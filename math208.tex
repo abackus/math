@@ -1,0 +1,924 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{$C^*$-algebras}
+\author{Aidan Backus}
+\date{December 2019}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\CVect}{\mathbf{Vect}_\CC}
+\newcommand{\Grp}{\mathbf{Grp}}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\MM}{\mathcal M}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\PGL}{\operatorname{PGL}}
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\pset}{\mathcal{P}}
+\newcommand{\Rep}{\operatorname{Rep}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand{\altrep}{\rho_{\text{alt}}}
+\newcommand{\trivrep}{\rho_{\text{triv}}}
+\newcommand{\regrep}{\rho_{\text{reg}}}
+\newcommand{\stdrep}{\rho_{\text{std}}}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+ 
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeindex
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Preliminaries}
+Here we treat functional analysis in a high level of abstraction.
+
+Throughout these notes, we mean by $f \preceq g$ that there is a universal constant $C > 0$ such that $f \leq C g$.
+
+\section{Locally convex spaces}
+    Fix a vector space $V$.
+\begin{definition}
+    $V$ is said to be a \dfn{topological vector space} if it is equipped with a topology for which addition and multiplication are continuous.
+\end{definition}
+\begin{definition}
+    $V$ is said to be \dfn{locally convex} if $V$ is equipped with a family of seminorms $P_\alpha$ and the initial topology with respect to the $P_\alpha$.
+\end{definition}
+    This is the smallest topology containing the open sets $P_\alpha([0, \varepsilon))$ for each $\alpha$ and each $\varepsilon > 0$ and which is translation-invariant.
+    
+    The most useful examples of locally convex spaces are Banach spaces.
+\begin{definition}
+    $V$ is said to be a \dfn{Banach space} if $V$ is equipped with the topology arising from a complete norm.
+\end{definition}
+\begin{definition}
+    If $V$ is a topological vector space, then the \dfn{dual space} of $V^*$ is the space of \emph{continuous} linear maps $V \to \CC$.
+\end{definition}
+\begin{definition}
+    Let $W$ be a Banach space and define a norm on $\Hom(V, W)$ by
+    $$||T|| = \sup_{||v|| \leq 1} ||Tv||.$$
+\end{definition}
+    So $V^*$ is a normed space, $V^* \subseteq \Hom(V, \CC)$. In general it is very difficult to construct elements of $V^*$. In general we cannot guarantee constructively that $V^*$ is nontrivial. On the other hand, it is often impossible to construct linear functions which are discontinuous (for example, any linear functional on a Banach space will be continuous if it was constructed without the axiom of choice). 
+\begin{definition}
+    A function $f: V \to \CC$ is said to be \dfn{sublinear} if it obeys the triangle inequality and if for each $c > 0$ and $x \in V$, $f(cx) = cf(x)$. 
+\end{definition}
+    Obviously seminorms are sublinear. Minkowski gauges are another useful example.
+\begin{definition}
+    Let $K \subseteq V$. Then:
+\begin{enumerate}
+    \item $K$ is \dfn{convex} if for each $x, y\in K$, $c \in [0, 1]$, $cx + (1-c)y \in K$.
+    \item $K$ is \dfn{balanced} if for each $c \in [0, 1]$, $cK \subseteq K$.
+\end{enumerate}
+    If $K$ is balanced and convex, then the \dfn{Minkowski gauge} of $K$ is the functional
+    $$p_K(x) = \inf_{cK \ni x} c.$$
+\end{definition}
+    Notice that the balanced condition suggests that $K$ needs to be close to the origin. Moreover, Minkowski gauges are sublinear.
+    
+    Sublinear estimates allow us to construct functionals using the axiom of choice, while still guaranteeing that they are continuous.
+\begin{theorem}[Hanh-Banach]
+    \index{Hanh-Banach theorem}
+    Assume that $p: V \to \CC$ is sublinear, $U \subset V$ a subspace, and $f: U \to \CC$ a linear functional. If $f$ is dominated by $p$, i.e. for each $x \in U$, $|f(x)| \leq |p(x)|$, then $f$ extends to $V$.
+\end{theorem}
+    In general the extension of $f$ will only be unique in case $U$ is dense. So we have to use the axiom of choice to construct $f$.
+\begin{proof}
+    The extension to the complex case is trivial so we replace $\CC$ with $\RR$. Assume that $f$ is defined on a space $W$, $U \subseteq W \subset V$. Choose $v \in V \setminus W$ and define $f(v)$ such that for each $w \in W$ and $s,t \geq 0$,
+$$\frac{p(w-sv)}{s} \leq h(v) \leq \frac{p(w+tv) - f(w)}{t}.$$
+    This is always possible because
+    $$f((t+s)w) \leq p((t+s)w) = p((t+s)w + tsv - tsv) \leq p(sw + stv) + p(tw - stv)$$
+    so
+    $$\frac{f(w) - p(w - sv)}{s} \leq \frac{p(w+tv) - f(w)}{t}.$$
+    Therefore for any $W$ and $v$ we can extend $f$ to $W + v$. If $\mathcal W$ is the family of subspaces of $V$ on which $f$ is defined and $\mathcal C \subset \mathcal W$ is a chain, then $\mathcal C$ therefore has an upper bound. Since $U \in \mathcal W$, Zorn's lemma implies that $\mathcal W$ has a maximal element, which is clearly $V$.
+\end{proof}
+    In case $p$ is the norm of $V$, this implies that $V^*$ is nontrivial. The Hanh-Banach theorem also has a useful geometric interpretation.
+\begin{theorem}[Hanh-Banach separation theorem]
+    \index{Hanh-Banach separation theorem}
+    Let $\RR$ be the scalar field and $A, B \subset V$ be convex, nonempty, and disjoint. If $A$ is open then there is a $\varphi \in V^*$ and $t \in \RR$ such that for every $a \in A$ and $b \in B$,
+    $$\varphi(a) < t \leq \varphi(b).$$
+\end{theorem}
+\begin{proof}
+    Choose $a_0 \in A$ and $b_0 \in B$, and let $C = A - B + b_0 - a_0$. Then $0 \in C$, $C$ is convex, and $C = \bigcup_{b \in B} A - b + b_0 - a_0$, so $C$ is open. If $x = b_0 - a_0$, then $x \notin C$.
+    
+    By the Hanh-Banach theorem, choose a $\varphi \in V^*$ such that $\varphi(x_0) = 1$ and $\varphi < 1$ on $C$. Given $a \in A$ and $b \in B$ we have
+    $$\varphi(a) < \varphi(b) + \varphi(a_0) - \varphi(b_0) + 1 = \varphi(b).$$
+    If $t = \inf_B \varphi$, then this gives, for every $a$ and $b,$
+    $$\varphi(a) \leq t \leq \varphi(b).$$
+    Since $A$ is open, $\varphi(A)$ is open so the claim holds.
+\end{proof}
+    In particular, linear functionals separate points.
+
+    Let's consider more properties of convexity. Let the scalar field be $\RR$ and let $S \subset V$ be nonempty, compact, and convex.
+\begin{definition}
+    A \dfn{face} of $S$ is a nonempty, compact, convex set $K \subseteq S$ such that for each $x \in K$, if there are $y_1, y_2 \in S$ and $c \in (0, 1)$ such that $x = cy_1 + (1-c)y_2$, then $y_1, y_2 \in K$. If $|K| = 1$, then $K$ is called an \dfn{extreme point}.
+\end{definition}
+\begin{definition}
+    If $X \subset V$ is a set, the \dfn{convex hull} of $X$ is the smallest set containing $X$ which is closed and convex.
+\end{definition}
+    For example, if $S$ is a convex polygon, then the extreme points of $S$ are its vertices, and $S$ is the convex hull of its vertices. The Krein-Milman theorem says that this phenomenon happens even in infinite dimensions.
+\begin{theorem}[Krein-Milman]
+    \index{Krein-Milman theorem}
+    $S$ is the convex hull of its extreme points.
+\end{theorem}
+\begin{proof}
+    Assume that $S'$ is the convex hull of the extreme points of $S$. Then $S' \subseteq S$, so $S'$ is compact. If there is an $x_0 \in S \setminus S'$, then since $V^*$ separates points, there is a $\lambda \in V^*$ such that $\lambda(S') < \lambda(x_0)$. If $C = \max \lambda(x_0)$, then $\varphi^{-1}(C) \cap S$ contains no extreme points of $S$. We can contradict this by showing that every convex compact set has an extreme point.
+
+    Let $\mathcal F$ be the set of all faces of $S$. Clearly $S \in \mathcal F$ so $\mathcal F$ is nonempty. If $\mathcal C \subset \mathcal F$ is a chain, then $\bigcap \mathcal C$ is a face, so by Zorn's lemma $\mathcal F$ has a minimal element $S_0$.
+    
+    Let $\varphi \in V^*$. Since $S_0$ is convex, it is connected, so $\varphi(S_0)$ is compact and connected. In particular, $\varphi(S_0) = [a, b]$ for some $a \leq b$. So $\varphi^{-1}(b) \cap S_0$ is nonempty, convex, and compact. If $x \in \varphi^{-1}(b) \cap S_0$,
+    $$x = ty_1 + (1-t)y_2,$$
+    then $y_1,y_2 \in S_0$. Therefore $\varphi(x) = b = c\varphi(y_1) + (1-c)\varphi(y_2)$, so $\varphi(y_1), \varphi(y_2) \geq c$. Therefore $y_1, y_2 \in \varphi^{-1}(b) \cap S_0$, so $\varphi^{-1}(b) \cap S_0$ is a face and by minimality, $\varphi^{-1}(b) \cap S_0 = S_0$. So $\varphi(S_0) = b$. Since $\varphi$ was arbitrary and $V^*$ separates points, $|S_0| = 1$. So $S$ has an extreme point. 
+\end{proof}
+
+
+\section{Hilbert spaces}
+    \begin{definition}
+    A \dfn{Hilbert space} $V$ is a Banach space whose norm arises from an inner product.
+    \end{definition}
+    The basic fact about Hilbert spaces $V$ is that $V^* = V$.
+\begin{theorem}[Riesz representation theorem]
+    \index{Riesz representation theorem for Hilbert spaces}
+    The association
+\begin{align*}
+    V &\to V^*\\
+    v &\mapsto (w \mapsto \langle v, w\rangle)
+\end{align*}
+    is a surjective isometry.
+\end{theorem}
+\begin{proof}
+    Evaluating $w \mapsto \langle v, w\rangle$ at $v$, we see $||v|| = ||v||_{op}$. So we just have to check surjectivity. Let $\varphi \in V^*$, and $F = \ker \varphi$. If $F = 0$ we're done; otherwise $F^\perp$ is nonempty. Let $z \in F^\perp$ and $\alpha = \varphi(z)/||z||$. Then for any $x \in V$,
+    \begin{align*}
+        \langle x, \alpha z\rangle  &=  \left\langle x - \frac{\varphi(x)}{\varphi(z)} z, \alpha z\right\rangle + \left\langle \frac{\varphi(x)}{\varphi(z)}z, \alpha z\right\rangle \\&= \left\langle \frac{\varphi(x)}{\varphi(z)}z, \alpha z\right\rangle
+            = \frac{\varphi(x)}{\varphi(z)} \varphi(z) = \varphi(x).
+    \end{align*}
+\end{proof}
+
+
+\section{Bochner integration}
+    Now we fix a Banach space $B$ and a measure space $(X, \Sigma, \mu)$. Recall that the \dfn{Caratheodory construction} is the standard way of building $(X, \Sigma, \mu)$: we define a semiring $\Sigma_0$ of sets (i.e. a family of sets closed under finite intersection and subsets of finite disjoint unions) and a countably additive function $\mu$ on $\Sigma_0$, which then extends to an outer measure $\mu^*$ on the power set $\pset(X)$. If $E \subseteq X$ satisfies the \dfn{Caratheodory criterion}, i.e. that for all $F \subseteq X$,
+    $$\mu^*(F) = \mu^*(F \cap E) + \mu^*(F \setminus E),$$
+    then we declare that $E$ is measurable. The measurable sets form a $\sigma$-algebra $\Sigma$ on which $\mu^*$ is outer measurable (note that $\mu^*$ did not have to be constructed from a semiring for this step to work; any outer measure will do) and we define the restriction $\mu$ of $\mu^*$ to $\Sigma$ to be the desired outer measure.
+\begin{definition}
+    A $B$-valued \dfn{integrable simple function} is a finite linear combination of functions \begin{align*}
+        \chi_E^b: X &\to B\\
+        E \ni x &\mapsto b\\
+        E^c \ni x &\mapsto 0
+    \end{align*} where $E$ is a measurable set with $||\mu(E)|| < \infty$, $b \in B$.
+    
+    The integral of a $B$-valued ISF $f = \sum_n \chi_{E_n}^{b_n}$ is
+    $$\int_X f ~d\mu = \sum_n b_n \mu(E_n)$$
+    and the $L^1$-norm is $||f||_{L^1} = \int_X |f| ~d\mu$.
+\end{definition}
+    Then $L^1$ is naturally the Cauchy completion of the ISF.
+\begin{definition}
+    A function $X \to B$ is a $B$-valued \dfn{integrable function} if it lies in $L^1$.
+\end{definition}
+\begin{definition}
+    For $p \in (1, \infty)$, the $L^p$ norm of $f: X \to B$ is
+    $$||f||_{L^p} = \left(\int_X ||f(x)||^p ~d\mu(x)\right)^{1/p}$$
+    and the $L^\infty$ norm is $||f||_{L^\infty} = \lim_{p \to \infty} ||f||_{L^p} = \esssup ||f||$.
+\end{definition}
+    The usual Lebesgue convergence theorems hold:
+\begin{theorem}[Lebesgue convergence theorems]
+    Let $\{f_n\}$ be a pointwise convergent sequence of integrable functions. Then:
+\begin{enumerate}
+    \item If each $f_n \leq f_{n+1}$,
+    $$\lim_n \int f_n = \int \lim_n f_n < \infty.$$
+    \item If there is an integrable function $g > 0$ such that every $|f_n| \leq g$,
+    $$\lim_n \int f_n = \int \lim_n f_n \leq g.$$
+    \item $$\int \liminf_n f_n \leq \liminf_n \int f_n.$$
+\end{enumerate}
+\end{theorem}
+
+    Now let's make some estimates which will actually prove that the $L^p$-norm is a norm, besides being useful later.
+\begin{theorem}[Jensen's inequality]
+    \index{Jensen's inequality}
+    Let $f: \RR \to \RR$ be convex and $g$ an integrable function. Then
+    $$f\left(\int g\right) \leq \int f \circ g.$$
+\end{theorem}
+\begin{theorem}[Holder's inequality]
+    \index{Holder's inequality}
+    Let
+    $$\frac{1}{p} + \frac{1}{q} = 1.$$
+    Then $||fg||_{L^1} \leq ||f||_{L^p} ||g||_{L^q}$.
+\end{theorem}
+\begin{proof}
+    The mapping $x \mapsto x^p$ is convex so if $f, g \geq 0$,
+\begin{align*}
+    \int fg
+        &= \left(\int g^q\right) \int fg^{1-q} \frac{g^q}{\int g^q}
+        \leq \left(\int g^q\right) \left(\int f^p g^{p(1-q)}\frac{g^q}{\int g^q}\right)^{1/p}\\
+        &= \left(\int g^q\right) \left(\left(\int g^q\right) \left(\int f^p\right)\right)^{1/p}
+        \leq \left(\int f^p\right)^{1/p} \left(\int g^q\right)^{1/q}.
+\end{align*}
+\end{proof}
+    Notice that Holder's inequality implies that $L^2$ is a Hilbert space with inner product
+    $$\langle f, g\rangle = \int fg.$$
+\begin{theorem}[Minkowski's inequality]
+    \index{Minkowski's inequality}
+    Let
+    $$\frac{1}{p} + \frac{1}{q} = 1.$$
+    Then
+    $$||f + g||_{L^p} \leq ||f||_{L^p} + ||g||_{L^p}.$$
+\end{theorem}
+\begin{proof}
+    By Holder's inequality,
+    \begin{align*}
+        \int |f+g|^p
+            &= \int |f+g||f+g|^{p-1}
+            \leq \int (|f| + |g|) |f+g|^{p-1}
+            \\&\leq \left(\left(\int |f|^p \right)^{1/p} + \left(\int |g|^p\right)^{1/p}\right)\left(\int |f+g|^{(p-1)\left(\frac{p}{p-1}\right)} \right)^{1-\frac{1}{p}}\\
+            &= (||f||_{L^p} + ||g||_{L^p}) \frac{||f+g||_{L^p}^p}{||f+g||_{L^p}}.
+    \end{align*}
+\end{proof}
+    Now we discuss change of variables.
+\begin{definition}
+    Let $\nu$ be a measure. Then
+\begin{enumerate}
+    \item $\nu$ is \dfn{absolutely continuous} with respect to $\mu$ if for every measurable set $A$, $\mu(A) = 0$ implies $\nu(A)$.
+    \item $\nu$ is \dfn{singular} with respect to $\mu$ if there are disjoint measurable sets $A, B$ such that $X = A \cap B$, $\nu(A) = 0$ and $\mu(A) = 0$.
+    \item If there is a measurable function $f$ such that for every measurable set $A$,
+    $$\nu(A) = \int_A f ~d\mu,$$
+    then $f$ is the \dfn{Radon-Nikodym derivative} of $\nu$, written
+    $$f = \frac{d\nu}{d\mu}.$$
+\end{enumerate} 
+\end{definition}
+\begin{theorem}[Radon-Nikodym]
+    \index{Radon-Nikodym theorem}
+    Let $\mu$ be $\sigma$-finite and $\nu$ be a positive measure. Then there is a unique decomposition $\nu = \nu_a + \nu_s$ such that $\nu_a$ is absolutely continuous and $\nu_s$ is singular (with respect to $\mu$). Moreover, $\nu_a$ has a Radon-Nikodym derivative.
+\end{theorem}
+    In particular, if $\nu$ was already absolutely continuous, then $\nu_s = 0$ and $\nu$ has a Radon-Nikodym derivative.
+\begin{proof}
+    Uniqueness is obvious. First assume $\mu(X) < \infty$. Then $\mu + \nu$ is finite, so $L^\infty(\mu + \nu) \subseteq L^1(\mu + \nu)$. So by the Cauchy-Schwarz inequality, if $f$ is an ISF,
+    $$\left|\int f ~d\nu\right| \leq ||f||_{L^1(\nu)} \leq ||f||_{L^1(\mu+\nu)} \preceq ||f||_{L^2(\mu)}.$$
+    So $\int \cdot ~d\nu$ is $L^2$-continuous on ISF, hence on $L^2(\mu + \nu)$. So by the Riesz representation theorem, there is a nonnegative $h \in L^1(\mu + \nu)$ such that
+    $$\int f ~d\nu = \int \int fh ~d(\mu + \nu)$$
+    for any $f \in L^2$. In particular, if $A$ is measurable,
+    $$\int_A h ~d(\mu + \nu) = \nu(A) \leq (\mu + \nu)(A).$$
+    Without loss of generality we assume $h \leq 1$. If $g \in L^\infty(\nu)$,
+    $$\int g ~d\nu = \int gh ~d\mu + \int gh ~d\nu.$$
+    So if $Y$ is the set of all $y$ such that $0 \leq h(y) < 1$, it follows that $\mu(Y) = \mu(X)$. By induction,
+    $$\int g ~d\nu = \int g(h + \dots + h^n) ~d\mu + \int gh^n ~d\nu.$$
+    Since $h \leq 1$, the dominated convergence theorem implies
+    $$\int gh^n ~d\nu \to \int_{X \setminus Y} g ~d\nu$$
+    and if
+    $$f = \frac{h\chi_Y}{1-h}$$
+    we have
+    $$\int g ~d\nu = \int_Y gf ~d\mu + \int_{X \setminus Y} g ~d\nu$$
+    and take $\nu_s(A) = \nu(A \cap (X \setminus Y))$. Then we take
+    $$\nu_a(A) = \int_A f ~d\mu$$
+    so $f$ is the Radon-Nikodym derivative of $\nu_a$, $\nu_a + \nu_s = \nu$ by taking $g = \chi_A$.
+    
+    To extend to the $\sigma$-finite case, break up $X$ into countably many finite measure spaces and sum over them.
+\end{proof}
+    Next we discuss iterated integrals. Given measure spaces $(X, S, \mu)$ and $(Y, T, \nu)$, we need a $\sigma$-algebra on $X \times Y$ and a measure defined on that $\sigma$-algebra. To do this, we use the Caratheodory construction.
+\begin{definition}
+    If $E \in S$ and $F \in T$, then $E \times F$ is a \dfn{measurable rectangle}. Let $S \otimes T$ denote the smallest $\sigma$-algebra containing the measurable rectangles, and on for each measurable rectangle, define a countably additive function by
+    $$\mu \otimes \nu(E \times F) = \mu(E) \nu(F).$$
+\end{definition}
+    By the monotone convergence theorem $d\nu$, $\mu \otimes \nu$ is countably additive. So the Caratheodory construction gives rise to a measure $\mu \otimes \nu$ whose measurable sets include $S \otimes T$ (in fact, is the completion of $S \otimes T$).
+\begin{definition}
+    The measure space $(X \times Y, S \otimes T, \mu \otimes \nu)$ is the \dfn{product measure space} of $(X, S, \mu)$ and $(Y, T, \nu)$.
+\end{definition}
+    Straight from the definitions, we know that for every measurable rectangle $E \times F$,
+    $$\int \chi_{E \times F} ~d(\mu \otimes \nu) = \iint \chi_{E \times F} ~d\mu ~d\nu = \iint \chi_{E \times F} ~d\nu ~d\mu.$$
+    
+    For a function $f$ defined on $X \times Y$ we define $f^y(x) = f(x, y)$ and $f_x(y) = f(x, y)$. For a set $G \subseteq X \times Y$, we define $G^y = \{x \in X: (x, y) \in G\}$ and $G_x = \{y \in Y: (x, y) \in G\}$. 
+\begin{theorem}[Fubini]
+    \index{Fubini's theorem}
+    Let $f \in L^1(\mu \otimes \nu)$ and assume $\mu \otimes \nu$ is $\sigma$-finite. Then for almost every $y$, $f^y \in L^1(\mu)$. Moreover, the function
+    $$F(y) = \int f^y ~d\mu$$
+    has $F \in L^1(\nu)$, and
+    $$\int f ~d(\mu \otimes \nu) = \iint f^y ~d\mu ~d\nu = \iint f_x ~d\nu ~d\mu.$$
+\end{theorem}
+    The assumption of $\sigma$-finiteness is not optional here, and Fubini's theorem can fail for large cardinality measure spaces.
+\begin{definition}
+    Let $M$ be a family of subsets of $X$ such that for every countable chain of $A_n$ in $M$ and $\bigcup_n A_n = A$ or $\bigcap_n A_n = A$, $A \in M$. Then we say $M$ is a \dfn{monotone class}.
+\end{definition}
+    If $R$ is a ring of sets, then the smallest monotone class $M$ containing $R$ is also a ring, and it is not hard to see that $M$ is the smallest $\sigma$-algebra containing $R$.
+\begin{lemma}
+    Let $G \in S \otimes T$. Then:
+\begin{enumerate}
+    \item $G_x \in T$ and $G^y \in S$.
+    \item $x \mapsto \nu(G_x)$ and $y \mapsto \mu(G^y)$ are measurable.
+    \item One has
+    $$\mu \otimes \nu(G) = \int (x \mapsto \nu(G_x)) ~d\mu(x) = \int (y \mapsto \mu(G^y)) ~d\nu(y) = \iint \chi_G ~d\mu ~d\nu.$$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+    This is obvious if $G$ is a measurable rectangle. We shall show that the algebra of sets on which this claim holds is a monotone class, hence a $\sigma$-algebra. Clearly if $\bigcup_n G_n = G$ then $G$ has the property. Given $x \in X$, $\bigcup_n (G_n)_x = G_x$, so $G_x \in T$. Therefore the chain of functions $x \mapsto \nu(G_n)_x$ converges to $x \mapsto \nu(G_x)$ which is therefore measurable. So by the monotone convergence theorem,
+    $$\lim_n \mu \otimes \nu(G_n) = \lim_n \int (x \mapsto \nu((G_n)_x) ~d\mu(x) = \int (x \mapsto \nu(G_x) ~d\mu(x) = \mu \otimes \nu(G).$$
+    So this algebra is closed under ascending chains. The proof in the other direction is similar but you have to start by assuming that $\mu \otimes \nu(G_1) < \infty$.
+\end{proof}
+\begin{lemma}
+    Let $f \geq 0$ be $S \otimes T$-measurable. Then
+    $$\int f ~d\mu \otimes \nu = \iint f ~d\mu ~d\nu.$$
+\end{lemma}
+\begin{proof}
+    Let $\{f_n\}$ be a chain of ISFs. This claim is obvious for ISF, so the monotone convergence theorem on the $f_n^y$ for each $y \in Y$.
+\end{proof}
+\begin{theorem}[Tonelli]
+    \index{Tonelli's theorem}
+    If $f$ is $S \otimes T$-measurable, $g(x) = ||f(x)||$, $g^y \in L^1(\mu)$, and $(y \mapsto \int g^y ~d\mu) \in L^1(\nu)$, then $f \in L^1(\mu \otimes \nu)$. 
+\end{theorem}
+\begin{proof}
+    Clear by the lemmata.
+\end{proof}
+\begin{proof}[Proof of Fubini's theorem]
+    Let $g(x, y) = ||f(x, y)||$. Then if $\{f_n\}$ is a sequence of ISF converging to $f$, $g$ dominates the $f_n$. Apply the dominated convergence theorem twice, once for each integral.
+\end{proof}
+
+\section{Duality}
+    Fix a normed space $V$. We consider properties of $V^*$. Since $\CC$ is complete, $V^*$ is a Banach space; in particular, $V^{**}$ is a Banach space. So we can always embed $V$ in a Banach space by the mapping
+\begin{align*}
+    V &\to V^{**}\\
+    v &\mapsto (\varphi \mapsto \varphi(v)).
+\end{align*}
+    However, $V^{**}$ is rarely the completion of $V$ if $V$ is infinite-dimensional. Moreover, the topology of $V^*$ is a bit awkward to work with, since a convergence in operator norm is much stronger than convergence pointwise.
+\begin{definition}
+    The \dfn{weakstar topology} of $V^*$ is the initial topology such that every evaluation $\varphi \mapsto \varphi(v)$ is continuous.
+\end{definition}
+    In other words, the weakstar topology is the topology of pointwise convergence.
+\begin{theorem}[Banach-Alaoglu]
+    \index{Banach-Alaoglu theorem}
+    Let $B$ be the closed unit ball of $V^*$. Then $B$ is weakstar compact.
+\end{theorem}
+    Like the Hanh-Banach and Krein-Milman theorems, the proof of Banach-Alaoglu uses the axiom of choice. However, the Banach-Alaoglu theorem is not really nonconstructive, since if $V$ is separable, we can use a diagonalization argument to prove it instead. Banach-Alaoglu generalizes to locally convex spaces.
+\begin{proof}
+    Let
+    $$D_v = \{z \in \CC: |z| \leq ||v||\}$$
+    and $D = \prod_{v \in V} D_v$. By Tychonoff's theorem, $D$ is compact. Moreover, there is a natural embedding
+\begin{align*}
+    \iota: V^* &\to D\\
+    f &\mapsto \{f(v)\}_{v \in V}.
+\end{align*}
+    Since the product topology is the topology of pointwise convergence, $\iota$ is a homeomorphism $V^* \to \iota(V^*)$. So we just need to show that $\iota(V^*)$ is closed. So let $\{\{f_\alpha(v)\}_{v \in V}\}_{\alpha \in A}$ be a net in $D$, which converges to a $\{\varphi_v\}_{v \in V}$. Then $f(v) = \varphi_v$ is a linear functional and $f_\alpha \to f$ pointwise so $\{\varphi_v\}_{v \in V} \in \iota(V^*)$.
+\end{proof}
+    Now we compute the duals of the main examples of Banach spaces we have presented so far.
+\begin{theorem}
+    Let $p, q \in [1, \infty]$ and assume $\mu$ is $\sigma$-finite.
+    $$\frac{1}{p} + \frac{1}{q} = 1.$$
+    Then $(L^p(\mu))^* = L^q(\mu)$.
+\end{theorem}
+    Actually, this theorem is true without the $\sigma$-finiteness; however, it becomes much more difficult.
+\begin{proof}
+    For $g \in L^q$, one has $||g||_{p^*} \leq ||g||_q$ by Holder's inequality and by taking larger and larger measurable sets $E$ and considering $\int_E g$, we check $||g||_{p^*} \geq ||g||_q$. So we just need to show that the map $L^q \to L^{p^*}$ is surjective.
+    
+    If $h \in L^p$ and $X$ splits into finite measure spaces $X_k$ we put $h_k = \chi_{X_k}h$, so $\sum_k h_k = h$ in $L^p$ by the dominated convergence theorem. If $\varphi \in L^{p^*}$ then $\varphi(\sum_k h_k) = \sum_k \varphi(h_k)$ so we might as well assume $X = X_1$, viz. $\mu(X) < \infty$. Then $L^\infty \subseteq L^p$, so $\varphi \in (L^\infty)^*$. We can define an absolutely continuous measure $\nu$ by $\nu(A) = \varphi(\chi_A)$, and by the Radon-Nikodym theorem, there is a Radon-Nikodym derivative $f$ of $\nu$.
+    
+    Let $Y_n = \{x \in X: |f(x)| \leq n\}$ and let $g = f/|f|^{q-2}$, where $g(x) = 0$ if $f(x) = 0$, and $g_n = \chi_{Y_n}g_n$. Then $|g|^p = |f|^q$ and
+    $$\int_{Y_n} |f|^q = \int g_nf = \varphi(g_n) \preceq ||g_n||_p \preceq ||f_n||_{L^p(Y_n)}.$$
+    So $||f||_{L^q(Y_n)} < \infty$, and by the monotone convergence theorem, $f \in L^q$.
+\end{proof}
+
+\section{Vector lattices}
+    We now consider the natural order structure of a space.
+\begin{definition}
+    A \dfn{vector lattice} is a vector space $V$ equipped with a partial order $\leq$ which is translation-invariant such that $(V, \leq)$ is a lattice, and such that for each $c \geq 0$ and $x \leq y$, $cx \leq cy$.
+\end{definition}
+    Recall that a lattice is just a poset which is closed under finite joins $\vee$ (suprema) and meets $\wedge$ (infima). Actually, we just need to check that $V$ is a semilattice, since multiplication by $-1$ implies that a semilattice is already a lattice.
+    
+    If $V$ is a vector lattice and $v \in V$, we define $f_\pm = \pm f \vee 0$. Then $f = f_+ - f_-$ and we define the absolute value (or valuation) $|f| = f_+ + f_-$.
+\begin{definition}
+    A \dfn{Banach lattice} is a vector lattice $V$ which is a Banach lattice, such that $|x| \leq |y|$ whenever $||x|| \leq ||y||$.
+\end{definition}
+\begin{example}
+    A function space mapping into $\RR$ is usually a Banach lattice with the natural ordering, $f \leq g$ iff for every $x$, $f(x) \leq g(x)$. For example, $C(X)$ is a lattice. Spaces of operators are Banach lattices as well, whose positive elements are precisely the positive operators; as are spaces of signed measures, where the positive measures are the positive elements.
+\end{example}
+\begin{theorem}
+    Let $V$ be a Banach lattice. There is a natural ordering on $V^*$, such that $f \in V^*$ is positive iff for each positive $v \in V$, $f(v) \geq 0$, and such that $f \leq g$ iff for every positive $v \in V$, $f(v) \leq g(v)$.
+\end{theorem}
+\begin{proof}
+    Take the definition of positive functionals as in the statement of the theorem. If $f$ and $-f$ are both positive, each $v = v_+ - v_-$ has $f(v_+) \geq 0$ but $f(v_-) \leq 0$. So $f(v) = 0$. Since $v$ was arbitrary, $f = 0$.
+    
+    Given $f \in V^*$, define
+    $$f^+(v) = \sup_{0 \leq x \leq v} f(x)$$
+    for $v \geq 0$. Then $f^+ \geq f$, and $f^+$ is finite because if $x \leq v$, $|f(x)| \leq ||f|| ||v||$. Moreover, if $v, w \geq 0$, it is easy to check $f^+(v+w) = f^+(v) + f^+(w)$. So $f^+$ is positive-linear, so extends to all of $V$ and so $f^+ \in V^*$.
+    
+    Clearly $f^+ - f \geq 0$. We need to show this is optimal, i.e. $f^+ = f \vee 0$. Assume $g \geq f \vee 0$. Then for $0 \leq x \leq v$, $f(x) \leq g(x) \leq g(v)$, so taking the $\sup$ over $x$ we have $f^+(v) \leq g(v)$. The other direction is similar. So $f^+ = f \vee 0$.
+\end{proof}
+    Fix a compact Hausdorff space $X$, $|X| \geq 2$ (so in particular, every set which separates points is nonempty). Let us now study the behavior of sublattices of $C(X) = C(X \to \RR)$.
+\begin{theorem}[Dini]
+    \index{Dini's theorem}
+    Let $L$ be a sublattice of $C(X)$, and define $g(x) = \inf_{f \in L} f(x)$. For each $\varepsilon > 0$, there exists a $h \in L$ such that $g \leq h \leq g + \varepsilon$.
+\end{theorem}
+\begin{proof}
+    For each $f \in L$ let $U_f = \{x \in X: f(x) - g(x) \leq \varepsilon\}$. Then the $U_f$ are an open cover of $X$, which has a finite subcover by functions $f_1, \dots, f_k$. Take $h = \bigwedge_{j \leq k} f_j$.
+\end{proof}
+    When can a lattice be used to approximate any function in $C(X)$? A necessary condition is that the lattice strongly separates points. This turns out to be sufficient as well.
+\begin{definition}
+    A set $A \subseteq C(X)$ \dfn{separates points} if for each $x, y \in X$, there is an $f \in A$ such that $f(x) \neq f(y)$. If, in addition, the constant functions $\RR \subseteq A$, then $A$ \dfn{strongly separates points}.
+\end{definition}
+\begin{theorem}[Stone-Weierstrass]
+    \index{Stone-Weierstrass theorem}
+    If $L \subseteq C(X)$ is a sub-vector lattice or a subalgebra which strongly separates points, then $L$ is dense in $C(X)$.
+\end{theorem}
+    The lattice case is also called the \dfn{Kakutani-Krein theorem}.
+\begin{lemma}
+    \label{sw lem 1}
+    Let $L$ be a sublattice of $C(X)$ which separates points and is closed under multiplication and addition by elements of $\RR$. Then if $B \subseteq X$ is compact, $p \in X \setminus B$, and $a, b \in \RR$, there is a $g \in L$ such that $g \geq a$, $g(p) = a$ and $g > b$ on $B$.
+\end{lemma}
+\begin{proof}
+    For each $x \in B$ there exists $g_x \in L$ such that $g_x(p) = a$ and $g_x(x) = b+1$. Let $U_x = \{y\in X: g_x(y) > b\}$. Since $x \in U_x$, the $U_x$ are an open cover of $B$ with finite subcover $U_{x_1}, \dots, U_{x_k}$. Take $g = a \vee \bigvee_{j \leq k} g_{x_k}$.
+\end{proof}
+\begin{lemma}
+    \label{sw lem 2}
+    Assume that $L$ is a closed unital subalgebra of $C(X)$. Then $L$ is a lattice.
+\end{lemma}
+\begin{proof}
+    Choose $\varepsilon > 0$ and apply the classical Weierstrass theorem to $[-1, 1]$ to find a polynomial $P_\varepsilon$ which approximates $|\cdot|$ in $L^\infty$-norm by $\varepsilon$. Then for each $f \in L$, we can approximate $|f|$ by $P_\varepsilon \circ f$. Since $L$ is unital, $P_\varepsilon \circ f \in L$. So $|f| \in L$, since $L$ is closed. The lattice operations $\vee$ and $\wedge$ can be expressed in terms of algebra operations $+$ and $\cdot$, and $|\cdot|$, so $L$ is closed under lattice operations.
+\end{proof}
+\begin{proof}[Proof of Stone-Weierstrass]
+    First consider the case that $L$ is a lattice. Given $f \in C(X)$, define $L_f = \{g \in L: g \geq f\}$. Then $L_f$ is a sublattice of $L$. Given $x \in X$, $\delta > 0$, the set $B = \{y \in X: f(y) \geq f(x) + \delta\}$ is closed. Since $X$ is compact, there is an $M > 0$ such that $f < M$. Apply Lemma \ref{sw lem 1} with $a = f(x) + \delta$ and $b = M$, so there is a $g \in L$ such that $g \geq f(x) + \delta$, $g(x) = f(x) + \delta$ and $g > M$ on $B$. So $f \leq g \leq g + \delta$, so $f = \bigwedge L_f$. Therefore by Dini's theorem, there is an $h \in L$ with the desired properties.
+    
+    For the algebra case, since $L$ strongly separates points, $L$ is unital. Therefore $\overline L$ is a closed unital algebra, $\overline L$ is a closed lattice whose closure is $C(X)$, by Lemma \ref{sw lem 2} and the above case. So $\overline L = C(X)$.
+\end{proof}
+This even extends to decaying functions on locally compact Hausdorff spaces, by taking the one-point compactification.
+
+\section{Positive Radon measures}
+The usual construction of measures by ISF is somewhat unnatural when we have a nice topology, since then we can define integration in terms of continuous functions. Clearly ``nice" in this context implies locally compact Hausdorff; these conditions are also sufficient (though $\sigma$-compactness also helps). Throughout this section, we fix a locally compact Hausdorff space $X$ and consider the space $C_c(X)$ of compactly supported continuous functions $X \to \CC$.
+
+We have not given a topology on $C_c(X)$, so a functional is just an element of $\Hom(C_c(X), \CC)$ for now.
+\begin{definition}
+    A \dfn{positive Radon measure} on $X$ is a functional on $C_c(X)$.
+\end{definition}
+Let us prove that a positive Radon measure is actually a measure in a natural way. First, we put a topology on $C_c(X)$. We start by putting the $L^\infty$-topology on $C_c(U)$ for each open set $U \subseteq X$ with compact closure.
+\begin{definition}
+    The \dfn{inductive limit topology} of $C_c(X)$ is the final (i.e. strongest) topology on $C_c(X)$ such that $\varphi: C_c(X) \to Y$ is continuous provided that for each open set $U \subseteq X$ with compact closure, $\varphi|_{C_c(U)}$ is continuous.
+\end{definition}
+In other words, the inductive limit topology is the final topology which makes the natural maps $C_c(U) \to C_c(X)$ continuous. A positive Radon measure is continuous for the inductive limit topology, as can be seen by taking an $h \in C_c(X)$ which is $1$ on $U$, so $||\varphi||_{C_c(U)} \leq \varphi(h)$.
+
+Now we need some general facts about locally compact Hausdorff spaces.
+\begin{definition}
+    A (continuous) \dfn{partition of unity} on a subordinate to an open cover $U_1, \dots, U_n$ is a family of (continuous) functions $f_1, \dots, f_n$ which are compactly supported in $U_i$, such that $\sum_i f_i = 1$.
+\end{definition}
+\begin{theorem}
+    \label{partitions of unity}
+    For any finite open cover $\mathcal U$ of a compact set, there is a partition of unity subordinate to $\mathcal U$.
+\end{theorem}
+\begin{lemma}
+    Let $K \subseteq X$ be compact. If $U_1, \dots, U_n$ is an open cover of $K$ there are compact sets $K_1, \dots, K_n$, $K_i \subseteq U_i$, which cover $K$.
+\end{lemma}
+\begin{proof}
+    For each $x \in K$ choose a $j$ such that $U_j \ni x$ and an open set $V_x \ni x$ such that
+    $$V_x \subset \overline V_x \subset U_j.$$
+    Then the $V_x$ are an open cover of $K$ so they reduce to a finite subcover $V_{x_1}, \dots, V_{x_p}$. For each $k \leq p$ choose a $j_k \leq n$ such that $V_{x_k} \subseteq U_{j_k}$ and let $W_j = \bigcup_{j_k=j} V_k \subseteq U_j$. Then $\overline W_j \subseteq U_j$ and the $\overline W_j$ contain the $V_x$s, so are a compact cover of $K$.
+\end{proof}
+\begin{proof}[Proof of Theorem \ref{partitions of unity}]
+    Fix a compact set $K$. By the lemma, we can choose $D_j \subseteq U_j$ a compact cover of $K$ and $g_j$ supported in $U_j$ with $g_j \geq 1$ on $D_j$, and $h = \sum_j g_j$. Then $h \geq 1$ on $C$ and put $k = h \vee 1 \geq 1$. So $1/k$ exists and we can put $f_j = g_j/k$, to force $\sum_j f_j = 1$.
+\end{proof}
+
+\begin{definition}
+    A \dfn{content} is a function defined on sets into $[0, \infty]$ which is monotone, countably subadditive, and finitely additive, and which carries compact sets to $[0, \infty)$. A content $\mu$ is said to be \dfn{inner regular} if for every open set $U$,
+    $$\mu(U) = \sup_{\substack{\overline V \subseteq U\\V \text{open}\\\overline V \text{compact}}} \mu(V).$$
+\end{definition}
+Fix a positive Radon measure $\varphi$, and define an inner-regular content $\mu$ on the topology $\mathcal T$ on $X$ by
+\begin{align*}
+    \mu: \mathcal T &\to [0, \infty]\\
+    U &\mapsto \sup_{\substack{f \in C_c(U)\\0 \leq f \leq 1}} \varphi(f).
+\end{align*}
+Given a content $\nu$, we can extend $\nu$ to an outer measure $\nu^*$ on the power set $\pset$ by
+$$\nu^*(A) = \inf_{\substack{U \subseteq A\\U \in \mathcal T}} \nu(U).$$
+In turn, then, $\nu^*$ restricts to a measure, also called $\nu$, on its measurable $\sigma$-algebra, by the Caratheodory construction. So, in particular, $\mu$ gives rise to a measure.
+
+\begin{definition}
+    Let $\nu$ be a Borel measure. We say that $\nu$ is \dfn{outer regular} if for every Borel set $E$,
+    $$\mu(E) = \inf_{\substack{E \subseteq U\\U \in \mathcal T}} \mu(U)$$
+    and \dfn{inner regular} if for every \emph{open} set $U$,
+    $$\mu(U) = \sup_{\substack{\overline V \subseteq U\\V \text{open}\\\overline V \text{compact}}} \mu(V).$$
+\end{definition}
+    We state the main result.
+\begin{theorem}[Riesz-Markov representation theorem]
+    \index{Riesz-Markov representation theorem}
+    $\mu$ is a positive Borel measure which is both inner and outer regular, and $\varphi$ is the unique functional such that for every $f \in C_c(X)$,
+    $$\varphi(f) = \int f~d\mu.$$
+\end{theorem}
+    The proof of the Riesz-Markov representation theorem is quite long, so we only sketch it.
+\begin{proof}[Proof sketch]
+    Let $\nu^*$ be an outer measure which is finitely additive and inner regular on the topology of $X$, and let $U$ be open. Then Caratheodory's criterion holds for $U$ and $\nu^*$ on open sets. Approximating any subset of $X$ by an open set, Caratheodory's criterion holds on the power set for $U$ and $\nu^*$. So $U$ is $\nu^*$-measurable, and $\nu^*$ restricts to a Borel measure $\nu$. In particular, $\mu$ is a Borel measure.
+    
+    If $f \in C_c(X)$, and $f \geq 1$ on an open set $U$, $\varphi(f) \geq \mu^*(U)$. Approximating any set $A$ by an open set, we see that $\varphi(f) \geq \mu^*(A)$ whenever $f \geq 1$ on $A$. On the other hand, if $f \leq 1$ on $A$, a monotone convergence argument shows that $\mu^*(A) \geq \varphi(f)$. Since $C_c(X)$ is a Banach lattice, we can replace $f$ with $f^+$ and by decomposing $X$ into a chain of sets $X_n \{x \in X: f(x) \geq n\varepsilon\}$ and summing the $f|_{X_n} \setminus f|_{X_{n-1}}$ we prove
+    $$\varphi(f) = \int f~d\mu.$$
+    
+    Since $\mu$ was inner and outer regular as a content, approximation by open sets implies regularity on Borel sets. Moreover, if $\psi$ is a positive Radon measure, define a content $\nu$ by
+    $$\nu(U) = \sup_{\substack{f \leq \chi_U\\f \in C_c(U)}} \int f ~d\nu.$$
+    If $\nu = \mu$ it follows that $\psi = \varphi$.
+\end{proof}
+    Notice that on the other hand, a complex measure $\nu$ on $C_c(X)$ gives rise to a functional $\psi$ by
+    $$\psi(f) = \int f ~d\nu.$$
+    The positive part of $\psi$ is in fact the positive part of $\nu$.
+    
+\section{Baire categories}
+    Now we look at a topological analogue of ``measure zero."
+\begin{definition}
+    Let $X$ be a topological space. A set $S \subseteq X$ is \dfn{nowhere dense} if for every open set $U$, $S \cap U$ is not dense in $U$. A set $T \subseteq X$ is \dfn{meager} or \dfn{of the first category} if $T$ is the countable union of nowhere dense sets. A set $W \subseteq X$ is \dfn{of the second category} if it is not of the first category, or \dfn{comeager} if it is the complement of a meager set.
+\end{definition}
+\begin{lemma}
+    For a topological space, the following are equivalent:
+\begin{enumerate}
+    \item Every countable union of closed sets with empty interior has empty interior. 
+    \item Every countable intersection of open dense sets is dense. 
+    \item Every nonempty open set is of the second category.
+\end{enumerate}
+\end{lemma}
+    This is basically obvious.
+\begin{definition}
+    A topological space is a \dfn{Baire space} if one (and all) of the above criteria hold.
+\end{definition}
+\begin{theorem}[Baire category theorem]
+    \index{Baire category theorem}
+    Every completely pseudometrizable or locally compact Hausdorff space is Baire.
+\end{theorem}
+    For example, a Banach space is Baire.
+\begin{proof}
+    Let $U_n$ be a sequence of open dense sets, and let $W$ be open, in the space $X$. Then $W \cap U_1$ is nonempty and open, say $x_1 \in W \cap U_1$. If $X$ is pseudometrizable, then there is a $\varepsilon_1 \in (0, 1)$ such that the open ball $V_1 = B(x_1, \varepsilon_1)$ satisfies $K_1 = \overline B(x_1, \varepsilon_1) \subseteq W \cap U_1$; if $X$ is locally compact Hausdorff, then there is a compact set with nonempty interior $V_1 \subseteq K_1 \subseteq W \cap U_1$. Iterate using the denseness of the $U_n$ and the axiom of choice to construct a sequence $x_n \in V_n \subseteq K_n \subseteq V_{n-1} \cap U_n$. If $X$ is pseudometrizable, then we can always choose $\varepsilon_n < 1/n$, so the $x_n$ are a Cauchy sequence. Otherwise, $\bigcap_n K_n$ is nonempty anyways by the finite intersection property. Either way, we can find an $x \in \bigcap_n K_n \subseteq \bigcap_n U_n$ such that $x \in W$. So $\bigcap_n U_n$ is dense.
+\end{proof}
+Actually, we didn't use the full axiom of choice. The Baire category theorem is equivalent over ZF to the following axiom.
+\begin{axiom}[Axiom of dependent choice]
+    \index{axiom of dependent choice}
+    Let $X$ be a nonempty set and $R$ be a binary relation. If, for every $a \in X$, there is a $b \in X$ such that $aRx$, then there is a sequence of $x_n$ such that $x_nRx_{n+1}$.
+\end{axiom}
+The axiom of dependent choice is not strong enough to prove the existence of nonmeasurable sets, for example. Moreover, if $X$ is assumed to be separable, then the Baire category theorem just follows from induction, without even dependent choice.
+
+\begin{theorem}[uniform boundedness principle]
+    \index{uniform boundedness principle}
+    Let $X$ be a Banach space and $Y$ a normed space, and $F$ be a set of linear mappings $X \to Y$. If for every $x \in X$,
+    $$\sup_{T \in F} ||Tx|| < \infty,$$
+    then
+    $$\sup_{\substack{T \in F\\||x|| = 1}} ||Tx|| = \sup_{T \in F} ||T||.$$
+\end{theorem}
+The uniform boundedness principle is also called the Banach-Steinhaus theorem.\index{Banach-Steinhaus theorem} The proof is a standard application of the Baire category theorem: construct a chain of closed sets whose union is the entire space, which implies that one is not meager.
+\begin{proof}
+    Let
+    $$X_n = \{x \in X: \sup_{T \in F} ||Tx|| \leq n\}.$$
+    Then the $X_n$ are a closed chain whose union is $X$. So by the Baire category theorem, there is an $x \in X$, $m > 0$, and $\varepsilon > 0$ such that $B(x, \varepsilon) \subset X_m$. So if $||u|| < 1$ and $T \in F$,
+\begin{align*}
+    ||Tu|| &= \varepsilon^{-1} ||T(x + \varepsilon u) - Tx||
+        \leq \varepsilon^{-1} ||T(x + \varepsilon u)|| + \varepsilon^{-1} ||Tx||
+        \leq 2\frac{m}{\varepsilon}.
+\end{align*}
+    Taking the $\sup$ over $u$ of both sides,
+    $$\sup_{T \in F} ||T|| \leq 2\frac{m}{\varepsilon} < \infty.$$
+\end{proof}
+\begin{theorem}[open mapping theorem]
+    \index{open mapping theorem}
+    If $A: X \to Y$ is a surjective continuous linear mapping between Banach spaces, then $A$ is open.
+\end{theorem}
+The open mapping theorem is also called the Banach-Schauder theorem.\index{Banach-Schauder theorem}
+\begin{proof}
+    We must show that if $U$ is the open unit ball of $X$, then $A(U)$ is open. Since $X = \bigcup_k kU$, $Y = \bigcup_k A(kU)$. By the Baire category theorem, there is a $k > 0$, $\varepsilon > 0$, and $y \in Y$ such that $B(y, \varepsilon) \subseteq \overline{A(kU)}$. If $V$ is the unit ball of $Y$, $v \in V$, $y+\varepsilon v \in \overline{A(kU)}$ so
+    $$\varepsilon v \in \overline{A(kU)} + \overline{A(kU)} \subseteq \overline{A(2kU)}.$$
+    So if $L = 2k/\varepsilon$, $V \subseteq \overline{A(LU)}$. 
+    
+    In other words, for every $y \in Y$ and $\varepsilon > 0$ there is an $x \in X$ such that $||x|| \leq L||y||$ and $||y-Ax|| < \varepsilon$. In particular, given $y \in V$ we can choose $x_1$ such that $||x_1|| \leq L$ and $||x-Ax_1|| < 1/2$. Choose $||x_{n+1}|| \leq L2^{-n}$ such that
+    $$||y - A(x_1 + \dots + x_n) - Ax_{n+1}|| < 2^{-n-1},$$
+    by induction and the axiom of (dependent) choice. The sequence of partial sums is therefore Cauchy, so we can put $x = \sum_n x_n$, and $Ax = y$ by the above estimates. Also
+    $$||x|| = \lim_{n \to \infty} \left|\left| \sum_{k\leq n} x_k\right|\right| \leq \sum_{n=1}^\infty x_n < 2L.$$
+    So $y \in A(2LU)$. Therefore $V \subseteq A(2LU)$ which was to be shown.
+\end{proof}
+\begin{theorem}[closed graph theorem]
+    Let $A: X \to Y$ be a linear mapping between Banach spaces. If the graph of $A$ is closed in $X \oplus Y$, then $A$ is continuous.
+\end{theorem}
+    Notice that while there isn't a canonical norm for $X \oplus Y$, any $\ell^p$ norm will do; since $X \oplus Y$ is a finite direct sum, all $\ell^p$ norms are equivalent. In particular, $X \oplus Y$ is a Banach space.
+\begin{proof}
+    Let $\Gamma$ be the graph of $A$, which is equipped with a natural (linear, bijective) projection $\pi_X: \Gamma \to X$. Since
+    $$||P(x, Ax)|| = ||x|| \leq ||(x, Ax)||,$$
+    $||P|| \leq 1 < \infty$. So by the open mapping theorem,
+    $$||Tx|| \preceq ||P^{-1}x|| + ||x|| \preceq ||x||.$$
+\end{proof}
+
+    
+
+\chapter{$C^*$-algebras}
+\begin{definition}
+A \dfn{Banach algebra} is a Banach space equipped with a bilinear, associative multiplication such that
+$$||xy|| \leq ||x|| ||y||.$$
+If $*$ is a linear involution on $\mathcal A$ such that $(xy)^* = y^*x^*$ and $1^*= 1$ if $\mathcal A$ is unital. then we say that $\mathcal A$ is a \emph{$*$-algebra}.
+\end{definition}
+
+\begin{definition}
+\index{$C^*$-algebra}
+Let $\mathcal A$ be a $*$-algebra. If one has the \emph{$C^*$-identity}
+$$||x^*x|| = ||x||^2,$$
+then we say that $\mathcal A$ is a \emph{$C^*$-algebra}.
+\end{definition}
+
+For example, if $\mathcal H$ is a Hilbert space, then $\mathcal B(\mathcal H)$ is a $C^*$-algebra. Later we will learn that sub-$*$-algebras of $\mathcal B(\mathcal H)$ are the only examples of $C^*$-algebras.
+
+Often the norm topology is too strong, so we introduce a new topology which is weaker on $\BB(\HH)$.
+\begin{definition}
+    The \dfn{strong operator topology} is the locally convex topology on $\BB(\HH)$ defined by the seminorms
+    $$P_\xi(T) = ||T\xi||.$$
+\end{definition}
+In other words, a sequence converges in the strong operator topology $T_n \to T$ iff for each $\xi \in \HH$, $||(T_n - T)\xi|| \to 0$. So the strong operator topology is the topology of pointwise convergence.
+\begin{definition}
+    A \dfn{von Neumann algebra} $\mathcal A$ is a sub-$*$-algebra of $\BB(\HH)$ which is closed in the strong operator topology.
+\end{definition}
+
+\section{Weights}
+\begin{definition}
+\index{weight}
+Let $\mathcal A$ be a sub-$*$-algebra of $\mathcal B(\mathcal H)$. A map $\omega: \mathcal A^+ \to [0, \infty]$ is a \emph{weight} if $\omega$ is additive and if $\omega(ta) = t\omega(a)$ whenever $t \geq 0$.
+\end{definition}
+
+Fix a weight $\omega$. By $m_\omega$ we mean the span of the set of positive $a$ such that $\omega(a) < \infty$, and by $m_\omega^{sa}$ we mean the closure of the set of positive $a$ such that $\omega(a) < \infty$ under subtraction. Clearly $\omega$ extends uniquely to $m_\omega^{sa}$ by $\omega(b-c) = \omega(b) - \omega(c)$. So $\omega$ extends to a positive linear functional on $m_\omega$ in the obvious way. On the other hand, if $\varphi$ is any positive linear functional on $\mathcal B(\mathcal H)$, then $\varphi$ is a weight such that $m_\varphi = \mathcal B(\mathcal H)$.
+
+Now we define $n_\omega$ to be the set of $a \in \mathcal A$ such that $\omega(a^*a) < \infty$, which is clearly a subspace of $\mathcal A$.
+\begin{lemma}
+    $n_\omega$ is a left ideal of $\mathcal A$.
+\begin{proof}
+    If $T \geq 0$ then
+    \begin{align*}
+        \langle S^*TS\xi, \xi\rangle
+            &= \langle TS\xi, S\xi\rangle
+            \leq ||T|| ||S\xi||^2\\
+            &= ||T|| \langle S\xi, S\xi\rangle
+            = ||T|| \langle S^*S\xi, \xi\rangle.
+    \end{align*}
+    So if $d \in \mathcal A$ and $a \in n_\omega$ then
+    \begin{align*}
+        (da)^*da = a^*d^*da \leq ||d^*d|| a^*a = ||d||^2 a^*a
+    \end{align*}
+    whence
+    $$||\omega((da)^*(da)) \leq ||d||^2 \omega(a^*a) < \infty.$$
+\end{proof}
+\end{lemma}
+\begin{definition}
+\index{tracial weight}
+If $\omega(a^*a) = \omega(aa^*)$ then $\omega$ is \emph{tracial}.
+\end{definition}
+Clearly if $\omega$ is tracial then $n_\omega$ is a two-sided ideal. For example, if $\omega$ is actually the trace,
+$$\omega(x) = \sum_j \langle x^*xe_j, e_j\rangle$$
+for $\{e_j\}_j$ an orthonormal basis of the separable Hilbert space $\mathcal H$, then $\omega$ is tracial and $n_\omega$ is just the space of trace-class operators and $\omega$ is tracial.
+
+\index{polarization identity}
+Recall the polarization identity:
+$$4b^*a = \sum_{k=0}^3 i^k(a+i^kb)^*(a+i^kb).$$
+From this we are justified in defining, on $n_\omega$,
+$$\langle a, b\rangle_\omega = \omega(b^*a).$$
+This would be an inner product if $N_\omega = \{a \in \mathcal A: \omega(a^*a) = 0\}$ were trivial. Clearly $N_\omega$ is a subspace, so we can take the completion of $n_\omega/N_\omega$ and recover a Hilbert space.
+
+\section{The GNS construction}
+\begin{definition}
+    The completion of $n_\omega/N_\omega$ is denoted $L^2(\mathcal A, \omega)$.
+\end{definition}
+If $b \in n_\omega$, then
+$$\langle ab, ab\rangle_\omega
+    = \omega(b^*a^*ab)
+    \leq ||a^*a|| \omega(b^*b) = ||a||^2 ||b||_\omega^2.$$
+So if $a \in \mathcal A$ then $\xi \mapsto a\xi$ is a well-defined, bounded operator on $n_\omega/N_\omega$ and so extends to $L^2(\omega)$. 
+
+\begin{definition}
+    \index{$*$-representation}
+    A \emph{$*$-representation} is a morphism of $*$-algebras (i.e. a morphism of algebras preserving $*$) into $\BB(\HH)$.
+\end{definition}
+If $a \in \AAA$, $b,c \in n_\omega$, then
+$$\langle ab, c\rangle_\omega = \omega(c^*ab) = \omega((a^*c)^*b) = \langle b, a^*c\rangle_\omega,$$
+which descends to $L^2(\omega)$. So we can define a $*$-representation
+\begin{align*}
+    L: \AAA &\to \BB(L^2(\omega))\\
+        a &\mapsto (\xi \mapsto a\xi).
+\end{align*}
+\begin{definition}
+    \index{GNS construction}
+    \index{left regular representation}
+    The map $L$ is called the \emph{GNS construction} (for Gelfand-Neimark-Segal) of $\AAA$, or the \emph{left regular representation} of $\AAA$.
+\end{definition}
+The GNS construction allows us to assume that $\AAA$ is actually acting on a Hilbert space, namely $L^2(\omega)$. So a $C^*$-algebra is always an operator algebra.
+
+We can also define a right regular representation\index{right regular representation},
+\begin{align*}
+    R: \AAA &\to \BB(L^2(\omega))\\
+        a &\mapsto (\xi \mapsto \xi a).
+\end{align*}
+Notice that $R$ is an antihomomorphism.
+
+\begin{lemma}
+    Assume that for each positive $a \in \AAA$, $\sqrt a$ exists. Then $m_\omega \subseteq n_\omega$, and in particular $m_\omega$ is a sub-$*$-algebra of $\AAA$.
+    \end{lemma}
+\begin{proof}
+If $a \in m_\omega$ is positive, 
+    $$\omega(\sqrt a^2) = \omega(\sqrt a^* \sqrt a) = \omega(a)$$
+so $\sqrt a \in n_\omega$. Since $n_\omega$ is a left ideal, $a \in n_\omega$.
+\end{proof}
+
+
+\begin{example}
+    Let $X$ be a measure space and $K \in L^2(X \times X)$. Then the integral operator $T_K: L^2(X) \to L^2(X)$ has $||T_K||_{\BB^2} = ||K||_{L^2}$. Indeed, if $\{\xi_n\}_n$ is a Hilbert basis for $L^2(X)$ then
+\begin{align*}
+    \sum_n ||T_k\xi_n||^2
+        &= \sum_{m,n} |\langle T_k\xi_m, \xi_n\rangle|^2
+        = \sum_{m,n} \left|\iint_{X \times X} K(x, y) \xi_n(y) \xi_m(x) ~dx ~dy\right|^2\\
+        &= \sum_{m,n} |\langle K, \xi_m \otimes \xi_n\rangle|^2
+        = ||K||_{L^2}
+\end{align*}
+    since the $\xi_m \otimes \xi_n$ form a Hilbert basis for $L^2(X \times X) = L^2(X) \otimes L^2(X)$.
+\end{example}
+\begin{example}
+    If $\AAA = C([0, 1])$ and
+    $$\omega(f) = \int_0^1 f(t) ~dt$$
+    then $\omega$ is a tracial weight on $\AAA$ such that $n_\omega = \AAA$. But of course $n_\omega$ is a Banach space when given the $\BB^2 = L^2$ norm. Its completion is $L^2([0, 1])$.
+\end{example}
+\begin{prop}
+    Let $\omega$ be a tracial weight and $\AAA$ be a sub-$*$-algebra of $\BB_0(\HH)$. If $b \geq 0$ and $b \in m_\omega$, and $a \in \BB(\HH)$ then
+    $$|\omega(ab)| \leq ||a||_{op}|\omega(b)|.$$
+\end{prop}
+\begin{proof}
+    We have
+\begin{align*}
+    |\omega(ab)|^2
+        &= |\omega(a \sqrt b \sqrt b)|^2
+        = |\omega(\sqrt b a \sqrt b)|^2
+        = |\langle a \sqrt b, \sqrt b\rangle|^2\\
+        &\leq \langle a\sqrt b, a\sqrt b\rangle \langle \sqrt b, \sqrt b\rangle
+        = \omega(\sqrt b a^* a\sqrt b)\omega(b)
+        \leq ||a||^2 \omega(b)^2.
+\end{align*}
+\end{proof}
+
+\section{The $\BB^p$ spaces}
+\begin{definition}
+    If $T \in \BB^2(\HH)$ then $T$ is called a \dfn{Hilbert-Schmidt operator}.
+\end{definition}
+\begin{example}
+    Let $\HH$ be the separable Hilbert space. Take $\AAA = \BB_0(\HH)$ and $\omega$ to be the trace. Since $\BB_0(\HH)$ has square roots and $\omega$ is tracial, we can apply the above result to prove that $n_\omega$ and $m_\omega$ are two-sided ideals and hence sub-$*$-algebras.
+    
+    If we write $|T| = \sqrt T^2$, and let $\BB^p(\HH)$ be the space of $T \in \BB_0(\HH)$ such that $\omega(|T|^p) < \infty$, then $\BB^1(\HH) = m_\omega(\HH)$ and $\BB^2(\HH) = n_\omega(\HH)$.
+    
+    We think of $\BB^p(\HH)$ as the noncommutative analogue of $\ell^p$.
+\end{example}
+Let's check that that example actually makes sense.
+\begin{theorem}
+    $\BB^2(\HH)$ is a Banach space.
+\end{theorem}
+\begin{proof}
+    First observe that $||T||_{op} \leq ||T||_2$. To do this, compute the trace of $T$ by using an orthonormal basis containing a $\xi$ such that $||T\xi|| \geq ||T||_{op} - \varepsilon$. As this is possible for any $\varepsilon > 0$ the claim holds.
+    
+    Now assume that $\{T_n\}_n$ is $2$-Cauchy, so in particular $op$-Cauchy. So there is a $T \in \BB_0(\HH)$ such that $T_n \to^{op} T$.
+    
+    If $P$ is a finite-rank projection then $(T-T_n)P$ is a finite-rank operator, hence $\in \BB^2(\HH)$. So
+\begin{align*}
+    ||(T-T_n)P||_2^2
+        &= tr P(T-T_n)^*(T-T_n)P
+        = tr (T-T_n)P(T-T_n)^*
+        = \lim_{k \to \infty} tr (T_k-T_n)P(T_k -T_n)^*\\
+        &\leq \limsup_{k \to \infty} (T_k-T_n)(T_k-T_n)^*
+        = \limsup_{k \to \infty} ||T_k-T_n||_2^2.
+\end{align*}
+Let $C_n = \limsup_{k \to \infty} ||T_k-T_n||_2^2$. Then $C_n \to 0$ and
+$$||(T-T_n)P||_2^2 \leq C_n$$
+regardless of the choice of $n$ and $P$. Since $T-T_n$ is a compact operator, we can approximate it arbitrarily well by $(T-T_n)P$ by choosing $P$. So $||T-T_n||_2^2 \to 0$.
+\end{proof}
+Recall the \dfn{polar decomposition} of $T \in \BB_0(\HH)$ is the factorization
+$$T = V|T|$$
+where $|T| = \sqrt T^2$ and $V$ is a \dfn{partial isometry}, i.e. an isometry on its cokernel.
+\begin{lemma}
+    If $T \in \BB^1(\HH)$ and $A \in \BB(\HH)$ then
+    $$|tr(AT)| \leq ||A||_{op} tr|T|.$$
+\end{lemma}
+\begin{proof}
+    Write $T = V|T|$. Then
+\begin{align*}
+    |tr(AT)|
+        &= |tr(AV|T|)|
+        \leq ||AV||_{op} tr|T|
+        \leq ||A||_{op} tr|T|.
+\end{align*}
+\end{proof}
+\begin{lemma}
+    $||\cdot||_1 = tr|\cdot|$ is a norm on $\BB^1(\HH)$.
+\end{lemma}
+\begin{proof}
+    Let $S,T \in \BB^1(\HH)$ and $S+T = W|S+T|$. Then
+\begin{align*}
+    tr|S+T|
+        &= tr W^*(S+T)
+        = tr(W^*S) + tr(W^*T)
+        \leq |trW^*S| + |trW^*T|
+        \leq tr|S| + tr|T|.
+\end{align*}
+\end{proof}
+\begin{theorem}
+    $\BB^1(\HH)$ is a Banach algebra.
+\end{theorem}
+\begin{proof}
+    Since $||T||_{op} \leq ||T||_1$ the proof is basically the same as for Hilbert-Schmidt operators.
+\end{proof}
+\begin{theorem}
+    $\BB^1(\HH)^* = \BB(H)$.
+\end{theorem}
+\begin{proof}
+    If $A \in \BB(\HH)$, let $\Psi_A(T) = tr(AT)$. Then
+$$||\Psi_A(T)|| \leq ||A||||T||_1.$$
+    So $A \mapsto \Psi_A$ is an isometry and so $\BB(\HH) \subseteq \BB^1(\HH)^*$.
+    
+    Let $\Psi \in \BB^1(\HH)^*$ and $\xi,\eta \in \HH$. Define a bounded operator $\langle \xi, \eta\rangle_O$ by
+    $$\langle \xi, \eta\rangle_O\zeta = \xi \langle \eta, \zeta\rangle.$$
+    (So $\langle\cdot,\cdot\rangle_O$ is an operator-valued pseudo-inner product (the pseudo- here means that it could be zero).
+    Define a semilinear form
+    $$B_\Psi(xi, \eta) = \Psi\langle \xi, \eta\rangle_O.$$
+    So $|B_\Psi(\xi, \eta)| \leq ||\Psi||||\xi||||\eta||$. Therefore by the Riesz representation theorem, there is an operator $A$ such that $B_\Psi(\xi, \eta) = \langle A\xi, \eta\rangle$. Therefore $||A|| = ||\Psi||$ and $\Psi = \Psi_A$. So $\BB^1(\HH)^* \subseteq \BB(\HH)$.
+\end{proof}
+
+\section{Representation theory of groups}
+Let $G$ be a group with a good topology (so $G$ admits a Haar measure).
+
+\begin{definition}
+A \dfn{unitary representation} of $G$ is a continuous morphism of groups $G \to U(H)$. It is \dfn{irreducible} if the only $G$-invariant subspaces are trivial. 
+\end{definition}
+For $\pi$ a unitary representation, we have $\pi(x)^* = \pi(x)^{-1}$.
+
+\begin{example}
+    Let $G = \SL(3, \ZZ)$. Then the ``obvious" map $G \to \SL(3, \CC)$ is not a unitary representation. In fact $G$ has very few finite-dimensional unitary representations, because $G$ is not compact.
+\end{example}
+
+\begin{definition}
+    The \dfn{left regular representation} of $G$ is the map $G \to U(L^2(G))$ given by
+    $$\pi(x)(\xi)(y) = \xi(x^{-1}y).$$
+\end{definition}
+
+It is natural to want to study the subalgebra of $B(H)$ generated by $\pi(G)$ for $\pi$ a unitary representation. This will be given by linear combinations of the $\pi(x)$s as $x \in G$, which we identify with the space $C_c(G)$ of compactly supported continuous functions on $G$. Namely, for $f \in G$ we define
+$$\pi(f) = \int_G f(x) \pi(x) ~dx.$$
+\begin{definition}
+    The norm-closure of $\pi(C_c(G))$ is the \dfn{reduced C$^*$-algebra} of $G$.
+\end{definition}
+Now an easy computation shows
+$$\pi(f)\pi(g) = \pi(f*g)$$
+and of course $\pi(f)^* = \pi(f^*)$ where we define $f^*(x) = \overline f(x^{-1})$. Finally, we observe that
+$$||\pi(f)|| \leq ||f||_{L^1(G)}$$
+so $\pi$ is a $*$-Banach algebra morphism which extends to a map
+$$\pi: L^1(G) \to U(H).$$
+This leads to the abstract theory of Fourier transform.
+
+
+
+\newpage
+\printindex
+
+\end{document}

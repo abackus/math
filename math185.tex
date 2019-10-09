@@ -1,0 +1,649 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+
+\title{Math 185: Complex Analysis}
+\author{Michael Klass}
+\date{Fall 2019}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\makeindex
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\chapter{Introduction}
+Math started with the cavemen. Cavemen wanted to begin telling stories; this led to the creation of pictographs and hieroglyphics. In particular, cavemen invented speech and the use of symbols. Some time after, trade was invented, creating a need for documentation and recording. This gave rise to the notions of counting, worth, and money -- leading to a notion of linear equations. This was quite difficult -- even the equation $ax + b = 0$ is conceptually complicated. Studying systems of equations of integers was hard back then! But now we can even study equations of several complex variables.
+
+\section{Logistics}
+We will be following Marsden-Hoffman's book, because it teaches the purpose of complex analysis. But one can also consider Saranson's notes, or the classic book by Brown-Churchill.
+
+Your grade will be based on the final exam (50 percent), midterm exam (25 percent), homework (25 percent). An 80-85 percent grade is an A-, and every 20 percent is a different grade. If you are on the boundary between two grades, participation and attendance will be considered. You will also get extra credit on borderline cases if you maintain a thought journal as you solve problems, so that you learn more about your thought process.
+
+Office hours are held after class and by appointment, though on Wednesdays office hours will be cut short by the probability seminar. In addition, assignments will be due Fridays, in particular next Friday.
+
+\section{Examples of complex analysis}
+One of the main goals of complex analysis is to integrate functions that cannot be studied using the tools of calculus, even over the real line (as opposed to the entire complex plane!) For example, we want to show
+$$\int_0^\infty \frac{dx}{1+x^2} = \frac{\pi}{2}$$
+or
+$$\int_{-\infty}^\infty \frac{\sin x}{x} ~dx = \pi.$$
+Miraculously, when we extend a function from the real line to the complex plane, integration becomes much easier.
+
+But let's start with something simple. With the linear equation $ax + b = 0$, we can solve for $x$ provided $a \neq 0$. This was not possible with the quadratic equation $ax^2 + bx + c = 0$. In fact, the equation $x^2 + 1 = 0$ has no solutions in $\RR$, because $x^2$ must then be a negative number. Alternatively, just plot the function and notice that its minimum is above the $x$-axis. The natural thing to do is to look for a solution elsewhere.
+
+This is not a new idea. To solve $ax + b = 0$, we needed to introduce the notion of negative number (and to even state it we needed the notion of $0$).
+
+The same principle holds here. We introduce the symbol $i$ to mean $\sqrt{-1}$. (Morally, is this okay? Yes! Mathematics is concerned with consistent axiomatic systems. The theory of complex numbers is consistent.) We can even solve $x^2 + b^2 = 0$ by adjoining $i$. In fact, take $x = \pm ib$. We can therefore solve the equation
+$$(x - a)^2 + b^2 = 0$$
+by taking $x = a \pm ib$.
+
+\section{The complex numbers}
+\begin{definition}
+The \dfn{field of complex numbers} is the set
+$$\CC = \{a + bi: a, b \in \RR\}
+$$
+where we define $i^2 = -1$.
+\end{definition}
+This is exactly the set of solutions for the equations $(x - a)^2 + b^2 = 0$ we discussed last time.
+
+Of course, we don't know any operations on $\CC$. So we need to define them before we can solve equations.
+\begin{theorem}
+$\CC$ is a field over $\RR$.
+\end{theorem}
+\begin{proof}
+To see this, we show that $\CC$ is closed under addition and multiplication (check it!) Then we rationalize the denominator to show existence of additive inverses.
+\end{proof}
+
+\section{Complex multiplication}
+To understand complex multiplication, we need to use polar coordinates.
+
+Let $z \in \CC$, $z = a + ib$. We want to write $z = (r, \theta)$ where $r$ is the distance between $z$ and $0$, and $\theta$ is the angle of $z$ above the $x$-axis. Now $r^2 = a^2 + b^2$, so in other words $r^2 = z(a - ib)$. We define $\overline z = a - ib$, the \dfn{complex conjugate} of $z$. So $r$ is defined by
+$$r^2 = z \overline z.$$
+Intuitively, $\overline z$ is the reflection of $z$ across the $x$-axis. In other words, we will have $\overline \theta = \theta$. The \dfn{modulus} $|z|$ of $z$ is given by $r$, and we have
+$$|z_1z_2| = \sqrt{z_1z_2 \overline{z_1z_2}} = |z_1| |z_2|.$$
+It is easy to check $2 \Re z = z + \overline z$ and $2 \Im z = z - \overline z$. Similarly,
+$$\overline{z_1 + z_2} = \overline z_1 + \overline z_2,$$
+and $\overline{z_1z_2} = \overline z_1 \overline z_2$ (which justifies the computation of $|z_1z_2|$ above).
+\begin{proof}[Proof that conjugation respects multiplication]
+We have
+$$\overline{z_1z_2} = \overline{x_1x_2 - y_1y_2 + i(x_1y_2 + x_2y_1)} = x_1x_2 - y_1y_2 - i(x_1y_2 + x_2y_1).$$
+Meanwhile,
+$$\overline{z_1}\overline{z_2} = (x_1 - iy_1)(x_2 - iy_2) = x_1x_2 - y_1y_2 - ix_1y_2 - ix_2y_1.$$
+Therefore the claim holds.
+\end{proof}
+We also have $\overline{\overline z} = z$.
+
+Now, how to compute $\theta$? Well, by some trigonometry, we have
+$$z = r \cos \theta + ir \sin \theta.$$
+Thus we can write $z = rg(\theta)$ for the function $g(\theta) = \cos \theta + i\sin \theta$.
+
+Writing out the Taylor series
+$$i \sin \theta = \sum_{j=0}^\infty \frac{(i\theta)^{2j+1}}{(2j+1)!}$$
+and
+$$\cos \theta = \sum_{j=0}^\infty \frac{(i\theta)^{2j}}{(2j)!}$$
+we have
+$$e^{i\theta} = \sum_{j=0}^\infty \frac{(i\theta)^{2j}}{j!} = g(\theta).$$
+So we can always write
+$$z = re^{i\theta}.$$
+Similarly $\overline z = re^{i\theta}$. We will always take $\theta \in (-\pi, \pi]$. We call $\theta$ the \dfn{argument} of $z$, written $\theta = \arg z$.
+
+Now inverting the above manipulations, we have
+$$\log z = \log |z| + i \arg z.$$
+This is weird: the definition of $\log$ depends on the ``branch" that we chose, here $(-\pi, \pi]$. But other people might want to define $\log$ in a different way.
+
+Writing out the definition of $\log zw$, we have $\log zw = \log z + \log w$ modulo $2\pi i$ (since $\log 2\pi i =0$). So to understand multiplication, we might as well just try to understand addition! We also have $e^{z+w} = e^ze^w$, where we define for $z = x+iy$,
+$$e^z = e^x(\cos y + i\sin y).$$
+We also have
+$$\arg z_1 + \arg z_2 = \arg z_1z_2$$
+modulo $2\pi$.
+
+We want to define
+$$w^z = e^{z \log w}$$
+but this may define on the branch that we chose.
+
+Now we study the equation $w^n = 1$. Solutions $w$ are called \dfn{roots of unity} of degree $n$. Thus we have
+$$n\theta = 2\pi k$$
+so there are $n$ solutions, each of the form $e^{2\pi ik/n}$, $k = 0, \dots, n-1$.
+
+
+\chapter{Holomorphic functions}
+\section{Metric topology}
+The notion of a closed set extends from $\RR$ to any metric space; in particular, $\RR^2 = \CC$.
+
+\begin{definition}
+Let $A$ be a set in $\CC$, and consider all of the Cauchy sequences from $A$. The set of all limits of such Cauchy sequences is called $\overline A$, the \dfn{closure} of $A$. If $A = \overline A$, then we say $A$ is a \dfn{closed set}.
+\end{definition}
+\begin{definition}
+Let $O$ be a set in $\CC$. Then $O$ is open if, for every $z \in O$, there is a disc $D(z, \varepsilon)$ centered on $z$,
+$$D(z, \varepsilon) = \{w \in \CC: |z - w| < \varepsilon\}$$
+ which is contained in $O$.
+\end{definition}
+Notice that unions of open sets are open, complements of open sets are closed, finite intersections of open sets are open, the empty set is open, and $\CC$ is open. Conversely, intersections of closed sets are closed, complements of closed sets are open, finite unions of closed sets are closed, the empty set is closed, and $\CC$ is closed.
+
+The purpose of open and closed sets is to allow us to consider limits.
+\begin{definition}
+Let $f: U \to \CC$ be a function, $z_0 \in \CC$. The \dfn{limit} of $f$ at $z_0$ is $w \in \CC$, written
+$$\lim_{z \to z_0} f(z) = w,$$
+if for every $\varepsilon > 0$, there is a $\delta > 0$ such that if $|z - z_0| < \delta$ then $|f(z) - w| < \varepsilon$.
+\end{definition}
+This is equivalent to saying that for every open set $U \ni f(z_0)$, there is a $\delta > 0$ such that if $|z - z_0| < \delta$, then $f(z) \in U$.
+	
+
+\section{Complex differentiation}
+\begin{definition}
+Let $A$ be an open subset of $\CC$ and $f: A \to \ZZ$, $z_0 \in A$. Then $f$ is \dfn{differentiable} at $z_0$ if
+$$\lim_{z - z_0} \frac{f(z) - f(z_0)}{z - z_0}$$
+exists, in which case we call this limit $f'(z_0)$, the \dfn{derivative} of $f$. If $f$ is differentiable on an open neighborhood of $z_0$, then we say that $f$ is \dfn{holomorphic} or \dfn{analytic} or \dfn{regular}.
+\end{definition}
+\begin{corollary}
+If $f$ is complex differentiable at $z_0$, then $f$ is continuous at $z_0$.
+\end{corollary}
+The sum, product, and quotient rules go through unchanged, and the proofs remain the same. Moreover, clearly if $f(z) = z$ then $f'(z) = 1$. So we can do induction on the product rule to recover the familiar formula
+$$\frac{dz^n}{dz} = nz^{n-1}.$$
+Moreover, if $h = g \circ f$ and $f,g$ are analytic, then just like always, $h$ is analytic and we have
+$$h'(z) = g'(f(z))f'(z)$$
+This can be easily seen by doing the manipulation
+$$\frac{g(f(z+\delta)) - g(f(z))}{\delta} = \frac{g(f(z+\delta))-g(f(z))}{f(z+\delta) - f(z)}\frac{f(z+\delta) - f(z)}{\delta}$$
+and then taking the limit of both sides as $\delta \to 0$.
+
+
+\begin{theorem}[Cauchy-Riemann equations]
+\index{Cauchy-Riemann equations}
+Let $f = u + iv$, $u, v: \CC \to \RR$, and assume $f'(z_0)$ exists. Then
+$$\frac{\partial u}{\partial x}(z_0) = \frac{\partial v}{\partial y}(z_0)$$
+and
+$$\frac{\partial u}{\partial y}(z_0) = -\frac{\partial v}{\partial x}(z_0).$$
+\end{theorem}
+\begin{proof}
+We have
+$$f'(z_0) = \lim_{z \to z_0} \frac{f(z) - f(z_0)}{z - z_0}.$$
+Let's consider what happens when $x + iy = z \to z_0 = x_0 + iy_0$ along the real axis. Then
+$$\frac{\Delta f}{\Delta z} = \frac{u(x + iy_0) - u(x_0 + iy_0) + iv(x + iy_0) - iv(x_0 + iy_0)}{x + iy_0 - (x_0 + iy_0)}$$
+which converges to $\partial_x u + i\partial_x v$. So $f' = \partial_x u + i \partial_x v$. Similarly, $f' = \partial_y v - i\partial_y u$. This gives us a system of two linear equations, which we solve as $\partial_x u = \partial_y v$ and $\partial_x v = -\partial_y u$.
+\end{proof}
+\begin{definition}
+Let $u, v: \CC \to \RR$. If $u + iv$ is holomorphic, then we say that $u$ and $v$ are \dfn{harmonic conjugate} to each other.
+\end{definition}
+Recall that $\nabla u$ is the gradient of $u$, i.e. $\nabla u = (\partial_x u, \partial_y u)$. Recall also that two vectors $v, w$ are perpendicular iff $v \cdot w = 0$, where $\cdot$ is the dot product. In this case, we write $v \perp w$.
+\begin{corollary}
+Let $u, v$ be harmonic conjugates. Then $\nabla u \perp \nabla v$.
+\end{corollary}
+\begin{proof}
+We have
+$$\nabla u \cdot \nabla v = \frac{\partial u}{\partial x} \frac{\partial v}{\partial x} + \frac{\partial u}{\partial y} \frac{\partial v}{\partial y} = \frac{\partial u}{\partial x} \frac{\partial u}{\partial y} - \frac{\partial u}{\partial x} \frac{\partial u}{\partial y} = 0.$$
+\end{proof}
+Thus the level curves of $u$ and $v$ intersect exactly at right angles.
+
+To show that a function is holomorphic, we use the Cauchy-Riemann equations. For example, $e^{x+iy} = e^x\cos y + ie^x \sin y$. It is not hard to check that the Cauchy-Riemann equations are satisfied, so $z \mapsto e^z$ is holomorphic.
+
+
+Let us formally consider
+$$f(z) = \sum_{n=0}^\infty \frac{a_nz^n}{n!}.$$
+If we differentiate term by term we have
+$$f'(z) = \sum_{n=0}^\infty \frac{a_{n+1}z^n}{n!}.$$
+
+Let $M$ be a vector space, whose elements are sequences of complex numbers. Assume
+$$a = (a_0, a_1, a_2/2!, a_3/3!)$$
+be an element of $a$. We let $Da$ be given by
+$$Da = (a_1, a_2, a_3/2!, a_4/3!, \dots).$$
+Notice that then $D$ is a linear operator, and this makes sense even if $a$ does not define a convergent holomorphic function. So we can define differentiation in very high generality, without requiring anything about convergence.
+
+
+\section{Differentation in Banach spaces}
+Actually, differentiation can be defined a lot more generally. We mentioned ``Banach spaces" in class very briefly, but these are spooky, so let me give some more details.
+
+\begin{definition}
+A \dfn{Banach space} is a vector space equipped with a norm, such that every Cauchy sequence with respect to the norm converges.
+\end{definition}
+For example, $\RR^n$ and $\CC^n$ with their usual absolute values are Banach spaces. Another famous example is $C([0, 1] \to \CC)$, the space of all continuous functions $[0, 1] \to \CC$ with
+$$||f|| = \sup_{x \in [0, 1]} |f(x)|.$$
+(You shouldn't know how to prove that this is a Banach space yet, but at least it tells you that there are lots of interesting examples other than just $\RR^n$).
+
+Actually, you can define differentation for functions between Banach spaces. Namely, if $f: V \to W$ is a function and $A$ is a continuous linear function $V \to W$ then we say that $A$ is the \dfn{derivative} of $V$ if
+$$\lim_{||h|| \to 0} \frac{||f(x+h) - f(x) - Ah||_W}{||h||_V} = 0.$$
+
+You don't need to know any of this for the exam. But we mentioned it and I thought it was cool.
+
+
+\section{Inverse functions}
+Assume $F: A \to B$ is an analytic bijection, whose inverse is a bijection. So $z = F^{-1}(F(z))$. In this case,
+$$1 = z' = \frac{d}{dz}F(F^{-1}(z)) = F'(F^{-1}(z)) \frac{d}{dz} F^{-1}(z).$$
+So,
+$$(F^{-1}(z))' = \frac{1}{F'(F^{-1}(z))}.$$
+
+Now, $z \mapsto e^z$ is locally injective: if $y$ is so close to $y_0$ that we do not see the periodicity of $\sin$ and $\cos$ (so $|y - y_0| < 2\pi$), then $e^z \neq e^{z_0}$ unless $z = z_0$. In particular, the function is invertible on the strip $\RR \times i(-\pi, \pi]$. But functions are differentiable on open sets, so we will only invert $z \mapsto e^z$ on $\RR \times i(-\pi, \pi)$. The image of $e^z$ on this strip is $\CC$ minus $(-\infty, 0]$. So we will define $\log$ there as the inverse of $e^z$. But we could change the strip so that for any $\theta$, the half-line through $e^{i\theta}$ is the point at which $\log$ is not defined.
+
+Using the same inversion trick as before (the \dfn{inverse function theorem}), we have
+$$\frac{d \log z}{dz} = \frac{1}{z}.$$
+
+
+
+\chapter{Integration}
+Now that we've defined differentation, we want to define integration. Let $a, b \in \CC$ and let $f$ be a good function. Then we want to think of the integral
+$$\int_a^b f$$
+as well-defined; but it isn't. For one thing, the integral depends on the path we take from $a$ to $b$ (which wasn't a problem in $\RR$), and for another, the straight-line path from $a$ to $b$ may not lie in the domain of $f$. (Imagine $f$ defined on a ``snake-shaped" open set.)
+
+We should at least require that the fundamental theorem of calculus holds: if $F$ is a holomorphic function, then
+$$F(b) - F(a) = \int_\gamma F'(t) ~dt$$
+where $\gamma$ is any path from $a$ to $b$. To justify this, we write
+$$F(b) - F(a) = \sum_{j=1}^n F(a_j) - F(a_{j-1}) = \sum_{j=1}^n \left(\frac{F(a_j) - F(a_{j-1})}{(b-a)/n}\right)\frac{b - a}{n}$$
+for some points $a_j$ sampled along $\gamma$, taking $a_n = b$ and $a_0 = a$. Notice that the right-hand side looks an awful lot like a Riemann sum. So in the limit as the sample gets better and better, the fundamental theorem of calculus holds. Of course, if the fundamental theorem holds, then it is indeed the case that the integral does not depend on $\gamma$.
+
+Let's make all this rigorous.
+\section{Curves}
+\begin{definition}
+A \dfn{curve} is a continuous, piecewise continuous differentiable (that is, piecewise $C^1$) function $[a, b] \to \CC$.
+\end{definition}
+What piecewise continuously differentiable means is that there are at most finitely many $x_1, \dots, x_k$ in $[a, b]$ so that away from those points, the curve is continuously differentiable.
+
+\begin{definition}
+A \dfn{closed curve} is a curve $\gamma: [a, b] \to \CC$ such that $\gamma(a) = \gamma(b)$.
+\end{definition}
+So you should think of a closed curve as a circle, or at least a distorted circle.
+
+Let $\gamma$ be a curve such that $\gamma(a) = z_0$, $\gamma(b) = z_n$. Then
+\begin{align*}
+	F(z_n) - F(z_0)
+		&= F(\gamma(b)) - F(\gamma(a))
+		= \sum_{j=1}^n \frac{F(\gamma(a_j)) - F(\gamma(a_{j-1}))}{\gamma(a_j) - \gamma(a_{j-1})}\\
+		&\approx \sum_{j=1}^n F'(\gamma(a_j)) \frac{\gamma(a_j) - \gamma(a_{j-1})}{a_j - a_{j-1}} (a_j - a_{j-1})\\
+		&\approx \int_a^b F'(\gamma(t)) \gamma'(t) ~dt.
+\end{align*}
+The error in the above approximations vanish as the partitions in the Riemann sum vanish, so we have
+$$F(z_n) - F(z_0) = \int_a^b F'(\gamma(t)) \gamma'(t) ~dt.$$
+Note that it's okay if $\gamma'$ doesn't exist at every point in $[a, b]$, since a finite set can't affect the value of an integral. This is why we assumed that $\gamma$ was piecewise $C^1$.
+
+Notice that by linearity, if $h = u + iv$, then
+$$\int_a^b h = \int_a^b u + i\int_a^b v.$$
+This defines integration for functions $[a, b] \to \CC$, since the integrals on the right-hand side of the above equation are integrals $[a, b] \to \RR$, which you learned how to define in Math 104.
+
+\begin{definition}
+An \dfn{orientation-preserving reparametrization} of a curve $\gamma$ is a curve $\tilde \gamma: [\tilde a, \tilde b] \to \CC$ such that there is a continuously differentiable function $\alpha: [\tilde a, \tilde b] \to [a, b]$, such that $\alpha' > 0$ and $\tilde \gamma = \gamma \circ \alpha$. The function $\alpha$ is called a \dfn{orientation-preserving diffeomorphism}. 
+\end{definition}
+We could also consider orientation-reversing reparametrizations, those for which $\alpha' < 0$. But these would change the sign of the integral. To avoid this, we will only study orientation-preserving reparametrization, and we will always just call them reparametrizations. By the inverse function theorem, $\alpha'$ has a continuously differentiable inverse, so $\gamma$ is also a reparametrization of $\tilde \gamma$
+
+For convenience, we will take $\gamma$ to be parametrized by $[0, 1]$.
+
+\begin{definition}
+The \dfn{arc length} of a curve $\gamma$ is defined by
+$$\ell(\gamma) = \int_0^1 |\gamma'(t)| ~dt.$$
+\end{definition}
+This agrees with the usual definition of arc length that we learned about in calculus. Note that the definition makes sense, even if $\gamma'$ is not defined at finitely many points, because of the following very important result of real analysis (see, for example, Rudin, Theorem 6.10):
+\begin{theorem}
+Let $f,g: [0, 1] \to \RR$ be equal, except possibly at finitely many points. Then
+$$\int_0^1 f = \int_0^1 g.$$
+\end{theorem}
+In fact this theorem holds if $f \neq g$ on a countable set (or even certain uncountable sets, like the middle-thirds Cantor set -- but you don't need to know what that is!) The point is that if $\gamma$ may not be differentiable at some point $t$, but then we can just declare that $\gamma'(t) = 0$, and this won't affect the integral.
+\
+\begin{definition}
+A \dfn{simple closed curve} is a closed curve that does not intersect itself except at the beginning and end.
+\end{definition}
+So a simple closed curve is a deformed circle.
+
+
+\section{Connected sets}
+How should we define connected sets? Let $x$ be one point by itself. Whatever the definition of ``connected" is, $x$ by itself had better be connected. But if we add a second point $y$, the set $\{x, y\}$ had better be disconnected.
+
+Let us now replace $y$ with a set $B$, which we want to think of as ``connected." Then $\{x\} \cup B$ is connected if and only if $x$ ``touches" $B$. This exactly means that $x$ belongs to the closure of $B$. In other words, for every open set $U$ containing $x$, $U \cap B$ is nonempty.
+
+\begin{definition}
+A set $C$ is \dfn{disconnected} if there are two nonempty subsets $A, B$ of $C$ which are contained in open sets $U \supseteq A$ and $V \supseteq B$ such that $U \cap V$ is empty. Otherwise, $C$ is \dfn{connected}.
+\end{definition}
+Another way you might consider a set to be connected is that for any two points $x,y$ in the set, there is a curve from $x$ to $y$. This notion of connectedness will also be useful to us.
+\begin{definition}
+A set $C$ is \dfn{pathconnected} if for any points $z, w \in C$, there is a curve $\gamma$ such that $\gamma(0) = z$ and $\gamma(1) = w$.
+\end{definition}
+\begin{theorem}
+A connected, open set $A \subseteq \CC$ is pathconnected.
+\end{theorem}
+\begin{proof}
+Fix $z \in A$, and let $Z$ be the set of all points $w \in A$ such that there is a curve from $z$ to $w$. We must show that $Z = A$.
+
+Since $A$ is open, for every $w \in Z$ there is a $\delta > 0$ so that the disc $D(w, \delta) = \{q \in \CC: |q - w| < \delta\}$ is a subset of $A$. A disc is pathconnected (just draw a picture!) so we can find a path from $w$ to any $q \in D(w, \delta)$. Therefore $D(w, \delta) \subseteq Z$. Since $w$ was arbitrary, $Z$ is open.
+
+On the other hand, $A \setminus Z$ is an open subset of $A$. That is, if $w \in A$ but $w \notin Z$, choose $\delta > 0$ so that $D(w, \delta)$ is a subset of $A$. Then we cannot find a curve from $z$ to any point $q \in D(w, \delta)$ (if we could, then we could use the fact that $D(w, \delta)$ is pathconnected to extend it to a curve from $z$ to $w$.)
+
+But then $Z$ and $A \setminus Z$ witness that $A$ is disconnected, a contradiction.  
+\end{proof}
+Famously, not every connected set is pathconnected. (See, for example, Pugh, Chapter 2.) However, this won't be a problem in complex analysis, because the only connected sets we were going to consider were open.
+
+Finally, we consider simply connected sets. These are sets which are not only connected, but don't have any holes.
+\begin{definition}
+Let $A$ be a set and let $\gamma_0, \gamma_1: [0, 1] \to A$ be two curves. A \dfn{homotopy} $H: [0, 1]^2 \to A$ between $\gamma_0$ and $\gamma_1$ is a mapping such that $H(0, t) = \gamma_0(t)$ and $H(1, t) = \gamma_1(t)$.
+\end{definition}
+To imagine a homotopy, notice that the mappings $t \mapsto H(s, t)$ (so $s$ is held constant) are curves. Meanwhile, $s \mapsto H(s, \cdot)$ is a mapping into the space of all curves, so is a curve whose points are themselves curves. It may feel a little weird to consider curves as points in a space -- but this is a very fruitful viewpoint.
+
+If $z,w \in A$, we often speak of a homotopy between $z$ and $w$. This is a homotopy between two curves, both of which start at $z$ and end at $w$.
+\begin{definition}
+Let $A$ be a connected, open set. We say $A$ is \dfn{simply connected} if for every curve $\gamma$ in $A$, there is a point $z \in A$ and a homotopy $H$ in $A$ from $\gamma$ to the curve $\tilde z(t) = z$.
+\end{definition}
+In other words, every curve can be continuously deformed to just a point.
+
+Notice that the ``punctured plane" ($\CC$ with the origin removed) is not simply connected. But lots of sets are simply connected. 
+\begin{definition}
+Let $A$ be a connected, open set. We say $A$ is \dfn{starlike} with respect to a point $z \in A$ if for every $w \in A$, the line segment $[w, z]$ is contained in $A$. We say $A$ is \dfn{convex} if for every $z \in A$, $A$ is starlike with respect to $z$.
+\end{definition}
+\begin{theorem}
+A starlike set (so, in particular, a convex set) is simply connected.
+\end{theorem}
+\begin{proof}
+Let $A$ be starlike with respect to $z$ and let $\gamma$ be a curve in $A$. We will show that $\gamma$ is homotopic to $z$. For any $t \in [0, 1]$, notice that $[\gamma(t), z]$ is contained in $A$. Let us parametrize $\rho_t = [\gamma(t), z]$ by $[0, 1]$, so $\rho_t(0) = \gamma(t)$, $\rho_t(1) = z$, and $\rho_t(s) \in [\gamma(t), z]$ for any $s \in [0, 1]$. Now let $H(s, t) = \rho_s(t)$. Then $H$ is a homotopy, as promised.
+\end{proof}
+
+
+\section{Rules of line integration}
+The usual rules of line integration apply. First,
+$$\int_\gamma c_1 f_1 + c_2 f_2 = c_1 \int_\gamma f_1 + c_2 \int_\gamma f_2.$$
+Second,
+$$\int_{-\gamma} f = -\int_\gamma f$$
+where $-\gamma$ is an orientation-reversing reparametrization of $\gamma$. In other words, $-\gamma$ is the curve from $b$ to $a$ along the same path as $\gamma$ took from $a$ to $b$. Formally, $-\gamma(t) = \gamma(b + a -t)$.
+We let $\gamma_1 + \gamma_2$ denote the path from $a$ to $b$ along $\gamma_1$, followed by the path along $b$ to $c$ along $\gamma_2$. Formally, $\gamma_1 + \gamma_2: [a, c] \to \CC$ is given by $\gamma_1 + \gamma_2(t) = \gamma_1(t)$ if $t \leq b$ and $\gamma_2(t)$ otherwise. Then
+$$\int_{\gamma_1 + \gamma_2} = \int_{\gamma_1} f + \int_{\gamma_2} f.$$
+Finally, if $\tilde \gamma$ is a reparametrization of $\gamma$, then
+$$\int_\gamma f = \int_{\tilde \gamma} f.$$
+The proofs of all of these facts is in Marsden-Hoffman, but the idea is pretty much always to use a change of variables to replace $\gamma$ with an integral along $[a, b]$.
+
+It is frequently useful to be able to consider $\gamma'$ (see, for example, the definition of arc length). Since $\gamma$ is assumed piecewise $C^1$, we can always write
+$$\gamma = \gamma_1 + \gamma_2 + \dots + \gamma_n$$
+where each of the $\gamma_j$ is differentiable. Then we can replace any integral involving $\gamma$ with a sum of integrals involving the $\gamma_j$. For example,
+$$\int_\gamma f = \sum_j \int_{\gamma_j} f = \sum_j \int_0^1 f(\gamma_j(t)) \gamma_j'(t) ~dt.$$
+Thus, once we have assumed that $\gamma$ is piecewise $C^1$, we may always assume without loss of generality that $\gamma$ is actually differentiable.
+
+\begin{example}
+Let $f(z) = \Re z$, and let $\gamma$ be a straight line from $0$ to $1 + i$, so $\gamma(t) = t(1 + i)$. Then
+$$\int_\gamma f(z) ~dz = \int_0^1 \Re \gamma(t) \gamma'(t) ~dt = \int_0^1 t\gamma'(t) ~dt = \int_0^1 \gamma(t) ~dt = \int_0^1 t(1 + i) ~dt = \frac{1 + i}{2}.$$
+\end{example}
+
+Now we prove a version of the triangle inequality for integrals.
+\begin{theorem}
+Let $f: A \to \CC$ be continuous, $A$ an open set, and $\gamma$ a curve in $A$. Then
+$$\left|\int_\gamma f\right| \leq \int_0^1 |f(\gamma(t))| |\gamma'(t)| ~dt \leq \ell(\gamma) \sup_{t \in [0, 1]} |f(t)|.$$
+\end{theorem}
+\begin{proof}
+We can write
+$$\left|\int_\gamma f\right| = \left|\int_0^1 f(\gamma(t)) \gamma'(t) ~dt\right| \leq \int_0^1 |f(\gamma(t)) \gamma'(t)| ~dt = \int_0^1 |f(\gamma(t))| |\gamma'(t)| ~dt.$$
+The inequality of real integrals is a standard result from real analysis (the details are in Marsden-Hoffman; it follows by using the triangle inequality on the Riemann sums.)
+
+We then use the inequality
+$$\int_0^1 |f(\gamma(t))| |\gamma'(t)| ~dt \leq \int_0^1 \sup_{s \in [0, 1]} |f(s)| |\gamma'(t)| ~dt = \sup_{s \in [0, 1]} |f(s)| \int_0^1 |\gamma'(t)| ~dt = \ell(\gamma) \sup_{t \in [0, 1]} |f(t)|.$$
+\end{proof}
+Since $f$ is continuous, $[0, 1]$ a closed, bounded subset of $\RR$, $\sup_{t \in [0, 1]} |f(t)| < \infty$.
+
+\section{Fundamental theorem of calculus}
+\begin{theorem}[fundamental theorem of calculus]
+Let $f: A \to \CC$ be holomorphic, $A$ an open set, and $\gamma$ a curve in $A$. If $f'$ is continuous, then
+$$\int_\gamma f' = f(\gamma(1)) - f(\gamma(0)).$$
+\end{theorem}
+\begin{proof}
+Write $u(t) + iv(t) = f(\gamma(t))$. Then by the chain rule, $f'(\gamma(t))\gamma'(t) = u'(t) + iv'(t)$. Without loss of generality, we can assume $\gamma$ is differentiable, since if not, then we can replace $\gamma$ by a sum of smooth curves (as above). Then
+\begin{align*}
+\int_\gamma f' &= \int_0^1 f'(\gamma(t)) \gamma'(t) ~dt = \int_0^1 u'(t) ~dt + i\int_0^1 v'(t) ~dt \\&= u(1) - u(0) + iv(1) - v(0) = f(\gamma(1)) - f(\gamma(0)).\end{align*}
+\end{proof}
+
+
+\begin{corollary}
+Let $f: A \to \CC$ be holomorphic, $A$ an open set, and $\gamma$ a closed curve in $A$. Then
+$$\int_\gamma f' = 0.$$
+\end{corollary}
+\begin{proof}
+Just plug it into the fundamental theorem.
+\end{proof}
+\begin{corollary}
+Let $f: A \to \CC$ be holomorphic, $A$ a connected open set, and $f' = 0$. Then $f$ is a constant.
+\end{corollary}
+\begin{proof}
+Fix $z \in A$. Since $A$ is pathconnected, for every $w \in A$ there is a curve $\gamma$ from $z$ to $w$. Then
+$$f(w) = f(z) + \int_\gamma f'$$
+by the fundamental theorem. Since $f' = 0$ we have $f(w) = f(z)$.
+\end{proof}
+
+\begin{example}
+Let $\gamma(\theta) = e^{i\theta}$, for $\theta \in [0, 2\pi]$. Then $\gamma$ is a circle running counterclockwise around $0$. Notice that
+$$\int_\gamma z^{-2} ~dz = \int_\gamma (-z^{-1})' ~dz = e^{-2\pi i} - e^{-i 0} = e^0 - e^0 = 0.$$
+
+On the other hand, notice that $z^{-1}$ does not have an antiderivative close to $0$. In fact, $(\log z)' = z^{-1}$, and $\log z$ is not defined on a ray extending from the origin. So no matter how we try to draw a circle around $0$, it will intersect a ray on which $\log z$ is not defined. So we cannot use the fundamental theorem of calculus on $\int_\gamma z^{-1} ~dz$. Unsurprisingly, that integral is not $0$. Rather,
+$$\int_\gamma \frac{dz}{z} = \int_0^{2\pi} f(\gamma(\theta))\gamma'(\theta) ~d\theta = \int_0^{2\pi} e^{-i\theta}ie^{i\theta} ~d\theta = i\int_0^{2\pi}d\theta = 2\pi i.$$
+
+More generally, if we are given a \dfn{Laurent polynomial}
+$$f(z) = \frac{a_{-N}}{z^N} + \frac{a_{-N+1}}{z^{N-1}} + \dots + \frac{a_{-1}}{z} + a_0 + a_1z + a_2z^2 + \dots + a_M z^M$$
+then the only term that matters from the point of view of contour integration is the $a_{-1}$ term. In fact, with $\gamma$ as above,
+$$\int_\gamma f = a_{-1} \int_\gamma \frac{dz}{z} = 2a_{-1} \pi i.$$
+\end{example}
+
+\begin{theorem}[path independence]
+Let $A \subseteq \CC$ be an open connected set. Let $f: A \to \CC$ be a continuous function. The following are equivalent:
+\begin{enumerate}
+\item If $\gamma$ is any closed curve, then $\int_\gamma f = 0$.
+\item For any $z, w \in A$, and any two curves $\gamma,\rho$ from $z$ to $w$, then $\int_\gamma f = \int_\rho f$.
+\item There is a holomorphic function $F: A \to \CC$ such that $F' = f$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Assume (1) and let $\gamma, \rho$ be two curves from $z$ to $w$. Then $\gamma + (-\rho)$ is a curve from $z$ back to $z$; i.e. a closed curbe. So
+$$\int_\gamma f = \int_\gamma f - \int_\rho f + \int_\rho f = \int_{\gamma-\rho} f + \int_\rho f = \int_\rho f.$$
+Therefore (2) holds.
+
+Now assume (2). Choose a $z \in A$. Since $A$ is open and connecetd, $A$ is pathconnected, so for every $w \in A$ we can find a $\gamma_w$ from $z$ to $w$. Moreover, the integral $\gamma_w f$ does not depend on the choice of $\gamma_w$, by (2). Thus the function
+$$F(w) = f(z) + \int_{\gamma_w} f$$
+is well-defined. We have the estimate
+\begin{align*}
+\left|\frac{F(w) - F(z)}{w - z} - f(z)\right| &= \frac{|F(w) - F(z) - (w-z)f(z)|}{|w - z|}\\
+	&\leq \frac{|\int_{\gamma_w} f - f(z)\int_{\gamma_w}1|}{|w-z|}\\
+	&\leq \frac{\int_{\gamma_w} |f(q)-f(z)| ~dq}{|w - z|}\\
+	&\leq \frac{\ell(\gamma_w)}{w-z} \sup_{t \in [0, 1]} |f(\gamma_w(t)) - f(z)|
+\end{align*}
+and since the integral does not depend on the choice of $\gamma_w$ we can choose $\gamma_w$ to be made small enough, so that $\ell(\gamma_w)/(w-z) \leq C$ for some $C$ that only depends on $A$ (for example, if $A$ is convex, we can take $\gamma_w$ to be a straight line and then $C = 1$; if $A$ is very ``twisty" then $C$ is quite large, but ultimately independent of $w$ or $f$.) So
+$$\left|\frac{F(w) - F(z)}{w - z} - f(z)\right| \leq C\sup_{t \in [0, 1]} |f(\gamma_w(t)) - f(z)|$$
+and $f$ is continuous, so the $\sup$ in the right-hand side of the above equation is very small if $w$ is close to $z$. Therefore
+$$\lim_{w \to z} \frac{F(w) - F(z)}{w - z} = f(z).$$
+Thus $F' = f$. So (3) holds.
+
+Assume (3). Then by the fundamental theorem of calculus, (1) holds.
+\end{proof}
+
+\section{Cauchy's theorem}
+We now loosen the hypotheses of the path independence theorem.
+
+\begin{theorem}[Cauchy]
+Let $A$ be an open, simply connected set, and let $\gamma$ be a simple closed curve in $A$. Let $f: A \to \CC$ be holomorphic. Then
+$$\int_\gamma f = 0.$$
+\end{theorem}
+Before we prove this, notice that we do not assume that $f'$ is continuous (so $f$ may not be continuously differentiable). We will actually be able to assume something much weaker: $f$ may not even be holomorphic at every point (see a later corollary). This result is called \dfn{Goursat's improvement}. But as it will turn out, we will use Cauchy's theorem to prove that $f$ is holomorphic, and $f'$ actually is continuous.
+
+Also, let us notice that we can assume that $\gamma$ is a rectangle, oriented counterclockwise.
+\begin{lemma}
+Let $B$ be an open, simply connected set and $\varepsilon > 0$. Then there is a sequence of rectangles $R_n \subset B$, which only overlap on their boundary, such that the area of $B \setminus \bigcup_n R_n$ is $< \varepsilon$.
+\end{lemma}
+\begin{proof}
+Suppose not. Then there is a $\delta > 0$ such that for any sequence of rectangles $R_n \subset B$ which only overlap on their boundaries, the error $E = B \setminus \bigcup_n R_n$ has area $\geq \delta$. But then $E$ is an open set, so we can remove another rectangle $S_1$ from it. We repeat this process until the error term is less than $\delta$, but $S_1, \dots, S_N, R_1, R_2, \dots$ now has an error area of $< \delta$, a contradiction.
+\end{proof}
+
+So taking $B$ to be the interior of $\gamma$, we see that we can tile the interior of $\gamma$ using rectangles $R_n$ with error $\varepsilon$ and put
+$$\int_\gamma f \approx \sum_{n=1}^\infty \int_{R_n} f$$
+and the $\approx$ becomes equality as $\varepsilon \to 0$, since the boundary terms all cancel out except the ones that are closest to $\gamma$.
+
+\begin{proof}[Proof of Cauchy's theorem]
+Assume without loss of generality that $\gamma$ is a rectangle. Draw line segments from each of the midpoints of the line segments to the midpoint of their opposite segment, to partition $\gamma$ into four rectangles $\gamma_1, \gamma_2, \gamma_3, \gamma_4$. Then
+$$\int_\gamma f = \sum_{j=1}^4 \int_{\gamma_j} f$$
+whence
+$$\left|\int_\gamma f\right| \leq \sum_{j=1}^4 \left|\int_{\gamma_j} f\right|.$$
+So there is a $j$ with
+$$\left|\int_{\gamma_j} f\right| \geq \frac{1}{4} \left|\int_\gamma f\right|.$$
+Let $R_1 = \gamma_j$, and iterate. Then
+$$4^{-n} \left|\int_\gamma f\right| \leq \cdots \leq 4^{-1} \left|\int_{R_{n-1}} f\right| \leq \left|\int_{R_n} f \right|.$$
+
+Let $P$ the perimeter of $\gamma$ and let $D$ be the diagonal length of $\gamma$. Then the perimeter of $R_n$ is $2^{-n}P$ and the diameter is $D2^{-n}$, by euclidean geometry. By compactness, there is a $w_0 \in \bigcap_n R_n$, and for each a $\varepsilon > 0$, there is a $n$ so that if $z \in R_n$ then the Taylor error of $f(z)$ around $w_0$ is $< \varepsilon$. Using the Taylor expansion of $f$ around $w_0$,
+\begin{align*}
+\left|\int_\gamma f\right| &\leq 4^n \left|\int_{R_n} f\right|
+	= 4^n \left|\int_{R_n} f - f(w_0) \int_{R_n} ~dz - f'(w_0)\int_{R_n} z - w_0 ~dz\right|\\
+	&\leq 4^n \left|\int_{R_n} f(z) - f(w_0) - (z - w_0)f'(w_0) ~dz\right|\\
+	&\leq 4^n \int_{R_n} |f(z) - f(w_0) - (z - w_0)f'(w_0)| ~dz < \varepsilon PD.
+\end{align*}
+\end{proof}
+\begin{corollary}
+Let $A$ be an open set. Let $\gamma$ be a curve which is homotopic to a point in $A$, $f: A \to \CC$ holomorphic; then $\int_\gamma f = 0$.
+\end{corollary}
+\begin{corollary}
+Let $A$ be an open set. Let $f: A \to \CC$ be a holomorphic function and assume that $\gamma_0,\gamma_1$ are homotopic curves in $A$. Then
+$$\int_{\gamma_0} f = \int_{\gamma_1} f.$$
+\end{corollary}
+\begin{proof}
+The image $H$ of a homotopy is the image of $[0, 1]^2$, a connected, simply connected sets. Continuous functions preserve connectedness and simple connectedness. So the boundary of $H$, which is $\gamma_0 - \gamma_1$, is a simple closed curve which is contained in $A$. So $H$ is homotopic to a point; therefore the integral of any holomorphic function around $\gamma_0 - \gamma_1$ is zero.
+\end{proof}
+\begin{corollary}
+Let $A$ be an open, simply connected set, and let $\gamma$ be a simple closed curve in $A$. Let $f: A \to \CC$ be holomorphic, except possibly at a point $w \in A$, where we only assume that $f$ is bounded. Then
+$$\int_\gamma f = 0.$$
+\end{corollary}
+\begin{proof}
+Be a little more careful in how we choose our rectangles, so that $w$ does not lie on the boundary of any of them. If $w$ lies on $\gamma$ itself this is a little harder, but we can use Cauchy's theorem to throw away all of the interior of $\gamma$ except a tiny rectangle $\rho$, which $w$ is allowed to lie on. Then $\ell(\rho)$ is very small, and since $f$ is bounded,
+$$\left|\int_\rho f\right| \leq \ell(\rho) \sup_A |f|$$
+which is very small. Taking the limit as $\rho$ shrinks, we see that $\int_\gamma f = 0$.
+\end{proof}
+\section{Cauchy's integral formula}
+Notice that if $\gamma$ is a simple closed curve around the origin,
+$$\int_\gamma \frac{dz}{z} = 2\pi i.$$
+But if $\gamma$ winds a net $n$ times around the origin counterclockwise (so $n + k$ times counterclockwise and $k$ times clockwise, since the $k$ times will cancel out), we have
+$$\frac{1}{2\pi i} \int_\gamma \frac{dz}{z} = n.$$
+\begin{definition}
+Let $\gamma$ be a closed curve, and $w$ a point not on the curve. The \dfn{winding number} or \dfn{index} of $\gamma$ around $w$ is given by
+$$I(\gamma, w) = \frac{1}{2\pi i} \int_\gamma \frac{dz}{z - w}.$$
+\end{definition}
+So the winding number is just the net number of times $\gamma$ winds around $w$.
+
+Let's make sure this definition actually makes sense, i.e. $I(\gamma, w)$ is an integer. Clearly $\gamma$ divides $\CC$ into multiple regions. Moreover, $1/(z-w)$ is a continuous function. So $I(\gamma, \cdot)$ is continuous, and clearly $0$ at infinity. If we show that $I(\gamma, \cdot)$ maps into the integers, then it must be constant on each region demarcated by $\gamma$, since a continuous function from a connected set into $\ZZ$ must be constant. (See the open-set definition of continuity to check this.)
+
+\begin{lemma}
+The winding number $I(\gamma, w)$ is an integer.
+\end{lemma}
+\begin{proof}
+Let
+$$g(t) = \int_0^t \frac{\gamma'(s) ~ds}{\gamma(s) - w}.$$
+Then
+$$g'(t) = \frac{\gamma'(t)}{\gamma(t) - w}.$$
+Writing out the left-hand side of the following equation using calculus, we have
+$$\frac{d}{dt}e^{-g(t)}(\gamma(t) - w) = 0.$$
+Now $g(0) = 0$ so, since $\gamma(0) = \gamma(1)$,
+$$e^{-g(0)} = e^{-g(1)} = e^0 = 1.$$
+So there is an $n$ so that $g(1) = 2\pi in$, but then by the definition of a ilne integral, $g(1) = 2\pi i I(\gamma, w)$.
+\end{proof}
+
+\begin{theorem}[Cauchy's integral formula]
+Let $A$ be an open set, let $f$ be holomorphic on $A$, and let $\gamma$ be a closed curve which is homotopic to a point. Let $w \in A$ not lie in the image of $\gamma$. Then
+$$f(w) = \frac{1}{2\pi iI(\gamma, w)} \int_\gamma \frac{f(z)}{z - w} ~dz.$$
+\end{theorem}
+\begin{proof}
+Let
+$$g(z) = \frac{f(z) - f(w)}{z - w}.$$
+Then $g$ is not defined at $w$, but since $f$ is holomorphic, the limit there exists, so we can put $g(w) = f'(w)$ and have $g$ still be continuous (and hence bounded). This does not guarantee that $g$ is holomorphic at $w$, since $f$ is not assumed twice-differentiable, but by a corollary of Cauchy's theorem, we still can assume that
+$$0 = \int_\gamma g = \int_\gamma \frac{f(z) ~dz}{z - w} - \int_\gamma \frac{f(w) ~dz}{z - w}.$$
+Therefore
+$$\int_\gamma \frac{f(z) ~dz}{z - w} = f(w) \int_\gamma \frac{dz}{z - w} = f(w) 2\pi i I(\gamma, w).$$
+\end{proof}
+All corollaries of Cauchy's integral formula are incredibly powerful, and should be committed to memory.
+\begin{corollary}
+Let $\gamma$ be a closed curve, $f$ continuous on an open set containing $\gamma$, and
+$$F(w) = \frac{1}{2\pi i} \int_\gamma \frac{f(z) ~dz}{w - z}.$$
+Then the higher derivatives $F^{(n)}$ exist for all $n$; in fact,
+$$F^{(n)}(w) = \frac{n!}{2\pi i} \int_\gamma \frac{f(z) ~dz}{(z - w)^{n+1}}.$$	
+\end{corollary}
+\begin{proof}
+One has
+$$F^{(n)}(w) = \frac{1}{2\pi i} \int_\gamma \frac{\partial}{\partial w} \frac{f(z) ~dz}{w - z},$$
+a standard result of real analysis (c.f. Theorem 9.42 in Rudin; you don't need to know the proof of this for the exam.) Now differentiate $(z - w)^{-1}$ $n$ times to see the result.
+\end{proof}
+\begin{corollary}
+Let $A$ be an open set. Let $f$ be a holomorphic function on $A$. Then all higher derivatives $f^{(n)}$ exist; in fact, for any curve $\gamma$ which is homotopic to a point in $A$,
+$$f^{(n)}(w) = \frac{n!}{2\pi i I(\gamma, w)} \int_\gamma \frac{f(w) ~dw}{(w - z)^{n+1}}.$$
+\end{corollary}
+\begin{corollary}[Morera]
+Let $f$ be continuous on an open set $A$, and assume that for every curve $\gamma$ in $A$, $\int_\gamma f = 0$. Then $f$ is holomorphic.
+\end{corollary}
+\begin{proof}
+By path independence, $f$ has a holomorphic antiderivative $F$. Moreover, $F'' = f'$ exists, by a previous corollary.
+\end{proof}
+\begin{corollary}[Cauchy estimates]
+Let $A$ be an open set. Let $f$ be holomorphic on $A$ and let $\gamma$ be a circle of radius $R$ and center $w \in A$, such that the disc $D(w, R) \subseteq A$. Then
+$$|f^{(n)}(w)| \leq \frac{n!}{R^n} \sup_{t \in [0, 1]} |f(t)|.$$
+\end{corollary}
+\begin{proof}
+We have
+$$|f^{(n)}(w)| \leq \frac{n!}{2\pi} \int_\gamma \left|\frac{f(z)}{(z - w)^{n+1}}\right| ~dz	\leq \frac{n!}{2\pi} \frac{\sup_\gamma |f|}{R^{n+1}}\ell(\gamma)$$
+which proves the claim since $\ell(\gamma) = 2\pi R$.
+\end{proof}
+\begin{definition}
+An \dfn{entire function} is a function which is holomorphic on all of $\CC$.
+\end{definition}
+\begin{corollary}[Liouville]
+Every entire function is either constant or unbounded.
+\end{corollary}
+\begin{proof}
+Let $f$ be entire and bounded. Then $\sup_\gamma |f| \leq \sup |f| < \infty$. So for any $R$, by the Cauchy estimates with $n = 1$,
+$$|f(w)| \leq \frac{\sup |f|}{R^n}$$
+and taking $R \to \infty$ we see the claim.
+\end{proof}
+\begin{corollary}[fundamental theorem of algebra]
+Every polynomial is either constant or has a zero.
+\end{corollary}
+\begin{proof}
+Assume that $f$ is a polynomial but does not have a zero. Then $1/f$ is a rational function with no zeroes, so is entire by the quotient rule. By Liouville's theorem, $1/f$ is either constant or unbounded. If $1/f$ is unbounded, then $f$ becomes arbitrarily small close to infinity, but $f(z) = a_nz^n + \dots + a_0$, and the $a_nz^n$ term goes to infinity at infinity, so this is a contradiction. Therefore $1/f$ is constant, so $f$ is constant.
+\end{proof}
+
+
+\printindex
+
+\end{document}

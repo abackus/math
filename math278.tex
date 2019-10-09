@@ -1,0 +1,123 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+
+\title{Math 185: Complex Analysis}
+\author{Michael Klass}
+\date{Fall 2019}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\makeindex
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+
+\chapter{Special relativity}
+We start with the two experimentally verifiable axioms of special relativity.
+
+\begin{definition}
+    A \dfn{reference frame} is a coordinate system for $\RR^4 = \RR \times \RR^3$. A reference frame is said to be \dfn{inertial} if the motion of a body without external influence forms a straight line in $\RR^4$. Otherwise, the reference frame is said to be \dfn{accelerated}.
+\end{definition}
+\begin{axiom}
+    All laws of physics are invariant under change of inertial reference frame.
+\end{axiom}
+\begin{axiom}
+    The speed of light in a vacuum is invariant under change of inertial reference frame.
+\end{axiom}
+	We denote the speed of light in a vacuum by $c$.
+
+\section{Lorentz transformations}
+\begin{definition}
+    A \dfn{Lorentz transformation} is a smooth transformation which fixes the origin and is homotopic to the identity, which carries an inertial reference frame to an inertial reference frame.
+\end{definition}
+\begin{definition}
+	Let $p = (t, x), q = (t', x') \in \RR^4$. The \dfn{spacetime interval} $\Delta s = [p, q]$ between $p, q$ is the distance
+	$$\Delta s^2 = \Delta x^2 - c^2\Delta t^2$$
+	where $\Delta t = t' - t$ and $\Delta x = x' - x$.
+\end{definition}
+It is not hard to check that Lorentz transformations are linear (since they preserve straight-line trajectories). Moreover, spacetime intervals are also preserved by Lorentz transformations. By the second axiom of relativity, the quadratic polynomials associated to $\Delta s$ and its Lorentz transform, say $\Delta s'$, have the same roots. So there is an $\alpha \neq 0$ such that
+$$(\Delta s)^2 = \alpha (\Delta s')^2.$$
+Moreover, this constant appears for any choice of $s, s'$, so by ``reciprocity", $\alpha^2 = 1$. Since Lorentz transformations are homotopic to the identity, which clearly has $\alpha > 0$, we have $\alpha = 1$. Therefore the claim holds.
+
+\begin{example}[twin paradox]
+\index{twin paradox}
+Let $A, B$ be two twins born in space. They are separated at birth (spacetime $P$), and $B$ moves away from $A$ but then suddenly turns around (at spacetime $Q$) and meets $A$ again (at spacetime $R$). Then it appears that both $A$ is older than $B$ (from the point of view of $A$) and $B$ is older than $A$ (from the point of view of $B$). However, one can check that in fact $A$ is older than $B$, since $B$ had an accelerated reference frame (when he turned around at $Q$) and so has an incorrect perception of the universe. This can be checked using the spacetime interval invariance.
+\end{example}
+
+Let us consider the Lorentzian metric
+$$ds^2 = dx^2 - c^2 dt^2,$$
+where as usual we write $s = (t, x) \in \RR \times \RR^3 = \RR^4$ for a point in spacetime. This is a linear combination of the Riemannian metrics $dx^2$ and $dt^2$. We will also write $m$ for the indefinite quadratic form induced by $ds^2$ on the tangent bundle. On the other hand we will write $\delta$ for the positive-definite quadratic form induced by the Riemannian metric $dx^2$. Therefore $(\RR^3, \delta)$ is just Euclidean space.
+\begin{definition}
+	A \dfn{Lorentzian manifold} is a smooth manifold equipped with a smoothly varying quadratic form on each tangent space. The Lorentzian manifold $(\RR^4, m)$ is known as \dfn{Minkowski spacetime}.
+\end{definition}
+
+Now let $\gamma$ be a curve in $\RR^4$, which we think of as parametrized by $[0, 1]$. We denote the tangent vector by $\dot \gamma$.
+\begin{definition}
+The \dfn{proper time} of the curve $\gamma$ is
+$$\int_0^1 \frac{\sqrt{-m(\dot \gamma(\sigma), \dot \gamma(\sigma))}{c}} ~d\sigma.$$
+\begin{definition}
+	Let $v$ be a tangent vector over $\RR^4$. If $m(v, v) < 0$, we say that $v$ is \dfn{timelike}. If $m(v, v) = 0$, then $v$ is \dfn{lightlike} or \dfn{null}. Otherwise, $v$ is \dfn{spacelike}. If $v$ is not spacelike, we say that $v$ is \dfn{causal}. If every tangent vector to a curve is timelike (lightlike, etc.), we say that the curve itself is timelike (lightlike, etc.)
+\end{definition}
+Notice that a vector $v$ has speed $\leq c$ iff $v$ is causal. So causal curves are those trajectories of objects which are allowed by the laws of physics.
+
+
+
+\printindex
+
+\end{document}
