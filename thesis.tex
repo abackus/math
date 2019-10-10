@@ -22,6 +22,7 @@
 \newcommand{\QQ}{\mathbf{Q}}
 \newcommand{\RR}{\mathbf{R}}
 \newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
 
 \DeclareMathOperator{\ch}{ch}
 \DeclareMathOperator{\supp}{supp}
@@ -63,6 +64,9 @@
     %Ning added hyperlinks to the table of contents 6/17/19
 }
 
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{thesis.bib}
+
 \makeindex
 \begin{document}
 
@@ -70,10 +74,11 @@
 
 \tableofcontents
 
-\newpage
 
 \section*{Acknowledgments}
-I would like to thank Prof. Maciej Zworski for mentoring me, ..., and Erik Wendt for helpful comments.
+I would like to thank Prof. Maciej Zworski for suggesting this topic and mentoring me, as well as teaching me much of what I know about partial differential equations, harmonic analysis, and complex analysis. I would also like to thank Erik Wendt for suggesting the use of conformal mappings to better explain Green functions.
+
+
 
 \chapter{Zeroes of Fourier Transforms}
 Let $\mu$ be a distribution on $\RR$, i.e. a continuous element of the dual of the space of test functions $C^\infty_{comp}(\RR)$. We will abuse notation and write $\int_E f\mu$ for the pairing of $f$ and $\mu$, whenever it is defined. If $\mu$ satisfies certain growth conditions, then the Fourier transform
@@ -82,15 +87,15 @@ is well-defined and is also a distribution.
 
 For any distribution $\mu$ with bounded support $\supp \mu$, the convex hull of the support $\ch \supp \mu$ is given by a compact interval, and the Paley-Weiner theorem guarantees that $\hat \mu$ is an entire function. In particular, the number of zeroes of $\hat \mu$ lying in any compact set is necessarily finite, even when counted with multiplicity, assuming that $\mu \neq 0$.
 
-Our goal is to prove the following theorem:
-\begin{theorem}[Titchmarsh]
+Our goal is to prove the following theorem, which was first proven by Titchmarsh \cite{titchmarsh1926zeros}. The proof we give is based on the proof of Beurling that was first published in \cite[Chapter XVI]{hormander2004analysis}.
+\begin{theorem}
     \index{Titchmarsh's theorem}
     Let $\mu$ be a distribution with $\ch \supp \mu = [a, b]$. Let $N(R)$ denote the number of zeroes $z$ of $\hat \mu$ with $|z| < R$, counted with multiplicity. Then
     $$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b-a}{\pi}.$$
-\end{theorem}TODO: Cite it
+\end{theorem}
 
 \section{The Paley-Weiner theorem}
-We review the proof of the Paley-Weiner theorem, proven by Schwartz.
+We review the proof of the Paley-Weiner theorem, proven by Schwartz. The exposition given here is based on \cite[Chapter VII]{hormander2015analysis}.
 
 \begin{definition}
     For $\alpha,\beta$ multiindices, we define the $(\alpha,\beta)$th \dfn{Schwartz seminorm} on $\Omega \subseteq \CC^n$ by
@@ -148,8 +153,8 @@ Fix an open set $\Omega \subseteq \CC$. Recall that a function $u: \Omega \to [-
 $$M(z, r) = \frac{1}{2\pi} \int_0^{2\pi} u(z + re^{i\theta}) ~d\theta$$
 are increasing in $r$. This condition is logically equivalent to assuming that $u$ satisfies a maximum principle: for every compact set $K$ with nonempty interior $U$, if $u|_K$ attains its maximum on $U$, then $u|_K$ is a constant. To avoid trivialities, we shall assume that $u$ is not identically $-\infty$, though not every author makes this assumption.
 
-It is a well-known result that an upper-semicontinuous function $u$ is subharmonic iff the weak Laplacian $\Delta u \geq 0$; that is, for any nonnegative test function $\varphi \in C^\infty_c(\Omega)$,
-$$\int_\Omega u(z) \Delta \varphi(z) ~dz \geq 0.$$ If actually $\Delta u = 0$, then we call $u$ harmonic; by a typical mollification argument, if $u$ is harmonic, then $u$ is actually smooth (even real analytic), but such niceties may not be true for subharmonic functions. The reason why we refer to functions $u$ with $\Delta u \geq 0$ as subharmonic rather than superharmonic is that $-\Delta$ is a positive operator, and so we think of applying $\Delta$ as akin to ``multiplying by a negative function". Such a function lies in $L^1_{loc}(\Omega)$.
+It is a well-known result that an upper-semicontinuous function $u$ is subharmonic iff the weak Laplacian $\Delta u \geq 0$; that is, for any nonnegative test function $\varphi \in C^\infty_{comp}(\Omega)$,
+$$\int_\Omega u(z) \Delta \varphi(z) ~dz \geq 0.$$ If actually $\Delta u = 0$, then we call $u$ harmonic; by a typical mollification argument, if $u$ is harmonic, then $u$ is actually smooth (even real analytic), but such niceties may not be true for subharmonic functions. The reason why we refer to functions $u$ with $\Delta u \geq 0$ as subharmonic rather than superharmonic is that $-\Delta$ is a positive operator, and so we think of applying $\Delta$ as akin to ``multiplying by a negative function". Such a function lies in $L^1_{loc}(\Omega)$. (For the proofs, see \cite[Chapter 1]{hormander1973introduction}.)
 
 By the Paley-Weiner theorem, if $\mu$ is a distribution with $\ch \supp \mu = [a, b]$, then $\hat \mu$ is an entire function which satisfies the estimate
 $$\hat \mu(x + iy) \leq Ce^{h(y)}$$
@@ -194,25 +199,27 @@ It is immediate that $\log |\hat \mu|$ is imaginary-sublinear.
     Applying the maximum principle to a sufficiently large compact subset $K$, and noting that $v(\cdot, \varepsilon) \leq 0$ on $\partial K$, $v(\cdot, \varepsilon) \leq 0$ on $K$, hence globally since $K$ was arbitrary. Taking $\varepsilon \to 0$, we see that $u(x + iy) \leq L(y)$, so maximizing over $x$, $M \leq L$ on $[a, b]$. So $M$ is convex. But the limit of a sublinear, convex function exists, so $\gamma$ is well-defined, and $\gamma > -\infty$ since $u \in L^1_{loc}(\Omega)$, hence not $-\infty$ except on a discrete set. The bound $\gamma \leq D$ follows easily.
 \end{proof}
 
-We now give a representation formula for functions on the upper-half plane in terms of their Laplacian and their boundary values.
+The main result of this section is a representation formula for functions on the upper-half plane in terms of their Laplacian and their boundary values. To do this, we construct the Green function of $\Delta$ in the half plane.
 \begin{definition}
     The \dfn{Green function} for $\Delta$ on $\CC_+$ is defined on $\CC_+ \times \CC_+$ by
 $$G(z, w) = E(z - w) - E(z - \overline w).$$
     The \dfn{Poisson kernel} for $\Delta$ on $\CC_+$ is defined on $\CC+_ \times \RR$ by
 $$P(z, x) = -\frac{\partial G(z, x + iy)}{\partial y}|_{y = 0}.$$
 \end{definition}
-    Then $\Delta_w G(z, w) = \Delta_w E(z - w) = \delta_z$ since $\overline w \notin \CC_+$, hence $z \neq w$. Moreover, $\lim_{w \to 0} G(z, w) = 0$ for $z$ fixed. We can rewrite $G$ as
-$$G(z, w) = \frac{1}{2\pi} \log\left(\frac{z - w}{z - \overline w}\right),$$
-    which is clearly homogeneous: for $t > 0$, $G(tz, tw) = G(z, w)$. Since $(z-w)/(z - \overline w) \to 1$ as $z \to \infty$, $G(z, w) \to 0$.
+  To motivate the definition of a Green function, suppose that we want to solve the boundary-value problem for $\Delta$ on $\CC_+$. That is, given any function $f \in C(\RR)$, we want to find a harmonic function $u$ on $\CC_+$ which continuously extends to $\RR$, such that $u|_\RR = f$. If we can find a function $G$ on $\CC_+ \times \CC_+$ such that $\Delta G(z, w) = \delta_z w$ which continuously extends to $0$ on $\RR$, then one can use Stokes's theorem to see that
+$$u(z) = \int_{-\infty}^\infty f(x) P(z, x) ~dx,$$
+  since by definition the Poisson kernel is the normal derivative (i.e. infinitesimal of the flux) of $G$ along $\RR$. Now $G(z, w) = E(z - w)$ would suffice as such a function, except that it is nonzero at the boundary. On the other hand, $\Delta_z E(z - \overline w) = 0$ for $z, w \in \CC_+$, and by symmetry introducing this error term will cancel out the boundary term in $E(z - w)$.
 
-    As for the Poisson kernel, we notice that $\int_{-\infty}^\infty -\partial_y G(z, x + iy)|_{y = 0} ~dx$ can be profitably viewed as the ``flux" of $G(z, \cdot)$ through $\RR$. Moreover,
+    One has $\Delta_w G(z, w) = \Delta_w E(z - w) = \delta_z$ since $\overline w \notin \CC_+$, hence $z \neq w$. Moreover, $\lim_{w \to 0} G(z, w) = 0$ for $z$ fixed. We can rewrite $G$ as
+$$G(z, w) = \frac{1}{2\pi} \log\left|\frac{z - w}{z - \overline w}\right|,$$
+    which is clearly homogeneous: for $t > 0$, $G(tz, tw) = G(z, w)$. Since $(z-w)/(z - \overline w) \to 1$ as $z \to \infty$, $G(z, w) \to 0$.  Moreover,
 $$\partial_y G(z, x + iy) = -\frac{1}{2\pi} \left(\frac{y - \Re z}{|x + iy - z|^2} - \frac{y + \Re z}{|x + iy - \overline z|^2}\right)$$
   and setting $y = 0$ we have
 $$P(z, x) = \frac{\Im z}{2\pi|z-x|^2}.$$
 We have the estimate $P(z, x) = O(\Im z|z|^{-2})$ for small $x$ as $z \to \infty$. In the other direction, $P$ is a nascent Dirac mass in the sense that
-$$\lim_{b \to 0} P(a + ib, x) = \delta_x(a).$$
+$$\lim_{b \to 0} P(a + ib, x) = \delta_x(a).$$ Moreover, $\Delta G(\cdot, w) = 0$ away from $w$, so commuting $\partial_y$ and $\Delta$, we see that $P(\cdot, x)$ is harmonic on $\CC_+$.
 
-    Now $\Delta G(\cdot, w) = 0$ away from $w$, so commuting $\partial_y$ and $\Delta$, we see that $P(\cdot, x)$ is harmonic on $\CC_+$.
+To prove the representation formula, we will need some estimates on the Green function's order of growth.
 \begin{lemma}
 \label{estimate on Green function}
     For every $w \in \CC_+$ there is a constant $C > 0$ such that for every $z \in \CC_+$ such that $|z|$ is large enough,
@@ -228,6 +235,35 @@ $$\frac{\Im z}{C(1 + |z|)^2} \leq |G(w, z)| \leq \frac{C \Im z}{(1 + |z|)^2}.$$
   where the implied constants are allowed to depend on $w$, and we have used Knuth's big-$\Theta$ notation. Indeed, if $|z|$ is large then $x/|z|$ is small, and so does not contribute meaningfully to the long-term behavior of $P$.
 \end{proof}
 
+We shall also need a representation formula for the unit disc $\DD$. We recall that the Cayley transform, which we will denote $z \mapsto z^\flat$ (with inverse $w \mapsto w^\sharp$), conformally transforms $\CC_+$ into $\DD$, and so all that we have proven about $\CC_+$ corresponds to a fact about $\DD$. The Cayley transform is given by
+$$z^\flat = \frac{z - i}{z + i}.$$
+Pushing forward the Poisson kernel along the Cayley transform, we arrive at the following definition.
+\begin{definition}
+The \dfn{Poisson kernel} for $\Delta$ on $\DD$ is defined by
+$$P^\flat(z, \theta) = P(z^\sharp, (e^{i\theta})^\sharp).$$
+\end{definition}
+\begin{lemma}[Poisson representation formula]
+Let $f \in C(\partial \DD)$ and let
+$$F(z) = \int_0^{2\pi} P^\flat(z, \theta)f(e^{i\theta}) ~d\theta.$$
+Then $F$ is the unique solution to the boundary-value problem for $\Delta$ with boundary condition $f$.
+\end{lemma}
+\begin{proof}
+Since $P$ is harmonic, it follows that $P^\flat$ is harmonic as well, and
+$$\int_0^{2\pi} P^\flat(z, \theta) ~d\theta = \int_{-\infty}^\infty P(z^\sharp, x) ~dx = 1.$$
+So for any $r \in (0, 1)$ and any $\varepsilon > 0$, we have the estimate
+\begin{align*}
+  |F(re^{i\theta}) - f(e^{i\theta})| &\leq \int_0^{2\pi} P^\flat(re^{i\theta}, e^{i\eta})|f(e^{i\theta}) - f(e^{i\eta})| ~d\eta\\
+    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| + \int_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta})|f(e^{i\theta}) - f(e^{i\eta})| ~d\eta\\
+    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| + \sup_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta}) \int_{B_\varepsilon^c} |f(e^{i\theta}) - f(e^{i\eta})| ~d\eta
+\end{align*}
+where $B_\varepsilon$ is a interval in $[0, 2\pi]$ modulo $2\pi$ of radius $\varepsilon$ centered on $e^{i\theta}$. Since $f$ is continuous,
+$$\lim_{\varepsilon \to 0}\sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| = 0.$$
+On the other hand, since $P(z^\sharp, x) \to 0$ uniformly in $x$ as $z^\sharp \to \infty$, $P^\flat(z, x^\flat) \to 0$ uniformly in $x^\flat$ as $|z| \to 1$, provided that we are away from the singularity $z = x^\flat$. Thus
+$$\lim_{r \to 1} F(re^{i\theta}) = f(e^{i\theta})$$
+uniformly in $\theta$. So $F|_{\partial \DD} = f$. By the maximum principle, $F$ is unique.
+\end{proof}
+
+Now we are ready to prove the Riesz representation formula for $\CC_+$.
 \begin{theorem}[Riesz representation formula]
     \index{Riesz representation formula}
     Let $u$ be an imaginary-sublinear subharmonic function on $\CC_+$, let $\gamma$ be as in Lemma \ref{imaginary sublinear limit}, and fix any $w \in \CC_+$. Let $\mu = \Delta v$; then
@@ -309,38 +345,57 @@ $$w_j(z) = u_1(z + i\varepsilon) - \int_{-\infty}^\infty \delta_x(z) \psi_j(x) u
       \\&= -\int_{-\infty}^\infty \liminf_{z \to \infty} P(z, x) \psi_j(x) u_1(x + i\varepsilon) ~dx = 0.\end{align*}
     Therefore $h_j|_{\partial \CC_+} \leq 0$, so by the maximum principle, $h_j \leq 0$.
 
-    By the Schwarz reflection principle, we can extend $h_j$ by $h_j(x - iy) = -h(x + iy)$, and the resulting function is harmonic on the strip $\{z \in \CC: |\Re z| < j\}$. Taking the limit as $j \to \infty$, we construct a harmonic function $h$ on all of $\CC$, such that if $z \in \CC_+$,
-$$u_1(z + i\varepsilon) = h(z) + \int_{-\infty}^\infty P(z, x)u_1(x + i\varepsilon) ~dx.$$
-    If we can show $h = 0$, the lemma will follow.
-
-    TODO
+    By the Schwarz reflection principle, we can extend $h_j$ by $h_j(\overline z) = -h(z)$, and the resulting function is harmonic on the strip $\{z \in \CC: |\Re z| < j\}$. Taking the limit as $j \to \infty$, we construct a harmonic function $h$ on all of $\CC$, such that if $z \in \CC_+$,
+\begin{equation}\label{sigma rep with h}u_1(z + i\varepsilon) = h(z) + \int_{-\infty}^\infty P(z, x)u_1(x + i\varepsilon) ~dx.\end{equation}
+    In particular, $h$ restricts to a harmonic function on the rescaled disc $R\DD$ for any $R > 0$, so by the Poisson representation formula, for any $z < R$,
+$$h(z) = \int_0^{2\pi} P^\flat(z/R, \theta) h(Re^{i\theta}) ~d\theta = \int_0^\pi (P^\flat(z/R, \theta) - P^\flat(\overline z/R, \theta)) h(Re^{i\theta}) ~d\theta.$$
+    We set $x^\flat = e^{i\theta}$ and use the fact that the Cayley transform and complex conjugation commute (and so $|(z/R)^\sharp - x| = |\overline{(z/R)^\sharp} - x|$) to see
+\begin{align*}
+  P^\flat(z/R, \theta) - P^\flat(\overline z/R, \theta) &= P((z/R)^\sharp, x) - P\left(\overline{(z/R)^\sharp}, x\right)\\
+    &= \frac{\Im (z/R)^\sharp - \Im \overline{(z/R)^\sharp}}{2\pi |(z/R)^\sharp - x|^2}
+    = \frac{\Im (z/R)^\sharp}{\pi|(z/R)^\sharp - x|^2}.
+\end{align*}
+    If $z = \alpha + i\beta$, then if $R$ is large and $|z|$ is fixed,
+$$\Im (z/R)^\sharp = \frac{1 - |z|^2}{R^2((\alpha-R^{-1})^2 + \beta^2)} = \frac{1 - |z|^2}{R^2|z|^2 - 2\alpha R + 1} = O(R^{-2}).$$
+    Meanwhile, $|(z/R)^\sharp - x|^2 = |x + i|^2 = O(1)$. Taking the limit as $R \to \infty$, we see that $h = 0$. Plugging $h$ back into (\ref{sigma rep with h}), we complete the proof.
 \end{proof}
-    Since $\gamma = 0$ and $u \leq 0$, for every $\delta > 0$ there is a $x \in \RR$ such that for any $y$ large enough, $u(x + iy) > -\delta y$. So TODO, and if $R$ is large enough, then
-$$\left(\int_{-\infty}^{-R} + \int_R^\infty\right) \frac{-u_1(x + i\varepsilon)}{x^2} ~dx < \frac{\delta}{2\pi}.$$
-    This estimate is uniform in $\varepsilon$, and $u_1(\cdot + i\varepsilon)$ is bounded on $[-R, R]$ since it is harmonic; these bounds are also uniform in $\varepsilon$. Certainly any test function on $\RR$ decays faster than $x^2$, so it follows that $u_1(\cdot + i\varepsilon)$ is uniformly bounded in $\varepsilon$ as a functional acting on $C^\infty_{comp}(\RR)$. So by the Banach-Alaoglu theorem, there is a weak limit $\sigma$ as $\varepsilon \to 0$. Since $\sigma$ satisfies the same bounds as $u_1(\cdot + i\varepsilon)$, (\ref{estimate on sigma}) follows, and, passing to the limit in Lemma \ref{approximate sigma rep},
+    Since $\gamma = 0$ and $u \leq 0$, for every $\delta > 0$ and every $x \in \RR$, we can choose $y > 0$ so large that $u(x + iy) > -\delta y$. Since $G$ vanishes at infinity, so does $u_2$, so if $y$ is chosen even larger still, we can arrange that $u_1(x + iy) > -\delta y$. By Lemma \ref{approximate sigma rep} with a change of variable in $y$,
+$$-\int_{-\infty}^\infty \frac{u_1(x + i\varepsilon)}{|x + iy - t|^2} ~dt < \frac{\pi \delta y}{y - \varepsilon}.$$
+    Taking $\varepsilon$ and $R$ large enough, we can find a constant $B > 0$ such that
+$$\left(\int_{-\infty}^{-R} + \int_R^\infty\right) \frac{-u_1(x + i\varepsilon)}{x^2} ~dx < B \delta.$$
+    This estimate is uniform in $\varepsilon$, and $u_1(\cdot + i\varepsilon)$ is bounded on $[-R, R]$ since it is harmonic; these bounds are also uniform in $\varepsilon$. Certainly any test function on $\RR$ decays faster than $x^2$, so it follows that $u_1(\cdot + i\varepsilon)$ is uniformly bounded in $\varepsilon$ as a functional acting on $C^\infty_{comp}(\RR)$. So by the Banach-Alaoglu theorem, the space of all such distributions $u_1(\cdot + i\varepsilon)$ is weakstar compact, and so there is a weak limit $\sigma$ as $\varepsilon \to 0$. Since $\sigma$ satisfies the same bounds as $u_1(\cdot + i\varepsilon)$, (\ref{estimate on sigma}) follows, and, passing to the limit in Lemma \ref{approximate sigma rep},
 $$u_1(z) = \int_{-\infty}^\infty P(z, x) \sigma(x) ~dx.$$
     Plugging the representation formula for $u_1$ and $u_2$ back into the decomposition $u = u_1 + u_2$, we complete the proof.
 \end{proof}
 
 \begin{corollary}
     \label{gamma in mean}
-    Let $u$ be an imaginary-sublinear subharmonic function on $\CC_+$, and let $\gamma = \lim_{y \to \infty} \sup_x u(x + iy)/y$, as above. Then
+    Let $u$ be an imaginary-sublinear subharmonic function on $\CC_+$, and let $\gamma$ be as in Lemma \ref{imaginary sublinear limit}. Then
 $$\lim_{t \to \infty} \frac{u(t(x + iy))}{t} = \gamma y$$
     in $L^1_{loc}(\overline{\CC_+})$.
 \end{corollary}
 \begin{proof}
-    Fix a compact set $K \subset \overline{\CC_+}$. If $u$ is a constant, then both sides of the claimed equation are $0$, so by linearity we may subtract $C$ from $u$, and so assume without loss of generality that $C = 0$. Then $u(t(x+iy)) \leq \gamma y$, so it suffices to prove that
+    Fix a compact set $K \subset \overline{\CC_+}$. If $u$ is a constant, then both sides of the claimed equation are $0$, so by linearity we may subtract the constant $C$ that appears in the definition of an imaginary-sublinear function from $u$, and so assume without loss of generality that $C = 0$. Then $u(t(x+iy)) \leq \gamma y$, so it suffices to prove that
 $$\lim_{t \to \infty} \int_K \frac{u(tz)}{t} - \gamma \Im z ~dz = 0$$
     to show convergence in $L^1(K)$.
 
-    Let TODO
-
+    By the Riesz representation formula,
+$$\frac{u(tz)}{t} - \gamma \Im z = \int_{-\infty}^\infty P(z, x) \sigma(x) ~dx + \int_{\CC_+} G(z, w) \mu(w) ~dw.$$
+    We now let
+    $$f(t, x) = \frac{1}{t^2} \int_K P\left(t, \frac{x}{t}\right) ~dx.$$
+    Since $t > 0$ and $P \geq 0$, it follows that $f \geq 0$. Moreover, by Lemma \ref{estimate on Green function}, there is a $B > 0$ which only depends on $K$ such that for any $x/t$ large enough,
+    $$f(t, x) \leq \frac{1}{t^2} \sup_{x \in K} P\left(t, \frac{x}{t}\right) \leq \frac{B}{t^2(1 + |t|)^2}.$$
+    Moreover, this estimate on $f$ is trivial if we bound $x/t$ from above; so we can take $B$ to be large enough that this estimate is valid for any $x/t \in \RR$. Similarly, we take
+    $$g(t, w) = -\frac{1}{t} \int_K G(z, w) ~dw \leq \frac{D \Im z}{t^2(1+|z/t|)^2}.$$
+    Thus $g \geq 0$, and
+    $$\int_K \frac{u(tz)}{t} - \gamma \Im z ~dz = \int_{-\infty}^\infty f(t, x) \sigma(x) ~dx - \int_{\CC_+} g(t, w) \mu(w) ~dw.$$
+    Since we have estimated $f$ and $g$, we can use (\ref{estimate on sigma}) and (\ref{estimate on mu}) to apply the dominated convergence theorem. Clearly the dominators of $f$ and $g$ converge to $0$ pointwise as $t \to \infty$, so the integrals against $\sigma$ and $\mu$ converge to $0$.
 \end{proof}
 
 
 
 \section{Proof of Titchmarsh's theorem}
-Fix a distribution $\mu$ on $\RR$ with $\ch \supp \mu = [a, b]$. By the Paley-Weiner theorem, $\hat \mu$ is an entire function and $\log |\hat \mu|$ is an imaginary-sublinear subharmonic function. In fact, viewing $\log |\hat \mu|$ as a function on $\CC_+$ and taking $\gamma$ as in Corollary \ref{gamma in mean}, we have $\gamma = b$. On the other hand, viewing $\log |\hat \mu|$ as a function on $\CC_-$, we have $\gamma = a$. Let $Z$ be the multiset of zeroes of $\hat \mu$ with repetition.
+Fix a distribution $\mu$ on $\RR$ with $\ch \supp \mu = [a, b]$. By the Paley-Weiner theorem, $\hat \mu$ is an entire function and $\log |\hat \mu|$ is an imaginary-sublinear subharmonic function. In fact, viewing $\log |\hat \mu|$ as a function on $\CC_+$ and taking $\gamma$ as in Lemma \ref{imaginary sublinear limit}, we have $\gamma = b$. On the other hand, viewing $\log |\hat \mu|$ as a function on $\CC_-$, we have $\gamma = a$. Let $Z$ be the multiset of zeroes of $\hat \mu$ with repetition.
 
 Let $h(t) = at$ for $t < 0$, $h(t) = bt$ for $t > 0$. Then $h'$ is a rescaled Heaviside function, so $h'' = (b-a)\delta_0$. Using Corollary \ref{gamma in mean}, we have
 $$\lim_{t \to \infty} \frac{\log |\hat \mu(t\zeta)|}{t} = h(\Im \zeta)$$
@@ -358,8 +413,7 @@ This proves Titchmarsh's theorem.
 
 
 
-
-
+\printbibliography
 
 
 
