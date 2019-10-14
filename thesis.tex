@@ -263,6 +263,14 @@ $$\lim_{r \to 1} F(re^{i\theta}) = f(e^{i\theta})$$
 uniformly in $\theta$. So $F|_{\partial \DD} = f$. By the maximum principle, $F$ is unique.
 \end{proof}
 
+\begin{lemma}
+\label{reflected harmonics are linear}
+Let $h: \CC \to \RR$ be a harmonic function such that $h(z) + h(\overline z) = 0$ for every $z \in \CC$. Then there is an $A \in \RR$ such that $h(z) = A \Im z$ for every $z \in \CC$.
+\end{lemma}
+\begin{proof}
+TODO: Prove this.
+\end{proof}
+
 Now we are ready to prove the Riesz representation formula for $\CC_+$.
 \begin{theorem}[Riesz representation formula]
     \index{Riesz representation formula}
@@ -345,19 +353,7 @@ $$w_j(z) = u_1(z + i\varepsilon) - \int_{-\infty}^\infty \delta_x(z) \psi_j(x) u
       \\&= -\int_{-\infty}^\infty \liminf_{z \to \infty} P(z, x) \psi_j(x) u_1(x + i\varepsilon) ~dx = 0.\end{align*}
     Therefore $h_j|_{\partial \CC_+} \leq 0$, so by the maximum principle, $h_j \leq 0$.
 
-    By the Schwarz reflection principle, we can extend $h_j$ by $h_j(\overline z) = -h(z)$, and the resulting function is harmonic on the strip $\{z \in \CC: |\Re z| < j\}$. Taking the limit as $j \to \infty$, we construct a harmonic function $h$ on all of $\CC$, such that if $z \in \CC_+$,
-\begin{equation}\label{sigma rep with h}u_1(z + i\varepsilon) = h(z) + \int_{-\infty}^\infty P(z, x)u_1(x + i\varepsilon) ~dx.\end{equation}
-    In particular, $h$ restricts to a harmonic function on the rescaled disc $R\DD$ for any $R > 0$, so by the Poisson representation formula, for any $z < R$,
-$$h(z) = \int_0^{2\pi} P^\flat(z/R, \theta) h(Re^{i\theta}) ~d\theta = \int_0^\pi (P^\flat(z/R, \theta) - P^\flat(\overline z/R, \theta)) h(Re^{i\theta}) ~d\theta.$$
-    We set $x^\flat = e^{i\theta}$ and use the fact that the Cayley transform and complex conjugation commute (and so $|(z/R)^\sharp - x| = |\overline{(z/R)^\sharp} - x|$) to see
-\begin{align*}
-  P^\flat(z/R, \theta) - P^\flat(\overline z/R, \theta) &= P((z/R)^\sharp, x) - P\left(\overline{(z/R)^\sharp}, x\right)\\
-    &= \frac{\Im (z/R)^\sharp - \Im \overline{(z/R)^\sharp}}{2\pi |(z/R)^\sharp - x|^2}
-    = \frac{\Im (z/R)^\sharp}{\pi|(z/R)^\sharp - x|^2}.
-\end{align*}
-    If $z = \alpha + i\beta$, then if $R$ is large and $|z|$ is fixed,
-$$\Im (z/R)^\sharp = \frac{1 - |z|^2}{R^2((\alpha-R^{-1})^2 + \beta^2)} = \frac{1 - |z|^2}{R^2|z|^2 - 2\alpha R + 1} = O(R^{-2}).$$
-    Meanwhile, $|(z/R)^\sharp - x|^2 = |x + i|^2 = O(1)$. Taking the limit as $R \to \infty$, we see that $h = 0$. Plugging $h$ back into (\ref{sigma rep with h}), we complete the proof.
+    By \ref{reflected harmonics are linear}, we can find an $A$ such that $h(z) = A \Im z$. But by our assumption that $C = \gamma = 0$, it follows that $A = 0$, so $h = 0$. Plugging $h$ back into (\ref{sigma rep with h}), we complete the proof.
 \end{proof}
     Since $\gamma = 0$ and $u \leq 0$, for every $\delta > 0$ and every $x \in \RR$, we can choose $y > 0$ so large that $u(x + iy) > -\delta y$. Since $G$ vanishes at infinity, so does $u_2$, so if $y$ is chosen even larger still, we can arrange that $u_1(x + iy) > -\delta y$. By Lemma \ref{approximate sigma rep} with a change of variable in $y$,
 $$-\int_{-\infty}^\infty \frac{u_1(x + i\varepsilon)}{|x + iy - t|^2} ~dt < \frac{\pi \delta y}{y - \varepsilon}.$$
@@ -411,6 +407,59 @@ Dividing both sides by $2\pi$, we see that
 $$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b - a}{\pi}.$$
 This proves Titchmarsh's theorem.
 
+
+\chapter{Potential scattering on $\RR$}
+\begin{quote}
+  ``EVERY MORNING I WAKE UP AND OPEN PALM SLAM A BOOK ONTO THE DESK. IT'S MATHEMATICAL THEORY OF SCATTERING RESONANCES BY DYATLOV AND ZWORSKI AND RIGHT THEN AND THERE I START DOING THE MOVES ALONGSIDE WITH THE AUTHORS, DYATLOV AND ZWORSKI. I DO EVERY PROOF AND I DO EVERY PROOF HARD. MAKIN WHOOSHING SOUNDS WHEN I MEROMORPHICALLY CONTINUE THE RESOLVENT INTO THE LOWER HALF PLANE OR EVEN WHEN I MESS UP TECHNIQUE. NOT MANY CAN SAY THEY CAN BOUND THE NUMBER OF RESONANCES OF A BLOCK BOX OPERATOR. I CAN. I SAY IT AND I SAY IT OUTLOUD EVERYDAY TO PEOPLE IN MY COLLEGE CLASS AND ALL THEY DO IS PROVE PEOPLE IN COLLEGE CLASS CAN STILL BE IMMATURE JEKRS. AND IVE LEARNED ALL THE LEMMAS AND IVE LEARNED HOW TO MAKE MYSELF AND MY APARTMENT LESS LONELY BY SHOUTING EM ALL. 2 HOURS INCLUDING WIND DOWN EVERY MORNIng"
+
+  -Analytic Memes for Estimate-Loving Teens
+\end{quote}
+
+Recall that if $A$ is a quantum observable, then the spectrum of $A$ consists of the possible values $\lambda^2$ that the observable can take when a state $\psi$ is measured. Moreover, $\psi$ is a pure state for measurement $\lambda^2$ (i.e. an observer is guaranteed to measure $\psi$ in state $\lambda^2$) if and only if $\psi$ solves the eigenvalue equation $A\psi = \lambda^2 \psi$. So we are especially interested in the eigenvalue equation $(A - \lambda^2)\psi = 0$.
+
+Let $V \in L^\infty_{comp}(\RR \to \RR)$. We view $V$ as a potential, and define the Hamiltonian
+$$H_V = D_x^2 + V$$
+where $D_x = -i\partial_x$. We can think of $D_x^2$ as the one-dimensional Laplacian $-\Delta_x$, or equivalently as the momentum observable. Since $\supp V$ is compact, a solution $\psi$ of the time-independent Schrödinger equation
+$$(H_V - \lambda^2)\psi = 0$$
+with energy $\lambda^2$ has the form
+$$\psi(x) = Ae^{i\lambda x} + Be^{-i\lambda x},$$
+for $x$ far from the support of $\supp V$ -- so $\psi$ consists of plane waves of frequency $\lambda$. (This is our reason for writing the eigenvalue as $\lambda^2$.) Clearly $\psi$ is not normalizable (i.e. $\psi \notin L^2(\RR \to \CC)$), essentially because $H_V$ has continuous spectrum. On the other hand, since $V$ is bounded, it is possible for a particle to tunnel through the barrier $\supp V$. This mathematically manifests as relations between the coefficients $A,B$: scattering.
+
+More generally, we will study the inhomogeneous Schrödinger equation $(H_V - \lambda^2)\psi = f$, for $f \in L^2_{comp}(\RR)$. By definition, the resolvent $R_V(\lambda)$ tells us how to solve the Schrödinger equation: it is an operator $L^2_{comp}(\RR) \to L^2_{loc}(\RR)$ satisfying the equation
+$$(H_V - \lambda^2)R_V(\lambda)f = f.$$
+Viewing the resolvent as a meromorphic function $R_V: \CC \to B(L^2_{comp}(\RR) \to L^2_{loc}(\RR))$, we want to understand the relationship between the poles of the resolvent $P_V$ function and the scattering behavior of $H_V$. This is the main goal of this thesis.
+
+\section{Scattering resonances}
+Fix a potential $V$. Recall that the family of resolvents $R_V: \CC \to B(L^2_{comp}(\RR) \to L^2_{loc}(\RR))$ is meromorphic, and that if $\lambda \in \RR$ is a pole, then $\lambda = 0$. (Of course, $R_V$ may and does have many nonreal poles.) This can be proven by using a Neumann series expansion to explicitly compute $R_V(\lambda)$ when $\Im \lambda$ is large enough, and then using cutoffs to analytically continue $R_V$ to a maximal subset of $\CC$. (For a proof, see \cite[Chapter 2]{dyatlov2019mathematical}.) In turn, poles correspond to eigenvalues of the operator $H_V$.
+
+In what follows, we let $\Gamma_\lambda$ denote a sufficiently small (counterclockwise-oriented) circle centered on $\lambda$.
+
+\begin{definition}
+A \dfn{scattering resonance} is a pole of the resolvent family $R_V$. If $\lambda_0$ is a scattering resonance, its \dfn{multiplicity} $m_R(\lambda_0)$ is defined to be the rank of the operator
+$$\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} R_V(\lambda) ~d\lambda.$$
+\end{definition}
+In fact, if $\lambda_0$ is a scattering resonance, then for any $\lambda$ close to $\lambda_0$, we can express $R_V(\lambda)$ as a Laurent series
+$$R_V(\lambda) = Q(\lambda - \lambda_0) + \sum_{j=1}^N \frac{P_j}{(\lambda - \lambda_0)^j}$$
+for some holomorphic family of operators $Q$ defined on a small neighborhood of $0$ and some finite-rank operators $P_1, \dots, P_N$. Applying the Cauchy-Goursat theorem to $\Gamma_{\lambda_0}$, we see that the multiplicity is entirely determined by the principal part $R_V(\lambda) - Q(\lambda - \lambda_0)$.
+
+Since we have assumed that $V$ and $f$ have compact support, if $|x|$ is large, then
+$$(H_0 - \lambda^2)R_V(\lambda)f(x) = 0.$$
+So if we let $\psi = R_V(\lambda)f$, it follows from some calculus that we can find constants $A_+, B_-$ such that for all $x$ large enough,
+$$\psi(x) = a_+e^{i\lambda x} + b_+e^{-i\lambda x}.$$
+Similarly, we can find $A_-, B_+$ such that for every $x$ with $-x$ large enough,
+$$\psi(x) = a_-e^{-i\lambda x} + b_-e^{i\lambda x}.$$
+In case $\lambda > 0$, we can view waves of the form $C e^{i\lambda x}$ as ``moving to the right with frequency $\lambda$" and waves of the form $C e^{-i\lambda x}$ as ``moving to the left with frequency $\lambda$." Of course, this distinction makes sense for any fixed $\lambda \in \CC$, even if $\lambda$ is not a positive real number. So we make the following definition.
+\begin{definition}
+An \dfn{incoming wave} is a linear combination of waves of the form $e^{i\lambda x}$ for $x < 0$ and $e^{-i\lambda x}$ for $x > 0$. An \dfn{outgoing wave} is a linear combination of waves of the form $e^{-i\lambda x}$ for $x < 0$ and $e^{i\lambda x}$ for $x > 0$.
+\end{definition}
+We now define a matrix which encodes how a wave transforms as it passes through $H_V$.
+\begin{definition}
+The \dfn{scattering matrix} is the operator $S(\lambda): \CC^2 \to \CC^2$ defined by
+$$S(\lambda)\begin{bmatrix}b_-\\b_+\end{bmatrix} = \begin{bmatrix}a_+\\a_-\end{bmatrix}.$$
+\end{definition}
+The map $S$ is a meromorphic family of unitary operators on $\CC$. We put $m_S(\lambda_0)$ for the trace of the operator
+$$-\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} S(\lambda)^{-1}S'(\lambda) ~d\lambda.$$
+This satisfies the equation $m_S(\lambda) = m_R(\lambda) - m_R(-\lambda)$. (For a proof, again see \cite[Chapter 2]{dyatlov2019mathematical}.)
 
 
 \printbibliography
