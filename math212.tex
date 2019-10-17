@@ -1,0 +1,1344 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Complex geometry}
+\author{Aidan Backus}
+\date{December 2019}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\CVect}{\mathbf{Vect}_\CC}
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\A}{\mathcal A}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Cantor}{\mathcal{C}}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator*{\chsupp}{ch\,supp}
+\DeclareMathOperator*{\coker}{coker}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\ind}{\operatorname{ind}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\MM}{\mathcal M}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\PGL}{\operatorname{PGL}}
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\pset}{\mathcal{P}}
+\newcommand{\Rep}{\operatorname{Rep}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand{\altrep}{\rho_{\text{alt}}}
+\newcommand{\trivrep}{\rho_{\text{triv}}}
+\newcommand{\regrep}{\rho_{\text{reg}}}
+\newcommand{\stdrep}{\rho_{\text{std}}}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+ 
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeindex
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Preliminaries}
+
+\section{Complex analysis in one variable}
+Throughout, we identify $\RR^2 = \CC$ and write $z = x + iy$, $dz = dx + idy$, so that $d\overline z = dx - i dy$. Then
+$$dz \wedge d\overline z = 2i dx \wedge dy = 2i dA.$$
+We thus write $2 \partial f = \partial_x f - i\partial_y f$ and $2\overline f = \partial_x f + i\partial_y f$, so that
+$$df = \partial f ~dz + \overline \partial f ~d\overline z.$$
+We let $K$ be a compact set in an $\Omega$-precompact open set $\omega$, where $\Omega$ is open in $\CC$. So we have inclusions
+$$K \subset \omega \subset \overline \omega \subset \Omega \subseteq \CC.$$
+We will always assume that $\partial \omega$ is a positively oriented, piecewise-$C^1$ Jordan curve.
+
+Making the change of variable $dA \mapsto dz \wedge d\overline z$ in Green's formula, we arrive at the following generalization of the Cauchy integal formula.
+\begin{theorem}[Cauchy-Green]
+    \index{Cauchy-Green formula}
+    Let $f \in C^1(\omega)$. For each $\zeta \in \omega$,
+    $$f(\zeta) = \frac{1}{2\pi i}\left(\int_{\partial\omega} \frac{f(z)}{z - \zeta}dz + \iint_\omega \frac{\overline \partial f(z)}{z - \zeta} ~dz \wedge d\overline z\right).$$
+\end{theorem}
+\begin{definition}
+    The \dfn{Cauchy-Riemann equation} is the equation
+    $$\overline \partial f = 0.$$
+    If $f \in C^1(\omega)$ solves the Cauchy-Riemann equation, we say that $f$ is a \dfn{holomorphic function}, written $f \in A(\omega)$.
+\end{definition}
+So in case $f$ is holomorphic, we recover the classical Cauchy integral formula from the Cauchy-Green theorem.
+\begin{theorem}
+    Let $\mu$ be a finite Borel measure on $\CC$ with compact support $K$. Let
+    $$u(\zeta) = \int_\CC \frac{d\mu(z)}{z - \zeta}.$$
+    Then $u$ is holomorphic on $K^c$. If $\varphi \in C^k(\omega)$ and $2\pi i \mu = \varphi ~dz\wedge d\overline z$, then $u \in C^k(\omega)$ and $\overline u = \varphi$ on $\omega$. In particular, if $\mu$ solves the Cauchy-Riemann equation in the distributional sense, then $\mu$ is holomorphic.
+\end{theorem}
+\begin{corollary}[Cauchy]
+    \index{Cauchy's inequality}
+    If $u \in A(\Omega)$ then
+    $$||\partial^j u||_{L^\infty(K)} \preceq_{K,j} ||u||_{L^1(\omega)}.$$
+\end{corollary}
+\begin{proof}
+    Differentiate under the integral sign in the Cauchy-Green formula, and then use the triangle inequality.
+\end{proof}
+\begin{corollary}
+    If we are given a sequence of $u_n \in A(\Omega)$ which converges locally uniformly to $u$, then $u \in A(\Omega)$.
+\end{corollary}
+\begin{proof}
+    This is obvious for uniform convergence, but holomorphy is a local property.
+\end{proof}
+\begin{corollary}[Montel]
+    \index{Montel's theorem}
+    If we are given a sequence in $A(\Omega)$ which is locally bounded, then there is a locally uniformly convergent subsequence, whose limit is in particular holomorphic.
+\end{corollary}
+\begin{proof}
+    Use Arzela-Ascoli on Cauchy's inequality. Then use locally uniform convergence.
+\end{proof}
+\begin{corollary}[root test]
+    \index{root test}
+    If $u(z) = \sum_n a_nz^n$, then $u$ is analytic on $D(0, \limsup_n |a_n|^{1/n})$.
+\end{corollary}
+\begin{corollary}[Taylor]
+    \index{Taylor's theorem}
+    If $u \in A(D(0, R))$, then $u \in C^\infty(D(0, R))$ and for $z \in D(0, R)$ we have
+    $$u(z) = \sum_{n=0}^\infty \frac{\partial^n u(0)}{n!} z^n.$$
+\end{corollary}
+\begin{proof}
+    Differentiate under the integral sign in the Cauchy-Green formula, then use the root test.
+\end{proof}
+\begin{corollary}
+    If $\Omega$ is connected and $u \in A(\Omega)$, and there is a $z \in \Omega$ such that for all $j$, $\partial^ju(z) = 0$, then $u = 0$.
+\end{corollary}
+\begin{proof}
+    Taylor series propagate to connected components.
+\end{proof}
+\begin{corollary}[Weierstrass preparation theorem]
+    \index{Weierstrass preparation theorem}
+    If $u \in A(\Omega)$, $0 \in \Omega$, $u \neq 0$, and $u(0) = 0$ with order $k$, then there is a $v \in A(\Omega)$ so that $u(z) = z^k v(z)$.
+\end{corollary}
+\begin{proof}
+    Factor the $z^k$ out of the Taylor series.
+\end{proof}
+\begin{corollary}
+    If $u \in A(\omega) \cap C(\overline \omega)$ then
+    $$||u||_{L^\infty(\omega)} = ||u||_{L^\infty(\partial \omega)}.$$
+\end{corollary}
+
+\section{Approximation by polynomials}
+Let $K \subset \Omega \subseteq \CC$ be compact. If $K$ is the compactification of a disc, then it is easy to uniformly approximate holomorphic functions on $K$ by polynomials, just by truncating the Taylor series.
+
+\begin{example}
+    Let $K$ be the compactification of an annulus and assume $u$ has a pole in the center of $K$. If $p_j \to u$ on $K$ and the $p_j$ are entire functions, then in particular $p_j \to u$ on $\partial K$, so they are a Cauchy sequence in $A(K)$, so on a disk containing $K$, and in particular the pole of $u$. Therefore $p_j \to p$, an entire function, even though $u$ has a pole. Notice that we can still approximate $u$ by meromorphic functions, though.
+\end{example}
+\begin{theorem}[Runge approximation theorem]
+    \index{Runge approximation theorem}
+    The following are equivalent.
+\begin{enumerate}
+    \item If $u$ is holomorphic near $K$, then there are functions $u_j \in A(\Omega)$ such that $u_j \to u$ uniformly on $K$.
+    \item The complement $\Omega \setminus K$ has no $\Omega$-precompact connected components.
+    \item For each $z \in \Omega \setminus K$ there is an $f \in A(\Omega)$ such that
+    $$|f(z)| > ||f||_{L^\infty(K)}.$$
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+    Let us first prove that not-2 implies not-3 and not-1.
+    
+    If not-2, then there is a $K$-precompact component $O$ of $\Omega \setminus K$, so $\partial O \subseteq K$. If $f \in A(\Omega)$, then
+    $$||f||_{L^\infty(O)} = ||f||_{L^\infty(\partial O)} \leq ||f||_{L^\infty(K)}$$
+    by the maximum principle, implying not-3. Moreover, if 1 were true, then for every $f$ holomorphic near $K$, we could approximate $f$ by $f_j \in A(\Omega)$ uniformly. We have
+    $$||f_j - f_k||_{L^\infty(\overline O)} \leq ||f_j - f_k||_{L^\infty(K)},$$
+    so the $f_j$ form a Cauchy sequence in $L^\infty(K)$, which converge to a holomorphic function $F \in A(O)$. But if $f$ has a pole in $O$, then $f \neq O$, a contradiction, so we have not-1.
+    
+    Now we show 1 and 2 imply 3. Let $L = K \cup \overline{D(z, \varepsilon)}$ where $\epsilon < d(z, K)$. Then every component of $L$ is either a component of $K$ or else $\overline{D(z, \varepsilon)}$, and $L$ satisfies the hypotheses of 2, so in particular satisfies the hypotheses of 1. Let $u \in A(L)$ be given by $u = 1$ near $z$ and $u$ on $K$. By 1, $u$ is uniformly approximable in $A(\Omega)$. Assume $f \in A(\Omega)$ is such that $||f - u||_{L^\infty(L)} < \delta$ for $\delta$ small enough; then $f$ witnesses 3.
+    
+    Finally we show 2 implies 1. Let $X_2$ be the set of restrictions of holomorphic functions to $K$, and let $X_1$ be the set of restrictions of holomorphic functions on $\Omega$ to $K$. Then $X_1 \subset X_2 \subset C(K)$, and 1 holds iff $\overline{X_1} = \overline{X_2}$. So we must show $\overline{X_2} \subseteq \overline{X_1}$. By the Hanh-Banach and Riesz-Markov theorems, this is equivalent to showing that for every finite Borel measure $\mu$ with support in $K$ and every $f \in A(\Omega)$, $\int f ~d\mu = 0$. In particular, we can prove this with the addition assumption that $f$ is only holomorphic near $K$. So fix such a $f, \mu$.
+    
+    Let $\varphi$ be the holomorphic function given by $\mu$. Since $\varphi = 0$ on $\CC \setminus \Omega$, $\varphi = 0$ on any component of $\CC \setminus K$. Moreover,
+    $$\frac{1}{z - \zeta} = -\sum_{j=0}^\infty \zeta^{-j-1}z^j$$
+    whenever the sum converges, i.e. for $|\zeta|$ large enough. Therefore
+    $$\varphi(\zeta) = -\sum_{j=0}^\infty \zeta^{-j-1} \int z^j ~d\mu(z) = 0$$
+    for $|\zeta|$ large enough. By 2, $\Omega \setminus K$ has no $\Omega$-precompact components, so every component of $\Omega \setminus K$ touches $\partial \Omega$ or is unbounded. Therefore $\varphi = 0$ on $\CC \setminus K$. 
+    
+    Let $\psi$ be a cutoff which is $1$ whenever $f$ is holomorphic. Then, taking $\omega = \CC$, we have
+    $$\psi(z) = \frac{1}{2\pi i}\iint_\CC \frac{\overline \partial \psi(\zeta)}{\zeta - z} d\overline \zeta \wedge d\zeta.$$
+    For each $z \in K$, the function
+    $$\zeta \mapsto \frac{\overline \partial \psi(\zeta) f(\zeta)}{\zeta - z}$$
+    is smooth since $\zeta \notin K$. So we are entitled to use Fubini's theorem to prove
+\begin{align*}
+    \int_\CC f ~d\mu &= \int_\CC \psi f ~d\mu
+        = \frac{1}{2\pi i} \iiint_{\CC^2} \frac{\overline \partial \psi(\zeta) f(\zeta)}{\zeta - z} ~d\overline \zeta \wedge d\zeta ~d\mu(z)\\
+        &= \frac{1}{2\pi i} \iint_\CC f(\zeta) \overline \partial \psi(\zeta) \int_\CC \frac{d\mu(z)}{\zeta - z} ~d\overline \zeta \wedge d\zeta
+        = 0.
+\end{align*}
+    This proves 1.
+\end{proof}
+\begin{corollary}
+    Let $K \subset \CC$ be compact, such that $\CC \setminus K$ is connected. Every function which is holomorphic near $K$ can be approximated by polynomials uniformly on $K$.
+\end{corollary}
+\begin{definition}
+    The \dfn{holomorphically convex hull} of $K$ in $\Omega$, written $\hat K$, is the set of $z \in \Omega$ such that for every $f \in A(\Omega)$,
+    $$|f(z)| \leq ||f||_{L^\infty(K)}.$$
+    If $K = \hat K$, we say that $K$ is \dfn{holomorphically convex}.
+\end{definition}
+\begin{example}
+    Let $K$ be as in the previous example; then $\hat K$ is the outer disc in the definition of $K$ as an annulus.
+\end{example}
+It is easy to check that
+$$d(K, \CC \setminus \Omega) = d(\hat K, \CC \setminus \Omega).$$
+
+Recall that $\ch K$ denotes the convex hull of $K$. If $K$ is convex, then $K$ is topologically $\overline{D(0, 1)}$, which is clearly holomorphically convex by Runge's approximation theorem. But the connection between convexity and holomorphic convexity is stronger than that.
+\begin{proposition}
+    For any $K$, $\hat K \subseteq \ch K$.
+\end{proposition}
+\begin{proof}
+    It is easy to check that $\ch K$ is the intersection of half-planes
+    $$H_{a,c} = \{z \in \CC: \Re(az) \leq c\}.$$
+    Fix $a \in \CC$, $c \in \RR$; we will show $\hat K \subset H_{a,c}$. Let $z \in \hat K$. Then $|e^{az}| \leq \max_{w \in K} |e^{aw}|$. So $\Re e^{az} \leq \max_{w \in W} \Re |e^{aw}|$, implying
+    $$\Re az \leq \max_{w \in K} aw \leq c.$$
+    Therefore $z \in \hat K$.
+\end{proof}
+Moreover, $\hat K$ is the union of $K$ with all $\overline O$, for each $\CC$-precompact connected component $O$ of $\Omega \setminus K$.
+
+\begin{definition}
+    The \dfn{polynomially convex hull} of a compact set $K$ is the set
+    $$\hat K = \{z \in \CC: |p(z)| \leq \max_{w \in K} |p(w)| \text{for every polynomial} p\}.$$
+    If $K = \hat K$, then $K$ is \dfn{polynomially convex}.
+\end{definition}
+
+\section{Sheaves}
+Let $X$ be a topological space. By $\Open(X)$ we will denote the posetal category of open sets in $X$; that is, objects are open sets in $X$ and morphisms are inclusions.
+
+\begin{definition}
+    A \dfn{presheaf} on $X$ is a functor $\Open(X)^{op} \to C$ for some concrete category $C$.
+    
+    If $U \subseteq X$ is an open set, and $\mathcal F: \Open(X)^{op} \to C$ a presheaf on $X$, then elements of $\mathcal F(U)$ are called \dfn{sections} of $\mathcal F$ at $U$. Sections of $\mathcal F$ at $X$ are called \dfn{global sections}.
+\end{definition}
+To motivate this terminology, let us assume that we are given a fiber bundle $\pi: E \to X$ (the most trivial case of this is when $E = X \times Y$ for some space $Y$, and $\pi$ is projection onto the first factor; as with any notion of bundle, the point is that $E$ is locally a product space.) Then the sections of $\pi$, i.e. the sets $\pi^{-1}(U)$, are exactly a sheaf (to be defined later), and thus a presheaf, $\Open(X)^{op} \to \Set$.
+
+Now notice that every morphism in $\Open(X)^{op}$ is epic, so it makes sense to define the restriction maps $f \mapsto f|_V$ for sections $f \in \mathcal F(U)$ and $V \subseteq U$.
+
+\begin{definition}
+    Let $\mathcal F: \Open(X)^{op} \to C$ be a presheaf on $X$. Assume that for every open set $U \in \Open(X)$ and every open cover $\{U_j\}$ of $U$ we have the following conditions:
+\begin{enumerate}
+    \item For every pair of sections $f,g \in \mathcal F(U)$, if we have $f|_{U_i} = g|_{U_i}$ for every $i$, then $f = g$.
+    \item If for every $i$ we have a section $f_i \in \mathcal F(U_i)$ such that on intersections, $f_i|_{U_i \cap U_j} = f_j|_{U_i \cap U_j}$, then there is a section $f \in \mathcal F(U)$ such that for every $i$, $f|_{U_i} = f_i$.
+\end{enumerate}
+    Then we say that $\mathcal F$ is a \dfn{sheaf} on $X$.
+\end{definition}
+\begin{proposition}
+    Let $\mathcal F$ be a sheaf which is only defined on an open base, but otherwise satisfying all the conditions. Then $\mathcal F$ uniquely determines a sheaf on the entire topology.
+\end{proposition}
+
+    We now put sheaves into a category.
+\begin{definition}
+    Let $\mathcal F, \mathcal G: \Open(X)^{op} \to C$ be presheaves. A \dfn{morphism of presheaves} over $X$ is a natural transformation $\psi: \mathcal F \to \mathcal G$. If $\mathcal F$ and $\mathcal G$ are sheaves, then $\psi$ is a \dfn{morphism of sheaves}.
+\end{definition}
+That is, a morphism of sheaves $\psi: \mathcal F \to \mathcal G$ consists of, for each open set $U \subseteq X$, a morphism $\psi(U) \in \Hom(\mathcal F(U), \mathcal G(U))$ such that if $U \subseteq V$ for some open set $V \subseteq X$, then the diagram
+$$\begin{tikzcd}
+\mathcal F(V) \arrow[r,"\psi(V)"] \arrow[d] &\mathcal G(V) \arrow[d]\\
+\mathcal F(U) \arrow[r,"\psi(U)"] &\mathcal G(U)
+\end{tikzcd}$$
+commutes.
+
+In several complex variables, we are interested in holomorphic germs. The following family of definitions allows us to talk about germs algebraically.
+\begin{definition}
+    Let $C$ be a category such that for every directed set $\mathcal D$ in $C$, a colimit exists at $\mathcal D$, and let $x \in X$. Let $\mathcal F: \Open(X)^{op} \to C$ be a sheaf. The \dfn{stalk} of $\mathcal F$ at $x$ is the colimit
+    $$\mathcal F_x = \varinjlim_{U \in \mathcal D_x} \mathcal F(U)$$
+    where $\mathcal D_x$ is the directed set of all open sets $U \ni x$. An element of $\mathcal F_x$ is called a \dfn{germ} of $\mathcal F$ at $x$.
+\end{definition}
+
+
+\section{Meromorphy in one complex variable}
+Let $z \in \CC$. By $A_z$ we mean the ring of germs of holomorphic functions at $z$. Note that germs have values, since we can identify them with Taylor series. Let $M_z$ denote the field of fractions of $A_z$ (not the localization).
+
+
+
+
+\section{Subharmonicity}
+\begin{definition}
+    Let $X$ be a topological space. An \dfn{upper-semicontinuous function} on $X$ is a function $u: X \to [-\infty, \infty)$ such that for each $s \in \RR$, the preimage of the ray $[-\infty, s)$ is open in $X$. 
+\end{definition}
+Notice that there is a dual notion of lower-semicontinuity, by considering the rays $(s, \infty]$. A function which is both upper- and lower-semicontinuous is just continuous, since open rays form a base of the topology of $\RR$.
+
+\begin{definition}
+    Let $\Omega \subseteq \RR^n$ be an open set. A \dfn{subharmonic function} on $\Omega$ is a upper-semicontinuous function $u: \Omega \to [-\infty, \infty)$ such that for every compact set $K \subseteq \Omega$ and every continuous function $h: K \to \RR$ which is harmonic in $K$, if $h \leq u$ on $\partial K$, then $h \leq u$ on $K$.
+\end{definition}
+This definition makes just as much sense in $\CC^n$, or even on a Riemannian manifold; one just needs a Laplace-Beltrami operator $\Delta_g$, so that we have a notion of harmonicity $\Delta_g h = 0$. By the maximum modulus principle, a harmonic function is already subharmonic (since it cannot attain its maximum on the boundary of a compact set).
+
+Let $u$ be subharmonic. Then if $c > 0$, $cu$ is subharmonic (simply by replacing $h$ with $ch$ for each $h$ in the definition of subharmonicity). Moreover, if $A$ is a set of subharmonic functions and $u = \sup A$, then $u$ is subharmonic provided that $u$ is upper-semicontinuous (simply by considering the $h$ such that $v \leq h$ for every $v \in A$, which exist since $u$ is upper-semicontinuous and so finite).
+
+\begin{proposition}
+Let $u_1, \dots$ be a decreasing sequence of subharmonic functions. Then $u = \lim_j u_j$ is subharmonic.
+\end{proposition}
+\begin{proof}
+    Note that
+    $$\{z \in \Omega: u(z) < s\} = \bigcup_j \{z \in \Omega: u_j(s)\}$$
+    is open so $u$ is upper-semicontinuous. If $h, K$ are as in the definition of subharmonicity and $\varepsilon > 0$ then the set
+    $$\{z \in \partial K: u_j(z) \geq h(z) + \varepsilon\}$$
+    is compact and decreasing as $j \to \infty$. The intersection of nonempty compact sets is nonempty, but the intersection is empty by definition of $H$, so there the sequence is eventually empty. Therefore $u_j \leq h + \varepsilon$ for $j$ large enough. So $u \leq h$.
+\end{proof}
+
+Now we consider equivalent definitions of subharmonicity.
+\begin{proposition}
+Let $u$ be an upper-semicontinuous function on $\Omega \subseteq \CC$. Let $\delta > 0$ and let $\Omega_\delta = \{z \in \Omega: d(z, \Omega^c) > \delta\}$. The following are equivalent:
+\begin{enumerate}
+    \item $u$ is subharmonic.
+    \item If $D \subseteq \Omega$ is a compact disk, and $f$ is a polynomial such that $u \leq f$ on $\partial D$, then $u \leq f$ in $D$.
+    \item For each $z \in \Omega_\delta$,
+    $$2\pi u(z) \leq \int_0^{2\pi} u(z+re^{i\theta}) ~d\theta.$$
+    \item For each positive measure $\mu$ on $[0, \delta]$ and each $z \in \Omega_\delta$,
+    \begin{equation}
+        \label{subharmonic equation in C}
+        2\pi \mu([0, \delta]) u(z) \leq \int_0^\delta \int_0^{2\pi} u(z + re^{i\theta}) ~d\theta ~d\mu(r).
+    \end{equation}
+    \item For each $z \in \Omega_\delta$ there is a positive measure $\mu$ on $[0, \delta]$, such that Equation \ref{subharmonic equation in C} holds and such that $\mu((0, \delta]) > 0$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+    Obviously 1 implies 2 and 3 implies 4 implies 5.
+    
+    Assume 2. To prove 3, let $z \in \Omega_\delta$ and $r \leq \delta$. Let $D$ be the disk of all $\zeta$ such that $|\zeta - z| \leq r$. If $\varphi(\theta) = \sum_k a_k e^{ik\theta}$ is a trigonometric polynomial such that $u(z + re^{i\theta}) \leq \varphi(\theta)$ for every $\theta \in [0, 2\pi]$, then $f(\zeta) = a_0 + 2\sum_{k\geq 1} a_k(\zeta - z)^k/r^k$ has $u \leq \Re f$ on $\partial D$, so on $D$ since $f$ is a polynomial. Plugging in $\theta = 0$, we have
+\begin{equation}
+    \label{subharmonic in C proof}
+    u(z) \leq a_0 = \frac{1}{2\pi} \int_0^{2\pi} \varphi(\theta) ~d\theta.
+\end{equation}
+    Since the trigonometric polynomials are an algebra, they are dense in the space of continuous functions. Therefore Equation \ref{subharmonic in C proof} holds for any continuous $\varphi$. This proves 3.
+    
+    Assume 5 and let $h, K$ be as in the definition of subharmonicity. If $M = \sup u - h > 0$ then $u - h = M$ on some nonempty compact set $K_0$ by semicontinuity of $u - h$. Let $z_0 \in K_0$. Then
+    $$\int_0^{2\pi} \int_0^\delta (u-h)(z_0 + re^{i\theta}) ~d\mu(r) ~d\theta < 2\pi (u-h)(z_0) \mu([0, \delta)).$$
+    This is a contradiction of 5, so $u$ is subharmonic.
+\end{proof}
+    It follows that the class of subharmonic functions is closed under addition, and subharmonicity is a local property. Moreover, if $f$ is holomorphic on $\Omega$, it follows that $\log|f|$ is subharmonic: by the maximum modulus principle, $|f|$ does not attain its maximum on a compact disk $D$.
+
+\begin{theorem}
+    Assume $\Omega \subseteq \CC$ is open and connected and $u$ is subharmonic on $\Omega$ is not identically $-\infty$. Then $u \in L^1_{loc}(\Omega)$ and for any $v \in C^2_{comp}(\Omega)$, $v \geq 0$, $\langle u, \Delta v\rangle \geq 0$. If $u \in C^2(\Omega)$, then $\Delta u \geq 0$.
+\end{theorem}
+\begin{theorem}
+    Suppose $u \in L^1_{loc}(\Omega)$ and for every $v \in C^2_{comp}(\Omega)$, $v \geq 0$, $\langle u, \Delta v \rangle \geq 0$. Then, up to a null set, $u$ is subharmonic. In particular, the mollification of $u$ is subharmonic.
+\end{theorem}
+From the above theorem we see that for $u \in L^1_{loc}$, then $u$ is subharmonic exactly when $\Delta u \geq 0$ in the weak sense.
+
+
+
+\section{Spectral theory}
+\begin{theorem}
+\label{norm of the resolvent}
+Let $A$ be a self-adjoint operator and
+$$R_A(\lambda) = (A - \lambda)^{-1}$$
+its resolvent. Then we have
+$$||R_A(\lambda)|| = \frac{1}{d(\lambda, \sigma(A))}.$$
+\end{theorem}
+Notice the utility of this theorem: we do not assume that $A$ is a bounded linear operator, so we cannot use the spectral radius theorem.
+\begin{proof}
+Since $\lambda$ is in the resolvent set, $d(\lambda, \sigma(A)) > 0$. We can assume $A$ is unbounded; therefore $R_A$ is bounded, and its spectrum consists of $0$ and the set of all $1/(\mu - \lambda)$, for $\mu \in \sigma(A)$. By the spectral radius theorem,
+$$||(A - \lambda)^{-1}|| = \sup_{\mu \in \sigma(A)} |\lambda - \mu|^{-1}$$
+which proves the claim.
+\end{proof}
+
+
+\section{Grushin problems and Fredholm operators}
+This section follows a paper on the arxiv known as ``elementary linear algebra for advanced spectral problems" by Sjostrand-Zworski. Fix Banach spaces $X_1,X_2,X_+,X_-$ and linear maps $P: X_1 \to X_2$, $R_+: X_1 \to X_+$, $R_-: X_- \to X_2$.
+
+\begin{definition}
+    The \dfn{Grushin problem} is the problem of solving the equation
+$$\begin{bmatrix}P & R_-\\R_+ & 0\end{bmatrix}\begin{bmatrix}u\\u_-\end{bmatrix} = \begin{bmatrix}v\\v_-\end{bmatrix}.$$
+\end{definition}
+This is the same as solving the equations
+\begin{align*}
+    Pu + R_-u_- &= v\\
+    R_+u &= v_+
+\end{align*}
+and is an operator
+$$X_1 \oplus X_- \to X_2 \oplus X_+.$$
+Actually, it follows from easy linear algebra that if
+$$\begin{bmatrix}P & R_+\\R_+ & 0\end{bmatrix}^{-1} = \begin{bmatrix}E & E_+\\E_- & E_0\end{bmatrix}$$
+then $P^{-1} = E - E_+E_0^{-1}E_-$ and $E_0^{-1} = -R_+P^{-1}R_-$. The is the \dfn{Schur complement formula}.
+
+\begin{lemma}
+    Assume that the Grushin problem is well-posed (so the matrix of operators is invertible). Then $R_+,E_-$ are surjective, and $R_-,E_+$ are injective.
+\end{lemma}
+\begin{proof}
+    Use the fact that $E_0^{-1}$ is bijective to show the conditions on $R_+$ and $R_-$. Now use the formula for the inverse of a $2\times 2$ block matrix to prove the conditions on $E_-$ and $E_+$.
+\end{proof}
+
+\begin{definition}
+A \dfn{Fredholm operator} $T: X_1 \to X_2$ is one which is invertible modulo compact operators.
+
+Moreover, if $T$ is Fredholm, then we define the \dfn{Fredholm index}
+$$\ind T = \dim \ker T - \dim \coker T.$$
+\end{definition}
+Since compact operators are exactly those which are limits of finite-rank operators, one readily checks that the index is always finite. On the other hand, if the index is finite, then it is easy to see that an operator is Fredholm.
+
+\begin{lemma}
+    If $P: X_1 \to X_2$ is a Fredholm operator, then there are finite-dimensional spaces $X_\pm$ and operators $R_\pm$ for which the corresponding Grushin problem is well-posed. Conversely, if there are spaces $X_\pm$ and operators $R_\pm$ for which the Grushin problem is well-posed, then $\ind E_0 = \ind P$. In particular, $E_0$ is Fredholm if and only if $P$ is Fredholm.
+\end{lemma}
+\begin{proof}
+    First assume $P$ is Fredholm, and put $X_+ = \ker P$ and $X_- = \coker P$. Then ``by counting" we can find maps $R_\pm$ of maximal rank such that the Grushin matrix is invertible. By the open mapping theorem, the Grushin matrix has a continuous inverse.
+    
+    On the other hand, if the Grushin problem is well-posed, diagram chase until we have proven $\dim \ker P = \dim \ker E_0$ and $\dim \coker P= \dim \coker E_0$, using the above lemma.
+\end{proof}
+    The operator $E_0$ is called the \dfn{effective Hamiltonian} associated to $P$. If we can choose $E_0$ to be an isomorphism $\coker P \to \ker P$, then $P$ is invertible and in fact $E_0 = 0$, which is invertible since it is a map between zero spaces.
+\begin{theorem}
+The set of Fredholm operators is open in $L(X_1 \to X_2)$ and $\ind$ is constant on connected components.
+\end{theorem}
+\begin{proof}
+    Let $P$ be a Fredholm operator. Then we can find $E_0: \coker P \to \ker P$ solving a corresponding Grushin problem, and $\ind P = \ind E_0$. But the Grushin problem remains well-posed if $P'$ is close to $P$. So the set of Fredholm operators is open, and $\ind P' = \ind E_0 = \ind P$.
+\end{proof}
+    
+\section{Meromorphic continuation of operators}
+This section follows Zworski-Dyatlov, Appendix C.
+
+\begin{definition}
+Let $\Omega \subseteq \CC$ be a connected, open set. Let $X, Y$ be Banach spaces. A \dfn{meromorphic family of operators} $B: X \to Y$ on $\Omega$ consists of, for every $z_0 \in \CC$,
+\begin{enumerate}
+    \item An neighborhood $U$ of $z_0$
+    \item Holomorphic mappings $B_0, B_1, \dots, B_J: U \to L(X \to Y)$, such that $B_1(z), \dots, B_J(z)$ are finite-rank operators for every $z \in U$
+    \item For every $z$ in the punctured neighborhood $U \setminus z_0$, operators
+    $$B(z) = B_0(z) + \frac{B_1}{z - z_0} + \dots + \frac{B_J}{(z-z_0)^J}$$
+\end{enumerate}
+such that $B(z)$ is independent of the choice of $z_0$ for every $z \in \Omega$ for which $B(z)$ is defined.
+
+If, for every $z \in \Omega$ for which $B(z)$ is defined, $B_0(z)$ is a Fredholm operator, we say that $B$ is a \dfn{meromorphic family of Fredholm operators}.
+\end{definition}
+\begin{theorem}
+\label{analytic fredholm theory}
+Let $\Omega \subseteq \CC$ be a connected, open set. Let $A$ be a meromorphic family of Fredholm operators on $\Omega$. If $A(z_0)^{-1}$ exists for some $z_0 \in \Omega$, then the family $A^{-1}$ defined by $z \mapsto A(z)^{-1}$ is a meromorphic family of operators.
+\end{theorem}
+\begin{proof}
+    Let $z_1 \in \Omega$. There is a Grushin problem corresponding to $P = A(z_1)$ which is well-posed, and which remains well-posed for $z$ close enough to $z_1$. Let $E_0(z_1; z)$ be the effective Hamiltonian perturbed by the mapping $z_1 \mapsto z$. (Then $E(z_1; z)$ really only depends on $z$, but is only known so far to be holomorphic in a neighborhood of $z_1$.) We $\ind A(z) = \ind A(z_0) = 0$ (since $A(z_0)^{-1}$ exists) so since $\Omega$ is connected, there is an $n$ such that $\dim \ker A(z_1) = \dim \coker A(z_1) = n$. In particular, $E_0(z_1; \cdot)$ is a family of $n \times n$ matrices with holomorphic coefficients, whose invertibility is equivalent to the invertibility of $A$.
+    
+    Therefore we can take $f(z_1; z) = \det E_0(z_1; z)$; the functions $f(z_1; \cdot)$ are holomorphic close to $z_1$, and by a compactness argument we can choose locally finitely many. We have $A(z)$ invertible iff $f(z_1; z) \neq 0$ for $z$ close enough to $z_1$. By holomorphy, the zeroes of $f$ cannot cluster, so $A(z)^{-1}$ exists close to $z_1$ and is holomorphic in $z$. But $z_1$ was arbitrary, so $A(z)^{-1}$ is a meromorphic family of operators on $\Omega$.
+\end{proof}
+
+
+\chapter{Holomorphy in several complex variables}
+This chapter follows Hormander's SCV book, Chapter II, and Zworski's lectures on SCV.
+
+\section{Cauchy-Riemann equations}
+Let us generalize the Cauchy-Riemann equations to higher dimensions.
+\begin{definition}
+    Let $f: \CC^n \to \CC$ be a function. We write $z = x + iy$ and define the partial derivatives
+    $$\frac{\partial f}{\partial z_j} = \frac{1}{2}\left(\frac{\partial f}{\partial x_j} - i\frac{\partial f}{\partial y_j}\right),$$
+    and
+    $$\frac{\partial f}{\partial \overline z_j} =
+    \frac{1}{2}\left(\frac{\partial f}{\partial x_j} + i\frac{\partial f}{\partial y_j}\right).$$
+    We define the \dfn{Wirtinger differential} of $f$ by $\partial f = \sum_j \partial_{z_j}f dz_j$ and $\overline \partial f = \sum_j \partial_{\overline z_j} f d\overline z_j$. Finally, we define the \dfn{total differential} $df = \partial f + \overline \partial f$.
+\end{definition}
+For ease of notation we frequently make the decomposition $dz_j = dx_j + idy_j$ and $d\overline z_j = dx_j - idy_j$. Then $df = \sum_j \partial_{x_j}f ~dx_j + \partial_{y_j}f ~dy_j$, as it should be.
+
+Notice that if $n = 1$ and $f$ is holomorphic, then $\overline \partial f = 0$. Indeed, $f = u + iv$ solves the Cauchy-Riemann equations, so
+$$\frac{\partial f}{\overline \partial z} = \frac{1}{2}\left(\frac{\partial u}{\partial x} - \frac{\partial v}{\partial y} + \frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right) = 0.$$
+This motivates the general definition of holomorphy.
+\begin{definition}
+    The \dfn{Cauchy-Riemann equation} is the equation
+    $$\overline \partial f = 0.$$
+    If $f: \CC^n \to \CC$ solves the Cauchy-Riemann equation, then $f$ is said to be a \dfn{holomorphic function} of several complex variables. If $f = (f_1, \dots, f_m)$ is a function $\CC^n \to \CC^m$ such that each $f_j$ is holomorphic, then $f$ itself is said to be holomorphic.
+\end{definition}
+It is easy to check that the composite of holomorphic functions is holomorphic.
+
+Recall that the implicit function theorem guarantees that a $C^r$ relation between $\RR^n$ and $\RR^m$ that ``passes the vertical hyperplane test" is actually the graph of a $C^r$ function $\RR^n \to \RR^m$. In particular, this holds if $r = \infty$, but demanding holomorphy of the function is actually a much stronger condition, so we must check that it holds.
+\begin{theorem}[implicit function theorem]
+    \index{implicit function theorem}
+    Let $U$ be a neighborhood of $(w_0, z_0) \in \CC^m \times \CC^n$, and let $f: U \to \CC^m$ be holomorphic. Suppose that $f(w_0, z_0) = 0$ and $\det(\partial f_j/\partial w_k)_{j,k=1}^m \neq 0$. Then there is a unique holomorphic function $g: \CC^n \to \CC^m$ such that $f(g(z), z) = 0$ and $g(z_0) = w_0$.
+\end{theorem}
+\begin{proof}
+    By replacing $\CC$ with $\RR^2$, we can apply the classical implicit function theorem. To do this, we write $f = u + iv$ and consider the Jacobian
+$$\frac{\partial(u,v)}{\partial(x,y)} = \begin{bmatrix}
+    \Re \partial f & -\Im \partial f\\
+    \Im \partial f & \Re \partial f.
+\end{bmatrix}$$
+    One easily checks that the determinant of this matrix is $|\det(\partial f_j/\partial w_k)|_{j,k=1}^m$ which is nonzero. This gives a function $g$ with $f(g(z), z) = 0$.
+    
+    To prove holomorphy, we apply $\dbar$. This is
+$$\dbar_k f_j(g(z), z) = \sum_\ell \partial_{w_\ell} f_j \dbar g_\ell(z)$$
+    by the chain rule, using that $\dbar f = 0$. We have $\dbar_k f_j(g(z), z) = 0$, so by linear algebra, $\dbar g_\ell = 0$. So $g$ is holomorphic.
+\end{proof}
+\begin{corollary}[inverse function theorem]
+    \index{inverse function theorem}
+    Let $z_0 \in \CC^m$ and $f: \CC^m \to \CC^m$ be a  holomorphic function whose Jacobian does not vanish at $z_0$. Then there is a neighborhood $U \ni z_0$ such that $f$ is a holomorphic diffeomorphism of $U$ into its image.
+\end{corollary}
+
+    Recall that if $\alpha = (\alpha_1, \dots, \alpha_n)$ is a multiindex, then the differential form $dx_\alpha$ is given by
+    $$dx_\alpha = \bigwedge_{j=1}^n dx_{\alpha_j}.$$
+\begin{definition}
+    A differential form $\omega$ is \dfn{type} $(p, q)$ if it can be written
+    $$\omega = \sum_{|\alpha| = p} \sum_{|\beta| = q} f_{\alpha,\beta} dz_\alpha d\overline z_\beta.$$
+    For each function space $\mathcal F$, we let $\mathcal F_{p,q}$ denote the space of differential forms of type $(p, q)$ over $\mathcal F$.
+\end{definition}
+
+\section{Basic properties}
+\begin{theorem}[Hartogs]
+    \index{Hartogs' theorem}
+    Let $u: \Omega \to \CC$ be holomorphic in each variable alone; then $u$ is holomorphic.
+\end{theorem}
+Allegedly this theorem is useless (though it comes up in dynamical systems). Its proof is very difficult, using the Baire category theorem and the Schwarz lemma. However, if we are allowed to assume that $u$ is continuous, then the proof is almost trivial.
+\begin{lemma}
+    Assume that we are given a sequence $u_j$ of uniformly bounded subharmonic functions, such that $\limsup_j u_j$ is bounded from above. Then the $u_j$ are locally uniformly bounded from above by $\sup \limsup_j u_j + \varepsilon$.
+\end{lemma}
+\begin{proof}
+    Without loss of generality, we may assume that the $u_j \leq 0$. Let $K$ be a compact set with $d(K, \Omega^c) \geq 3r$. Let $z \in K$, $\varepsilon > 0$. Then we can find a $n_0$ such that for any $n > n_0$,
+$$\int_{|z' - z| < r} u_n(z') ~dz' \leq (C + \frac{\varepsilon}{2})\pi r^2$$
+    by Fatou's lemma. If $\delta$ is small enough and $|w - z| < \delta$, then
+$$\pi(r + \delta)^2 u_n(w) \leq \int_{|z' - z| \leq r + \delta} u_n(z') ~dz' \leq \int_{|z' - z| < \delta} u_n(z') ~dz' \leq (C + \varepsilon/2) \pi r^2$$
+for $n$ large enough. Therefore
+$$u_n(w) \leq (C + \varepsilon/2)\left(\frac{ r + \delta}{r}\right)^2 \leq C + \varepsilon$$
+for $\delta$ small enough. This does not depend on $z, w$.
+
+Cover $K$ by discs $D(z, \delta)$, so reduce to a finite subcover to find a uniform $\delta$.
+\end{proof}
+
+\begin{definition}
+    A \dfn{polydisk} in $\CC^n$ is a set $D$ of the form
+    $$D = \prod_{j=1}^n D_j$$
+    where each $D_j \subset \CC$ is an open disk. The \dfn{distinguished boundary} $\partial_0 D$ is the set
+    $$\partial_0 D = \prod_{j=1}^n \partial D_j.$$
+    If $u: \overline D \to \CC^m$ is a continuous function which is holomorphic on $D$, we simply say $u$ is \dfn{holomorphic} on $\overline D$. 
+\end{definition}
+Notice that $\partial_0 D$ is in general a torus (since it is a product of circles) and a very small subset of $\partial D$.
+
+By induction on $n$, one easily proves the following.
+\begin{theorem}[Cauchy's integral formula in a polydisk]
+    \index{Cauchy's integral formula}
+    Let $D$ be a polydisk in $\CC^n$ and let $u: \overline D \to \CC$ is holomorphic in each variable separately and continuous on $\overline D$. Then one has
+    $$u(z) = \frac{1}{(2\pi i)^n} \int_{\partial_0 D} \frac{u(\zeta) ~d\zeta}{(\zeta_1 - z_1)\cdots(\zeta_n - z_n)}.$$
+\end{theorem}
+\begin{corollary}
+    Let $U \subseteq \CC^n$ be an open set and $f: U \to \CC^m$ be a holomorphic function. Then $f \in C^\infty(U)$, and for every compact set $K \subset U$, every multiindex $\alpha$, and every open neighborhood $V$ of $K$, we have
+    $$||\partial^\alpha u||_{L^\infty(K)} \preceq_{K,\alpha} ||u||_{L^1(V)}.$$
+\end{corollary}
+\begin{proof}
+    Since $K$ is compact, it can be covered by finitely many sets contained in polydiscs contained in $V$. Now use Cauchy's integral formula (the implicit constant arising from the denominator of the formula, the measures of the distinguished boundary, and the obligatory factors of $2\pi$).
+\end{proof}
+\begin{corollary}[Montel]
+    \index{Montel's theorem}
+    Let $(u_k)_k$ be a sequence of holomorphic functions on an open set $U \subseteq \CC^n$. If $u_k \to u$ locally uniformly, then $u$ is holomorphic. On the other hand, if one has
+    $$||u_k||_{L^\infty(K)} \preceq_K 1$$
+    for $K \subset U$ compact, then $(u_k)_k$ has a locally uniformly convergent subsequence (which, in particular, has a holomorphic limit).
+\end{corollary}
+The proof is the same as in one variable.
+
+We view $\dbar$ as an exterior derivative. For $(0, 1)$-forms $f$ we have
+$$\dbar f = \sum_{j<k} (\dbar_j f_k - \dbar_k f_j) d\overline z_j \wedge d\overline z_k$$
+and if $\dbar u = f$ for some $(0, 0)$-form $u$, $\dbar f = 0$.
+
+\begin{theorem}
+    Let $\Omega \subset \CC^n$ be bounded, $n > 1$, and assume that $\CC^n \setminus \Omega$ is connected. If there is a $\rho \in C^4(\CC^n \to \RR)$ such that $\partial \Omega$ is the zero set of $\rho$ and $d\rho|_{\partial \Omega} \neq 0$, and there is a $u \in C^4(\overline \Omega)$ such that $\dbar u \wedge \dbar \rho = 0$ on $\partial \Omega$, then there is a $U \in A(\Omega) \cap C^1(\overline \Omega)$ such that $U = u$ on $\partial \Omega$.
+\end{theorem}
+    Note that if $U$ exists, then $U - u = \rho h$ for some $h \in C^1(\overline \Omega)$, with $-\dbar u = \dbar \rho h$ on $\partial \Omega$. This is what we mean by $\dbar u \wedge \dbar \rho = 0$ on $\partial \Omega$, which is hence a necessary condition as well as sufficient.
+\begin{definition}
+    For $\rho$ as above, the equation $\dbar u \wedge \dbar \rho = 0$ is called the \dfn{tangential Cauchy-Riemann equation}.
+\end{definition}
+    Clearly if $u$ is holomorphic then it solves the tangential Cauchy-Riemann equations. Otherwise, what this condition is saying is that $\dbar u$ and $\dbar \rho$ are proportional. The intuition is that if $\sum_j t_j \dbar_j \rho = 0$ then $\sum_j t_j \dbar_j u = 0$, and the hypothesis here is that the vector field $\sum_j t_j \dbar_j$ is tangent (in the sense of the complexified tangent bundle) to $\partial \Omega$. Thus, what the tangential Cauchy-Riemann equations say is that any section $V$ of the tangent bundle of $\partial \Omega$ which only contain antiholomorphic coordinates has $Vu = 0$, so annihilates $u$.
+\begin{example}
+    Take the unit ball $B$ of $\CC^2$. Here $\rho(z) = |z|^2 - 1$. If $V = t_1 \dbar_1 + t_2 \dbar_2$ then $V\rho(z) = 2t\cdot z$. Thus the antiholomorphic vector fields which are tangent to $\partial B$ are elements of the ideal generated by $z_2 \dbar_1 - z_1 \dbar_2$.
+\end{example}
+\begin{proof}[Proof of theorem]
+    We construct $U_0 \in C^1(\overline \Omega)$ such that $U_0 = u$ on $\partial \Omega$ and $\dbar U_0 = O(\rho^2)$ on $\partial \Omega$. By the tangential Cauchy-Riemann equations, we have a $h_0 \in C^3$ such that $\dbar u = h_0\dbar \rho$ on $\partial \Omega$. Thus $\dbar u = h_0 \dbar \rho + \rho h_1$ for some $h_1 \in C^3_{0,1}$. Then $\dbar(u-h_0\rho) = \dbar u - h_0\dbar \rho - \dbar h_0\rho = \rho h_1 - \dbar h_0 \rho = \rho(h_1 - \dbar h_0) = \dbar \rho h_2$ for $h_2 \in C^2_{0, 1}$, and $0 =\dbar(\rho h_2) = \dbar \rho \wedge h_2 + \rho \dbar h_2$. Now $\dbar h_2 = 0$ on $\partial \Omega$ so $\dbar \rho \wedge h_2 = 0$ on $\partial \Omega$, i.e. $h_2 = h_3 \dbar \rho + \rho h_4$ for some $h_3 \in C^2$ and $h_4 \in C^2_{0, 1}$. Now let $h_5 = -h_3/2$, then $2\dbar \rho h_5 = -h_2 + O(\rho)$, so
+    $$\dbar(u-h_0\rho+h_5\rho^2) = \rho(h_3\dbar \rho + \rho h_4) - \rho^2\dbar h_3/2 + 2\rho \dbar \rho(-h_3/2)=\rho^2h_4 - \rho^2 \dbar h_3/2 = O(\rho^2).$$
+    Thus let $U_0 = u - h_0\rho + h_5\rho^2$. So there is an $f \in C^1$ such that $\dbar U_0 = \rho^2 f$.
+
+    Now let $F = \rho^2f$ on $\overline \Omega$ and $0$ away from $\Omega$. Then $F \in C^1(\CC)$. So there is a $v \in C^1_{comp}$ such that $\dbar v = F$. By continuity, $v = 0$ on $\partial \Omega$. Let $U = U_0 - v$.
+\end{proof}
+
+
+
+
+
+\section{Plurisubharmonicity and pseudoconvexity}
+\begin{definition}
+    Let $\Omega \subseteq \CC^n$ be open, and $u: \Omega \to [-\infty, \infty)$ be a upper-semicontinuous function. We say $u$ is a \dfn{plurisubharmonic function} or \dfn{plush function} if for every $a, b \in \CC^n$, the function $z \mapsto u(az + b)$ is subharmonic.
+\end{definition}
+If $u$ is $C^2$, then $u$ is plush iff the Hessian matrix
+$$\lambda_{ij} = \partial_i \dbar_j f$$
+is positive-semidefinite everywhere.
+
+\begin{definition}
+    An open set $\Omega \subseteq \CC^n$ is a \dfn{domain of holomorphy} if there are no $\Omega_1, \Omega_2 \subset \CC^n$, $\Omega_1$ is nonempty, $\Omega_1 \subset \Omega_2 \cap \Omega$, $\Omega_2$ is not contained in $\Omega_1$, and for every $u \in A(\Omega)$ there is a $\tilde u \in A(\Omega_2)$ such that $u|_{\Omega_1} = u_1|_{\Omega_1}$.
+\end{definition}
+    For example, a polydisk $D = \prod_j D_j$ is a domain of holomorphy because we could always find $f_j \in A(D_j)$ which cannot extend to any open set beyond $D_j$, and then $f(z) = \sum_j f_j(z_j)$ cannot be extended to any open set. More generally, a product of domains of holomorphy is a domain of holomorphy.
+
+We choose a function $\delta: \CC^n \to [0, \infty)$ such that $\delta(z) > 0$ for $z \neq 0$, $\delta(tz) = |t|\delta(z)$ for $\delta \in \CC$. For example, $\delta(z) = |z|$, or $\delta(z) = \max_j |z_j|r_j^{-1}$ for $r_j > 0$. Put
+$$\delta(z, \Omega) = \inf_{w \in \Omega} \delta(z - w).$$
+
+\begin{lemma}
+    Suppose $\Omega$ is a domain of holomorphy, $f \in A(\Omega)$, and $K$ compactly contained in $\Omega$. If for every $z \in K$,
+    $$|f(z)| \leq \delta(z, \CC^n \setminus \Omega),$$
+    then this estimate is also true for $z \in \hat K_\Omega$, the holomorphic hull of $K$. In particular, 
+    $$f(z) = \inf_{\substack{w \in \CC \setminus \Omega\\z \in K}} \delta(z - w) = \inf_{\substack{w \in \CC \setminus \Omega\\z \in \hat K_\omega}}
+ \delta(z - w).$$\end{lemma}
+\begin{proof}
+    For $D = \{|z_j| < r_j\}$ a polydisc, let
+    $$\Delta_\Omega^D(z) = \sup_{z + rD \subseteq \Omega} r = \delta(z, \CC^n \setminus \Omega)$$
+    where $\delta(z) = \max_j |z_j|r_j^{-1}$.
+
+    Suppose $f \in A(\Omega)$ and $|f(z)| \leq \Delta_\Omega^D(z)$ for $z \in K$. We claim that for each $\zeta \in \hat K_\Omega$ and $u \in A(\Omega)$,
+    $$u(z) = \sum_\alpha \frac{(z - \zeta)^\alpha}{\alpha!} \partial^\alpha u(\zeta)$$
+    on $\zeta + |f(\zeta)|D$. Since $\Omega$ is a domain of holomorphy, this Taylor series cannot converge on a large enough polydisc, so |f(\zeta)| \leq \Delta_\Omega^D(z), which proves the claim in case $\Omega$ itself is a polydisc.
+
+    To prove the claim, let $L_t = \{z \in \Omega: \exists w \in K~|z_j - w_j| \leq tr_j|f(w)|\}$. If $t < 1$, then $L_t$ is compact. In fact, if $\{z^k\}_j$ is a sequence in $L_t$ then there is a sequence of $w^k$ witnessing that $z^k \in L_t$. Since $K$ is compact we can choose a limit $w$ of the $w^k$. Thus for $k$ large,
+    $$|z^k_j - w_j| \leq tr_j |f(w)| + \varepsilon.$$
+    Taking $\varepsilon$ small, we see that the $z^k$ lie in a compact set in $K$ since $|z_j^k - w_j^k| \leq \Delta_\Omega^D(w)$, so have a limit $z \in K$.
+
+    Let $M_t = ||u||_{L^\infty(L_t)}$. By the Cauchy inequality applied to the polydisc $\zeta + |f(\zeta)|D$,
+    $$|\partial^\alpha u(w)| t^{|\alpha|} \frac{r^\alpha}{\alpha!} |f(w)|^{|\alpha|} \leq M_t.$$
+    Let $F(\zeta) = \partial^\alpha u(\zeta) t^{|\alpha|} r^\alpha (\alpha!)^{-1} f(\zeta)^{|\alpha|}$. Then $F$ is holomorphic and $|F(\zeta)| \leq M_t$ for $\zeta \in K$. So by the definition of $\hat K_\Omega$, $||F||_{L^\infty(\hat K_\Omega)} \leq M_t$. Therefore
+    $$\frac{|\partial^\alpha u(\zeta)|}{\alpha!} \leq M_t t^{|\alpha|} r^\alpha |f(\zeta)|^{|\alpha|}$$
+    so if $|z_j - \zeta_j| \leq tr_j |f(\zeta)|$ then the Taylor series converges.
+
+    The above argument proves the lemma when $\delta(z) = \max_j |z_j|r_j^{-1}$. The general $\delta$ satisfies
+    $$\delta(z, \CC^n \setminus \Omega) = \sup \{r \in R: \forall w \in \CC ~\delta(w) \leq 1 \implies \forall a \in B(0, r) ~z + aw \in \Omega\}.$$
+    Thus $\delta(z, \CC^n \setminus \Omega) = \inf_{\delta(w) \leq 1} \delta_w(z, \CC^n \setminus \Omega)$ where $\delta_w(z, \CC^n \setminus \Omega) = \sup_{\forall a ~z \in aw \in \Omega} r$ where $a$ ranges over $B(0, r)$. Take $w = (1, 0, \dots, 0)$ and $D_k = \{z: |z_1| < 1, j \neq 1 \implies |z_j| < 1/k\}$. Thus $\Delta^{D_k}_\Omega(z) \to \delta_w(z, \CC^n \setminus \Omega)$ as $k \to \infty$. Moreover $\Delta^{D_{k+1}}_\Omega(z) \geq \Delta^{D_k}_\Omega(z)$ so by Dini's theorem the convergence of the $\Delta^{D_k}_\Omega$ is uniform. 
+
+    If $|f(z)| \leq \delta_w(z, \CC^n \setminus \Omega)$ then $|f(z)| \leq (1 + \varepsilon) \Delta^{D_k}_\Omega(z)$ for $k$ large enough and $z \in K$. By the lemma, $|f(z)| \leq (1 + \varepsilon)\Delta_\Omega^{D_k}(z)$ and $z \in \hat K_\Omega$. By Dini's theorem again one has
+    $$|f(z)| \leq \delta_w(z, \CC^n \setminus \Omega).$$
+    Take the infimum over $w$ of both sides. So $|f(z)| \leq \delta(z, \CC^n \setminus \Omega)$ even for ``weird" choices of $\delta$. 
+\end{proof}
+
+
+
+\begin{theorem}
+The following are equivalent:
+\begin{enumerate}
+    \item $\Omega$ is a domain of holomorphy.
+    \item For every compact subset $K$ of $\Omega$, the holomorphic hull $\hat K_\Omega$ is compactly contained in $\Omega$, and for every $f \in A(\Omega)$,
+    $$\sup_K \frac{|f(z)|}{\delta(z, \CC^n \setminus \Omega)} = \sup_{\hat K_\Omega} \frac{|f(z)|}{\delta(z, \CC^n \setminus \Omega)}.$$
+    \item For every compact subset $K$ of $\Omega$, the holomorphic hull $\hat K_\Omega$ is compactly contained in $\Omega$.
+    \item There is a $f \in A(\Omega)$ which does not extend to any larger set.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+    Obviously 2 implies 3 and 4 implies 1. By the lemma above, 1 implies 2.
+\end{proof}
+
+
+
+
+\section{$L^2$-estimates}
+We want to use the method of a priori estimates to show that $\dbar u = f$ has a solution, but the Hilbert space $L^2(\CC^n)$ contains no holomorphic functions except $0$. Therefore we must weight the inner product to apply Hilbert space theory. Fix $\Omega \subseteq \CC^n$ open. We let $\lambda$ denote Lebesgue measure.
+
+\begin{definition}
+    Let $\varphi \in C^2(\Omega)$. We say that $\varphi$ is a \dfn{strictly plurisubharmonic function} or simply that $\varphi$ is \dfn{strictly plush} if
+    $$\inf_{t \in \CC^n \setminus 0} \frac{\sum_j\sum_k \partial_j \dbar_k \varphi(z) t_j \overline{t_k}}{\sum_j |t_j|^2} > 0.$$
+\end{definition}
+\begin{definition}
+Let $\varphi$ be a strictly plush function on $\Omega$. We define the \dfn{weighted inner product} with strictly plush weight $\varphi$ to be the inner product $(\cdot,\cdot)_\varphi$ of the Hilbert space $L^2(\varphi)$ corresponding to the Borel measure $e^{-\varphi} ~d\lambda$ on $\Omega$.
+\end{definition}
+In other words,
+$$(f, g)_\varphi = \int_\Omega f(z) g(z) e^{-\varphi(z)} ~dz.$$
+To motivate this definition, notice that
+$$\int |u|^2 e^{-\varphi} = \int e^{2\log |u| - \varphi}$$
+so we must have $\varphi > 2 \log |u|$ at infinity. But $\log |u|$ is subharmonic, so the point is that $\varphi$ must have an especially strong form of subharmonicity for this to work on as many holomorphic functions as possible. This leads us to consider $\varphi$ as a plush function.
+
+Suppose that we have solved the equation $\dbar u = f$, for $f: \Omega \to \CC^n$ a good function. Then for $f$ to be the ``gradient" of $u$ with respect to $\dbar$, it must be the case that
+$$\dbar_j f_k = \dbar_k f_j$$
+since $u$ is smooth and so has equality of mixed partials. We call this condition the \dfn{Cauchy-Riemann constraint equation}. One could view it as the statement that the $1$-form $\overline du = \sum_k f_j ~dx_j$ is closed. Of course, $\overline du$ is an exact form, hence closed.
+
+\begin{theorem}[Hormander's estimates]
+    \index{Hormander's $L^2$-estimates}
+    Let $\varphi$ be strictly plush and let
+    $$\kappa(z) = \inf_{t \in \CC^n \setminus 0} \frac{\sum_j\sum_k \partial_j \dbar_k \varphi(z) t_j \overline{t_k}}{\sum_j |t_j|^2}$$
+    witness that $\varphi$ is strictly plush. Assume that $f \in L^2(\varphi + \log \kappa, \Omega \to \CC^n)$ satisfies the Cauchy-Riemann constraints $\dbar_j f_k = \dbar_k f_j$. Then there is a $u \in L^2_\varphi$ such that $\dbar_j u = f_j$ and
+    $$||u||_{L^2(\varphi, \Omega \to \CC)} \leq ||f||_{L^2(\varphi + \log \kappa, \Omega \to \CC^n)}.$$
+\end{theorem}
+Before proving the theorem, we need the notion of weak solution for the operator $\dbar$. We introduce the differential operators
+$$\delta_j = \partial_j - (\partial_j \varphi).$$
+If $u$ is a smooth solution to the equation $\dbar u = f$ and $g$ is smooth, then
+$$(\delta_j g, u)_\varphi
+    = \int_\Omega \partial g \overline u e^{-\varphi} - \int_\Omega \partial_j \varphi g \overline u e^{-\varphi}
+    = (g, f_j)_\varphi.$$
+In other words, $\dbar_j^* = \delta_j$. 
+
+
+For functions $\Omega \to \CC^n$ we define
+$$(g, h)_\varphi = \sum_j (g_j, h_j)_\varphi.$$
+\begin{proof}[Proof of the Hormander estimates]
+    Fix a convex function $\phi \geq 0$ such that
+    $$\phi(z) \geq |z| \log \kappa(z),$$
+    which is possible because $\kappa > 0$. Then for any $\varepsilon > 0$, we have $\log \kappa \leq \varepsilon \phi$ on $|z| > 1/\varepsilon$. Thus
+    $$\int_{|z| > 1/\varepsilon} |f|^2 e^{-\varphi - \varepsilon\phi} \leq \int_{|z| > 1/\varepsilon} |f|^2 e^{-\varphi-\log\kappa} < \infty,$$
+    and the set $\{|z| \leq 1/\varepsilon\}$ is no problem for integrability, so $f \in L^2_{\varphi + \varepsilon\phi}$. Since $\phi$ is convex, it is plush, so $\varphi_\varepsilon = \varphi + \varepsilon \phi$ is strictly plush. Taking weakstar limits as $\varepsilon \to 0$, we can assume that $f \in L^2(\varphi)$.
+    
+    Fix $g \in C^\infty_c(\Omega \to \CC^n)$. Then
+    \begin{align*}
+(\delta_j g_j, \delta_k g_k)_\varphi &= -(\dbar_j \delta_k g_j, g_k)_\varphi \\
+&= -(\delta_k \partial_{\overline{z}_j} g_j,g_k)_\varphi - ([\dbar_j, \delta_k]g_j, g_k)_\varphi \\
+&= (\dbar_j g_j, \dbar_k g_k)_\varphi + (\partial_j \dbar_k \varphi g_j, g_k)_\varphi
+\end{align*}
+    so, summing both sides over $j, k$,
+    $$(\delta g, \delta g)_\varphi + \frac{1}{2} \sum_{j \neq k} ||\dbar_j g_k - \dbar_k g_j||_\varphi^2 = \sum_j ||\dbar_j g||_\varphi^2 + \sum_{jk} (g_j \partial_j \dbar_k \varphi, g_k).$$
+    By the Cauchy-Schwartz inequality,
+    $$(g, f)_\varphi^2 = (g\kappa, f)_{\varphi + \log \kappa}^2 \leq ||g\kappa||_{\varphi + \log \kappa} ||f||_{\varphi + \log \kappa}$$
+    and
+\begin{align*}
+    ||g\kappa||_{\varphi + \log \kappa} 
+        &= \inf_{t \neq 0} ||t||^{-2} \sum_{jk} \int_\Omega g\overline g e^{-\varphi} \partial_j \dbar_k \varphi t_j \overline{t_k}
+        \leq \sum_{jk} \int_\Omega g\overline g e^{-\varphi} \partial_j \dbar_k \varphi\\
+        &\leq \sum_j ||\dbar_j g||_\varphi^2 + \sum_{jk} (g_j\partial_j \dbar_k \varphi, g_k)
+\end{align*}
+    In conclusion,
+$$(g, f)_\varphi^2 \leq ||\delta g||^2_\varphi ||f||_{\varphi + \log \kappa}^2 + \frac{1}{2} \sum_{j \neq k} ||\dbar_j g_k - \dbar_k g_j||_\varphi^2 ||f||_{\varphi + \log \kappa}^2.$$
+
+    Let $N$ be the subspace of $L^2(\varphi, \Omega \to \CC^n)$ consisting of $g$ which satisfy the Cauchy-Riemann constraints. If $h \in N^\perp$ (with respect to $(\cdot, \cdot)_\varphi$) and $\psi$ is a test function, then $\dbar \psi \in N$, so $0 = (h, \dbar \psi)_\varphi = (\delta h, \psi)_\varphi$. But $\psi$ was arbitrary, so $\delta h = 0$.
+    
+    Let $P: L^2(\varphi, \Omega \to \CC^n) \to N$ be the canonical projection. Then
+    $$|(g, f)_\varphi| = |(Pg, f)_\varphi| \leq ||f||_{\varphi + \log \kappa}^2 ||\delta g||_\varphi.$$
+    Let us define the space $D$ of elements of $L^2(\varphi, \Omega \to \CC^n)$ of the form $\delta g$ for some $g \in L^2(\varphi)$, and define $T \in D^*$ by $T(\delta g) = (g, f)_\varphi$. Then $||T|| \leq ||f||_{\varphi + \log \kappa} < \infty$. So by the Hanh-Banach theorem, $T$ admits a linear extension $\tilde T$ to $L^2(\varphi, \Omega \to \CC^n)$. Then $\tilde T$ has a Riesz representation, say $u$, which completes the proof.
+\end{proof}
+
+
+
+
+
+
+\chapter{Commutative Banach algebras}
+This chapter follows Hormander's SCV book, Chapter III.
+
+\begin{definition}
+    A complex algebra $B$, which is also a complex Banach space, is a \dfn{Banach algebra} if for each $f, g \in B$,
+    $$||fg|| \leq ||f||\cdot||g||.$$
+\end{definition}
+    Throughout this chapter we will assume that $B$ is an abelian, unital algebra, with unit $e$.
+    
+\section{The Gelfand transform}
+Let $B$ be an abelian, unital Banach algebra. One of the fundamental problems of the theory of such algebras is to consider to what extent that $B$ can be approximated by algebras of the form $C(K)$, for $K$ a compact Hausdorff space.
+\begin{definition}
+    A \dfn{Banach algebra representation} of $B$ on $K$ is a continuous morphism of algebras $B \to C(K)$.
+\end{definition}
+
+To classify representations, we consider the space of characters on $B$.
+\begin{definition}
+    A \dfn{character} or \dfn{multiplicative functional} on $B$ is a continuous morphism of algebras $m: B \to \CC$ which is not identically $0$. The space of all characters on $B$ is denoted $M_B$.
+    
+    For each $f \in B$, the function $\hat f$ defined on characters by $\hat f(m) = m(f)$ is the \dfn{Gelfand transform} of $f$. We give the space $M_B$ the weakstar topology, namely the weakest topology such that for each $f \in B$, the Gelfand transform $\hat f$ is continuous. The resulting map $B \to C(M_B)$ is called the \dfn{Gelfand representation} of $f$. 
+\end{definition}
+    By the Banach-Alaoglu theorem, $M_B$ is a compact Hausdorff space.
+     
+    The Gelfand representation is universal among representations of $B$.
+\begin{lemma}
+    If $T: B \to C(K)$ is a representation of $B$, then there is a map $\varphi$ so that for every $f \in B$,
+    $$Tf = \hat f \circ \varphi.$$
+\end{lemma}
+\begin{proof}
+    Recall that $Te$ is idempotent, so its image $(Te)(K)$ consists only of $0$ or $1$. Let $K_0$ be the kernel of $Te$ and $K_1$ be its complement in $K$. Then $\{K_0, K_1\}$ is a partition of $K$ into compact, open sets. But then for any $f \in B$, $Tf = 0$ on $K_0$, so we might as well assume $K = K_1$. Under this assumption, for each $x \in K$, the map $f \mapsto Tf(x)$ is a character, which we denote $\varphi(k)$.
+\end{proof}
+
+\begin{definition}
+    Let $f \in B$. The \dfn{resolvent function} of $f$ is the meromorphic function $R_f: U \to B$ given by
+    $$R_f(\lambda) = \frac{1}{f - \lambda e}.$$
+    The domain $U$ of the resolvent function of $f$ is called the \dfn{resolvent set} of $f$. The complement in $B$ of $U$ of $f$ is called the \dfn{spectrum} of $f$, denoted $\sigma(f)$.
+\end{definition}
+    In case $B$ is a space of matrices, then the spectrum of $f$ is exactly the set of eigenvalues of $f$ viewed as a linear operator, since then $f$ solves the eigenvalue equation
+    $$f(x) = \lambda x.$$
+\begin{theorem}[spectral radius theorem]
+    \index{spectral radius theorem}
+    For each $f \in B$, $\sigma(f) = \{\hat f(m): m \in M_B\}$. Moreover,
+    $$\sup_{m \in M_B} |\hat f(m)| = \lim_{n \to \infty} ||f^n||^{1/n}.$$
+\end{theorem}
+    The proof of this theorem uses some complex analysis, which we now consider.
+\begin{lemma}
+    Let $g \in B$. If $g$ is invertible, then the mapping 
+    $$\lambda \mapsto (g - \lambda h)^{-1}$$
+    is continuous on the disk $D$ of all $\lambda$ such that
+    $$|\lambda| < \frac{1}{||g^{-1}h||}.$$
+    Assume $\omega \subseteq D$ is bounded by a finite number of $C^1$ arcs. If $\varphi$ is holomorphic on $\omega$ and $C^1$ on $\overline \omega$, then
+    $$\int_{\partial \omega} (g - \lambda h)^{-1} \varphi(\lambda) d\lambda = 0.$$
+\end{lemma}
+\begin{proof}
+    Let $H = g^{-1}h$ and
+    $$I(\lambda) = g^{-1}\sum_{n=0}^\infty \lambda^n H^n.$$
+    This series converges locally uniformly on $D$, in fact by definition of $D$. Also,
+    $$I(\lambda)(g - \lambda h) = I(\lambda)g(e - \lambda H) = e.$$
+    Therefore we can integrate term by term after multiplying by $\varphi(\lambda)$, and each term is holomorphic.
+\end{proof}
+\begin{lemma}
+    If $(e - \lambda f)^{-1}$ exists for every $|\lambda| \leq R$, then for each $n \geq 0$,
+    $$R^n ||f^n|| \leq \sup_{|\lambda| = R} ||(e-\lambda f)^{-1}||.$$
+\end{lemma}
+\begin{proof}
+    By homotopy invariance and the above lemma, the integral
+    $$\frac{1}{2\pi i} \int_{|\lambda| = r} (e-\lambda f)^{-1}\lambda^{-n-1} ~d\lambda$$
+    is independent of $r$ if $r \leq R$, and if $r||f|| < 1$, then the integral is equal to $f^n$.
+\end{proof}
+\begin{lemma}
+    For each $f \in B$, $\sigma(f)$ is nonempty.
+\end{lemma}
+\begin{proof}
+    Assume $\sigma(f)$ is empty. Then $(e - \lambda f)^{-1}$ exists for every $\lambda \in \CC$, and the holomorphic function
+    $$||(e - \lambda f)^{-1}|| \leq \frac{||f^{-1}||}{|\lambda|}||(e - \lambda^{-1}f^{-1})^{-1}||$$
+    is bounded as $\lambda\to \infty$, contradicting Liouville's theorem.
+\end{proof}
+\begin{corollary}
+    If $B$ is a field, then $B = \CC$.
+\end{corollary}
+\begin{proof}
+    By the lemma, for every $f \in B$ we can find $\lambda \in \CC$ such that $f - \lambda e$ is not invertible, but since $B$ is a field, it follows that $f = \lambda e$.
+\end{proof}
+\begin{lemma}
+    If $I$ is a proper ideal of $B$ then there is a $m \in M_B$ such that $m(f) = 0$ for every $f \in I$.
+\end{lemma}
+\begin{proof}
+    By Zorn's lemma, we can find a maximal ideal $\mathfrak m \supseteq I$. The natural map $B \to B/\mathfrak m = \CC$ is a character, call it $m$.
+\end{proof}
+    Finally we are ready to prove the spectral radius theorem.
+\begin{proof}[Proof of spectral radius theorem]
+    We first claim that $\{\hat f(m): m \in M_B\} \subseteq \sigma(f)$: if $\lambda \notin \sigma(f)$, then there is a $g \in B$ so that $g(f - \lambda e) = e$, so $\hat g(\hat f - \lambda) = 1$. Therefore $\hat f(m) \neq \lambda$ for any $m$.
+    
+    Now let
+    $$1/R \leq \sup_{z \in \sigma(f)} |z|.$$
+    So if $|\lambda| \leq R$, $(e-\lambda f)^{-1}$ exists by the above lemmata. So
+    $$\left(\limsup_{n \to \infty} R^n||f^n||\right)^{1/n} =  R\limsup_{n \to \infty}||f^n||^{1/n} \leq 1$$
+    and it follows that
+    $$\limsup_{n \to \infty} ||f^n||^{1/n} \leq \frac{1}{R} \leq \sup_{z \in \sigma(f)} |z|.$$
+    
+    Third, if $\lambda \in \sigma(f)$, then $f - \lambda e$ is not a unit, so the ideal $I = (f - \lambda e)$ is proper. Therefore we can find a $m \in M_B$ which is annihilated by $I$. Then $\lambda = m(f)$, so $\sigma(f) \subseteq \{\hat f(m): m \in M_B\}$. This proves the first assertion of the spectral radius theorem.
+    
+    Since the Gelfand representation is continuous, there is a $C \geq 1$ such that
+    $$\sup_{m \in M_B} |\hat f(m)| \leq C||f||.$$
+    So
+    $$\sup_{m \in M_B} |\hat f(m)| \leq C^{1/n} ||f^n||^{1/n} \leq C^{1/n}||f||$$
+    implying that
+    $$\sup_{m \in M_B} |\hat f(m)| \leq \liminf_{n \to \infty} ||f^n||^{1/n}.$$
+    Therefore by the lemmata
+    $$\sup_{m \in M_B} |\hat f(m)| \leq \liminf_{n \to \infty} ||f^n||^{1/n} \leq \limsup_{n \to \infty} ||f^n||^{1/n} \leq \sup_{z \in \sigma(f)} |z| = \sup_{m \in M_B} |\hat f(m)|.$$
+    This proves the second assertion.
+\end{proof}
+    Now we generalize the notion of a spectrum to several complex variables. A version of the spectral radius theorem holds still.
+\begin{definition}
+    The \dfn{joint spectrum} $\sigma(f_1, \dots, f_n)$ is the set of all $\lambda \in \CC^n$ such that the ideal
+    $$(f_1 - \lambda_1 e, \dots, f_n -\lambda_n e)$$
+    is proper.
+\end{definition}
+\begin{corollary}
+    For $f_1, \dots, f_n \in B$,
+    $$\sigma(f_1, \dots, f_n) = \{(\hat f_1(m), \dots, \hat f_n(m): m \in M_B\}.$$
+\end{corollary}
+    The proof is essentially the same. This generalization of the spectral radius theorem will allow us to classify the Gelfand representations of finitely generated Banach algebras.
+\begin{theorem}
+    Let $B$ be the Banach algebra generated by $f_1, \dots, f_n$. Then the mapping
+\begin{align*}
+    \varphi: M_B &\to \sigma(f_1, \dots, f_n)\\
+    m &\mapsto (\hat f_1(m), \dots, \hat f_n(m))
+\end{align*}
+    is a homeomorphism. Moreover, $\sigma(f_1, \dots, f_n)$ is polynomially convex, and for each $f \in B$, one can approximate $\hat f \circ \varphi^{-1}$ uniformly by polynomials on $\sigma(f_1, \dots, f_n)$.
+\end{theorem}
+\begin{proof}
+    Since $M_B$ carries the weakstar topology, $\varphi$ is continuous, and injective since if $p$ is a polynomial,
+    $$m(p(f_1, \dots, f_n)) = p(\hat f_1(m), \dots, \hat f_n(m))$$
+    (and polynomials in the $f_j$ are dense in $B$, by definition of $B$). By the corollary of the spectral radius theorem, $\varphi$ is surjective.
+    
+    To prove the second statement, let $K = \sigma(f_1, \dots, f_n)$, $z \in \hat K$, and define a map on the generators by $f_j \mapsto z_j$. This will extend to a character on all of $B$ if it is continuous; and indeed
+    $$|p(z)| \leq \sup_{w \in K} |p(w)| \leq \sup_{m \in M_B} |m(p(f))| \leq |p(f)|.$$
+    Therefore $z \in K$, proving the second claim. The final claim follows because polynomials are dense in $B$.
+\end{proof}
+    
+\section{The holomorphic functional calculus}
+We now show that holomorphic functions can be extended to an (abelian, unital) Banach algebra $B$, even in several complex variables.
+\begin{theorem}[holomorphic functional calculus in several complex variables]
+    \index{holomorphic functional calculus in several complex variables}
+    Let $f_1, \dots, f_n \in B$ and let $\varphi$ be a holomorphic function on a neighborhood of the joint spectrum $\sigma(f_1, \dots, f_n)$. Then there is a $g \in B$ such that
+    $$\hat g = \varphi(\hat f_1, \dots, \hat f_n).$$
+\end{theorem}
+One generally writes $g = \varphi(f_1, \dots, f_n)$, so we think of $\varphi$ as a function $B^n \to B$.
+    
+\begin{lemma}
+    Let $\Omega \subseteq \CC^n$ be open and contain $\sigma(f_1, \dots, f_n)$. Then there is a finitely generated Banach subalgebra $B'$ of $B$ such that $f_1, \dots, f_n \in B'$ and $\sigma_{B'}(f_1, \dots, f_n) \subseteq \Omega$.
+\end{lemma}
+\begin{proof}
+    As $B'$ increases, $\sigma_{B'}(f_1, \dots, f_n)$ decreases. So we show that for every $z \notin \sigma(f_1, \dots, f_n)$, we can find $B'$ so that $z \notin \sigma_{B'}(f_1, \dots, f_n)$. Indeed, we can find $f_{j+n} \in B$ so that
+    $$e = \sum_{j=1}^n f_{j+n}(f_j - z_je).$$
+    Now let $B'$ be the Banach algebra generated by the $f_j$.
+\end{proof}
+\begin{lemma}
+    Let $B'$ be as above. Let $f_1, \dots, f_v$ be the generators of $B'$, and let $\pi: \CC^v \to \CC^n$ be the projection which annihilates $(0, \dots, 0, z_{n+1}, \dots, z_v)$. Then there are polynomials $p_k$ such that for each $z \in \CC^v$ such that for each $j$, $|z_j| \leq ||f_j||$, if
+    $$|p_k(z)| \leq ||p_k(f_1, \dots, f_v)||,$$
+    then $\pi(z) \in \Omega$.
+\end{lemma}
+\begin{proof}
+    Assume $\pi(z) \notin \sigma_{B'}(f_1, \dots, f_n)$. Then the map $f_j \mapsto z_j$ cannot extend to a character on $B'$, so is discontinuous if we were to try to extend it; i.e. there is a $p$ so that
+    $$|p(z_1, \dots, z_v)| \geq ||p(f_1, \dots, f_v)||.$$
+    This is still true close to $z$, so use compactness of the closed polydisk
+    $$\{z \in \CC^v: |z_j| \leq ||f_j||\}.$$
+\end{proof}
+    Now we come to the theorem that we will use to prove the holomorphic functional calculus.
+\begin{theorem}
+    Let $f_1, \dots, f_n \in B$ and let $\varphi$ be holomorphic in a neighborhood of $\sigma(f_1, \dots, f_n)$. Then there are $f_{n+1}, \dots, f_N$ and a holomorphic function $\Phi$ on a neighborhood of the polydisk
+    $$\{z \in \CC^N: |z_j| \leq ||f_j||\}$$
+    such that $\varphi(f_1, \dots, f_n) = \Phi(f_1, \dots, f_N)$.
+\end{theorem}
+\begin{proof}
+    Let $\Omega$ be a neighborhood of $\sigma(f_1, \dots, f_n)$. By the lemma, we can find $f_{n+1}, \dots, f_v$ and $p_1, \dots, p_\mu$ satisfying certain conditions. Let $N = v + \mu$ and $f_{v+k} = p_k(f_1, \dots, f_v)$. The function $\varphi \circ \pi$ is holomorphic in a neighborhood of the compact set of all $z \in \CC^v$ such that $|z_j| \leq ||f_j||$ and $|p_k(z)| \leq ||f_{k+v}||$. Therefore by results in several complex variables, we can find the desired $\Phi$.
+\end{proof}
+\begin{proof}[Proof of holomorphic functional calculus]
+    Let $\Phi$ and $f_{n+1}, \dots, f_N$ be as above. By holomorphy, we can write
+    $$\Phi(z) = \sum_\alpha a_\alpha z^\alpha$$
+    such that
+    $$\sum_\alpha |a_\alpha| R^\alpha < \infty$$
+    where $R = (||f_1||, \dots, ||f_N||)$ and $z = (z_1, \dots, z_N)$. Therefore the series
+    $$g = \sum_\alpha a_\alpha f^\alpha$$
+    norm-converges. Moreover,
+    $$\hat g = \sum_\alpha a_\alpha \hat f^\alpha = \Phi(\hat f_1, \dots, \hat f_N) = \varphi(\hat f_1, \dots , \hat f_n).$$
+\end{proof}
+    
+    
+\chapter{Connections to algebraic geometry}
+This chapter loosely follows Vakil's Rising Sea and Hormander's SCV, Chapter 7. [At some point I'd like to understand the statement of the Serre gaga theorem, but today is not that day. Also, Zworski wants to cover line bundles over complex varieties.]
+
+Throughout this chapter, we assume that all rings are commutative and unital.
+
+
+\section{Schemes and varieties}
+
+\begin{definition}
+    A \dfn{ringed space} $X = (X, \mathcal F)$ consists of a sheaf of rings $\mathcal F$ on $X$. If the stalks of $\mathcal F$ are all local rings, then we say that $X$ is a \dfn{locally ringed space}.
+    
+    A \dfn{morphism of ringed spaces} $\psi: (X, \mathcal F) \to (Y, \mathcal G)$ consists of a continuous map $\psi: X \to Y$ and for each $U \in \Open(Y)$, a morphism of rings $\psi_U: \mathcal G(U) \to \mathcal F(\psi^{-1}(U))$ such that for every open set $V \subseteq U$, the diagram
+$$\begin{tikzcd}
+\mathcal G(V) \arrow[r,"\psi_V"] \arrow[d] &\mathcal F(\psi^{-1}(V)) \arrow[d]\\
+\mathcal G(U) \arrow[r,"\psi_U"] &\mathcal F(\psi^{-1}(U))
+\end{tikzcd}$$
+    commutes.
+    
+    Let $(X, \mathcal F)$ and $(Y, \mathcal G)$ be locally ringed spaces. A \dfn{morphism of locally ringed spaces} $\psi: (X, \mathcal F) \to (Y, \mathcal G)$ is a morphism of ringed spaces such that for every $x \in X$, the maximal ideal $\mathfrak m$ of the stalk $\mathcal F_x$ is given by $\mathfrak m = \psi_x(\mathfrak n)$ where $\mathfrak n$ is the maximal ideal of the stalk $\mathcal G_{\psi(x)}$ and $\psi_x$ is the colimit of morphisms $\psi_U$ as $U$ ranges over the directed set $\mathcal D_{\psi(x)}$ of all open sets $U \ni \psi(x)$.
+\end{definition}
+So a morphism of locally ringed spaces is a morphism of ringed spaces, whose domain and codomain are locally ringed, which preserves the maximal ideals at each stalk.
+
+\begin{definition}
+    Let $R$ be a ring. Let $X$ be the spectrum of $R$, equipped with the Zariski topology. If $U = D(f)$ is a distinguished open set, let $\mathcal F(U)$ be the localization of $R$ at $R \setminus D(f)$. Let $\mathcal F$ be the induced sheaf. Then $\Spec R = (X, \mathcal F)$ is called the \dfn{affine scheme} associated to $R$.
+\end{definition}
+\begin{proposition}
+    Let $R$ be a ring. The affine scheme $\Spec R$ is a locally ringed space, and $R$ is the ring of global sections of $\Spec R$.
+\end{proposition}
+\begin{definition}
+    A \dfn{scheme} is a locally ringed space which is locally an affine scheme. A \dfn{morphism of schemes} is a morphism of locally ringed spaces.
+\end{definition}
+    If $X$ is a scheme, then there is a unique morphism $X \to \Spec \ZZ$, which is the categorical dual of the morphisms $\ZZ \to R$ for each ring $R$ appearing in the definition of $X$.
+\begin{definition}
+    Let $S$ be a scheme. A \dfn{scheme over} $S$, $X$, is a scheme $X$ such that there is a morphism of schemes $\pi: X \to S$.
+    
+    Let $X$ and $Y$ be schemes over $S$, witnessed by morphisms $\pi: X \to S$ and $\varphi: Y \to S$. A \dfn{morphism of schemes over} $S$, $\psi: X \to Y$, is a morphism of schemes $\psi: X \to Y$ such that $\pi = \varphi \circ \psi$.
+    
+    In case $S = \Spec \CC$, we say that $X$ is a \dfn{complex scheme}.
+\end{definition}
+    Notice that if $X = (X, \mathcal F)$ is a complex scheme and $U \subseteq X$ is an affine subscheme, then $\mathcal F(U)$ admits a morphism of rings $\CC \to \mathcal F(U)$. This gives rise to a complex algebra structure on $\mathcal F(U)$. 
+\begin{definition}
+    If $X$ is a complex scheme and every algebra $\mathcal F(U)$ is finitely generated over $\CC$, we say that $X$ is a \dfn{complex scheme of finite type}.
+\end{definition}
+\begin{definition}
+    A \dfn{reduced scheme} $X = (X, \mathcal F)$ is a scheme such that for every open set $U \subseteq X$, the ring $\mathcal F(U)$ has no nilpotents.
+\end{definition}
+\begin{definition}
+    Let $\pi: X \to Y$ be a morphism of schemes. The \dfn{diagonal morphism} $\delta_\pi: X \to X \times_Y X$ is the fiber product of the identity $X \to X$ with itself induced by $\pi$. If $\delta_\pi(X)$ is closed in $X \times_Y X$, we say that $\pi$ is a \dfn{separated morphism}.
+    
+    If the unique morphism $X \to \Spec \ZZ$ is separated, we say that $X$ is a \dfn{separated scheme}.
+\end{definition}
+\begin{definition}
+    A \dfn{variety} is a reduced, separated complex scheme of finite type.
+\end{definition}
+
+\section{Formal power series}
+Let $\sum_\alpha a_\alpha z^\alpha$ be a formal power series on $\CC^n$ with domain of (absolute) convergence $D$. Let $B$ be the set of $z$ such that $|a_\alpha z^\alpha|$ is uniformly bounded in $\alpha$. Clearly $D \subseteq B$.
+\begin{lemma}
+    Assume $w \in B$ and $U = \{z \in \CC^n: |z_j| < |w_j|\}$. Then $U \subseteq D$. 
+\end{lemma}
+\begin{theorem}
+    $D^* = \{\xi \in \RR^n: (e^{\xi_1}, \dots, e^{\xi_n}) \in D\}$ is an open, convex set. If $\xi \in D^*$ and $|\eta_j| \leq |\xi_j|$ then $\eta \in D^*$. Moreover, $z \in D$ if and only if $|z_j| \leq e^{\xi_j}$ for some $\xi \in D^*$.
+\end{theorem}
+\begin{proof}
+    $D^*$ is the interior of $B^*$. We will show $B^*$ is convex. There is an $M$ such that $\xi, \eta \in B^*$ if and only if
+    $$|a_\alpha e^{\alpha\xi}| \leq M$$
+    and similarly for $e^{\alpha\eta}$. This remains true when we raise both sides to the $t$ or $1-t$ power. Then
+    $$|a_\alpha|e^{\alpha(t\xi + (1-t)\eta)} \leq M.$$
+    Thus $t\xi + (1-t)\eta \in B^*$.
+
+    The other claims follow from the definition or are obvious from the lemma.
+\end{proof}
+\begin{definition}
+    A \dfn{Reinhardt domain} is a set $\Omega \subset \CC^n$ such that for every $z \in \Omega$ and every $\theta \in \RR^n$, $(e^{i\theta_1} z_1, \dots, e^{i\theta_n} z_n) \in \Omega$.
+\end{definition}
+
+
+
+    
+    
+    
+
+\chapter{Scattering theory}
+This chapter follows Hormander's Analysis of PDOs book, Chapter XVI, and Zworski-Dyatlov.
+
+\section{Titchmarsh's theorem}
+In this section we give the complex-analytic machinery needed for the understanding of the Breit-Wigner formula.
+
+\begin{definition}
+    Let $E \subseteq \RR^2$ be a compact set. The \dfn{supporting function} $H_E$ is defined by
+    $$H_E(\xi) = \sup_{x \in \ch E} \langle x, \xi \rangle.$$
+\end{definition}
+    TODO: Remove the dependency on this definition, compute supporting functions in $\RR$.
+
+\begin{theorem}[Paley-Weiner-Schwartz]
+    \index{Paley-Weiner-Schwartz theorem}
+    Let $u$ be a compactly supported distribution on $\RR$. Then the Fourier transform $\hat u$ in the sense of Schwartz distributions extends uniquely to an entire function on $\CC$ which satisfies the estimate
+    $$|\hat u(\zeta)| \preceq_u \exp(H_{\chsupp u}(\Im \zeta)).$$
+    Conversely, if $E \subset \RR$ is compact and convex and $f$ is an entire function which satisfies the estimate $|f(\zeta)| \preceq_f \exp(H_E(\Im \zeta))$, then the inverse Fourier transform $\check f$ of the restriction $f|_\RR$ is a compactly supported distribution on $\RR$ with $\chsupp \check f = E$.
+\end{theorem}
+\begin{proof}
+    thm 7.1.14, 7.3.1 in Hormander I
+\end{proof}
+
+We let $\CC_+$ denote the upper half-plane. $G$ is the Green function and $P$ is the Poisson kernel
+\begin{theorem}[subharmonic Riesz representation]
+    \index{subharmonic Riesz representation theorem}
+    Let $v$ be a subharmonic function on $\CC_+$ satisfying the estimate
+    $$v(z) \preceq_v 1 + \Im z$$
+    which is not identically $-\infty$. Then the limit $\sigma(x) = \lim_{y \to 0} v(x + iy)$ exists in the weak sense and satisfies
+    $$v(z) = \int_{-\infty}^\infty P(z, x) \sigma(x) ~dx + \int_{\CC_+} G(z, w) \Delta v(w) ~dw + \Im z \lim_{y \to \infty} \sup_{x \in \RR} \frac{v(x + iy)}{y}.$$
+\end{theorem}
+\begin{proof}
+    thm 16.1.7 in Horm II
+\end{proof}
+
+\begin{corollary}
+    Let $v$ be a subharmonic function satisfying the estimate $v(z) \preceq_v 1 + \Im z$. For each compact set $K \subset \overline{\CC_+}$ we have
+$$\lim_{t \to \infty} \int_K \left|\frac{v(tz)}{z} - \Im z \lim_{y \to \infty} \sup_{x \in \RR} \frac{v(x + iy)}{y}\right| ~dz = 0.$$
+\end{corollary}
+\begin{proof}
+    thm 16.1.8 in Horm II
+\end{proof}
+
+\begin{theorem}[Titchmarsh]
+\index{Titchmarsh's theorem}
+Let $u$ be a distribution on $\RR$ such that $\chsupp u = [a, b]$. Let $N(R)$ be the number of zeroes of $\hat u$ with $|z| \leq R$, counted with multiplicity. Then
+$$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b-a}{\pi}.$$
+\end{theorem}
+\begin{proof}
+By the Paley-Weiner-Schwartz theorem, $\hat u$ is an entire function and we have the sharp estimate
+$$\log |\hat u(\zeta)| \leq C + \Im \zeta \begin{cases}
+    b, &\Im \zeta > 0\\
+    a, &\Im \zeta < 0
+\end{cases}.$$
+Therefore, by the subharmonic Riesz representation theorem, if $h(t) = ta1_{(-\infty, 0)}(t) + tb1_{(0, \infty)}(t)$, then
+$$\lim_{t \to \infty} \frac{\log |\hat u(t\zeta)|}{t} = h(\Im \zeta)$$
+in the suitable weak sense. We take the Laplacian of both sides. Let $Z$ be the multiset of zeroes of $\hat u$. Then
+$$\Delta \log |\hat u(t \zeta)| = 2\pi \sum_{z \in Z} \delta_{z/t}$$
+since $\log/2\pi$ is the fundamental solution of the equation $\Delta v = 0$ in $\RR^2$. On the other side, the derivative in the $x$-coordinate of $\zeta \mapsto h(\Im \zeta)$ vanishes, so its Laplacian is given by $\partial_y^2 h(\Im \zeta) = h''(\Im \zeta) = H'(\Im \zeta) = (b-a)\delta_0(\Im \zeta)$ where $H = a1_{(-\infty, 0)} + b1_{(0, \infty)}$ is a rescaled Heaviside function. In other words,
+$$\lim_{t \to \infty} \frac{\Delta(\log |\hat u(t\zeta)|)}{t} = (b-a)\delta_0(\Im z).$$
+Now let $\chi_R = 1_{B(0, R)}$ be the indicator function of the disk, and let $Z_R$ denote the multiset of zeroes with $|z| < R$. Then
+$$N(R) = \sum_{z \in Z_R} \int_\CC \delta_z = \sum_{z \in Z} \int_\CC \chi_R \delta_z = \sum_{z \in Z} \int_\CC \chi_1 \delta_{z/R}.$$
+Thus
+\begin{align*}
+    \lim_{R \to \infty} \frac{N(R)}{R}
+        &= \lim_{R \to \infty} \sum_{z \in Z} \int_\CC \frac{\chi_1}{R} \delta_{z/R}(\zeta) ~d\zeta = \frac{b - a}{2\pi} \int_{B(0, 1)} \delta_0(\Im \zeta) ~d\zeta\\
+        &= \frac{b - a}{2 \pi} \int_{-1}^1 ~dx = \frac{b - a}{\pi}.
+\end{align*}
+\end{proof}
+
+
+
+
+\section{Scattering matrices and quantum mechanics}
+Let $V \in L^\infty_c(\RR)$, the space of $L^\infty$ functions $\RR \to \RR$ which are compactly supported. Then we can think of $V$ as a multiplication operator $L^p \to L^p$.
+
+\begin{definition}
+The \dfn{stationary Schr\"odinger operator} is the operator
+$$P_V = D_x^2 + V(x).$$
+\end{definition}
+Then for $z \in \CC$, $f \in L^2(\RR)$, the stationary Schr\"odinger equation is $(P_V - z)u(x) = f(x)$.
+
+Why is the stationary Schr\"odinger equation interesting? To see this, let $F \in L^1_{loc}(\RR \to L^2(\RR))$. That is, the function $t \mapsto F(t)$ is locally $L^1$, and the functions $x \mapsto F(t, x)$ for $t$ fixed are $L^2$. The Schr\"odinger equation reads
+$$(i\partial_t - P_V)v(t,x) = F(t,x).$$
+Assume now that $u, f$ solve the stationary Schr\"odinger equation, and let $v(t, x) = e^{-izt}u(x)$ and $F(t,x) = - e^{izt} f(x)$. Then $v, F$ solve the Schr\"odinger equation.
+
+Suppose that $f$ is compactly supported, so that there is an $R > 0$ such that if $|x| \geq R$, $f(x) = V(x) = 0$. Then $u$ is an ``eigenstate at infinity" of the Schr\"odinger operator $P_V$. That is, if $|x| \geq R$, then we can find $a_\pm,b_\pm \in \RR$ such that
+$$u(x) = a_\pm e^{ix\sqrt z} + b_\pm e^{-ix\sqrt z}.$$
+
+\begin{definition}
+Let $f$ be compactly supported, and let $R > 0$ witness the compact support of $f$ and $V$. An \dfn{outgoing solution} is a $u$ solving the stationary Schr\"odinger equation and such that $u(x) = a_-e^{-ix\sqrt z}$ if $-x < R$, $u(x) = a_+e^{ix\sqrt z}$ if $x > R$, for some $a_\pm \in \RR$. An \dfn{incoming solution} is defined similarly, but with $u(x) = b_-e^{ix\sqrt z}$ if $-x < R$ and $u(x) = b_+e^{-ix\sqrt z}$.
+\end{definition}
+So any solution can be written as the superposition of incoming and outgoing waves. Because of the appearance of $\sqrt z$ in the definition of the outgoing solution, we will write $\lambda = \sqrt z$ so that the stationary Schr\"odinger equation reads
+\begin{equation}
+    \label{square eigenvalue equation}
+    (P_V - \lambda^2) u(x) = f(x).
+\end{equation}
+Notice that if $\Im \lambda > 0$, then the kernel of $P_V - \lambda^2$ is nontrivial iff $\lambda^2$ is an eigenvalue of $P_V$.
+
+We now construct an outgoing solution $u$ of Equation \ref{square eigenvalue equation}, for $\lambda \in \CC$. We first assume $V = 0$ and $\Im \lambda > 0$. Notice then that if we define
+$$\Phi(x) = \frac{1}{2\lambda} e^{i\lambda|x|},$$
+$\Phi$ is the fundamental solution of the operator $P_0 - \lambda^2 = D^2 - \lambda^2$. Indeed, if $|x| > 0$, then $D^2\Phi(x) = \lambda^2 \Phi(x)$. So $(P_0 - \lambda^2)\Phi = \delta_0$; taking the convolution of both sides with $f$, we have
+$$u(x) = \frac{i}{2\lambda} \int_{-\infty}^\infty e^{i\lambda|x-y|} f(y)~dy.$$
+Note that this is equivalent to saying
+$u = (D^2 - \lambda^2)^{-1}f$.
+So
+$$R_0(\lambda, x, y) = \frac{ie^{i\lambda|x-y|}}{2\lambda}$$
+is the integral kernel of the resolvent $R_0(\lambda) = (D^2 - \lambda^2)^{-1}$, which we think of as an operator $L^2 \to L^2$, defined for $\Im \lambda > 0$. But the integral kernel makes sense as a meromorphic function on all of $\CC$.
+
+\begin{theorem}
+The resolvent $R_0(\lambda)$ extends to a meromorphic family of operators on $\CC$,
+\begin{align*}
+    R_0(\lambda): L^2_c(\RR) &\to L^2_{loc}(\RR)\\
+    f &\mapsto \frac{i}{2\lambda} \int_{-\infty}^\infty e^{i\lambda|x-y|} f(y)~dy.
+\end{align*}
+If $\Im \lambda > 0$, then we have
+$$||R_0(\lambda)||_{L^2 \to L^2} = \frac{1}{d(\lambda^2, [0, \infty))} \leq \frac{1}{|\lambda| \Im \lambda}.$$
+Let $\rho \in C^\infty_c(\RR)$ be such that for every $|x| \geq L$, $\rho(x) = 0$. Let $\lambda \in \CC$ and $j \in \{0, 1, 2\}$. Then
+$$||\rho R_0(\lambda)\rho||_{L^2 \to H^j} \preceq_{L,j} \exp(\max(0, -2L \Im \lambda)) |\lambda|^{j-1}.$$
+\end{theorem}
+\begin{proof}
+Recall that the spectrum of $D^2$ is $[0, \infty)$ (and $D^2$ is an unbounded, self-adjoint operator). Indeed, the eigenfunctions of $D^2$ are exactly $e^{\lambda x}$, $\lambda \in \RR$, with eigenvalues $\lambda^2$. Therefore we use Theorem \ref{norm of the resolvent} to see that
+$$||R_0(\lambda)||_{L^2 \to L^2} = \frac{1}{d(\lambda^2, [0, \infty))}.$$
+Since $\Im \lambda > 0$, the estimate
+$$\frac{1}{d(\lambda^2, [0, \infty)} \leq \frac{1}{|\lambda| \Im \lambda}$$
+also holds. This proves the first claim.
+
+We now prove the second claim in case $j = 0$. First, 
+$$\int_{-\infty}^\infty |\rho(x)\rho(y)R_0(\lambda, x, y)| ~dx \preceq \frac{1}{|\lambda|} \int_{-\infty}^\infty |\rho(x)\rho(y)| e^{-\Im \lambda|x-y|} ~dx \preceq_L \frac{e^{2L\Im \lambda}}{|\lambda|}.$$
+The same estimate follows upon integrating in $y$. Schur's criterion says that if $K$ is an integral operator then
+$$||K||_{L^2 \to L^2}^2 \leq \sup_{(x, y)} ||K(x, \cdot)|| \cdot ||K(\cdot, y)||.$$
+So
+$$||\rho R_0(\lambda)\rho||_{L^2 \to H^0} = ||R_0(\lambda)||_{L^2 \to L^2} \preceq_L \frac{e^{2L \Im \lambda}}{|\lambda|}.$$
+
+We now only need to prove the second claim in case $j = 2$, since we can interpolate for the case $j = 1$. Applying the interior Schauder estimate, we observe that if $\tilde \rho = 1$ close to the support of $\rho$ and $u = R_0(\lambda)\rho f$, then
+$$||\rho u||_{H^2} \preceq ||\tilde \rho u||_{L^2} + ||\tilde \rho D^2u||_{L^2}.$$
+But
+$$||\tilde \rho D^2u||_{L^2} = ||\rho f + \tilde \rho \lambda^2 R_0(\lambda) \rho f||_{L^2} \preceq_L |\lambda| e^{\max(0, -2L \Im \lambda)}||f||_{L^2}$$
+which completes the proof.
+\end{proof}
+\begin{remark}
+To extend to the general case of $H^n$, we use the derivative interpolation estimate:
+$$\sup_{|\alpha| = \ell} ||\partial^\alpha f||_\infty \le C\left(\sup_{|\alpha| = m} ||\partial^\alpha f||_\infty \right)^{\frac{p - \ell}{p - m}}\left(\sup_{|\alpha| = p} ||\partial^\alpha f||_\infty \right)^{\frac{\ell - m}{p - m}}$$
+\end{remark}
+
+\begin{theorem}
+The resolvent
+$$R_V(\lambda) = (D^2 + V - \lambda^2)^{-1}$$
+is a meromorphic family of operators $L^2 \to L^2$ on the upper half-plane, which extends uniquely to a meromorphic family of operators $L^2_c \to H^2_{loc}$ on $\CC$.
+\end{theorem}
+\begin{proof}
+We first assume $\Im \lambda$ is very large. Using the resolvent $R_0$, we have
+$$(P_V - \lambda^2)R_0(\lambda) = (D^2 - \lambda^2 + V) R_0(\lambda) + 1 VR_0(\lambda).$$
+Since $\Im \lambda$ is large enough, the estimates on $R_0$ give
+$$||VR_0(\lambda)|| \leq ||V||_\infty (\Im \lambda)^{-2} \leq \frac{1}{2}.$$
+Using the geometric series, we have
+$$(1 + VR_0(\lambda))^{-1} = \sum_{j=0}^\infty (-1)^j (VR_0(\lambda))^j.$$
+Therefore
+\begin{equation}
+\label{RV formula}
+R_V(\lambda) = (P_V - \lambda^2)^{-1} = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.
+\end{equation}
+
+Let $\rho \in C^\infty_c$ be identically $1$ on $\supp V$. Since $D^2: H^2 \to L^2$, $\rho R_0: L^2 \to H^2_c$. Now the natural inclusion $H^2_c \to H^2 \to L^2$ is compact by the Rellich-Kondrachov theorem, and by assumption, $\rho V = V$. So $VR_0(\lambda) = V\rho R_0(\lambda)$ is a compact mapping $L^2 \to L^2$. We formally write $R_V(\lambda)^{-1} = (1+VR_0(\lambda))R_0(V)^{-1}$, Then $R_V^{-1}$ is a meromorphic family of Fredholm operators, so by Theorem \ref{analytic fredholm theory}, $R_V$ is a meromorphic family of operators on the upper-half plane.
+
+We now consider the meromorphic family of operators $K(\lambda) = VR_0(\lambda)$, which has a pole exactly at $0$. Then $(1-\rho)K = 0$. Therefore
+$$(1 - K(\lambda)(1 - \rho))(1 + K(\lambda)(1 - \rho)) = 1 - K(\lambda)(1 - \rho)K(\lambda)(1 - \rho) = 1.$$
+So
+$$(1 + K(\lambda)(1 - \rho))^{-1} = 1 - K(\lambda)(1 - \rho).$$
+As above, the geometric series trick shows $1 + K(\lambda)\rho$ is invertible. So
+$$(1 + K(\lambda))^{-1} = ((1+ K(\lambda)(1 - \rho))(1 + K(\lambda)\rho))^{-1} = (1 + K(\lambda)\rho)^{-1}(1 - K(\lambda)(1 - \rho)).$$
+
+Plugging everything into Equation \ref{RV formula},
+$$R_V(\lambda) = R_0(\lambda)(1 + K(\lambda)\rho)^{-1}(1 - K(\lambda)(1 - \rho)).$$
+Now if $\lambda \neq 0$, the map $\rho R_0(\lambda) \rho$ is compact $L^2 \to H^2_c$. Since $V = \rho V$, $K(\lambda)\rho$ is compact $L^2 \to L^2$. So $1 + K\rho$ is a meromorphic family of Fredholm operators. By Theorem \ref{analytic fredholm theory} again, $(1 + K\rho)^{-1}$ is a meromorphic family of operators on $\CC$.
+
+Moreover, $1 - K(\lambda)(1 - \rho)$ and $(1 + K(\lambda)\rho)^{-1}$ carry $L^2_c \to L^2_c$. Since $R_0(\lambda)$ carries $L^2_c \to L^2_{loc}$, we see that $R_V(\lambda)$ carries $L^2_c \to L^2_{loc}$. So $R_V(\lambda)$ is a meromorphic family of operators $L^2_c \to L^2_{loc}$ on $\CC$.
+\end{proof}
+\begin{definition}
+A \dfn{scattering resonance} of $V$ is a pole of $R_V$. The \dfn{multiplicity} of a scattering resonance $\lambda$ is the rank of the operator
+$$\int_{\gamma_\lambda} R_V(\zeta) ~d\zeta$$
+where $\gamma_\lambda$ is a small circle around $\lambda$.
+
+A \dfn{regular point} of $V$ is any complex number that is not a scattering resonance of $V$; or, equivalently, a scattering resonance of multiplicity $0$.
+\end{definition}
+\begin{theorem}
+Assume that $\lambda$ is a regular point of $V$. For each $f \in L^2_c$, $u = R_V(\lambda)f$ is the unique outgoing solution to the equation $(P_V - \lambda^2)u = f$.
+\end{theorem}
+\begin{proof}
+The solution $u = R_V(\lambda)f$ solves $(P_V - \lambda^2)u = f$ by definition of $P_V$. Moreover, $u$ must be a linear combination of $e^{i\lambda|x|}$ and $e^{-i\lambda|x|}$ for $|x| > R$ by construction of the fundamental solution. But $e^{-i\lambda|x|}$ blows up since $\Im \lambda > 0$, so since $u \in L^2$ we have $u(x) = Ce^{i\lambda|x|}$ for some $C > 0$ and every $|x| > R$. Therefore $u$ is an outgoing solution.
+
+Now let $u \in H^2_{loc}$ be arbitrary. We claim
+$$u = R_V(\lambda)(P_V - \lambda^2)u.$$
+This will imply that $R_V(\lambda)$ and $P_V - \lambda^2$ are inverses, so the $u$ given by the statement of the theorem actually is unique. Since $u$ is outgoing, $u \in H^2_{loc}$ so $(P_V - \lambda^2)u \in L^2_c$.
+
+Write
+$$u(x) = u_0(x) + \chi_+(x) a_+ e^{i\lambda x} + \chi_-(x) a_- e^{-i\lambda x}$$
+where $u_0 \in H^2_c$ and the $\chi_\pm$ are supported (and identically $1$) only close to infinity. Then each term $v$ is in $H^2_{loc}$, so if $\Im \lambda > 0$ we have
+$$vR_V(\lambda)(P_V - \lambda^2)v.$$
+Then something with analytic continuation happens (TODO: ???) and so this works even if $\Im \lambda \leq 0$.
+\end{proof}
+    We identify the tensor product of a function space with itself as an integral operator, namely
+    $$(u \otimes v)(f)(x) = u(x) \int_{-\infty}^\infty v(y) f(y) ~dy.$$
+\begin{lemma}
+    \label{singular scattering resonance}
+    Let $\lambda_0 \neq 0$ be a scattering resonance of $V$. Then there exist linearly independent $u_1, \dots, u_{m_R(\lambda_0)} \in H^2_{loc}$, such that $u_1$ is an outgoing solution, $(P_V - \lambda_0^2) u_1 = 0$, and for each $j \geq 2$, $(P_V - \lambda_0^2) u_j = u_{j-1}$.
+    
+    Let
+    $$\Pi_{\lambda_0} = -\frac{1}{\pi i}\int_\gamma R_V(\lambda)\lambda ~d\lambda$$
+    where $\gamma$ is a small circle around $\lambda_0$. Then there exists a holomorphic function $\lambda \mapsto A(\lambda, \lambda_0)$, for $\lambda$ close enough to $\lambda_0$, such that one has the Laurent expansion
+    $$R_V(\lambda) = -\sum_{k=1}^{m_R(\lambda_0)} \frac{(P_V - \lambda_0^2)^{k-1} \Pi_{\lambda_0}}{(\lambda^2 - \lambda_0^2)^k} + A(\lambda, \lambda_0).$$
+    Moreover,
+    $$(P_V - \lambda_0^2)^{m_R(\lambda_0)} \Pi_{\lambda_0} = 0$$
+    and the image of $\Pi_{\lambda_0}$ is spanned by $u_1, \dots, u_{m_R(\lambda_0)}$.
+    
+    If $m_R(\lambda_0) = 1$, then $\Pi_{\lambda_0} = -iu_1 \otimes u_1$ and there are $c_\pm \in \RR$ so that if $x$ is large enough,
+    $$u_1(\pm x) = c_\pm e^{\pm i\lambda_0x}.$$
+    Moreover, for $R > 0$ large enough,
+    $$-2i\lambda_0 \int_{-R}^R u_1(x)^2 ~dx + c_+^2 e^{2i\lambda_0R} + c_-^2e^{-2i\lambda_0R} = 1.$$
+\end{lemma}
+\begin{definition}
+    Let $\lambda_0 \neq 0$ be a scattering resonance of $V$ and let $u_1, \dots, u_{m_R(\lambda_0)}$ be as in Lemma \ref{singular scattering resonance}. We say that $u_1$ is the \dfn{resonant state} of $V$, and $u_2, \dots, u_{m_R(\lambda_0)}$ are the \dfn{generalized resonant states} of $V$.
+\end{definition}
+\begin{proof}[Proof of Lemma \ref{singular scattering resonance}]
+    TODO: Do this when I have some motivation 
+\end{proof}
+
+
+
+
+
+\section{The Breit-Wigner formula}
+\begin{theorem}
+
+\end{theorem}
+
+
+
+\section{The method of complex scaling}
+This section is due to a talk by Haoren Xiong at HADES. The idea is that a ``complex deformation" of $\RR$ preserves most of the scattering resonances.
+
+Throughout this section, we think of a complex $n$-manifold $\tilde M$ as a real $2n$-manifold. This allows us to distinguish between the real tangent bundle $T\tilde M$ and imaginary tangent bundle $iT\tilde M$.
+\begin{definition}
+    Let $\tilde M$ be a complex $n$-manifold. A \dfn{totally real submanifold} $M$ of $\tilde M$ is a submanifold of $\tilde M$ of real dimension $n$ such that for each $m \in M$, $T_mM \cap iT_mM = 0$.
+\end{definition}
+    For example, $\RR^n$ is a totally real submanifold of $\CC^n$.
+\begin{definition}
+    Let $M$ be a totally real submanifold of $\tilde M$ and $f \in C^\infty(M)$. An \dfn{almost holomorphic extension} $\tilde f \in C^\infty(\tilde M)$ of $f$ is a function such that $\tilde f = f$ on $M$ and such that
+    $$\overline \partial f(z) = O(d(z, M)^\infty) ~dz.$$
+\end{definition}
+\begin{lemma}
+    Let $M$ be a totally real submanifold of $\CC^n$. Every $f \in C^\infty(M)$ has a unique almost holomorphic extension $\tilde f$. Moreover, for every holomorphic differential operator $P$ on $\CC^n$, there is a unique differential operator $P_M$ on $M$ such that for every $f \in C^\infty(M)$,
+    $$P_Mf = P\tilde f|_M.$$
+\end{lemma}
+\begin{proof}[Proof sketch]
+    Deform $M$ back into $\RR^n$ and think of $f$ as a function on $\RR^n$. Then use several complex variables to extend $f$ to a holomorphic function. The deformation introduces error terms but they aren't important.
+\end{proof}
+We now consider how to construct totally real submanifolds of $\CC^n$.
+\begin{definition}
+    A \dfn{complex deformation} $\Gamma$ of $\RR^n$ is a family of sets $\Gamma_\theta$ (for $\theta \in [0, \pi/2)$) such that there is a $R_1 > 0$ satisfying
+    $$\Gamma_\theta \cap B_{\CC^n}(0, R_1) = B_{\RR^n}(0, R_1)$$
+    and an $R_2 > 0$ satisfying
+    $$\Gamma_\theta \cap (B_{\CC^n}(0, R_2))^c = e^{i\theta}\RR^n \cap (B_{\RR^n}(0, R_2))^c,$$
+    and such that there are injective smooth functions $f_\theta: \RR^n \to \CC^n$ such that for each $\theta$,
+    $$\Gamma_\theta = f_\theta(\RR^n).$$
+\end{definition}
+Morally, $R_1$ is close to $R_2$, and for $|z| < R_1$, $\Gamma_\theta = \RR^n$, while for $|z| > R_2$, $\Gamma_\theta = e^{i\theta}\RR^n$, i.e. $\Gamma_\theta$ is $\RR^n$ but twisted by $\theta$. Between $R_1$ and $R_2$ is ``enough space for $\RR^n$ to twist smoothly." Moreover, each $\Gamma_\theta$ is a totally real submanifold.
+\begin{example}
+    Let $g \in C^\infty(\RR)$ be a smooth function supported on $(R_1, \infty)$ such that for each $t > R_2$, $g(t) = t^2/2$. Then define $F_\theta(x) = g(|x|)\tan \theta$. Then the family of functions $f_\theta(x) = x + iF_\theta'(x)$ gives rise to a complex deformation of $\RR^n$.
+\end{example}
+Throughout this section, we fix the complex deformation $\Gamma$ given in the above example.
+\begin{definition}
+    Let $-\Delta = -\sum_j \partial_{z_j}$ be the complex Laplacian. The \dfn{complex-scaled Laplacian} is the family of operators
+    $$-\Delta_\theta = (-\Delta)|_{\Gamma_\theta}.$$
+\end{definition}
+By a tedious computation, we see that the principal symbols $\sigma(-\Delta_\theta)$ each have a $C = C(\theta) > 0$ such that for every $(x, \xi) \in T^*\Gamma_\theta$,
+$$\frac{|\xi|^2}{C} \leq |\sigma(-\Delta_\theta)(x, \xi)| \leq C|\xi|^2.$$
+Therefore $-\Delta_\theta$ is a second-order elliptic operator, so we would like to study its resolvent $R_\theta: L^2(\Gamma_\theta) \to H^2(\Gamma_\theta)$. To get an idea of how we might study such a thing, we recall that the resolvent $R = R_0$ of the classical Laplacian has an integral kernel
+$$R(\lambda, x, y) = \frac{e^{i\lambda|x-y|}}{C|x-y|}$$
+for some constant $C = C(n)$. Now $(x, y) \mapsto |x - y| = \sqrt{(x - y)\cdot(x-y)}$ is a mapping $\RR^{2n} \to \RR^n$ which extends holomorphically to the mapping $(z, w) \mapsto \sqrt{(z-w)\cdot(z-w)}$ on a neighborhood of $\bigcup_{\theta' \leq \theta} \Gamma_{\theta'}$ in $\CC^{2n}$.
+\begin{theorem}
+    Assume $\Im \lambda e^{i\theta} > 0$. The resolvent $R_\theta: C^\infty_c(\Gamma_\theta) \to C^\infty(\Gamma_\theta)$ has an integral kernel
+    $$R_\theta(\lambda, z, w) = \frac{e^{i\lambda\sqrt{(z-w)\cdot(z-w)}}}{C\sqrt{(z-w)\cdot(z-w)}}$$
+    for some $C = C(n)$. Moreover, $R_\theta$ extends to a linear operator $L^2(\Gamma_\theta) \to H^2(\Gamma_\theta)$. If $\delta > 0$ and
+    $$\Re \lambda \geq \delta \Im \lambda > 0,$$
+    then we have
+    $$||R_\theta(\lambda)||_{L^2(\Gamma_\theta) \to L^2(\Gamma_\theta)} = O_\delta((\Im \lambda)^{-2}).$$
+\end{theorem}
+\begin{proof}[Proof sketch]
+    For $|z|,|w| > R_2$, we have
+    $$|e^{i\lambda\sqrt{(z-w)\cdot(z-w)}}| \leq e^{-\delta|z-w|}.$$
+    So there is a $C > 0$ so large that if $|z|,|w| > C$, we have
+    $$|R_\theta(\lambda, z, w)| \leq |e^{i\lambda\sqrt{(z-w)\cdot(z-w)}}| \leq \frac{e^{-\delta|z-w|/C}}{C|z-w|}.$$
+    Therefore $||w \mapsto R_\theta(\lambda, z, w)||_{L^1} < \infty$. By Schur's criterion, the $L^2$ estimate follows.
+\end{proof}
+We now consider the complex-scaled Schrodinger operator
+$$P_\theta = -\Delta_\theta + V,$$
+where $V \in L^\infty_c(\RR^3)$ like usual. By the same arguments as in the case $\theta  = 0$, we are justified in defining the finite-rank (hence trace-class) projection operator
+$$\Pi_{\lambda^2}^\theta = \frac{1}{\pi i} \oint_\lambda (\zeta^2 - P_\theta)^{-1} \zeta ~d\zeta.$$
+\begin{definition}
+    The \dfn{complex-scaled scattering multiplicity} $m_\theta(\lambda)$ is the rank of the operator $\Pi_{\lambda^2}^\theta$.
+\end{definition}
+We of course have $m_0 = m_R$.
+\begin{theorem}
+    Let $\Im \lambda > 0$ and $\Im \lambda e^{i\theta} > 0$. Then
+    $$m_0(\lambda) = m_\theta(\lambda).$$
+\end{theorem}
+\begin{proof}[Proof sketch]
+    Let $\chi \in C^\infty_c(B(0, R_1))$. Then if $\rho$ is the cutoff appearing in the proof of the above results for $\theta = 0$, $(1 - \rho)\chi = 0$. This can be used with analytic Fredholm theory to prove that
+    $$\chi(P - \lambda^2)^{-1}\chi = \chi(P_\theta - \lambda^2)^{-1}\chi.$$
+    Now adding a cutoff to the $\oint$ does not change its rank, so we might as well restrict to $B(0, R_1)$ and use the above equation.
+\end{proof}
+
+
+\newpage
+\printindex
+
+\end{document}

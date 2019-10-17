@@ -653,9 +653,7 @@ The open mapping theorem is also called the Banach-Schauder theorem.\index{Banac
     $$||Tx|| \preceq ||P^{-1}x|| + ||x|| \preceq ||x||.$$
 \end{proof}
 
-    
-
-\chapter{$C^*$-algebras}
+\chapter{Preliminaries on Banach algebras}
 \begin{definition}
 A \dfn{Banach algebra} is a Banach space equipped with a bilinear, associative multiplication such that
 $$||xy|| \leq ||x|| ||y||.$$
@@ -681,6 +679,135 @@ In other words, a sequence converges in the strong operator topology $T_n \to T$
     A \dfn{von Neumann algebra} $\mathcal A$ is a sub-$*$-algebra of $\BB(\HH)$ which is closed in the strong operator topology.
 \end{definition}
 
+
+\section{The spectrum}
+Fix a Banach algebra $A$.
+\begin{definition}
+    Let $a \in A$. The \dfn{spectrum} $\sigma(a)$ is the set of $z \in \CC$ such that $\sigma(a) - z$ is not invertible. The \dfn{resolvent} $\rho(a)$ is the complement of $\sigma(a)$.
+\end{definition}
+
+\begin{lemma}
+    Let $a \in A$. If $||a|| < 1$ then $1 - a$ is invertible with inverse
+    $$(1 - a)^{-1} = \sum_{n=0}^\infty a^n.$$
+\end{lemma}
+\begin{proof}
+    The partial sums converge since $||a|| < 1$. Therefore
+    $$(1 - a) \sum_{n=0}^\infty a^n = (1 - a) \lim_{n \to \infty} \sum_{k=0}^n a^k = \lim_{n \to \infty} \sum_{k=0}^n a^k - a^{k-1} = 1$$
+    since the summands telescope.
+\end{proof}
+In particular, if $||1 - a|| < 1$ then $a$ is invertible. 
+\begin{definition}
+    The \dfn{general linear group} of $A$ is $\GL(A)$, the group of invertible elements of $A$.
+\end{definition}
+By the above lemma, there is a ball $B$ around $1$ contained in $\GL(A)$. By continuity of translation, we can carry $B$ to be centered at any point of $\GL(A)$. Therefore $\GL(A)$ is an open set.
+
+\begin{proposition}
+    The function $z \mapsto (z - a)^{-1}$ is holomorphic on $\rho(a) \cup \infty$.
+\end{proposition}
+    In this case, holomorphy is indicated by local existence of a convergent power series.
+\begin{proof}
+    We have
+    $$(a - z)^{-1} = \sum_{n=0}^\infty (a - z_0)^{-n-1}(z-z_0)^n$$
+    for each $z_0 \in \rho(a)$ and $z$ close enough to $z_0$ that the power series converges. To see that the function is still holomorphic at $\infty$, notice that
+    $$(a - z^{-1})^{-1} = z(1 - az)^{-1}$$
+    which vanishes as $z \to 0$. Replacing $z$ by $z^{-1}$, we see that the function is bounded close to infinity, and continuous, so holomorphic there.
+\end{proof}
+
+We now observe that the usual proofs of Cauchy's integral formula and its friends such as Cauchy's estimate and Liouville's theorem go through even in case of holomorphic functions $U \to A$, $U \subseteq \CC$ open. 
+
+We now come to the famous Gelfand-Mazur theorem, which can be thought of as a ``restatement of the fundamental theorem of algebra" for our purposes. For the notation, recall that the map $z \mapsto z1$ is an embedding of $\CC$ in any Banach algebra. 
+\begin{theorem}[Gelfand-Mazur]
+    \index{Gelfand-Mazur theorem}
+    If $A = \GL(A) \cup 0$, then $A = \CC$.
+\end{theorem}
+\begin{proof}
+    Let $a \in \GL(A)$ and assume towards contradiction that $a \notin \CC$. Then the resolvent $z \mapsto (a - z)^{-1}$ is a holomorphic function defined on the Riemann sphere, so constant. Taking $z = \infty$, the resolvent is identically $0$, but also identically $a^{-1}$ (taking $z = 0$). This is a contradiction.
+\end{proof}
+Notice that this fails over $\RR$, as witnessed by $\CC$ as well as the quaternions $\mathbb H$. This is why we study Banach algebras over $\CC$.
+
+\section{Ideals}
+Let $I$ be an ideal of $A$. It is immediate that the norm-closure $\overline I$ is an ideal. Moreover, since $\GL(A) \ni 1$ is open, if $I$ is a proper ideal, then $I$ does not meet $\GL(A)$ and so $\overline I$ does not contain $1$, so $\overline \cdot$ preserves propriety. Therefore maximal ideals are closed. Moreover, for continuous morphisms, kernels are closed, so we might as well only study closed ideals.
+
+If $I$ is a (left, right) ideal then $A/I$ is a (left, right) module over $A$, equipped with the seminorm
+$$||a|| = \inf_{d \in I} ||a - d||.$$
+In case $I$ is closed, this seminorm is actually a norm, and complete since $A$ is complete. So we end up with a Banach space.
+
+\begin{definition}
+    A \dfn{Banach module} over $A$ is an $A$-module $M$ which is a Banach space, such that
+    $$||am||_M \leq ||a||_A ||m||_M.$$
+\end{definition}
+It is not very hard to check that $M = A/I$ is a Banach module. In fact, for $b, c \in I$, we have
+$$||am||_M \leq ||(a - c)(m - d)||_A \leq ||a - c||_A ||m - d||_A.$$
+Taking the $\inf$ over $c, d$ of both sides, we have
+$$||am||_M \leq ||a||_A ||m||_M.$$
+In case $I$ is two-sided, $M$ is a Banach $(A, A)$-bimodule, or in other words, a Banach algebra.
+
+In what follows we use $\Hom(A, B)$ to mean the $K$-algebra of morphisms of $K$-algebras $A \to B$ over some field $K$ (which is usually $\CC$).
+
+If $I$ is a maximal ideal, therefore, $A/I$ is a field, and so $A/I = \CC$ by the Gelfand-Mazur theorem. But a maximal ideal gives a epimorphism $A \to \CC$, and conversely, the kernel of a such an epimorphism is a maximal ideal. This gives a bijection between the maximal spectrum of $A$ and $\Hom(A, \CC) \setminus 0$, which we call $\hat A$.
+
+\begin{lemma}
+    Let $K$ be a field and $A$ a unital $K$-algebra. Let $\varphi \in \Hom(A, K)$. Then if $a \in A$, $\varphi(a) \in \sigma(a)$.
+\end{lemma}
+\begin{proof}
+    We have $\varphi(a - \varphi(a)) = 0$.
+\end{proof}
+\begin{lemma}
+    If $\varphi: A \to \CC$ is a nonzero morphism, then $||\varphi|| \leq 1$.
+\end{lemma}
+\begin{proof}
+    $\varphi(a) \in \sigma(a)$ so $||\varphi(a)|| \leq ||a||$.
+\end{proof}
+
+Therefore $\hat A$ is contained in the unit ball $A'_1$ of the dual $A'$. Since nets in $\hat A$ act continuously on $A$, their pointwise convergence preserves operations of $A$. So $\hat A$ is closed. In particular, the Banach-Alaoglu theorem implies that $\hat A$ is a weakstar compact Hausdorff space.
+
+\begin{definition}
+    Let $a \in A$. The \dfn{Gelfand transform} $\hat a$ is the function
+    $$\hat a(\varphi) = \varphi(a),$$
+    for $\varphi \in \hat A$.
+\end{definition}
+Notice that $||\hat a||_{L^\infty(\hat A)} \leq ||a||_A$ and $\hat a(\hat A) \subseteq \sigma_A(a)$. Conversely, let $\lambda \in \sigma_A(a)$. Then $a - \lambda$ is not invertible, so there is a maximal ideal $I \supseteq (a - \lambda)$ and an epimorphism $\varphi$ such that $\ker \varphi = I$. Thus $\lambda \in \hat a(\hat A)$. Therefore $\hat A = \sigma_A(a)$, but the proof of this is highly nonconstructive.
+
+\begin{example}
+    Recall that $c_0(\NN)$, the set of $x \in \ell^\infty(\NN)$ such that $x_n \to 0$ as $n \to \infty$, is a closed ideal of $A = \ell^\infty(\NN)$. Therefore there is a $\varphi$ such that $\varphi(c_0(\NN)) = 0$. But, in fact, $\hat A = \beta\NN$, where $\beta$ is the Stone-Cech functor. It follows that it is consistent with ZF without the axiom of choice that $\varphi$ does not exist.
+\end{example}
+
+\begin{definition}
+    Let $a \in A$. The \dfn{spectral radius} of $a$ is
+    $$r(a) = \max_{\lambda \in \sigma(a)} |\lambda|.$$
+\end{definition}
+Equivalently, $r(a) = ||\hat a||_{L^\infty(\hat A)}$. Therefore we have $r(ab) \leq r(a)r(b)$. 
+
+\section{The holomorphic functional calculus}
+    As usual, let $A$ be a commutative Banach algebra.
+\begin{definition}
+    Let $a \in A$ and let $f$ be a holomorphic function on $D(0, ||a|| + \varepsilon)$. Put
+    $$f(z) = \sum_{n=0}^\infty \alpha_n z^n.$$
+    The \dfn{holomorphic functional calculus} is the morphism $f \mapsto f(a)$ defined by
+    $$f(a) = \sum_{n=0}^\infty \alpha_n a^n.$$
+\end{definition}
+    The Taylor series of $f$ converges uniformly absolutely on $D(0, ||a||)$, so the partial sums of $f(a)$ form a Cauchy sequence in $A$. Therefore $f(a)$ is a well-defined element of $A$, and we can think of $f$ as a mapping $U \to A$, where $U$ consists of elements of $A$ that are small enough. If $f$ is entire, then $f$ lifts to a function $A \to A$.
+\begin{theorem}[spectral mapping theorem]
+    \index{spectral mapping theorem}
+    If $\lambda \in \sigma(a)$ then $f(\lambda) \in \sigma(f(a))$. 
+\end{theorem}
+\begin{proof}
+    We have
+    \begin{align*}
+        f(a) - f(\lambda) &= \sum_{n=0}^\infty \alpha_n(a^n - \lambda^n)
+            = \sum_{n=0}^\infty \alpha_n(a - \lambda)(a^{n-1} + a^{n-2}\lambda + \dots + \lambda^{n-1})\\
+            &= (a - \lambda)b
+    \end{align*}
+    for some $b$, if we can show that the partial sums are a Cauchy sequence. In fact
+    $$||a^{n-1} + \dots + \lambda^{n-1}|| \leq n||a||^{n-1}$$
+    which is the right-hand side of $f'(||a||)$ (which clearly converges, so partial sums are Cauchy). Therefore $f(a) - f(\lambda) = (a-\lambda)b$. So if $f(a) - f(\lambda)$ is invertible, then so is $a - \lambda$.
+\end{proof}
+
+
+
+
+
+\chapter{Preliminaries on $*$-algebras}
 \section{Weights}
 \begin{definition}
 \index{weight}
@@ -785,10 +912,10 @@ so $\sqrt a \in n_\omega$. Since $n_\omega$ is a left ideal, $a \in n_\omega$.
     $$\omega(f) = \int_0^1 f(t) ~dt$$
     then $\omega$ is a tracial weight on $\AAA$ such that $n_\omega = \AAA$. But of course $n_\omega$ is a Banach space when given the $\BB^2 = L^2$ norm. Its completion is $L^2([0, 1])$.
 \end{example}
-\begin{prop}
+\begin{proposition}
     Let $\omega$ be a tracial weight and $\AAA$ be a sub-$*$-algebra of $\BB_0(\HH)$. If $b \geq 0$ and $b \in m_\omega$, and $a \in \BB(\HH)$ then
     $$|\omega(ab)| \leq ||a||_{op}|\omega(b)|.$$
-\end{prop}
+\end{proposition}
 \begin{proof}
     We have
 \begin{align*}
@@ -913,8 +1040,26 @@ $$\pi(f)\pi(g) = \pi(f*g)$$
 and of course $\pi(f)^* = \pi(f^*)$ where we define $f^*(x) = \overline f(x^{-1})$. Finally, we observe that
 $$||\pi(f)|| \leq ||f||_{L^1(G)}$$
 so $\pi$ is a $*$-Banach algebra morphism which extends to a map
-$$\pi: L^1(G) \to U(H).$$
+$$\pi: L^1(G) \to B(L^2(G)).$$
 This leads to the abstract theory of Fourier transform.
+
+
+
+\chapter{Compact operators}
+Let $B_0(H)$ denote the algebra of compact operators in $H$.
+
+\section{Nonunitary algebras}
+TODO: a bunch of notes i need to type up lol
+
+\section{The type-I dichotomy}
+Let $A$ be a $C^*$-algebra. We write $\hat A$ to denote the set of all isomorphism classes of irreducible representations of $A$.
+
+\begin{definition}
+    Let $\pi: A \to B(H)$ range over $\hat A$. We say that $A$ is \dfn{liminal} or \dfn{CCR} if for every $\pi$, $\pi(A) = B_0(H)$. We say $A$ is \dfn{postliminal} or \dfn{GCR} if for every $\pi$, $B_0(H) \subseteq \pi(A)$. We say $A$ is \dfn{antiliminal} or \dfn{NCR} if for every $\pi$, $B_0(H) \cap \pi(A) = 0$.
+
+    If $A$ is a von Neumann algebra, we say that $A$ is \dfn{type-I} if $A$ is postliminal. We say that $A$ is \dfn{non-type-I} if $A$ is not postliminal.
+\end{definition}
+
 
 
 
