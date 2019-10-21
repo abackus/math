@@ -1046,10 +1046,103 @@ This leads to the abstract theory of Fourier transform.
 
 
 \chapter{Compact operators}
-Let $B_0(H)$ denote the algebra of compact operators in $H$.
+Let $B_0(H)$ denote the algebra of compact operators in $H$. This is a closed ideal of $H$, hence a $C^*$ algebra (proof: it is the closure of the ideal $B_f(H)$ of finite rank operators in $H$.) It will be one of our main examples of a noncommutative, nonunital $C^*$ algebra.
 
-\section{Nonunitary algebras}
-TODO: a bunch of notes i need to type up lol
+\section{Representation theory}
+We now study the representation theory of $B_0(H)$.
+
+Like any $C^*$ algebra, $B_0(H)$ has a normalized approximate identity, sequential if $H$ is separable. Decompose $H$ by transfinite recursion as
+$$H = \bigoplus_{\alpha < \kappa} \CC$$
+where $\kappa$ is some cardinal ($\kappa = \aleph_0$ if $H$ separable) and the biproduct is in the category of Hilbert spaces. For $\lambda < \kappa$, let $H_\lambda = \bigoplus_{\alpha < \lambda} H_\lambda$ so $H$ is the injective limit of the $H_\lambda$; then let $e_\lambda$ be the natural projection $H \to H_\lambda$. The $e_\lambda$ form a net with respect to the natural ordering on $\kappa$ and are obviously an approximate identity.
+
+Recall that if we fix a representation $\pi: A \to B(H)$, we can view $H$ as a module over $A$ by defining $a\xi = \pi(a)(\xi)$. Recall also that a representation is said to be nondegenerate if $HA$ is dense in $A$.
+
+In fact, any representation of $B_0(H)$ is faithful. Since representations are continuous, and $B_0(H)$ has no closed ideals (since $B_f(H)$ contains all proper ideals of $B_0(H)$, and is dense in $H$), any representation of $B_0(H)$ is faithful.
+
+There is a natural $*$-representation $B_0(H) \to B(H)$ given by the inclusion map. Since $e_\lambda\xi \to \xi$, this representation is nondegenerate. In some sense this is the only such representation.
+\begin{lemma}
+    A nondegenerate $*$-representation of $B_0(H)$ is isomorphic to a direct sum to copies of the representation $B_0(H) \to B(H)$. In particular, the only irreducible such representation is the representation $B_0(H) \to B(H)$. 
+\end{lemma}
+\begin{proof}
+    Let $\langle \xi, \eta\rangle_0$ be the $B_0(H)$-valued inner product
+    $$\langle \xi, \eta\rangle_0 \zeta = \xi \langle \eta, \zeta\rangle.$$
+    In fact such an inner product has values in rank-$1$ operators since $\xi \langle \eta, \zeta\rangle$ lies in the span of $\xi$.
+
+    For $T \in B(H)$, $T\langle \xi, \eta\rangle_0\zeta = (T\xi)\langle \eta, \zeta\rangle$ so $T\langle \xi, \eta\rangle_0 = \langle T\xi, \eta\rangle_0$, and $\langle \xi, \eta\rangle_0T = \langle \xi, T^*\eta\rangle_0$.
+
+    Let $\pi: B_0(H) \to B(V)$ be a nondegenerate $*$-representation, $\xi \in H$ a unit vector. Then $\langle \xi, \xi\rangle_0$ is a rank-$1$ projection. Since $\pi$ is faithful, $\pi(\langle \xi, \xi\rangle_0)$ is a nonzero projection. Let $v$ be a unit vector of $\langle \xi, \xi\rangle_0(V)$ and define $Q: H \to V$ by $Q\eta = \langle \eta, \xi\rangle_0 v$. Then by a tedious computation, $Q$ is an isometry.
+
+    We now show that $Q$ commutes the representations. Let $T = \langle \omega, \zeta\rangle_0$. Any operator in $B_0(H)$ can be written as an infinite linear combination of rank-$1$ operators so it suffices to show that $QT = TQ$. In fact,
+    $$Q(T\eta) = \langle T\eta, \zeta\rangle_0 v = TQ(\eta).$$
+    Also, $Q(H)^\perp$ is $\pi$-invariant, so we repeat the argument on $Q(H)^\perp$ to see that we have
+    $$V = Q(H) \oplus Q(H)^\perp$$
+    as $B_0(H)$-modules. Now run Zorn's lemma to keep decomposing $Q(H)^\perp$ until we hit an irreducible representation.
+\end{proof}
+
+This is a very remarkable property of $B_0(H)$. To see why, we need something stronger than ZFC.
+\begin{definition}
+    A \dfn{$\Diamond$-sequence} is a net of sets $\alpha \mapsto A_\alpha$, for $\alpha < \aleph_1$, such that for any $A \subseteq \aleph_1$,
+    $$\hat A = \{\alpha < \aleph_1: A \cap \alpha = A_\alpha\}$$
+    is stationary in $\aleph_1$.
+\end{definition}
+In other words, for every closed and unbounded (``club") set $C \subseteq \aleph_1$, $C \cap \hat A$ is nonempty. The existence of a $\Diamond$-sequence implies that $V = L$, in particular implying GCH.
+
+Naimark conjectured that if $A$ was a $C^*$-algebra with only one irreducible representation, then $A = B_0(H)$. This is true if $A$ is separable.
+\begin{theorem}[Ackemann-Weaver]
+    If there is a $\Diamond$-sequence, then there is a $C^*$-algebra $A$ which has only one irreducible representation such that $A \neq B_0(H)$.
+\end{theorem}
+
+In this lemma, you should read $A = B(H)$ and $I = B_0(H)$.
+\begin{lemma}
+    Let $A$ be a $*$-normed algebra and $I$ a $*$-ideal of $A$ with normalized approximate unit. Then every nondegenerate $*$-representation of $I$ extends uniquely to $A$.
+\end{lemma}
+\begin{proof}
+    Let $\pi: I \to B(H)$ be such a representation. Define
+    $$\tilde \pi(a) \sum_\alpha \pi(d_\alpha) \xi_\alpha = \sum_\alpha \pi(ad_\alpha) \xi_\alpha$$
+    where the $\xi_\alpha$ are a Hilbert basis of $H$. Then $\tilde \pi$ is a well-defined function since if $\sum_\alpha \pi(d_\alpha)\xi_\alpha = 0$, then
+    $$\sum_\alpha \pi(ad_\alpha)\xi_\alpha = \lim_\lambda \sum_\alpha \pi(ae_\lambda d_\alpha) \xi_\alpha = \lim_\lambda \pi(ae_\lambda) \sum_\alpha \pi(d_\alpha)\xi_\alpha = 0$$
+    since the $e_\lambda$ are a normalized approximate unit. This is unique because
+    $$\tilde \pi(a)\pi(d)\xi = \pi(ad)\xi$$
+    and the $\pi(ad)\xi$ are dense in $H$.
+\end{proof}
+
+\begin{lemma}
+    Let $A,I$ be as above and let $\pi$ be an irreducible representation of $A$. Then either $I \subseteq \ker\pi$ or $\pi$ is an irreducible representation of $I$.
+\end{lemma}
+\begin{proof}
+    Assume $I$ is not contained in $\ker \pi$. Then $\overline{IH}$ is nonzero and $A$-invariant. Since $\pi$ is irreducible, $\overline{IH} =H$. Therefore $\pi$ is a nondegenerate representation of $I$.
+
+    We have $e_\lambda\xi \to \xi$ for any $\xi$ since $\pi$ is nondegenerate. Let $K \subseteq H$ be nondegenerate and nonzero. Using $e_\lambda$, $\overline{IK} = K$ so $\overline{IK}$ is $A$-invariant. Therefore since $\pi$ is irreducible, $K = H$.
+\end{proof}
+
+\begin{lemma}
+    Let $A,I$ be as above. Let $\pi: A \to B(H)$ and $\rho: A \to B(K)$ be irreducible representations. If $\pi \cong \rho$ as representations of $I$, then $\pi \cong \rho$ as representations of $A$.
+\end{lemma}
+\begin{proof}
+    Let $U: H \to K$ be an isomorphism of $I$-modules. For $d \in I$,
+    $$U(\pi(a)\pi(d)\xi) = U(\pi(ad)\xi) = \rho(ad)U\xi = \rho(a)U(\pi(d)\xi).$$
+    So $U\pi = \rho U$.
+\end{proof}
+
+\begin{theorem}[Burnside]
+    Assume $H \neq \CC$. Let $A \subseteq B_0(H)$ be a $C^*$-algebra. If $A$ acts on $H$ irreducibly, then $A = B_0(H)$.
+\end{theorem}
+\begin{proof}
+    By assumption on $H$, $A \neq 0$. Let $T \neq 0$. Then $T^*T \in A$ is nonzero, so we can assume without loss of generality that $T$ is self-adjoint. Moreover, $C^*(T, 1) = C(\sigma(T))$ acts on $H$ as an abelian monoid.
+
+    Let $\lambda \in C(\sigma(T))$. Taking bump functions centered on $\lambda$ we can find a sequence of $\xi_n \in H$ such that $(T - \lambda)\xi_n \to 0$. Since $T$ is comapct, $T$ sends the unit ball of $H$ to a precompact set. So the $T\xi_n$ have a weak limit $\eta$. Thus $T\eta = \lambda\eta$. Therefore $T$ has an eigenvector for $\lambda$. So the only limit point of $\sigma(T)$ is $0$, because the other eigenvectors are all orthogonal.
+
+    Let $P$ be a projection of minimal rank in $A$. We claim that $P$ is a rank-$1$ projection. In fact, $PTP$ is a self-adjoint operator on the finite-dimensional space $PH$, so has spectral projections in $A$ whose rank is the same as that of $P$ by minimality. Thus there is a unique such spectral projection; i.e. there is an $s \in \RR$ such that $PTP = sP$. Moreover, if $\xi,\eta \in PH$ are orthonormal, $R \in A$, then $\langle R\xi, \eta\rangle = s\langle\xi, \eta\rangle = 0$. Therefore $\langle A\xi, \eta\rangle = 0$, yet $A$ acts irreducibly, which is a contradiction. Therefore $P$ is a rank-$1$ projection.
+
+    Now $R,S \in A$ implies that $RPS$ is a rank-$1$ projection. Thus $\overline{APAH} = H$. So $\overline{APA}$ is the set of rank-$1$ operators. Any compact operator can be written as an infinite linear combination of those.
+\end{proof}
+
+\begin{corollary}
+    Let $A$ be a $C^*$-algebra and $\pi: A \to B(H)$ an irreducible representation. If $\pi(A)$ contains a nonzero compact operator then $\pi(A)$ contains $B_0(H)$.
+\end{corollary}
+\begin{proof}
+    Let $I = \pi(A) \cap B_0(H)$. Then $I$ acts irreducibly on $H$ so by Burnside's theorem, $\overline{\pi(I)} = B_0(H)$. But $\pi$ takes $I/\ker \pi$ to $B_0(H)$ isometrically (since it is injective), so $\pi(I)$ is closed since $I$ is complete. Thus $\pi(I) = B_0(H)$.
+\end{proof}
 
 \section{The type-I dichotomy}
 Let $A$ be a $C^*$-algebra. We write $\hat A$ to denote the set of all isomorphism classes of irreducible representations of $A$.
