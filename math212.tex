@@ -607,21 +607,48 @@ and if $\dbar u = f$ for some $(0, 0)$-form $u$, $\dbar f = 0$.
 
 
 
-\section{Plurisubharmonicity and pseudoconvexity}
+\section{Plurisubharmonicity and domains of holomorphy}
 \begin{definition}
-    Let $\Omega \subseteq \CC^n$ be open, and $u: \Omega \to [-\infty, \infty)$ be a upper-semicontinuous function. We say $u$ is a \dfn{plurisubharmonic function} or \dfn{plush function} if for every $a, b \in \CC^n$, the function $z \mapsto u(az + b)$ is subharmonic.
+    Let $\Omega \subseteq \CC^n$ be open, and $u: \Omega \to [-\infty, \infty)$ be a upper-semicontinuous function. We say $u$ is a \dfn{plurisubharmonic function} or \dfn{plush function} if for every $a, b \in \CC^n$, the function $z \mapsto u(az + b)$ is subharmonic whenever it is defined.
 \end{definition}
-If $u$ is $C^2$, then $u$ is plush iff the Hessian matrix
+\begin{lemma}If $u$ is $C^2$, then $u$ is plush iff the Hessian matrix
 $$\lambda_{ij} = \partial_i \dbar_j f$$
-is positive-semidefinite everywhere.
+is positive-semidefinite everywhere.\end{lemma}
+\begin{proof}
+    We have $0 \leq \Delta_\tau u(z + \tau w) = 4\partial_\tau \dbar_\tau u(z + \tau w)$. By the chain rule,
+    $$0 \leq 4 \partial_\tau \sum_j \dbar_j u (z + \tau w)\overline w_j = 4 \sum_{k,j} \partial_k \dbar_j u(z + \tau w) \overline w_j w_k.$$
+    Now divide both sides by $4$.
+\end{proof}
+We let $P(\Omega)$ denote the set of plush functions on $\Omega$. It is easy to see from this characterization that for any holomorphic function $f$, $\log |f| \in P(\Omega)$. A tensor product of subharmonic functions, $u \otimes v(z, w) = u(z) v(w)$ is also plush. Any convex function is plush. 
+
+Recall that the decreasing sequence of a subharmonic functions converges to a subharmonic function. Restricting to a line we see:
+\begin{corollary}
+    The limit of a decreasing sequence of plush functions is plush.
+\end{corollary}
+    Thus we could define a plush function to be a decreasing limit of smooth plush functions (where a smooth plush function is one satisfying the Hessian characterization.)
+
+\begin{corollary}
+Let $\varphi$ be a standard mollifier and $u$ plush. Let $u_\varepsilon$ denote the $\varepsilon$-mollification of $u$. Then $u_\varepsilon$ decreases to $u$ as $\varepsilon \to 0$ and $u_\varepsilon \in C^\infty(\Omega_\varepsilon) \cap P(\Omega_\varepsilon)$ for $\Omega_\varepsilon = \{z \in \Omega: d(z, \partial \Omega) > \varepsilon\}$.
+\end{corollary}
+The proof is the same as in one dimension (i.e. for subharmonic functions).
+
+\begin{corollary}
+    Let $\Omega \subseteq \CC^n$, $\Omega' \subseteq \CC^m$, $f: \Omega \to \Omega'$ a holomorphic mapping, and $u \in P(\Omega')$. Then the pullback $f^*u \in P(\Omega)$.
+\end{corollary}
+\begin{proof}
+    Without loss of generality we can assume that $u$ is smooth (since the pullback of a decreasing sequence is decreasing). By the Hessian characterization, the pullback is plush.
+\end{proof}
+
 
 \begin{definition}
     An open set $\Omega \subseteq \CC^n$ is a \dfn{domain of holomorphy} if there are no $\Omega_1, \Omega_2 \subset \CC^n$, $\Omega_1$ is nonempty, $\Omega_1 \subset \Omega_2 \cap \Omega$, $\Omega_2$ is not contained in $\Omega_1$, and for every $u \in A(\Omega)$ there is a $\tilde u \in A(\Omega_2)$ such that $u|_{\Omega_1} = u_1|_{\Omega_1}$.
 \end{definition}
-    For example, a polydisk $D = \prod_j D_j$ is a domain of holomorphy because we could always find $f_j \in A(D_j)$ which cannot extend to any open set beyond $D_j$, and then $f(z) = \sum_j f_j(z_j)$ cannot be extended to any open set. More generally, a product of domains of holomorphy is a domain of holomorphy.
+    For example, a polydisk $D = \prod_j D_j$ is a domain of holomorphy because we could always find $f_j \in A(D_j)$ which cannot extend to any open set beyond $D_j$, and then $f(z) = \sum_j f_j(z_j)$ cannot be extended to any open set. More generally, a product of domains of holomorphy is a domain of holomorphy. If $n = 1$ then every set is a domain of holomorphy, so this is the distinction between one and many variables.
 
 We choose a function $\delta: \CC^n \to [0, \infty)$ such that $\delta(z) > 0$ for $z \neq 0$, $\delta(tz) = |t|\delta(z)$ for $\delta \in \CC$. For example, $\delta(z) = |z|$, or $\delta(z) = \max_j |z_j|r_j^{-1}$ for $r_j > 0$. Put
 $$\delta(z, \Omega) = \inf_{w \in \Omega} \delta(z - w).$$
+
+Recall that for $K \subset \Omega$ a compact set, the holomorphic hull $\hat K_\Omega$ is defined by the set of $z \in \Omega$ such that for every $f \in A(\Omega)$, $|f(z)| \leq ||f||_{L^\infty(K)}$.
 
 \begin{lemma}
     Suppose $\Omega$ is a domain of holomorphy, $f \in A(\Omega)$, and $K$ compactly contained in $\Omega$. If for every $z \in K$,
@@ -636,7 +663,7 @@ $$\delta(z, \Omega) = \inf_{w \in \Omega} \delta(z - w).$$
 
     Suppose $f \in A(\Omega)$ and $|f(z)| \leq \Delta_\Omega^D(z)$ for $z \in K$. We claim that for each $\zeta \in \hat K_\Omega$ and $u \in A(\Omega)$,
     $$u(z) = \sum_\alpha \frac{(z - \zeta)^\alpha}{\alpha!} \partial^\alpha u(\zeta)$$
-    on $\zeta + |f(\zeta)|D$. Since $\Omega$ is a domain of holomorphy, this Taylor series cannot converge on a large enough polydisc, so |f(\zeta)| \leq \Delta_\Omega^D(z), which proves the claim in case $\Omega$ itself is a polydisc.
+    on $\zeta + |f(\zeta)|D$. Since $\Omega$ is a domain of holomorphy, this Taylor series cannot converge on a large enough polydisc, so $|f(\zeta)| \leq \Delta_\Omega^D(z)$, which proves the claim in case $\Omega$ itself is a polydisc.
 
     To prove the claim, let $L_t = \{z \in \Omega: \exists w \in K~|z_j - w_j| \leq tr_j|f(w)|\}$. If $t < 1$, then $L_t$ is compact. In fact, if $\{z^k\}_j$ is a sequence in $L_t$ then there is a sequence of $w^k$ witnessing that $z^k \in L_t$. Since $K$ is compact we can choose a limit $w$ of the $w^k$. Thus for $k$ large,
     $$|z^k_j - w_j| \leq tr_j |f(w)| + \varepsilon.$$
@@ -658,7 +685,6 @@ $$\delta(z, \Omega) = \inf_{w \in \Omega} \delta(z - w).$$
 \end{proof}
 
 
-
 \begin{theorem}
 The following are equivalent:
 \begin{enumerate}
@@ -670,10 +696,65 @@ The following are equivalent:
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-    Obviously 2 implies 3 and 4 implies 1. By the lemma above, 1 implies 2.
+    Obviously 2 implies 3 and 4 implies 1. By the lemma above, 1 implies 2. So we just need to show 3 implies 4.
+
+    Let $\{K_j\}$ a compact exhaustion of $\Omega$ (so for any compact $L \subset \Omega$ and every $j$ large enough $L \subseteq K_j$). Define $D_\zeta = \{\zeta\} + rD$ for $D = \{|z_j| < r_j\}$ and $r = \sup_{\{\zeta\} + \rho D \subset \Omega} \rho$.
+
+    Let $M$ be the set of rational points of $\Omega$; then we choose a sequence of $\zeta_j \in M$ so that every element of $M$ appears infinitely often. We also choose a sequence of $z_j \in D_{\zeta_j}$ such that $z_j \notin K_j$; this is possible because $D_{\zeta_j}$ touches $\partial \Omega$ but $K_j$ does not because it is compact.
+
+    By (3), there is a $f_j \in A(\Omega)$ such that $f_j(z_j) = 1$ and $||f_j||_{L^\infty(K_j)} < 1$. Replacing $f_j$ by a power of $f_j$, we can assume without loss of generality that $||f_j|_{L^\infty(K_j)} < 2^{-j}$.
+
+    Now let
+    $$f(z) = \prod_j (1 - f_j(z))^j.$$
+    To see that this product converges we just have to show convergence in any compact set $L$, and we can assume without loss of generality that there is a $J$ such that $L = K_J$. For $j > J$ we have $|f_j(z)| < 2^{-j}$ and since we only care about the tail we can assume $J = 1$. Then
+    $$\log f(z) = \sum_j j|\log(1-f_j(z))| \leq \sum_j j |f_j(z)| \leq \sum_j j2^{-j} < \infty.$$
+    Therefore convergence is locally uniform so $f \in A(\Omega)$.
+
+    For every $D_{\zeta_j}$ there is a $w_N$ such that for every $|\alpha| \leq N$, $\partial^\alpha f(z_N) = 0$. Therefore $f$ has a zero of order $N$ in $D_{\zeta_j}$. In particular, the zeroes of $f$ have higher and higher order as we approach $\partial \Omega$. Therefore if $f$ is defined at a point $z$ of $\partial \Omega$ then $z$ is an infinite-order zero of $f$. So $f = 0$. But $f$ is nonzero so this is a contradiction.
 \end{proof}
+\begin{example}
+    As a counterexample, notice that if $\Omega = B(0, 3) \setminus \overline{B(0, 1)}$ and $K = \partial B(0, 2)$ then $\hat K_\Omega = \overline{B(0, 2) \setminus B(0, 1)}$ by Hartogs' theorem and the maximum principle for $n \geq 2$. This is not a compact subset of $\Omega$, so $\Omega$ is not a domain of holomorphy.
+\end{example}
+\begin{corollary}
+    If $\Omega$ is convex then $\Omega$ is a domain of holomorphy.
+\end{corollary}
+\begin{proof}
+    Recall that $\hat K_\Omega$ is contained in the convex hull of $K$, which is a compact subset of $\Omega$.
+\end{proof}
+\begin{corollary}
+    If $\Omega_\alpha$ are domains of holomorphy then the interior of $\bigcap_\alpha \Omega_\alpha$ is a domain of holomorphy.
+\end{corollary}
+\begin{proof}
+    Let $K \subset \Omega$ be a compact set. Then $\hat K_\Omega$ is a compact subset of $\hat K_{\Omega_\alpha}$ for every $\alpha$, in particular of the compact set $\bigcap_\alpha \hat K_{\Omega_\alpha}$, which is a compact subset of $\Omega$.
+\end{proof}
+\begin{corollary}
+    Let $\Omega$ be a domain of holomorphy, $f_1, \dots, f_N \in A(\Omega)$. Then
+    $$\Omega_f = \{z \in \Omega: |f_j(z)| < 1\}$$
+    is a domain of holomorphy.
+\end{corollary}
+\begin{proof}
+    Let $K$ be a compact subset of $\Omega_f$. Then by compactness, there is a $r < 1$ such that $K \subset \{z \in \Omega: |f_j(z)| < r\}$. Thus for any $z \in \hat K_{\Omega_f}$, $|f_j(z)| \leq r$. Moreover
+    $$\hat K_{\Omega_f} \subseteq \hat K_\Omega \subset \{|f_j| \leq r\} \subseteq \Omega_f.$$
+    Therefore $\hat K_{\Omega_f}$ is a compact subset of $\Omega_f$. 
+\end{proof}
+\begin{corollary}
+    Let $u: \Omega \to \CC^m$ be a holomorphic transformation, $\Omega' \subseteq \CC^m$ a domain of holomorphy. Then the pullback $u^{-1}(\Omega')$ is a domain of holomorphy.
+\end{corollary}
 
+We now relate domains of holomorphy to plurisubharmonicity.
+\begin{theorem}
+    If $\Omega$ is a domain of holomorphy and $\delta$ as above, then $z \mapsto -\log \delta(z, \CC^n \setminus \Omega)$ is a continuous plurisubharmonic function.
+\end{theorem}
+\begin{proof}
+    For $z_0 \in \Omega$, $w \in \CC^n$, take $D = \{z_0 + \tau w: \tau \in \CC, ~|\tau|\leq r\}$. If $r$ is small enough then $D \subseteq \Omega$. Let $f$ be a polynomial in $\tau$ and $-\log \delta(z_0 + \tau w, \CC^n \Omega) \leq \Re f(\tau)$ for every $|\tau| = r$. We must show this is true for $|\tau| < r$ as well.
 
+    Let $F$ be a polynomial on $\CC^n$ such that $F(z_0 + \tau w) = f(\tau)$. Then
+    $$|e^{-F(z)}| \leq \delta(z, \CC^n \setminus \Omega)$$
+    for $z \in \partial D$, hence for $z \in \widehat{\partial D}_\Omega$, in particular for $z\in D$. Thus the claim holds for $|\tau| < r$. 
+\end{proof}
+    In fact the converse of this result holds, using Hormander $L^2$-estimates with plush weights on $\Omega$.
+
+    
 
 
 \section{$L^2$-estimates}
