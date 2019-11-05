@@ -1180,6 +1180,48 @@ One generally writes $g = \varphi(f_1, \dots, f_n)$, so we think of $\varphi$ as
     $$\hat g = \sum_\alpha a_\alpha \hat f^\alpha = \Phi(\hat f_1, \dots, \hat f_N) = \varphi(\hat f_1, \dots , \hat f_n).$$
 \end{proof}
     
+
+\chapter{Bergman kernels}
+Suppose $\Phi$ is a strictly plush quadratic form on $\CC^n$. That is,
+$$\Phi(z) = \Re \langle Az, z\rangle + \langle Cz, \overline z \rangle$$
+where $A \in \CC^{n \times n}$ and $C$ is a positive matrix. (The inner product is antilinear in $\overline z$, hence why we needed complex conjugation). Then we define
+$$L^2_\Phi(\CC^n) = \left\{u: \int_{\CC^n} |u(z)|^2 e^{-2\Phi(z)} ~dz < \infty\right\}.$$
+Thus we can define $H_\Phi(\CC^n) = L^2_\Phi(\CC^n) \cap A(\CC^n)$. Taking the holomorphic part of a compactly supported function (which is always possible for smooth functions by the Hormander $L^2$ estimates), we see that $H_\Phi(\CC^n)$ is nonempty. $H_\Phi(\CC^n)$ is closed, hence a Hilbert space.
+
+It is often useful to have a semiclassical parameter, so we put
+$$||u||_\Phi^2 = \int_{\CC^n} |u|^2 e^{-2\Phi/h} ~dm.$$
+
+Putting
+$$u_\alpha(z) = e^{-\langle Az, z\rangle/h} z^\alpha$$
+we recover an orthonormal basis
+$$f_\alpha = C (h^{n + |\alpha|} \alpha!)^{-1/2}u_\alpha$$
+of $H_\Phi$. 
+
+Let
+$$\Pi_\Phi: L^2_\Phi \to H_\Phi$$
+be the orthogonal projection. Then one can check that
+$$\Pi_\Phi u(z) = C \int_{\CC^n} e^{2\Psi(z, \overline w)/h - 2\Phi(w)/h} u(w) ~dm(w),$$
+where $\Psi: \CC^{2n} \to \CC$ is the unique analytic quadratic function such that
+$$\Psi(z, \overline z) = \Phi(z).$$
+\begin{example}
+    If $\Phi(z) = |z|^2/2$ then $\Psi(z, w) = \langle z, w\rangle/2$ and
+$$\Pi u(z) = \frac{1}{(\pi h)^n} \int_{\CC^n} e^{-\langle z, \overline w\rangle/h - |w|^2/h}u(w) ~dm(w).$$
+\end{example}
+    In quantum mechanics, $H$ is the space of wavefunctions. If $g \in L^\infty$ is a classical observable, we quantize $g$ by
+    $$T_g = \Pi g \Pi.$$
+    In fact, $g$ itself cannot be holomorphic by Liouville's theorem, but $T_g$ preserves $A$.
+\begin{example}
+    Let $g(z) = \overline z_j$, $u \in H_{\Phi + \varepsilon|z|^2}$, where $\Phi(z) = |z|^2/2$. Then $T_g$ carries $H$ to itself, and
+    $$T_gu(z) = \frac{1}{(h\pi)^n} \int_{\CC^n} e^{-\langle z, \overline w \rangle/h - |w|^2/h} \overline w_j u(w) ~dm(w).$$
+    We first see that
+    $$\overline w_j e^{-\langle z, \overline w\rangle - |w|^2/h} = -h\partial_{w_j} e^{-\langle z, \overline w\rangle - |w|^2/h}$$
+    and since the integrals converge, we integrate by parts to see that
+    $$T_gu(z) = \frac{1}{(h\pi)^n} e^{-\langle z, \overline w\rangle/h - |w|^2/h} h\partial_{w_j}u(w) ~dm(w) = \Pi(h\partial_ju(z)) = h\partial_j u(z).$$
+    That is, multiplication by $\overline z_j$ is the same as differentiating in $z_j$. So this is, in fact, a quantization.
+\end{example}
+
+
+
     
 \chapter{Connections to algebraic geometry}
 This chapter loosely follows Vakil's Rising Sea and Hormander's SCV, Chapter 7. [At some point I'd like to understand the statement of the Serre gaga theorem, but today is not that day. Also, Zworski wants to cover line bundles over complex varieties.]
@@ -1257,18 +1299,101 @@ Let $\sum_\alpha a_\alpha z^\alpha$ be a formal power series on $\CC^n$ with dom
     A \dfn{Reinhardt domain} is a set $\Omega \subset \CC^n$ such that for every $z \in \Omega$ and every $\theta \in \RR^n$, $(e^{i\theta_1} z_1, \dots, e^{i\theta_n} z_n) \in \Omega$.
 \end{definition}
 
-\section{Bergman kernels}
-We now begin setting up for a theorem of Quillen.
-
-Suppose $\Phi$ is a strictly plush quadratic form on $\CC^n$. That is,
-$$\Phi(z) = \Re \langle Az, z\rangle + \langle Cz, \overline z \rangle$$
-where $A \in \CC^{n \times n}$ and $C$ is a positive matrix. (The inner product is antilinear in $\overline z$, hence why we needed complex conjugation). Then we define
-$$L^2_\Phi(\CC^n) = \left\{u: \int_{\CC^n} |u(z)|^2 e^{-2\Phi(z)} ~dz < \infty\right\}.$$
-Thus we can define $H_\Phi(\CC^n) = L^2_\Phi(\CC^n) \cap A(\CC^n)$. Taking the holomorphic part of a compactly supported function (which is always possible for smooth functions by the Hormander $L^2$ estimates), we see that $H_\Phi(\CC^n)$ is nonempty. $H_\Phi(\CC^n)$ is closed, hence a Banach space. Let
-$$\Phi_\Phi: L^2_\Phi \to H_\Phi$$
-be the orthogonal projection. 
 
 
+\section{Quillen's theorem}
+\begin{theorem}[Catlin-d'Angelo-Quillen]
+    \index{Catlin-d'Angelo-Quillen theorem}
+    Let
+    $$f(z, \overline z) = \sum_{|\alpha| = |\beta| = m} c_{\alpha\beta} z^\alpha \overline z^\beta$$
+    be a bihomogeneous quadratic form on $\CC^n$ such that $f(z, \overline z) > 0$ for every $z \neq 0$. Then there is a $N \in \NN$ and a polynomial
+    $$P_j(z) = \sum_{|\alpha| = m} p_\alpha^j z^\alpha$$
+    such that 
+    $$|z|^{2N} f(z, \overline z) = \sum_{j=1}^J |P_j(z)|^2.$$
+\end{theorem}
+    Quillen developed this theorem to prove the complex Nullstellensatz. It was also used by Polya for the following theorem.
+\begin{theorem}[Polya]
+    \index{Polya's theorem}
+    Suppose $p$ is a real homogeneous polynomial on $\RR^n$ and $p(x) > 0$ if $\forall j ~x_j \geq 0$ and $\sum_j x_j = 1$. Then there is a $N \in \NN$ such that $(x_1 + \dots + x_n)^Np(x)$ has positive coefficients.
+\end{theorem}
+\begin{proof}
+    Write $x_j = z_j \overline{z_j}$ and put $c_{\alpha\beta} = 0$ for $\alpha \neq \beta$, then use Quillen's theorem.
+\end{proof}
+    To prove Quillen's theorem, we develop the theory of real quadratic forms.
+
+    Let $q: \CC^n \to \RR$ be a quadratic form.
+\begin{lemma}
+    There is a decomposition $q = h + \ell$ such that $h(iz) = -ih(z)$ and $\ell(z) = \ell(iz)$.
+\end{lemma}
+\begin{definition}
+    $\ell$ is the \dfn{Levi form} of $q$.
+\end{definition}
+\begin{proof}
+    Define $Jq(z) = q(iz)$. Then $J^2 = 1$. Put $h = (q - Jq)/2$, $\ell = (q + Jq)/2$. Then $h$ is \dfn{pluriharmonic} in the sense that for any $j$ in any coordinate system, $\partial_j \dbar_j h(iz)$ is constant because $h$ is a quadratic form. Moreover,
+    $$\partial_j \dbar_j h(iz) = -\partial_j(\dbar_jh(iz)) = \partial_j \dbar_j h(iz)$$
+    which proves the claim for $h$.
+\end{proof}
+    To prove Quillen's theorem, let
+    $$P_f(z) = \sum_{|\alpha| = |\beta| = m} c_{\alpha\beta} z^\alpha (h\partial)^\beta$$
+    be a quantization of $f$. Then if $h = 1/N$, $P_f$ carries the space $\mathcal P_{m + N}$ of homogeneous polynomials of degree $m + N$ to itself, as we will prove, and this will prove Quillen's theorem.
+\begin{lemma}
+    There is a polynomial $P$ such that
+    $$f(z, \overline z) = \sum_{j=1}^J |P_j(z)|^2$$
+    if and only if $A = (c_{\alpha\beta})_{\alpha\beta}$ is a positive-definite matrix.
+\end{lemma}
+    Note that this is not trivial because $A$ acts on the vector space $\CC^K$, where $K$ is the set of partitions of $m$, which by some combinatorics can be very large!
+\begin{proof}
+    For any symmetric matrix $A \in \CC^{K \times K}$ we can find $w_k \in \CC^K$, $\lambda_j$, $j,k \in K$, such that
+    $$A = \sum_{j,k} \lambda_j w_k w_k^*$$
+    by the spectral theorem. Here $f$ is real-valued, so $c_{\alpha\beta} = \overline{c_{\beta\alpha}}$ whence $A$ is symmetric. Thus we can use that decomposition.
+
+    Let $Z = (z^\alpha)_{\alpha \in K}$. Then
+    $$f(z, \overline z) = Z^*AZ = \sum_{\alpha \in K} \lambda_\alpha Z^*w_\alpha w_\alpha^* Z$$
+    so $f(z, \overline z)$ is the sum over $\alpha$ of the sign of $\lambda_\alpha$ times $|P_\alpha(z)|^2$, where
+    $$P_\alpha(z) = |\lambda_\alpha|^{1/2} w_\alpha^* Z = |\lambda_\alpha|^{1/2} \sum_{\beta \in K} \overline w_\alpha^\beta z^\beta.$$
+    So if $A$ is positive then the $\lambda_\alpha \geq 0$.
+
+    For the converse, just run the same argument in reverse. 
+\end{proof}
+\begin{example}
+    Let $z \in \CC^2$,
+    $$f(z, \overline z) = |z_1|^4 + |z_2|^4 + c|z_1|^2 |z_2|^2$$
+    for some $|c| \in (0, 2)$. Then $f$ is a positive quadratic form. There are only $3$ partitions of $2$, so the matrix $A$ acts on $\CC^3$ by
+    $$A = \begin{bmatrix}
+        1 &&\\&c&\\&&1
+    \end{bmatrix}.$$
+    Then $A$ is positive-definite if and only if $c > 0$, so that is exactly when $f$ is a positive quadratic form.
+\end{example}
+    Let $\mathcal P_{n + M}$ be the space of homogeneous polynomials of degree $n + M$. Let $\Phi(z) = |z|^2/2$ as in the theory of Bergman kernels and $T_\cdot$ be the quantization operator.
+\begin{lemma}
+    Let
+    $$|z|^{2N} f(z, \overline z) = \sum_{|\alpha| = |\beta| = N + m} c_{\alpha\beta}^N z^\alpha \overline z^\beta$$
+    be a bihomogeneous form. Let
+    $$P_f(z) = \sum_{|\alpha| = |\beta| = m} c_{\alpha\beta}z^\alpha T_{\overline z^\beta}.$$
+    Then $A = (c_{\alpha\beta})$ is positive if and only if there is a $c > 0$ such that for every $u \in \mathcal P_{n + M}$ we have
+    $$\langle P_f u, u\rangle_\Phi \geq c||u||_\Phi$$
+\end{lemma}
+\begin{proof}
+    The orthonormal projection $\Pi: L^2 \to H$ is self-adjoint so
+    $$T_g^* = T_{\overline g}.$$
+    Moreover, it is easy to check that $P_f$ is self-adjoint, and $P_f = \sum_{\alpha,\beta} c_{\alpha\beta} z^\alpha (h\partial)^\beta$. Then
+\begin{align*}P_fg(z) &= \sum_{\alpha,\beta} c_{\alpha\beta} z^\alpha \Pi(\overline z^\beta g(z)) \\
+&= \sum_{L=0}^\infty \frac{1}{(\pi h)^n} \int_{\CC^n} \frac{\langle z, \overline w\rangle^L}{h^LL!} f(z, \overline w) g(w) e^{-|w|^2/h} ~dm(w)\\
+&= \sum_L (h\pi)^{-n} \int_{\CC^n} \sum_{|\mu| = L} \frac{z^\mu \overline w^\mu}{\mu! h^{|\mu|}} f(z, \overline w) g(w) e^{-|w|^2/2h} ~dm(w).
+\end{align*}
+Assume $g \in \mathcal P_{m + N}$. By homogeneity one can only get a nonzero contribution to the integral when $L = N$. So
+$$P_fg(z) = (\pi h)^{-n} \int_{\CC^n} \sum_{|\mu| = N} \frac{z^\mu \overline w^\mu}{\mu! h^{|\mu|}} f(z, \overline w) g(w) e^{-|w|^2/h} ~dm(w).$$
+Let $u \in \mathcal P_{m + N}$ expand as
+$$u(z) = \sum_{|\gamma| = m + N} u_\gamma(z) z^\gamma.$$
+Then
+\begin{align*}\langle P_fu, u\rangle &=
+h^{N + 2m}\sum_{\substack{|\alpha| = |\beta| = m\\|\mu| = N}} c_{\alpha\beta} \frac{(\alpha + \mu)!(\beta + \mu)!}{\mu!}u_{\beta + \alpha} \overline u_{\alpha + \mu}\\
+&= (\pi h)^{-n} h^{N+2m} \sum_{|\gamma| = |\rho| = N + m} c^N_{\rho\gamma} \rho! \gamma! u_\rho \overline u_\gamma
+\end{align*}
+and $(c^N_{\rho\gamma}\rho!\gamma!)$ is positive iff $A$ is positive. Since
+$$\frac{\langle z, \overline z\rangle^N}{N!} \sum_{|\alpha|=|\beta|=m} c_{\alpha\beta}z^\alpha z^\beta = \sum_{\substack{|\alpha| = |\beta| =m\\|\mu| = N}} \frac{c_{\alpha\beta}}{\mu!} z^{\alpha + \mu} \overline z^{\beta + \mu}$$
+we plug this back into $\langle Pf u, u\rangle$.
+\end{proof}
 
     
     
