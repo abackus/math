@@ -576,6 +576,9 @@ In turn, then, $\nu^*$ restricts to a measure, also called $\nu$, on its measura
     $$\psi(f) = \int f ~d\nu.$$
     The positive part of $\psi$ is in fact the positive part of $\nu$.
     
+    Now if $S$ is a locally compact semigroup, we let $M(S)$ be the set of all finite Radon measures on $S$. This is a convolution algebra, with
+    $$\mu*\nu(f) = \iint_S f(xy) ~d\mu(x) ~d\nu(y).$$
+
 \section{Baire categories}
     Now we look at a topological analogue of ``measure zero."
 \begin{definition}
@@ -1346,7 +1349,117 @@ The norm is defined as in the case of tensor products. A representation of $A*B$
 \begin{example}
     Let $(M, \omega)$ be a Poisson manifold (e.g. $\omega$ is a symplectic form on $M$). We let $h$ be a semiclassical parameter for a family of noncommutative ring structures on $C_c^\infty(M \to \CC)$, so we can view $(M, \omega, h)$ as a family of operator algebras. There is a notion of modular function for $M$.
 \end{example}
+    The trouble with locally compact groups is that the maps $G \to U(H)$ are typically not norm-continuous. In fact, this is already apparent for the left regular representation $\RR \to U(L^2(\RR))$, where we take a function with compact support and translate it by far outside its support.
+\begin{definition}
+    An action $\alpha$ of $G$ on a Banach space $A$ is \dfn{strongly continuous} if for every $a \in A$, $x \mapsto \alpha(x)(a)$ is continuous.
+\end{definition}
+    This is the correct definition of the continuity of a representation of a locally compact group.
+\begin{definition}
+    If $G$ is a locally compact group, a $C^*$-dynamical system for $G$ is a strongly continuous action of $G$ on a $C^*$-algebra. A \dfn{covariant representation} of the $C^*$-dynamical system is one which is also strongly continuous.
+\end{definition}
+    The integrated form of a covariant representation $(\pi, U)$ of a $C^*$-dynamical system is given by
+    $$\sigma_f(\xi) = \int_G \pi(f(x))U(x)(\xi) ~dx.$$
+    Using Bochner integration, we can define the integrated form for any $f \in C_c(G \to A)$. Now
+    $$||\sigma_f(\xi)|| \leq \int_G ||f(x)|| ~dx ~||\xi||$$
+    so it follows that $||\sigma_f|| \leq ||f||_{L^1(G)}$. So $\sigma$ extends to $L^1(G \to A)$. Though the elements of $C_c(G \to A)$ are functions, it makes sense to think of them as Radon-Nikodym derivatives of $A$-valued measures on $G$ with respect to Haar measure. As in the theory of discrete groups, $\sigma_f\sigma_g = \sigma_{f*_\alpha g}$ where the twisted convolution is defined by
+    $$f*_\alpha g(x) = \int_G f(y) \alpha(y)(g(y^{-1}x))(y) ~dy.$$
+    Therefore $||f*_\alpha g||_{L^1(G)} \leq ||f||_{L^1(G)}||g||_{L^1(G)}$.
 
+    Another complication comes in the form of groups that are not unimodular. This happens because
+\begin{align*}
+    \sigma_f^* &= \int_G \pi(f(x))U_x ~dx = \int_G U_x^* \pi(f(x))^* ~dx\\
+    &= \int_G U_{x^{-1}} \pi(f(x))^* ~dx = \Delta(x) \int_G U_x\pi(f(x^{-1})^*) ~dx.
+\end{align*}
+    Therefore we must define the twisted involution
+    $$f^*(x) = \Delta(x)\alpha(x)(f(x^{-1})^*)$$
+    if we want $\sigma_f^* = \sigma_{f^*}$.
+\begin{example}
+    Let $G$ be the group of affine transformations of $\RR$ (the ``$ax + b$ group"). This group is far from unimodular, and its action on $\RR$ is important in the theory of wavelets. So the modular function is important in signal processing.
+\end{example}
+    We write $C^*(A, G, \alpha) = A \rtimes_\alpha G$ for the completion of $C_c(G \to A)$ with respect to the norm given by taking the supremum over all integrated forms. The reduced algebra $A \rtimes_\alpha^r G$ is given by taking the supremum over all integrated forms arising from covariant representations.
+
+    Now $L^1(G)$ does not have an identity since it does not have a delta function if $G$ is not discrete. But we could always take an approximate delta function. Specifically, we let $\Lambda$ denote the filter of all open sets containing the identity $1$ of $G$. (A filter-base also suffices.) Then given a neighborhood $\lambda$ of $1$, let $f_\lambda \in C_c(G \to \RR^+)$ be supported in $\lambda$ with $||f_\lambda||_{L^1(G)} = 1$. We view $f_\lambda$ as a probability measure carried by $\lambda$. Obviously the $(f_\lambda)_\lambda$ are an approximate delta function in $L^1(G)$.
+
+    Let $\alpha$ be an action of $G$ on a $C^*$-algebra $A$ with approximate identity $(e_\mu)_\mu$. We then define
+    $$h_{\mu,\lambda}(x) = f_\lambda(x) e_\mu$$
+    to obtain an approximate identity for $L^1(G \to A)$.
+
+\begin{theorem}
+    There is a natural bijection between nondegenerate $*$-representations of $A \rtimes_\alpha G$ and covariant representations of $\alpha$. 
+\end{theorem}
+\begin{proof}[Proof sketch]
+    Let $\sigma$ be a nondegenerate $*$-representation of $A \rtimes_\alpha G$ and consider its multiplier algebra $M(A \rtimes_\alpha G)$. We have an injection $G \to M(A \rtimes_\alpha G)$ by $x \mapsto \delta_x$, using the fact that $L^1(G)$ is a $2$-sided ideal in the multiplier algebra $M(G)$, where we think of double centralizers as finite Radon measures (this is true up to natural isomorphism). We also have an injection $A \to M(A \rtimes_\alpha G)$, by $a \mapsto a \delta_{1_G}$. We can therefore obtain a covariant representation $(\pi, U)$ of $\alpha$ obtained by restricting $\sigma$ to $A,G$. It follows that $\sigma$ is the integrated form of $(\pi, U)$.
+\end{proof}
+    In particular, it makes sense to talk about the hull-kernel topology on the set of covariant representations of $\alpha$.
+
+\begin{definition}
+    For $G$ a locally compact group, we let $(A, \alpha)$ and $(B, \beta)$ be $C^*$-dynamical systems. Let $\varphi: A \to B$ be a $*$-morphism. Then $\varphi$ is a \dfn{equivariant morphism} with respect to $\alpha,\beta$ if for every $a \in A$,
+    $$\varphi(\alpha(x)(a)) = \beta(x)(\varphi(a)).$$
+\end{definition}
+    The category of $C^*$-dynamical systems over $G$ has equivariant morphisms as its morphisms by definition. Equivariant morphisms $\varphi:A \to B$ give rise to maps $C_c(G \to A) \to C_c(G \to B)$ given by
+    $$\varphi(f)(x) = \varphi(f(x)).$$
+    This naturally extends to the group $C^*$-algebras, so gives rise to a morphism $\varphi: A \rtimes_\alpha G \to B \rtimes_\alpha G$. Therefore the following theorem holds.
+\begin{theorem}
+    The map $\alpha \mapsto A \rtimes_\alpha G$ is a functor from the category of $C^*$-dynamical systems over $G$ to the category of $C^*$-algebras.
+\end{theorem}
+    Using category theory, we can obtain the following theorem.
+\begin{theorem}
+    Let $(A, \alpha)$ be a $C^*$-dynamical system. Let $I$ be an $\alpha$-invariant ideal of $A$. Then the natural action of $\alpha$ on $A/I$is a $C^*$-dynamical system, and the natural arrows
+    $$0 \to I \rtimes_\alpha G \to A \rtimes_\alpha G \to (A/I) \rtimes_\alpha G \to 0$$
+    form a short exact sequence.
+\end{theorem}
+    In other words, the functor $\cdot \rtimes_\alpha G$ is exact on $\alpha$-invariant ideals. This is not true for the reduced product.
+\begin{proof}
+    Consider the short exact sequence
+$$\begin{tikzcd}0 \arrow[r]& I\arrow[r,"i"] & A\arrow[r,"p"] & A/I\arrow[r] &0\end{tikzcd}.$$
+    Straight from the definitions, the induced map $p^*$ is onto and $p^*(i^*(C_c(G, A))) = 0$. So $i^*$ maps into the kernel of $p^*$.
+
+    We now claim that the induced map $i^*$ is injective. Let $\sigma$ be a faithful representation of $I \rtimes_\alpha G$. Let $(\pi, U)$ the covariant representation of $\sigma$. Then if $\sigma$ is nondegenerate, so is $(\pi, U)$. Then $\pi$ extends to a representation $\tilde \pi$ of $A$. Since $\pi$ is nondegenerate, we can restrict to the image of $\pi(I)$ without any loss of generality when proving that $(U, \tilde \pi)$ is covariant. In fact,
+    $$U(x)\tilde \pi(a)(\pi(d)\xi) = \pi(\alpha(x)(ad))U(x)\xi$$
+    which proves covariance of $(U, \tilde \pi)$. So let $\tilde \sigma$ be a representation of $A \rtimes_\alpha G$ for which $(U, \tilde \pi)$ is a covariant representation. Then
+    $$\tilde\sigma|_{i^*(I \rtimes_\alpha G)} = \sigma,$$
+    so $\tilde \sigma \circ i^*$ is faithful on $I \rtimes_\alpha G$. Therefore $\ker i^* = 0$. In particular $I \rtimes_\alpha G$ is isomorphic to an ideal of $A \rtimes_\alpha G$, and without loss of generality we assume that they are equal (i.e. $i^*$ is the identity).
+
+    Finally we show exactness at $A \rtimes_\alpha G$; i.e. $\ker p^* \subseteq I \rtimes_\alpha G$. Since $I \rtimes_\alpha G$ is a $C^*$-algebra, $A \rtimes_\alpha G/I \rtimes_\alpha G$ exists, and has a faithful representation $\sigma$. Pulling $\sigma$ back along the quotient map $A \rtimes_\alpha G \to A \rtimes_\alpha/I \rtimes_\alpha G$, we obtain a representation of $A \rtimes_\alpha G$. Let $(\pi, U)$ be the corresponding covariant representation of $A \rtimes_\alpha G$.
+
+    Let $d \in I$, $h \in C_c(G)$. Let $f \in C_c(G \to I) \subseteq I \rtimes_\alpha G$ be defined by
+    $$f(x) = h(x)d$$
+    so $\sigma(f) = 0$. Thus
+    $$0 = \int_G \pi(d)f(x)U(x) ~dx = \pi(d) \int_G f(x)U(x) ~dx.$$
+    Since the integral on the right does not have to be zero, $\pi(d) = 0$. So $I \subseteq \ker \pi$. Therefore $\pi$ drops to a representation $\tau$ of $A/I \rtimes_\alpha G$. It is routine to prove that $\sigma = \tau \circ p^*$. So $\ker \sigma = \ker p^* \subseteq I \rtimes_\alpha G$.
+\end{proof}
+    Note that the representation $\tau$ may not exist on the reduced product, which explains why the theorem fails there.
+
+    If $A$ is commutative, then we can find a locally compact Hausdorff space $M$ such that $A = C_\infty(M)$. We have an action $\alpha$ of $G$ on $M$ by homeomorphisms, and $G \times M$ is locally compact. The map
+\begin{align*}
+    G \times M &\to M\\
+    (x, m) &\mapsto \alpha(x)m
+\end{align*}
+    is continuous. Thus the action
+    $$\alpha(x)(f)(y) = f(\alpha(x)^{-1}y)$$
+    of $G$ on $C_c(M) \subseteq A$ is isometric, in particularly, strongly continuous in $L^\infty$-norm. Moreover, $\alpha$ is continuous in the inductive limit topology of $C_c(M)$. Therefore if $\mu$ is an $\alpha$-invariant Radon measure on $M$, $\alpha$ acts strongly continuously on $L^p(\mu)$.
+
+    We now consider $A \rtimes_\alpha G$, which contains $C_c(G \to A)$. Since
+    $$(f *_\alpha g)(y) = \int_G f(x)\alpha(x)(g(x^{-1}y)) ~dx,$$
+    it follows that
+    $$(f *_\alpha g)(y)(m) = \int_G f(x)(m) g(x^{-1}y)(\alpha(x)^{-1}m) ~dx.$$
+\begin{theorem}
+    Let $M$ be a second-countable locally compact Hausdorff space, $A = C_\infty(M)$. Let $\sigma$ be an irreducible nondegenerate representation of $A \rtimes_\alpha G$ and let $(\pi, U)$ be the covariant representation of $\sigma$, $I = \ker \pi$. Let $Z \subseteq M$ be the hull of $I$. Then there is an $\alpha$-orbit whose closure is $Z$.
+\end{theorem}
+    Notice that $I$ is $\alpha$-invariant, hence an ideal of $A$. Expanding out the definitions, $I$ is the set of $f$ whose supports are disjoint from $Z$. In particular, $Z$ is closed and $\alpha$-invariant and $A/I = C_\infty(Z)$. The theorem says that there is a $m_0 \in M$ such that
+    $$Z = \overline{\{\alpha(x)m_0: x \in G\}}.$$
+\begin{example}
+    For the irrational rotation, every orbit-closure is the entire circle, so for every ideal, the hull is the entire space. This generalizes to various ergodic actions.
+\end{example}
+\begin{proof}[Proof of theorem]
+    Let $\xi$ be a unit vector of the representation space $H$. Define a Radon measure $\mu$ by
+    $$\int_M f~d\mu = \langle \pi(f)\xi, \xi\rangle.$$
+    Since $M$ is second-countable, so is $Z$. Let $\{B_n\}_n$ be open subsets of $M$ such that the $B_n \cap Z$ form a countable base for the topology of $Z$, $B_n \cap Z$ nonempty. Let
+    $$O_n = \bigcup_{x \in G} \alpha(x)(B_n).$$
+    Then the $O_n$ are open, $\alpha$-invariant, and meet $Z$.
+
+    Let $J_n = C_\infty(O_n) \subseteq C_\infty(M)$. Since $O_n \cap Z$ is nonempty, there is a $f \in J_n$ which is not identically zero on $Z$, by Urysohn's lemma. So $\pi(J_n)$ is nonzero. Since $\sigma$ is nondegenerate, so is $\pi$, and $\pi(J_n)H$ generates a nonzero closed $\sigma$-invariant subspace. Since $\sigma$ is irreducible, $\pi(J_n)H$ generates $H$.
+\end{proof}
 
 
 

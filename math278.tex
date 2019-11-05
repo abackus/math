@@ -13,8 +13,8 @@
 \usepackage{makeidx}
 \usepackage{enumitem}
 
-\title{Math 185: Complex Analysis}
-\author{Michael Klass}
+\title{Math 278}
+\author{Aidan Backus}
 \date{Fall 2019}
 
 \newcommand{\NN}{\mathbf{N}}
@@ -22,6 +22,9 @@
 \newcommand{\QQ}{\mathbf{Q}}
 \newcommand{\RR}{\mathbf{R}}
 \newcommand{\CC}{\mathbf{C}}
+
+\newcommand{\Ric}{\text{Ric}}
+\newcommand{\Q}{\mathcal Q}
 
 \newcommand{\pic}{\vspace{30mm}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
@@ -80,16 +83,16 @@ We start with the two experimentally verifiable axioms of special relativity.
 \begin{axiom}
     The speed of light in a vacuum is invariant under change of inertial reference frame.
 \end{axiom}
-	We denote the speed of light in a vacuum by $c$.
+    We denote the speed of light in a vacuum by $c$.
 
 \section{Lorentz transformations}
 \begin{definition}
     A \dfn{Lorentz transformation} is a smooth transformation which fixes the origin and is homotopic to the identity, which carries an inertial reference frame to an inertial reference frame.
 \end{definition}
 \begin{definition}
-	Let $p = (t, x), q = (t', x') \in \RR^4$. The \dfn{spacetime interval} $\Delta s = [p, q]$ between $p, q$ is the distance
-	$$\Delta s^2 = \Delta x^2 - c^2\Delta t^2$$
-	where $\Delta t = t' - t$ and $\Delta x = x' - x$.
+    Let $p = (t, x), q = (t', x') \in \RR^4$. The \dfn{spacetime interval} $\Delta s = [p, q]$ between $p, q$ is the distance
+    $$\Delta s^2 = \Delta x^2 - c^2\Delta t^2$$
+    where $\Delta t = t' - t$ and $\Delta x = x' - x$.
 \end{definition}
 It is not hard to check that Lorentz transformations are linear (since they preserve straight-line trajectories). Moreover, spacetime intervals are also preserved by Lorentz transformations. By the second axiom of relativity, the quadratic polynomials associated to $\Delta s$ and its Lorentz transform, say $\Delta s'$, have the same roots. So there is an $\alpha \neq 0$ such that
 $$(\Delta s)^2 = \alpha (\Delta s')^2.$$
@@ -104,19 +107,613 @@ Let us consider the Lorentzian metric
 $$ds^2 = dx^2 - c^2 dt^2,$$
 where as usual we write $s = (t, x) \in \RR \times \RR^3 = \RR^4$ for a point in spacetime. This is a linear combination of the Riemannian metrics $dx^2$ and $dt^2$. We will also write $m$ for the indefinite quadratic form induced by $ds^2$ on the tangent bundle. On the other hand we will write $\delta$ for the positive-definite quadratic form induced by the Riemannian metric $dx^2$. Therefore $(\RR^3, \delta)$ is just Euclidean space.
 \begin{definition}
-	A \dfn{Lorentzian manifold} is a smooth manifold equipped with a smoothly varying quadratic form on each tangent space. The Lorentzian manifold $(\RR^4, m)$ is known as \dfn{Minkowski spacetime}.
+    A \dfn{Lorentzian manifold} is a smooth manifold equipped with a smoothly varying quadratic form on each tangent space. The Lorentzian manifold $(\RR^4, m)$ is known as \dfn{Minkowski spacetime}.
 \end{definition}
 
 Now let $\gamma$ be a curve in $\RR^4$, which we think of as parametrized by $[0, 1]$. We denote the tangent vector by $\dot \gamma$.
 \begin{definition}
 The \dfn{proper time} of the curve $\gamma$ is
-$$\int_0^1 \frac{\sqrt{-m(\dot \gamma(\sigma), \dot \gamma(\sigma))}{c}} ~d\sigma.$$
+$$\int_0^1 \frac{\sqrt{-m(\dot \gamma(\sigma), \dot \gamma(\sigma))}}{c} ~d\sigma.$$
+\end{definition}
 \begin{definition}
-	Let $v$ be a tangent vector over $\RR^4$. If $m(v, v) < 0$, we say that $v$ is \dfn{timelike}. If $m(v, v) = 0$, then $v$ is \dfn{lightlike} or \dfn{null}. Otherwise, $v$ is \dfn{spacelike}. If $v$ is not spacelike, we say that $v$ is \dfn{causal}. If every tangent vector to a curve is timelike (lightlike, etc.), we say that the curve itself is timelike (lightlike, etc.)
+    Let $v$ be a tangent vector over $\RR^4$. If $m(v, v) < 0$, we say that $v$ is \dfn{timelike}. If $m(v, v) = 0$, then $v$ is \dfn{lightlike} or \dfn{null}. Otherwise, $v$ is \dfn{spacelike}. If $v$ is not spacelike, we say that $v$ is \dfn{causal}. If every tangent vector to a curve is timelike (lightlike, etc.), we say that the curve itself is timelike (lightlike, etc.)
 \end{definition}
 Notice that a vector $v$ has speed $\leq c$ iff $v$ is causal. So causal curves are those trajectories of objects which are allowed by the laws of physics.
 
+\chapter{Lorentzian geometry with Minkowski signatures}
+We dive deeper into Lorentzian geometry. Throughout this chapter we fix a Lorentzian spacetime $(M, g)$. In other words, $(M, g)$ is locally isomorphic as a Lorentzian manifold to the Minkowski spacetime $(\RR^4, m)$. We always assume that $M$ is orientable.
 
+\section{Riemannian-esque geometry}
+Throughout these notes we use Einstein's conventions that a repeated index is summed over:
+$$\omega_\mu v^\mu = \langle \omega, v\rangle.$$
+We let $\{\partial_0, \dots, \partial_3\}$ be the standard basis of the tangent bundle $TM$, and $\{dx_0, \dots, dx_3\}$ be the standard basis of the cotangent bundle $T^*M$. Thus we have a pairing
+$$dx^\mu \partial_\nu = \delta_\nu^\mu.$$
+
+\begin{definition}
+A $(p, q)$-\dfn{tensor} at $x \in M$ is an element of $(T_x^*M)^{\otimes p} \otimes (T_xM)^{\otimes q}$. A $(p, q)$-\dfn{tensor field} is a section of the tensor bundle $$(T^*M)^{\otimes p} \otimes (TM)^{\otimes q} \to M.$$
+\end{definition}
+In local coordinates, we write
+$$T_{\alpha_1, \dots, \alpha_p}^{\beta_1, \dots, \beta_q}(x)$$
+for the $(\alpha_1, \dots, \alpha_p; \beta_1, \dots, \beta_q)$th coordinate of a $(p, q)$-tensor field evaluated at $x$.
+
+We now need the notion of a linear connection. A linear connection, morally, is a ``way to differentiate a vector field against another vector field." Let $\mathcal T(M)$ denote the space of vector fields $M \to TM$.
+\begin{definition}
+    A \dfn{linear connection} is a $(C^\infty(M), \RR)$-bilinear map $\nabla: \mathcal T(M)^2 \to \mathcal T(M)$, written $(X, Y) \mapsto \nabla_XY$ (though we write $\nabla_\alpha = \nabla_{\partial_\alpha}$) satisfying the Leibniz rule
+    $$\nabla_X (f Y) = (\nabla_X f) Y + f\nabla_XY = df(X)Y + f\nabla_XY.$$
+\end{definition}
+Let's consider the easy example of a Euclidean connection.
+\begin{definition}
+    Assume $(M, g)$ is Euclidean space. The \dfn{Euclidean connection} on $M$ is the linear connection
+    $$\nabla_X Y^j \partial_j = XY^j \partial_j.$$
+\end{definition}
+Since $X$ is a first-order derivation at each point, $XY^j$ is the partial derivative of $Y$ in the direction of $X$. Thus Euclidean connections are a very natural thing to study, and in case $X = \partial_\alpha$, $\nabla_X$ is just the map that sends $Y$ to its derivative in some direction. The Euclidean connection has the useful property that $\nabla g = 0$.
+\begin{definition}
+    The \dfn{Levi-Civita connection} $\nabla$ is the unique connection on $M$ such that $\nabla g = 0$ and which satisfies $\nabla_XY - \nabla_YX = [X, Y]$.
+\end{definition}
+\begin{theorem}
+    The Levi-Civita connection is well-defined.
+\end{theorem}
+\begin{definition}
+    The \dfn{Riemann curvature tensor} is the $(3, 1)$-tensor field
+    $$R_{\alpha\beta\gamma}^\delta \partial_\delta = \nabla_\alpha \nabla_\beta \partial_\gamma - \nabla_\beta \nabla_\alpha \partial_\gamma.$$
+\end{definition}
+It is pretty clear that
+$$R_{\alpha\beta\gamma}^\delta = -R_{\beta\alpha\gamma}^\delta,$$
+and
+$$R_{\alpha\beta\gamma\delta} = R_{\alpha\beta\delta\gamma}.$$
+\begin{theorem}[Bianchi]
+    \index{Bianchi's identities}
+    One has
+    $$R_{\alpha\beta\gamma\delta} + R_{\beta\gamma\alpha\delta} + R_{\gamma\beta\alpha\delta} = 0$$
+    and
+    $$\nabla_\alpha R_{\beta\gamma\delta\epsilon} + \nabla_\beta R_{\gamma\alpha\delta\epsilon} + \nabla_\gamma R_{\alpha\beta\delta\epsilon} = 0.$$
+\end{theorem}
+\begin{definition}
+    The \dfn{Christoffel symbol} $\Gamma$ is defined by
+    $$\nabla_\alpha \partial_\beta = \Gamma_{\alpha\beta}^\gamma \partial_\gamma.$$
+\end{definition}
+We have the \dfn{Kozsul formula}
+$$\Gamma_{\alpha\beta}^\gamma = \frac{g^{\gamma\delta}}{2}(\partial_\alpha g_{\beta\delta} + \partial_\beta g_{\delta\alpha} - \partial_\delta g_{\alpha\beta}).$$
+
+\section{Causality}
+Let $(M, g)$ be a Lorentzian spacetime as above. Recall that we have a causal structure on the tangent bundle of $M$, which gives rise to a pair of light cones in each tangent space. Taking the exponential map, we get a causal structure on curves in $M$.
+
+\begin{definition}
+    The spacetime $(M, g)$ is \dfn{time-orientable} if there is a continuous choice of light cone for each tangent space.
+\end{definition}
+    Let us fix a time-orientation. The vectors in the chosen lightcone point to the ``future."
+\begin{definition}
+    Let $S \subseteq M$. The \dfn{chronological future} $I^+(S)$ is the set of points in $M$ that can be reached by a curve through the exponential map of the open future light cones of $S$. The chronological past is defined similarly, but with the open past light cone. The \dfn{causal future} and causal past are defined similarly, but for the closed light cones.
+\end{definition}
+
+
+
+
+\chapter{The Cauchy problem}
+We pose the Einstein equation as an initial-value problem on the Lorenztian manifold $(M, g)$.
+
+\section{The Einstein equation}
+If $\mathcal L$ is a Lagrangian density, then $\mathcal L$ does not have to be integrable, so long as we only take only compactly supported perturbations when we carry out the calculus of variations. That is why we emphasize that $\mathcal L$ is only a ``density" rather than a summable quantity.
+
+Throughout, we let $\delta g_{\alpha\beta}$ be a compcatly supported perturbation of the metric tensor $g_{\alpha\beta}$.
+\begin{definition}
+    Let $\mathcal L$ be a Lagrangian density. The \dfn{energy-momentum tensor} associated to $\mathcal L$ is the tensor $T_{\alpha\beta}$ given by
+    $$\int \frac{d\mathcal L}{ds}(\cdot, g + s\delta g) ~dV(g + s \delta g) + \int T^{\alpha\beta} \delta g_{\alpha\beta} dV = 0.$$
+\end{definition}
+\begin{theorem}[Noether]
+    If $T_{\alpha\beta}$ is an energy-momentum tensor, then the divergence
+    $$\nabla^\alpha T_{\alpha\beta} = 0.$$
+\end{theorem}
+Noether's theorem can be interpreted as a generalization of the conservation laws of energy, mass (which is just a form of energy by Einstein's special theory of relativity), and momentum. It is a special case of Noether's theorem that for any Lie action of $\RR$ on a Lagrangian density, there is an associated conserved quantity in the respective Euler-Lagrange equations.
+
+A key point in general relativity is that ``curvature is energy-momentum", yet the energy-momentum tensor $T_{\alpha\beta}$ is divergence-free. So the curvature tensor appearing in general relativity should be a divergence-free covariant $2$-tensor. Thus we must define a $2$-tensor which measures curvature.
+\begin{definition}
+    Let $R^\alpha_{\beta\gamma\delta}$ be the Riemann curvature tensor of $(M, g)$. The \dfn{Ricci curvature tensor} of $(M, g)$ is given by
+    $$\Ric_{\alpha\beta} = R^\mu_{\alpha\mu\beta}.$$
+    The \dfn{scalar curvature} is given by $R = \Ric_\alpha^\alpha$.
+\end{definition}
+\begin{definition}
+    The \dfn{Einstein tensor} of $(M, g)$ is
+    $$G_{\alpha\beta} = \Ric_{\alpha\beta} - \frac{1}{2}g_{\alpha\beta} R.$$
+    The \dfn{Einstein equation} is the equation
+    $$G_{\alpha\beta} = \frac{8\pi G}{c^4} T_{\alpha\beta}.$$
+\end{definition}
+We will normalize $c = 1$, and then take $G = 1/(4\pi)$, so the Einstein equation will read as $G_{\alpha\beta} = 2T_{\alpha\beta}$. Notice the similarity to the Gauss-Poisson equation for gravity
+$$4\pi G \nabla^\alpha g_\alpha = \rho$$
+where $\rho$ is the mass density of the universe and $g_\alpha$ is the gravitational field. We have
+$$\nabla^\alpha G_{\alpha\beta} = 0$$
+by the second Bianchi identity.
+
+We interpret $T_{\alpha\beta} = 0$ as meaning that the universe is a vacuum. In this case we have $\Ric_{\alpha\beta} = 0$. Now $\Ric_{\alpha\beta} = 0$ is a geometric PDE, but we want to frame it as an initial-value problem where the initial data consists of a $3$-manifold, and the resulting $4$-manifold comes from gluing together the $3$-manifolds together in time.
+
+This interpretation gives another derivation of the Einstein equation. Assume $T_{\alpha\beta} = 0$; then the universe should have no curvature.
+\begin{definition}
+    The \dfn{Einstein-Hilbert Lagrangian density} is $\mathcal L_{EH} = R ~dV$.
+\end{definition}
+The Einstein equation should be the Euler-Lagrange equation minimizing the Einstein-Hilbert action.
+\begin{theorem}
+    The Euler-Lagrange equation corresponding to the Einstein-Hilbert Lagrangian density is the Einstein equation.
+\end{theorem}
+\begin{proof}
+    Let $\delta g$ be a compactly supported perturbation of hte metric tensor as above. Then
+    $$\frac{\delta}{\delta s} (g + s \delta g)^{\mu\nu} = -\delta g^{\mu\nu}.$$
+    Similarly
+    $$\frac{\delta}{\delta g} dV(g) = \delta g^{\alpha\beta} ~dV(g).$$
+    In coordinates, we have
+    $$\Ric_{\beta\nu} = \partial_\alpha \Gamma^\alpha_{\beta\nu} - \partial_\beta \Gamma^\alpha_{\alpha\nu} + \Gamma^\mu_{\alpha\gamma} \Gamma^\gamma_{\mu\nu} + \Gamma_{\beta\gamma}^\alpha\Gamma_{\alpha\nu}^\gamma.$$
+    After a tedious computation in normal coordinates (where $g = m$ and $\Gamma = 0$ at the origin) we have
+    $$\frac{\delta}{\delta s} \Ric_{\alpha\beta} (g + s\delta g)| = \frac{1}{2}g^{\mu\nu} (\partial_\alpha\delta g_{\beta\nu} + \partial_\beta \delta g_{\nu\alpha} - \partial_\nu\delta g_{\alpha\beta}).$$
+    Applying the Lebiniz rule we have
+    $$\int_M \frac{\delta}{\delta s} \mathcal L_{EH}(g + s\delta g) = \frac{1}{2} \int_M g^{\alpha\beta} R \delta g_{\alpha\beta} - \Ric^{\alpha\beta} \delta g_{\alpha\beta} ~dV$$
+    so the claim follows by lowering indices.
+\end{proof}
+
+\section{Initial-data sets}
+Henceforth we fix a time-orientation of $(M, g)$.
+\begin{definition}
+A \dfn{time function} is a smooth function $t$ on $M$ such that for every future-pointing timelike vector field $X^\alpha$, $g_{\alpha\beta} \nabla^\alpha t X^\beta > 0$.
+\end{definition}
+We fix a time function as well.
+
+\begin{definition}
+The \dfn{initial-time slice} $\Sigma_0$ is the level set of the equation $t = 0$.
+\end{definition}
+Because the metric signature is $(-, +, +, +)$, the initial-time slice will be a $3$-manifold. We denote its induced Riemannian metric by $\overline g$ and induced Levi-Civita connection by $\overline \nabla$.
+
+\begin{definition}
+    Let $\Sigma$ be a Riemannian submanifold of codimension $1$. Let $n$ denote the future-pointing unit normal vector to $\Sigma$. Then the \dfn{second fundamental form} $\overline k_{\alpha\beta}$ is given by
+    $$\overline k_{\alpha\beta} u^\alpha v^\beta = -g_{\alpha\beta} u^\alpha \cdot \nabla_v n^\beta.$$
+\end{definition}
+The second fundamental form measures how fast the unit normal vectors change as we move along unit tangent vectors; it is a measure of the extrinsic curvature of $\Sigma$ in $M$. 
+
+\begin{theorem}[Gauss-Codazzi]
+    \index{Gauss-Codazzi equations}
+    One has $R(\overline g)_{ijk\ell} + \overline k_{ij} \overline k_{j\ell} - \overline k_{i\ell} \overline k_{jk} = R(g)_{ijk\ell}$ and $\overline \nabla_i \overline k_{j\ell} - \overline \nabla_j \overline k_{i\ell} = C R(g)_{ik\ell0}$.
+\end{theorem}
+    Thus, if $(\Sigma, \overline g, \overline k)$ is to be an initial-data set, it had better satisfy the Gauss-Codazzi equations for the $4$-manifold we want to embed it into.
+\begin{definition}
+    Let $T_{\alpha\beta}$ be a symmetric, divergence-free $2$-tensor. An \dfn{initial-data set} $(\Sigma, \overline g, \overline k)$ corresponding to the energy-momentum tensor $T_{\alpha\beta}$ is the data of:
+\begin{enumerate}
+    \item A $3$-manifold $\Sigma$,
+    \item a Riemannian metric $\overline g$ on $\Sigma$ with Riemann curvature tensor $\overline R$,
+    \item and a symmetric $2$-tensor $\overline k$ on $\Sigma$,
+\end{enumerate}
+    satisfying the Gauss-Codazzi constraints
+\begin{align*}
+    \overline R + (\operatorname{tr} \overline k)^2 + \overline k^{ij} \overline k_{ij} &= 4 \varphi^2 T_{tt}\\
+    \nabla^i \overline k_{ij} - \nabla_j \operatorname{tr} \overline k &= 2\varphi T_{jt}
+\end{align*}
+    where 
+    $$\varphi = \frac{\overline k_{ij}}{2\partial_t \overline g_{ij}}.$$
+\end{definition}
+\begin{definition}
+    Let $(\Sigma, \overline g, \overline k)$ be an initial-data set corresponding to the energy-momentum tensor $T_{\alpha\beta}$. A \dfn{development} of $(\Sigma, \overline g, \overline k)$ is an isometric embedding $\iota: \Sigma \to M$, where $M = (M, g)$ is a Lorentzian $(1+3)$-manifold solving the Einstein equation
+    $$\Ric_{\alpha\beta} - \frac{1}{2} g_{\alpha\beta} R = T_{\alpha\beta}$$
+    and $\overline k$ is the second fundamental form of $\iota$.
+\end{definition}
+    We think of the initial-data set as being the initial conditions of the Einstein equation and $(M, g)$ as being the solution.
+\begin{definition}
+    Let $S \subseteq M$ be a spacelike hypersurface. Then $S$ is a {Cauchy hypersurface} if every maximal causal curve in $M$ intersects $S$ at exactly one point. Moreover, the \dfn{domain of dependence} is the maximal submanifold $D \subseteq M$ such that $S$ is a Cauchy hypersurface of $D$.
+\end{definition}
+    For example, the initial-time slice $\Sigma_0$ of Minkowski spacetime is a Cauchy hypersurface. In fact, if $B$ is a ball in $\Sigma_0$, then the future-pointing causal cone based at $B$ is the domain of dependence of $B$.
+\begin{definition}
+    Let $(\Sigma, \overline g, \overline k)$ be a respective initial-data set. Let $(M, g)$ be a Lorentzian $(1+3)$-manifold. A \dfn{globally hyperbolic development} $\iota: \Sigma \to M$ is a development of $(\Sigma, \overline g, \overline k)$ such that $\iota(\Sigma)$ is a Cauchy hypersurface of $(M, g)$.
+\end{definition}
+
+\section{Well-posedness for the vacuum equation}
+Throughout this section we work with the Einstein vacuum equation $\Ric_{\alpha\beta} = 0$.
+
+First, we recall the theorem that quasilinear wave equations are well-posed.
+\begin{theorem}
+    Fix a Lorentzian metric $g$ and consider the PDE
+\begin{align*}
+    g^{\mu\nu}(x, \varphi(x)) \partial_\mu \partial_\nu \varphi(x) &= N(x, \varphi(x), \partial \varphi(x))\\
+    (\varphi, \partial_t\varphi)(x) &= (\varphi_0, \varphi_1)(x)
+\end{align*}
+    where $\varphi$ is an unknown. Let $s > d/2 + 1$. If $(\varphi_0, \varphi_1) \in H^s \times H^{s-1}(\Sigma_0)$, then there is an maximal eclipse time $T > 0$ and a unique solution $\varphi \in H^s([0, T] \times \Sigma_0)$.
+\end{theorem}
+
+For $T_{\alpha\beta}$ a tensor, we write
+$$\hat T_{\alpha\beta} = T_{\alpha\beta} - \frac{1}{2} g_{\alpha\beta} g^{\alpha\beta} T_{\alpha\beta}.$$
+
+\begin{theorem}[Choquet-Bruhat-Geroch]
+    \index{Choquet-Bruhat-Geroch theorem}
+    Let $(\Sigma, \overline g, \overline k)$ be a smooth initial-data set with $\Ric_{\alpha\beta} = 0$. Then there is a unique \dfn{maximal globally hyperbolic development} $(M, g, \iota)$ of $(\Sigma, \overline g, \overline k)$; i.e. a globally hyperbolic development such that for any globally hyperbolic development $(\hat M, \hat g, \hat \iota)$, there is an isometric embedding $\Phi: \hat M \to M$ such that the diagram
+$$\begin{tikzcd}
+    \hat M \arrow[rr, "\Phi"] && M\\
+    &\Sigma \arrow[lu, "\hat \iota"] \arrow[ru, "\iota"]
+    \end{tikzcd}$$
+    commutes.
+\end{theorem}
+    By lower-order terms we mean those of first or zeroth order (those which may serve as quasilinear perturbations of the d'Alembertian, which is a second-order linear operator). The idea of the proof is to write $\Ric_{\alpha\beta}$ as a quasilinear wave equation and use local well-posedness to construct local solutions, then glue all the local solutions together using Zorn's lemma.
+\begin{proof}
+    We have
+\begin{align*}
+    \Ric_{\alpha\beta} &= \partial_\mu \Gamma^\mu_{\alpha\beta} - \partial_\alpha \Gamma^\mu_{\mu\beta}\\
+    &= \frac{1}{2} g^{\mu\nu} \partial_\mu \partial_\nu g_{\alpha\beta} - \frac{1}{2} g^{\mu\nu} \partial_\alpha\partial_\beta g_{\mu\nu} + \frac{1}{2} g^{\mu\nu}\partial_\alpha\partial_\nu g_{\beta\nu} + \frac{1}{2}g^{\mu\nu} \partial_\beta \partial_\mu g_{\alpha\nu}\\
+    &= \frac{1}{2} \partial^\nu \partial_\nu g_{\alpha\beta} + \partial_\alpha \Gamma_\beta + \partial_\beta \Gamma_\alpha
+\end{align*}
+where
+$$\Gamma_\beta = \frac{1}{2} g^{\mu\nu} \partial_\mu g_{\beta\nu} - \frac{1}{2} \partial_\beta g_{\mu\nu} = \frac{1}{2} g^{\mu\nu} \Gamma_{\mu\nu}^\alpha g_{\alpha\beta}.$$
+Let
+$$S_{\alpha\beta} = \Ric_{\alpha\beta} - \partial_\alpha \Gamma_\beta - \partial_\beta \Gamma_\alpha.$$
+Then the equation $S_{\alpha\beta} = 0$ is a quasilinear wave equation, so is locally well-posed, and has a solution on a submanifold $M$ of $\RR \times \Sigma$. 
+
+Recall that $\widehat \Ric_{\alpha\beta}$ is the Einstein tensor and hence
+$$\nabla^\alpha \widehat \Ric_{\alpha\beta} = 0.$$
+Taking the hat and divergence of both sides of the definition of $S_{\alpha\beta}$, we have
+$$\nabla^\alpha (\widehat{\nabla_\alpha \Gamma_\beta + \nabla_\beta \Gamma_\alpha}) = 0.$$
+But
+$$\widehat{\nabla_\alpha \Gamma_\beta + \nabla_\beta \Gamma_\alpha} = \nabla_\alpha \Gamma_\beta + \nabla_\beta \Gamma_\alpha - g_{\alpha\beta} g^{\mu\nu} \nabla_\mu \Gamma_\nu$$
+so
+$$0 = \nabla^\alpha \nabla_\alpha - \Gamma_\beta + \nabla^\alpha \nabla_\beta \Gamma_\alpha - g^{\mu\nu} \nabla_\beta \nabla_\mu \Gamma_\nu = \nabla^\alpha \nabla_\alpha \Gamma_\beta.$$
+Therefore $\Gamma$ solves the wave equation. Since the wave equation is well-posed, it suffices to show therefore that $\Gamma|_\Sigma = 0$ and $\partial_t \Gamma|_\Sigma = 0$. For $i,j$ spatial coordinates, we set $g_{ij}|_\Sigma = 0$ and $g_{tt}|_\Sigma = -1$, $g_{ti}|_\Sigma = 0$, $\partial_t g_{ij}|_\Sigma|_\Sigma = 2\overline k_{ij}$, and $\partial_t g_{t\alpha}|_\Sigma = 0$. Then $\Gamma|_\Sigma = \partial_t\Gamma|_\Sigma = 0$ by the Gauss-Codazzi equations. Thus with these initial conditions, $S_{\alpha\beta} = \Ric_{\alpha\beta}$ so the Einstein equation reduces to the quasilinear wave equation $S_{\alpha\beta} = 0$, and the solution manifold $M$ solves the vacuum Einstein equation, which is therefore locally well-posed.
+
+Now let $\mathcal M$ be the class of globally hyperbolic developments of $(\Sigma, \overline g, \overline k)$, ordered by isometric embeddings which commute with the inclusions $\iota$. This class is proper, but taking a quotient by isometry, we arrive at a poset. Taking injective limits, we show that every chain has an upper bound, so $\mathcal M$ has a maximal element $\iota: \Sigma \to M$, the \dfn{set-theoretic maximal globally hyperbolic development}. It remains to show that $\iota$ is maximal in the sense of the definition of maximal globally hyperbolic development (and hence unique).
+
+Let $\hat \iota: \Sigma \to \hat M$ be a set-theoretically maximal globally hyperbolic development. We must construct a isometric embedding $\Phi: \hat M \to M$ making the diagram commute. By a \dfn{partial isometric embedding} of $\hat M$ into $M$ we mean a isometric embedding $\hat U \to M$ for some open set $\hat U \subseteq \hat M$. By local well-posedness, every point is contained in a neighborhood which admits a partial isometric embedding that makes the diagram commute, and by local uniqueness, they satisfy the cohomological conditions in the definition of a sheaf. Therefore there is a global partial isometric embedding, which is of course $\Phi$.
+
+We define the \dfn{development-theoretic union} $M \cup \hat M = M \coprod \hat M/\Phi$, where the coproduct $\coprod$ is the sense of disjoint union. All conditions in the definition of a globally hyperbolic development are easily checked for $M \cup \hat M$ except that $M \cup \hat M$ is Hausdorff.
+
+Assume that $M \cup \hat M$ is not Hausdorff at a point $x \in M \cup \hat M$. Then $x \in \partial (M \cup \hat M)$, and by a difficult computation in Lorentzian geometry, there is a spacelike hypersurface $S$ which touches $\partial M$ exactly at $x$. Away from $x$, $S$ and $\Psi(S)$ determine the same initial-data set. But by continuity, $S$ and $\Psi(S)$ determine the same initial-data set at $x$ as well.
+
+But $x$ lifts to a regular point in $M \coprod \hat M$ (and let us assume without loss of generality that $x$ then lifts to a regular point in $M$), so there is a globally hyperbolic development extending from a $S$-neighborhood of $x$ by local well-posedness. Since $M$ is set-theoretically maximal, $x$ does not lift to a point of $\partial M$. Therefore $x \notin \partial (M \cup \hat M)$, a contradiction.
+
+It follows that $M \cup \hat M$ is Hausdorff, and hence a globally hyperbolic development which contains $M$. So $M \cup \hat M = M$, and it follows that $\hat M = M$. So $M$ is a globally hyperbolic development.
+\end{proof}
+
+\chapter{Spherical symmetry}
+We now make a simplifying assumption to get rid of annoying obstructions in Lorentzian geometry: that of spherical symmetry.
+
+\begin{definition}
+    A spacetime $(M, g)$ is \dfn{spherically symmetric} if there is a $SO(3)$-action on $M$ by $g$-isometries such that every $SO(3)$-orbit is a manifold of dimension at most $2$.
+\end{definition}
+Then the only possible orbits are fixed points and spheres of positive radius. For $p \in M$ we let $S_p$ denote the orbit of $p$, and let $r(p)$ denote the radius of $S_p$, which can be intrinsically defined by
+$$r(p) = \sqrt{\frac{\mu(S_p)}{4\pi}},$$
+$\mu$ denoting area. Then zeroes of $r$ are fixed points of $SO(3)$.
+
+When $r(p) > 0$, the induced metric on $S_p$ is given by 
+$$g|_{S_p} = r^2 \underline g$$
+where $\underline g$ is the Riemannian metric of the unit $2$-sphere $S^2$.
+
+We let $\Q = M/SO(3)$, so $\Q$ is a Lorentzian $(1+1)$-manifold with boundary $\Gamma = \partial \Q$. Then
+$$g = g_\Q + r^2 \underline g.$$
+
+\section{Double-null pairs}
+\begin{definition}
+    A \dfn{double-null pair} on $M$ is a pair of $SO(3)$-invariant smooth functions $u, v: M \to \RR$, increasing in time, such that
+    $$g^{\alpha\beta} du_\alpha du_\beta = g^{\alpha\beta} dv_\alpha dv_\beta = 0$$
+    and such that $du, dv$ are linearly independent on every cotangent space. If we view $u,v$ as coordinates on $M$ and let $\theta, \varphi$ be the usual polar coordinates on $S^2$, the tuple $(u, v, \theta, \varphi)$ is known as a system of \dfn{double-null pair coordinates}.
+\end{definition}
+    Assuming that $M$ has double-null pair coordinates,
+    $$\underline g = d\theta^2 + \sin^2 \theta ~d\varphi^2$$
+and
+    $$g_\Q = - \Omega^2 du \cdot dv$$
+    for some function $\Omega$.
+\begin{definition}
+    The function $\Omega$ determined by double-null pair coordinates is called the \dfn{null lapse} of the double-pull pair.
+\end{definition}
+    Let us assume that every spacetime admits a double-null pair coordinate system.
+    
+    We have $g_{uu} = g_{vv} = 0$ and
+    $$g_{uv} = - \frac{1}{2} \Omega^2.$$
+In particular we have
+$$g = \begin{bmatrix}
+&2^{-1}\Omega^2\\
+2^{-1}\Omega^2\\
+&&r^2\\
+&&&r^2\end{bmatrix}$$
+so
+$2\sqrt{-\det g} = $
+    We will always write the angular coordinates with capital letters.
+    
+    By reparametrizing $u,v$ to have bounded range, we can embed $\Q$ into a compact subset of the Minkowski spacetime $\RR^{1+1}$.
+\begin{theorem}
+    Let $(u, v, \theta, \varphi)$ be a double-null coordinate system with null lapse $\Omega$ and let $\phi$ be a spherically symmetric scalar field. Then
+    $$\Box_g \phi = -4 \Omega^{-2}(\partial_u \partial_v \phi + r^{-1}\partial_u r \partial_v \phi + r^{-1} \partial_v r \partial_u \phi).$$
+    Besides this, we can write the Einstein tensor $G_{\alpha\beta}$ as
+\begin{align*}
+    G_{uu} &= \Ric_{uu} &= -2r^{-1} \Omega^2 \partial_u (\Omega^{-2} \partial_u r)\\
+    G_{vv} &= \Ric_{vv} &= -2r^{-1} \Omega^2 \partial_v (\Omega^{-2} \partial_v r)\\
+    G_{uv} &= \Ric_{uv} - \frac{1}{2} g_{uv}R &= 2r^{-1} \partial_u \partial_v r + 2r^{-2} \partial_u r \partial_v r + \Omega^2r^{-2}\\
+    G_{AB} &= \Ric_{AB} - \frac{1}{2}g_{AB} &= -4r^2 Omega^2\underline g_{AB}(\Omega^{-1} \partial_u \partial_v \Omega - \Omega^{-2} \partial_u \Omega \partial_v \Omega + r^{-1} \partial_u \partial_v r)
+\end{align*}
+    and all other entries determined by symmetry or vanishing.
+\end{theorem}
+From this, it is easy to see that the Einstein vacuum equation in spherical symmetry can be expressed as
+\begin{align*}
+    \partial_u(\Omega^{-2}\partial_u r) &= 0\\
+    \partial_v(\Omega^{-2}\partial_v r) &= 0\\
+    \partial_u \partial_v r + 2r^{-1} \partial_u r \partial_v r + (2r)^{1} \Omega &= 0\\
+    \partial_u \partial_v \Omega - \Omega \partial_u \Omega \partial_v \Omega - \Omega r^{-2}(2\partial_u r \partial_b r + 2^{-1}\Omega^2) &= 0.
+\end{align*}
+The wave operator in spherical symmetry has principal part $\partial_u \partial_v$. So we view the first two Einstein equations as constraint equations (called \dfn{Raychaudhuri equations}) and the last two Einstein equations as quasilinear wave equations.
+
+\section{Local rigidity}
+We show that the Raychaudhuri equations form a strong constraint on the sort of solutions we are allowed to study.
+\begin{lemma}
+    Consider the quasilinear wave equation
+    $$\partial_u\partial_v \Phi = N(\phi, \partial \Phi)$$
+    where $N$ is $C^1$. If $\Phi$ is a $C^1$ solution to the equation with $\Phi$ prescribed on the future-pointing lightcone centered at a point $p \in M$, then $\Phi$ is unique.
+\end{lemma}
+Since this is a wave equation, we expect to need $\partial \Phi$ as initial data as well in order for $\Phi$ to be unique. But the lightcone consists exactly of characteristic curves of $\Phi$, one of which determines $\partial_u \Phi$ and the other determines $\partial_v \Phi$ -- and they must be compatible since $p$ touches both curves.
+\begin{proof}
+    Notice that
+    $$\partial_u \partial_v \Psi (\partial_u + \partial_v) \Psi = .5 \partial_v(\partial_u \Psi)^2 + .5 \partial_u(\partial_v \Psi)^2.$$
+    Assume that $\Phi, \Phi'$ are solutions and let $\Psi = \Phi - \Phi'$. Then
+    $$\partial_u \partial_v \Psi = \Psi\partial_\Phi N(\Phi, \partial \Phi) +  O(\Psi, \partial \Psi).$$
+    Integrate along a future-pointing ``diamond" whose first vertex is $p = (0, 0)$ and whose sides are given by (or are perpendicular to -- we call these $C_u$ and $C_v$) the characteristic curves $C_0, \underline C_0$). This gives
+$$\frac{1}{2}\left(\int_{C_u} (\partial_v \Psi)^2 + \int_{C_v} (\partial_u \Psi)^2  - \int_{C_0} (\partial_v \Psi)^2 - \int_{\underline C_0} (\partial_u \Psi)^2 \right) \leq C \int_D |\Psi| |\partial \Psi| + C\int_D |\partial \Psi|^2.$$
+    The integrals along $C_0$ and $\overline C_0$ are $0$ because $\Phi = \Phi'$ there by assumption. So we have
+    $$\int_{C_u} (\partial_v \Psi)^2 + \int_{C_v} (\partial_u \Psi)^2 \leq C \int_D |\Psi| |\partial \Psi| + \int_D |\partial \Psi|^2.$$
+    We use Gronwall's inequality to control the right-hand side. 
+    Now
+    $$\Psi(u, v) = \int_0^v \partial_v \Psi(u, \cdot)$$
+    which then vanishes. So this energy estimate gives $\Psi = 0$.
+\end{proof}
+\begin{theorem}[Birkhoff]
+    \index{Birkhoff's theorem on local rigidity}
+    Up to gauge symmetry, the solution to the Einstein vacuum equation in spherical symmetry near a point $p \in M$ is determined by $r(p)$, the signs $\sigma_\nu, \sigma_\lambda$ of $\partial_u r(p)$ and $\partial_v r(p)$, and $g^{\mu\nu} \partial_\mu \partial_\nu r(p)$.
+\end{theorem}
+\begin{proof}
+    If $u,v$ are a future-pointing double-null pair, and we transform them to $(\tilde u, \tilde v)$ where $\tilde u > 0$ only depends on $u$ and similarly for $\tilde v$, then $(\tilde u, \tilde v)$ are a future-pointing double-null pair. This transformation results in the transformation of $\Omega$ by
+$$-\Omega^2 ~du~dv = -\tilde \Omega^2 ~d\tilde u ~d\tilde v = -\tilde \Omega^2 \tilde u' \tilde v' ~du ~dv$$
+so $\tilde \Omega^2 \tilde u' \tilde v' = \Omega^2$.
+    Let $\underline c_p$, $c_p$ be the curves of the future-pointing lightcone along $u, v$ from $p$. Then we can choose $\tilde u, \tilde v$ so that $\tilde \Omega = 1$ on $\underline c_p, c_p$. Let us henceforth work in the coordinates $\tilde u, \tilde v$ (so $\Omega = \tilde \Omega$).
+
+    By the lemma, we only need to determine $\Omega$ and $r$ along $\underline c_p, c_p$, and this will uniquely determine the solution inside any diamond with two sides that lie along $\underline c_p, c_p$; then make the diamond as big as we need.
+    
+    Assume $\sigma_\nu = \sigma_\lambda = 0$. Applying the Raychaudhuri equations along $\underline c_p, c_p$, we have $\partial_u\partial_u r = 0$ on $\underline c_p$, so by the initial conditions we have $\partial_u r = 0$ on $\underline c_p$. Similarly $\partial_v r = 0$ on $c_p$. Thus $r = r(p)$.
+    
+    If $\sigma_\nu \neq 0$, $\sigma_\lambda \neq 0$, then we again have $\partial_u \partial_u r = 0$ along $\underline c_p$. The only remaining degree of freedom is our freedom to choose $g^{\mu\nu} \partial_\mu \partial_\nu r(p)$, which ends up determining $\partial_u r$. Therefore we know the value of $r$ along $\underline c_p, c_p$.
+    
+    Finally assume $\sigma_\nu \neq 0$ but $\sigma_\lambda = 0$. The proof is similar to the previous cases.
+    
+    We have proven uniqueness in the future-pointing lightcone of $p$. By time-reversal symmetry we obtain uniqueness in the past-pointing lightcone. By spherical symmetry, we can switch $u$ and $v$ with $-u$ and $-v$ and run the same argument for the ``left-pointing lightcone" and the ``right-pointing lightcone" which is all four cones that are around $p$.
+\end{proof}
+    The point is that $r,\sigma_\nu,\sigma_\lambda$, and $\mu_0 = g^{\mu\nu}\partial_\mu r \partial_\nu r(p)$ are geometric data, and don't depend on the choice of coordinates; but everything that isn't determined by these terms is determined by our choice of coordinates. Actually, $\mu_0$ is only needed when $\sigma_\nu$ and $\sigma_\lambda$ are nonzero.
+\begin{definition}
+    The \dfn{Hawking mass} is a function $m$ on spherically symmetric spacetime defined by
+    $$g^{\mu\nu} \partial_\mu r \partial_\nu r = 1 - 2mr^{-1}.$$
+\end{definition}
+    Note that $m$ does not depend on a choice of coordinates since neither does $r$. 
+\begin{lemma}
+    The Hawking mass is constant on connected components.
+\end{lemma}
+\begin{proof}
+    We have
+    $$-4\partial_ur\partial_vr\Omega^{-2} = g^{\mu\nu} \partial_\mu r \partial_\nu r$$
+    so by implicit differentation we have
+    $$-2r^{-1}\partial_u m + 2 \partial_u r r^{-2} m = -4 \partial_ur \Omega^{-2} \partial_u\partial_v r.$$
+    Doing a bunch of algebra we see $\partial_u m = \partial_v m = 0$.
+\end{proof}
+When $m = 0$ we will end up with Minkowski spacetime. If $m > 0$ one can show that the null lapse is given by
+$$\Omega^2 = -\sigma_\nu\sigma_\lambda(1 - 2mr^{-1}).$$
+This gives a certain metric that we call the Schwarzschild metric.
+\begin{definition}
+The \dfn{Schwarzschild metric} is the metric
+$$g = -\sigma_\nu\sigma_\lambda (1 - 2mr^{-1}) ~dudv + r^2 \underline g.$$
+\end{definition}
+One can construct a maximal Schwarzschild spacetime. In fact if we define $\mu$ by $1 - \mu = g^{\alpha\beta}\partial_\alpha\partial_\beta r$, then $r\mu$ is constant, and in fact we take $r\mu = 2m$. Doing some algebra and using the Raychaudhuri equations, we have $\Omega^2 = |1-2mr^{-1}|$. If $r \to r_0$ as $v \to \infty$, then $\partial_v r \to 0$, i.e. $r_0 = 2m$.
+
+We now rephrase Birkhoff's theorem.
+\begin{corollary}
+    If $(M, g)$ is a spherically symmetric solution to the Einstein vacuum equation then $(M, g)$ is locally isometric to an open subset of a Schwarzschild spacetime.
+\end{corollary}
+
+We think of Schwarzschild spacetime as an easy example of a black hole spacetime, for $m > 0$. Choosing our signs correctly, we have
+$$g = -(1-2mr^{-1})~dudv + r^2 \underline g = -dudv + r^2 \underline g + o(1)$$
+so that $g$ approximates Minkowski spacetime for $r$ large enough (or $m$ small enough; if $m = 0$ it is Minkowski spacetime, with the singularity $r = 0$ artifically added by the choice of coordinates). That is, $g$ is asymptotically flat, so models a gravitational system (where the mass is concentrated in a compact set -- say, all the mass is inside some star.) In particular, if the observer is not massless, then the observer is at $r = \infty$. Drawing the Penrose diagram, our causal past, looking in from $r = \infty$, is $r > 2m$. Thus no matter how far in the future we are, we lie in the causal complement of the region $r < 2m$.
+\begin{definition}
+    The boundary $r = 2m$ of a black hole is called the \dfn{event horizon}. The region $r < 2m$ is called a \dfn{black hole}.
+\end{definition}
+In fact we have $R_{\mu\nu\alpha\beta}R^{\mu\nu\alpha\beta} \geq Cm^2r^{-6}$, so the spacetime has infinite curvature at $0$.
+
+But assume $m < 0$. Then $r = 0$ is a ``naked singularity", which lies in our causal past. A major conjecture, the \dfn{weak cosmic censorship conjecture}, is that for any physically meaningful spacetime, naked singularities do not exist. Note that the Schwarzschild spacetime with $m < 0$ is not a counterexample, because such a spacetime somehow has negative mass, which is absurd.
+
+\section{Einstein-Maxwell equations}
+Let $F_{\mu\nu}$ be a real-valued $2$-form on $M$, the \dfn{electromagnetic field}. If $(M, g)$ is Minkowski spacetime, we can take $E_i = F_{0i}$ and $B_i = \epsilon_{ijk}F^{jk}/2$, the Hodge dual of $E$, to recover the electric and magnetic fields.
+\begin{definition}
+    The \dfn{Maxwell equations} are the system $\nabla^\mu F_{\nu\mu} = 0$, $dF = 0$.
+\end{definition}
+Let us assume that $F$ is spherically symmetric; i.e. if $R \in SO(3)$ then $R^*F_{\mu\mu} = F_{\mu\nu}$, where we think of $SO(3)$ as the symmetry group of $(M, g)$. We will write
+$$F = F_{uv} ~du\wedge dv + F_{\theta\varphi} ~d\theta \wedge d\varphi.$$
+One can use algebraic topology to prove that that $F_{uv}$ is completely determined by $u,v$ and $F_{\theta\varphi}$ is completely determined by a function of $u,v$ as well as $\sin \theta$. Since $dF = 0$, $\partial_u F_{\theta\varphi} = 0$, and $\partial_v F_{\theta\varphi} = 0$. So actually $F_{\theta\varphi} = m \sin\theta ~d\theta \wedge d\varphi$ for some constant $m$. Also,
+$$0 = \nabla^\mu F_{u\mu} = -2\Omega^{-2}\partial_u(r^2\Omega^{-2} F_{uv})$$
+and similarly for $v$. Thus $\partial_u(r^2\Omega^{-2}F_{uv}) = 0$ and similarly for $v$. Thus $F_{uv} = e\Omega^2r^{-2}$ for some constant $e$.
+
+\begin{theorem}[Weyl?]
+    Every spherically symmetric solution $F$ of the Maxwell equation is given by
+    $$F = e\Omega^2r^{-2}~du\wedge dv + b\sin \theta ~d\theta \wedge d\varphi.$$
+\end{theorem}
+Thus an electromagnetic field is completely determined by the pair $(e, m)$. In Minkowski spacetime, $e\Omega^2r^{-2} ~du\wedge dv = er^{-2} ~dt \wedge dr$ which is the electric field given by a point charge at the origin, while $b\sin \theta ~d\theta \wedge d\varphi$ is the magnetic flux through a sphere.
+
+We now derive the Einstein-Maxwell system from the principle of least action. The Lagrangian density of the Einstein vacuum equation was $R~dV$ while the Lagrangian density of the Maxwell equation is $-F_{\alpha\beta}F^{\alpha\beta}/2$. Thus we have
+\begin{align*}
+    \Ric_{\alpha\beta} - \frac{1}{2}g_{\alpha\beta}R &= 2T_{\alpha\beta}\\
+    T_{\alpha\beta} &= F_{\alpha\mu}F^\mu_\beta - \frac{1}{4}g_{\alpha\beta} F_{\mu\nu} F^{\mu\nu}\\
+    \nabla^\alpha F_{\alpha\beta} = dF &= 0.
+\end{align*}
+As usual, $T_{\alpha\beta}$ is the energy-momentum tensor of the Maxwell equation. We now compute $T_{\alpha\beta}$ by
+\begin{align*}
+    T_{uu} = T_{vv} &= 0\\
+    T_{uv} &= 4^{-1} \Omega^2 r^{-4}(b^2 - e^2)
+\end{align*}
+since
+$$F_{\mu\nu} F^{\mu\nu} = 2(g^{uv})^2 (F_{uv})^2 + g^{AA'}g^{BB'} F_{AB} F_{A'B'} = 2r^{-4}(e^2 + b^2).$$
+Moreover, $T_{AB}$ is proportional to $T_{uv}$. Thus, the Einstein-Maxwell equations in spherical symmetry, obtained by plugging into the Raychaudhuri and Einstein spherically symmetric equations, is
+\begin{align*}
+    0 &= -2r^{-1}\Omega^2 \partial_u (\Omega^{-2} \partial_ur)\\
+    0 &= -2r^{-1}\Omega^2 \partial_v (\Omega^{-2} \partial_vr)\\
+    0 &= 2r^{-1}\partial_u\partial_v r + 2r^{-2}\partial_ur\partial_vr + \Omega^22^{-1}r^{-2} - 2^{-1}\Omega^2r^{-4}(e^2 + b^2).
+\end{align*}
+\begin{theorem}
+    Let $(M, g, F)$ be a spherically symmetric solution to the Einstein-Maxwell system. Then for any $p \in M$, the solution is determined in an open neighborhood $O$ of $p$ by $r$, $\mu$, $\sigma_\nu$, $\sigma_\lambda$, $e = 2r^2\Omega^{-2}F_{uv}$, and $b = \csc \theta F_{\theta \varphi}$. 
+\end{theorem}
+\begin{proof}
+    The electromagnetic field is rigid since we are in spherical symmetry. Now run the proof of Einstein vacuum equation rigidity (using the Raychaudhuri equations, which are the same as before) but with $T_{\alpha\beta}$ given by $(e, b)$.
+\end{proof}
+\begin{lemma}
+    $d(1 - \mu) \wedge dr = 0$.
+\end{lemma}
+\begin{proof}
+    Same as in the vacuum case, because $\Ric_{uu} = \Ric_{vv} = 0$.
+\end{proof}
+As a result, there are constants $C$ such that $1 - \mu = 1 - 2Cr^{-1} + 2C(e^2 + b^2)r^{-2}$. In fact, $1 - \mu = g^{\alpha\beta} \partial_u r \partial_v r = -4\partial_u r \partial_vr \Omega^{-2}$ so we have
+$$d(1 - \mu) = -4d(\partial_u r \partial_v r\Omega^{-2}) = -4 \partial_u\partial_vr \Omega^{-2} (\partial_ur ~du + \partial_vr ~dv).$$
+Therefore
+$$d(1 - \mu) = -4\Omega^{-2}\partial_u\partial_vr ~dr.$$
+Using the Einstein-Maxwell equations we see that if $f(r) = -r^{-1}(1 - \mu) + r^{-1} - (e^2 + b^2)r^{-3}$ then $d(1 - \mu) = f(r) ~dr$. In addition, if $h = 1 - \mu$ then $h' = f$ so $d(rh)/dr = 1 - (e^2 + b^2)r^{-2}$ whence $rh = C + r + (e^2 + b^2)r^{-1}$. This proves the above claim.
+
+We now search for a global solution to the Einstein-Maxwell equation. We do this in Eddington-Finkelstein coordinates, which just means that $\partial_ur \Omega^{-2}$ is constant in one dimension and $\partial_vr \Omega^{-2}$ is constant in the other dimension. This is possible because of the Raychaudhuri equations. In these coordinates, $\Omega^2 = |1 - 2Cr^{-1} + (e^2 + b^2)r^{-2}|$ and $g = -\Omega^2 du~dv + r^2 \underline g$.
+
+We look at the sign of the discriminant $C^2 - Q^2$ where $Q^2 = e^2 + b^2$. If $0 < |Q| < C$ then there are two solutions to the equation $1 - 2CR^{-1} + Q^2r^{-2} = 0$, namely $r_\pm = C \pm \sqrt{C^2 - Q^2}$. This is called the \dfn{subextremal case}.
+
+By the Raychaudhuri equations the signs of $\partial_ur$ and $\partial_vr$ cannot change along the $u$ and $v$ directions respectively. So we can fix a sign for each and see what happens.
+
+First take the case $\partial_ur < 0$, $\partial_vr > 0$. Assume that $r \to r_+$ as $u \to \infty$, $v \to -\infty$; then $r \to \infty$ as $u \to -\infty$, $v \to \infty$. Thus along every null curve, $r$ tends to $r_+$ in one direction and $\infty$ in the other direction. On the other hand, if we take ``initial data" $r = r_-$, then we hit $r = 0$ for some finite $u$, which is a singularity.
+
+If $\partial_ur < 0$, $\partial_vr < 0$, then as $u \to -\infty$, $v \to -\infty$, $r \to r_+$. Similarly as $u \to \infty$, $v \to \infty$, $r \to r_-$.
+
+Gluing together the above Penrose diagrams we construct all possible solutions to the Einstein-Maxwell equations in spherical symmetry. We have to make sure that $\Omega$ is continuous along the gluings, which can be guaranteed by a clever change of coordinates. The maximal such simply connected solution is called the \dfn{maximal Reissner-Nordstrom spacetime}. It is not compact.
+
+In the \dfn{superextremal case} $Q^2 > C^2$ we recover the negative-mass Schwarzschild solution.
+
+Finally we consider the \dfn{extremal case} $Q^2 = C^2$. The resulting maximal solution is the \dfn{Bertotti-Robinson spacetime}. One can show that
+$$\partial_u\partial_v \log \Omega = 2r^{-2} \partial_u \partial_v r + ((2r^2)^{-1} - e^2r^{-4})\Omega^2$$
+using the equation for the angular Einstein tensor $\Ric_{AB} - g_{AB}R/2$ and the angular energy-momentum $T_{AB} = Q^2$. One then shows that $\partial_u\partial_v \log \Omega = K\Omega^2$ for some $K = (2r_0^2)^{-1} - e^2 r_0^{-4}$. This is a constant-curvature spacetime. 
+
+\begin{theorem}[Birkhoff for Einstein-Maxwell]
+    \index{Birkhoff's theorem}
+    If $(M, g, F)$ is a spherically symmetric solution to the Einstein-Maxwell equation, then each point of $M$ is contained in an open set which is isometric to an open set of either the maximal Reissner-Nordstrom spacetime, the Bertotti-Robinson spacetime, a Schwarzschild spacetime, or the Minkowski spacetime.
+\end{theorem}
+
+\chapter{Cosmic censorship}
+In GR, we are interested in two regimes: isolated gravitational systems (asymptotically flat spacetimes; there is a singularity at one point and everything else is a vacuum, so we are studying the dynamical structure) and cosmological systems (where we are modeling the entire universe, and we want to study the topological structure). For now, we will study the isolated case, and view it as a Cauchy problem.
+
+Notice that the Cauchy problem behaves quite strange in the negative Schwarzschild spacetime $(M, g)$. Suppose we have an initial-data set $\Sigma$ for $M$; then, a geodesic in $\Sigma$ along which $r \to 0$ cannot be extended to the future. Drawing the Penrose diagram we see that the negative Schwarzschild spacetime is ``not deterministic," i.e. $\Sigma$ does not uniquely determine the future because we cannot extend it into the future-pointing lightcone of the black hole.
+
+At least in a positive Schwarzschild spacetime, these ``incomplete geodesics" are inside the black hole region. Therefore the observer at infinity cannot see the singularity, where we cannot extend an initial data set to the future. But in the negative Schwarzschild spacetime, the observer sees the singularity. But negative Schwarzschild spacetimes have negative mass by definition, which makes no sense physically.
+
+We thus state the weak cosmic censorship conjecture: an observer at infinity cannot see a singularity in a ``typical" physically meaningful spacetime.
+
+We call the future boundary of a Penrose diagram (limiting points of radial null geodesics along which $r \to \infty$) the \dfn{null infinity} of the spacetime. A spacetime has \dfn{complete null infinity} if the lengths of geodesics parallel to null infinity tend to $\infty$ as $r \to \infty$. In the negative Schwarzschild spacetime, the null infinity was incomplete because the null infinity was the limit of the causal future of the initial-data set, which was compact.
+
+We will be deliberately vague about what we mean by a \dfn{reasonable Einstein-matter system}, but it will be the Einstein equation coupled to physically meaningful Lagrangian densities (i.e. the Maxwell density, the vacuum density, etc.) Similarly for \dfn{physically-meaningful initial-data set} but in particular the initial-data set should be a \dfn{geodesically complete manifold}. (This means that you can ``follow a geodesic forever"; or in other words the domain of the exponential map $T\Sigma \to \Sigma$ is defined on all of $T\Sigma$.) This rules out the punctured line and manifolds with boundary, because those have singularities we can run into in finite distance, which does not seem physically reasonable.
+
+By generic we mean in the sense of the Baire category theorem. In fact, Christodoulou has proven that a naked singularity is unstable, and under a slight perturbation of $g$ necessarily collapses into a black hole, and so is hidden from the observer at infinity, as in the positive Schwarzschild spacetime.
+\begin{conjecture}[weak cosmic censorship]
+    Given a generic physically-meaningful initial-data set to a reasonable Einstein-matter system in an asympotically flat universe, the future maximal globally hyperbolic development has complete null infinity.
+\end{conjecture}
+
+Recall that by definition, the maximal globally hyperbolic development ends at the spacelike hypersurface wherein the development fails to be unique. This region is called a \dfn{Cauchy horizon}. In a Reissner-Nordstrom black hole, there is a Cauchy horizon, so that a test particle falling into a black hole is NOT unique.
+\begin{conjecture}[strong cosmic censorship]
+    Given a generic physically-meaningful initial-data set to a reasonable Einstein-matter system in an asymptotically flat universe, the future maximal globally hyperbolic development is inextendible as a smooth Lorentzian manifold.
+\end{conjecture}
+
+\section{Einstein-Maxwell-charged scalar field equations}
+The most complicated model of the cosmic censorship conjectures is the \dfn{Einstein-Maxwell-charged scalar field} equation. A scalar field $\phi$ is a section of a complex line bundle $E$ whose structure group is the orthogonal group $O(1)$. This gives rise to a connection $D$ on $E$ and 
+$$F_{\alpha\beta} = [D_\alpha, D_\beta].$$
+Locally, we have $D_\alpha = \partial_\alpha + iA_\alpha$. The action is given by
+$$\rho(\phi, D, g) = \int R ~dV(g) - \int F^{\alpha\beta}F_{\alpha\beta} ~dV_g - 2 \int \langle D^\alpha\phi, D_\alpha\phi\rangle ~dV_g$$
+where $\langle \phi, \psi \rangle = \Re(\phi\overline\psi)$ is the natural real-valued inner product on a complex line bundle.
+
+In case $\phi = 0$, the Einstein-Maxwell-charged scalar field reduces to the Einstein-Maxwell system, but it is dynamical because it solves the wave equation with connection $D$, namely
+$$D_\alpha D^\alpha \phi = 0.$$
+However, the Einstein-Maxwell-charged scalar field is too hard to study directly, so we restrict to subsystems thereof.
+\begin{example}
+    The \dfn{Einstein-scalar field} equation or \dfn{Christodoulou model} is the Einstein-Maxwell-charged scalar field with trivial Maxwell tensor, $F_{\alpha\beta} = 0$. Then $D = \partial$, so we do not need to worry about the curvature of the line bundle. That is, we can think of $\phi$ as a mapping $\phi: M \to \RR$. It is the model that we will study when we consider the weak cosmic censorship conjecture.
+\end{example}
+\begin{example}
+    The \dfn{Einstein-Maxwell-uncharged scalar field} equation or \dfn{Daferemos model} is the system obtained by decoupling $\phi$ from $F$. In other words, $\phi: M \to \RR$ (so the curvature of the line bundle is trivial). It is the model where Reichner-Nordstrom spacetimes make sense, so we study the strong cosmic censorship here.
+\end{example}
+
+We now study the (relativistic) kinetic theory of the Einstein equation. Let $M$ be a spacetime, so $T^*M$, the cotangent bundle, has a natural symplectic form, namely
+$$\omega = dx^\alpha \wedge dp_\alpha.$$
+Here $x^\alpha$ is a coordinate system on $U \subseteq M$ and we view a covector as $p_\alpha ~dx^\alpha$. Given $H \in C^\infty(T^*M)$ we define the \dfn{Hamiltonian vector field} by
+$$(X^H)^\alpha = \omega^{\alpha\beta}~dH_\beta.$$
+In case $H = 2^{-1}p^\alpha p_\alpha$ then $X^H$ is the vector field on the cotangent bundle whose flow restricts to the Hamiltonian flow on $M$. We apply the Legrende transform $(x^\alpha, p_\alpha) \mapsto (x^\alpha, p^\alpha)$ we get a flow on $TM$ for which $\dot x^\alpha = p^\alpha$, $\dot p^\alpha = -\Gamma^\alpha_{\beta\gamma} p^\beta p^\gamma$. We let $\Phi^H$ denote the induced flow of $X_H$.
+
+\begin{definition}
+    A \dfn{Vlasov field} is a positive measure $\mu$ on $T^*M$ which is invariant under the pullback by $\Phi^H_t$ for every $t$; that is,
+    $$\mu = (\Phi_t^H)^* \mu.$$
+\end{definition}
+    In Newtonian mechanics, one assumes that the Vlasov field is absolutely continuous with respect to the natural volume form $\epsilon$ induced by the symplectic form $\mu$. Using the Radon-Nikodym theorem, we find an $f$ so that $\mu = f \epsilon$. Since $\Phi^H$ preserves $\epsilon$ we just need to check that $X^Hf = 0$, the \dfn{Vlasov equation}.
+
+    Now $T^*M$ is foliated by level hypersurfaces of $H$, and $X^HH = 0$, so $\Phi^H$ preserves the foliation of $T^*M$. Now a null geodesic is one arising from the flow restricted to $H = 0$, and timelike geodesics are those for which $H = -1$. To restrict to future-pointing geodesics we assume $p^0 < 0$. Thus we define $P_0^+$ to be the $(x, p)$ with $H(x, p) = 0$ and $p^0 < 0$. Similarly for $P_1^+$ where we have $H(x, p) = -1$. These level hypersurfaces are $7$-manifolds and we search for a top form on them. Now
+    $$\epsilon_{P^+_\sigma} = c~dH\wedge\omega\wedge\omega\wedge\omega$$
+    for some function $c$ allowed to depend on $\sigma \{0, -1\}$. For $\mu = f \epsilon_{P^+_\sigma}$, $X^Hf = 0$ iff
+    $$p^\alpha \partial_\alpha f = \partial_\alpha g^{\beta\gamma} p_\beta p_\gamma \partial_\alpha f = 0.$$
+    Of course if $\sigma = 0$ then we are thinking of our particle as a photo (no mass) so we say that this is the ``massless" case and $\sigma = -1$ is the ``massive" case.
+\begin{definition}
+    Let $\mu$ be a Vlasov field which is absolutely continuous with respect to $\epsilon_{P^+_\sigma}$. The \dfn{associated energy-momentum tensor} $T_{\alpha\beta}$ of $\mu$ is given weakly by (with $\varphi$ a test function)
+    $$\int_M T_{\alpha\beta})x \varphi(x) ~dV(g) = \int_{T^*M} p_\alpha p_\beta \varphi(x) ~d\mu.$$
+    The \dfn{number density} is
+    $$\int_M N_\alpha(x) \varphi(x) ~dV(g) = \int_{T^*M} p_\alpha \varphi(x) ~d\mu.$$
+\end{definition}
+    Since $\mu$ is absolutely continuous, it is supported on the $7$-manifold which is a level hypersurface of $H$. If $f$ is the Radon-Nikodym derivative, then
+    $$T_{\alpha\beta}(x) = \int_{T^*M} p_\alpha p_\beta f(-\det g)^{-1/2}\epsilon_{P^+_\sigma}|_{T^*_xM}$$
+    and
+    $$N_\alpha(x) = \int_{T^*M} p_\alpha f(-\det g)^{-1/2}\epsilon_{P^+_\sigma}|_{T^*_xM}.$$
+
+    To couple the Vlasov field to the Maxwell equation we take $N_\beta = \nabla^\alpha F_{\alpha\beta}$ and
+    $$2H = g^{\alpha\beta}(p_\alpha + A_\alpha)(p_\beta + A_\beta).$$
+
+\begin{example}
+    A subsystem of the Einstein-Vlasov system is the \dfn{Einstein-null dust system}. It is too simple to be realistic but is useful to demonstrate computations. The interpretation is that everything travels along radial null geodesics. So there is no mass, and the physical system consists solely of radiation moving radially.
+
+    An \dfn{null dust field} which is outgoing is characterized by having energy-momentum tensor $T_{\alpha\beta}$ such that
+    $$T^{out}_{uu} \geq 0$$
+    with other components zero. Similarly $T^{in}_{vv} \leq 0$ for incoming null dust fields. Now $\nabla^\alpha T_{\alpha\beta} = 0$ so $\partial_v T_{uu}^{out} = 0$. (Similarly $\partial_u T_{vv}^{in} = 0$.)
+
+    We will assume that there are two noninteracting null dusts, one incoming and one outgoing. That is, the Einstein-null dust equation is given by
+    $$\Ric_{\alpha\beta} -\frac{1}{2}g_{\alpha\beta}R = 2(T^{in}_{\alpha\beta} + T^{out}_{\alpha\beta}).$$
+\end{example}
+
+\section{The structure of toy models}
+    Two basic papers about the a priori characterizations of solutions to spherically symmetric toy models are Daferemos ``Spherically symmmetric spacetimes with a trapped surface" and Komnemi ``The global structure of a spherically symmetric charged scalar field spacetime". Let us give a shallow introduction to this theory.
+
+    We will let $(M, g)$ be the $1+3$-dimensional maximal globally hyperbolic development with a spherically symmetric initial data set $\Sigma_0$. Let $(Q, g_Q)$ be the quotient of $(M, g)$ by $SO(3)$. We will assume that $\Sigma_0$ is diffeomorphic to $\RR^3$ or $\RR \times S^2$. (The latter is the initial-data set of the spacetimes for which we will study the strong cosmic censorship conjecture.)
+
+    If $\Sigma_0 = \RR^3$, then by algebraic topology, there is a fixed point of $SO(3)$. In other words, the set $\Gamma = \{r = 0\}$ has
+    $$\Gamma \cap \Sigma_0 = \{p\}.$$
+    On the other hand, if $\Sigma_0 = \RR \times S^2$, then $SO(3)$ cannot have any fixed points.
+
+    By global hyperbolicity, there is a future-pointing double null pair $(u, v)$ on $Q$. The existence of a double null pair implies that there is an embedding $Q \to \RR^2$, i.e. a Penrose diagram. We will write $\overline Q$ for the closure of $Q$ inside $\RR^2$; i.e. if $Q$ is not a closed manifold then we will take it to be a manifold with boundary.
+
+\begin{definition}
+    $T_{\alpha\beta}$ obeys the \dfn{dominant energy condition} if for every causal, future-pointing vectors $x, y$,
+    $$T_{\alpha\beta}x^\alpha y^\beta \geq 0.$$
+\end{definition}
+    In fact, $T_{\alpha\beta} \dot \gamma^\alpha = J_\beta$ should be interpreted as the ``energy-momentum" along $\gamma$. In fact, the coordinate of $J_\beta$ along $\gamma$ is the energy along $\gamma$. So the dominant energy condition says that there is positive energy.
+
+    In spherical symmetry, the dominant energy condition is equivalent to $T_{uu} \geq 0$, $T_{vv} \geq 0$, $T_{uv} \geq 0$. It follows that $\Ric_{uu} \geq 0$, $\Ric_{vv} \geq 0$. Since
+    $$\Ric_{uu} = -2r^{-1}\Omega^2 \partial_u (\Omega^{-2}\partial_ur)$$
+    it must be that the sign of $\partial_ur$ is preserved, and similarly for $\partial_vr$. Thus $r$ is monotone in $u$ and $v$ separately.
+
+    Henceforth we assume the dominant energy condition. It therefore makes sense to also assume the antitrapping condition:
+\begin{definition}
+    $\Sigma_0$ obeys the \dfn{antitrapping condition} if: if $\Sigma_0 = \RR^3$ then $\partial_ur < 0$ on $\Sigma_0$; if $\Sigma_0 = \RR \times S^2$ then $\partial_ur < 0$ on some $\Sigma_0'$ a connected subset of $\Sigma$ which meets the ideal endpoint of $\Sigma_0$ on the right.
+\end{definition}
+    Let
+    $$Q' = \{(u, v) \in Q: \exists u_0~(u_0(v), v) \in \Sigma_0\}.$$
+    Then the antitrapping condition implies that $\partial_ur < 0$.
+\begin{definition}
+    Assume the antitrapping condition. $(u, v) in Q'$ is \dfn{trapped} if $\partial_vr < 0$. $(u, v) \in Q'$ is \dfn{regular} if $\partial_ur > 0$. $(u, v)$ is \dfn{marginally trapped} if $\partial_vr = 0$.
+
+    Because of these conventions, we say that $u$ is incoming and $v$ is outgoing.
+\end{definition}
+    In a black hole, every point is trapped. The event horizon is marginally trapped. Formally, if $T$ is the set of trapped points, and $(u, v')$ lies in the future of $(u, v)$, then $(u, v) \in T$ implies $(u, v') \in T$. 
+\begin{theorem}[Penrose singularity theorem]
+    \index{Penrose singularity theorem}Suppose that $T$ is nonempty. Then there is an incomplete outgoing null geodesic.
+\end{theorem}
+    Recall that a geodesic $\gamma$ is complete if for every $t$ such that $\gamma_{\dot \gamma}\dot \gamma(t) = 0$ ($t$ is an \dfn{affine paramter}), $\gamma(t)$ exists. This is not the case if $\gamma$ runs into a boundary. That is, there is an incomplete geodesic the exponential map $TM \to M$ fails to be defined far away from the origin of each tangent space. Incomplete null geodesics can be interpreted physically as meaning that a light wave fails to exist after traveling a finite distance.
+\begin{proof}
+    Let $(u_0, v_0) \in T$ be trapped, and let $(u_1, v_1)$ be the endpoint of the outgoing null geodesic from $(u_0, v_0)$. This is finite because we embedded $Q$ in $\RR^2$. Now we compute
+    $$\int_{v_0}^{v_1} \Omega^2(u, v) ~dv$$
+    and use the Raychaudhuri equations and the trapping conditions to conclude that the integral is the integral of a bounded function over a compact set. So it's finite, hence an affine parameter.
+\end{proof}
+    Actually the Penrose singularity theorem holds in much greater generality. The existence of trapped surfaces is an open condition on the moduli space of all initial-data sets, which implies that there is a \emph{stable} singularity, which necessarily follows from the existence of black holes.
 
 \printindex
 
