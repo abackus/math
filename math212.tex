@@ -383,7 +383,28 @@ From the above theorem we see that for $u \in L^1_{loc}$, then $u$ is subharmoni
 
 
 
-\section{Spectral theory}
+\section{Operator theory}
+\begin{theorem}[Schur]
+\label{Schur}
+Let $X$ be a $\sigma$-finite measure space and let $K$ be an integral operator. If there is a $p: X \to [0, \infty)$ and a $\lambda > 0$ such that
+$$\int_X |K(x, y)|p(y) ~dy \leq \lambda p(x)$$
+and
+$$\int_X |K(x,y)| p(x) ~dx \leq \lambda p(y)$$
+then
+$$||K||_{L^2 \to L^2} \leq \lambda.$$
+\end{theorem}
+\begin{proof}
+Let $u$ be an integrable simple function. By the Cauchy-Schwarz inequality and Fubini's theorem,
+\begin{align*}
+    ||Ku||^2_{L^2} &= \int_X \left|\int_X K(x, y)u(y) ~dy\right|^2 ~dx &\leq \left|\iint_{X^2} |K(x, y)|^{1/2}p(y)^{1/2} \frac{|u(y)|}{p(y)^{1/2}} |K(x, y)|^{1/2} ~dx ~dy\right|\\
+    &\leq \int_X\left(\int_X |K(x, y)| p(y) ~dy\int_X \frac{|u(y)|^2}{p(y)}|K(x, y)| ~dy\right)~dx\\
+    &\leq \lambda \int_X \frac{p(x)}{p(y)}|K(x, y)| |u(y)|^2 ~dy ~dx\\
+    &\leq \lambda^2 |u(y)|^2 ~dy = \lambda^2 ||u||_{L^2}^2.
+\end{align*}
+Since ISF is dense in $L^2$ we're done.
+\end{proof}
+As a corollary we can easily compute the $\ell^2$ norm of a matrix, since every matrix is an integral operator for counting measure on $\{1, 2, \dots, n\}$.
+
 \begin{theorem}
 \label{norm of the resolvent}
 Let $A$ be a self-adjoint operator and
@@ -1210,6 +1231,9 @@ $$\Pi u(z) = \frac{1}{(\pi h)^n} \int_{\CC^n} e^{-\langle z, \overline w\rangle/
     In quantum mechanics, $H$ is the space of wavefunctions. If $g \in L^\infty$ is a classical observable, we quantize $g$ by
     $$T_g = \Pi g \Pi.$$
     In fact, $g$ itself cannot be holomorphic by Liouville's theorem, but $T_g$ preserves $A$.
+\begin{definition}
+    The projection $T_g$ is called the \dfn{Toeplitz operator} of $g$.
+\end{definition}
 \begin{example}
     Let $g(z) = \overline z_j$, $u \in H_{\Phi + \varepsilon|z|^2}$, where $\Phi(z) = |z|^2/2$. Then $T_g$ carries $H$ to itself, and
     $$T_gu(z) = \frac{1}{(h\pi)^n} \int_{\CC^n} e^{-\langle z, \overline w \rangle/h - |w|^2/h} \overline w_j u(w) ~dm(w).$$
@@ -1394,10 +1418,77 @@ and $(c^N_{\rho\gamma}\rho!\gamma!)$ is positive iff $A$ is positive. Since
 $$\frac{\langle z, \overline z\rangle^N}{N!} \sum_{|\alpha|=|\beta|=m} c_{\alpha\beta}z^\alpha z^\beta = \sum_{\substack{|\alpha| = |\beta| =m\\|\mu| = N}} \frac{c_{\alpha\beta}}{\mu!} z^{\alpha + \mu} \overline z^{\beta + \mu}$$
 we plug this back into $\langle Pf u, u\rangle$.
 \end{proof}
+\begin{lemma}
+    For every $\delta > 0$ and $m > 1$ there is a $\varepsilon > 0$ such that if $|Mh - 1| < \varepsilon$, then for every $u \in \mathcal P_M$,
+    $$||~|z|^mu||_{L^2_\Phi(|z| \leq 1 - \delta)} \leq O(h^\infty)||u||_\Phi.$$
+\end{lemma}
+\begin{proof}
+    Let
+    $$\Pi_M: L^2_\Phi \to \mathcal P_M$$
+    be the orthogonal projection. Now
+    $$||\Pi_M |z|^m 1_{|z| \leq 1/2} \Pi_M||_{L^2_\Phi \to L^2_\Phi} = O(h^\infty)$$
+    if $hM$ is close to $1$. In fact, it is no trouble to reduce to when $m = 0$ since $|z|^m < 2^{-m}$ and then
+    $$||u||_{L^2_\Phi(|z| < 1/2)}^2 = \langle 1_{|z| < 1/2}u, u\rangle_\Phi = \langle \Pi_M 1_{|z| < 1/2}\Pi_Mu, u\rangle_\Phi.$$
+    We now use Schur's criterion with $p(w) = |w|^M$. In fact
+    $$\Pi_Mu(z) = (\pi h)^n \int_{\CC^n} \langle z, \overline w\rangle^M\frac{u(w)}{M!h^M} e^{-|w|^2/h} ~dw$$
+    so if $K$ is the integral kernel defined by
+    $$\Pi_M1_{|z|\leq 1/2}\Pi_M = \int_M K(z, w) u(w) e^{-|w|^2/h} ~dw$$
+    we have
+    $$K(z, w) = (h\pi)^{-2n} \int_{\CC^n} \frac{\langle z, \overline \zeta\rangle^M}{M!h^M} 1_{|\zeta|<1/2} \frac{\langle \zeta, \overline w\rangle^M}{M!h^M} e^{-|\zeta|^2/h} ~d\zeta$$
+    since by Fubini's theorem the integral kernel of a product of integral operators is the product of the integral kernels. Thus
+\begin{align*}|K(z, w)| &\leq (\pi h)^{-2n} \int_{|\zeta|<1/2} \frac{|z|^M|\zeta|^{2M}|w|^M}{M!h^M M!h^M} e^{-|\zeta|^2/h} ~d\zeta
+\end{align*} 
+    implies
+\begin{align*}
+    \int_{\CC^n} |K(z, w)| |w|^M e^{-|w|^2/h} ~dw &\leq \frac{|z|^M}{(\pi h)^{2M}} \int_{\CC^n} \int_{|\zeta| < 1/2} \frac{|\zeta|^{2M}}{M!h^M} \frac{|w|^{2M}}{M!h^M} e^{-|\zeta|^2/h} e^{-|w|^2/h} ~d\zeta ~dw\\
+    &=: I_1I_2
+\end{align*}
+    where we are thinking of the $e^{-|\cdot|^2/h}$ as a Radon-Nikodym derivative of a certain measure (so we can use Schur's criterion on that measure). Using polar coordinates,
+\begin{align*}I_1 &\leq \frac{C}{M!h^{M+n}} \int_0^\infty r^{2M+2n-1} e^{-r^2/h} ~dr\\
+&= O\left(\frac{1}{M!}\right) \int_0^{\infty} t^{M+n-1} e^{-t} ~dt\\
+&\leq O\left(\frac{1}{M!}\right) (M + n - 1)! \leq O((M + n)^n).
+\end{align*}
+    Since $Mh$ is close to $1$, $e^{(M+m+n-1)t}$ looks like $e^{t/h}$, and if $1 - \rho = Mh$ then $\rho$ is small. We recall that $\log 1/4 - 1/4 \approx -1.6 < 1$. So if we take $r^2 = t$,
+\begin{align*}
+    I_2 &\leq C\int_0^{1/2} \frac{r^{2M + 2n - 1}}{M!h^{M+n}} e^{-r^2/h} ~dr \\
+    &= C\int_0^{1/4} \frac{t^{M+m+n-1}}{M!h^{M+n}} e^{-t/h} ~dt
+    = \frac{Ce^{\delta/4h}}{M!h^{M+n}} \int_0^{1/4} (te^{-t})^{1/h} ~dt\\
+    &= \frac{Ce^{\delta/4h}}{M!h^{M+n}} \int_0^{1/4} e^{(\log t - t)/h} ~dt
+    \leq C\frac{e^{\delta/4h}-1.5/h}{M!h^{M+n}}\\
+    &\leq C\frac{e^{-1.2/h}}{M!(1-\rho)^{-(n+M)}M^{-(n+M)}}
+    \leq C\frac{(1+\rho)^{n+M}e^{-1.2/h}}{M^{M+1/2}M^{-M}M^{-n}}\\
+    &\leq O(M^n (1 + \rho)^{n+M}) e^{-(1-\rho)M}
+    \leq O(e^{-CM}) = O(e^{-C/h})
+\end{align*}
+    by Stirling's formula.
+\end{proof}
+\begin{lemma}
+    Let $|\alpha| = |\beta| = m$. There are $p_j \in \mathcal P_{m - j}$ such that if
+    $$q_{\alpha\beta}(z, \overline z) = z^\alpha \overline z^\beta + \sum_{j=1}^n h^j p_j^{\alpha\beta}(z, \overline z)$$
+    then $z^\alpha T_{\overline z^\beta} = T_{q_{\alpha\beta}}$.
+\end{lemma}
+\begin{proof}
+    This is obvious if $m = 0$. Otherwise, assume that it is true for $m$, and use the fact that
+    $$T_{z^\alpha \overline z^\beta} = (h \partial_z)^\beta z^\alpha = z^\alpha(h\partial_z)^\beta \sum_{j=1}^m h^j \sum_{|\mu|=m-j} p_j^{\alpha\beta} z^\mu (h\partial_z)^\mu$$
+    to prove the lemma by induction.
+\end{proof}
+\begin{proof}[Proof of Quillen's theorem]
+    By a previous lemma, we have $f = T_q$ where
+    $$q(z, \overline z) = f(z, \overline z) + \sum_{j=1}^m h^j p_j(z, \overline z)$$
+    for some $p_j \in \mathcal P_{m - j}$ which depend on our choice of $h$. We claim that for some $N > 1$, $h < 1$ and every $u \in \mathcal P_{m + N}$, there is a $c > 0$ such that
+    $$\langle T_qu, u\rangle_\Phi \geq c||u||^2_\Phi.$$
+    In fact we take $c$ so that $f(z, \overline z) > 2c$ for $2|z| > 1$, which is possible by homogeneity of $f$. So if $h > 0$ is small enough, then
+    $$q(z, \overline z) > c$$
+    for every $z$ with $2|z| > 1$. In particular we have the luxury to choose $h$ so that we can find $N$ such that $N = 1/h$. Now $\Pi$ is self-adjoint and $u \in H$, so
+\begin{align*}
+    \langle T_qu, u\rangle_\Phi &= \langle \Pi q\Pi u, u\rangle_\Phi = \langle q\Pi u, \Pi u\rangle_\Phi \\
+    &= \langle qu, u\rangle_\Phi \geq c\langle 1_{|z| \geq 1/2}u, u\rangle_\Phi - c||u||_{L^2_\Phi(|z| < 1/2)}\\
+    &= c||1_{|z| \geq 1/2} u||_{L^2_\Phi(|z| \geq 1/2)}^2 - O(h^\infty)||u||_\Phi\\
+    &\geq c\frac{||u||_\Phi^2}{2}.
+\end{align*} 
+\end{proof}
 
-    
-    
-    
+
 
 \chapter{Scattering theory}
 This chapter follows Hormander's Analysis of PDOs book, Chapter XVI, and Zworski-Dyatlov.
