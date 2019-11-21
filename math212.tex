@@ -23,6 +23,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\CP}{\mathbb{CP}}
+\newcommand{\PP}{\mathbb{P}}
 \newcommand{\DD}{\mathbb{D}}
 
 \newcommand{\AAA}{\mathcal A}
@@ -89,12 +90,12 @@
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
  
+\theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{axiom}[theorem]{Axiom}
-\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
@@ -1487,6 +1488,301 @@ we plug this back into $\langle Pf u, u\rangle$.
     &\geq c\frac{||u||_\Phi^2}{2}.
 \end{align*} 
 \end{proof}
+
+\section{Complex manifolds}
+\begin{definition}
+    An \dfn{immersion} is an injective continuous function.
+\end{definition}
+
+\begin{definition}
+    An \dfn{holomorphic atlas} on a topological space $M$ is an open cover $(U_\alpha)_\alpha$ equipped with open immersions $\tau_\alpha: U_\alpha \to \CC^n$ such that whenever $U_\alpha \cap U_\beta$ is nonempty, the mapping
+    $$\tau_\alpha \circ \tau_\beta^{-1}: \tau_\beta(U_\alpha \cap U_\beta) \to \tau_\alpha(U_\alpha \cap U_\beta)$$
+    is holomorphic.
+\end{definition}
+
+\begin{definition}
+    A \dfn{complex manifold} $M$ is a Hausdorff space equipped with a holomorphic atlas.
+\end{definition}
+
+\begin{definition}
+    A function $f: M \to \CC^m$ is a \dfn{holomorphic function} if for every $\alpha$, $f \circ \tau^{-1}: \tau_\alpha(U_\alpha) \to \CC^,$ is holomorphic.
+\end{definition}
+
+\begin{example}
+    Let
+    $$M = \{z \in \CC^{n+1}: z_0^2 + \dots + z_n^2 = 1\}.$$
+    Then there is a $j$ such that $z_j \neq 0$. By the implicit function theorem, we can show that $M$ is a complex manifold. But it is not compact, and in fact has complex codimension $1$.
+\end{example}
+
+\begin{definition}
+    Let $V$ be a complex vector space, which the multiplicative group $\CC^*$ acts on by scalar multiplication. Let $\PP(V) = (V\setminus 0)/\CC^*$, the \dfn{complex projective space}. Define for $x \in \PP(V)$ the equivalence class $[x] \in \PP(V)$. Define $\Omega_j = \{[x] \in \PP(V): x_j \neq 0\}$. Then define
+    $$\tau_j^{-1}([x]) = (x_0x_j^{-1}, \dots, x_{j-1}x_j^{-1}, x_{j+1}x_j^{-1}, \dots, x_nx_j^{-1}).$$
+    Then for $z \in \tau_j(\Omega_i \cap \Omega_j)$,
+    $$\tau_i \circ \tau_j^{-1}(z) = (z_0z_i^{-1}, \dots, z_{j-1}z_i^{-1}, z_i^{-1}, z_{j+1}z_i^{-1}, \dots, z_{i-1}z_i^{-1}, z_{i+1}z_i^{-1}, \dots, z_nz_i^{-1}).$$ 
+\end{definition}
+    Then if $V = \CC^{n+1}$, $\PP(V) = S^{2n-1}/S^1$ where $S^1$ acts on $S^{2n-1}$ by scalars. So $\PP(V)$ is a compact complex manifold.
+\begin{example}
+    Let $M = \{x \in \CC^{n+1}: x_0^2 + \dots + x_{n+1}^2 = 0\}/\CC^*$, where $\CC^*$ acts on $\CC^{n+1}$ by scalars. By a similar argument as with projective space, $M$ is a compact complex manifold.
+\end{example}
+
+\begin{theorem}
+    The only holomorphic functions on a compact connected complex manifold are constant.
+\end{theorem}
+\begin{proof}
+    A function would have to attain a maximum since the manifold is compact, and by the maximum principle if a function attains its maximum on the interior of a connected set then it is constant there.
+\end{proof}
+
+\section{Holomorphic line bundles}
+\begin{definition}
+    A \dfn{holomorphic line bundle} is a holomorphic projection of complex manifolds $\pi: E \to M$, such that for every $x \in M$, $E_x = \{\pi^{-1}(x)\}$ is isomorphic to $\CC$, and that there is an open set $U \ni x$ and a holomorphic function $\Theta: \pi^{-1}(U) \to U \times \CC$ such that $\Theta|_{E_x}: E_x \to \{x\} \times \CC$ is an isomorphism of vector spaces.
+\end{definition}
+    We define $\Theta_{j\ell} = \Theta_j \cap \Theta_\ell^{-1}$ whenever $U_j \cap U_\ell$ is nonempty. Then $\Theta_{j\ell}(x, \cdot)$, $x \in M$, is a linear map $\CC \to \CC$, so there is a scalar $g_{j\ell}(x)$ such that $\Theta_{j\ell}(x, t) = g_{j\ell}(x)t$.
+\begin{definition}
+    The functions $g_{j\ell}: \Theta_j \cap \Theta_\ell^{-1} \to \CC$ are called \dfn{transition functions} for the holomorphic line bundle.
+\end{definition}
+    We have $g_{j\ell}g_{\ell j} = 1$. In fact, on $U_j \cap U_k \cap U_\ell$, then $g_{j\ell}g_{\ell k}g_{kj} = 1$. On the other hand, we have a holomorphic line bundle for any family of functions with these compatibility conditions. Let $J$ be the index set, $(j, x, t) \sim (j', x, t')$ whenever $t' = g_{j'j}t$. Then $J \times M \times \CC$ projects by $\sim$ to a holomorphic line bundle $E$.
+\begin{example}
+    The \dfn{trivial line bundle} is $E = M \times \CC$.
+\end{example}
+\begin{example}
+    The \dfn{tautological line bundle} $O(-1)$ over $\PP^n$, the moduli space of all lines through $0 \in \CC^{n+1}$, sends the line corresponding to each point of $\PP^n$ to itself. It is defined by
+    $$O(-1) = \{([x], \xi) \in \PP^n \times \CC^{n+1}: \xi \in [x]\}.$$
+    (Here we allow $0 \in [x]$.) We define $\Theta_j([x], \xi) = \xi_j$. Then $\Theta_j \circ \Theta_\ell^{-1}([x], \xi) = x_j\xi/x_\ell$. That is,
+    $$g_{j\ell}(x) = \frac{x_j}{x_\ell}.$$
+\end{example}
+
+\begin{definition}
+    Let $\pi: E \to M$ be a holomorphic line bundle. A \dfn{section} is a right inverse of $\pi$.
+\end{definition}
+    So a section carries $x \in E$ to the complex line $\CC \times \{x\}$. We denote by $C^\infty(M, E)$ the space of smooth sections of $\pi$. The space of holomorphic sections is denoted by $H^0(M, E)$, for sheaf-theoretic reasons.
+\begin{example}
+    For the tautological line bundle, let $x \in U_j$. We define a vector space isomorphism $e_j: E_x \to \CC$ that sends a point in $[x]$ to its $j$th coordinate. This allows us to express as section $s$ as $s(x) = s_j(x) e_j(x)$ whenever $x \in U_j$. If $x \in U_j \cap U_\ell$, then $e_\ell(x) = g_{j \ell}(x)e_j(x)$ and $s_j(x) e_j(x) = s_\ell(x) e_\ell(x)$. So $s_j(x) e_j(x) = s_j(x) g_{\ell j}(x) e_\ell(x) = s_\ell(x) e_\ell(x)$ whence $s_j(x)/x_j = s_\ell(x)/x_\ell$. (Clearly this does not depend on the choice of $x \in [x]$.)
+
+    A section $s$ of $O(-1)$ defines a function on $\CC^{n+1} \setminus 0$, $\tilde s$, by, for $[x] \in U_j$,
+    $$\tilde s(x) = \frac{s([x])}{x_j}.$$
+    Then $\tilde s$ is well-defined, does not depend on the choice of $j$, and is homogeneous of degree $-1$. So $C^\infty(\PP^n, O(-1))$ is infinite-dimensional while $H^0(\PP^n, O(-1)) = 0$.
+\end{example}
+    We now define operations on the category of line bundles. The goal is to construct line bundles that have holomorphic sections.
+\begin{definition}
+    Let $M$ be a complex manifold. If $E$ is a holomorphic line bundle, we define the \dfn{dual line bundle} $E^*$ by requiring that the fibers $E_x^*$ are dual vector spaces to the fibers $E_x$. Given $g_{ij}$ the transition maps for $E$, we define the dual transition maps $g_{ij}^* = g_{ij}^{-1}$.
+\end{definition}
+    Then $E^*$ is a holomorphic line bundle, and given $x \in U_j \cap U_k \subset E$, $\xi \in E_x$, $f \in E_x^*$, $f(\xi)$ does not depend on whether we compute $f(\xi)$ in $U_k$ or in $U_j$.
+\begin{example}
+    The dual of the tautological line bundle is by definition $O(1) = O(-1)^*$. It has the transition maps
+    $$g_{ij}^*([x]) = \frac{x_j}{x_i}.$$
+    As above, the sections are functions on $\CC^{n+1} \setminus 0$ which are homogeneous of degree $1$. So $H^0(\PP^n, O(1))$ consists of linear forms on $\CC^{n+1}$ (since every holomorphic function extends over $0$ on $\CC^{n+1}$.)
+\end{example}
+
+\begin{definition}
+    Let $F,E$ be holomorphic line bundles over $M$. We define the \dfn{tensor product of line bundles} by $(F \otimes E)_x = F_x \otimes E_x$ on fibers and
+    $$g_{ij}^{F \otimes E} = g_{ij}^F \otimes g_{ij}^E.$$
+\end{definition}
+    Here the tensor product of holomorphic functions is defined by pointwise multiplication. 
+\begin{example}
+    Let $O(k) = O(1)^{\otimes k}$ (for $k \geq 0$; for $k < 0$ we have $O(k) = O(-1)^{\otimes -k}$). Then we have transition maps $g_{ij}^k([x]) = x_j^k x_i^{-k}$ so $H^0(\PP^n, O(k))$ consists of $k$th degree forms on $\CC^{n+1}$. The dimension of $H^0(\PP^n, O(k))$ is $(n+k)!/n!$. 
+\end{example}
+\begin{definition}
+    The \dfn{Picard group} is the group $\{O(k): k \in \ZZ\}$ of line bundles on $\PP^n$. with tensor product as multiplication and duality as inversion.
+\end{definition}
+    So the Picard group is isomorphic to $\ZZ$. The identity of the Picard group $O(0)$ is the trivial bundle. The sections on $O(0)$ are exactly those functions $\PP^n \to \CC$.
+
+
+\begin{definition}
+    A \dfn{Hermitian metric} on a holomorphic line bundle $h = (h_j)_j$ is a vector of smooth $h_j: U_j \to [0, \infty)$ satisfying the compatibility condition $h_j(x) = |g_{ij}(x)|^2 h_i(x)$, such that with $e_j(x) = \Theta^{-1}_j(x, 1)$ defined for $x \in U_j$, we have norms $||\cdot||$ on each fiber defined by
+    $$||e_j(x)||^2_h = h_j(x).$$
+\end{definition}
+    The norm is well-defined because any element of a fiber $E_x$ is a scalar multiple of $e_j(x)$. For a section $s$ we have
+    $$||s(x)||_h^2 = h_j(x) |s_j(x)|^2$$
+    in $U_j$.
+\begin{definition}
+    The \dfn{Fubini-Study metric} is the Hermitian metric on $O(1)$ given by
+    $$h_j([x]) = \frac{|x_j|^2}{|x|^2}$$
+    for $[x] \in \PP^n$.
+\end{definition}
+\begin{example}
+    Let
+    $$f(x, \overline x) = \sum_{|\alpha| = |\beta| = k} c_{\alpha\beta} x^\alpha \overline x^\beta$$
+    be such that $f(x, \overline x) > 0$. Then we can define
+    $$h_j(x) = \frac{|x_j|^{2k}}{f(x, \overline x)}.$$
+    By Quillen's theorem, if $k$ is large enough then there is a polynomial such that the metric we have just defined is the pullback of the Fubini-Study metric.
+\end{example}
+\begin{definition}
+    A \dfn{Hermitian line bundle} is a holomorphic line bundle equipped with a Hermitian metric.
+\end{definition}
+\begin{definition}
+    A \dfn{positive line bundle} is a Hermitian line bundle $(E, h)$ such that $h_j = e^{-\varphi_j}$ for some strictly plush functions $\varphi_j$.
+\end{definition}
+    On a positive line bundle, there will be lots of holomorphic sections.
+\begin{example}
+    Take $U_0 \subset \PP^n$ to be the set of $[x]$ such that $x_0 \neq 0$. Then $h_0([x]) = |x_0|^2|x|^{-2}$ for the Fubini-Study metric. The Fubini-Study metric makes $O(1)$ into a positive line bundle by
+    $$\varphi_0(z) = - \log(|x_0|^2 |x|^{-2}) = \log(1+|z|^2).$$
+    In fact,
+    $$\partial_j \dbar_k \varphi_0(z) = \frac{\delta_{jk}}{1 + |z|^2} - \frac{z_k \overline z_j}{(1 + |z|^2)^2}.$$
+    It is easy to check that this matrix is positive-semidefinite, so $(O(1), h)$ is a positive line bundle. 
+\end{example}
+
+\section{Integration on Hermitian line bundles}
+Let $h$ be the Hermitian line bundle defined by $h_\alpha = e^{-\varphi_\alpha}$ for some strictly plurisubharmonic function $\varphi_\alpha$. 
+\begin{definition}
+The \dfn{Levi form} of $h$ is given by
+$$\omega_\alpha = \frac{1}{2i}\partial\dbar \partial_\alpha.$$
+\end{definition}
+The Levi form is a $(1, 1)$-form, given by
+$$\omega_\alpha = \frac{1}{2i} \sum_{j,k} \partial_j\dbar_k \varphi_\alpha dx_j \wedge d\overline x_k.$$
+Then
+$\varphi_\alpha = 2\log|g_{\alpha\beta}| + \varphi_\beta$ for transition functions $\varphi$. It follows that $\omega_\alpha = \omega_\beta$ on overlapping patches so $\omega$ is a real $2$-form.
+
+\begin{example}
+    Let $h$ be the Fubini-Study metric. Then the Levi form of $h$ is
+\begin{align*}\omega_\ell &= \frac{i}{2} \sum_j \frac{dx_j \wedge d\overline x_j}{1 + |x|^2} - \sum_{\substack{j \neq \ell\\k\neq \ell}} \frac{\overline x_j x_k ~dx_j \wedge d\overline x_k}{(1+|x|^2)^2}\\
+    &= \frac{i}{2}\left(\frac{d(x~d\overline x)}{(1 + |x|^2)} - \frac{(\overline x ~dx)\wedge(x ~d\overline x)}{(1 + |x|^2)^2}\right).
+\end{align*}
+\end{example}
+
+Given a Levi form $\omega$ on an $n$-dimensional manifold, we obtain a volume form $dV = \omega^n/n!$ (where $\omega^n$ is the exterior power).
+\begin{example}
+    The Fubini-Study Levi form is invariant under the unitary group. We can use this diagonalize the Fubini-Study metric so that the double sum is only a single sum, and prove that
+    $$dV = \frac{i^n}{2^n} \frac{dx_1 \wedge d\overline x_1 \wedge \dots \wedge dx_n \wedge d\overline x_n}{(1+|x|^2)^{n+1}}.$$
+\end{example}
+Because we have a volume form, integration makes sense.
+\begin{definition}
+    The space $L^2(M, E, h)$ is the completion of the space of $s \in C^\infty(M, E)$ for which the norm defined by the inner product
+    $$\langle s, s'\rangle_h = \int_M \langle s(x), s'(x)\rangle_h ~dV.$$
+\end{definition}
+Here the inner product in the integral is the inner product induced on each line appearing in the line bundle induced by the Hermitian metric $h$.
+
+We thus introduce the Bergman projection $L^2(M, E) \to H^0(M, E)$, which is orthogonal. To construct it, we compute an orthonormal basis of $H^0(M, E)$.
+\begin{example}
+    For the Fubini-Study metric on $O(k)$, $O$ the Picard group, consider the basis $s_\alpha^k$ such that on the patch $\Omega_0$, $s_\alpha^k(x) = x_1^{\alpha_1}\dots x_n^{\alpha_n}$, $|\alpha| = k$. Then
+\begin{align*} 
+    \langle s_\alpha, s_\beta\rangle_{FS} &= \int_{\PP^n} x^\alpha \overline x^\beta h_{FS,0}(x) ~dV_{FS} \\&= \frac{i}{2} \int_{\CC^n} \frac{x_1^{\alpha_1} \cdots x_n^{\alpha_n} \overline x_1^{\beta_1} \cdots \overline x_n^{\beta_n}}{(1+|x|^2)^{k+n+1}} ~dx_1\wedge d\overline x_1\wedge \cdots \wedge dx_n \wedge d\overline x_n\\
+    &= \delta_{\alpha\beta} \pi^n \frac{\alpha!}{(n+k)!}
+\end{align*}
+    where we used polar coordinates. Therefore we normalize by dividing $s^k_{\alpha,0}$ by $\sqrt{(k+n)!/(\alpha!\pi^n)}$ to get an orthonormal basis. The Bergman projection is given by
+    $$\Pi_ku(x) = \sum_{|\alpha| = k} s_\alpha^k(x) \langle u, s_\alpha^k\rangle_k.$$
+    The \dfn{Bergman kernel} $B_k$ is defined by
+    $$\Pi_ku(x) = \int_{\PP^n} \langle u(y), B_k(y, x)\rangle_h ~dV.$$
+    So we have
+    $$B_k(y, x) = \sum_\alpha s_\alpha^k(y) \overline{s_\alpha^k(x)}.$$
+    Therefore $B_k$ is holomorphic in the first variable and antiholomorphic in the second variable. We conclude that $B_k$ can be given by the explicit formula
+    $$B_k(x, y) = \sum_{|\alpha| = k } \frac{(k+n)!}{\alpha!\pi^n} z^\alpha \overline w^\alpha = \frac{(k+n)!}{k!\pi^n} \langle z, w\rangle^k$$
+    where $x = [z]$, $y = [w]$. In particular, the Bergman kernel is given by the Hermitian metric:
+    $$B_k(x, x) = e^{-2k\varphi_0(x)} = \frac{(k+n)!}{k!\pi^n}.$$ 
+\end{example}
+
+\section{The Kodaira embedding theorem}
+    Here we let, for $L$ a line bundle, $L^k$ denote the $k$th tensor power of $L$ with itself.
+\begin{theorem}[Fefferman, Boutet, de Monvel, Sjostrand, Zelditch, Catlin, Berman, Bernsom]
+    Let $L \to M$ be a positive Hermitian line bundle and let $s_j^k$ be an orthonormal basis of $H^0(M, L^k)$. Then there is an asymptotic expansion
+    $$\sum_j |s_j^k(x)|^2_h = \frac{k^n}{\pi^n} + \sum_{\ell=1}^\infty a_\ell(x)k^{n-\ell}.$$
+\end{theorem}
+    Towards this theorem, we work locally. We identify a coordinate patch with $B_{\CC^n}(0, 1)$ and fix a strictly plurisubharmonic weight $\varphi$ on $B_{\CC^n}(0, 1)$ and a semiclassical parameter $h \in (0, 1)$. This gives a $(1, 1)$-form
+    $$\omega = -i\partial\dbar\varphi = \sum_{jk} \partial_j \dbar_k \varphi ~dx_j \wedge d\overline x_k.$$
+    We then have a volume form defined by $n! ~dV = \omega^k$, the right hand side being an exterior power. Then
+    $$||u||_\varphi^2 = \int_{B_{\CC^n}(0, 1)} |u(x)|^2 e^{-2\varphi(x)/h} ~dV(x)$$
+    is a $L^2$-norm and we denote its inner product by $(\cdot,\cdot)_\varphi$. We will obtain a local reproducing kernel $K$ given some $\varepsilon > 0$ and $\chi$ a $B_{\CC^n}(0, \varepsilon)$-cutoff function, i.e.
+    $$u(x) = \int_{B_{\CC^n}(0, 1)} \chi(y)u(y) \overline{K(y, x)} e^{-2\varphi(y)/h} ~dV(y).$$
+\begin{definition}
+    The reproducing kernel $K$ is called a \dfn{Bergman kernel} if $K(x, \cdot)$ is holomorphic.
+\end{definition}
+    To construct the Bergman kernel, we obtain an approximate reproducing kernel, which is correct up to an error of order $h^\infty$. 
+
+    Recall that for $A: L^2_\varphi \to L^2_\varphi$ an integral operator, $e^-\varphi A e^\varphi$ sends $L^2$ to itself an its integral kernel is given by $e^{-\varphi(x)/h} K_A(x, y) e^{-\varphi(y)/h}$. 
+
+\begin{definition}
+    Let $\Lambda \subseteq B_{\CC^n}(0, 1) \times \CC^n$, $\Lambda = \{(y, \xi)\}$ where $\xi$ is a function of $(x, y)$. Then $\Lambda$ is a \dfn{good contour} if
+    $$\Im \langle \xi, x - y\rangle \geq \delta|x - y|^2 + \varphi(y) - \varphi(x).$$
+\end{definition}
+\begin{example}
+    If $\varphi(x) = |x|^2/2$ then
+    $$\overline{K(y, x)} = (\pi h)^{-n} e^{\langle x, \overline y\rangle/h}$$
+    and this Bergman kernel is valid on $\CC^n$. Here $\omega = i/2\sum_j dz_j \wedge d\overline z_j$ and $dV$ is the Euclidean volume form. We obtain a good contour by $\xi(x, y) = i\overline y$. Then
+    $$2\Im \langle i\overline y, x - y\rangle = |y|^2 + |x|^2 + |x - y|^2.$$
+\end{example}
+    
+    Taylor expanding,
+    $$\varphi(x) = \varphi(y) - \Im Q(x, y)(x - y) + (\partial\dbar\varphi(x)(x-y))\overline{x - y} + O(|x - y|^3)$$
+    where $Q$ is some holomorphic function and 
+    $$2\delta |x - y|^2 \leq (\partial\dbar\varphi(x)(x-y))\overline{x-y}.$$
+    We now define a good contour by $\xi = Q$.
+\begin{lemma}
+    Suppose $\Lambda$ is a good contour for $\varphi$. Then there is a $\varepsilon > 0$ and a $B(0, \varepsilon)$-cutoff $\chi$ such that for every $u \in A(B(0, 1))$,
+    $$u(x) = i^{-n^2}(2\pi h)^{-n} \int_\Lambda e^{i\langle \xi, x - y\rangle/h} u(y) \chi(y) ~d\xi \wedge dy + O(e^{(\varphi(x) - \delta)/h})||u||_\varphi.$$
+\end{lemma}
+    This lemma can be intuited by deforming $\Lambda$ into a flat space and then applying the Fourier inversion formula. That is not a proof, however. We put $c_n = i^{-n^2}$ for simplicity.
+\begin{proof}
+    Define the form
+    $$\eta = c_n(2\pi h)^{-n} e^{i\langle \xi, x - y\rangle/h} u(y)\chi(y) ~d\xi \wedge dy.$$
+    Define $$I_s = \int_{\Lambda_s} \eta$$
+    where $\Lambda_s$ is the form defined by $\xi_s(x, y) = \xi(x, y) + i\overline{s(x - y)}$.
+\begin{lemma}
+    As $s \to \infty$, $I_s \to u(x)$ for $x \in B(0, 1/2)$.
+\end{lemma}
+\begin{proof}
+    We have the expression
+    $$e^{i\langle\xi, x - y\rangle/h} e^{-s|x - y|^2/h} u(y) \chi(y)(c_n ~d_{\overline y} \xi(x, y) \wedge dy + s^n~dm(y)).$$
+    By the dominated convergence theorem $e^{-s|x-y|^2/h}c_n~d_{\overline y}\xi(x, y) \wedge dy \to 0$ as $s \to \infty$. As a distribution,
+    $$s^n(2\pi h)^{-n} e^{-s|x - y|^2/h} \to \delta_0(x - y).$$
+\end{proof}
+Now $\Omega = \CC^n \times [0, s]$ and $\partial \Omega = \CC^n \times s - \CC^n \times 0$ (as a chain). We introduce the homotopy $h(y, t) = \langle y, \xi\rangle + it\overline{x - y}$, so $h: \CC^n \to [0, \infty) \to \CC^{2n}$ and put $\omega = h^*\eta$. Since $\omega$ is compactly supported (since $\eta$ has a factor of $\chi$) we can apply Stokes' theorem to see that
+    $$\int_\Omega d\omega = \int_{\partial \Omega} \omega.$$
+    Since $\eta$ has a factor of $d\xi \wedge dy$, $\partial \eta = 0$. So
+    $$d\eta = \dbar \eta = c_n(2\pi h)^{-n} e^{-\langle \xi, x-y\rangle/h} u(y) \dbar \chi \wedge dy \wedge d\xi.$$
+    Then
+$$
+    I_s - I_0 = \int_{\CC^n \times s} h^*\eta = \int_{\CC^n \times 0} h^*\eta = \int_{\CC^n \times [0, s]} h^*~d\eta
+$$
+    Since $I_s \to u(x)$ we can estimate $d\eta$. If $|y| < 1/2$ then $d\chi = 0$, and
+    $$\Re (i\langle x - y, \xi\rangle/h) \leq -\delta|x-y|^2 + \varphi(x) - \varphi(y)$$
+    since $\Lambda$ is good. Since $|x| < \varepsilon$ and we can take $\varepsilon < 1/4$ we only need to consider $|y| > 1/2$, in which case
+    $$\Re(i\langle x - y, \xi\rangle)/h \leq -\delta/C - \varphi(y) + \varphi(x).$$
+    Now
+\begin{align*}
+    \left|\int_{\CC^n \times [0, s]} h^*(d\eta)\right| &\leq Ch^{-n} e^{-\delta/16h + \varphi(x)/h} \int_{|y| \geq 1/2} |\chi'(y)| |u(y)|e^{-\varphi(y)/h} ~dm(y) \int_0^s (1 + t^n)e^{-t/16h} ~dt\\
+    &\leq Ce^{-\delta/32h + \varphi(x)/h}||u||_\varphi.
+\end{align*}
+    We conclude that
+    $$I_s - I_0 = O(e^{-\delta/h}e^{\varphi(x)/h})||u||_\varphi.$$
+    The right hand side does not depend on $s$ so we take $s \to \infty$ to see that we have constructed an approximate kernel.
+\end{proof}
+    Unfortunately the approximate kernel we constructed here may not be holomorphic. So we consider for which $a$ do we have
+    $$u(x) = c_n(2\pi h)^{-n} \int_\Lambda e^{i\langle \xi, x-y\rangle} u(y)(1+a)\chi(y) ~d\xi \wedge dy + O(\varphi(x)/h - \delta/h)||u||_\varphi.$$
+    If
+    $$ae^{i\langle \xi, x - y\rangle/h} ~d\xi = d\xi(e^{i\langle \xi ,x -y\rangle}A)$$
+    where $A = \sum_j A_j(x, y, \xi, h) ~d\hat \xi_j$ and $d\hat \xi_j$ is the unique $(n-1,0)$-form such that $\xi_j \wedge d\hat \xi_j = d\xi$ then
+\begin{align*}
+    \int_\Lambda e^{i\langle \xi, x-y\rangle/h} u(y) \chi(y) a(x, y, \xi, h) ~d\xi\wedge dy &= \int_\Lambda u(y)\chi(y) d(e^{i\langle \xi, x-y\rangle/h}A) \wedge dy\\
+    &= \int_\Lambda \chi(y)d(u(y)e^{i\langle \xi, x-y\rangle/h}A) \wedge dy\\
+    &= -\int_\Lambda d\chi \wedge u(y)e^{i\langle \xi,x-y\rangle/h}A \wedge dy\\
+    &= O(e^{-\delta/h}e^{\varphi(x)/h})||u||_\varphi
+\end{align*}
+    using that $\Lambda$ is a good contour. Intuitively we are replacing a pseudodifferential symbol that depends on $(x, y, \xi)$ with a pseudodifferential operator that depends on $(x, \xi)$.
+\begin{definition}
+    A symbol $a(x, y, \xi, h)$ is a \dfn{negligible symbol} if $a = \sum_j \D_{\xi_j}A_j + (x-y)A/h$ for some $A$.
+\end{definition}
+    In this case the error term introduced by adding $a$ is $O(e^{-\delta/h}e^{\varphi(x)/h})||u||_\varphi$. We are specifically interested in when $A$ has an asymptotic sum $A = \sum_m A_m h^m$. What this means is that for every $N$,
+    $$A - \sum_{m\leq N} A_m h^m = O(h^{N+1})$$
+    or in other words the sum ``converges" modulo $O(h^\infty)$.
+
+    We now introduce the pseudodifferential operator
+    $$S = e^{ih\langle D_\xi, D_y}.$$
+\begin{lemma}
+    $a$ is a negligible symbol if and only if $Sa|_{x = y} = 0$.
+\end{lemma}
+
+\begin{theorem}[Kodiara embedding theorem]
+    \index{Kodiara embedding theorem}
+    Let $L \to M$ be a positive Hermitian line bundle and let $d_k$ be the dimension of $H^0(M, L^k)$, define the morphism
+\begin{align*}
+    \varphi_k: M &\to \PP^{d_k - 1}\\
+    x &\mapsto [s_0^k(x), \dots, s_{d_k}^k(x)].
+\end{align*}
+    Then if $k$ is large enough, $\varphi_k$ is an embedding.
+\end{theorem}
+\begin{corollary}
+    If $M$ admits a positive Hermitian line bundle, then $M$ is a projective variety.
+\end{corollary}
+
 
 
 

@@ -22,7 +22,7 @@
 \newcommand{\QQ}{\mathbb{Q}}
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
-\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\PP}{\mathbb{P}}
 \newcommand{\DD}{\mathbb{D}}
 
 \newcommand{\AAA}{\mathcal A}
@@ -1257,6 +1257,7 @@ We now treat the coproduct in the category of $C^*$-algebras.
 \end{definition}
 The norm is defined as in the case of tensor products. A representation of $A*B$ consists of a pair of representations of $A$ and $B$ on the same Hilbert space, by the universal property.
 
+\chapter{Representation theory of locally compact groups}
 \section{Noncommutative dynamical systems}
 \begin{definition}
     A \dfn{noncommutative dynamical system} is an action of a group $G$ on a $C^*$-algebra $A$.
@@ -1583,13 +1584,131 @@ $$\begin{tikzcd}0 \arrow[r]& I\arrow[r,"i"] & A\arrow[r,"p"] & A/I\arrow[r] &0\e
     $$\alpha(q)(\varphi)(n) = \varphi(\alpha(q^{-1})(n)).$$
     Then $C^*(N \rtimes_\alpha Q) = C_\infty(\hat N) \rtimes_\alpha Q$. Thus we are back in the original situation of a locally compact group acting on a locally compact space.
 \begin{example}[Wigner 1939]
-    Let $L$ be the \dfn{Lorentz group}, the automorphism group of Minkowski spacetime (linear automorphisms that preserve the Lorentzian metric.) Then $L$ acts on $\RR^4$, so we have a semidirect product $\RR^4 \rtimes L$, the \dfn{Poincare group}. The unitary representations of the Poincare group are important in relativistic quantum mechanics. Elementary particles ``should be" completely determined by their symmetries, so correspond to representations of certain stabilizers of $\RR^4 \rtimes L$. This paper led to the discovery that electrons have spin. In principle one could use the representation theory of $\RR^4 \rtimes L$ to rederive the periodic table of elements.
+    Let $L$ be the \dfn{Lorentz group}, the automorphism group of Minkowski spacetime (linear automorphisms that preserve the Lorentzian metric $g(x, y) = -x_0y_0 + x_1y_1 + x_2y_2 + x_3y_3$.) Then $L$ acts on $\RR^4$, so we have a semidirect product $\RR^4 \rtimes L$, the \dfn{Poincare group}. The unitary representations of the Poincare group are important in relativistic quantum mechanics. Elementary particles ``should be" completely determined by their symmetries, so correspond to representations of certain stabilizers of $\RR^4 \rtimes L$. This paper led to the discovery that electrons have spin. In principle one could use the representation theory of $\RR^4 \rtimes L$ to rederive the periodic table of elements.
 \end{example}
-\begin{example}[Heisenberg]
-    The \dfn{Heisenberg commutation relations} require that the position $q$ and momentum $p$ observables act on $L^2$ of space with
+
+\section{The Heisenberg commutation relations}
+We now look at an algebra with ``invalid" generators and relations.
+
+In quantum physics, the position $q$ and momentum $p$ observables act on certain dense subspaces of tensor powers of $L^2(\RR)$ with
     $$[p, q] = i\hbar.$$
-    They must be unbounded operators, since their commutator is a scalar. So $q, p$ are not elements of a $C^*$-algebra.
+They must be unbounded operators, since their commutator is a scalar. So $q, p$ are not elements of a $C^*$-algebra. This relation is called the \dfn{Heisenberg commutation relation}.
+
+We want to be able to form the holomorphic functional calculus for an unbounded operator $T$. In particular, we would like to define a one-parameter unitary group by the group morphism $t \mapsto e^{itT}$.
+\begin{example}
+    The Schrodinger equation is the PDE that says that if $H$ is the Hamiltonian, the action of its one-parameter unitary group $t \mapsto e^{itH}$ is the time-advance map.
 \end{example}
+Reasoning just formally about how the holomorphic functional calculus should behave, we let $U(s) = e^{isP}$ and $V(t) = e^{itQ}$. Weyl observed that
+$$U(s) V(t) U(s)^* = e^{itU(s)QU(s)^*}$$
+so we let
+$$\varphi(s) = U(s)QU(-s).$$
+Then
+$$\varphi'(s) = iU(s)(PQ - QP)U(-s) = -\hbar.$$
+So $\varphi(s) = Q - s\hbar$ whence
+$$U(s)V(t) = e^{itQ}e^{-i\hbar ts}U(s) = e^{-i\hbar st} V(t) U(s).$$
+
+Recall that $\hat \RR \cong \RR$ (noncanonically). If we let $\langle\cdot,\cdot\rangle$ be the pairing of $\RR$ and $\hat \RR$, then we have just proved
+$$U(s)V(t) = \langle s, t\rangle V(t)U(s).$$
+Here the choice of isomorphism is induced by some normalization of the Fourier transform.
+
+\begin{definition}
+Let $G$ be an locally compact abelian group. By a \dfn{representation for the Heisenberg commutation relations} of $G$ we mean a pair of unitary representations $(U, V)$, $U: G \to \Aut(H)$, $V: \hat G \to \Aut(H)$, such that
+$$U(s)V(t) = \langle s, t\rangle V(t)U(s).$$
+\end{definition}
+Any unitary representation $V$ of $\hat G$ lifts to a representation $\pi$ of the commutative $C^*$-algebra $C^*(\hat G)$, which is $C_\infty$ of the double dual of $G$. By the Pontryagin duality theorem, the double dual of any locally compact abelian group is itself, so $C^*(\hat G) = C_\infty(G)$. Let $f = \hat h \in C_\infty(G)$ for some $h \in L^1(G)$. Then
+$$\pi(f) = \int_{\hat G} h(t) V(t) ~dt.$$
+Therefore
+\begin{align*}
+    U(s)\pi(f)U(s)^* &= \int_{\hat G} h(t) U(s)V(t)U(s)^* ~dt = \int_{\hat G} h(t) \langle s, t\rangle V(t) ~dt\\
+        &= \pi(\alpha_s(f))
+\end{align*}
+where $\alpha$ is the action of $G$ on $C_\infty(G)$ by left translation. So $(\pi, U)$ is a covariant representation of $\alpha$ and hence a representation of $C_\infty(G) \rtimes_\alpha G = B_0(L^2(G))$. But $B_0(L^2(G))$ only has one irreducible representation, which turns out to be the Schrodinger representation. This shows that the Heisenberg picture and the Schrodinger picture are equivalent. This is a theorem of von Neumann which was important to the foundations of physics.
+
+\section{Projective representations}
+Let $W: G \times \hat G \to U(H)$ be defined by
+$$W(s, t) = U(s)V(t),$$
+where $(U, V)$ is a representation for the Heisenberg commutation relations. Then
+\begin{align*}
+W(s, t) W(s', t') &= U(s)V(t)U(s')V(t') = -U(s + s') V(t) \langle s', t\rangle V(t')\\  
+&= \langle s', t\rangle U(s + s') V(t + t') = \langle s', t\rangle W(s + s', t + t').
+\end{align*}
+
+\begin{definition}
+    Let $G$ be a group. A \dfn{projective representation} of $G$ is a continuous function $W: G \to U(H)$ defined by
+    $$W(x)W(y) = c(x, y)W(xy)$$
+    for some $c: G^2 \to S^1$.
+\end{definition}
+Here we are thinking of $S^1$ as the unit circle subgroup of $\CC$. It is a morphism up to a harmless constant. In fact, if $\PP H$ is the projective space of some Hilbert space, then every projective representation drops to a morphism of groups $G \to \Aut(\PP H)$, since it permutes the one-dimensional subspaces. Wigner proved that every automorphism of $\PP H$ is given by a unitary or antiunitary (i.e. conjugate linear) operator. If $P$ is a rank-$1$ projection, then $P$ is sent to $UPU^{-1}$ by any such automorphism, for $U$ a unitary or antiunitary operator. 
+\begin{example}
+    Charge-conjugation, parity, and time-reversal are examples of antiunitary operators in quantum field theory.
+\end{example}
+So we have constructed a projective representation of $G \times \hat G$.
+
+Up to a normalization we may assume $U_1 = 1$.
+
+Given $d: G \to S^1$, set $V(x) = d(x)U(x)$. Then
+$$V(x)V(y) = d(x)d(y)U(x)U(y) = d(x)d(y)\overline{d(xy)}V(xy).$$
+Associativity of $\Aut(\PP H)$ manifests as
+$$c(xy, z) c(x, y) = c(x, yz) c(y, z).$$
+We say that $c$ is a \dfn{$2$-cocycle} for $G$ valued in $S^1$.
+
+\begin{example}
+    Let $C_k$ be the set of all functions $G^k \to S^1$. The \dfn{boundary operator for the homology of groups} with values in $S^1$ is defined by $\partial: C_1 \to C_2$ by
+    $$\partial d(x, y) = d(x)d(y)d(xy),$$
+    and $\partial: C_2 \to C_3$ by
+    $$\partial d(x, y, z) = c(xy, z)c(x, y)\overline{c(x, yz)c(y, z)}.$$
+    This extends to a homology theory for all $k$. Here $S^1$ can be replaced by any abelian group. If $c' = (\partial d) c$, then $c'$ and $c$ are homologous.
+\end{example}
+
+Assume that for all $\xi \in H$, $x \mapsto U(x)(\xi)$ is measurable. Then for every $f \in L^1(G)$, we define
+$$U(f)(\xi) = \int_G f(x)U(x)(\xi) ~dx.$$
+Then $||U(f)|| = ||f||_{L^1}$ and $U(f)U(g) = U(f*_cg)$ where $*_c$ is the twisted convolution defined by
+$$f *_c g(x) = \int_G f(y) g(y^{-1}x)c(y, y^{-1}x) ~dy.$$
+So $L^1(G, c)$ (which is $L^1$ with the twisted convolution $*_c$) is a Banach algebra, which is not commutative even if $G$ is abelian. If $c$ is homologous to $c'$ then we have an isomorphism $L^1(G, c) \to L^1(G, c')$. 
+
+Given a $2$-cocycle $c$ we can consider all projective representations of $G$ where the $2$-cocycle is homologous to $c$. In these cases, the isomorphism of Banach algebras above implies that we can assume that the $2$-cocycle is actually $c$. For $f \in L^1(G, c)$, this defines the $C^*$-norm by
+$$||f||_{C^*(G, c)} = \sup_U ||U(f)||$$
+where $U$ ranges over all projective representations whose cocycles are homologous to $c$. Here we have a twisted adjoint, which for unimodular groups can be explicitly expressed as
+$$f^*(x) = \overline{f(x) c(x, x^{-1})}.$$
+
+We have a left regular representation $L: L^1(G, c) \to L^2(G)$ defined by
+$$L(f)(\xi)(x) = \int_G f(y) \xi(y^{-1}x) c(y, y^{-1}x) ~dy.$$
+This gives rise to the reduced $C^*$-algebra $C^*_r(G, c)$.
+
+\begin{example}
+    Let $G = \RR^n \times \widehat{\RR^n}$. We define the cocycle $c((x, s), (y, t)) = \langle (x, s), (y, t)\rangle$. We already saw that $C^*(G, c) \cong B_0(L^2(G))$ in an unnatural way, by uniqueness of the Heisenberg commutation relation. Now $G$ is abelian, but $B_0(L^2(G))$ is far from commutative.
+\end{example}
+
+\begin{example}
+    Let $G = \ZZ^n$. Then every cocycle is homologous to a \dfn{bicharacter}, a cocycle $c$ of the form
+    $$c(m, \ell) = e^{\langle im, \Theta \ell\rangle}$$
+    where $\Theta \in \RR^{n \times n}$.
+
+    When we study $G$ we will assume without loss of generality that $c$ is a bicharacter. Henceforth we will mainly be interested in discrete groups, but really we are actually studying $\ZZ^n$.
+\end{example}
+    If $G$ is a discrete group with a cocycle $c$, we can define a faithful tracial state $\tau$ on $\ell^1(G, c)$ (hence on $C^*(G, c)$) by $\tau(f) = f(e)$. Moreover, $\delta_1$ is the identity of $\ell^1(G, c)$, and $\tau(f *_c f^*) = \sum_{y \in G} |f(y)|^2$. From this it follows that the GNS construction for $\tau$ gives a faithful representation $\ell^1(G, c) \to \ell^2(G)$, so extends to a representation $C^*(G, c) \to \ell^2(G)$.
+
+    If $G$ is discrete and abelian, then $\hat G$ is compact, and we have an action $\hat \alpha: G \to \Aut(C^*(G, c))$,
+    $$\hat \alpha(t)(f)(x) = \langle x, t\rangle f(x).$$
+    Then
+    $$\hat \alpha(t)(f *_c g)(x) = \hat\alpha(t)(f) *_c \hat\alpha(t)(g)(x).$$
+
+    To study the properties of this action $\hat \alpha$, $G$ be a compact group with its Haar probability measure, and $\alpha: G \to \Aut A$ an action. Then we define $P: A \to A$,
+    $$P(a) = \int_G \alpha(x)(a) ~dx.$$
+    Then $P$ is $\alpha$-invariant, $\alpha(y)(P(a)) = P(a)$. In particular, if we let $A^G$ be the algebra of all fixed points of $\alpha$, $P$ carries $A$ into $A^G$. Conversely, if $a$ is actually a fixed point, then $P(a) = a$. So $P$ is the projection map $A \to A^G$.
+\begin{definition}
+    Assume $B \subseteq A$, and $P: A \to B$ is a projection. If for every $b \in B$, $a \in A$, $P(ab) = P(a)b$ and $P(ba) = bP(a)$, we say that $P$ is a \dfn{conditional expectation}.
+\end{definition}
+    It is easy to check that the projection $P: A \to A^G$ is a conditional expectation. Moreover, if $a > 0$ then $P(a) > 0$.
+
+    If $G$ is a compact abelian group (in applications, $G$ is usually a torus), then $\hat G$ is discrete (in applications, $\ZZ^n$). We let $\alpha$ be an action of $G$ on $A$. For each $t \in \hat G$, set
+    $$a_t = \int_G \langle x, t\rangle \alpha_x(a) ~dx.$$
+    So the $a_t$ are the generalized Fourier coefficients of $a$. We have
+    $$\alpha(y)(a_t) = \alpha(y)\left(\int_G \overline{\langle x, t\rangle} \alpha(x)(a) ~dx\right) = \int_G \overline{\langle y^{-1x}, t\rangle} \alpha(x)(a) ~dx = \langle y, t\rangle a_t.$$
+    We now set $A_t = \{a \in A: \forall y ~\alpha(y)(a) = \langle y, t\rangle a\}$. Then $a_t \in A_t$ and $A_t$ is a closed subspace, hence a $C^*$-algebra. For $a \in A_t$, $b \in A_s$, we have
+    $$\alpha(y)(ab) = \alpha(y)(a)\alpha(y)(b) = \langle y, t\rangle \langle y, s\rangle ab = \langle y, ts\rangle ab$$
+    so $ab \in A_{ts}$.
+
 
 
 
