@@ -1,6 +1,6 @@
 \documentclass[12pt]{report}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+%\usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amsthm,amssymb}
 \usepackage{mathrsfs}
 
@@ -35,6 +35,9 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 
+\newcommand{\tr}{\operatorname{tr}}
+
+\theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{badtheorem}[theorem]{``Theorem"}
 \newtheorem{prop}[theorem]{Proposition}
@@ -44,12 +47,10 @@
 \newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{axiom}[theorem]{Axiom}
 
-\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
 
-\theoremstyle{remark}
 \newtheorem{exercise}[theorem]{Discussion topic}
 \newtheorem{homework}[theorem]{Homework}
 \newtheorem{problem}[theorem]{Problem}
@@ -80,7 +81,7 @@ I would like to thank Prof. Maciej Zworski for suggesting this topic and mentori
 
 
 
-\chapter{Zeroes of Fourier Transforms}
+\chapter{Zeroes of Fourier transforms}
 Let $\mu$ be a distribution on $\RR$, i.e. a continuous element of the dual of the space of test functions $C^\infty_{comp}(\RR)$. We will abuse notation and write $\int_E f\mu$ for the pairing of $f$ and $\mu$, whenever it is defined. If $\mu$ satisfies certain growth conditions, then the Fourier transform
 $$\hat \mu(\xi) = \int_{-\infty}^\infty e^{-ix\xi} \mu(x) ~dx$$
 is well-defined and is also a distribution.
@@ -443,12 +444,12 @@ This proves Titchmarsh's theorem.
 \end{proof}
 
 
-\chapter{Potential scattering on $\RR$}
-%\begin{quote}
-%  ``EVERY MORNING I WAKE UP AND OPEN PALM SLAM A BOOK ONTO THE DESK. IT'S MATHEMATICAL THEORY OF SCATTERING RESONANCES BY DYATLOV AND ZWORSKI AND RIGHT THEN AND THERE I START DOING THE MOVES ALONGSIDE WITH THE AUTHORS, DYATLOV AND ZWORSKI. I DO EVERY PROOF AND I DO EVERY PROOF HARD. MAKIN WHOOSHING SOUNDS WHEN I MEROMORPHICALLY CONTINUE THE RESOLVENT INTO THE LOWER HALF PLANE OR EVEN WHEN I MESS UP TECHNIQUE. NOT MANY CAN SAY THEY CAN BOUND THE NUMBER OF RESONANCES OF A BLOCK BOX OPERATOR. I CAN. I SAY IT AND I SAY IT OUTLOUD EVERYDAY TO PEOPLE IN MY COLLEGE CLASS AND ALL THEY DO IS PROVE PEOPLE IN COLLEGE CLASS CAN STILL BE IMMATURE JEKRS. AND IVE LEARNED ALL THE LEMMAS AND IVE LEARNED HOW TO MAKE MYSELF AND MY APARTMENT LESS LONELY BY SHOUTING EM ALL. 2 HOURS INCLUDING WIND DOWN EVERY MORNIng"
+\chapter{Compactly supported potentials}
+\begin{quote}
+  ``EVERY MORNING I WAKE UP AND OPEN PALM SLAM A BOOK ONTO THE DESK. IT'S MATHEMATICAL THEORY OF SCATTERING RESONANCES BY DYATLOV AND ZWORSKI AND RIGHT THEN AND THERE I START DOING THE MOVES ALONGSIDE WITH THE AUTHORS, DYATLOV AND ZWORSKI. I DO EVERY PROOF AND I DO EVERY PROOF HARD. MAKIN WHOOSHING SOUNDS WHEN I MEROMORPHICALLY CONTINUE THE RESOLVENT INTO THE LOWER HALF PLANE OR EVEN WHEN I MESS UP TECHNIQUE. NOT MANY CAN SAY THEY CAN BOUND THE NUMBER OF RESONANCES OF A BLOCK BOX OPERATOR. I CAN. I SAY IT AND I SAY IT OUTLOUD EVERYDAY TO PEOPLE IN MY COLLEGE CLASS AND ALL THEY DO IS PROVE PEOPLE IN COLLEGE CLASS CAN STILL BE IMMATURE JEKRS. AND IVE LEARNED ALL THE LEMMAS AND IVE LEARNED HOW TO MAKE MYSELF AND MY APARTMENT LESS LONELY BY SHOUTING EM ALL. 2 HOURS INCLUDING WIND DOWN EVERY MORNIng"
 
-%  -Analytic Memes for Estimate-Loving Teens
-%\end{quote}
+  -Analytic Memes for Estimate-Loving Teens
+\end{quote}
 
 Recall that if $A$ is a quantum observable, then the spectrum of $A$ consists of the possible values $\lambda^2$ that the observable can take when a state $\psi$ is measured. Moreover, $\psi$ is a pure state for measurement $\lambda^2$ (i.e. an observer is guaranteed to measure $\psi$ in state $\lambda^2$) if and only if $\psi$ solves the eigenvalue equation $A\psi = \lambda^2 \psi$. So we are especially interested in the eigenvalue equation $(A - \lambda^2)\psi = 0$.
 
@@ -463,7 +464,7 @@ for $x$ far from the support of $\supp V$ -- so $\psi$ consists of plane waves o
 More generally, we will study the inhomogeneous Schrödinger equation $(H_V - \lambda^2)\psi = f$, for $f \in L^2_{comp}(\RR)$. By definition, the resolvent $R_V(\lambda)$ tells us how to solve the Schrödinger equation: it is an operator $L^2_{comp}(\RR) \to L^2_{loc}(\RR)$ satisfying the equation
 $$(H_V - \lambda^2)R_V(\lambda)f = f.$$
 
-\section{Meromorphic continuation}
+\section{Meromorphic continuation of the resolvent}
 Viewing the resolvent $R_V$ as a function valued in $B(L^2_{comp}(\RR) \to L^2_{loc}(\RR))$, we want to understand the relationship between the poles of the resolvent $R_V$ function and the scattering behavior of $H_V$.
 
 We first show that $R_V(\lambda)$ is a meromorphic function in $\lambda$. To do this, we consider the \dfn{resolvent function}, $(x, y) \mapsto R_V(\lambda; x, y)$, defined by
@@ -477,9 +478,23 @@ When we study the free resolvent, we are just solving the Schrödinger equation 
 $$R_0(\lambda; x, y) = \frac{i}{2\lambda} e^{i\lambda|x - y|}.$$
 In fact,
 $$2i\lambda (H_0 - \lambda^2)R_0(\lambda; x, 0) = (\Delta_x + \lambda^2) e^{i\lambda|x|} = -\lambda^2 e^{i\lambda|x|} + \lambda^2 e^{i\lambda|x|} = -2i\delta_0(x).$$
-Now if $\Im \lambda \leq 0$, then we have no decay in the plane waves $e^{i\lambda|x - y|}$ and so $R_0$ is not a bounded operator on $L^2$. The spectrum of $H_0 = \Delta$ consists of $\RR_+$, so if $\Im \lambda > 0$, it follows from the spectral radius theorem that
+Now if $\Im \lambda \leq 0$, then we have no decay in the plane waves $e^{i\lambda|x - y|}$ and so $R_0$ is not a bounded operator on $L^2$. The spectrum of $H_0 = -\Delta$ consists of $\RR_+$, so if $\Im \lambda > 0$, it follows from the spectral radius theorem that
 $$||R_0(\lambda)||_{L^2 \to L^2} = \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} = \frac{1}{d(\RR_+, \lambda^2)}.$$
 Therefore $R_0(\lambda)$ is bounded on $L^2$ if $\Im \lambda > 0$. In particular, $R_0$ is holomorphic on $\CC_+$.
+
+\begin{lemma}
+  Let $\rho \in C^\infty_{comp}(\RR)$ be such that $\rho V = V$. Then
+$$(1 + VR_0(\lambda))^{-1}\rho = \rho(1 + VR_0(\lambda)\rho)^{-1}.$$
+\end{lemma}
+\begin{proof}
+  We have
+  $$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.$$
+  Suppose $\rho$ is supported on $[-R, R]$. Then
+  $$\supp (1 + VR_0(\lambda))\rho \subseteq [-R, R]$$
+  so it follows that
+  $$\rho(1 + VR_0(\lambda))\rho = (1 + VR_0(\lambda))\rho.$$
+  Inverting the operator $1 + VR_0(\lambda)$, the theorem follows.
+\end{proof}
 
 \begin{theorem}
 The family of operators
@@ -491,21 +506,12 @@ By the definition of the free resolvent, we have
 $$(H_V - \lambda^2)R_V(\lambda) = 1 + VR_0(\lambda).$$
 If $\Im \lambda$ is very large, then $||VR_0(\lambda)||_{L^2 \to L^2}$ is very small, so the formal Neumann series computation
 $$(1 + VR_0(\lambda))^{-1} = \sum_{k=0}^\infty (-VR_0(\lambda))^k$$
-is valid. Thus $(1 + VR_0(\lambda))^{-1}$ is a holomorphic family of operators on $L^2$, for $\Im \lambda$ sufficiently large. In this case, we have
-$$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.$$
+is valid. Thus $(1 + VR_0(\lambda))^{-1}$ is a holomorphic family of operators on $L^2$, for $\Im \lambda$ sufficiently large.
 
-Let $\rho$ be the multiplication operator of a cutoff such that $\rho V = V$, supported on $[-R, R]$. Then
-$$\supp (1 + VR_0(\lambda))\rho \subseteq [-R, R]$$
-so it follows that
-$$\rho(1 + VR_0(\lambda))\rho = (1 + VR_0(\lambda))\rho.$$
-Therefore
-$$(1 + VR_0(\lambda))^{-1}\rho = \rho(1 + VR_0(\lambda)\rho)^{-1}.$$
-Now $VR_0(\lambda)\rho = V\rho R_0(\lambda)\rho$ is a meromorphic family of compact operators $L^2 \to H^2_{comp}$, so $1 + VR_0(\lambda)\rho$ is a meromorphic family of Fredholm operators. It follows that
+With $\rho$ a cutoff such that $\rho V = V$, $VR_0(\lambda)\rho = V\rho R_0(\lambda)\rho$ is a meromorphic family of compact operators $L^2 \to H^2_{comp}$, so $1 + VR_0(\lambda)\rho$ is a meromorphic family of Fredholm operators. It follows that
 $$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}$$ is a meromorphic family of operators $L^2 \to L^2_{loc}$. Taking $R \to \infty$, the theorem follows.
 \end{proof}
 
-
-\section{The transmission coefficients}
 Since we have assumed that $V$ and $f$ have compact support, if $|x|$ is large, then
 $$(H_0 - \lambda^2)R_V(\lambda)f(x) = 0.$$
 So if we let $\psi = R_V(\lambda)f$, it follows from some calculus that we can find constants $A_+, B_-$ such that for all $x$ large enough,
@@ -517,32 +523,298 @@ In case $\lambda > 0$, we can view waves of the form $C e^{i\lambda x}$ as ``mov
 An \dfn{incoming wave} is a linear combination of waves of the form $e^{i\lambda x}$ for $x < 0$ and $e^{-i\lambda x}$ for $x > 0$. An \dfn{outgoing wave} is a linear combination of waves of the form $e^{-i\lambda x}$ for $x < 0$ and $e^{i\lambda x}$ for $x > 0$.
 \end{definition}
 
-For $\lambda \in \RR \setminus 0$, we let
-$$e_\pm(x, \lambda) = (1 - R_V(\lambda)V)e^{\pm i\lambda x}$$
-denote the unique eigenfunction of $H_V$ with eigenvalue $\lambda^2$ which is equal to $e^{\pm i\lambda x}$ modulo outgoing terms. (Here $V$ is viewed as a multiplication operator.) %TODO: Prove that such a thing is unique and satisfies the claimed condition
-%TODO: Prop 1.3 in TZ for linear independence -- we actually need it.
+Let us classify which outgoing solutions can be solutions of the eigenvalue equation
+$$H_Vu = \lambda^2u.$$
+Our goal is the following theorem.
+\begin{theorem}
+\label{real poles are zero}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Then $\lambda$ is not a pole of $R_V$.
+\end{theorem}
+\begin{lemma}
+\label{laurent expansion of the resolvent}
+Suppose that $R_V$ has a pole at $\lambda_0 \neq 0$. Suppose that
+$$R_V(\lambda) = \frac{P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{P_1}{\lambda - \lambda_0} + Q(\lambda)$$
+is the Laurent expansion of $R_V$ at $\lambda_0$ (so $Q$ is holomorphic). Then for every $f \in L^2_{comp}$, $u = P_Nf$ is an outgoing solution of the eigenvalue equation $H_Vu = \lambda_0^2u$.
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+  (\lambda - \lambda_0)^N(H_V - \lambda^2)R_V(\lambda)f &= (\lambda - \lambda_0)^N (H_V - \lambda^2)\left(\frac{u}{(\lambda - \lambda_0)^N} + O((\lambda - \lambda_0)^{1-N}f)\right)\\
+  &= (H_V - \lambda^2)u + O((\lambda - \lambda_0)f)
+\end{align*}
+and taking $\lambda \to \lambda_0$ we see that $(H_V - \lambda_0^2)u = 0$. Therefore $u$ solves the eigenvalue equation. To see that $u$ is outgoing, choose $\rho \in C^\infty_{comp}(\RR)$ such that $\rho V = V$. Then
+$$R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} = R_V(\lambda)\rho$$
+so $(1 + VR_0(\lambda)\rho)^{-1}$ is meromorphic with a pole of order $\leq N$ at $\lambda_0$. Write
+$$(1 + VR_0(\lambda)\rho)^{-1} = \frac{\tilde P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{\tilde P_1}{\lambda - \lambda_0} + \tilde Q(\lambda)$$
+for the Laurent expansion of $(1 + VR_0(\lambda)\rho)^{-1}$ at $\lambda_0$. Then
+$$P_N(\rho(L^2(\RR))) = R_0(\lambda) \rho \tilde P_N(L^2(\RR)) \subseteq R_0(\lambda)(L^2_{comp}(\RR)).$$
+Since $\rho$ was arbitrary, it follows that $u \in R_0(\lambda)(L^2_{comp}(\RR))$. Since $R_0$ is the outgoing free resolvent, $u$ is outgoing.
+\end{proof}
 
-In the trivial case $V = 0$, we have $e_\pm(x, \lambda) = e^{\pm i\lambda x}$. In this case, the Wronskian $W$ of $e_\pm(x, \lambda)$ is given by $-2i\lambda$. We interpret this as meaning that the entirety of an incoming wave is transmitted through $\ch \supp V = \emptyset$. But even if $V$ is nonzero, $H_V$ does not have a first-order term, so it follows from Abel's Wronskian formula that $W$ is a nonzero constant.
+\begin{lemma}
+\label{no outgoing solutions, part 1}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Suppose $H_Vu = \lambda^2u$. If we expand $u$ as
+$$u(x) = \begin{cases}
+  A_+ e^{i\lambda x} + B_-e^{-i\lambda x}, &x \gg 0,\\
+  A_- e^{i\lambda x} + B_+e^{-i\lambda x}, &x \ll 0,
+\end{cases}$$
+then $|A_+|^2 + |B_+|^2 = |A_-|^2 + |B_-|^2$.
+\end{lemma}
+\begin{proof}
+Since $\lambda \in \RR$, $H_V - \lambda^2$ is a real operator, so $(H_V - \lambda^2) \overline u = 0$. Therefore the Wronskian
+$$\begin{vmatrix}
+u&\overline u\\u' & \overline u'
+\end{vmatrix} = -2i\lambda \begin{cases}
+|A_+|^2 + |B_-|^2, &x \gg 0,\\
+|A_-|^2 + |B_+|^2, &x \ll 0,
+\end{cases}$$
+is constant so $|A_+|^2 + |B_-|^2 = |A_-|^2 + |B_+|^2$.
+\end{proof}
+
+We will need the following lemma to show that certain solutions are unique. It guarantees that a wave's transmission cannot be completely intercepted by a bounded potential, and so must scatter. Note that this stands in contrast to, say, the infinite potential well that is taught in introductory quantum mechanics class.
+\begin{lemma}
+\label{bounded potentials must scatter}
+Let $u \in L^\infty(\RR)$, $W \in L^\infty(\RR)$, and $\supp u \subseteq [0, \infty)$. If $H_Wu = 0$, then $u = 0$.
+\end{lemma}
+\begin{proof}
+Let $h \in (0, 1)$ and $v(x) = e^{-x/h}u(x)$. Since $u$ is supported in the right half-ray, it follows that $v \in L^\infty(\RR)$ and that $v$ is rapidly decaying. Therefore $v \in L^2(\RR)$. For $\xi \in \RR$, $|i - h\xi|^2 \geq 1$. Therefore
+$$||v||_{L^2(\RR)}^2 = ||\hat v||_{L^2(\RR)}^2 \leq \int_{-\infty}^\infty |(h\xi - i)^2\hat v(\xi)|^2 ~d\xi.$$
+The inverse Fourier transform of $(h\xi - i)^2 = h^2\xi^2 - 2ih\xi - 1$ is
+$$h^2D^2_x - 2ihD_x - 1 = h^2 e^{-x/h} D^2 e^{x/h}.$$
+So by the Plancherel formula,
+\begin{align*}
+  ||v||_{L^2(\RR)} &\leq \int_{-\infty}^\infty |e^{-x/h}(hD_x)^2 u(x)|^2 ~dx
+  \\&= h^2 \int_{-\infty}^\infty |e^{-x/h}W(x)u(x)|^2 ~dx
+  \\&\leq h^2 ||W||_{L^\infty(\RR)} ||v||_{L^2(\RR)}.
+\end{align*}
+Taking $h \to 0$, we see that $v = 0$, but $e^{-x/h} \neq 0$, so $u = 0$.
+\end{proof}
+
+\begin{corollary}
+\label{no outgoing solutions, part 2}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. If $H_Vu = \lambda^2u$, then $u$ is not outgoing.
+\end{corollary}
+\begin{proof}
+Let $A_\pm,B_\pm$ be as in Lemma \ref{no outgoing solutions, part 1}. If $u$ is outgoing and not compactly supported, then $|A_+|^2 + |B_-|^2 > 0$ while $|A_-|^2 + |B_+|^2 = 0$. Therefore $u$ is compactly supported, but after translating the support of $u$, we may assume that $\supp u \subseteq [0, \infty)$. But then Lemma \ref{bounded potentials must scatter} implies that $u = 0$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{real poles are zero}]
+Suppose that $\lambda$ is a pole. By Lemma \ref{laurent expansion of the resolvent}, there is an outgoing function $u$ such that $H_Vu = \lambda^2u$. This contradicts Corollary \ref{no outgoing solutions, part 2}.
+\end{proof}
+
+
+\section{The transmission coefficients}
+We construct the eigenfunctions for the continuous spectrum of $H_V$; namely, for $x \in \RR$, $\lambda \in \RR$, $\lambda \neq 0$,
+$$e_\pm(x, \lambda) = e^{\pm i\lambda x} - R_V(\lambda)(V(x)e^{\pm i\lambda x}).$$
+By Theorem \ref{real poles are zero}, $\lambda$ is not a pole of $R_V$, so this definition makes sense.
+\begin{lemma}
+The function $e_\pm(\cdot, \lambda)$ is the unique eigenfunction of $H_V$ with eigenvalue $\lambda^2$ which is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
+\end{lemma}
+\begin{proof}
+Clearly $e_\pm$ is an eigenfunction of $H_V$ with eigenvalue $\lambda^2$. If $\rho V = V$, then
+$$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}.$$
+So
+$$R_V(\lambda)(Ve^{i\pm x}) = R_V(\lambda)(\rho Ve^{i\pm x}) = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} Ve^{i\pm x}$$
+which lies in the image of the outgoing resolvent $R_0(\lambda)$, so is outgoing. Therefore $e_\pm$ is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
+
+Assume that $\tilde e_\pm(x, \lambda) = e^{\pm i\lambda x} + g(x, \lambda)$ is also an eigenfunction with $g(\cdot, \lambda)$ outgoing. Then
+$$\tilde e_\pm(x, \lambda) - e_\pm(x, \lambda) = g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x})$$
+is also an eigenfunction, which is outgoing. Then, by Corollary \ref{no outgoing solutions, part 2}, $g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x}) = 0$.
+\end{proof}
+
+In the trivial case $V = 0$, we have $e_\pm(x, \lambda) = e^{\pm i\lambda x}$. In this case, the Wronskian $W(x, \lambda)$ of $e_\pm(x, \lambda)$ is given by $-2i\lambda$. We interpret this as meaning that the entirety of an incoming wave is transmitted through $\ch \supp V = \emptyset$. But even if $V$ is nonzero, $H_V$ does not have a first-order term, so it follows from Abel's Wronskian formula that the function $W(\cdot, \lambda)$ is a constant.
 
 \begin{definition}
-The \dfn{transmission coefficient} $T$ is defined by $T(\lambda) = \frac{iW}{2\lambda}$ where $W$ is the Wronskian in $x$ of $e_\pm$.
+The \dfn{transmission coefficient} $T$ is defined by
+$$T(\lambda) = \frac{iW(\lambda)}{2\lambda}.$$
 \end{definition}
 
 We now define
 $$\phi_\pm(x, \lambda) = \frac{e_\pm(x, \mp \lambda)}{T(\pm \lambda)}.$$
 
 \begin{lemma}
+\label{construction of intertwining, part 1}
 For every $\lambda \in \RR$, the $\phi_\pm$ are functions on $\RR$ such that $(D_x^2 + V - \lambda^2)\phi_\pm = 0$ and such that $\phi_\pm(x, \lambda) = e^{-i\lambda x}$ for $\pm x$ large enough.
 \end{lemma}
 \begin{proof}
-If $\lambda \neq 0$, then the $e_\pm(\lambda)$ are linearly independent %TODO
-so $T(\lambda) \neq 0$. On the other hand, the $e_\pm(0)$ are linearly dependent, then there is an $m \in \NN$ such that the $\phi_\pm$ have a pole of order of $m$ at $0$. So
+To show that the $\phi_\pm$ are functions, we must show that they do not have poles.
+
+First we rule out the possibility that $T(\pm \lambda) = 0$. If $\lambda \neq 0$, then the $e_\pm(\lambda)$ are linearly independent %TODO
+so $T(\lambda) \neq 0$.
+
+On the other hand, if the $e_\pm(0)$ are linearly dependent, then there is an $m \in \NN$ such that the $\phi_\pm$ have a pole of order of $m$ at $0$. So
 $$\tilde \phi_\pm(x) = \lim_{\lambda \to 0} \lambda^m\phi_\pm(x, \lambda)$$
 is a holomorphic function on a ball close to $0$, and $\tilde \phi_\pm \in \ker \tilde \phi_\pm$. Since, for $\pm x$ large enough, $\tilde \phi_\pm(x) = 0$, we conclude that $\tilde \phi_\pm = \phi_\pm$, a contradiction. So the $e_\pm(0)$ are linearly independent, and $\phi_\pm$ is defined on all of $\RR$. Clearly we have $(D_x^2 + V - \lambda^2)\phi_\pm = 0$, so we are done.
 \end{proof}
 
-We will now construct distributions $A_\pm$ on $\RR^2$ in the kernel of $D_x^2 + V - D_y^2$
-such that $A_\pm(x, y) = \delta(x - y)$ for $\pm x$ large enough.
+We now put
+$$w_\pm(x, y) = \frac{1}{2\pi} \int_{-\infty}^\infty \phi_\pm(x, \lambda)e^{i\lambda y} ~d\lambda$$
+By Lemma \ref{construction of intertwining, part 1}, $A_\pm$ solves the equation
+\begin{align*}
+  (D_x^2 + V(x))w_\pm(x, y) &= D_y^2(x, y),\\
+  w_\pm(x, y) &= \delta(x - y) &\pm x \gg 0.
+\end{align*}
+Rewriting the first equation as
+$$(D_x^2 - D_y^2)w_\pm(x, y) = V(x)w_\pm(x, y)$$
+we see that the $w_\pm$ are the unique solutions to these equations, by uniqueness for the wave equation (since $D_x^2 - D_y^2$ is the wave operator), c.f. \cite[\S2.4.3]{evans10}.
+
+\begin{lemma}
+\label{construction of intertwining, part 2}
+Let $[a, b] = \ch \supp V$. Then there are distributions $X,Y$ such that if $x \gg 0$,
+$$\partial_yw_-(x, y) = X(y - x) + Y(x + y),$$
+such that $\supp X \subseteq [-2(b-a), 0]$ and $\supp Y \subseteq [2a, 2b]$.
+\end{lemma}
+\begin{proof}
+For $x \gg 0$,
+$$(D_x^2 - D_y^2)\partial_yA_-(x, y) = 0$$
+so $\partial_yA_-(x, y)$ solves the wave equation where $x$ is the time variable and $y$ is the space variable. The lemma then follows from the causality properties of the wave equation, c.f. \cite[\S2.4.1a]{evans10}, where $x = a$ is the inital-time slice of $\RR^2$, the future is $x > a$, and the distributions $X,Y$ must have support of measure at most $2|\ch \supp V|$.
+\end{proof}
+
+
+
+\section{The scattering matrix}
+We now define a matrix which encodes how a wave transforms as it passes through $\ch \supp V$.
+
+Let $A_\pm$, $B_\pm$ be the incoming and outgoing coefficients, as in Lemma \ref{no outgoing solutions, part 1}, and let $X, Y$ be as in Lemma \ref{construction of intertwining, part 2}. The scattering matrix maps the incoming coefficients to the outgoing coefficients. Since $X$ is a compactly supported distribution, the Paley-Weiner theorem implies that the Fourier transform $\hat X$ is an entire function, and in particular $1/\hat X$ is a meromorphic function.
+\begin{definition}
+The \dfn{scattering matrix} is the operator $S(\lambda): \CC^2 \to \CC^2$ defined by
+$$S(\lambda)\begin{bmatrix}A_-\\B_-\end{bmatrix} = \begin{bmatrix}A_+\\B_+\end{bmatrix}.$$
+\end{definition}
+\begin{theorem}
+  The scattering matrix $S$ is a meromorphic family of operators on $\CC$ such that
+  $$S(\lambda) = \begin{bmatrix}\frac{i\lambda}{\hat X(\lambda)} & \frac{\hat Y(\lambda)}{\hat X(\lambda)}\\ \frac{\hat Y(-\lambda)}{\hat X(\lambda)} & \frac{i\lambda}{\hat X(\lambda)}\end{bmatrix}.$$
+  If $\lambda \in \CC_+$ is a pole of $S$ and $\Im \lambda > 0$, then $\lambda^2$ is an eigenvalue of $H_V$.
+\end{theorem}
+\begin{proof}
+  By Lemma \ref{construction of intertwining, part 1}, we may write
+\begin{align*}
+  \phi_-(x, \lambda) &= \begin{cases}
+  A(\lambda)e^{i\lambda x} + B(\lambda)e^{-i\lambda x}, &x \gg 0\\
+  e^{-i\lambda x}, &x \ll 0,
+\end{cases}\\
+  \phi_+(x, \lambda) &= \begin{cases}
+  e^{-i\lambda x}, &x \gg 0\\
+  C(\lambda) e^{i\lambda x} + D(\lambda)e^{-i\lambda x}, &x \ll 0.
+\end{cases}
+\end{align*}
+  By definition of the scattering matrix, we have
+  $$\begin{bmatrix}
+  -\frac{A(\lambda)}{B(\lambda)C(\lambda)} &\frac{A(\lambda)}{B(\lambda)}\\
+  \frac{B(\lambda)D(\lambda) - 1}{B(\lambda)C(\lambda)} & \frac{1}{B(\lambda)}
+  \end{bmatrix}.$$
+  Now
+  $$\partial_yw_-(x, y) = \frac{i}{2\pi} \int_{-\infty}^\infty \phi_=(x, \lambda) \lambda e^{i\lambda y} ~d\lambda$$
+  TODO: This somehow gives the scattering matrix.
+\end{proof}
+  TODO: Other properties of scatmat as we need them.
+
+We now construct an operator on $L^2(\RR)$ which is controlled by the scattering matrix $S$.
+
+\begin{definition}
+The operators $W_\pm$ defined by
+$$W_\pm u = \lim_{t \to \pm \infty} e^{itH_V} e^{-itH_0} u$$
+are called the \dfn{wave operators} of $V$.
+\end{definition}
+Recall that if $T$ is a self-adjoint operator, then for any initial data $u$, we have
+$$(i\partial_t - T)e^{-itT}u = 0,$$
+where $t \mapsto e^{-itT}$ is a one-parameter unitary group, which is well-defined because we can use the spectral theorem to diagonalize $T$ and then plug in the eigenvalues of $T$ into $e^{-it\cdot}$. Thus we can think of $e^{itH_V}e^{-itH_0} u$ as running the Schrödinger equation $(i\partial_t - H_V)u = 0$ back in time by $t$, and then running the equation $(i\partial_t - H_0)u = 0$ forward in time by $t$, so the wave operators approximate $u$ by a solution to the free Schrödinger equation.
+
+\begin{definition}
+The \dfn{scattering operator} is defined by
+$$\mathcal S = W_+^*W_-.$$
+\end{definition}
+It is not obvious that such definitions even make sense, so we now prove this.
+\begin{lemma}
+The wave operators $W_\pm$ are well-defined as partial isometries on $L^2(\RR)$.
+\end{lemma}
+\begin{proof}
+Let
+$$U(t) = e^{itH_V}e^{-itH_0}.$$
+Then $U$ is a one-parameter unitary group on $L^2(\RR)$, and it suffices to show that the limits
+$$W_\pm u = \lim_{t \to \pm \infty} U(t)u$$
+exist for a dense set of $u$. In fact, if
+$$D = \{u \in L^2(\RR): \hat u \in C^\infty_{comp}(\RR \setminus 0)\},$$
+then because $C^\infty_{comp}(\RR \setminus 0)$ is dense in $L^2(\RR)$ and the Fourier transform is a unitary operator where it is defined, $D$ is dense in $L^2(\RR)$.
+
+Let $u \in D$. Since
+$$\partial_t e^{itH_V} e^{-itH_0} u = ie^{itH_V}(H_V - H_0)e^{-itH_0}u = ie^{itH_V}Ve^{-itH_0}u,$$
+the fundamental theorem of calculus implies that
+$$U(s)u = u + i\int_0^s e^{itH_V}Ve^{-itH_0}u ~dt.$$
+By definition of $D$, we can find $R > r > 0$ such that if $\xi \in \supp \hat u$, then $\xi$ lies in the annulus $A(r, R)$. Let $u_t = e^{-itH_0}u$. Then
+$$\partial_{\xi_j}e^{ix\xi - it|\xi|^2} = i(x_j - 2t\xi_j)$$
+so, integrating by parts,
+\begin{align*}
+  u_t(x) &= e^{-itH_0}u(x) = \frac{1}{2\pi} \int_{A(r, R)} e^{ix\xi - it|\xi|^2} \hat u(\xi) ~d\xi\\
+    &= \frac{1}{2\pi} \int_{A(r, R)} \left(\frac{\partial_{\xi_j}}{i(x_j - 2t\xi_j)}\right)^2 e^{ix\xi - it|\xi|^2} \hat u(\xi) ~d\xi\\
+    &= \frac{1}{2\pi} \int_{A(r, R)} e^{ix\xi - it|\xi|^2}\left(\partial_{\xi_j}\left(\frac{1}{i(x_j - 2t\xi_j)}\right)\right)^2 \hat u(\xi) ~d\xi.
+\end{align*}
+If $x \in \supp V$ and $\xi \in A(r, R)$ are held fixed, and $t \to \infty$, then we have
+$$\left|\frac{1}{|x_j - 2t\xi_j|}\right| = O(|t|^{-1})$$ and $|\hat u(\xi)| = O(1)$ since $\hat u$ is holomorphic and restricted to the compact set $A(r, R)$, so
+$$
+  |u_t(x)| \leq \frac{1}{2\pi} \int_{A(r, R)} \left|\partial_{\xi_j}\left(\frac{1}{i(x_j - 2t\xi_j)}\right)\right|^2 |\hat u(\xi)| ~d\xi
+    = O(|t|^{-2}).
+$$
+Therefore
+$$\int_{-\infty}^\infty ||e^{itH_V}Ve^{-itH_0}u||_{L^2(\RR)} ~dt = \int_{-\infty}^\infty ||Vu_t||_{L^2(\RR)} ~dt = \int_{-\infty}^\infty O(|t|^{-2}) ~dt < \infty.$$
+So the one-parameter unitary group $U$ remains bounded on $L^2(\RR)$ at infinity, so $W_\pm$ exist. A strong limit of unitary operators is a partial isometry, so we are done.
+\end{proof}
+
+\begin{lemma}
+One has
+$$W_\pm H_0 = H_VW_\pm.$$
+\end{lemma}
+\begin{proof}
+One has
+$$e^{isH_V}W_\pm e^{-isH_0} = \lim_{t \to \pm \infty} e^{i(s+t)H_V}e^{-i(s+t)H_0} = W_\pm$$
+which is independent of $s$. Therefore
+$$0 = \partial_s(e^{isH_V}W_\pm e^{-isH_0}) = iH_Ve^{isH_V}W_\pm e^{-isH_0} - ie^{isH_V}W_\pm e^{-isH_0}H_0 = i(H_VW_\pm - W_\pm H_0)$$
+whence $H_VW_\pm = W_\pm H_0$.
+\end{proof}
+
+To characterize the scattering operator in terms of the scattering matrix, we define the isomorphism
+\begin{align*}
+  \Phi: L^2(\RR) &\to L^2(\RR_+) \oplus L^2(\RR_+)\\
+  u &\mapsto (\hat u, \hat u(-\cdot)).
+\end{align*}
+Here $L^2(\RR_+) \oplus L^2(\RR_+)$ is being viewed as a Hilbert space with the direct sum inner product. Since the Fourier transform is unitary, so is $\Phi$.
+
+\begin{lemma}
+The scattering operator $\mathcal S$ satisfies
+$$\mathcal S = \Phi^*S\Phi.$$
+In particular, $\mathcal S$ is unitary.
+\end{lemma}
+\begin{proof}
+Let $v \in C^\infty_{comp}(\RR)$, and let $u = \Phi^*S\Phi v$. Then
+$$(\hat u(\lambda), \hat u(-\lambda)) = S(\lambda)(\hat v(\lambda), \hat v(-\lambda)).$$
+We must prove $W_+u = W_-v$. To this end, let
+$$w(x) = \frac{1}{2\pi} \int_0^\infty e_+(x, \lambda)\hat v(\lambda) + e_-(x, \lambda)\hat v(-\lambda) ~d\lambda.$$
+Since $e_\pm(\cdot, \lambda)$ are eigenfunctions of $H_V$, they are stationary solutions of the Schrödinger equation, hence $e^{-itH_V}e_\pm(x, \lambda) = e^{-it\lambda^2}e_\pm(x, \lambda)$. Since $e^{-itH_V}$ is unitary, it commutes with integration, so
+$$e^{-itH_V}w(x) = \frac{1}{2\pi} \int_0^\infty (e_+(x, \lambda) \hat v(\lambda) + e_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2} ~d\lambda.$$
+We let $f_\pm(x, \lambda) = -R_V(\lambda)(V(x)e^{\pm ix\lambda})$ be the outgoing part of $e_\pm$. Then
+$$ e^{-itH_V}w(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{i\lambda x}\hat v(\lambda) e^{-it\lambda^2} ~d\lambda + \frac{1}{2\pi} \int_0^\infty (f_+(x, \lambda) \hat v(\lambda) + f_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2} ~d\lambda.$$
+Since the free Hamiltonian $H_0 = -\Delta$ has continuous spectrum $[0, \infty)$, it can be diagonalized as the multiplier $H_0 = \mathcal F^{-1} \lambda^2 \mathcal F$, where $\mathcal F$ is the Fourier transform. Therefore
+$$e^{-itH_0}v(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{ix\lambda} \hat v(\lambda) e^{-it\lambda^2} ~d\lambda.$$
+Moreover, if $Q = \{\lambda \in \CC: \Re \lambda > 0, ~\Im \lambda > 0\}$ is the first quadrant, then $Ve^{\pm i\lambda x} \in (1 + VR_0(\lambda))(L^2_{comp}(\RR))$, so since $R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}$ and $R_0$ is holomorphic on $Q$, $f_\pm(\cdot, \lambda)$ exists and is holomorphic in $\lambda$ on $Q$. Since $v \in C_{comp}^\infty(\RR)$, the Paley-Weiner theorem implies that the integrand $I(t, x, \lambda) = e^{i\lambda x}\hat v(\lambda) e^{-it\lambda^2} ~d\lambda + \frac{1}{2\pi} \int_0^\infty (f_+(x, \lambda) \hat v(\lambda) + f_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2}$ is holomorphic on $Q$ and remains holomorphic at the ``boundary" $\Re \lambda \to \infty$, since the $f_\pm$ are outgoing waves and hence bounded, and $\hat v(\lambda)$ is bounded for $\Im \lambda$ fixed by the Paley-Weiner theorem, so that $I(t, x, \lambda)$ remains bounded for $t,x,\Im \lambda$ fixed.
+
+Letting $\gamma$ be the contour $\mu + i\mu: \mu > 0$ through $Q$, we use the Paley-Weiner to find a $C > 0$ such that
+\begin{align*}
+  \left|\int_0^\infty I(t, x, \lambda) ~d\lambda\right|^2 &= \left|\int_\gamma I(t, x, \lambda) ~d\lambda\right|^2 \\
+    &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu)\hat v(\mu + i\mu) + f_-(x, \mu+i\mu)\hat v(-\mu - i\mu)|^2e^{-2t\mu^2} ~d\mu\\
+    &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu) + f_-(x, \mu + i\mu)|^2 |e^{C\mu - 2t\mu^2})|^2 ~d\mu\\
+    &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu)|^2 + |f_-(x, \mu + i\mu)|^2 ~d\mu \int_0^\infty |e^{C\mu - 2t\mu^2})|^2 ~d\mu
+\end{align*}
+and recalling that
+$$||R_V(\mu + i\mu)||_{L^2 \to L^2} = O(\mu^{-2})$$
+we see that the integral of the $f_\pm$ are bounded, and that the integral of $I(t, x, \cdot)$ vanishes as $t \to \infty$. Therefore $W_-v = w$. A similar argument with $Q, \gamma$ reflected across the real axis $\Im \lambda = 0$ shows that if
+$$\tilde w(x) = \frac{1}{2\pi} \int_0^\infty e_+(x, -\lambda)\hat u(-\lambda) + e_-(x, \lambda)\hat u(\lambda) ~d\lambda$$
+then $W_+u = w$. TODO: This seems nontrivial since we applied a Fourier multiplier to $v$ to get $u$. Also $\hat u$ is not of exponential type but we can approximate $u$ by a compactly supported function. So these are details to fill in.
+
+TODO: Use the functional equation for scatmat to prove $w = \tilde w$.
+\end{proof}
+
+TODO: If we need it, interpret that crazy commutative diagram to compute the images of $W_\pm$.
+
+
 
 
 \section{Scattering resonances}
@@ -554,17 +826,118 @@ $$\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} R_V(\lambda) ~d\lambda.$$
 \end{definition}
 In fact, if $\lambda_0$ is a scattering resonance, then for any $\lambda$ close to $\lambda_0$, we can express $R_V(\lambda)$ as a Laurent series
 $$R_V(\lambda) = Q(\lambda - \lambda_0) + \sum_{j=1}^N \frac{P_j}{(\lambda - \lambda_0)^j}$$
-for some holomorphic family of operators $Q$ defined on a small neighborhood of $0$ and some finite-rank operators $P_1, \dots, P_N$. Applying the Cauchy-Goursat theorem to $\Gamma_{\lambda_0}$, we see that the multiplicity is entirely determined by the principal part $R_V(\lambda) - Q(\lambda - \lambda_0)$.
+for some holomorphic family of operators $Q$ defined on a small neighborhood of $0$ and some operators $P_1, \dots, P_N$. The operators $P_1, \dots, P_N$ are of finite rank by construction of $R_V(\lambda)$. Applying the Cauchy-Goursat theorem,
+$$\int_{\Gamma_{\lambda_0}} Q(\lambda - \lambda_0) ~d\lambda = 0$$
+so the multiplicity is entirely determined by the principal part $R_V(\lambda) - Q(\lambda - \lambda_0)$.
 
 
-We now define a matrix which encodes how a wave transforms as it passes through $H_V$.
-\begin{definition}
-The \dfn{scattering matrix} is the operator $S(\lambda): \CC^2 \to \CC^2$ defined by
-$$S(\lambda)\begin{bmatrix}b_-\\b_+\end{bmatrix} = \begin{bmatrix}a_+\\a_-\end{bmatrix}.$$
-\end{definition}
-The map $S$ is a meromorphic family of unitary operators on $\CC$. We put $m_S(\lambda_0)$ for the trace of the operator
+We put $m_S(\lambda_0)$ for the trace of the operator
 $$-\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} S(\lambda)^{-1}S'(\lambda) ~d\lambda.$$
 This satisfies the equation $m_S(\lambda) = m_R(\lambda) - m_R(-\lambda)$. (For a proof, again see \cite[Chapter 2]{dyatlov2019mathematical}.)
+
+
+
+\section{The Eisenbud-Wigner time delay formula}
+We have the intuition that the wave operators should satisfy
+$$e^{-itH_V}W_- \approx e^{-itH_0}$$
+in some suitable sense, for $-t$ large enough, and would like to measure how good this approximation is for a typical function $f \in L^2(\RR)$.
+
+In this section, let $\chi_r(x) = 1_{|x| < r}$ be the indicator function of the interval $(-r,  r)$.
+\begin{definition}
+  For every $f \in C^\infty_{comp}(\RR)$, let
+  $$S_r(f) = \int_{-\infty}^\infty ||\chi_r e^{-itH_V} W_-f||_{L^2(\RR)}^2 ~dt$$
+  and
+  $$S_r^0(f) = \int_{-\infty}^\infty ||\chi_r e^{-itH_0} f||_{L^2(\RR)}^2 ~dt.$$
+  Let $\tilde T_r$ be defined by $\langle \tilde T_rf, f\rangle = S_r(f) - S_r^0(f)$ and let $\tilde T$ be the weak limit of $\tilde T_r$ as $r \to \infty$. Then $\tilde T$ is known as the \dfn{time delay operator} for $V$.
+\end{definition}
+It is not obvious that the weak limit $\tilde T$ exists, but we will show that $\tilde T$ can be explicitly computed, so that it is does exist.
+
+Recall that $\Phi$ is the isomorphism $L^2(\RR) \to L^2(\RR_+) \oplus L^2(\RR_+)$. Let
+$$T(\lambda) = -2\lambda iS(\lambda)^* S'(\lambda).$$
+
+\begin{theorem}[Eisenbud-Wigner]
+\index{Eisenbud-Wigner time delay formula}
+The time delay operator $\tilde T$ exists, and
+$$\tilde Tf(\lambda) = \Phi^*(T(\lambda)\Phi(f))(\lambda).$$
+\end{theorem}
+\begin{proof}
+Expanding out the definitions of $T,\Phi$, we are being asked to prove, for every $f \in C_{comp}^\infty(\RR)$ and $\lambda \in \RR_+$,
+$$(\widehat{\tilde Tf}(\lambda), \widehat{\tilde Tf}(-\lambda)) = -2i\lambda S(\lambda)^* S'(\lambda)(\hat f(\lambda), \hat f(-\lambda)).$$
+By the unitarity of the Fourier transform, $2\pi \langle \tilde Tf, f\rangle = \langle \widehat{\tilde Tf}, \hat f\rangle$.
+TODO: The proof in TZ is just wrong lol.
+\end{proof}
+
+
+
+\section{The Breit-Wigner approximation}
+TODO: Motivation . Mention that this proof was outlined by Zworski and Dyatlov...
+
+\begin{theorem}[Breit-Wigner]
+  \index{Breit-Wigner approximation}
+Let $Z$ be the set of all nonzero resonances of $R_V$. Then
+$$\frac{1}{2\pi i} \tr S'(\lambda_0)S(\lambda_0)^* = -\frac{1}{\pi}|\ch\supp V| - \frac{1}{\pi}\sum_{\lambda \in Z} \frac{\Im \lambda}{|\lambda - \lambda_0|^2}.$$
+\end{theorem}
+\begin{proof}
+  TODO: Compute $S$ in terms of $X$ and $Y$.
+
+  TODO: Show that
+  $$t(\lambda) = i\frac{\lambda}{\hat X(\lambda)}.$$
+
+  TODO: Show that
+  $$S(-\lambda)J = JS(\lambda)^*.$$
+
+  TODO: Show that
+  $$\det S(\lambda) = \frac{t(\lambda)}{t(-\lambda)}.$$
+
+  TODO: Show that
+  $$\det S(\lambda) = \frac{\hat X(-\lambda)}{\hat X(\lambda)}.$$
+
+  TODO: Show that
+  $$\tr \frac{S'(\lambda)}{S(\lambda)} = \frac{(\det S)'(\lambda)}{\det S(\lambda)}.$$
+
+  TODO: Use the argument principle and Titchmarsh's theorem.
+\end{proof}
+
+
+
+\chapter{Super-exponentially decreasing potentials}
+We are interested in generalizing the Breit-Wigner formula to non-compactly supported potentials. Formally, we write
+$$\frac{1}{2\pi i}\tr S'(\lambda)S(\lambda)^* = \infty - \frac{1}{\pi} \sum_{\kappa \in P} \frac{\Im \kappa}{|\kappa - \lambda|^2}$$
+which would imply that the sum over resonances diverges. Of course, our definition of the scattering matrix, or even of the set of resonances $P$, relied on the notion of an outgoing wave, which makes no sense if $\supp V$ is not compact.
+
+blah blah Richard Froese
+
+\begin{definition}
+A function $V \in L^\infty(\RR)$ is said to be \dfn{super-exponentially decreasing} if for every $N \in \NN$ we can find a $C_N > 0$ such that
+$$V(x) \leq C_Ne^{-N|x|}.$$
+\end{definition}
+
+Let $R_0(\lambda) = (D_x^2 - \lambda^2)^{-1}$ be the free resolvent, as in the case of compactly supported potentials.
+\begin{definition}
+The \dfn{potential-weighted resolvent} $W_V(\lambda)$ is defined by
+$$W_V(\lambda) = \sqrt VR_0(\lambda)|\sqrt V|.$$
+\end{definition}
+
+Let $B^1(L^2(\RR))$ denote the space of trace-class operators on $L^2(\RR)$.
+\begin{lemma}
+Suppose that $V$ is super-exponentially decreasing. Then $W_V$ extends to a meromorphic family of trace-class operators on $\CC$, with only a single pole at $0$.
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+TODO: Use Froese's construction of the resonant set $P$.
+
+
+\begin{theorem}
+If $V$ is not compactly supported, then
+$$\sum_{\kappa \in P} \frac{\Im \kappa}{|\kappa - \lambda|^2} = \infty.$$
+\end{theorem}
+\begin{proof}
+Suppose it's finite, then get a bound
+$$|\ch\supp V| \leq C \sum_{\kappa \in P}\frac{\Im \kappa}{|\kappa - \lambda|^2}.$$
+Then $V$ is compactly supported.
+\end{proof}
+
 
 
 
