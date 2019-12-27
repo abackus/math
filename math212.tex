@@ -89,6 +89,16 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
  
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[chapter]
@@ -1670,7 +1680,7 @@ We thus introduce the Bergman projection $L^2(M, E) \to H^0(M, E)$, which is ort
     $$B_k(x, x) = e^{-2k\varphi_0(x)} = \frac{(k+n)!}{k!\pi^n}.$$ 
 \end{example}
 
-\section{The Kodaira embedding theorem}
+\section{Asymptotics for the Bergman kernel}
     Here we let, for $L$ a line bundle, $L^k$ denote the $k$th tensor power of $L$ with itself.
 \begin{theorem}[Fefferman, Boutet, de Monvel, Sjostrand, Zelditch, Catlin, Berman, Bernsom]
     Let $L \to M$ be a positive Hermitian line bundle and let $s_j^k$ be an orthonormal basis of $H^0(M, L^k)$. Then there is an asymptotic expansion
@@ -1685,6 +1695,9 @@ We thus introduce the Bergman projection $L^2(M, E) \to H^0(M, E)$, which is ort
 \begin{definition}
     The reproducing kernel $K$ is called a \dfn{Bergman kernel} if $K(x, \cdot)$ is holomorphic.
 \end{definition}
+\begin{example}
+    Reproducing kernels also have applications in machine learning.
+\end{example}
     To construct the Bergman kernel, we obtain an approximate reproducing kernel, which is correct up to an error of order $h^\infty$. 
 
     Recall that for $A: L^2_\varphi \to L^2_\varphi$ an integral operator, $e^-\varphi A e^\varphi$ sends $L^2$ to itself an its integral kernel is given by $e^{-\varphi(x)/h} K_A(x, y) e^{-\varphi(y)/h}$. 
@@ -1760,28 +1773,248 @@ $$
 \begin{definition}
     A symbol $a(x, y, \xi, h)$ is a \dfn{negligible symbol} if $a = \sum_j \D_{\xi_j}A_j + (x-y)A/h$ for some $A$.
 \end{definition}
+    We introduce the differential operator $\tilde \nabla = \partial_\xi + i(x - y)/h$. Then $ia = \tilde \nabla A$ and we absorb the $i$ into the $A$.
+
     In this case the error term introduced by adding $a$ is $O(e^{-\delta/h}e^{\varphi(x)/h})||u||_\varphi$. We are specifically interested in when $A$ has an asymptotic sum $A = \sum_m A_m h^m$. What this means is that for every $N$,
     $$A - \sum_{m\leq N} A_m h^m = O(h^{N+1})$$
-    or in other words the sum ``converges" modulo $O(h^\infty)$.
+    or in other words the sum ``converges" modulo $O(h^\infty)$. We write $A^{(N)}$ for the $N$th partial sum. Then $a^{(N)} = \tilde \nabla A^{(N)} + O(h^{N+1})$.
 
     We now introduce the pseudodifferential operator
-    $$S = e^{ih\langle D_\xi, D_y}.$$
+    $$S = e^{ih\langle D_y, D_\xi\rangle} = \sum_{m=0}^\infty \frac{(ih)^m}{m!} D_y \cdot D_\xi.$$
+    A priori this makes no sense, but it does make sense modulo $O(h^\infty)$. In fact if $a = \sum_m a_m h^m$, $b = \sum_m b_m h^m$ we say $Sa = b$ if and only if
+    $$b_j = \sum_{m+p = j} \frac{i^m}{m!}(D_\xi \cdot D_y)^m a_p$$
+    where the dot product of differential operators is defined by $D_\xi \cdot D_y = \sum_j D_{\xi_j}D_{y_j}$. Moreover $S^{-1} = e^{-ihD_y\cdot D_\xi}$. Then $S^{-1}Sa = a$ up to $O(h^\infty)$. 
 \begin{lemma}
     $a$ is a negligible symbol if and only if $Sa|_{x = y} = 0$.
 \end{lemma}
+\begin{proof}
+    $S\partial_\xi = \partial_\xi S$ and, thinking of $y_j$ as the multiplication operator, $Sy_j = y_jS + hD_{\xi_j}S$. Therefore
+    $$S((x-y)A) = (x-y)SA - hD_{\xi_j}SA.$$
+    If $a$ is negligible, say $a = \tilde \nabla A$, then
+    $$Sa = S\tilde \nabla A = \partial_{\xi_j}SA + i(x-y)SA/h - \partial_{\xi_0}SA = i(x-y)SA/h$$
+    which restricts to $0$ on $x=y$. Conversely, if $Sa|_{x=y} = 0$ we can write $Sa = (x-y)B$. Now $S\tilde \nabla = i(x-y)S/h$ so
+    $$\tilde \nabla S^{-1} = iS^{-1}(x-y)/h.$$
+    Therefore
+    $$\tilde \nabla S^{-1}B = iS^{-1}(x-y)B/h.$$
+    So $ia/h = \tilde \nabla(S^{-1}B)$.
+\end{proof}
+\begin{definition}
+    Let $Y \subset \CC^N$ be a $\RR$-linear subspace. Then $Y$ is a \dfn{totally real space} if $Y \cap iY = 0$.
+\end{definition}
+    Assume $\varphi$ is analytic as a function on $\RR^n \times \RR^n$. We extend $\varphi$ to a function on the maximal totally real subspace $\{(x, \overline x) \in \CC^n \times \CC^n\}$. To do this, let $\iota(x, y) = (x + y, -i(x - y))$. Then let $\iota^*\tilde \varphi = \varphi$. We then can find a $\psi$ which is holomorphic near $(0, 0)$ such that $\psi(z, \overline z) = \varphi(z)$. Then $\psi(x, \overline y) = \psi(y, \overline x)$ with
+    $$2 \Re \psi(x, \overline y) - \varphi(x) - \varphi(y) \leq -\delta|x - y|^2.$$
+    We solve for $\xi$ in the equation
+    $$i\langle \xi, x - y\rangle = 2(\psi(x, z) - \psi(y, z)).$$
+    This is possible by the lemma on negligible symbols and $\xi$ is a function of $(x, y, z)$. By Taylor's theorem,
+    $$\xi(x, y, z) = -2i\int_0^1 \partial_x \psi(tx + (1-t)y, z) ~dt$$
+    so $\xi(x, x, z) = -2i\partial_x \psi(x, z)$. In fact $(x, y, z) \mapsto (x, y, \xi)$ is a biholomorphic function close to $0$ on $\CC^{3n}$ by the analytic implicit function theorem. To see this we must show that the quadratic form given by the matrix $\partial_z \xi(0)$ is nondegenerate. Now
+    $$\partial_z \xi(0) = -2i \partial_x\partial_z \psi(0) = -2i \partial_x\dbar_x \varphi(0)$$
+    which is nondegenerate since $\varphi$ is strictly plush. By our previous estimate on $\psi$, the contour
+    $$\Lambda = \{(y, \xi): \xi = \xi(x, y, \overline y)\}$$
+    is good.
+\begin{lemma}
+    We have
+    $$u(x) = (\pi h)^{-n} \int_{B(0, 1)} \chi(y) e^{i(2\psi(x, \overline y) - 2\psi(y, \overline y))/h} \frac{i}{2} \det \dbar_y \xi (1 + a^{(N)})u(y) ~d\overline y \wedge dy + O(e^{\varphi(x)/h}h^{N+1})||u||_\varphi.$$
+\end{lemma} 
 
-\begin{theorem}[Kodiara embedding theorem]
-    \index{Kodiara embedding theorem}
-    Let $L \to M$ be a positive Hermitian line bundle and let $d_k$ be the dimension of $H^0(M, L^k)$, define the morphism
+\begin{definition}
+    The \dfn{Bergman function} is defined on a compact complex manifold equipped with a positive line bundle by
+    $$B(x) = ||K(x, x)|| = K(x, x)e^{-2\varphi(x)}.$$
+\end{definition}
+\begin{lemma}
+    We have
+    $$B(x) = \sup_{\substack{s \in H^0(M \to L)\\||s||_{L^2} \leq 1}} ||s(x)||^2.$$
+\end{lemma}
+\begin{proof}
+    We have
+    $$K(x, y) = \sum_\alpha u_\alpha(x) \overline{u_\alpha(y)},$$
+    the sum ranging over an orthonormal basis $u_\alpha$ of $H^0(M \to L)$. It follows that
+    $$B(x) = \sum_\alpha ||u_\alpha(x)||^2$$
+    and now we use the Cauchy-Schwarz inequality.
+\end{proof}
+    From this we can easily compute
+    $$\int_M B ~dV = \dim H^0(M \to L).$$
+
+    Given $L \to M$ fixed, we let $B_k$ denote the Bergman function determined by $L^k$.
+\begin{lemma}
+    The Bergman function satisfies
+    $$|B_k(x)| \leq Ck^n.$$
+\end{lemma}
+    Therefore $\dim H^0(M \to L^k)$ is finite and grows like $k^n$. Morally this lemma is a restatement of the uncertainty principle because it describes how many independent states can be on a compact set, with $h = 1/k$. The uncertainty principle says we cannot localize past $\sqrt{1/h} = \sqrt k$. Here we cannot localize too much because we only have so many holomorphic sections.
+\begin{proof}
+    Let $s \in H^0(M \to L^k)$. We want to show
+    $$||s(x)||^2 \leq Ck^n ||s||_{L^2_k}.$$
+    Then the claim follows from the previous lemma. Since $||s||_{L^2_k} \leq ||s||_{L^2_k(\Omega_j)}$ we might as well prove the claim locally.
+
+    Choose an atlas so $\theta_j(x_0) = 0$ and write $s(x) = (x, u(x))$ where $u$ is holomorphic near $x_0 = 0$. Now $\varphi_j$ is strictly plurisubharmonic so up to a linear change of variables
+    $$\varphi_j(x) = \sum_{j=1}^n \lambda_j|x_j|^2 + \Re Q(x) + \varphi(0) + O(|x|^3)$$
+    where $Q(x) = \langle Ax, x\rangle + \langle a, x\rangle$ is holomorphic. Now $\varphi(0)$ does not affect our computation so we might as well take $\varphi(0) = 0$. By absorbing the holomorphic term $Q$ into $u$ we may assume $Q = 0$. Close to $0$ we may assume $O(|x|^3) = 0$. Now
+    $$\frac{||u(0)||^2}{||u|_{L^2_k(\Omega_j)}} \leq \frac{||u(0)||^2}{||u||_{L^2_k(B(0, R_k))}}$$
+    and we now make the change of variables
+    $$f(w) = u(w/\sqrt k)$$
+    and
+    $$k\varphi(w) = \varphi_0(w) = \frac{1}{2}\sum_j \lambda_j |w_j|^2 + O(|w|^3k^{-1/2}).$$
+    By our assumptions on $\varphi$, $u(0) = f(0)$. Here $dm$ and $dV$ are absolutely continuous to each other so we can replace $dV$ with $dm$ up to a constant error. Hence
+\begin{align*}\frac{||u(0)||^2}{||u||_{L^2_k(\Omega_j)}} &\leq \frac{Ck^n||f(0)||^2}{\int_{|w| \leq B_k(\sqrt k)} |f(w)|^2 e^{-2\varphi_0(w)}  ~dm(w)} \\
+    &\leq \frac{Ck^n||f(0)||^2}{\int_{|w| \leq B_k(\sqrt k)} |f(w)|^2 e^{-\sum_j \lambda_j|w_j|^2} ~dm(w)}.
+\end{align*}
+    Now $|f|^2$ is strictly plush so by the mean value theorem for measures,
+$$\int_{|w| \leq B_k(\sqrt k)} e^{-\sum_j \lambda_j |w_j|^2} |f(0)|^2 ~dm(w) \leq \int_{|w| \leq B_k(\sqrt k)} |f(w)|^2 e^{-\sum_j \lambda_j |w_j|^2} ~dm(w).$$
+    Pulling out $|f(0)|^2$ and taking $k$ big enough that the integral converges we see our lemma.
+\end{proof}
+    Actually Mike Christ showed that
+    $$|K(x, y)| \leq Ce^{-\sqrt{k \log k}}d(x, y).$$
+    But we have only proved $|K(x, y)| = O(k^{-\infty})$.
+\begin{theorem}
+    Assume $\varphi$ is real analytic. If $d(x, y) < \varepsilon$ then in a suitable trivialization,
+    $$\partial^\alpha_{x,y}(K(x, y) - K^{(N)}(x, y)) = O(k^{-N-1+n+|\alpha|}e^{k(\varphi(x)+k\varphi(y)})||u||_k.$$
+\end{theorem}
+    To prove the theorem we rephrase the Hormander $L^2$-estimates to work for manifolds.
+\begin{lemma}
+    For every $(0, 1)$-form $f \in C^\infty_{0,1}(M \to L^k)$ such that $\dbar f = 0$ there is a $u \in C^\infty(M \to L^k)$ such that $\dbar u = f$ and $||u||_{L^2_k} \leq C||f||_{L^2_k}$, and $C$ can be chosen independently of $k$.
+\end{lemma}
+\begin{lemma}
+    One has
+    $$K(y, x) = (xK_x, K_y^{(N)})_{L^2_k} + O(k^{-N-1+n})e^{k\varphi(x) + k\varphi(y)}||K_x||_{L^2_k}.$$
+\end{lemma}
+\begin{proof}
+    We use the fact that
+    $$u(y) = (\chi_yu, K^N(\cdot, y))_{L^2_k} + O(k^{-N-1+n}e^{k\varphi(y)})||u||_\varphi$$
+    on the function $u(y) = K_x(y)$. Then
+    $$K(y, x) = (\chi K_x, K_y^{(N)})_{L^2_k} + O(k^{N-1})e^{k\varphi(y)}||u||_{L^2_k}.$$
+    Here
+    $$||K_x||_{L^2_k}^2 = B_k(x)e^{2k\varphi(x)}$$
+    so
+    $$||K_x||_{L^2_k} \leq Ck^{n/2}e^{k\varphi(x)}.$$
+    Now use
+    $$e^{k\varphi(y)}||u||_{L^2_k}^2 \leq e^{k\varphi(x) + k\varphi(y)} k^{n/2}$$
+    to prove the lemma. 
+\end{proof}
+    Recall also that if $P: H \to \ker A$ is an orthogonal projection and $Pu = v$, $w = u - Pu$, then $A(u - Pu) = Au$ and
+    $$||w|| = \min_{A\tilde w = Au} ||\tilde w||.$$
+\begin{proof}[Proof of theorem]
+    We may assume that $\chi$ is real-valued. Then
+    $$(\chi K_x, K_y^{(N)})_{L^2_k} = (K_x, \chi K_y^{(N)})_{L^2_k} = \overline{P_k(\chi K_x^{(N)})(y)}.$$
+    Then we define
+    $$u_y(x) = K_y^{(N)}(x) - (\chi K_y^{(N)}, K_x)_{L^2_k} = K_y^{(N)}(x) - P_k(\chi K_y^{(N)})(x).$$
+    By the linear algebra above, $u_y$ is the $L^2_k$-minimal solution to the problem
+    $$\dbar u_y = \dbar \chi K_y^{(N)} + \chi \dbar K_y^{(N)} = \dbar \chi K_y^{(N)}$$
+    because $\varphi$ was assumed analytic. Moreover, $\dbar \chi = 0$ away from the diagonal. So
+    $$\dbar u_y(x) = O(e^{-\delta k}e^{k\varphi(x) + k\varphi(y)}).$$
+    Since $u_y$ is the minimal solution, $||u_y||_{L^2_k} \leq ||\tilde u||_{L^2_k}$ where $\tilde u$ is the solution to the $\dbar$-problem yielded by the Hormander estimate. Therefore the Hormander estimate gives
+    $$||u_y||_{L^2_k} \leq Ce^{-\delta k}e^{k\varphi(y)}.$$
+    By the Cauchy-Green formula we have, for any compactly supported $\psi$ which is identically $1$ near $0$,
+    $$|u(0)| \leq \sup_D e^{k\varphi(y)} O(e^{-\delta/k} e^{k\varphi(y)})$$
+    for any open neighborhood $D$ of $0$. If we take $D \subset B(0, k^{-1})$ and translate appropriately we have
+    $$|u_y(x)| \leq e^{-\delta k}e^{k\varphi(y)} e^{k\varphi(x)}.$$
+\end{proof}
+    Therefore we can actually approximate the Bergman kernel by its asymptotic expansion. We use this theorem to find an asymptotic expansion for the Bergman function.
+\begin{corollary}
+    One has
+    $$B_k(x) = \left(\frac{k}{\pi}\right)^n(1 + k^{-1}b_1(x, \overline x) + k^{-2}b_2(x, \overline x) + \dots)$$
+    where the sum is meant in the asymptotic sense.
+\end{corollary}
+\begin{corollary}
+    One has
+    $$\dim H^0(M \to L^k) = \frac{k^n}{\pi^n}(1 + O(k^{-1})) \int_M ~dV.$$
+\end{corollary}
+    All that remains is to extend from the real-analytic case to the $C^\infty$ case. To do this we use a technique introduced by Hormander and Nirenberg.
+\begin{lemma}
+    Suppose $f \in C^\infty_{comp}(\RR^m)$. Then there is a $\tilde f \in C^\infty(\CC^m)$ such that $\tilde f|_{\RR^m} =f$ and $\dbar \tilde f(z) = O(|\Im z|^\infty)$.
+\end{lemma}
+\begin{proof}
+    By a Paley-Weiner type theorem, we can define
+    $$\tilde f(x + iy) = \frac{1}{(2\pi)^m} \int_{\RR^m} e^{ix\xi} \chi(|\xi||y|)e^{-y\xi} \hat f(\xi) ~d\xi$$
+    for some compactly supported function $\chi$ which is identically $1$ at $0$. Obviously $\tilde f$ is smooth, and $\dbar$ only falls on the $\chi$ term. Then we end up with $\chi'$, which is not supported at $0$, and a factor of $|\xi|y_j|y|^{-1}$. We can then add factors of $|\xi||y|^{-1}$ with impunity since $\chi^{(N)}$ is $0$ close to $0$. Iterating we get the decay we need.
+\end{proof}
+\begin{defintion}
+    The function $\tilde f$ is called the \dfn{almost analytic extension} of $f$.
+\end{definition}
+    Using the theory of almost analytic extensions, one can prove the following lemma.
+\begin{lemma}
+    Assume $\varphi$ is smooth. There is a function $\psi$ which is $C^\infty$ in a neighborhood of $0 \in \CC^{n + n}$ such that $\psi(x, \overline x) = \varphi(x)$ and $\dbar_x\psi(x, \overline y)$ and $\partial_y\psi(x, \overline y) = O(|x - y|^\infty)$.
+\end{lemma}
+    Now notice that we can replace any assumption that $\dbar \varphi = 0$ with $\dbar \varphi$ with the property in the above lemma anywhere in the above construction of the approximate Bergman kernel, since the function was only an approximation away from the diagonal anyways. This completes the proof of the theorem of Fefferman, Boutet, de Monvel, etc.
+
+\section{Morphisms into projective space}
+    Throughout this section, let $M$ be a compact complex manifold, $L \to M$ a line bundle. Let $\omega_{FS}$ be the Fubini-Study metric on $O(1)$, the dual of the tautological line bundle, of $\PP^n$ for some $n$. We let $(s_j^k)_j$ be an orthonormal basis of $H^0(M \to L^k)$. Define the morphism
 \begin{align*}
     \varphi_k: M &\to \PP^{d_k - 1}\\
     x &\mapsto [s_0^k(x), \dots, s_{d_k}^k(x)].
 \end{align*}
-    Then if $k$ is large enough, $\varphi_k$ is an embedding.
+
+\begin{theorem}[Catlin-Tian-Yau-Zelditch asymptotics]
+    \index{Catlin-Tian-Yau Zelditch asymptotics}
+    Let $\omega$ be a positive Hermitian metric on $L$. Then there is an asymptotic expansion
+    $$\omega = \frac{1}{k}\varphi^*_k\omega_{FS} + \frac{\omega_2}{k^2} + \frac{\omega_3}{k^3} + \dots$$
+    for some $\omega_j$ which are $(1, 1)$-forms.
 \end{theorem}
-\begin{corollary}
+\begin{proof}
+    Write $s_j^k(z) = f_j^k(z)e_k$ for some holomorphic functions $f_j^k$. Then
+    $$\varphi_k^*\omega_{FS} = i\partial \dbar\left(\log \sum_{j=1}^{d_k} |f_j^k(z)|^2 \right).$$
+    On the other hand, the Bergman projector is given by
+    $$B_k(z) = e^{-2k\varphi(z)} \sum_{j=1}^{d_k} |f_j^k(z)|^2.$$
+    Therefore
+    $$i\partial\dbar \log B_k(z) = -k \omega + \varphi_k^* \omega_{FS}.$$
+    So
+    \begin{align*}
+        \omega = \frac{1}{k} \varphi_k^*\omega_{FS} + \frac{1}{ik} \partial \dbar \log B_k(z)\\
+            &= \frac{1}{k} \varphi_k^*\omega_{FS} + \frac{1}{ik} \partial \dbar \frac{a_1(x)}{k} + \dots
+    \end{align*}
+    as $k \to \infty$.
+\end{proof}
+
+\begin{definition}
+    A \dfn{Hodge metric} is a positive $(1, 1)$-form $\omega$ such that $[\omega] \in H^2(M, \QQ)$.
+\end{definition}
+    In other words, $\omega$ is in the second rational-valued cohomology class of $M$.
+
+\begin{theorem}[Kodiara embedding theorem]
+    \index{Kodiara embedding theorem}
+    The following are equivalent:
+\begin{enumerate}
+    \item If $n$ is large enough, then $M$ can be embedded in $\PP^n$.
+    \item $M$ admits a positive Hermitian line bundle.
+    \item $M$ admits a Hodge metric.
+\end{enumerate}
+\end{theorem}
+    In the below proof we use $\varphi$ to mean the weight and $\varphi_k$ to mean the embedding, oops.
+\begin{proof}
+    Obviously if we have an embedding in projective space we can just pull back $(O(1), \omega_{FS})$ to $M$. The proof that positive Hermitian line bundles are equivalent to Hodge metrics uses Chern classes.
+
+    If $M$ has a positive Hermitian line bundle, then $\varphi_k$ is an immersion $M \to \PP^{d_k}$. Suppose that $\varphi_k$ is never injective. Then there are sequences $x_k,y_k$ such that $x_k \neq y_k and $\varphi_k(x_k) = \varphi_k(y_k)$.
+
+    First suppose $d(x_k, y_k)\sqrt k \to \infty$. Since $\varphi_k(x_k) = \varphi_k(y_k)$, for all $x$, the Bergman kernel $K$ has $K(x, x_k) = K(x, y_k)$. Then
+$$\int_{B(x_k, r_{k/2})} |K_k(x, x_k)|^2 e^{-2k\varphi(x)} ~dV(x) \sim e^{2k\varphi(x_k)} \frac{k^n}{\pi^n}$$
+yet
+$$\int_{B(x_k, r_{k/2})} |K_k(x, x_k)|^2 e^{-2k\varphi(x)} ~dV(x) = \int_{B(y_k, r_{k/2})} |K_k(x, y_k)|^2 e^{-2k\varphi(x)} ~dV(x).$$
+    Now $d(x_k, y_k) \gg k^{-1/2}$ so the balls can be taken to be disjoint. Then
+    $$K_k(x_k, x_k) = \int_M |K_k(x, x_k)|^2 e^{-2k\varphi(x)} ~dV(x) \geq \frac{k^n}{\pi^n}(e^{2k\varphi(x_k)} + e^{2k\varphi(y_k)}).$$
+    But
+    $$K_k(x_k, y_k) \sim \frac{k^n}{\pi^n} e^{2k\varphi(x_k)}.$$
+    Without loss of generality we can assume $\varphi(y_k) \geq \varphi(x_k)$. But
+    $$e^{2k\varphi(x_k)} \gtrsim e^{2k\varphi(x_k)} + e^{2k\varphi(y_k)}$$
+    which is a contradiction.
+
+    Otherwise we can assume $d(x_k, y_k) \leq Ck^{-1/2}$. By changing coordinates we may assume that $x_k = 0$, $y_k = w_kk^{-1/2}$, $|w_k| \leq C$, and $x_k \neq y_k$. Now put
+    $$f_k(t) = \frac{|K_k(0, tw_kk^{-1/2})|^2}{K_k(0, 0)K_k(tw_kk^{-1/2}, tw_kk^{-1/2})}.$$
+    Then $f_k$ is smooth on $[0, 1]$ and by the Cauchy-Schwarz inequality $0 \leq f_k(t) \leq 1$. In fact $f_k(0) = 1$ and $f_k(1) = 1$. So there is a $t_k \in [0, 1]$ such that $f_k''(t_k) \geq 0$. But
+\begin{align*}
+    f_k(t) &= e^{-2k\psi(0, tw_kk^{-1/2} - \varphi(0) - \varphi(tw_kk^{-1/2}))}(1 + r(tw_k)k^{-1} + \dots)\\ 
+        &= e^{-t^2\langle Aw_k, \overline w_k\rangle} + O(t^3|w_k|^3)}(1 + r_k(t_wk)k^{-1} + \dots)
+\end{align*}
+    which implies $|w_k| = O(k^{-1/2})$.
+    So
+    $$f_k''(t) = -2\langle Aw_k, \overline w_k\rangle O(|w_k|^3k^{-1/}2 + |w_k|^2k^{-1}) \leq -C|w_k|^2 < 0$$
+    which is a contradiction.
+\end{proof}
+\begin{theorem}[Chow]
+    \index{Chow's theorem}
     If $M$ admits a positive Hermitian line bundle, then $M$ is a projective variety.
-\end{corollary}
+\end{theorem}
+\begin{proof}
+    A compact submanifold of $\PP^n$ is a projective variety.
+\end{proof}
 
 
 
