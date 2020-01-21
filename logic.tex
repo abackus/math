@@ -1,0 +1,1440 @@
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Logic}
+\author{Aidan Backus}
+\date{December 2019}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\CVect}{\mathbf{Vect}_\CC}
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\A}{\mathcal A}
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\Cantor}{\mathcal{C}}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator*{\chsupp}{ch\,supp}
+\DeclareMathOperator*{\coker}{coker}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\FF}{\mathcal{F}}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\ind}{\operatorname{ind}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\MM}{\mathcal M}
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\PGL}{\operatorname{PGL}}
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\pset}{\mathcal{P}}
+\newcommand{\Rep}{\operatorname{Rep}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\supp}{\operatorname{supp}}
+
+\newcommand{\altrep}{\rho_{\text{alt}}}
+\newcommand{\trivrep}{\rho_{\text{triv}}}
+\newcommand{\regrep}{\rho_{\text{reg}}}
+\newcommand{\stdrep}{\rho_{\text{std}}}
+
+\newcommand{\Card}{\mathbf{Card}}
+\newcommand{\code}{\texttt}
+\newcommand{\halts}{\downarrow}
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\nohalts}{\uparrow}
+\newcommand{\HOD}{\mathbf{HOD}}
+\newcommand{\Ord}{\mathbf{Ord}}
+\newcommand{\PA}{\mathbf{PA}}
+\newcommand{\PR}{\mathbf{PR}}
+\newcommand{\proves}{\vdash}
+
+\DeclareMathOperator{\Add}{Add}
+\DeclareMathOperator{\cof}{cof}
+\DeclareMathOperator{\comp}{comp}
+\DeclareMathOperator{\crt}{crt}
+\DeclareMathOperator{\Def}{Def}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\ext}{ext}
+\DeclareMathOperator{\Name}{Name}
+\DeclareMathOperator{\pred}{pred}
+\DeclareMathOperator{\TC}{TC}
+\DeclareMathOperator{\Ult}{Ult}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{axiomZFC}{Axiom of ZFC}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeindex
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Elementary recursion theory}
+\section{Recursive functions}
+\begin{axiom}[Church-Turing]
+  \label{church and turing}
+  \index{Church-Turing thesis}
+Any two reasonable definitions of computer program are logically equivalent.
+\end{axiom}
+For example, if my definition of computability is ``there is a Python program that computes it," that is good enough. In fact, I'll take this as my definition whenever it is useful to do so. There's no reason to worry about Turing machines, etc.
+
+One can easily code any finite object in terms of natural numbers (or equivalently, binary strings) so we might as well only worry about functions between natural numbers, and assume without loss of generality that every computer program has exactly one input and one output, both a natural number.
+\begin{definition}
+A \dfn{partial recursive function} is a function $f: A \to \NN$ where $A \subseteq \NN$, such that there is a computer program (as defined by Axiom \ref{church and turing}) which takes elements $n \in A$ as an input and returns $f(n)$ as output. In this case, we write $A = \dom f$. If $A = \NN$, then $A$ is said to be a \dfn{recursive function}.
+\end{definition}
+\begin{definition}
+If $A$ is the domain of a partial recursive function, then we say that $A$ is a \dfn{recursively enumerable set} or simply a \dfn{r.e. set}. If $A$ is the complement of a r.e. set, we say that $A$ is a \dfn{co-r.e. set}. If the indicator function of $A$ is recursive, we say that $A$ is a \dfn{recursive set}.
+\end{definition}
+\begin{definition}
+If $n \in A$ and $f: A \to \NN$ is partial recursive, we say that $f$ \dfn{halts} on $n$ and write $f(n)\halts$.
+\end{definition}
+Sometimes in computer science we refer to functions as \dfn{pure functions} to emphasize that they do not have any hidden inputs and do not have any side effects. The ``print function" is not a pure function. If we ever need this notion of function, we will refer to them as \dfn{impure function}s.
+
+We will write $f \simeq g$ to mean that $\dom f = \dom g$ and $f = g$.
+
+We now formalize the notion of a partial evaluation. To do this, let $\pset_{\omega}(\NN)$ denote the set of finite subsets of $\NN$. It is clear that there is a recursive surjection $\NN \to \pset_{\omega}(\NN)$, and we fix such an enumeration $D$.
+\begin{definition}
+Let $A \in \pset_{\omega}(\NN)$. If $n \in \NN$ and $D_n = A$, then $n$ is a \dfn{strong index} encoding $A$.
+\end{definition}
+\begin{definition}
+A program \dfn{lazily returns}, \dfn{yields}, or \dfn{recursively enumerates} the set $A$ if there is a chain of sets $A_n$ such that $\lim_n A_n = A$ and a recursive function $q$ such that for every $n$, $q(n)$ is a strong index encoding $A_n$.
+\end{definition}
+
+\begin{theorem}
+  \label{exists effective turing enumeration}
+There is a computer program which yields the set of valid computer programs.
+\end{theorem}
+\begin{proof}[Proof sketch]
+Call the program that lazily returns the set of strings, and feed each string into a compiler to see if it compiles.
+\end{proof}
+For the remainder of these notes, we implicitly fix an instantiation of the program given by Theorem \ref{exists effective turing enumeration}.
+\begin{definition}
+ Let $P_k$ be the $k$th program with respect to the program given by Theorem \ref{exists effective turing enumeration}. Let $\Phi_k$ be the partial recursive function that is computed by $P_k$; that is, the $k$th \dfn{Turing functional}.
+\end{definition}
+\begin{definition}
+Let $\Xi(k, x) = \Phi_k(x)$. A program which computes $\Xi$ is called a \dfn{universal program}, or \dfn{Turing complete}.
+\end{definition}
+For example, a compiler is clearly Turing complete.
+\begin{theorem}[padding]
+\index{padding theorem}
+For every $e$ there is a $e' > e$ such that $P_{e'}$ behaves identically to $P_e$.
+\end{theorem}
+This follows by adding a sufficiently long block encased in a if-block whose premise is always false to the program $P_e$. It implies that every partial recursive function appears infinitely many times in the enumeration $\Phi_e$.
+\begin{theorem}[parameter]
+\index{parameter theorem}
+Let $A \subseteq \NN^2$ be an r.e. set. For every partial recursive function $\Theta: A \to \NN$ there is a recursive, strictly increasing function $q$ such that
+$$\Phi_{q(e)}(x) \simeq \Theta(e, x).$$
+Moreover, if $P$ denotes a program that computes $\Theta$ and $Q$ denotes a program that computes $Q$, then $P \mapsto Q$ is recursive.
+\end{theorem}
+In other words, given a program $P$ with two inputs, we can recursively replace $P$ with a program that returns programs with one input; this is a form of currying. This is immediate from properties of compilers. This result is also known as the \dfn{SMN theorem}.
+
+We now fix a notion of runtime. For example, we could say that a program $P$ has runtime $s$ if it takes $s$ flops to execute $P$.
+\begin{definition}
+We say that $\Phi_{e,s}(x) = y$ if $\Phi_e(x) = y$ and the program $P_e$ computes $\Phi_e(x)$ with runtime at most $s$. If such a $y$ exists, we write $\Phi_{e,s}(x) \halts$.
+\end{definition}
+
+\section{Primitive recursion}
+We now introduce a stronger notion of recursive function, those which are especially easy to analyze because we have a priori control over their runtime.
+\begin{definition}
+A loop in a computer program is said to be a \dfn{bounded loop} if it can be expressed as a \code{for} loop, such that the set that the \code{for} loop indexes over is fixed at the start of the loop and cannot be edited from within the loop.
+\end{definition}
+
+\begin{definition}
+A \dfn{primitive recursive function} is a partial recursive fuction $f$ such that there is a program which computes $f$, for which we are only allowed the operations $+$, $-$, $=$, $<$, \code{if}, and bounded loops. The set of primitive recursive functions is denoted $\PR$.
+\end{definition}
+
+\begin{theorem}
+Every primitive recursive function is recursive.
+\end{theorem}
+\begin{proof}
+Let $f$ be primitive recursive and suppose that $P$ witnesses that $f$ is primitive recursive. We fix a notion of runtime where the primitive operations $+$, $-$, $=$, $<$, and \code{if} take one unit of time. Those blocks of code in $P$ which are $s$ lines long and have no bounded loops have runtime at most $s < \infty$. Those blocks of code in $P$ which have $s$ lines of code and $N$ bounded loops, each with at most $n_k$ iterations and internal runtime at most $s_k < \infty$, have runtime at most $s + \sum_{k=1}^N n_ks_k < \infty$. By Noetherian induction, the outermost code block in $P$ has finite runtime. Therefore $f(n) \halts$.
+\end{proof}
+
+We now give a primitive recursive function that is not recursive by a diagonal argument. So it is not so easy to use Noetherian induction to bound the runtime of a program.
+\begin{definition}
+The \dfn{Ackermann function} $A: \NN^2 \to \NN$ is defined recursively by
+$$
+A(m, n) = \begin{cases}
+  n + 1, &m = 0\\
+  A(m-1,1), &m > 0, \quad n = 0\\
+  A(m-1, A(m,n-1)) &(m,n) \neq 0.
+\end{cases}
+$$
+\end{definition}
+\begin{example}
+Let $\alpha(n)$ denote the least $m$ such that $A(n, n) \leq m$, the \dfn{inverse Ackermann function}. Then $\alpha(n) \leq 5$ for any $n$ which would ``normally appear" in applied complexity theory (in fact for any $n$ less than the number of particles in the universe). This is because $A(4, 3) = 2^{2^{65536}} - 3$. In fact, the disjoint-set data structure, implemented with path compression and union-by-rank, has amortized runtime $O(\alpha(n))$, hence $O(1)$ for any physically existing machine.
+\end{example}
+
+\begin{theorem}
+The Ackermann function is not primitive recursive.
+\end{theorem}
+\begin{proof}
+Let $\mathcal A$ be the class of all multivariable functions $f: \NN^n \to \NN$ such that there is a $t \in \NN$, such that for every $x \in \NN^n$,
+$$f(x_1, \dots, x_n) < A(t, \max_i x_i).$$
+Clearly $\mathcal A$ contains the constant functions, and is closed under the successor function and projections. If $g: \NN^k \to \NN^m$ and $h: \NN^m \to \NN$ have $g_j, h \in \mathcal A$, then $g_i(x) < A(r_i, \max x)$, $h(y) < A(s, \max y)$ for some $r,s$. If $f = h \circ g$ and $g_j(x) = \max_j g(x)$ then
+$$f(x) < A(s, g_j(x)) < A(s, A(r_j, x)) < A(s + r_j + 2, x)$$
+so setting $t = s + r_j + 2$ we see that $f \in \mathcal A$. Therefore $\mathcal A$ is closed under function compsition.
+
+Now suppose that $g: \NN^k \to \NN$, $h: \NN^{k+2} \to \NN$, $g, h \in \mathcal A$. Suppose that $g(x) < A(r, \max x)$ and $h(y) < A(s, \max y)$. Suppose that $f: \NN^k \times \NN \to \NN$ is recoverable from $g, h$ using a primitive recursive program. We claim $f \in \mathcal A$.
+
+Let $q = 1 + \max(r,s)$ and induct on $n$ to see that
+$$f(x, n) < A(q, n + x).$$
+If $n = 0$ then $f(x, 0) < A(q, x)$. So
+$$f(x, n + 1) = h(x, n, f(x, n)) < A(s, z)$$
+where $z = \max(\max x, n, f(x, n))$. Then $z < A(q, n +x)$ by the inductive hypothesis. Thus
+$$f(x, n + 1) < A(s, z) < A(s, A(q, n + x)) \leq A(q, n + 1 + x)$$
+so $f \in \mathcal A$.
+
+Therefore $A$ strictly dominates $\PR$, so $A \notin \PR$.
+\end{proof}
+The Ackermann function is used to test the ability of compilers to optimize deep recursion, which is difficult because of the limited height of the stack and the inability to tail-recurse, among other problems.
+
+\section{Two fixed-point theorems}
+\begin{theorem}[Kleene recursion theorem]
+\index{Kleene recursion theorem}
+For every recursive function $f$ there is a $e$ such that $\Phi_{f(e)} = \Phi_e$.
+\end{theorem}
+\begin{proof}
+The function $(e, x) \mapsto \Phi_{f(\Phi_e(e))}(x)$ is recursive and bivariate so we can use the parameter theorem to find a recursive function $q$ such that
+$$\Phi_{q(e)}(x) \simeq \Phi_{f(\Phi_e(e))}(x).$$
+There is a $j$ such that $q = \Phi_j$, since $q$ is recursive. Then
+$$\Phi_{q(j)} = \Phi_{\Phi_j(j)} = \Phi_{f(\Phi_j(j))}.$$
+Now set $e = q(j)$.
+\end{proof}
+The Kleene recursion theorem is a frequently useful fixed-point theorem. It has an important analogue in proof theory known as Godel's fixed point theorem.
+
+Let $\PA$ denote Peano arithmetic.
+\begin{definition}
+  Let $\mathcal L_{\PA}$ denote the language of arithmetic. A \dfn{Godel code} is an effective enumeration of $\mathcal L_{\PA}$.
+\end{definition}
+Clearly $\PA$ proves that there is a Godel code. Henceforth we fix a Godel code $\sigma \mapsto \underline \sigma$.
+
+\begin{theorem}[Godel fixed point theorem]
+  \index{Godel fixed point theorem}
+For every $\Gamma \in \mathcal L_{\PA}$ with one free variable, there is a sentence $\sigma \in \mathcal L_{\PA}$ such that
+ $$\PA \proves \sigma \iff \Gamma(\underline \sigma).$$
+\end{theorem}
+\begin{proof}[Proof sketch]
+Let $F(\sigma) = \sigma(\underline \sigma)$. Since the map $\sigma \mapsto \underline \sigma$ is recursive by definition, it follows that $F$ is recursive. One can use this fact to show that there is a formula $\psi \in \mathcal L_{\PA}$ such that $\psi(\underline \sigma, y)$ is true iff $y = \underline{F(\sigma)}$; this is the technical heart of the proof of Godel's incompleteness theorems. Let
+$$\alpha_\Gamma(x) = \exists y(\psi(x, y) \wedge \Gamma(y)).$$
+Then for every $\sigma$,
+$$\PA \proves \alpha_\Gamma(\underline \sigma) \iff \Gamma(\underline{F(\sigma)}).$$
+Fix $\sigma = F(\alpha)$. Then, as in the proof of the recursion theorem,
+$$\PA \proves \sigma \iff F(\alpha) \iff \Gamma(\underline{F(\alpha)}) = \Gamma(\underline \sigma).$$
+\end{proof}
+\begin{theorem}[Godel's first incompleteness theorem]
+  \index{Godel's first incompleteness theorem}
+There is a sentence $\sigma \in \mathcal L_{\PA}$ which is undecidable from $\PA$.
+\end{theorem}
+\begin{proof}[Proof sketch]
+One can show that there is a $\Gamma \in \mathcal L_{\PA}$ with one free variable $x$ which expresses that $x$ is the Godel code a sentence $\sigma$ such that $\PA \proves \neg \sigma$. By Godel's fixed point theorem, there is a sentence $\sigma$ such that $\PA \proves \sigma \iff \Gamma(\underline \sigma)$. But if $\PA \proves \Gamma(\underline \sigma)$, then $\PA \proves \neg \sigma$; so $PA \not\proves \sigma$; similarly $PA \not\proves \neg\sigma$.
+\end{proof}
+
+\section{Recursive enumerations}
+Let $W_e = \dom \Phi_e$. Then $W$ is a recursive enumeration of the r.e. sets, hence also of the co-r.e. sets.
+\begin{definition}
+A sequence of sets $A$ is said to be a \dfn{uniformly r.e. sequence} if the set $\{(x, e) \in \NN^2: x \in A_e\}$ is r.e.
+\end{definition}
+So $W$ is uniformly r.e.
+\begin{lemma}
+A set $A$ is recursive iff $A$ is r.e. and co-r.e.
+\end{lemma}
+\begin{proof}
+Suppose $A$ is recursive, and let $f$ be its indicator function. Let $g_j(x) = j$ if $x = f(j)$ and be undefined otherwise. Then clearly $g_j$ is recursive, and $g_0,g_1$ witness that $A$ and $A^c$ are r.e.)
+
+Suppose that $A$ is r.e. and co-r.e., and let $f,f^c$ be partial recursive functions which witness those facts respectively. Define a program $P$ with one input $n$ by attempting to compute $f(n)$ by day and $f^c(n)$ by night. Since $\dom f = A$ and $\dom f^c = A^c$, eventually we will have computed $f(n)$ or $f^c(n)$, thus computing $A$.
+\end{proof}
+We now show that $W$ is satisfies a universal property; namely, it is the initial object of the category of uniformly r.e. sequences under recursive functions.
+\begin{lemma}
+  If $A$ is a uniformly r.e. sequence then there is a recursive $q$ such that $A_e = W_{q(e)}$.
+\end{lemma}
+\begin{proof}
+Let $\Theta(e, x) = 0$ whenever $x \in A_e$, and leave $\Theta(e, x)$ undefined otherwise. Since $A$ is r.e., $\Theta$ is partial recursive. By the parameter theorem, there is a $q$ such that $\Phi_{q(e)}(x) \simeq \Theta(e, x)$. Thus $A_e = \dom \Phi_{q(e)} = W_e$.
+\end{proof}
+
+We now justify the terminology ``recursively enumerable." To do this, let $W_{e,s} = \dom \Phi_{e,s}$.
+\begin{lemma}
+The set $W_{e,s}$ is recursive.
+\end{lemma}
+\begin{proof}
+Since $P_{e,s}$ has runtime bounded by $s$, we can define a program $Q_{e,s}$ which admits one input $x$ and returns $1$ if $\Phi_{e,s}(x) \halts$ and $0$ otherwise. Since $Q_{e,s}$ has runtime bounded by $s+1$, it halts for any $x$, and clearly computes the indicator function of $W_{e,s}$.
+\end{proof}
+
+\begin{lemma}
+\label{re iff yielding}
+A set $A$ is r.e. iff there is a program which recursively enumerates $A$.
+\end{lemma}
+\begin{proof}
+If $A$ is r.e., there is a $e$ such that $A = W_e$, and $(W_{e,s})_s$ is a recursive enumeration of $W$. Conversely, suppose that $A$ admits a recursive enumeration $(A_s)_s$. Then let $f(x) = 0$ if $x \in A_s$. So $f(x) \halts$ iff $x \in A$, and hence $A$ is r.e.
+\end{proof}
+
+\begin{lemma}
+The partial recursive image of a r.e. set is r.e.
+\end{lemma}
+\begin{proof}
+Let $f$ be partial recursive, $A = \dom f$, $B = f(A)$. Since $A$ is r.e., it has a recursive enumeration $(A_s)_s$, and $(f(A_s))_s$ is a recursive enumeration of $B$.
+\end{proof}
+So partial recursive functions ``cannot add any more complexity."
+\begin{definition}
+Sets $A, B\subseteq \NN$ are said to be \dfn{many-one reducible} if there is a recursive function $f$ such that $n \in A$ iff $f(n) \in B$; in this case we write $A \leq_m B$.
+\end{definition}
+So $\leq_m$ is a preorder on $\pset(\NN)$.
+
+We now show that there are nontrivial examples of r.e. sets.
+\begin{definition}
+Let $0'$ (``\dfn{zero jump}") be $\dom(e \mapsto \Phi_e(e))$. The problem of determining membership in $0'$ is called the \dfn{halting problem}.
+\end{definition}
+Equivalently, $0' = \{e: e \in W_e\}$, by definition of $W_e$.
+\begin{theorem}
+$0'$ is r.e. but not recursive.
+\end{theorem}
+\begin{proof}
+By definition $0'$ is r.e. If $0'$ is co-r.e., then there is a $e$ such that $(0')^c = W_e$. So $e \in 0'$ iff $e \in W_e$ iff $e \in (0')^c$, which is a contradiction.
+\end{proof}
+
+\section{Notions of reducibility}
+\begin{definition}
+A preorder on $\pset(\NN) \setminus \{\emptyset, \NN\}$ is said to be a \dfn{notion of reducibility.}
+\end{definition}
+Let $\leq_r$ be a notion of reducibility. (For example, we could be talking about many-one reducibility.) Then we have an equivalence relation $\equiv_r$ on $\pset(\NN) \setminus \{\emptyset, \NN\}$ defined by $A \equiv_r B$ iff $A \leq_r B$ and $B \leq_r A$, and $\leq_r$ drops to a partial order on the set of equivalence classes for $\equiv_r$.
+\begin{definition}
+Let $\leq_r$ be a notion of reducibility. The poset of equivalence classes of $\equiv_r$ is called the set of \dfn{degrees} of $\leq_r$.
+\end{definition}
+\begin{definition}
+Let $\leq_r$ be a notion of reducibility. A r.e. set $A$ is said to be \dfn{$r$-complete} iff for every r.e. set $B$, $B \leq_r A$.
+\end{definition}
+Intuitively, a set is $r$-complete if it is at least as complicated as every r.e.-set.
+
+We now treat many-one reducibility. The terminology derives from the fact that the recursive function appearing in the definition may not be injective, so maps many numbers to just one. Notice that $\emptyset$ and $\NN$ do not fit into the many-one degrees sensibly, and we throw out their degrees from the poset of many-one degrees that we are about to construct. (Here by ``trivial" we mean equal to $\emptyset$ or $\NN$.)
+\begin{lemma}
+The lowest many-one degree consists of the nontrivial recursive sets.
+\end{lemma}
+\begin{proof}
+Given $X$ recursive and $Y \subset \NN$ nontrivial, we must find a witness $f$ to the fact that $X \leq_m Y$. Choose $y \in Y$ and $\not y \notin Y$. Let $f(x) = y$ if $x \in X$ and $f(x) = \not y$ otherwise. Since $X$ is recursive, so is $f$.
+\end{proof}
+\begin{lemma}
+  \label{0jump is many1 complete}
+A set $A$ is r.e. iff $A \leq_m 0'$, so $0'$ is $m$-complete. Moreover, the r.e. index for $A$ can be computed from the witness to $A \leq_m 0'$ and vice-versa.
+\end{lemma}
+\begin{proof}
+Suppose that $A \leq_m 0'$, as witnessed by a recursive function $h$. Let $j(e) \simeq \Phi_e(e)$ and let $\Psi \simeq j \circ h$. Then $\dom \Psi = h^{-1}(0') = A$, so $A$ is r.e. and the index can be easily computed using Lemma \ref{re iff yielding}.
+
+Conversely, suppose that $A$ is r.e. Let $\Theta(e, n, x) \halts$ exactly if $n \in A$ and $x = e$. By the parameter theorem, there is a recursive function $g$ such that
+$$\Theta(e, n, x) \simeq \Phi_{g(e, n)}(x).$$
+Then $W_{g(e, n)} = \dom \Phi_{g(e, n)} = \dom \Theta(e, n, \cdot)$. If $n \in A$, therefore, $W_{g(e, n)} = \{e\}$; otherwise $W_{g(e, n)} = \emptyset$.
+
+By the recursion theorem, there is a recursive function $h$ such that $W_{g(h(n), n)} = W_{h(n)}$. If $n \in A$, then $W_{h(n)} = \{h(n)\}$ so $h(n) \in 0'$. Otherwise $W_{h(n)} = \emptyset$ so $h(n) \notin 0'$. So $h$ is a witness to $A \leq_m 0'$, and the proof of this was constructive because the recursion theorem and parameter theorem were.
+\end{proof}
+
+\begin{lemma}
+For every $A \subset \NN$ there are countably many $X \subset \NN$ such that $X \leq_m A$. In particular, there is no greatest many-one degree.
+\end{lemma}
+\begin{proof}
+There are only countably many recursive functions, each one defining an $X$.
+\end{proof}
+
+To introduce another notion of reducibility, we need to talk about oracles.
+\begin{definition}
+Let $Y \subseteq \NN$. The \dfn{oracle} associated to $Y$ is the blackbox subroutine which computes the indicator function of $Y$.
+\end{definition}
+Assuming the existence of an oracle greatly strengthens our notion of computation. For example, the oracle associated to $0'$ can tell whether a program halts. This does not introduce a contradiction, because assuming the existence of an oracle for $0'$ will cause many fewer programs to halt (since they can decide whether $0'$ halts). In fact, it changes the enumeration of the Turing functionals, since more programs are valid. We write $P^Y_k$, $W^Y_k$, and $\Phi^Y_k$ for this new enumeration, which is only assumed to be recursive with respect to the oracle $0'$.
+\begin{definition}
+Let $Y \subseteq \NN$. A function $f: \NN \to \NN$ is said to be \dfn{recursive in $Y$} if the oracle associated to $Y$ provides enough information to compute $f$. In this case, we write $f \leq_T Y$. If $A \subseteq \NN$, we say that $A$ is \dfn{Turing reducible} and write $A \leq_T Y$, if the indicator function of $A$ is recursive in $Y$.
+\end{definition}
+\begin{definition}
+Let $Y \subseteq \NN$. The \dfn{Turing jump} of $Y$, denoted $Y'$, is defined to be $\dom(e \mapsto \Phi_e^Y(e))$.
+\end{definition}
+Thinking of $0$ as a von Neumann ordinal we see that this agrees with the original definition of $0'$. We now extend this definition transfinitely.
+\begin{definition}
+A \dfn{recursive ordinal} is a countable ordinal $\alpha$ such that the ordering of $\alpha$, viewed as a subset of $\NN^2$, is recursive. The supremum of the recursive ordinals is the \dfn{Church-Kleene ordinal} $\omega_1^{CK}$.
+\end{definition}
+We can identify $\alpha$ with a subset of $\NN^2$ since $\alpha$ is countable. The Church-Kleene ordinal exists since the ordinals form a proper class, but actually $\omega_1^{CK}$ is not even uncountable. For example, $\omega_1^{CK} > \varepsilon_0$, where $\varepsilon_0$ is the proof-theoretic ordinal of $\PA$. $(L_{\omega_1^{CK}}, \in)$ is a model of a weak set theory known as \dfn{Kripke-Platek set theory}, and is the predicative part of ZFC.
+\begin{definition}
+Let $Y \subseteq \NN$. We define $Y^{(\alpha)}$, $\alpha$ ranging over $\omega_1^{CK}$, as follows. Let $Y^{(0)} = Y$, and let $Y^{(\alpha + 1)} = (Y^{(\alpha)})'$. If $\alpha$ is a limit ordinal, let $Y^{(\alpha)}$ denote the image of a recursive function of the disjoint union of the $Y^{(\beta)}$, $\beta < \alpha$, into $\NN$.
+\end{definition}
+Here such a recursive function exists because $\alpha < \omega_1^{CK}$.
+
+The notions of recursion relativise to notions for recursion with respect to an oracle. For example, we may refer to a function as r.e. with respect to an oracle. We summarize the relativizations of the results that we have proven thus far.
+\begin{theorem}
+Let $Y \subseteq \NN$, $A \subseteq \NN$. Then:
+\begin{enumerate}
+  \item $A \leq_T Y$ iff $A$ is r.e. and co-r.e. in $Y$.
+  \item For every recursive function $g: \NN^2 \to \NN$ there is a recursive function $f$ such that
+  $$\Phi^Y_{g(f(n), n)} = \Phi^Y_{f(n)}$$
+  and this function $f$ is independent of the choice of $Y$.
+  \item $A$ is r.e. in $Y$ iff $A \leq_m Y'$.
+\end{enumerate}
+\end{theorem}
+
+When we write $\Phi_{e,s}^Y(x) = y$, we specifically mean that not only is the runtime of $P_e^Y(x)$ at most $s$, but that $P_e^Y(x)$ did not ask whether $s' \in Y$, for $s' > s$.
+
+\begin{theorem}[use principle]
+\index{use principle}
+A terminating computation with oracle set $Y$ only checks whether finitely many numbers are in $Y$; so, in particular,
+$$\lim_{s \to \infty} \Phi_{e,s}^Y(x) = \Phi_e^Y(x).$$
+\end{theorem}
+\begin{definition}
+The \dfn{use} of $\Phi_e^Y(x)$ is $1 + \max_i s_i$, where $s_1, \dots, s_n$ are the indices that $P_e^Y(x)$ checked were in $Y$.
+\end{definition}
+
+\section{The arithmetical hierarchy}
+Suppose that $R$ is a computable relation on $\NN^k$. Then $R$ is definable in $\mathcal L_{\PA}$, since the formula defining $R$ can clearly be recovered from a program which computes $R$. Therefore we can view $R$ as the interpretation of a variable in $\mathcal L_{\PA}$. So the below definition makes sense.
+\begin{definition}
+\label{arithemtical hierarchy}
+Let $A \subseteq \NN$ be definable in $\mathcal L_{\PA}$. Let $Q_n = \exists$ for $n$ odd and $Q_n = \forall$ for $n$ even. We say that $A$ is $\Sigma_n^0$, if there is a relation variable $R$ whose interpretation is computable, and the formula $\sigma$ which defines $A$ has one free variable and
+$$\sigma(x) = \exists y_1 \forall y_2 \exists y_3 \cdots Q_n y_n R(x, y_1, \dots, y_n).$$
+We say that $A$ is $\Pi_n^0$ if $A^c$ is $\Sigma_n^0$. We say that $A$ is $\Delta_n^0$ if $A$ is $\Sigma_n^0$ and $\Pi_n^0$. If $A$ is $\Sigma_n^0$ for some $n$, we say that $A$ is an \dfn{arithmetical set}.
+\end{definition}
+We now relativize this notion.
+\begin{definition}
+Let $Y \subseteq \NN$ be an oracle and let $A \subseteq \NN$. We say that $A$ is $\Sigma_n^0(Y)$ if the same conditions as Definition \ref{arithemtical hierarchy} hold, except that we only assume that the interpretation of the relation symbol $R$ is recursive in $Y$.
+\end{definition}
+
+\begin{lemma}
+  \label{sigma 10 re}
+A set $A$ is $\Sigma_1^0$ iff $A$ is r.e.
+\end{lemma}
+\begin{proof}
+Suppose $A$ is $\Sigma_1^0$. Then there is a computable relation $R$ such that for every $x$, $x \in A$ iff there is a $y$ such that $R(x, y)$. Define $f(x)$ to be the least such $y$ if it exists. Then $f$ can be computed by iterating over $\NN$, so $f$ is partial recursive with $\dom f = A$. Therefore $A$ is r.e.
+
+Conversely, if $A$ is r.e., let $A = \dom f$ for some partial recursive $\Phi_e$. Let $R$ be the computable relation such that $R(x, s)$ iff $\Phi_{e,s}(x) \halts$. Then $R$ witnesses that $A$ is $\Sigma_1^0$.
+\end{proof}
+
+\begin{definition}
+Let $\mathcal A \subseteq \pset(\NN)$ be a complexity class. A set $Y$ is \dfn{$\mathcal A$-complete} if for every $A \in \mathcal A$, $A \leq_m Y$.
+\end{definition}
+
+\begin{theorem}
+\label{sigman0 iff re in zero(n-1)jump}
+A set $A$ is $\Sigma_n^0$ iff $A$ is r.e. in $0^{(n-1)}$. Moreover, $0^{(n)}$ is $\Sigma_n^0$-complete.
+\end{theorem}
+\begin{proof}
+We prove this by induction on $n$. If $n = 1$ this follows from Lemmata \ref{sigma 10 re} and \ref{0jump is many1 complete}, so we may assume $n > 1$.
+
+Suppose $A$ is $\Sigma_n^0$. Then there is a $\Pi_{n-1}^0$ formula $\varphi$ with two free variables such that $x \in A$ iff $\exists y~\varphi(x, y)$. Let $B$ be the set of those $(x, y) \in \NN^2$ such that $\varphi(x, y)$. By Lemma \ref{sigma 10 re}, $A$ is r.e. in $B$.
+Moreover, since $B$ is $\Pi_{n-1}^0$, $B$ is also $\Sigma_{n-1}^0$, hence $B \leq_m 0^{(n-1)}$. Therefore $A$ is r.e. in $0^{(n-1)}$.
+
+Suppose that $A$ is r.e. in $0^{(n-1)}$, so there is an index $e$ such that $A = \dom(\Phi_e^{0^{(n-1)}})$. By the use principle, $x \in A$ iff there is a runtime $s$ such that the finite set $Y = \{n \in 0^{(n-1)}: n \leq s\}$ satisfies $\Phi^Y_{e,s}(x) \halts$.
+For a fixed $i \leq s$, the statement $i \in Y \iff i \in 0^{(n-1)}$ is $\Sigma_n^0$. Since the quantifier is bounded, $A$ is $\Sigma_n^0$. In particular, $A \leq_m 0^{(n)}$, so $A$ is $\Sigma_n^0$-complete.
+\end{proof}
+
+We now more carefully scrutinize the $\Delta_2^0$ sets.
+\begin{definition}
+Let $Z \subseteq \NN$. A \dfn{recursive approximation} to $Z$ is a recursive sequence of sets $(Z_s)_s$ such that $Z_s \subseteq \{0, 1, \dots, s - 1\}$ and $\lim_s Z_s = Z$.
+\end{definition}
+Every r.e. set is recursively approximable, but the idea is that a recursive approximation is not assumed to be a chain; membership of some fixed number can change arbitrarily many (but finitely many) times as $s \to \infty$.
+
+We write $E[s]$ to mean the value of $E$ at stage $s$, and $E[s] \halts$ if $E[t]$ remains constant for $t \geq s$.
+
+\begin{theorem}[Schoenfeld limit lemma]
+  \index{Schoenfeld limit lemma}
+  The following are equivalent for a set $Z$:
+\begin{enumerate}
+\item $Z$ has a recursive approximation.
+\item $Z \leq_T 0'$.
+\item $Z$ is $\Delta_2^0$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Suppose that $Z \leq_T 0'$, so there is a $e$ such that the indicator function of $Z$ is $\Phi_e^{0'}$. Then a recursive approximation to $Z$ is given by
+$$Z_s = \{x < s: \Phi_e^{0'}(x)[s] = 1\}.$$
+
+Conversely, if $Z$ has a recursive approximation $(Z_s)_s$, let $C_0 = \emptyset$, and inductively let $C_s$ consist of elements of $C_{s-1}$ and those $(x, i)$ such that $Z_{s-1}(x) \neq Z_s(x)$ and $i$ is chosen minimally so that $(x, i) \notin C_{s-1}$. Then $(C_s)_s$ is a chain of recursive sets, since the $Z_s$ were recursive, so $C = \lim_s C_s$ is a r.e. set, hence $C \leq_T 0'$. Define a program with oracle $C$ to compute the least $i$ such that $(x, i) \notin C$.
+This $i$ is the number of times that $x$ was added or removed from the recursive approximation of $Z$. So if $i$ is even then $Z(y) = Z_0(y)$. Otherwise $Z(y) = 1 - Z_0(y)$. Therefore $Z \leq_T C$, so $Z \leq_T 0'$.
+
+Now $Z \leq_T 0'$ iff $A$ is r.e. and co-r.e. in $0'$, which by Theorem \ref{sigman0 iff re in zero(n-1)jump} happens iff $A \in \Delta_2^0$.
+\end{proof}
+
+
+
+\chapter{Elementary set theory}
+\section{The axioms of ZF without Foundation}
+By an \dfn{LST-formula} we mean a first-order formula in the language of set theory, namely the language consisting of a single binary relation symbol $\in$.
+
+The axioms are:
+\begin{axiomZFC}[extensionality]
+    A set is determined by its elements.
+\end{axiomZFC}
+\begin{axiomZFC}[empty set]
+    There is a set with no elements, denoted $\emptyset$.
+\end{axiomZFC}
+\begin{axiomZFC}[pairing]
+    For any two sets $x,y$, the set $\{x, y\}$ exists.
+\end{axiomZFC}
+\begin{axiomZFC}[union]
+    For any set $x$, the set $\bigcup x$ exists.
+\end{axiomZFC}
+\begin{axiomZFC}[power set]
+    For any set $x$, the set $\pset x$ exists.
+\end{axiomZFC}
+    By extensionality, all the above sets are unique. Moreover, the class $V_\omega$ of hereditarily finite sets is a model of the above theory. So we need to introduce a new axiom to escape $V_\omega$. This will be the first ``small large-cardinal axiom."
+\begin{axiomZFC}[infinity]
+    There is a set $x$ such that $\emptyset \in x$ and such that for each $y \in x$, $y \cup \{y\} \in x$.
+\end{axiomZFC}
+    Then $\omega$ is the intersection of all such sets. (We will call these sets \dfn{inductive}.)
+
+    Now $V_{\omega + \omega}$ is a model of the above theory, but does not contain $\aleph_\omega$. So we introduce the following schema of ``small large-cardinal axioms."
+\begin{axiomZFC}[replacement schema]
+    For every LST-formula $\varphi$, we have
+$$\forall \vec p \forall x(\forall y \in x \exists! z \varphi(y, z, \vec p) \to \exists y \forall z (z \in y \leftrightarrow \exists w \in x \varphi(y, z, \vec p)).$$
+\end{axiomZFC}
+
+\section{Transfinite induction}
+    Fix a binary relation $R$ on a class $X$.
+\begin{definition}
+    The $R$-\dfn{extension} of $x \in X$ is
+    $$\ext_R(x) = \{x^* \in X: x^*Rx\}.$$
+
+    $R$ is \dfn{transitive} if for every $x_1,x_2,x_3$, $x_1Rx_2$ and $x_2Rx_3$ implies $x_1Rx_3$. The \dfn{transitive closure} of $R$, $\TC(R)$, is the smallest binary relation which is transitive and contains $R$.
+
+    The $R$-\dfn{predecessors} of $x$ are
+    $$\pred_R(x) = \ext_{\TC(R)}(x).$$
+
+    $Y \subseteq X$ is $R$-\dfn{transitive} if for every $y \in Y$, $\pred_R(y) \subseteq Y$ (i.e. $Y$ is closed under $\pred$).
+\end{definition}
+\begin{definition}
+    $R$ is \dfn{well-founded} if for every set $Y \subseteq X$ there is a $R$-minimal element, and if for every $x \in X$, $\ext_R(x)$ is a set.
+\end{definition}
+\begin{axiomZFC}[foundation]
+    $\in$ is well-founded.
+\end{axiomZFC}
+    We will always assume foundation in what follows. Foundation, along with the above axioms, comprise the Zermelo-Frankel axiom system. This is still not ZFC because we have no introduced choice.
+
+    Note that if $X$ is actually a set, then $R$ is well-founded iff every subset has a minimal element, and if $(X, R)$ is a chain, then this happens iff $R$ is a well-order. In fact we take this as a definition.
+\begin{definition}
+    $R$ is \dfn{strict} if for every $x \in X$, $\neg(xRx)$.
+
+    $R$ is \dfn{linear} if every $x_1,x_2 \in X$, $x_1Rx_2$ or $x_2Rx_1$.
+\end{definition}
+\begin{definition}
+    $R$ is a \dfn{well-ordering} if $R$ is strict, linear, and well-founded.
+\end{definition}
+\begin{axiom}[well-ordering]
+    Every set admits a well-ordering.
+\end{axiom}
+    We will \emph{not} assume this axiom.
+
+    Now we have set up transfinite induction and recursion.
+\begin{theorem}[transfinite induction]
+    \index{transfinite induction}
+    Let $R$ be well-founded and $Y \subseteq X$. If for every $x \in X$ such that $\pred_R(x) \subseteq Y$, $x \in Y$, then $Y = X$.
+\end{theorem}
+    We think of $x$ as the ``successor" of its predecessors $\pred_R(x)$. So this is analogous to strong induction.
+\begin{proof}
+    Assume $x \in X \setminus Y$. Then we can take $x$ to be minimal since $R$ is well-founded. Then if $y \in \pred_R(x)$, $y \notin X \setminus Y$ so $y \in Y$. So $x \in Y$, a contradiction.
+\end{proof}
+\begin{theorem}[transfinite recursion]
+    \index{transfinite recursion}
+    Let $R$ be well-founded and $G: X \times V \to V$ is a class function. There is a unique class function $F: X \to V$ such that for every $x \in X$,
+    $$F(x) = G(x, F|_{\pred_R(x)}).$$
+\end{theorem}
+\begin{proof}
+    Uniqueness follows immediately by transfinite induction. For existence, let $x$ be minimal and put $f_0(x) = G(x, \emptyset)$ to start the induction.
+
+    Say that $f: D \to X$ is \dfn{good} if $D \subseteq X$, for every $x \in D$, $\pred_R(x) \subseteq D$, and $f(x) = G(x, f|_{\pred_R(x)})$. Clearly $f_0$ is good. By uniqueness, if $f_1: D_1 \to X$ and $f_2: D_2 \to X$ are good, then $f_1\cap f_2: D_1 \cap D_2 \to X$ is defined. By transfinite induction with $f_0$ as the base case, the union of all $D$ such that there is a good $f$ is $X$ itself. So by ``gluing" the good functions, $F$ is uniquely defined.
+\end{proof}
+
+\section{Ordinals}
+Let $R$ be a well-ordering of a class $X$. For $x \in X$, we let $I_x^R$ be the initial segment $\pred_R(x)$ with its induced well-ordering.
+
+By an easy transfinite induction, we have the following theorem.
+\begin{theorem}
+    Let $S$ be a well-ordering of a class $Y$. Then either $Y$ is an initial segment of $X$ or $X$ is an initial segment of $X$.
+\end{theorem}
+
+\begin{definition}
+    A \dfn{transitive set} $X$ is one for which $x \in X$ implies $x \subset X$.
+\end{definition}
+\begin{lemma}
+    If $X$ is transitive then so are $X \cup \{X\}$, $\bigcup X$, and $\pset X$.
+\end{lemma}
+    Obviously $\emptyset$ is transitive.
+\begin{definition}
+    An \dfn{ordinal} is a transitive set $\alpha$ such that $\in$ is a well-ordering of $\alpha$.
+\end{definition}
+    We denote the class of ordinals $\Ord$. Now if $\alpha \in \Ord$ and $\beta \in \alpha$, $\beta \in \Ord$. So $\alpha$ consists of the ordinals under $\alpha$. In particular $\beta \in \alpha$ iff $\beta \subset \alpha$. So it follows that $\Ord$ is well-ordered by $\in$.
+\begin{theorem}
+    $\Ord$ is a proper class.
+\end{theorem}
+\begin{proof}
+    Suppose not. Then $\in$ is a well-ordering of $\Ord$, so $\Ord$ is an ordinal. So $\Ord \in \Ord$, contradicting foundation.
+\end{proof}
+
+Now we see that the only well-ordered sets are the ordinals.
+\begin{theorem}
+    Let $(X, R)$ be a well-ordered set. Then there is an ordinal $\alpha$ and an isomorphism $X \to \alpha$.
+\end{theorem}
+\begin{definition}
+    The ordinal $\alpha$ is called the \dfn{ordertype} of $(X, R)$.
+\end{definition}
+    To prove this we need a lemma.
+\begin{lemma}
+    For any $x \in X$ there is an ordinal $\alpha$ such that $I_x^R \cong \alpha$.
+\end{lemma}
+\begin{proof}
+    Apply replacement from $I_x^R$ into $\Ord$.
+\end{proof}
+\begin{proof}[Proof of theorem]
+    Take the set $\beta$ of all ordinals $\alpha$ such that for some $x \in X$, $I_x^R \cong \alpha$. Then clearly $\beta$ is an ordinal.
+\end{proof}
+
+Now we define arithemtic on ordinals by transfinite recursion. Namely, we put $\alpha + 0 = \alpha$, $\alpha\cdot 0 = \alpha$, and $\alpha^0 = 1$. We then put $\alpha + (\beta + 1) = (\alpha + \beta) + 1$, $\alpha(\beta + 1) = \alpha\beta + \alpha$, and $\alpha^{\beta+1} = \alpha^\beta\alpha$. Then we take unions at limit stages. We let $\omega$ denote the smallest infinite ordinal, which exists by the axiom of infinity.
+
+\begin{theorem}[division algorithm]
+    Let $\alpha$ and $\beta > 0$ be ordinals. There are unique $\gamma_1$ and $\gamma_2 < \beta$ such that
+    $$\alpha = \beta\gamma_1 + \gamma_2.$$
+\end{theorem}
+The proof is the same as for the classical division algorithm.
+
+\begin{theorem}[Cantor normal form]
+    \index{Cantor normal form}
+    If $\alpha > 0$ is an ordinal then we can uniquely write
+    $$\alpha = \omega^{\beta_1}\kappa_1 + \dots + \omega^{\beta_n}\kappa_n$$
+    where $\alpha > \beta_1 > \dots > \beta_n \in \Ord$ and $\kappa_1, \dots, \kappa_n, n \in \omega$.
+\end{theorem}
+The proof is by greedy transfinite induction.
+
+\begin{definition}
+    The \dfn{cumulative hierarchy} is defined by transfinite recursion as:
+\begin{enumerate}
+    \item $V_0 = \emptyset$.
+    \item $V_{\alpha + 1} = \pset V_\alpha$.
+    \item $V_\lambda = \bigcup_{\alpha \in \lambda} V_\alpha$ for $\lambda$ a limit ordinal.
+\end{enumerate}
+    Finally $V$ is the proper class $V = \bigcup_{\alpha \in \Ord} V_\alpha$.
+\end{definition}
+By transfinite induction, every $V_\alpha$ is transitive. Since $V_\alpha \in V_\beta$ for $\beta > \alpha$, transitivity implies that the $V_\alpha$ form a chain with respect to $\subset$.
+
+By foundation, $\in$ is a well-founded relation on the proper class of all sets. Thus we have the following theorem.
+\begin{theorem}
+For any set $x$, $x \in V$.
+\end{theorem}
+\begin{proof}
+Suppose not. Then take $x$ to be an $\in$-minimal set which does not appear in $V$, which is possible since $\in$ is well-founded. Then $x \in V$, a contradiction.
+\end{proof}
+
+\begin{definition}
+The \dfn{rank} $\alpha$ of a set $x$ is the least ordinal such that $x \in V_{\alpha + 1}$.
+\end{definition}
+
+\section{The axiom of choice}
+We now study the most famous of the axioms of ZFC.
+\begin{definition}
+    A \dfn{choice function} on a set $X$ is a function $f: X \to \bigcup X$ such that for every $x \in X$, $f(x) \in x$.
+\end{definition}
+\begin{axiomZFC}[choice]
+    Every set admits a choice function.
+\end{axiomZFC}
+ZF + choice = ZFC. However we will \emph{not} assume choice until a later stage. Here's another famous axiom.
+\begin{axiom}[Zorn]
+    If $(X, \leq)$ is a nonempty poset such that every subchain of $X$ has an upper bound, then $X$ has a maximal element.
+\end{axiom}
+\begin{theorem}
+    Choice, well-ordering, and Zorn are equivalent.
+\end{theorem}
+\begin{proof}
+    First we prove that choice implies well-ordering. Given $X$ there is a choice function on $\pset X \setminus \{\emptyset\}$. Now let $x_1 \in f(X)$, $x_2 \in f(X \setminus \{x_1\}$, $\dots$. This gives an bijective function $\alpha \to X$, $\beta \mapsto x_\beta$, where $\alpha \in \Ord$, and must stop after transfinitely many steps because if not then $\alpha = \Ord$, a contradiction.
+
+    Now assume well-ordering. To prove Zorn we let $(X, \leq)$ be a poset such that every subchain of $X$ has an upper bound. By well-ordering there is a bijection $f: \alpha \to X$ for some $\alpha \in \Ord$. This gives an injection $g: \beta \to X$ for some $\beta \in \alpha$ by choosing $g(0) = f(0)$ and always letting $g(\beta)$ be the $f$-minimal element in the current chain. This process stops after transfinitely many steps (or else $\beta = \Ord$), and then $g(\beta)$ is maximal.
+
+    To prove choice from Zorn, let $\mathcal F$ be the set of all partial choice functions on $X$. By Zorn, $\mathcal F$ has a maximal element $F$, and it is easy to see that $F$ is a (total) choice function on $X$.
+\end{proof}
+
+\section{Cardinals}
+We still are working in ZF, i.e. still not assuming choice.
+
+\begin{definition}
+    If $\kappa$ is an ordinal such that for every ordinal $\alpha$ which is in bijection with $\kappa$, $\alpha \geq \kappa$, then $\kappa$ is a \dfn{cardinal}, and we write $\kappa \in \Card$.
+\end{definition}
+\begin{definition}
+    Assume the axiom of choice. The \dfn{cardinality} of $X$, $\card X$, is the unique $\kappa \in \Card$ such that $X$ and $\kappa$ are in bijection.
+\end{definition}
+\begin{lemma}
+    If $A$ is a set of cardinals then $\bigcup A$ is a cardinal.
+\end{lemma}
+\begin{proof}
+    Clearly $\bigcup A = \sup A$, so we just have to show that $\sup A \in A$. Assume not. So there is an ordinal $\alpha < \bigcup A$ and a bijection $f: \alpha \to \bigcup A$. Then there is a $\kappa \in \bigcup A$ such that $\alpha < \kappa$ and an injection $\alpha \to \kappa$ obtained by restricting $f$, a contradiction.
+\end{proof}
+    We let $\aleph_0 = \omega$, $\aleph_{\alpha + 1}$ be the smallest cardinal larger than $\aleph_\alpha$, and let $\aleph_\gamma = \bigcup_{\alpha < \gamma} \aleph_\gamma$ for $\gamma$ a limit ordinal, which is a set by replacement. In particular, $\aleph_\omega$ exists; this is the sense in which replacement is a ``large cardinal axiom."
+    Since $\Ord$ is well-ordered, for every cardinal $\kappa$ there is an ordinal $\alpha$ such that $\kappa = \aleph_\alpha$.
+
+    Similarly, we define $\beth_0 = \omega$, $\beth_{\alpha + 1} = \card \pset \beth_\alpha$, $\beth_\gamma = \bigcup_{\alpha < \gamma} \beth_\gamma$.
+\begin{lemma}
+    If $\kappa \geq \aleph_0$ then there is a $\alpha \in \Ord$ such that $\kappa = \aleph_\alpha$.
+\end{lemma}
+\begin{proof}
+    Let $\alpha$ be minimal among those for which $\aleph_\alpha \geq \kappa$. Assume that $\aleph_\alpha > \kappa$. If $\alpha$ is a limit ordinal, then there is a $\beta < \alpha$ such that $\aleph_\beta > \kappa$, so we might as well assume $\alpha = \gamma + 1$ for some $\gamma$. Then we have $\aleph_\gamma < \kappa < \aleph_\alpha$, a contradiction.
+\end{proof}
+
+We now consider the two axioms that will motivate much of the rest of what we do. They are independent of ZFC, but proving this is highly nontrivial.
+\begin{axiom}[continuum hypothesis]
+    \index{continuum hypothesis}
+    $\card \RR = \aleph_1$.
+\end{axiom}
+\begin{axiom}[generalized continuum hypothesis]
+    \index{generalized continuum hypothesis}
+    For every $\alpha$, $\aleph_\alpha = \beth_\alpha$.
+\end{axiom}
+Obviously GCH implies CH. In the absence of choice these are a little silly, because we have no reason to believe that $\card \RR$ is even well-defined.
+
+We now set up cardinal arithmetic. We define $\kappa + \lambda = \card(\kappa \sqcup \lambda)$ and $\kappa\lambda = \card(\kappa \times \lambda)$. This ends up being completely trivial.
+\begin{theorem}
+If $\kappa$ is infinite, then
+$$\kappa + \lambda = \kappa\lambda = \max(\kappa, \lambda).$$
+\end{theorem}
+\begin{proof}
+We have
+$$\max(\kappa, \lambda) \leq \kappa + \lambda \leq \kappa\lambda \leq \max(\kappa, \lambda) \max(\kappa, \lambda) = \max(\kappa, \lambda).$$
+The only step in this that isn't trivial is $\max(\kappa, \lambda)^2 = \max(\kappa, \lambda)$. But this is true of any infinite set.
+\end{proof}
+
+On the other hand, exponentiation is highly nontrivial. We let $\kappa^\lambda$ be the cardinality of the set of all functions $\lambda \to \kappa$.
+
+Let $\kappa$ be an infinite cardinal. Then $\kappa^\kappa = 2^\kappa$, so $\kappa^\kappa > \kappa$ by the diagonal argument. This (and one more theorem) is pretty much all we can prove about cardinal exponentiation. Just about everything can be proven independence using forcing.
+
+More generally, if $2 \leq \kappa \leq \lambda$ and $\lambda \geq \aleph_0$, then $\kappa^\lambda = 2^\lambda$. So we might as well assume $\kappa > \lambda$ unless we are studying $2^\lambda$.
+
+\begin{definition}
+A function $f: \alpha \to \kappa$ is \dfn{cofinal} if $f(\alpha)$ is unbounded in $\kappa$. The \dfn{cofinality} of $\kappa$, $\cof\kappa$, is the least $\alpha$ such that there is a cofinal $f: \alpha \to \kappa$.
+\end{definition}
+Obviously $\cof \kappa \leq \kappa$.
+\begin{definition}
+    A \dfn{regular cardinal} is a $\kappa \in \Card$ such that $\cof \kappa = \kappa$. Otherwise, $\kappa$ is a \dfn{singular cardinal}.
+\end{definition}
+It is easy to see that $\cof \aleph_0 = \cof \aleph_\omega = \aleph_0$. So $\aleph_0$ is a regular cardinal, while $\aleph_\omega$ is singular.
+\begin{lemma}
+    Let $\kappa \in \Card$. There is a strictly increasing cofinal function $\cof \kappa \to \kappa$.
+\end{lemma}
+\begin{proof}
+    There is a cofinal function $f: \cof \kappa \to \kappa$. Now let $g: \cof \kappa \to \kappa$ be given by
+    $$\alpha \mapsto \max(f(\alpha), 1+\sup_{\beta<\alpha}g(\beta)).$$
+    Then $g$ is strictly increasing and cofinal.
+\end{proof}
+\begin{lemma}
+    Suppose $f:\kappa \to \lambda$ is cofinal and nondecreasing. Then $\cof\kappa = \cof\lambda$.
+\end{lemma}
+\begin{proof}
+    For $\cof \lambda \leq \cof \kappa$, let $g: \cof\kappa \to \kappa$ be cofinal, then $f \circ g$ is cofinal. For the converse, let $g: \cof\lambda\to \lambda$ be cofinal and strictly increasing (possible by the above lemma). We let $h: \cof \lambda \to \kappa$ be given by sending $\alpha$ to the least $\beta$ such that $f(\alpha) > g(\beta)$, which is possible since $f$ is cofinal. Then $h$ is cofinal since $g$ is.
+\end{proof}
+    In particular, $\cof \cof \kappa = \cof \kappa$. It's not hard to show that $\cof \kappa$ is a cardinal, so $\cof \kappa$ is a regular cardinal.
+\begin{theorem}
+    Assume choice. If $\kappa$ is a successor cardinal then $\kappa$ is regular.
+\end{theorem}
+\begin{proof}
+    Assume $\kappa$ is the successor of $\lambda$. If $\kappa$ is singular then there is a cofinal function $f: \lambda \to \kappa$. For each $\alpha \in \lambda$ we have $f(\alpha) < \kappa$, so $\card f(\alpha) \leq \lambda$, which is well-defined by choice. So there is a surjective function $g_\alpha: \lambda \to f(\alpha)$. Now let $g(\beta) = \bigcup_\alpha g_\alpha(\beta)$. Then $g$ is surjective and maps onto $\kappa$, a contradiction.
+\end{proof}
+Now we can prove SOMETHING about cardinal exponentiation.
+\begin{theorem}
+    If $\kappa \geq \aleph_0$ then $\kappa^{\cof \kappa} > \kappa$.
+\end{theorem}
+\begin{proof}
+Assume $f: \cof \kappa \to \kappa$ is cofinal and $\kappa^{\cof \kappa} = \kappa$. Enumerate $\kappa^{\cof \kappa}$ as $g_\alpha$, for $\alpha < \kappa$. So define $g: \cof \kappa \to \kappa$ by sending $\beta$ to the least element of $\kappa$ such that $g_\alpha(\beta)$ does not have $\alpha < f(\beta)$. Then $g(\beta) \neq g_\alpha(\beta)$ for any $\alpha < f(\beta)$. Since $f$ is cofinal, $g \neq g_\alpha$ for any $\alpha$. So we have diagonalized.
+\end{proof}
+
+We now arrive at a large cardinal axiom.
+\begin{definition}
+A \dfn{weakly inaccessible cardinal} $\kappa$ is a regular limit cardinal such that $\kappa > \aleph_0$. An \dfn{inaccessible cardinal} is a weakly inaccessible cardinal $\kappa$ such that if $\lambda < \kappa$ then $2^\lambda < \kappa$.
+\end{definition}
+If $\kappa$ is weakly inaccessible, then $\aleph_\kappa = \kappa$. But $\kappa$ is much larger than the least $\aleph$-fixed point, since the limit $\lambda$ of $\aleph_0,\aleph_{\aleph_0},\aleph_{\aleph_{\aleph_0}},\dots$ is an $\aleph$-fixed point, yet $\lambda \leq \kappa$ and $\cof \lambda = \aleph_0$, so $\lambda < \kappa$. Moreover, if $\kappa$ is inaccessible and choice holds, then $V_\kappa$ is closed under every set-theoretic operation, so $(V_\kappa, \in)$ is a model of ZFC. (Weakly inaccessible cardinals already give models of ZFC minus power set, since inaccessibility gives replacement.) So their consistency strength is much stronger than that of ZFC, since they prove the consistency of ZFC.
+
+However, it is often useful (e.g. in the foundations of category theory) to assume the following large cardinal axiom.
+\begin{axiom}[Grothendieck]
+  \index{Grothendieck's axiom}
+There is a proper class of inaccessible cardinals.
+\end{axiom}
+
+
+\chapter{Infinitary combinatorics}
+\section{Ramsey theory}
+\section{Weakly compact cardinals}
+\section{Trees}
+\section{$\Delta$-systems}
+
+\begin{definition}
+    Let $C$ be an uncountable set of finite sets. Then $C$ is a \dfn{$\Delta$-system} if there is an $R \in C$ such that for every distinct pair $x, y \in C$, $x \cap y = R$.
+\end{definition}
+\begin{lemma}
+    If $C$ is an uncountable set of finite sets, then there is a $\Delta$-system $C' \subseteq C$.
+\end{lemma}
+\begin{proof}
+    By the infinite pigeonhole principle, we can find $n \in \omega$ such that uncountably many sets in $C$ have cardinality $n$, and we replace $C$ with the set of all sets in $C$ with cardinality $n$. Obviously if $n = 1$ then $R = \emptyset$ and we're done.
+
+    Assume that the lemma is true for every $k < n$. If there is an $c \in C$ contained in uncountably many sets, then add $c$ to $C'$ and apply the inductive hypothesis. Otherwise, every $c \in C$ only appears in countably many sets. Now do the usual Baire category theorem trick.
+\end{proof}
+\section{Suslin's hypothesis}
+
+
+
+
+
+\chapter{Constructibility}
+\section{Definability}
+We introduce a notion of quantifier complexity for LST.
+\begin{definition}
+A formula has \dfn{bounded quantifiers} if every quantification only ranges over sets.
+\end{definition}
+For example, $\forall y \in x(y \neq y)$ has bounded quantifiers (and defines $\emptyset$).
+\begin{definition}
+A formula $\varphi$ is $\Sigma_0$ and $\Pi_0$ if it has bounded quantifiers. It is $\Sigma_{n+1}$ if it can be expressed as $\exists x_1 \exists x_2 \cdots \exists x_k \psi$ for some $\psi$ which is $\Pi_n$. It is $\Pi_n$ if it can be expressed as $\neg\psi$ for some $\psi$ which is $\Sigma_n$. It is $\Delta_n$ if it is both $\Sigma_n$ and $\Pi_n$.
+\end{definition}
+
+\begin{theorem}
+Suppose $M \subseteq N \subseteq V$ is a chain of transitive models. Suppose $\psi$ is a formula and $a \in M^n$. Then:
+\begin{enumerate}
+\item If $\psi \in \Delta_0$ then $M \models \psi(a)$ iff $N \models \psi(a)$.
+\item If $\psi \in \Sigma_1$ and $M \models \psi(a)$ then $N \models \psi(a)$.
+\item If $\psi \in \Pi_1$ and $N \models \psi(a)$ then $M \models \psi(a)$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+In the $\Delta_0$ case, if $a_1, a_2 \in M$ then $M \models a_1 \in a_2$ iff $a_1 \in a_2$ iff $N \models a_1 \in a_2$. Similarly for $a_1 = a_2$. Something similar happens here for $\Sigma_1$ and $\Pi_1$ but obviously it only works in one direction.
+
+Now suppose that the theorem holds for $\varphi$ and $\psi$. Then obviously the theorem holds for $\neg\psi$ and $\varphi \wedge \psi$. Finally, we check the theorem for $\exists$. Note that $M \models \exists x \in a_1 \psi(x, a)$ iff there is a $b \in a_1$ such that $b \in M$ and $M \models \psi(b, a)$. Similarly for $N$. Here upward absoluteness follows because $M \subseteq N$. For downward absoluteness, we know $b \in a_1$, $b \in N$, $a_1 \in M$ and must show $b \in M$. This follows because $M$ is transitive.
+\end{proof}
+
+\begin{definition}
+Let $M$ be a set. Let $\Def^M$, the \dfn{definable power set} of $M$, be the set of $X \subseteq M$ which are definable with parameters taken from $M$.
+\end{definition}
+The definable power set exists, by the axiom of power set. Everything in $M$ is definable from $M$; take $x = m$ to define $m \in M$. So $M \subseteq \Def^M \subseteq \pset M$. If $M$ is finite then $\Def^M = \pset M$; if $M$ is infinite then $\card \Def^M = \aleph_0\card M = \card M$.
+
+\section{The reflection principle}
+\begin{definition}
+Suppose $\kappa$ is a regular uncountable cardinal. A set $S \subseteq \kappa$ is a \dfn{club set} if for every $\alpha < \kappa$ there is a $\beta \in C$ such that $\beta > \alpha$ and if $\alpha = \sup(S \cap \alpha)$ then $\alpha \in S$.
+\end{definition}
+So $S$ is closed and unbounded in the topology of $\kappa$.
+
+Recall that $M \preceq N$ means that $M$ is an elementary substructure of $N$.
+
+\begin{theorem}
+Let $\kappa$ be a regular uncountable cardinal and suppose that we have a chain of LST-models $M_\alpha = (M_\alpha, E_\alpha)$, $\alpha < \kappa$, so $M_\alpha \subseteq M_\beta$ whenever $\alpha < \beta$. Suppose that for every $\alpha < \kappa$, $\card M_\alpha < \kappa$, and for every limit $\beta < \kappa$, $M_\lambda = \bigcup_{\alpha < \beta} M_\alpha$.
+
+Let $M = \bigcup_{\alpha < \kappa} M_\alpha$, $E = \bigcup_{\alpha < \kappa} E_\alpha$, so $M = (M, E)$ is the injective limit of the $M_\alpha$. Let $S \subseteq \kappa$ be the set of $\alpha$ such that $M_\alpha \preceq M$. Then $S$ is a club set.
+
+In particular, for any $\alpha, \beta \in S$, if $\alpha < \beta$ then $M_\alpha \preceq M_\beta$.
+\end{theorem}
+\begin{proof}
+To see that $S$ is closed, let $\beta$ be a limit point of $S$. We must show $M_\beta \preceq M$, so let $\psi$ be a formula, $b \in M_\beta^n$. Then we can find a $\alpha < \beta$ such that $b \in M_\alpha^n$ and $M_\alpha \preceq M$, since $\beta$ is a limit point.
+
+Suppose that there is a $a \in M$ such that $M \models \psi(a, b)$. By the Tarski-Vaught test, there is a $a_\alpha \in M_\alpha$ such that $M_\alpha \models \psi(a_\alpha, b)$. Since $M_\beta$ is a limit, we can take $\alpha$ so large as to guarantee $M_\beta \models \psi(a_\alpha, b)$. Therefore $M_\beta \preceq M$ by the Tarski-Vaught test. Therefore $S$ is closed.
+
+Given $\psi$, let $f_\psi: \kappa \to \kappa$ send $\alpha$ to the least $\beta$ such that for all $b \in M_\alpha^n$, if there is a $a \in M$ such that $M \models \psi(a, b)$ then there is a $a_\beta \in M_\beta$ such that $M_\beta \models \psi(a_\beta, b)$.
+
+To see that $f_\psi$ is well-defined, fix $\psi$ and $\alpha$ and suppose that no such $\beta$ exists. There are $|M_\alpha|^n = |M_\alpha| < \kappa$ choices of $b$. Let $\beta_b$ be a witness to the failure of the theorem for $b$. Then $b \mapsto \beta_b$ is cofinal $M_\alpha^n \to \kappa$, so $\kappa$ is singular.
+
+Let $g: \kappa \to \kappa$ be defined by
+$$g(\alpha) = \sup_\psi f_\psi(\alpha).$$
+The mapping $\psi \mapsto f_\psi(\alpha)$ is cofinal $\omega \to \kappa$ if it is unbounded; since $\kappa$ is regular, it follows that the mapping is bounded, so $g$ is well-defined.
+
+Suppose that $g$ restricts to a function $\alpha \to \alpha$. By definition of $g$ and the Tarski-Vaught test, for every $\beta < \alpha$ and $b \in M_\beta^n$, if there is a $a \in M$ such that $M \models \psi(a, b)$ then there is a $a' \in M_{g(\beta)}$ such that for some $\gamma \leq g(\beta)$, $M_\gamma \models \psi(a', b)$, hence $M_\alpha \preceq M$.
+
+Now $g$ is an increasing function, so for any $\alpha_0$ the ordinal
+$$\alpha = \sup_{n < \omega} g^{\circ n}(\alpha_0)$$
+is closd under $g$ and is larger than $\alpha_0$. Taking $\alpha_0$ arbitrarily large we see that $\alpha$ is arbitrarily large, but $\alpha \in S$, so $S$ is unbounded.
+
+The last paragraph is obvious.
+\end{proof}
+
+\begin{theorem}[reflection]
+  \index{reflection principle}
+  The class of ordinals $\alpha$ such that $V_\alpha \prec V$ is a club.
+\end{theorem}
+\begin{proof}
+The $V_\alpha$, $\alpha \in \Ord$, meet the hypotheses of the above theorem (this is obvious if ZFC is consistent, and otherwise it follows by the principle of explosion).
+\end{proof}
+So it is impossible to distinguish $V$! Anything that we can say about it was already true for a club class of submodels.
+
+\section{The constructible sets}
+We now consider those sets which are constructible from the ordinals.
+
+\begin{definition}
+Let $L_0 = 0$, $L_{\alpha + 1} = \Def^{L_\alpha}$, and $L_\gamma = \bigcup_{\alpha < \gamma} L_\alpha$ for $\gamma$ a limit ordinal. Let $L = \bigcup_{\alpha \in \Ord} L_\alpha$. If $x \in L$, we say that $x$ is a \dfn{constructible set}.
+\end{definition}
+By induction, one can easily check that $L_\alpha$ is a transitive set and $L_\alpha \subset L_\beta$ for $\alpha < \beta$. Moreover, we have $L_\alpha \subseteq V_\alpha$, and every finite subset of $L_\alpha$ lies in $L_{\alpha + 1}$. Moreover, for $\alpha \leq \omega$, we have $L_\alpha = V_\alpha$. But, on the other hand, if $\alpha \geq \omega$ then $
+\card L_\alpha = \aleph_0(\card \alpha) = \card \alpha$ so $\card L_\alpha = \card \alpha$, which usually (but not always) implies $L_\alpha \neq V_\alpha$.
+
+\begin{theorem}
+$L$ is a model of ZF.
+\end{theorem}
+\begin{proof}
+Since $L$ is a transitive class, extensionality and foundation hold. Clearly $\emptyset, \omega \in L$ so empty set and infinity hold. Pairing, union, replacement, and power set follow from the definition of definability. The only nontrivial axiom is replacement. Suppose that for every $A, w \in L$ and every $x \in A$ there is a unique $y \in L$ such that $\phi^L(x, y, A, w)$. Let $\alpha$ be the sup, taken over the ranks (in $L$) of all $y \in L$ such there is an $x \in A$ with $\phi^L(x, y, A, w)$.
+
+Let $Y = L_{\alpha + 1}$; then $Y \in L$ and for every $y \in V$ such that there is a $x \in A$ such that $\phi^L(x, y, A, w)$, $y \in Y$. Therefore $y \in L$, so $L$ is a model of replacement.
+\end{proof}
+
+\begin{axiom}[$V = L$]
+  \index{$V=L$}
+    Every set is constructible.
+\end{axiom}
+In other words, $V_\alpha = L_\alpha$ for every $\alpha \in \Ord$.
+
+Since the notion of ``definability" is absolute, and $\Ord$ is absolute to $L$, it follows that $L_\alpha$ is absolute to $L$. In particular, $L$ proves that for every $x \in V$, $x \in L$, so $L \models (V=L)$.
+\begin{theorem}
+If ZF is consistent, then $V = L$ is consistent.
+\end{theorem}
+\begin{proof}
+If $V$ exists, then so does $L$, and $L$ is a model of $V = L$.
+\end{proof}
+
+In fact, $L$ is in some sense the minimal inner model of ZF.
+\begin{lemma}
+Let $M$ be a transitive proper class, and suppose $M$ is a model of ZF. Then $\Ord$ is absolute to $M$, and $\Ord$ is a subclass of $M$.
+\end{lemma}
+\begin{proof}
+The rank of a set $x$ is defined by recursion on $x$. Therefore rank is absolute to $M$. If $\alpha \in \Ord$, $M$ is not contained in $V_\alpha$ since $M$ is a proper class. So there is a $x \in M \setminus V_\alpha$ whose rank $\beta$ has $\beta \geq \alpha$; therefore $\beta \in M$, and since $M$ is transitive, $\beta \in M$. So $\Ord^M = \Ord$.
+\end{proof}
+
+\begin{theorem}
+Let $M$ be a transitive proper class, and suppose $M$ is a model of ZF. Then $L$ is absolute to $M$, and $L$ is a subclass of $M$.
+\end{theorem}
+\begin{proof}
+Since $\Ord$ is absolute to $M$, so is $L_\alpha$. Therefore $L^M = L$.
+\end{proof}
+
+We now show that $L$ satisfies an especially strong form of the axiom of choice.
+\begin{axiom}[global choice]
+  \index{axiom of global choice}
+  There is a well-ordering of $V$.
+\end{axiom}
+In fact, the axiom of global choice is equivalent to the existence of a class bijection $V \to \Ord$. Clearly such a bijection gives a well-ordering, and conversely, if there is a well-ordering $<$ of $V$, then every ordinal must embed into $(V, \in)$, which is only possible if $(V, \in) \cong \Ord$ by definition of $\Ord$. The axiom of global choice implies the axiom of choice, since it restricts to a well-ordering of any set.
+
+\begin{theorem}
+$L$ is a model of global choice, hence of ZFC. Stronger, its well-ordering is definable.
+\end{theorem}
+\begin{proof}
+We will define a well-ordering $<_\alpha$ of $L_\alpha$ as follows. Let $<_0 = 0$ and let the well-ordering of a limit ordinal be the limit of the well-orderings. Let $<_\alpha^n$ denote the lexicographic ordering on $L_\alpha^n$. Fix a definable enumeration $E_n$ of the set of definable $n$-ary relations on $R$.
+
+For $x \in L_{\alpha + 1}$ let $n_x$ denote the least $n$ such that there is a $s \in L_\alpha^n$ and a definable $(n+1)$-ary relation $R$ on $L_\alpha$ such that $x = \{y \in L_\alpha: (s, y) \in R\}$. Let $s_x$ be the $<_\alpha^{n_x}$th least witness to the definition of $n_x$. Let $m$ be the least index of $R$ in $E_{n+1}$.
+
+For $x, y \in L_{\alpha + 1}$ define $x <_\alpha y$ iff $x, y \in L_\alpha$ and $x <_\alpha y$, $x \in L_\alpha$ and $y \notin L_\alpha$, or $x, y \notin L_\alpha$ and either $n_x < n_y$, or if they are equal then $s_x <_\alpha^{n_x} s_y$, or if they are also equal then $m_x < m_y$.
+
+If $n_x = n_y$, $s_x = s_y$, and $m_x = m_y$, then $x$ and $y$ are defined by the same relation so $x = y$ by extensionality. By induction, $<_\alpha$ is a well-ordering of $L_\alpha$.
+
+Now write $L = L_0 \cup (L_1 \setminus L_0) \cup (L_2 \setminus L_1) \cup \cdots$ and order the $\alpha$th entry in the above disjoint union decomposition using $<_\alpha$.
+\end{proof}
+
+\begin{corollary}
+ZF with the axiom of global choice, and hence ZFC, is consistent if ZF is.
+\end{corollary}
+
+\begin{corollary}
+If ZF is consistent, then it is consistent that $\RR$ has a definable well-ordering.
+\end{corollary}
+However, we cannot prove that such a well-ordering is actually a well-ordering of $\RR$.
+
+\section{Consistency of the continuum hypothesis}
+\begin{theorem}
+    If $V = L$, then CH.
+\end{theorem}
+
+
+
+
+
+
+\chapter{Forcing}
+The idea behind forcing is that given a model $M$ of ZFC, we want to adjoin a ``generic" set $x \notin M$ so that the smallest model $M[x]$ containing $M$ and $x$ has a certain property $p$. In this chapter we'll go through this procedure with $p = (2^{\aleph_0} = \aleph_2)$.
+
+\section{Generic filters}
+Let $M$ be a transitive model of ZFC. (This might not exist, since the existence of transitive models is strictly stronger than the existence of models, which implies that ZFC is consistent by soundness, but we can remove the transitivity assumption later.) It will be frequently be useful to assume that $M$ is countable, which is always possible up to elementary equivalence by the Lowenheim-Skolem theorem.
+
+Let $\PP \in M$ be a poset, and let $1_\PP \in \PP$ be the maximum of $\PP$.
+
+\begin{definition}
+    An element $x \in \PP$ is called a $\PP$-\dfn{condition}, and a subset $D \subseteq \PP$ is \dfn{dense} if for every $p \in \PP$ there is a $d \in D$ with $d \leq p$.
+\end{definition}
+    Proper dense subsets exist, because any downward slice of $\PP$ is dense.
+
+\begin{definition}
+    If $x, y \in \PP$ are such that there is $z \in \PP$ with $z \leq x$ and $z \leq y$, then $x$ and $y$ are \dfn{compatible conditions} and we write $x \parallel y$. Otherwise, we write $x \perp y$.
+
+    If $X \subseteq \PP$ is such that every pair in $X$ is incompatible then we say that $X$ is an \dfn{antichain}.
+\end{definition}
+\begin{definition}
+    Let $G \subseteq \PP$ be a filter. We say that $G$ is an $M$-\dfn{generic filter} if for every $D \in M$ which is dense in $\PP$, $D \cap G$ is nonempty.
+\end{definition}
+    Since we think of $x, y \in \PP$ as conditions, the ordering $\leq$ is an ordering by logical strength. Indeed, $1_\PP$ is the maximal and hence weakest condition (since $G$ is a filter, $1_\PP \in G$ -- $G$ is nonempty since $\PP$ is dense). If $x \leq y$ then $x$ is a weaker condition than $y$ (since $y \in G$ implies $x \in G$). Since $G$ is a filter, any pair in $G$ is compatible.
+
+    Notice that since $\PP$ is in general infinite, its power set $\pset \PP$ is not absolute. That is, if $N$ is a model of ZFC, $(\pset \PP)^M$ might disagree with $(\pset \PP)^N$. That is why it makes sense to define genericity with respect to a particular model $M$.
+\begin{lemma}
+    For every dense set $D \subseteq \PP$ there is a maximal antichain in $D$.
+\end{lemma}
+\begin{proof}
+    Zorn's lemma.
+\end{proof}
+
+\begin{theorem}[Rasiowa-Sikorski]
+    \index{Rasiowa-Sikorski theorem}
+    If $M$ is countable, then there is an $M$-generic filter in $\PP$.
+\end{theorem}
+This turns out to be the same as the Baire category theorem (or, equivalently, the axiom of dependent choice). This motivates the terminology ``dense" and ``generic."
+\begin{proof}
+    Since $M$ is countable, the set $\mathcal D$ of dense sets in $\PP$ is countable, say $\mathcal D = \{D_n: n \in \omega\}$. Let $p_1 \in D_1$. We can inductively choose $p_{n+1} \leq p_n$ such that $p_{n+1} \in D_{n+1}$ since $D_{n+1}$ is dense. Now let $G$ be the smallest filter containing the sequence of $p_n$. Clearly $G$ meets every $D_n$.
+\end{proof}
+
+\begin{definition}
+    $\PP$ is \dfn{splitting} for every $x \in \PP$, there are $y, z \leq x$ with $y \perp z$.
+\end{definition}
+    That is, for every condition, there are two incompatible ``possible futures."
+
+\begin{lemma}
+    If $\PP$ is splitting and $F \subseteq \PP$ is a filter, then the ideal $F^c$ is dense.
+\end{lemma}
+\begin{proof}
+    If $x \in F$ then there are $y, z \leq x$ which are incompatible. But every pair in $F$ is compatible, so one of them lies in $F^c$. Therefore $F^c$ is dense.
+\end{proof}
+\begin{theorem}
+    If $\PP$ is splitting and $G \subseteq \PP$ is a $M$-generic filter then $G \notin M$.
+\end{theorem}
+\begin{proof}
+    Suppose not. Then by the lemma, $G^c$ is dense, but since $G \in M$, $G^c \in M$. Since $G$ is $M$-generic, $G$ meets every dense set, so $G \cap G^c$ is nonempty, which is absurd.
+\end{proof}
+\begin{example}
+    Let $\PP$ be the infinite binary tree, which is splitting. Then a filter is a branch, and a generic set is an infinite path. So the generic sets are exactly the infinite binary sequences $2^\omega$.
+\end{example}
+
+\section{Constructing the generic extension}
+Recall that $M$ is a transitive model of ZF, and $\PP \in M$ is a poset with a maximum $1_\PP \in \PP$ and an filter $G \subseteq \PP$. We will eventually assume that $\PP$ is splitting and $G$ is $M$-generic, so that $G \notin M$, but not yet.
+
+We now construct a class $\Name(\PP)$ from $\PP$, which admits an injection $V \to \Name$, by transfinite recursion. First, $\Name_0(\PP) = \emptyset$. If $\Name_\alpha(\PP)$ is defined then
+$$\Name_{\alpha + 1}(\PP) = \pset(\Name_\alpha(\PP) \times \PP).$$
+Finally we take unions at limit stages, and let $\Name(\PP) = \bigcup_\lambda \Name_\lambda(\PP)$.
+\begin{definition}
+    A $\PP$-\dfn{name} is an element of $\Name(\PP)$. The \emph{rank} of a $\PP$-name $\tau$ is the least $\lambda$ such that $\tau \in \Name_\lambda(\PP)$.
+
+    We define the $G$-\dfn{interpretation} $\tau^G$ of a $\PP$-name $\tau$ by transfinite recursion. Namely, $\tau^G$ is the set of all interpretations $\sigma^G$ such that the $\PP$-name $\sigma$ has $(\sigma, p) \in \tau$ with $p \in G$.
+\end{definition}
+We think of the set of interpretations
+$$X = \{\tau^G: \tau \in \Name_\lambda(\PP)\}$$
+as the ``expansion of $V_\lambda$ by $G$", so ``$X = V_\lambda[G]$".
+\begin{example}
+    We always have
+    $$\Name_2(\PP) = \pset(\{\emptyset\} \times \PP) = \{(\emptyset, p): p \in \PP\}.$$
+    So $\Name_2(\PP)$ can be identified with $\pset \PP$. Therefore the interpretation set
+    $$X = \{\tau^G: \tau \in \Name_2(\PP)\}$$
+    has each element
+    $$\tau^G = \{\emptyset: (\emptyset, p) \in \tau, p \in G\}$$
+    which means $\tau^G = \{\emptyset\}$ iff there is a $p \in G$ (and $\tau^G = \emptyset$ otherwise). So $X = V_2$. In fact this is true for any $\Name_n$ and any $G$.
+\end{example}
+
+Now we can define the extension.
+\begin{definition}
+The \dfn{generic extension}
+$$M[G] = \{\tau^G: \tau \in \Name^M(\PP)\}.$$
+\end{definition}
+
+\begin{theorem}
+    $M \subseteq M[G]$ and $G \in M[G]$. Moreover, $M[G]$ is transitive.
+\end{theorem}
+Notice that while $\Name^M(\PP) \subseteq M$, the interpretations of the $\PP$-names may not live in $M$. For example, suppose that $G$ actually is $M$-generic and $\PP$ is splitting. Then $G \notin M$, even though $G \in M[G]$. So we truly have ``adjoined $G$ to $M[G]$."
+\begin{proof}
+We need to give an injection $M \to M[G]$. So we define the $\PP$-names
+$$\hat x = \{(\hat y, 1_\PP): y \in x\}$$
+by transfinite recursion. The map $x \mapsto \hat x$ is then an injection $M \to \Name^M(\PP)$.
+Finally, we define
+$$\dot G = \{(\hat p, p): p \in \PP\}.$$
+Since these are $\PP$-names, we consider their interpretations. First,
+$$\hat x^G = \{y: (\hat y, 1_\PP) \in \hat x\}$$
+by transfinite induction. So we have $M \subseteq M[G]$. Moreover,
+$$\dot G^G = \{\sigma^G: (\sigma, p) \in \dot G, p \in G\} = \{\hat p^G: (\hat p, p), p \in \PP\} = \{p: p \in G\} = G.$$
+So indeed, $M \cup \{G\} \subseteq M[G]$.
+
+Now we show that $M[G]$ is transitive. Let $x \in M[G]$ and $y \in x$. Then there is a $\sigma \in \Name^M(\PP)$ such that $\sigma^G = x$. So $y = \tau^G$ for some $\tau \in \Name^M(\PP)$. Then
+$$\tau \in \sigma \in M.$$
+Since $M$ is transitive, $\tau \in M$. Therefore $y \in M[G]$, so $M[G]$ is transitive.
+\end{proof}
+
+\begin{theorem}
+    $M[G]$ is a model of extensionality, empty set, infinity, pairing, foundation, and union. If $M$ is a model of choice then so is $M[G]$.
+\end{theorem}
+    So $M[G]$ doesn't quite model ZF, but will happen when we assume that $G$ is actually $M$-generic.
+\begin{proof}
+    Extensionality and foundation follow because $M[G]$ is transitive; empty set and infinity follow because $M \subseteq M[G]$.
+
+    For pairing, assume $x = \sigma^G$ and $y = \tau^G$. Then $\{x, y\}^{M[G]} = \{(\sigma, 1_\PP), (\tau, 1_\PP)\}^G$ so we're good. Union is similar, and same with choice -- just lift infinite products from $M[G]$ to $\Name^M(\PP)$.
+\end{proof}
+
+\section{Forcing semantics}
+We now define a relation $\Vdash$. The idea is that if $p \in \PP$ is a condition, then $p \Vdash \varphi(\sigma_1, \dots, \sigma_n)$ iff $M[G] \models \varphi(\sigma_1^G, \dots, \sigma_n^G)$.
+
+\begin{definition}
+    Let $M$ be a transitive model of ZF and let $\PP \in M$ be a poset. For $p \in \PP$ and $\varphi$ a LST-formula (possibly with variables), write $p \Vdash \varphi$ to mean:
+\begin{enumerate}
+    \item If $\varphi = (\tau_1 = \tau_2)$, then for each $(\sigma_1, q_1) \in \tau_1$, let $D_{\sigma_1}^{q_1}$ be the set of all $r \in \PP$ such that if $r \leq q_1$, then there is a $(\sigma_2, q_2) \in \tau_2$ such that $r \leq q_2$ and such that $r \Vdash (\sigma_1 = \sigma_2)$, and let $D_{\sigma_2}^{q_2}$ be defined similarly. Then $D_{\sigma_i}^{q_i}$ are dense below $p$ for $i \in \{1, 2\}$.
+    \item If $\varphi = (\tau_1 \in \tau_2)$, then let $D$ be the set of all $q \in \PP$ such that there is $(\tau, r) \in \tau_2$ such that $q \leq r$ and $q \Vdash (\tau = \tau_1)$. Then $D$ is dense below $p$.
+    \item If $\varphi = (\exists x \psi(x))$ then let $D$ be the set of all $q \in \PP$ such that there is $\tau$ with $q \Vdash \psi(\tau)$. Then $D$ is dense below $p$.
+    \item If $\varphi = \psi \vee \chi$, then $p \Vdash \psi$ and $p \Vdash \chi$.
+    \item If $\varphi = \neg\psi$, then $p \not \Vdash \psi$.
+\end{enumerate}
+    If $p \Vdash \varphi$, then we say that $p$ \dfn{forces} $\varphi$.
+\end{definition}
+Notice that $D_{\sigma_1}^{q_1}$ encodes $\tau_1 \subseteq \tau_2$. Similarly for the other dense sets we defined.
+
+Also notice that even though $\Vdash$ is a relation in $V$, $\Vdash$ is definable from $M$, since all we have referred to are $\PP$-names, which already lie in $M$.
+
+We now show that $\Vdash$ behaves ``modally" as we desire. First, a very tedious induction that we skip shows the following.
+\begin{lemma}
+    Let $\Vdash$ be as above. Then:
+\begin{enumerate}
+    \item If $p \Vdash \varphi$ and $q \leq p$ then $q \Vdash \varphi$.
+    \item If the set of $q \in \PP$ such that $q \Vdash \varphi$ is dense below $p$ then $p \Vdash \varphi$.
+    \item If $p \not \Vdash \varphi$ then there is a $p' \leq p$ such that $p' \Vdash \neg \varphi$.
+\end{enumerate}
+\end{lemma}
+    Interpreting $\Vdash$ modally, we think of $p \Vdash \varphi$ to mean that $p$ implies that $\varphi$ will be eventually true, and $q \leq p$ to mean that $q$ is a possible future state reachable from $p$. Then, the first condition means that if it is known that $\varphi$ will eventually be true, then it will continue to be known that $\varphi$ will be eventually be true. The second condition means that if in every possible future, we will learn that $\varphi$ will be eventually true, then $\varphi$ is already known to be eventually true in every possible future. The final condition means that if $\varphi$ is not known to be true then there is a possible future where it is false.
+
+\begin{theorem}
+    Suppose $M$ is a transitive model of ZF, $\PP \in M$ is a poset, $G \subseteq \PP$ is an $M$-generic filter, and $n \in \omega$. For each LST-formula $\varphi$ with $n$ free variables and each $\sigma_1, \dots, \sigma_n \in \Name^M(\PP)$,
+    $$M[G] \models \varphi(\sigma_1^G, \dots, \sigma_n^G)$$
+    if and only if there is a condition $p \in G$ such that
+    $$p \Vdash \varphi(\sigma_1, \dots, \sigma_n).$$
+\end{theorem}
+\begin{corollary}
+    Let $M$ and $G$ be as above. Then $M[G]$ is a model of ZF, and if $M$ is a model of ZFC then so is $M[G]$.
+\end{corollary}
+\begin{proof}
+    We just need to check comprehension and replacement, and we'll just do comprehension since replacement is similar. For convenience we suppress parameters. Assume $\sigma^G \in M[G]$ and $\varphi$ is an LST-formula with a free variable. We need to show that the set
+    $$A = \{x \in \sigma^G: \varphi(x)\} \in M[G].$$
+    This can be rewritten as, for some $\rho \in \Name^M(\PP)$,
+    $$A = \{\rho^G \in \sigma^G: \exists p \in G(p \Vdash \rho \in \sigma \wedge \varphi(\rho))\}.$$
+    Now let
+    $$\tau = \{(\rho, p) \in M \times \PP: p \Vdash \varphi(\rho)\}.$$
+    Then obviously $\tau^G = A$ and $\tau \in V$. Since $M$ is a model of comprehension and $\Vdash$ is definable in $M$, it follows that $\tau \in \Name^M(\PP)$. So $A \in M[G]$.
+\end{proof}
+
+\section{Cardinal collapse}
+    We set up some machinery for later.
+\begin{definition}
+    A poset $\PP$ has the \dfn{countable chain condition} (or is \dfn{ccc}) if every antichain in $\PP$ is countable.
+\end{definition}
+
+\begin{theorem}[possible values]
+    \index{possible values argument}
+    Let $M$ be a transitive model of ZFC and $\PP \in M$ be a poset with an $M$-generic filter $G$. Let $X, Y \in M$ and let $f \in M[G]$ be a function $X \to Y$.
+
+    If $M$ is a model of ``$\PP$ is ccc," then there is a function $F \in M$ such that for each $x \in X$, $f(x) \in F(x)$ and $M$ is a model of ``$F(x)$ is countable".
+\end{theorem}
+    Let $x \in X$. Notice that we do not assume $f \in M$, so $M$ does not know the value $f(x)$, even though $f(x) \in M$. We think of $F(x)$ as the ``possible values of $f$ that $M$ allows", so $M$ does have some control over its generic extension $M[G]$, ruling out but all but countably many possibilities.
+\begin{proof}
+    Let $\dot f \in \Name^M(\PP)$ be such that $\dot f^G = f$. Then there is a $p \in \PP$ which forces ``there exists a function $\dot f: \hat X \to \hat Y$".
+
+    Since $M$ thinks $\PP$ is ccc and thinks AC is true, for each $x \in X$ we can use Zorn's lemma to find a maximal set $A(x)$ of incompatible conditions $q \leq p$ such that for each $q \in A(x)$ there is a $y \in Y$ such that $q$ forces ``$\dot f(\hat x) = \hat y$," and $A(x)$ is countable.
+
+    Each of the $q \in A(x)$ forces $f(x)$ to admit a certain value, say $y_q$. So we define
+    $$F(x) = \{y \in Y: \exists q \leq p(y = q_y)\}.$$
+    By maximality of $A(x)$, $F(x)$ must hit every possible value of $y$ in every possible forcing extension.
+\end{proof}
+
+\begin{definition}
+    Let $M$ be a transitive model of ZFC. A poset $\PP \in M$ \dfn{preserves cardinals} if for every $M$-generic filter $G \subseteq \PP$ and each ordinal $\lambda$, $M$ is a model of ``$\lambda \in \Card$" if and only if $M[G]$ is a model of ``$\lambda \in \Card$".
+\end{definition}
+\begin{theorem}
+    Let $M$ be a transitive model of ZFC, $\PP \in M$ a poset, and $M$ is a model of ``$\PP$ is ccc". Then $\PP$ preserves cardinals.
+\end{theorem}
+\begin{proof}
+    Taking limits, it suffices to check that $\PP$ preserves \emph{regular cardinals}; namely $M$ is a model of ``$\lambda$ is a regular cardinal" if and only if $M[G]$ is a model of ``$\lambda$ is a regular cardinal."
+
+    Let $\lambda \geq \aleph_2^M$ be an $M$-regular cardinal, and suppose that $\lambda$ is not $M[G]$-regular. Then there is a function $f \in M[G]$, $\overline \lambda \to \lambda$ cofinal, fo some $\overline \lambda < \lambda$. By the possible values argument, there is a function $F \in M$, $\overline \lambda \to 2^\lambda$, such that $f(\alpha) \in F(\alpha)$ and
+    $$\card^M F(\alpha) \leq \aleph_0^M < \lambda.$$
+    Define a map $\overline \lambda \to \lambda$ by $g(\alpha) = \sup F(\alpha)$. Then $M$ is a model of ``$g$ is cofinal", even though $\lambda$ is regular in $M$, a contradiction.
+\end{proof}
+
+
+
+
+\section{Forcing $2^{\aleph_0} = \aleph_2$}
+Our goal is to prove the following theorem.
+\begin{theorem}[Cohen]
+There is a model $M[G]$ of ZFC such that $M[G] \models \neg$ CH.
+\end{theorem}
+
+We have two problems forcing $2^{\aleph_0} = \aleph_2$. First, we need to find an $M$ and a $\PP$ such that for each $M$-generic filter $G \subseteq \PP$, $M[G]$ has $\aleph_2$ more real numbers than $M$ (and by constructing $M$ from $L$, we can arrange for $M[G]$ to have $\aleph_2 + \aleph_1 = \aleph_2$ many reals). Second, we need to show that $\aleph_2^M = \aleph_2^{M[G]}$.
+
+\begin{definition}
+    For $x \in V$,
+    $\Add(x)$ is the set of partial functions $x \to 2$, ordered by reverse inclusion.
+\end{definition}
+So $p \leq q$ iff $dom(p) \supseteq dom(q)$, and $1_{\Add(x)}$ is the empty function.
+
+\begin{lemma}
+    For each $\kappa \in \Card$, $\Add(\kappa \times \omega)$ is ccc.
+\end{lemma}
+\begin{proof}
+    If not, let $\{p_\alpha\}$ be an antichain of length $\aleph_1$, and let $C = \{dom(p_\alpha)\}$. Then $\card C = \aleph_1$, yet $C$ consists only of finite sets, so there is a $\Delta$-system in $C$ with root $R$. Let $B = \{p_\alpha: dom(p_\alpha) \in R\}$. Then each $p_\alpha \in B$ determines a total function $R \to \{0, 1\}$ and $R$ is finite, so $\pset R$ is finite, yet there are supposed to be uncountably many $p_\alpha$.
+\end{proof}
+
+\begin{theorem}
+    Let $M$ be a countable, transitive model of ZFC + CH, and let
+    $$\PP = (\Add(\aleph_2 \times \omega))^M.$$
+    Let $G$ be an $M$-generic filter. Then $M[G]$ is a model of ZFC + ``$2^{\aleph_0} = \aleph_2$".
+\end{theorem}
+    Notice that $\PP$ is splitting. Moreover, such a $G$ exists by the Baire category theorem, since $M$ is transitive, so $G \notin M$.
+\begin{proof}
+    By thinking of $G$ as a ``measure" on $\aleph_2 \times \omega$, we get a function $\hat G: \aleph_2 \times \omega \to 2$. For each $\alpha \in \aleph_2$, we define
+    $$G_\alpha = \{n \in \omega: \hat G(\alpha, n) = 0\}.$$
+    Given $\alpha, \beta \in \aleph_2$, the set
+    $$D = \{q \in \PP: \exists n \in \omega(q(\alpha, n) \neq q(\beta, n))\}$$
+    is dense, so $D$ meets $G$. Therefore the map $\alpha \mapsto G_\alpha$ is injective. The $G_\alpha$ interpret to give new elements of $\pset \omega = 2^{\aleph_0}$ in $M[G]$. So $\card M[G] = \aleph_2^M$, and it remains to show $\aleph_2^M = \aleph_2^{M[G]}$. This happens because $\PP$ is ccc in $M$.
+\end{proof}
+    In fact this
+
+
+
+
+
+\chapter{Large cardinals}
+\section{HOD}
+Previously we constructed the inner model $L$, but it is seriously deficient in the sense that it lacks large cardinals.
+\begin{theorem}[Jensen's $L$ dichotomy theorem]
+One and exactly one of the following is true:
+\begin{enumerate}
+    \item Let $\gamma$ be a singular cardinal. Then $\gamma$ is singular in $L$ and its successor $\gamma^+ = (\gamma^+)^L$.
+    \item Let $\kappa$ be an uncountable cardinal. Then $\kappa$ is inaccessible in $L$.
+\end{enumerate}
+Moreover, if $\kappa$ is a measurable cardinal, then case (2) holds.
+\end{theorem}
+
+So we will need a ``better" inner model to study large cardinals.
+\begin{definition}
+A set $x$ is \dfn{ordinal-definable} if $x$ is definable in $V$ from parameters in $\Ord$.
+
+If the transitive closure of $x$ is ordinal-definable, then we say that $x$ is \dfn{hereditarily ordinal-definable} and write $x \in \HOD$.
+\end{definition}
+In fact, $\HOD$ is an inner model.
+\begin{theorem}[Woodin's HOD dichotomy theorem]
+Let $\delta$ be an extendible cardinal. One and exactly one of the following is true:
+\begin{enumerate}
+    \item Let $\gamma > \delta$ be a singular cardinal. Then $\gamma$ is singular in $\HOD$ and its successor $\gamma^+ = (\gamma^+)^{\HOD}$.
+    \item If $\lambda > \delta$ is a cardinal, then $\lambda$ is $\omega$-inaccessible in $\HOD$.
+\end{enumerate}
+\end{theorem}
+\begin{axiom}[HOD hypothesis]
+\index{HOD hypothesis}
+There is a proper class of cardinals that are not $\omega$-inaccessible in HOD.
+\end{axiom}
+If the HOD hypothesis is true, then we are in the first (``good") case of Woodin's HOD dichotomy theorem. In fact, Woodin has conjectured that ZFC proves the HOD hypothesis.
+
+\section{Measurable cardinals}
+TODO: Fill in the details here in preparation for Math Monday.
+\begin{definition}
+A \dfn{measurable cardinal} $\kappa$ is an uncountable cardinal such that there is a free $\kappa$-complete ultrafilter on $\kappa$.
+\end{definition}
+Notice that by Zorn's lemma, $\omega$ would be measurable if it was uncountable.
+\begin{definition}
+If $F$ is a filter, then the \dfn{completeness} of $F$, $\comp F$, is the least cardinal $\kappa$ such that $F$ is not $\kappa^+$-complete.
+\end{definition}
+\begin{theorem}
+The following are equivalent:
+\begin{enumerate}
+    \item There is a measurable cardinal.
+    \item There is a $\aleph_1$-complete free ultrafilter.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+    Obviously 1 implies 2. So assume that $U$ is a $\aleph_1$-complete free ultrafilter on a cardinal $\lambda$. Let $\kappa = \comp U$. Then $\aleph_1 \leq \kappa \leq \lambda$ since $U$ is $\aleph_1$-complete. We can find sets $X_\alpha$, $\alpha < \kappa$, so that $X_\alpha \subseteq U$ and $A = \bigcap_\alpha X_\alpha \notin U$, by definition of $\comp U$. Then $\lambda \setminus A \notin U$.
+
+    Define a function $f: \lambda \to \kappa$ by $f(x) = 0$ if $x \in A$, or $f(x)$ is the least $\gamma$ such that $x \notin X_\gamma$ if $x \notin A$. Now let $V$ be the filter of $X \subseteq \kappa$ such that $f^{-1}(X) \in U$. Then $\comp V = \kappa$ and $V$ is a free ultrafilter, so $\kappa$ is a measurable cardinal.
+\end{proof}
+\begin{definition}
+    A \dfn{normal ultrafilter} $U$ is an ultrafilter on $\kappa \geq \aleph_0$ such that for every $f: \kappa \to \kappa$, if
+    $$\{\alpha < \kappa: f(\alpha) < \alpha\} \in U,$$
+    then there is a $\beta < \kappa$ such that
+    $$\{\alpha < \kappa: f(\alpha) = \beta\} \in U.$$
+\end{definition}
+    In other words, if $f$ is an almost-everywhere decreasing function, then $f$ is almost-everywhere constant.
+\begin{definition}
+    Let $\kappa \geq \aleph_0$ be a regular cardinal and $X_\alpha$, $\alpha < \kappa$, a family of subsets of $\kappa$. The \dfn{diagonal intersection}
+    $$\Delta_{\alpha < \kappa} X_\alpha = \bigcup_\alpha [0, \alpha] \cap X_\alpha.$$
+\end{definition}
+\begin{proposition}
+    Let $\kappa \geq \aleph_0$ be a regular cardinal and $U$ an ultrafilter. Then the following are equivalent:
+\begin{enumerate}
+    \item $U$ is normal.
+    \item $U$ is closed under diagonal intersection.
+\end{enumerate}
+    Moreover, if one and hence both of the above cases are true, then the following are equivalent:
+\begin{enumerate}
+    \item $U$ is free and $\kappa$-complete.
+    \item $U$ is a \dfn{strongly uniform ultrafilter} in the sense that for every $x \in U$, $\card x = \kappa$.
+    \item $U$ is a \dfn{weakly uniform ultrafilter} in the sense that for every $\gamma < \kappa$, $\kappa \setminus \gamma \in U$.
+\end{enumerate}
+\end{proposition}
+\begin{theorem}[Scott]
+    If $\kappa$ is a measurable cardinal, then there is a normal uniform ultrafilter on $\kappa$.
+\end{theorem}
+\begin{proof}
+    Let $U$ be a $\kappa$-complete free ultrafilter. We claim there is a function $f$ such that $f$ is not constant on any $X \in U$, and such that if $g < f$ on some set $X \in U$, then $g$ is constant on a set in $U$.
+
+    If not, let $f_0$ be the identity and for each $\alpha$, let $f_{n+1} < f_n$ almost everywhere, but be constant almost everywhere. By $\aleph_1$-completeness, this remains true almost everywhere as $n \to \omega$. So we can find an $\alpha$ such that $f_{n+1}(\alpha) < f_n(\alpha)$ for every $\alpha$, implying that $\omega$ is not well-ordered, a contradiction. Now let $f = \lim_n f_n$ and let $V$ be the pullback of $U$ by $f$. Then $V$ is a normal free (hence uniform) ultrafilter on $\kappa$.
+\end{proof}
+
+For $\mathcal M = (M, E)$ a model of ZFC and $U$ an ultrafilter, we let $\Pi_U \mathcal M$ be the ultrapower of $\mathcal M$ with respect to $U$. Then $\Pi_U \mathcal M$ is well-founded, so it has a Mostowski collapse. We denote the Mostowski collapse by $\Ult(M, U)$ and the inclusion map
+$$j_{M,U}: M \to \Ult(M, U).$$
+\begin{lemma}
+    Suppose $U$ is a $\aleph_1$-complete ultrafilter. Let $\kappa = \comp U$. Then $j_U|_{V_\kappa}$ is the identity and $j_U(\kappa) > \kappa$.
+\end{lemma}
+\begin{proof}
+    By induction on $\alpha < \kappa$, using $\kappa$-completeness we show that $j_U|_\kappa$ is the identity. In fact if $\gamma < \alpha$ implies $j_U(\gamma) = \gamma$, then $\gamma < \alpha$ implies $\alpha \subseteq [c_\alpha]_U$, where $c_\alpha$ is the constant map $V \to V^A$ (where $A$ is the set $U$ is defined on). The converse follows by Los, since for every $[f] \in [c_\alpha]$ there must be a $\gamma < \alpha$ such that for almost every $x \in A$, $f(x) = \gamma$.
+
+    Now induction does the same for $V_\kappa$. By the noncompleteness of $\kappa^+$, we find $X_\alpha \in U$, $\alpha < \kappa$, so that $\bigcap_\alpha X_\alpha \notin U$. Then we let $f: A \to \kappa$ be defined by $f(x) = 0$ if $x \in \bigcap_\gamma X_\gamma$, or the least $\gamma$ such that $x \notin X_\gamma$ otherwise. Then
+    $$\kappa = \sup_{\alpha < \kappa} [c_\alpha] < [f] < [c_\kappa] = j_U(\kappa).$$
+\end{proof}
+\begin{lemma}
+    Suppose $U$, $A$, $\kappa$, and $j_U$ are as above. Then:
+\begin{enumerate}
+    \item $V_{\kappa+1}^{\Ult(V, U)} = V_{\kappa+1}$.
+    \item Every function $\kappa \to \Ult(V, U)$ lies in $\Ult(V, U)$.
+    \item If $A = \kappa$, then $j_U|_{\kappa^+}$ is not in $\Ult(V, U)$.
+    \item $U \notin \Ult(V, U)$.
+\end{enumerate}
+\end{lemma}
+\begin{definition}
+    Let $j: M \to N$ be an elementary embedding. The \dfn{critical point} $\crt j$ is the least ordinal $\kappa$ such that $j(\kappa) \neq \kappa$.
+\end{definition}
+\begin{theorem}[Scott-Keisler]
+    Suppose $\kappa$ is an ordinal. The following are equivalent:
+\begin{enumerate}
+    \item $\kappa$ is a measurable cardinal.
+    \item There is an elementary embedding $j: V \to M$ so that $M$ is a transitive class and $\crt j = \kappa$.
+    \item There is an elementary embedding $j: V_{\kappa+1} \to N$ so that $N$ is a transitive class and $\crt j = \kappa$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+1 implies 2 implies 3 is easy (take $N = M \cap V_{\kappa + 1}$). For 3 implies 1, take $U$ to be the set of all $x \subseteq \kappa$ such that $\kappa \in j(x)$. Then $U$ is a free ultrafilter. Let $\gamma < \kappa$. Then $j(\gamma) = \gamma$, so for any family of sets $x_\alpha \in U$, $\alpha < \kappa$,
+$$j\left(\bigcap_{\alpha < \gamma} x_\alpha\right) = \bigcap_{\alpha < \gamma} j(x_\alpha) \ni \kappa.$$
+So $U$ witnesses that $\kappa$ is a measurable cardinal.
+\end{proof}
+\begin{definition}
+    A \dfn{Mahlo cardinal} $\kappa$ is an inaccessible cardinal such that the set of $\lambda < \kappa$ such that $\lambda$ is an inaccessible is stationary in $\kappa$.
+\end{definition}
+\begin{theorem}
+    Suppose $\kappa$ is a measurable cardinal. Then $\kappa$ is the $\kappa$th inaccessible cardinal and the $\kappa$th Mahlo cardinal.
+\end{theorem}
+    So measurable cardinals are much stronger than Mahlo cardinals, which are much stronger than inaccessible cardinals, which are much stronger than singular cardinals.
+\begin{proof}
+    First we show $\kappa$ is a regular cardinal. Assume $f: \gamma \to \kappa$ is cofinal. If $\gamma < \kappa$ then
+    $$j(f)(\xi) = j(f)(j(\xi)) = j(f(\xi)) = f(\xi)$$
+    since $\xi < \kappa$ and $\crt j = \kappa$. Therefore $j(f) = f$ is a cofinal map $\gamma = j(\gamma) \to j(\kappa) > \kappa$, so $\gamma \geq \kappa$, a contradiction.
+
+    If $\gamma < \kappa$ and $2^\gamma \geq \kappa$ then there is a surjection $f: 2^\gamma \to \kappa$, and $2^\gamma \in V_\kappa$, so $j(f) = f$ is a surjection $j(2^\gamma) = 2^\gamma \to j(\kappa) = \kappa$, so $2^\gamma > \kappa$ even though $V_\kappa$ is preserved, a contradiction. So $\kappa$ is inaccessible since $\kappa$ is regular.
+
+    Since $j$ preserves $V_\kappa$, $M$ is a model of ``$\kappa$ and $j(\kappa)$ are inaccessible cardinals." So if $\alpha < j(\kappa)$, $M$ is a model of ``There is an inaccessible cardinal $\lambda$ such that $\alpha < \lambda < j(\kappa)$," but $j$ is an elementary embedding so for every $\alpha < \kappa$, $V$ is a model of ``There is an inaccessible cardinal $\lambda$ such that $\alpha < \lambda < \kappa$." Since $\kappa$ is regular, this implies that there are $\kappa$ many such cardinals.
+
+    Now let $C \subseteq \kappa$ be a club set. Then $j(C)$ is a club set in $j(\kappa)$ so $j(C) \cap \kappa$ is cofinal in $\kappa$, so $\kappa \in j(C)$. So $M$ is a model of ``There is an inaccessible cardinal $\lambda$ such that $\lambda \in j(C)$." So this is true of $C$ as well in $V$. So $\kappa$ is Mahlo. The proof that it is the $\kappa$th Mahlo is similar.
+\end{proof}
+\begin{theorem}[Scott]
+    If there exists a measurable cardinal, then $V \neq L$.
+\end{theorem}
+\begin{proof}
+    Assume not. Let $\kappa$ be the least measurable cardinal in $L$. Then we have an elementary embedding $j: L \to M$ with $\crt j = \kappa$. Since $j$ is an elementary embedding, it follows that $M$ is a model of ``$V = L$". So $M = L$, and so is the model of ``$\kappa$ is the least measurable cardinal." But $M$ is a model of ``$j(\kappa)$ is the least measurable cardinal" and $j(\kappa) > \kappa$ by definition of $j$. This is a contradiction.
+\end{proof}
+
+\section{Supercompact cardinals}
+For $\kappa \leq \lambda$ regular cardinals, we let
+$$\pset_\kappa(\lambda) = \{A \subseteq \lambda: \card A < \kappa\}.$$
+\begin{definition}
+    An ultrafilter $U$ on $\pset_\kappa(\lambda)$ is called a \dfn{fine ultrafilter} if for every $\alpha < \lambda$, $\{\sigma \in \pset_\kappa(\lambda): \alpha \in \sigma\} \in U$.
+\end{definition}
+In other words, an ultrafilter is fine if it contains all atoms.
+\begin{definition}
+    A \dfn{supercompact cardinal} $\kappa$ is an uncountable regular cardinal such that for every $\lambda > \kappa$ there is a $\kappa$-complete, normal fine ultrafilter on $\pset_\kappa(\lambda)$.
+\end{definition}
+\begin{theorem}
+    An uncountable regular cardinal $\kappa$ is supercompact if and only if for every $\lambda > \kappa$, there is an elementary embedding $j: V \to M$ such that $\crt(j) = \kappa$, $j(\kappa) > \lambda$, and $M^\lambda \subseteq M$.
+\end{theorem}
+    TODO: Actually prove me.
+
+\begin{proof}[Proof sketch]
+    Similar to the proof for measurables. Use normal and fine to prove closure under $\lambda$ sequences.
+\end{proof}
+In other words, a cardinal is supercompact if and only if we can push it above any cardinal $\lambda$ above it by an elementary embedding, in a way which is closed under $\lambda$-sequences.
+\begin{definition}
+    Let $\delta$ be an ordinal. A transitive model of ZFC $N$ is a \dfn{weak extender model for supercompactness} of $\delta$ if for every $\gamma > \delta$, there is a $\delta$-complete, normal fine ultrafilter $U$ on $P_\delta(\gamma)$ such that $N \cap P_\delta(\gamma) \in U$ and $U \cap N \in N$.
+\end{definition}
+So if there is a weak extender model for supercompactness of $\delta$, then $\delta$ is supercompact, and a large subset of $P_\delta(\gamma)$ is contained in $N$, yet $U \cap N$ lies in $N$ (so $N$ cannot be too far from $V$). On the other hand, if $\delta$ is supercompact, then $V$ is a weak extender model for its supercompactness, but that's not very interesting.
+
+
+
+
+
+
+
+
+
+\newpage
+\printindex
+
+\end{document}
