@@ -77,6 +77,7 @@
 
 \newcommand{\Card}{\mathbf{Card}}
 \newcommand{\code}{\texttt}
+\DeclareMathOperator{\Halt}{\mathbf{Halt}}
 \newcommand{\halts}{\downarrow}
 \renewcommand{\iff}{\leftrightarrow}
 \newcommand{\nohalts}{\uparrow}
@@ -144,15 +145,154 @@
 \tableofcontents
 
 \chapter{Elementary recursion theory}
-\section{Recursive functions}
-\begin{axiom}[Church-Turing]
-  \label{church and turing}
-  \index{Church-Turing thesis}
-Any two reasonable definitions of computer program are logically equivalent.
-\end{axiom}
-For example, if my definition of computability is ``there is a Python program that computes it," that is good enough. In fact, I'll take this as my definition whenever it is useful to do so. There's no reason to worry about Turing machines, etc.
+Let $V$ be the set of validities; i.e. first-order formulae $\psi$ such that for every structure $M$, $M \models \psi$.
 
-One can easily code any finite object in terms of natural numbers (or equivalently, binary strings) so we might as well only worry about functions between natural numbers, and assume without loss of generality that every computer program has exactly one input and one output, both a natural number.
+\begin{theorem}[completeness]
+For every first-order formula $\psi$, $\psi \in V$ iff $\proves \psi$.
+\end{theorem}
+\begin{corollary}
+There is an algorithm which enumerates $V$.
+\end{corollary}
+\begin{proof}
+Iterate over all strings in the language. For each such string check if it is a proof; if it is, yield its conclusion.
+\end{proof}
+So it is possible to check that a formula is in $V$; but the above procedure does not allow us to check that a formula is not in $V$.
+\begin{theorem}[Church-Turing]
+There is no algorithm to determine membership in $V$.
+\end{theorem}
+The proof is easy once we have a rigorous definition of ``algorithm."
+\begin{corollary}
+There is no complete finite axiomatization of the theory of algorithms.
+\end{corollary}
+\begin{proof}
+Suppose there were finitely many axioms from which we could deduce the theory of algorithms. Then we could decide membership in $V$, by considering the algorithm for $V$.
+\end{proof}
+Note that we prove that mathematical statements are undecidable in the same way every time.
+\begin{example}
+Suppose that $P$ is an NP-complete problem. Then the satisfaction relation embeds in $P$ (in fact, this is how we always prove that $P$ is NP-complete!) So there is really only one reason that a problem is ``hard" in complexity theory.
+\end{example}
+
+\section{Examples of the diaagonal argument}
+\begin{example}
+For every real $x$, there is a number which is not algebraic in $x$. Enumerate the algebraic numbers in $x$ as $q_i$ and let $r$ disagree with $q_i$ at the $i$th digit. In fact, when Liouville proved that there was a transcendental number, his proof used a difficult Diophantine approximation argument that does not generalize to the case of numbers which are actually algebraic in $x$.
+\end{example}
+\begin{example}[halting problem]
+\index{halting problem}
+There is a set which is not computable. Enumerate the programs as $P_i$. Let $X$ be the set of $i$ such that $P_i(i)$ returns False. Thus the halting problem is not decidable.
+\end{example}
+\begin{example}[Tarski's undefinability theorem]
+\index{Tarski's undefinability theorem}
+There is an undefinable set. Enumerate the first-order formulae with one free variables as $\psi_i$ and let $X$ be the set of $i$ such that $\NN \models \neg\psi_i(i)$. Thus the satisfaction predicate is not definable.
+\end{example}
+
+\section{A model for computation}
+We now make the above diagonal arguments rigorous.
+
+Let $A$ be an alphabet, so words in $A$ are elements of $A^{<\omega}$, which we will also write as $A^*$. By a \dfn{procedure} in $A$ we mean an algorithm which takes words as inputs and outputs.
+\begin{definition}
+A \dfn{decision procedure} for $W \subseteq A^*$ is a procedure which takes a word $w$ as input and returns the empty word $\Box$ if $w \in W$ and a nonempty word if $w \notin W$.
+\end{definition}
+If $A$ is a finite and $W$ has a decision procedure, then so does $W^c$. Similarly for finite unions and intersections, and set differences. (So the set of sets which admit a decision procedure forms a boolean algebra.)
+\begin{definition}
+An \dfn{enumeration procedure} is a procedure which on $\Box$ input returns a sequence of words.
+\end{definition}
+So a set $W$ is enumerable iff there is an enumeration procedure whose image is $W$, and $W$ has a decision procedure iff $W$ and $W^c$ are enumerable.
+\begin{definition}
+Any $f: A^* \to A^*$ is a \dfn{computable function} iff there is a procedure which takes $w \in A^*$ and returns $f(w)$.
+\end{definition}
+So a function is computable iff its graph is enumerable iff its graph has a decision procedure.
+
+We now rigorously define ``procedure" using the notion of a register machine. Let $A = \{a_1, \dots, a_r\}$. A \dfn{register machine} has finitely many \dfn{register}s $R_1, ..., R_N$, each of which can hold a word in $A^*$.
+\begin{definition}
+A \dfn{register machine program} is a finite list of instructions of the following forms:
+\begin{enumerate}
+\item Let $R_i = R_i + a_j$.
+\item If the last letter of $R_i$ is $a_j$ then let $R_i = R_i - a_j$.
+\item If $R_i = \Box$ goto line $L$. Elif the last letter of $R_i$ is $a_j$ goto line $L_j$.
+\item Print $R_1$.
+\item Halt.
+\end{enumerate}
+Here $+$ denotes concatenation. We will assume that if $\alpha_1,\dots, \alpha_k$ are the instructions, then $\alpha_j$ says ``Halt" if and only if $j = k$.
+\end{definition}
+Note that if we only cared about computable sets rather than enumerable sets we would not need ``Print". This is analogous to the ``yield" command in Python and lazy returns in Lisp.
+\begin{example}
+Let $A = \{a\}$. Consider the register machine program:
+\begin{enumerate}
+\item If $R_2 = \Box$ then goto $5$, else goto $2$
+\item Let $R_1 = R_1 + a$
+\item If the last letter of $R_2$ is $a$ then let $R_2 = R_2 - a$
+\item If $R_2 = \Box$ then goto $5$, else goto $2$
+\item Print $R_1$
+\item Halt
+\end{enumerate}
+This program takes $R_1$ and $R_2$ as input, and replaces $R_1$ with $R_1 + R_2$ and $R_2$ with $\Box$. So this program witnesses that addition is computable.
+\end{example}
+If $P$ is a register machine program, then we write
+$$P: w \mapsto \eta$$
+if $P$ halts on input $w$ and prints $\eta$. We write $P: w \mapsto \infty$ if $P$ does not halt.
+\begin{axiom}[Church-Turing thesis]
+\index{Church-Turing thesis}
+  \label{church and turing}
+Assume that $A$ is finite. If there is a procedure to decide $W \subseteq A^*$, then there is a register machine program which also decides $W$.
+\end{axiom}
+So without loss of generality we may assume that any program is a register machine program. Note that the Church-Turing thesis only applies to idealized programs. For example, if Planck's constant is uncomputable, one could in principle use the digits of Planck's constant in some machine, but it would not be necessarily computable using a register machine program.
+
+One might also hope to extend the Church-Turing thesis to nondeterministic algorithms. However, it is a theorem that if $X$ is a measurable subset of $[0, 1]$ whose measure is positive, then any function that can be computed by a program which can take elements of $[0, 1]$ as parameters and returns the same as long as those elements lie in $X$ is actually computable in the deterministic sense.
+\begin{definition}
+A set $W$ is \dfn{register-decidable} if there is a register machine program which decides $W$.
+\end{definition}
+\begin{example}
+Let $A = \{a\}$. Consider the register machine program $p$:
+\begin{enumerate}
+\item If $R_1 = \Box$ then goto 2 else goto 3
+\item Let $R_2 = R_2 + a$
+\item If the last letter of $R_1$ is $a$ then let $R_1 = R_1 - a$
+\item If $R_1 = \Box$ then goto 5 else goto 3
+\item If $R_2 = \Box$ then goto 7 else goto 6
+\item Let $R_1 = R_1 + a$
+\item Print
+\item Halt
+\end{enumerate}
+Suppose that $R_0 = w$ and $R_1 = \Box$ initially. Then this program outputs $a$ if $w = \Box$ and $\Box$ otherwise. Therefore the set of nonempty words, $\{\Box\}^c$, is register-decidable. In particular it is decidable.
+\end{example}
+
+\section{The halting problem}
+Let $P$ be a register machine program. Then $P$ is a finite sequence of instructions, each of which consists of finitely many symbols. Therefore $P$ can be viewed a finite word in a finite alphabet $A$.
+
+Let $\Halt$ be the set of register machine programs $P$ such that $P$ halts on input $P$.
+\begin{theorem}
+$\Halt$ is not register-decidable by any machine in the alphabet $A$.
+\end{theorem}
+\begin{proof}
+Suppose that $\Halt$ is register-decidable by some program $P$ in the alphabet $A$. Then $P$ has a halt instruction, say on line $k$. Define a program $Q$ by taking the code for $P$ and replacing line $k$ with the instruction ``goto $k$", and append line $k+1$ with a halt instruction. In addition, for all lines $\ell$ in $P$ with a print instruction, replace $\ell$ in $Q$ with ``if $R_1 = \Box$ then goto $\ell + 1$ else goto $k+1$."
+
+Let $\sigma$ be a string. If $P: \sigma \mapsto \eta$ and $\eta \neq \Box$, then the change to lines $\ell$ and $k+1$ causes $Q$ to halt. That is, if $P$ thinks that $\sigma$ does not halt, then $Q$ halts on input $\sigma$. Conversely, if $P: \sigma \mapsto \Box$, then $Q$ does not print anything due to the change to line $\ell$, and then loops forever due to the change to line $k$. So if $P$ thinks that $\sigma$ halts, then $Q$ does not halt on input $\sigma$.
+
+We call $Q$ on input $Q$. If $P: Q \mapsto \eta$ and $\eta \neq \Box$, then $Q$ halts when called with input $Q$, so $P: Q \mapsto \Box$, a contradiction. Otherwise, if $P: Q \mapsto \Box$, then $Q$ does not halt when called with input $Q$, so $P: Q \mapsto \eta$ for some $\eta \neq \Box$, which is also a contradiction.
+\end{proof}
+
+Let $A \subset B$ be alphabets. Clearly we cannot solve the halting problem in $A$ with a program in the alphabet $A$, but one could consider choosing $B$ so big that a program in $B$ can decide the halting problem in $A$. However, this turns out to be impossible, and we can always collapse $A$ to an alphabet of just one letter without affecting the halting problem.
+\begin{exercise}
+Show that if $P$ is a program in any nonempty alphabet $A$ and $a \in A$ is a symbol, there is a program $Q$ in the alphabet $\{a\}$, such that if $P: Q \mapsto \Box$ then $Q$ does not halt, and if $P: Q \mapsto \eta$ for some $\eta \neq \Box$ then $Q$ halts. (Hint: Show that $\{a\}$ can be used to describe an arbitrarily large alphabet using Godel codes.)
+\end{exercise}
+\begin{corollary}
+$\Halt$ is not register-decidable by any register machine written in any alphabet.
+\end{corollary}
+\begin{corollary}
+There is a definable set which is not register-decidable.
+\end{corollary}
+
+\section{Undecidability in first-order logic}
+\begin{theorem}[Church-Turing]
+The set of first-order validities is not register-decidable.
+\end{theorem}
+
+
+
+
+
+
+\section{Recursive functions}
 \begin{definition}
 A \dfn{partial recursive function} is a function $f: A \to \NN$ where $A \subseteq \NN$, such that there is a computer program (as defined by Axiom \ref{church and turing}) which takes elements $n \in A$ as an input and returns $f(n)$ as output. In this case, we write $A = \dom f$. If $A = \NN$, then $A$ is said to be a \dfn{recursive function}.
 \end{definition}
