@@ -24,7 +24,9 @@
 \newcommand{\CC}{\mathbf{C}}
 \newcommand{\DD}{\mathbf{D}}
 
+\DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\Res}{Res}
 \DeclareMathOperator{\supp}{supp}
 
 \newcommand{\dbar}{\overline \partial}
@@ -1067,15 +1069,6 @@ whence $\hat V$ is an entire function. We therefore review the theory of growth 
 Let $f$ be a entire function. The \dfn{order} $\rho$ of $f$ is defined by
 $$\rho = \inf \{m \in \RR: f(z) = O(\exp(|z|^m))\}.$$
 \end{definition}
-\begin{lemma}
-  \label{order of vhat}
-Let $\rho$ be the order of $\hat V$. Then $\rho \geq 1$, and $\rho = 1$ if and only if $V$ has compact support.
-\end{lemma}
-\begin{proof}
-Suppose that $\rho < 1$, and let $\varepsilon > 0$. By assumption, $\hat V(z) = o(\exp(\varepsilon |z|)$. Let $z = \alpha + i\beta$; then we have 
-$$|\hat V(z)| \leq \int_{-\infty}^\infty |V(x)|e^{x\beta} ~dx.$$
-
-\end{proof}
 
 
 TODO: completely regular growth, Phragmen-Lindelof indicator functions...
@@ -1302,26 +1295,81 @@ Holomorphy follows from that of $R_0$. Since $V$ is super-exponentially decreasi
 \end{proof}
 
 \section{Conditional convergence}
+Let $\rho$ be the order of $\hat V$. If $V$ is compactly supported, then by the Paley-Wiener theorem, $\hat V(z) = O(e^{h(\Im z)})$ where $h$ is a linear function which depends on $\supp V$. Therefore $\hat V$ is of exponential type $\sup\{|x|: x \in \supp V\} < \infty$. In particular, $V$ is not compactly supported if and only if $\rho > 1$, or $\hat V$ is of exponential type $\infty$.
 \begin{theorem}
   \label{conditional convergence of breit wigner}
-If $V$ is not compactly supported and satisfies Froese's conjecture, then the Breit-Wigner series $S_V$ is not absolutely convergent.
+Suppose that $V$ satisfies Froese's conjecture. If $\rho > 1$, then the Breit-Wigner series $S_V$ is not absolutely convergent.
 \end{theorem}
+(TODO don't call it SV we already called something that)
+
 Before we can prove Theorem \ref{conditional convergence of breit wigner}, we note that a major obstruction to the theorem is the density of approximately real resonances. Indeed, if the resonances of $V$ remain too close to $\RR$, then the summands that appear in $S_V$ are approximately of the form $|\lambda|^{-2}$, which one expects to converge absolutely.
 
-Let $\rho$ be the order of $\hat V$. By the Paley-Weiner theorem,
+We start by proving a generalization of the Riemann-Lebesgue lemma. The proof is more or less the same as in the case of the classical Riemann-Lebesgue lemma.
 \begin{lemma}
-Suppose that $V$ meets the hypotheses of Theorem \ref{conditional convergence of breit wigner}.
+\label{RiemannLebesgue}
+Let $(\xi_j)_j$ be a sequence in $\CC$ such that as $j \to \infty$, $|\Re \xi_j| \to \infty$ while $|\Im \xi_j|$ remains bounded. Suppose that $f \in L^1(\RR)$. Then $\hat f(\xi_j) \to 0$ as $j \to \infty$.
 \end{lemma}
 \begin{proof}
-Suppose that there are infinitely many real resonances of $V$. Then there are infinitely many real solutions $\xi$ to the equation
-$$\hat V(2\xi) \hat V(-2\xi) + 1 = 0,$$
-by Froese's conjecture. These solutions cannot cluster, since $\lambda \mapsto \hat V(2\lambda)\hat V(-2\lambda) + 1$ is a nonzero entire function (since $V$ is super-exponentially decreasing and nonzero). Without loss of generality, we may assume that there are infinitely many positive solutions $\xi$; so we can find a sequence $\xi_j \to \infty$ of solutions. In the weakstar topology, we have
-$$-1 = \lim_{j \to \infty} \int_{-\infty}^\infty V(x) e^{-2i\xi_jx} ~dx \int_{-\infty}^\infty V(x)e^{2i\xi_jx} ~dx = 0$$
-by the Riemann-Lebesgue lemma. (NOTE: One of these goes to $1$, the other goes to $0$. I should be clear which is which.) This is a contradiction.
+We first check this when $f$ is the indicator function of $[a, b] \subset \RR$. Assume that $M > 0$ is so large that $|\Im \xi_j| \leq M$ and $\max(a, b) \leq M$. Then
+$$|\hat f(\xi_j)| = \left|\int_{-\infty}^\infty f(x)e^{-ix\xi_j} ~dx\right| = \frac{|e^{-i\xi_jb} - e^{-i\xi_ja}|}{|\xi_j|} \leq \frac{\exp(2M^2)}{|\xi_j|}$$
+which vanishes as $j \to \infty$. Linearity extends this argument to simple functions.
+
+Let $\varepsilon > 0$. If $f$ is a general function in $L^1(\RR)$, let $g$ be a simple function such that $||f - g||_{L^1(\RR)} < \varepsilon$. Since the lemma holds for $g$, we can find a $J > 0$ so large that for every $j > J$, $|\hat g(\xi_j)| < \varepsilon$.
+Then, for any such $j$,
+$$\left|\int_{-\infty}^\infty f(x) e^{-ix\xi_j} ~dx\right| \leq ||f - g||_{L^1(\RR)} + \left|\int_{-\infty}^\infty g(x)e^{-ix\xi_j} ~dx\right| < 2\varepsilon.$$
+Therefore $f(\xi_j) \to 0$ as $j \to \infty$.
 \end{proof}
 
+\begin{lemma}
+\label{delta lower bound}
+There is a $\delta > 0$ such that
+$$N(\delta, \pi - \delta, R) + N(-\pi + \delta, -\delta, R) = o(R^\rho).$$
+\end{lemma}
+\begin{proof}
+Suppose not and let $\varepsilon > 0$.
+Let $X(\varepsilon, R)$ be the set of $\xi = re^{i\theta} \in \CC$ such that $r < R$, $|\theta| < \varepsilon$, and $\hat V(2\xi) \hat V(-2\xi) + 1 = 0$. Then $X(\varepsilon, R)$ is a compact set which consists of zeroes of a nonconstant entire function, so is finite. In particular, $X(\varepsilon) = \bigcup_R X(\varepsilon, R)$ is discrete. By Froese's conjecture,
+$|N(\varepsilon, \pi - \varepsilon, R) + N(-\pi + \varepsilon, -\varepsilon, R) - \card X(\varepsilon, R)| = o(R^\rho)$ and so
+$$0 \neq \lim_{R \to \infty} \frac{N(\varepsilon, \pi - \varepsilon, R) + N(-\pi + \varepsilon, -\varepsilon, R)}{R^\rho} = \lim_{R \to \infty} \frac{\card X(\varepsilon, R)}{R^\rho}.$$
+Therefore $X(\varepsilon)$ is infinite; since $\Re$ has finite fibers as a projection $X(\varepsilon) \to \RR$, the infinite pigeonhole principle applied to the $\Re$-preimages of $[n, n + 1]$, $n \in \ZZ$, furnishes a sequence of $\xi_j \in X(\varepsilon)$ such that $|\Re \xi_j| \to \infty$.
+Moreover, since $\varepsilon$ was arbitrary, we may replace a $\xi_j$ with another $\xi_j'$ such that $|\Im \xi_j'| < 1$; so we may assume that for every $j$, $|\Im \xi_j| < 1$.
 
+By Lemma \ref{RiemannLebesgue}, we have $\hat V(2\xi_j) \to 0$ and $\hat V(-2\xi_j) \to 0$. So
+$$1 = -\lim_{j \to \infty} \hat V(2\xi_j) \hat V(-2\xi_j) = 0,$$
+which is absurd.
+\end{proof}
 
+\begin{proof}[Proof of Theorem \ref{conditional convergence of breit wigner}]
+To show that the Breit-Wigner series is not absolutely convergent, it suffices to show that
+$$\sum_{\lambda \in \Res V} \frac{|\Im \lambda|}{|\lambda|^2} = \infty.$$
+Therefore we bound this series from below.
+
+Let $\delta$ be given by Lemma \ref{delta lower bound}. We can and do take $\delta$ so small that $\sin \delta > \delta/2$.
+Let $\Res_\delta V$ denote the set of resonances $re^{i\theta} \in \Res V$ such that $|\theta| \geq \delta$ and $|\theta - \pi| \geq \delta$.
+Let $N_\delta(R)$ be the number of $re^{i\theta} \in \Res_\delta V$ such that $r < R$. Then by our choice of $\delta$,
+$$|N(-\pi, \pi, R) - N_\delta(R)| = o(R^\rho).$$
+Since Froese's conjecture gives
+$$N(-\pi, \pi, R) = \frac{s(-\pi, \pi)}{2\pi \rho}R^\rho + o(R^\rho),$$
+it follows that
+$$N_\delta(R) = \frac{s(-\pi, \pi)}{2\pi \rho}R^\rho + o(R^\rho)$$
+as well. Now (TODO $s$ is nonzero on a positive measure set) so $N_\delta(R) \gtrsim R^\rho$.
+
+Let $\lambda = re^{i\theta} \in \Res_\delta V$. We will assume for now that $\Re \lambda \geq 0$ and $\Im \lambda \geq 0$ to simplify notation, but analogous arguments go through in the other three cases. In this case, $0 < \delta \leq \theta \leq \pi/2$. If $\theta = \delta$, then $\Im \lambda = r \sin \delta > r\delta/2$.
+Otherwise, $\theta > \delta$. Let $\mu = \Re \lambda(1 + i\tan\delta)$. Then $\Re \mu = \Re \lambda$, so $\Im \lambda/\Re \lambda > \Im \mu/\Re \mu$. But $\arg \mu = \delta$, so
+$$\frac{\Im \lambda}{|\lambda|} = \frac{\Im \lambda}{\sqrt{(\Im \lambda)^2 + (\Re \lambda)^2}} > \frac{\Im \mu}{\sqrt{(\Im \mu)^2 + (\Re \mu)^2}} = \frac{\Im \mu}{|\mu|} > \frac{\delta}{2},$$
+the first inequality following because for any $t$, the function $x \mapsto x/\sqrt{t^2 + x^2}$ is strictly increasing. Therefore, for any $\lambda \in \Res_\delta V$, $2|\Im \lambda| > \delta|\lambda|$.
+
+Since $\Res_\delta V \subseteq \Res V$,
+\begin{align*}\sum_{\lambda \in \Res V} \frac{|\Im \lambda|}{|\lambda|^2}
+&\geq \sum_{\lambda \in \Res_\delta V} \frac{|\Im \lambda|}{|\lambda|^2}
+> \frac{\delta}{2} \sum_{\lambda \in \Res_\delta V} |\lambda|^{-1}
+\\&= \frac{\delta}{2} \sum_{r=0}^\infty \sum_{\substack{\lambda \in \Res_\delta V\\r \leq |\lambda| < r + 1}} |\lambda|^{-1}
+\geq \frac{\delta}{2} \sum_{r=0}^\infty \sum_{\substack{\lambda \in \Res_\delta V\\r \leq |\lambda| < r + 1}} \frac{1}{r + 1}
+\\&= \frac{\delta}{2} \sum_{r=0}^\infty \frac{N_\delta(r+1) - N_\delta(r)}{r + 1}
+\\&= \frac{\delta s(-\pi, \pi)}{4\pi\rho} \sum_{r=0}^\infty \frac{(r+1)^\rho - r^\rho}{r+1} + o(r^{\rho - 1})
+\\&\geq \frac{\delta s(-\pi, \pi)}{4\pi\rho} \sum_{r=1}^\infty \frac{1}{r} = \infty.
+\end{align*}
+Therefore the Breit-Wigner series diverges.
+\end{proof}
 
 
 
