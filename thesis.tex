@@ -27,6 +27,7 @@
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\ch}{ch}
 \DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\singsupp}{sing supp}
 \DeclareMathOperator{\supp}{supp}
 
 \newcommand{\dbar}{\overline \partial}
@@ -445,6 +446,132 @@ $$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b - a}{\pi}.$$
 This proves Titchmarsh's theorem.
 \end{proof}
 
+\chapter{Other preliminaries}
+TODO Clean me up
+
+
+\section{Noncommutative sequence spaces}
+We review the theory of trace-class operators, which are those operators $T$ such that $T$ has a well-defined trace and $1 + T$ has a well-defined determinant. To do this, we will need the theories of compact and Hilbert-Schmidt operators as well.
+
+Fix a Hilbert space $H$. If $T \in B(H)$, then $T^*T$ is a positive operator, so has a unique positive square root $|T| = \sqrt{T^*T}$, which we can reasonably think of as the absolute value of $T$. If $H$ is actually finite-dimensional, then the trace of $T$ is given by $\tr T = \sum_j \langle Te_j, e_j\rangle$ for any and every orthonormal basis $(e_j)_j$. So it is reasonable to define $\tr T$ this way whenever $H$ is separable (hence has a countable orthonormal basis), though the series may not converge in that case. Henceforth we will assume that $H$ is separable.
+
+\begin{definition}
+The \dfn{trace-class norm} is defined by $||T||_1 = \tr |T|$, and the \dfn{Hilbert-Schmidt norm} is defined by $||T||_2^2 = \tr(T^*T)$. If $||T||_1$ (resp. $||T||_2$) is finite, we say that $T$ is a \dfn{trace-class operator} (resp. \dfn{Hilbert-Schmidt operator}). The space of trace-class operators is known as $B^1(H)$ and the space of Hilbert-Schmidt operators is known as $B^2(H)$.
+\end{definition}
+Let $X$ be a ``good" measure space. Then one can think of $B^1(L^2(X))$ as the ``noncommutative analogue" of $L^1(X)$. In this metaphor, the Hilbert space of Hilbert-Schmidt operators $B^2(L^2(X))$ corresponds to $L^2(X)$, and the space $B^\infty(L^2(X))$ of compact operators corresponds to $L^\infty(X)$. This metaphor is especially good when $X$ is a discrete space, for then we have the chains of inclusions $B^p(L^2(X)) \subseteq B^q(L^2(X))$ and $L^p(X) \subseteq L^q(X)$ for $1 \leq q \leq p \leq \infty$.
+
+Letting $||\cdot||_\infty$ denote the usual operator norm, we observe that
+\begin{align*}
+||T||_\infty & \leq ||T||_1,\\
+||TS||_1 &\leq ||T||_2||S||_2;
+\end{align*}
+the proof is the same as their ``commutative analogues" which interpolate between $\ell^1$, $\ell^2$, and $\ell^\infty$.
+
+We now construct a wealth of Hilbert-Schmidt operators, some of which we will need later.
+\begin{lemma}
+Let $k \in L^2(\RR^2)$ be the integral kernel of an operator $K \in B(L^2(\RR))$. Then $||K||_2 = ||k||_2$, so $K \in B^2(L^2(\RR))$.
+\end{lemma}
+\begin{proof}
+Fix an orthonormal basis $(e_n)_n$ of $L^2(\RR)$. This determines an orthonormal basis $(e_{nm})_{nm}$ of $L^2(\RR^2)$ by $e_{nm}(x, y) = e_n(x) \overline{e_m(y)}$. So
+$$||k||_2 = \sum_{nm} |\langle k, e_{nm}\rangle|^2.$$
+We therefore compute
+\begin{align*}
+  \langle k, e_{nm}\rangle &= \int_{-\infty}^\infty \int_{-\infty}^\infty k(x, y) \overline{e_m(x)} e_n(y) ~dx ~dy\\
+  &= \int_{-\infty}^\infty \overline{e_m(x)} \int_{-\infty}^\infty k(x, y) e_n(y) ~dx ~dy\\
+  &= \int_{-\infty}^\infty \overline{e_m(x)} Ke_n(y) ~dx ~dy = \langle Ke_n, e_m\rangle.
+\end{align*}
+Therefore
+$$||k||_2 = \sum_n ||Ke_n||^2 = ||K||_2.$$
+In particular, $K \in B^2(L^2(\RR))$.
+\end{proof}
+It can be shown that every Hilbert-Schmidt operator on $L^2(\RR)$ can be written as an integral operator whose kernel lies in $L^2(\RR^2)$; but we will not need this fact.
+\begin{lemma}
+Let $f, g \in L^2(\RR)$ and suppose that
+$$Ku = \mathcal F^{-1}(\hat f \mathcal F(gu)).$$
+Then $||K||_2 = ||f||_2||g||_2$, so $K \in B^2(L^2(\RR))$.
+\end{lemma}
+\begin{proof}
+By an approximation argument, we may assume that $f$, $g$, and $u$ are Schwartz-class functions. Then
+\begin{align*}
+Ku(x) &= \frac{1}{2\pi} \int_{-\infty}^\infty e^{i\xi x} \hat f(\xi) \widehat{gu}(\xi) ~d\xi \\
+  &= \frac{1}{2\pi} \int_{-\infty}^\infty \int_{-\infty}^\infty e^{i\xi(x - y)} \hat f(\xi) g(y) u(y) ~dy ~d\xi\\
+  &= \frac{1}{2\pi} \int_{-\infty}^\infty g(y)u(y) \int_{-\infty}^\infty e^{i\xi(x - y)} \hat f(\xi) ~d\xi ~dy\\
+  &= \int_{-\infty}^\infty f(x - y) g(y) u(y) ~d\xi~dy
+\end{align*}
+so $k(x, y) = f(x - y) g(y)$ is the integral kernel of $K$. Besides,
+\begin{align*}
+  ||k||_2^2 &= \int_{-\infty}^\infty \int_{-\infty}^\infty |g(y)|^2 |f(x - y)|^2 ~dx ~dy
+  \\&= \int_{-\infty}^\infty |g(y)|^2 \int_{-\infty}^\infty |f(x - y)|^2 ~dx ~dy = ||g||_2^2||f||_2^2.
+\end{align*}
+Therefore $||K||_2 = ||g||_2 ||f||_2$.
+\end{proof}
+\begin{lemma}
+  \label{partial resolvent is hilbert schmidt}
+Let $\chi$ denote the indicator function of $[-1, 1]$ and let $\Im \lambda > 0$. Then the operator $T(\lambda) = (-i\partial - \lambda)^{-1}\chi$ is Hilbert-Schmidt, and
+$$||T(\lambda)||_2 = \frac{1}{\sqrt{\Im \lambda}}.$$
+\end{lemma}
+\begin{proof}
+Let $\hat f(\xi) = (\xi - \lambda)^{-1}$. Then
+$$T(\lambda)u = \mathcal F^{-1}(\hat f \mathcal F(\chi u)).$$
+So $||T(\lambda)||_2 = ||f||_2||\chi||_2$, and $||\chi||_2 = \sqrt 2$. Also,
+$$||f||_2^2 = \frac{||\hat f||_2^2}{2\pi} = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{d\xi}{|\xi - \lambda|^2}.$$
+Up to a translation of $\xi$, we may assume $\Re \lambda = 0$. Then
+$$|\xi - \lambda|^2 = |\xi|^2 + |\lambda|^2$$
+by the Pythagorean theorem. Since $|\xi|^2 = \xi^2$ we have
+$$||f||_2^2 = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{d\xi}{\xi^2 + |\lambda|^2} = \frac{1}{2\Im \lambda}$$
+wherefore the claim.
+\end{proof}
+
+A trace-class operator $T$ can clearly be approximated by finite-rank operators in $||\cdot||_1$, and the compact operators are those that can be approximated by finite-rank operators in $||\cdot||_\infty$. Therefore a trace-class operator is compact. In particular, its spectrum is countable and its only limit point is $0$ (provided that $H$ is infinite-dimensional). So every element of the spectrum is an eigenvalue except possibly $0$. (That is, every element of the spectrum of $1 + T$ is an eigenvalue except possibly $1$.) We recall that the multiplicity of an eigenvalue $\lambda$ of $1 + T$ is defined to be the dimension of the space of vectors annihilated by $(T - \lambda)^j$ for some $j \geq 0$.
+\begin{definition}
+Let $T \in B^1(H)$ and let $(\lambda_j)_j$ be an enumeration of the spectrum of $1 + T$, counting multiplicities. Then the \dfn{Fredholm determinant} of $1 + T$ is defined by
+$$\det(1 + T) = \prod_j \lambda_j.$$
+\end{definition}
+\begin{lemma}
+The infinite product in the definition of the Fredholm determinant converges absolutely, satisfying the estimate
+$$|\det(1 + T)| \leq e^{||T||_1}.$$
+One has $\det(1 + T) = 0$ if and only $1 + T$ is not injective. If $H$ is finite-dimensional, then the Fredholm determinant agrees with the classical determinant.
+\end{lemma}
+\begin{proof}
+The spectrum of $T$ is given by $(\lambda_j - 1)_j$, so
+$$|\det(1 + T)| \leq \exp\left(\sum_j |\lambda_j - 1|\right) = \exp(\tr|T|) = e^{||T||_1} < \infty.$$
+If $1 + T$ is injective, then $\ker(1 + T) = 0$, so $0$ is not an eigenvalue of $1 + T$. Since $0$ is not a limit point of the spectrum of $1 + T$, it follows that there is a $\varepsilon > 0$ such that for every $j$, $|\lambda_j| > \varepsilon$. In particular, $\det(1 + T) \neq 0$. The converse is easy.
+
+Finally, if $H$ is finite-dimensional, we can write $1 + T$ in a Jordan canonical form $J$, and the classical determinant of $1 + T$ will be the product of the diagonal entries of $J$, which are exactly the eigenvalues of $1 + T$, which appear as many times as their multiplicities.
+\end{proof}
+
+By the spectral theorem for compact operators, a compact operator $T \in B^\infty(H)$ admits a singular value decomposition
+$$Tu = \sum_{n=1}^\infty \rho_n \langle u, e_n\rangle f_n$$
+for some orthonormal sets $e_n,f_n \in H$ and singular values $\rho_n \in \RR$. Then the assumption that $T \in B^p(H)$ is equivalent to saying that $(\rho_n)_n \in \ell^p$ (and this makes sense for any $p \in [1, \infty]$, not just $p =1,2,\infty$). In particular, given $f, g \in H$, the operator
+$$Tu = \langle u, f \rangle g$$
+is a rank-$1$ operator (since its image is the span of $g$), and we can compute its SVD by finding a $\rho \in \RR$ such that if
+$$Tu = \rho \langle u, \tilde f \rangle \tilde g$$
+has $||\tilde f||_2 = ||\tilde g||_2 = 1$. Clearly then
+\begin{equation}\label{b1 norm of a tensor product}||T||_1 = |\tr T| = |\rho| = ||f||_2 ||g||_2.\end{equation}
+So the following linear map is well-defined.
+\begin{definition}
+\label{tensor products are trace class}
+We define a linear map $b: H \otimes H \to B^1(H)$ by
+$$b(f \otimes g)u = \langle u, f \rangle g.$$
+\end{definition}
+
+\section{The Riemann-Lebesgue lemma}
+\begin{lemma}
+\label{RiemannLebesgue}
+Let $(\xi_j)_j$ be a sequence in $\CC$ such that as $j \to \infty$, $|\Re \xi_j| \to \infty$ while $|\Im \xi_j|$ remains bounded. Suppose that $f \in L^1(\RR)$. Then $\hat f(\xi_j) \to 0$ as $j \to \infty$.
+\end{lemma}
+\begin{proof}
+We first check this when $f$ is the indicator function of $[a, b] \subset \RR$. Assume that $M > 0$ is so large that $|\Im \xi_j| \leq M$ and $\max(a, b) \leq M$. Then
+$$|\hat f(\xi_j)| = \left|\int_{-\infty}^\infty f(x)e^{-ix\xi_j} ~dx\right| = \frac{|e^{-i\xi_jb} - e^{-i\xi_ja}|}{|\xi_j|} \leq \frac{\exp(2M^2)}{|\xi_j|}$$
+which vanishes as $j \to \infty$. Linearity extends this argument to simple functions.
+
+Let $\varepsilon > 0$. If $f$ is a general function in $L^1(\RR)$, let $g$ be a simple function such that $||f - g||_{L^1(\RR)} < \varepsilon$. Since the lemma holds for $g$, we can find a $J > 0$ so large that for every $j > J$, $|\hat g(\xi_j)| < \varepsilon$.
+Then, for any such $j$,
+$$\left|\int_{-\infty}^\infty f(x) e^{-ix\xi_j} ~dx\right| \leq ||f - g||_{L^1(\RR)} + \left|\int_{-\infty}^\infty g(x)e^{-ix\xi_j} ~dx\right| < 2\varepsilon.$$
+Therefore $f(\xi_j) \to 0$ as $j \to \infty$.
+\end{proof}
+
+
 \section{Weierstrassian products}
 TODO
 
@@ -494,7 +621,10 @@ $$R_0(\lambda; x, y) = \frac{i}{2\lambda} e^{i\lambda|x - y|}.$$
 In fact,
 $$2i\lambda (H_0 - \lambda^2)R_0(\lambda; x, 0) = (\Delta_x + \lambda^2) e^{i\lambda|x|} = -\lambda^2 e^{i\lambda|x|} + \lambda^2 e^{i\lambda|x|} = -2i\delta_0(x).$$
 Now if $\Im \lambda \leq 0$, then we have no decay in the plane waves $e^{i\lambda|x - y|}$ and so $R_0$ is not a bounded operator on $L^2$. The spectrum of $H_0 = -\Delta$ consists of $\RR_+$, so if $\Im \lambda > 0$, it follows from the spectral radius theorem that
-$$||R_0(\lambda)||_{L^2 \to L^2} = \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} = \frac{1}{d(\RR_+, \lambda^2)}.$$
+\begin{equation}
+\label{bound on R_0}
+  ||R_0(\lambda)||_{L^2 \to L^2} = \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} = \frac{1}{d(\RR_+, \lambda^2)}.
+\end{equation}
 Therefore $R_0(\lambda)$ is bounded on $L^2$ if $\Im \lambda > 0$. In particular, $R_0$ is holomorphic on $\CC_+$.
 
 \begin{lemma}
@@ -955,179 +1085,17 @@ $$S_V = \sum_{\lambda \in P} \frac{\Im \lambda}{|\lambda|^2}.$$
 Let $V$ be a super-exponentially decreasing potential. The Breit-Wigner series converges if and only if $V$ is compactly supported.
 \end{conjecture}
 
-\section{Noncommutative sequence spaces}
-We review the theory of trace-class operators, which are those operators $T$ such that $T$ has a well-defined trace and $1 + T$ has a well-defined determinant. To do this, we will need the theories of compact and Hilbert-Schmidt operators as well.
-
-Fix a Hilbert space $H$. If $T \in B(H)$, then $T^*T$ is a positive operator, so has a unique positive square root $|T| = \sqrt{T^*T}$, which we can reasonably think of as the absolute value of $T$. If $H$ is actually finite-dimensional, then the trace of $T$ is given by $\tr T = \sum_j \langle Te_j, e_j\rangle$ for any and every orthonormal basis $(e_j)_j$. So it is reasonable to define $\tr T$ this way whenever $H$ is separable (hence has a countable orthonormal basis), though the series may not converge in that case. Henceforth we will assume that $H$ is separable.
-
-\begin{definition}
-The \dfn{trace-class norm} is defined by $||T||_1 = \tr |T|$, and the \dfn{Hilbert-Schmidt norm} is defined by $||T||_2^2 = \tr(T^*T)$. If $||T||_1$ (resp. $||T||_2$) is finite, we say that $T$ is a \dfn{trace-class operator} (resp. \dfn{Hilbert-Schmidt operator}). The space of trace-class operators is known as $B^1(H)$ and the space of Hilbert-Schmidt operators is known as $B^2(H)$.
-\end{definition}
-Let $X$ be a ``good" measure space. Then one can think of $B^1(L^2(X))$ as the ``noncommutative analogue" of $L^1(X)$. In this metaphor, the Hilbert space of Hilbert-Schmidt operators $B^2(L^2(X))$ corresponds to $L^2(X)$, and the space $B^\infty(L^2(X))$ of compact operators corresponds to $L^\infty(X)$. This metaphor is especially good when $X$ is a discrete space, for then we have the chains of inclusions $B^p(L^2(X)) \subseteq B^q(L^2(X))$ and $L^p(X) \subseteq L^q(X)$ for $1 \leq q \leq p \leq \infty$.
-
-Letting $||\cdot||_\infty$ denote the usual operator norm, we observe that
-\begin{align*}
-||T||_\infty & \leq ||T||_1,\\
-||TS||_1 &\leq ||T||_2||S||_2;
-\end{align*}
-the proof is the same as their ``commutative analogues" which interpolate between $\ell^1$, $\ell^2$, and $\ell^\infty$.
-
-We now construct a wealth of Hilbert-Schmidt operators, some of which we will need later.
-\begin{lemma}
-Let $k \in L^2(\RR^2)$ be the integral kernel of an operator $K \in B(L^2(\RR))$. Then $||K||_2 = ||k||_2$, so $K \in B^2(L^2(\RR))$.
-\end{lemma}
-\begin{proof}
-Fix an orthonormal basis $(e_n)_n$ of $L^2(\RR)$. This determines an orthonormal basis $(e_{nm})_{nm}$ of $L^2(\RR^2)$ by $e_{nm}(x, y) = e_n(x) \overline{e_m(y)}$. So
-$$||k||_2 = \sum_{nm} |\langle k, e_{nm}\rangle|^2.$$
-We therefore compute
-\begin{align*}
-  \langle k, e_{nm}\rangle &= \int_{-\infty}^\infty \int_{-\infty}^\infty k(x, y) \overline{e_m(x)} e_n(y) ~dx ~dy\\
-  &= \int_{-\infty}^\infty \overline{e_m(x)} \int_{-\infty}^\infty k(x, y) e_n(y) ~dx ~dy\\
-  &= \int_{-\infty}^\infty \overline{e_m(x)} Ke_n(y) ~dx ~dy = \langle Ke_n, e_m\rangle.
-\end{align*}
-Therefore
-$$||k||_2 = \sum_n ||Ke_n||^2 = ||K||_2.$$
-In particular, $K \in B^2(L^2(\RR))$.
-\end{proof}
-It can be shown that every Hilbert-Schmidt operator on $L^2(\RR)$ can be written as an integral operator whose kernel lies in $L^2(\RR^2)$; but we will not need this fact.
-\begin{lemma}
-Let $f, g \in L^2(\RR)$ and suppose that
-$$Ku = \mathcal F^{-1}(\hat f \mathcal F(gu)).$$
-Then $||K||_2 = ||f||_2||g||_2$, so $K \in B^2(L^2(\RR))$.
-\end{lemma}
-\begin{proof}
-By an approximation argument, we may assume that $f$, $g$, and $u$ are Schwartz-class functions. Then
-\begin{align*}
-Ku(x) &= \frac{1}{2\pi} \int_{-\infty}^\infty e^{i\xi x} \hat f(\xi) \widehat{gu}(\xi) ~d\xi \\
-  &= \frac{1}{2\pi} \int_{-\infty}^\infty \int_{-\infty}^\infty e^{i\xi(x - y)} \hat f(\xi) g(y) u(y) ~dy ~d\xi\\
-  &= \frac{1}{2\pi} \int_{-\infty}^\infty g(y)u(y) \int_{-\infty}^\infty e^{i\xi(x - y)} \hat f(\xi) ~d\xi ~dy\\
-  &= \int_{-\infty}^\infty f(x - y) g(y) u(y) ~d\xi~dy
-\end{align*}
-so $k(x, y) = f(x - y) g(y)$ is the integral kernel of $K$. Besides,
-\begin{align*}
-  ||k||_2^2 &= \int_{-\infty}^\infty \int_{-\infty}^\infty |g(y)|^2 |f(x - y)|^2 ~dx ~dy
-  \\&= \int_{-\infty}^\infty |g(y)|^2 \int_{-\infty}^\infty |f(x - y)|^2 ~dx ~dy = ||g||_2^2||f||_2^2.
-\end{align*}
-Therefore $||K||_2 = ||g||_2 ||f||_2$.
-\end{proof}
-\begin{lemma}
-  \label{partial resolvent is hilbert schmidt}
-Let $\chi$ denote the indicator function of $[-1, 1]$ and let $\Im \lambda > 0$. Then the operator $T(\lambda) = (-i\partial - \lambda)^{-1}\chi$ is Hilbert-Schmidt, and
-$$||T(\lambda)||_2 = \frac{1}{\sqrt{\Im \lambda}}.$$
-\end{lemma}
-\begin{proof}
-Let $\hat f(\xi) = (\xi - \lambda)^{-1}$. Then
-$$T(\lambda)u = \mathcal F^{-1}(\hat f \mathcal F(\chi u)).$$
-So $||T(\lambda)||_2 = ||f||_2||\chi||_2$, and $||\chi||_2 = \sqrt 2$. Also,
-$$||f||_2^2 = \frac{||\hat f||_2^2}{2\pi} = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{d\xi}{|\xi - \lambda|^2}.$$
-Up to a translation of $\xi$, we may assume $\Re \lambda = 0$. Then
-$$|\xi - \lambda|^2 = |\xi|^2 + |\lambda|^2$$
-by the Pythagorean theorem. Since $|\xi|^2 = \xi^2$ we have
-$$||f||_2^2 = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{d\xi}{\xi^2 + |\lambda|^2} = \frac{1}{2\Im \lambda}$$
-wherefore the claim.
-\end{proof}
-
-A trace-class operator $T$ can clearly be approximated by finite-rank operators in $||\cdot||_1$, and the compact operators are those that can be approximated by finite-rank operators in $||\cdot||_\infty$. Therefore a trace-class operator is compact. In particular, its spectrum is countable and its only limit point is $0$ (provided that $H$ is infinite-dimensional). So every element of the spectrum is an eigenvalue except possibly $0$. (That is, every element of the spectrum of $1 + T$ is an eigenvalue except possibly $1$.) We recall that the multiplicity of an eigenvalue $\lambda$ of $1 + T$ is defined to be the dimension of the space of vectors annihilated by $(T - \lambda)^j$ for some $j \geq 0$.
-\begin{definition}
-Let $T \in B^1(H)$ and let $(\lambda_j)_j$ be an enumeration of the spectrum of $1 + T$, counting multiplicities. Then the \dfn{Fredholm determinant} of $1 + T$ is defined by
-$$\det(1 + T) = \prod_j \lambda_j.$$
-\end{definition}
-\begin{lemma}
-The infinite product in the definition of the Fredholm determinant converges absolutely, satisfying the estimate
-$$|\det(1 + T)| \leq e^{||T||_1}.$$
-One has $\det(1 + T) = 0$ if and only $1 + T$ is not injective. If $H$ is finite-dimensional, then the Fredholm determinant agrees with the classical determinant.
-\end{lemma}
-\begin{proof}
-The spectrum of $T$ is given by $(\lambda_j - 1)_j$, so
-$$|\det(1 + T)| \leq \exp\left(\sum_j |\lambda_j - 1|\right) = \exp(\tr|T|) = e^{||T||_1} < \infty.$$
-If $1 + T$ is injective, then $\ker(1 + T) = 0$, so $0$ is not an eigenvalue of $1 + T$. Since $0$ is not a limit point of the spectrum of $1 + T$, it follows that there is a $\varepsilon > 0$ such that for every $j$, $|\lambda_j| > \varepsilon$. In particular, $\det(1 + T) \neq 0$. The converse is easy.
-
-Finally, if $H$ is finite-dimensional, we can write $1 + T$ in a Jordan canonical form $J$, and the classical determinant of $1 + T$ will be the product of the diagonal entries of $J$, which are exactly the eigenvalues of $1 + T$, which appear as many times as their multiplicities.
-\end{proof}
-
-By the spectral theorem for compact operators, a compact operator $T \in B^\infty(H)$ admits a singular value decomposition
-$$Tu = \sum_{n=1}^\infty \rho_n \langle u, e_n\rangle f_n$$
-for some orthonormal sets $e_n,f_n \in H$ and singular values $\rho_n \in \RR$. Then the assumption that $T \in B^p(H)$ is equivalent to saying that $(\rho_n)_n \in \ell^p$ (and this makes sense for any $p \in [1, \infty]$, not just $p =1,2,\infty$). In particular, given $f, g \in H$, the operator
-$$Tu = \langle u, f \rangle g$$
-is a rank-$1$ operator (since its image is the span of $g$), and we can compute its SVD by finding a $\rho \in \RR$ such that if
-$$Tu = \rho \langle u, \tilde f \rangle \tilde g$$
-has $||\tilde f||_2 = ||\tilde g||_2 = 1$. Clearly then
-\begin{equation}\label{b1 norm of a tensor product}||T||_1 = |\tr T| = |\rho| = ||f||_2 ||g||_2.\end{equation}
-So the following linear map is well-defined.
-\begin{definition}
-\label{tensor products are trace class}
-We define a linear map $b: H \otimes H \to B^1(H)$ by
-$$b(f \otimes g)u = \langle u, f \rangle g.$$
-\end{definition}
-
-\section{Froese's conjecture}
-Recall that $V$ is assumed to be super-exponentially decreasing. This justifies the differentiation under the integral sign
-$$\dbar \hat V(\xi) = \int_{-\infty}^\infty \dbar_\xi V(x) e^{-ix\xi} ~dx = 0$$
-whence $\hat V$ is an entire function. We therefore review the theory of growth of entire functions.
-
-\begin{definition}
-Let $f$ be a entire function. The \dfn{order} $\rho$ of $f$ is defined by
-$$\rho = \inf \{m \in \RR: f(z) = O(\exp(|z|^m))\}.$$
-\end{definition}
-
-
-TODO: completely regular growth, Phragmen-Lindelof indicator functions...
-
-
-Froese \cite{froese1997asymptotic} conjectured an asymptotic formula for the distribution of resonances of $V$.
-\begin{definition}
-Let $R > 0$ and let $\theta,\varphi$ be angles. The \dfn{angular counting function} $N(R, \theta, \varphi)$ is the number of resonances $\lambda$ of $V$ such that $\arg \lambda \in (\theta, \varphi)$ and $|\lambda| < R$.
-\end{definition}
-\begin{conjecture}[Froese's conjecture]
-The angular counting function satisfies
-$$N(R, \theta, \varphi) = \frac{s(\theta, \varphi)}{2\pi \rho} R^\rho + o(R^\rho).$$
-Moreover, the asymptotic distribution of resonances is identical to the asymptotic distribution of zeroes of $\lambda \mapsto \hat V(2\lambda)\hat V(-2\lambda) + 1$.
-\end{conjecture}
-Froese was able to prove his conjecture \cite[Theorem 1.3]{froese1997asymptotic} for potentials which meet the following hypothesis.
-\begin{definition}
-Suppose that $\hat V$ has order $\rho > 1$ and is of completely regular growth. Suppose that... TODO Then we say that $V$ satisfies \dfn{Froese's criterion}.
-\end{definition}
 
 \section{Trace-class analytic continuation}
 Let $R_V(\lambda) = (H_V - \lambda^2)^{-1}$ denote the resolvent, as in the compactly supported case. Trouble comes because $R_V$ may not extend meromorphically to $\CC$ if $V$ is not compactly supported. Indeed, the proof of Theorem \ref{meromorphic continuation with compact support} used the fact that we could find a cutoff function $\rho$ such that $\rho V = V$, and so we must somehow generalize the meromorphic continuation of $R_V$. This section follows \cite[Lemma 3.1]{froese1997asymptotic}.
 
-If $V$ is compactly supported, then we can meromorphically continue $R_V$ to all of $\CC$, and the following are equivalent for each $\lambda \in \CC \setminus 0$:
-\begin{enumerate}
-\item $\lambda$ is a resonance.
-\item $\lambda$ is a pole of $R_V$.
-\item $\lambda$ is a pole of $\sqrt VR_V\sqrt{|V|}$.
-\end{enumerate}
-Moreover, we have
-$$R_V(\lambda) = R_0(\lambda)(1 + VR_V(\lambda)),$$
-so if we put
-$$S_V(\lambda) = \sqrt VR_0(\lambda) \sqrt{|V|},$$
-it follows that
-$$\sqrt V R_V(\lambda) \sqrt{|V|} = S_V(\lambda)(1 - \sqrt VR_V(\lambda)\sqrt{|V|}),$$
-which can be rewritten as
-$$S_V(\lambda) = (1 + S_V(\lambda))\sqrt V R_V(\lambda)\sqrt{|V|}.$$
-The definition of $S_V$ makes sense even if $V$ is only assumed to be in $L^\infty(\RR)$.
+We put
+$$S_V(\lambda) = \sqrt VR_0(\lambda)\sqrt{|V|}.$$
+We view $S_V$ as a weighted version of the resolvent of $R_0(\lambda)$. We will need the fact that $S_V$ is a holomorphic family of trace-class operators on the punctured plane when we consider basic properties of resonances of $V$.
 \begin{theorem}
   \label{sv is b1 family}
 Suppose that $V$ is super-exponentially decreasing. Then $S_V$ is holomorphic as a function $\CC \setminus 0 \to B^1(L^2(\RR))$, and has a simple pole at $0$.
 \end{theorem}
-Suppose that $V$ is compactly supported and $\lambda \neq 0$ is a resonance, hence a pole of $\sqrt VR_V\sqrt{|V|}$. By the lemma, $S_V(\lambda)$ exists, so we have
-$$(1 + S_V(\lambda))^{-1}S_V(\lambda) = \sqrt V R_V(\lambda) \sqrt{|V|} = \infty.$$
-This only makes sense if $1 + S_V(\lambda)$ is singular, and since $S_V(\lambda)$ is trace-class, this means that $\lambda$ is a zero of $\det(1 + S_V(\lambda))$.
-We can therefore easily extend the definition of resonance to super-exponentially decreasing potentials.
-\begin{definition}
-Suppose that $V$ is super-exponentially decreasing and let
-$$D(\lambda) = \det(1 + S_V(\lambda)).$$
-A \dfn{scattering resonance} of $V$ is a zero of $D$.
-\end{definition}
-\begin{corollary}
-Suppose that $V$ is super-exponentially decreasing. Then $D$ is holomorphic as a function $\CC \setminus 0 \to \CC$, and has a simple pole at $0$.
-\end{corollary}
-In particular, we can find an entire function $E$ such that $E(0) \neq 0$ and
-\begin{equation}
-  \label{determinant is an entire function}
-  D(z) = \frac{E(z)}{z},
-\end{equation}
-so that the scattering resonances of $D$ are exactly the zeroes of $E$.
 
 Before we can prove Theorem \ref{sv is b1 family}, we need some careful estimates on $S_V(\lambda)$.
 
@@ -1294,82 +1262,309 @@ and the theorem holds taking $L \to \infty$.
 Holomorphy follows from that of $R_0$. Since $V$ is super-exponentially decreasing, so is $\sqrt V$. For every $\lambda$, we can find a $N$ large enough that Lemma \ref{convergence in b1 topology} applies.
 \end{proof}
 
-\section{Conditional convergence}
-Let $\rho$ be the order of $\hat V$. If $V$ is compactly supported, then by the Paley-Wiener theorem, $\hat V(z) = O(e^{h(\Im z)})$ where $h$ is a linear function which depends on $\supp V$. Therefore $\hat V$ is of exponential type $\sup\{|x|: x \in \supp V\} < \infty$. In particular, $V$ is not compactly supported if and only if $\rho > 1$, or $\hat V$ is of exponential type $\infty$.
-\begin{theorem}
-  \label{conditional convergence of breit wigner}
-Suppose that $V$ satisfies Froese's conjecture. If $\rho > 1$, then the Breit-Wigner series $S_V$ is not absolutely convergent.
+
+
+
+\section{Resonances of large imaginary part}
+In this section we show that there is a constant $C$ there are no resonances $\lambda$ such that $\Im \lambda > C$. This will ensure that the Breit-Wigner series must be unconditional; i.e. either $B_V$ converges absolutely, or $B_V$ diverges.
+
+We start by using Theorem \ref{sv is b1 family} to justify the definition of a resonance of the super-exponentially decaying potential $V$. (So throughout this section we assume that $V$ decays fast enough for the estimates in the proof of Theorem \ref{sv is b1 family} will go through.)
+
+If $V$ is compactly supported, then we can meromorphically continue $R_V$ to all of $\CC$, and the following are equivalent for each $\lambda \in \CC \setminus 0$:
+\begin{enumerate}
+\item $\lambda$ is a resonance.
+\item $\lambda$ is a pole of $R_V$.
+\item $\lambda$ is a pole of $\sqrt VR_V\sqrt{|V|}$.
+\end{enumerate}
+Moreover, we have
+$$R_V(\lambda) = R_0(\lambda)(1 + VR_V(\lambda)),$$
+and it follows that
+$$\sqrt V R_V(\lambda) \sqrt{|V|} = S_V(\lambda)(1 - \sqrt VR_V(\lambda)\sqrt{|V|}),$$
+which can be rewritten as
+$$S_V(\lambda) = (1 + S_V(\lambda))\sqrt V R_V(\lambda)\sqrt{|V|}.$$
+
+By Theorem \ref{sv is b1 family}, $S_V(\lambda)$ exists, so we have
+$$(1 + S_V(\lambda))^{-1}S_V(\lambda) = \sqrt V R_V(\lambda) \sqrt{|V|} = \infty.$$
+This only makes sense if $1 + S_V(\lambda)$ is singular, and since $S_V(\lambda)$ is trace-class, this means that $\lambda$ is a zero of $\det(1 + S_V(\lambda))$.
+We can therefore easily extend the definition of resonance to super-exponentially decreasing potentials.
+\begin{definition}
+\label{determinant definition of resonance}
+Let
+$$D(\lambda) = \det(1 + S_V(\lambda)).$$
+A \dfn{scattering resonance} of $V$ is a zero of $D$.
+\end{definition}
+
+Conversely, suppose that $\lambda$ is a nonzero scattering resonance of $V$. If $R_V$ is meromorphic on some open neighborhood of $\lambda$, then $\lambda$ is a pole of $R_V$, even if $V$ is not compactly supported. In fact, $\lambda$ is a pole of $(1 + S_V(\lambda))^{-1}$, hence of $\sqrt VR_V(\lambda) \sqrt{|V|}$. Since $S_V$ is holomorphic near $\lambda$, $\lambda$ must be a pole of $R_V(\lambda)$. So we are interested in when $R_V$ is holomorphic.
+
+\begin{lemma}
+\label{no resonances of large imaginary part}
+There is a constant $C$ such that if $\Im \lambda > C$ then $\lambda$ is not a resonance.
+\end{lemma}
+To prove this we will need a standard estimate on $R_0(\lambda)$.
+\begin{lemma}
+If $\Im \lambda > ||V||_{L^\infty}$, then
+$$||VR_0(\lambda)||_{L^2 \to L^2} < 1.$$
+\end{lemma}
+\begin{proof}
+We note that $||V||_{L^2 \to L^2} \leq ||V||_{L^\infty}$, and by (\ref{bound on R_0}), it follows that
+\begin{align*}||VR_0(\lambda)||_{L^2 \to L^2} &\leq ||V||_{L^\infty} \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} \leq \frac{||V||_{L^\infty}}{|\lambda| \Im \lambda}
+\\&\leq \frac{||V||_{L^\infty}}{(\Im \lambda)^2}.\end{align*}
+The claim immediately follows.
+\end{proof}
+
+\begin{proof}[Proof of Lemma \ref{no resonances of large imaginary part}]
+Again we use the Neumann series computation
+$$(1 + VR_0(\lambda))^{-1} = \sum_{k=0}^\infty (-VR_0(\lambda))^k,$$
+which is valid whenever $\Im \lambda > ||V||_{L^\infty}$. By definition of the free resolvent, we have
+$$(H_V - \lambda^2)R_V(\lambda)\sum_{k=0}^\infty (-VR_0(\lambda))^k = 1$$
+and since that Neumann series is nonzero it follows that $(H_V - \lambda^2)R_V(\lambda)$ is finite.
+Since $H_V$ is an unbounded operator while $\lambda$ is bounded, $H_V \neq \lambda^2$, so it follows that $R_V$ is holomorphic at $\lambda$ and hence $\lambda$ cannot be a resonance of $V$.
+\end{proof}
+
+\begin{lemma}
+\label{density zero in upper half plane}
+Let $n(R, \theta, \varphi)$ be the number of resonances $re^{i\xi}$ such that $r \leq R$ and $\xi \in (\theta, \varphi).$
+Then for every $\varepsilon > 0$ the function $R \mapsto n(R, \varepsilon, \pi - \varepsilon)$ is bounded (in particular $o(R^\rho)$).
+\end{lemma}
+\begin{proof}
+We need to show that there are finitely many resonances $re^{i\theta}$ such that $\theta \in (\varepsilon, \pi - \varepsilon)$.
+Since resonances are zeroes of the entire function $z \mapsto zD(z)$, where $D$ is the determinant that appears in Definition \ref{determinant definition of resonance}, the set of resonances is discrete.
+For any $R$, the sector of $re^{i\theta}$ such that $r \leq R$ and $\theta \in (\varepsilon, \pi - \varepsilon)$ is compact, so only contains finitely many resonances.
+So if there are to be infinitely many resonances $r_ne^{i\theta_n}$, then $r_n \to \infty$, and in particular the imaginary parts
+$$\lim_{n \to \infty} r_n \sin \theta_n \geq \lim_{n \to \infty} r_n \sin \varepsilon = \infty.$$
+This contradicts Lemma \ref{no resonances of large imaginary part}.
+\end{proof}
+
+
+\section{The growth of an entire function}
+Recall that $V$ is assumed to be super-exponentially decreasing. This justifies the differentiation under the integral sign
+$$\dbar \hat V(\xi) = \int_{-\infty}^\infty \dbar_\xi V(x) e^{-ix\xi} ~dx = 0$$
+whence $\hat V$ is an entire function. We therefore review the theory of growth of entire functions.
+The growth of an entire function is closely tied to its distribution of zeroes, as given by the angular counting function.
+\begin{definition}
+Let $R > 0$ and let $\theta,\varphi$ be angles; let $\Gamma_{R,\theta,\varphi}$ be the contour around the sector
+$$\{re^{i\xi} \in \CC: r < R \wedge \xi \in (\theta, \varphi)\}.$$
+Given an entire function $f$ which is not identically $0$, its \dfn{angular counting function} $N$ to be the number of zeroes of $f$ inside $\Gamma_{R,\theta,\varphi}$, counted by multiplicity.
+\end{definition}
+Note that by the argument principle, the angular counting function could also be defined by the contour integral
+$$N(R, \theta, \varphi) = \int_{\Gamma_{R,\theta,\varphi}} \frac{f'(z)}{f(z)} ~dz.$$
+\begin{definition}
+Let $f$ be a entire function. The \dfn{order} $\rho$ of $f$ is defined by
+$$\rho = \inf \{m \in \RR: f(z) = O(\exp(|z|^m))\}.$$
+\end{definition}
+It is easy to see that the order $\rho$ of $f$ is given by
+$$\rho = \limsup_{r \to \infty} \frac{\log \log \sup_{|z| = r} |f(z)|}{\log r}.$$
+
+\begin{definition}
+The \dfn{type} $\tau$ of $f$ is
+$$\tau = \limsup_{r \to \infty} \frac{\log \sup_{|z| = r} |f(z)|}{r^\rho}.$$
+If $\tau \in (0, \infty)$, then we say that $f$ is \dfn{of normal type}.
+If $\rho = 1$ and $f$ is of normal type, then we say that $f$ is \dfn{of exponential type}.
+\end{definition}
+We now show that we can determine whether a distribution is of compact support by considering its order.
+\begin{lemma}
+Let $\mu$ be a super-exponentially decreasing distribution which is not identically zero, and let $F = \hat \mu$. Suppose that $F$ is of normal type, and let $\rho$ be the order of $F$. Then $\rho \geq 1$, and $\rho = 1$ if and only if $\mu$ has compact support.
+\end{lemma}
+\begin{proof}
+Since $F$ is a Fourier transform, $F(\xi + i\eta)$ is bounded in $\xi$ if $\eta$ is held fixed. To see this, note that
+$$|F(\xi + i\eta)| = \left|\int_{-\infty}^\infty \mu(x)e^{-ix\xi}e^{x\eta} ~dx\right| \leq \int_{-\infty}^\infty |\mu(x)| e^{x\eta} ~dx.$$
+The last integral converges because $\mu$ is assumed super-exponentially decreasing, so $\mu(x) = O(e^{-2x\eta})$ whence $\mu(x)e^{x\eta} = O(e^{-x\eta})$.
+Therefore $F(\xi + i\eta) = O(g(\eta))$ for some function $g$ which does not depend on $\xi$, and $\rho = \inf \{m: g(\eta) = O(e^{\eta^m})\}$.
+
+If $\mu$ has compact support, then by the Paley-Wiener theorem, for every $\varepsilon > 0$ and some $\tau > 0$ which depends on $\supp \mu$, $g(\eta) = O(e^{\tau\eta}) = O(e^{\eta^{1+\varepsilon}})$, and this estimate is sharp; therefore $\rho = 1$.
+Conversely, if $\rho = 1$, then because $F$ is of normal type there is a $\tau > 0$ such that $g(\eta) = O(e^{\tau\eta})$, and then the Paley-Wiener theorem bounds $\sup\{|x|: x \in \supp \mu\}$ in terms of $\tau$, so $\supp \mu$ is compact.
+
+We finally show that $\rho \geq 1$. So suppose that $\rho < 1$, and let $\chi$ be the indicator function of a compact set $K$ such that $\int_K |\mu| \neq 0$. (Such a set $K$ must exist, since $\mu$ is not identically zero.)
+Since $\rho \neq 1$, $\mu$ is not compactly supported, so there is a $\mu_0$ which does not have compact support such that $\mu = \mu\chi + \mu_0$, so that $F = \widehat{\mu\chi} + \widehat{\mu_0}$.
+Since $\mu_0$ is not compactly supported, the order $\rho_0$ of $\widehat{\mu_0}$ satisfies $\rho_0 \neq 1$.
+On the other hand, the order of $\widehat{\rho\chi}$ is $1$.
+
+If $\rho_0 < 1$, then $\widehat{\mu_0}$ is strictly dominated by $\widehat{\mu\chi}$ along any line $\xi + i\eta$ as $\eta \to \infty$ and $\xi$ is held fixed, so $\rho$ is given by the order of $\widehat{\mu\chi}$, and so $\rho = 1$. (Running this argument again then shows that $\rho_0 < 1$ implies a contradiction, but we did not know this a priori.)
+On the other hand, if $\rho_0 > 1$, then $\widehat{\mu\chi}$ is strictly dominated by $\widehat{\mu_0}$ on the imaginary axis, so $\rho = \rho_0 > 1$.
+Either way, $\rho \geq 1$.
+\end{proof}
+
+If $f$ is of normal type $\tau$, then we can understand how quickly $f$ grows along a ray $\{re^{i\theta}: r > 0\}$ by understanding the growth rate of the logarithm in the definition of $\tau$. This information is encoded by the indicator function of $f$.
+\begin{definition}
+Let $f$ be an entire function of order $\rho$ and normal type. The \dfn{indicator function} $h$ of $f$ is given by
+$$h(\theta) = \limsup_{r \to \infty} \frac{\log|f(re^{i\theta})|}{r^\rho}.$$
+Suppose that $\alpha < \beta$ are angles. If the $\limsup$ appearing in the definition of $h$ is actually a uniform limit as $r \to \infty$ along a subset of $\{re^{i\theta}: r>0\}$ of density $1$ for every $\theta \in (\alpha, \beta)$, then $f$ is said to have \dfn{completely regular growth} in $(\alpha, \beta)$. If $f$ is of completely regular growth and order $\rho$, then we define
+$$s(\theta, \varphi) = h'(\theta) - h'(\varphi) + \rho^2 \int_\theta^\varphi h(\xi) ~d\xi$$
+for every $\theta, \varphi$ such that $h'$ exists and is continuous at $\theta,\varphi$.
+\end{definition}
+We will need two facts about the indicator function of a function of completely regular growth.
+\begin{theorem}[TODO CITE ME]
+\label{indicator function is C1}
+For every function $f$ of completely regular growth, there is a countable set $Z \subset [0, 2\pi]$ such that the indicator function $h$ is continuously differentiable on $[0, 2\pi] \setminus Z$. In particular, for every $\theta \notin Z$, $\varphi \mapsto s(\theta, \varphi)$ is continuous on $Z$.
 \end{theorem}
-(TODO don't call it SV we already called something that)
+\begin{theorem}[TODO CITE ME]
+Let $f$ be a function of completely regular growth. Let $\alpha < \theta < \varphi < \beta$ be angles such that $s(\theta,\varphi)$ exists. Then
+$$s(\theta, \varphi) = 2\pi\rho \lim_{r\to\infty} \frac{N(r, \theta, \varphi)}{r^\rho}.$$
+\end{theorem}
 
-Before we can prove Theorem \ref{conditional convergence of breit wigner}, we note that a major obstruction to the theorem is the density of approximately real resonances. Indeed, if the resonances of $V$ remain too close to $\RR$, then the summands that appear in $S_V$ are approximately of the form $|\lambda|^{-2}$, which one expects to converge absolutely.
 
-We start by proving a generalization of the Riemann-Lebesgue lemma. The proof is more or less the same as in the case of the classical Riemann-Lebesgue lemma.
+
+
+\section{Froese's conjecture}
+Froese \cite{froese1997asymptotic} conjectured an asymptotic formula for the distribution of resonances of $V$.
+\begin{definition}
+The \dfn{associated entire function} $F$ to the potential $V$ is the function
+$$F(z) = \hat V(2z)\hat V(-2z) + 1.$$
+\end{definition}
+\begin{conjecture}[Froese's conjecture]
+Let $F$ be the associated entire function to $V$ and let $N$ be its angular counting function. If $F$ is of order $\rho$ and has completely regular growth, then
+$$N(R, \theta, \varphi) = \frac{s(\theta, \varphi)}{2\pi \rho} R^\rho + o(R^\rho).$$
+In addition, if $n(R, \theta, \varphi)$ is the number of resonances $re^{i\xi}$ of $V$ such that $r < R$ and $\xi \in (\theta, \varphi)$, and $(\theta, \varphi) \subseteq [\pi, 2\pi]$, then
+$$n(R, \theta, \varphi) = N(R, \theta, \varphi) + o(R^\rho).$$
+\end{conjecture}
+
+Froese was able to prove his conjecture for potentials which meet the following hypothesis. (See \cite[Theorem 1.3]{froese1997asymptotic} for a sharper statement and the proof.)
+\begin{theorem}
+Suppose that $\hat V$ has completely regular growth, and either:
+\begin{enumerate}
+\item $V$ is compactly supported;
+\item or, $\rho > 1$, $V \geq 0$, and there is a $C > 0$ such that for every $re^{i\theta} \in \CC$ such that
+$$2|\theta| \leq \pi - \frac{\pi}{\rho},$$
+we have
+$$|\hat V(\lambda)| + |\hat V'(\lambda)| + |\hat V^{(2)}(\lambda)| \leq e^{C|\Im \lambda|}.$$
+\end{enumerate}
+Then $V$ satisfies Froese's conjecture.
+\end{theorem}
+
+Note that the assumption that $(\theta, \varphi) \subseteq [\pi, 2\pi]$ is essential, because the set of resonances in $\CC_+$ is density zero. This follows from Lemma \ref{density zero in upper half plane}.
+
+In addition, the associated entire function $F$ has a great deal of symmetry. Assuming that $V$ is real-valued,
+$$\overline{\hat V(2z)} = \int_{-\infty}^\infty \overline{V(x)e^{-2ixz}} ~dx = \int_{-\infty}^\infty V(x) e^{2ixz} ~dx = \hat V(-2z)$$
+so $z$ satisfies $\hat V(2z) \hat V(-2z) = -1$ iff $\overline z$ and $-z$ do; this implies $F$ is preserved by reflection about a real or imaginary axis, or about the origin.
+
+TODO: Relate the order and type of hat V to F.
+
+For functions satisfying Froese's conjecture we have an existence theorem for resonances.
 \begin{lemma}
-\label{RiemannLebesgue}
-Let $(\xi_j)_j$ be a sequence in $\CC$ such that as $j \to \infty$, $|\Re \xi_j| \to \infty$ while $|\Im \xi_j|$ remains bounded. Suppose that $f \in L^1(\RR)$. Then $\hat f(\xi_j) \to 0$ as $j \to \infty$.
+\label{existence theorem for resonances}
+Suppose that $\hat V$ is of completely regular growth.
+Let $F$ be the associated entire function and let $s, h$ be as above.
+If $\hat V$ is of normal type, then for every $\varphi \in [0, 2\pi]$ there is a $\theta \in [\varphi, 2\pi]$ such that $s(\varphi, \theta) \neq 0$ or $s(\varphi, \theta)$ is not defined.
 \end{lemma}
 \begin{proof}
-We first check this when $f$ is the indicator function of $[a, b] \subset \RR$. Assume that $M > 0$ is so large that $|\Im \xi_j| \leq M$ and $\max(a, b) \leq M$. Then
-$$|\hat f(\xi_j)| = \left|\int_{-\infty}^\infty f(x)e^{-ix\xi_j} ~dx\right| = \frac{|e^{-i\xi_jb} - e^{-i\xi_ja}|}{|\xi_j|} \leq \frac{\exp(2M^2)}{|\xi_j|}$$
-which vanishes as $j \to \infty$. Linearity extends this argument to simple functions.
+Suppose otherwise; then TODO FIX ME
+$$0 = s'(\theta) = -h^{(2)}(\theta) + \rho^2 h(\theta).$$
+This implies that there are constants $c_\pm$ such that
+$$h(\theta) = c_+e^{\rho \theta} + c_-e^{-\rho\theta}$$
+so $h$ is not periodic; yet $h(\theta + 2\pi k) = h(\theta)$ by definition, so this is a contradiction unless $h = 0$, but then the type of $\hat V$ is zero, which is also a contradiction.
+\end{proof}
 
-Let $\varepsilon > 0$. If $f$ is a general function in $L^1(\RR)$, let $g$ be a simple function such that $||f - g||_{L^1(\RR)} < \varepsilon$. Since the lemma holds for $g$, we can find a $J > 0$ so large that for every $j > J$, $|\hat g(\xi_j)| < \varepsilon$.
-Then, for any such $j$,
-$$\left|\int_{-\infty}^\infty f(x) e^{-ix\xi_j} ~dx\right| \leq ||f - g||_{L^1(\RR)} + \left|\int_{-\infty}^\infty g(x)e^{-ix\xi_j} ~dx\right| < 2\varepsilon.$$
-Therefore $f(\xi_j) \to 0$ as $j \to \infty$.
+\section{Resonances in the lower-half plane}
+In the following we will assume that $\varepsilon$ and other small parameters are less than $\pi/2$, or any other angle that we have to consider which does not depend on a small parameter.
+For every $\varepsilon > 0$, we let
+$$\Res^\varepsilon V = \{re^{i\theta} \in \Res V: \theta \in (\pi + \varepsilon, 2\pi - \varepsilon)\}.$$
+We also define the series
+$$B_\varepsilon(V) =\sum_{\lambda \in \Res^\varepsilon V} \frac{\Im \lambda}{|\lambda|^2}.$$
+We let
+$$B_-(V) = -\inf_\varepsilon B_\varepsilon(V)$$
+so that, if all the series involved converge absolutely, $B(V) = B_+(V) - B_-(V)$, where $B_+(V)$ is the sum over resonances in the upper-half plane.
+
+It is not obvious, however, that $B(V)$ converges absolutely iff it converges. One could conceieve of a sequence of resonances $\lambda_n$ such that $\Im \lambda_n \to -\infty$ yet $\arg \lambda_n \to 0$.
+If in addition the complex conjugates of the $\lambda_n$ are also resonances, then their terms in the Breit-Wigner series will all telescope, and $B(V)$ will converge, but possibly conditionally.
+Therefore we must show that this is not the case.
+
+To accomplish this, we first note that $B_\varepsilon(V)$ consists of terms of all the same sign. Therefore $B_\varepsilon(V)$ converges iff $B_\varepsilon(V)$ converges absolutely. In particular, $B_-(V)$ converges iff $B_-(V)$ converges absolutely.
+
+We now consider the relationship between certain series converging and the function $s$ being zero.
+\begin{lemma}
+\label{s zero iff converge}
+Let $\pi \leq \theta \leq \varphi \leq 2\pi$ be angles, and let $B(\theta, \varphi, V)$ be the sum over resonances $\lambda$ such that $\arg \lambda \in [\theta, \varphi]$. Then $B(\theta, \varphi, V)$ converges iff $s(\theta, \varphi)$ exists and is $0$.
+\end{lemma}
+\begin{proof}
+Suppose that $s(\theta, \varphi) = 0$. Then (RUN THE ARGUMENT)
 \end{proof}
 
 \begin{lemma}
-\label{delta lower bound}
-There is a $\delta > 0$ such that
-$$N(\delta, \pi - \delta, R) + N(-\pi + \delta, -\delta, R) = o(R^\rho).$$
+\label{epsilon absolute converge in lower half plane}
+The series $B_-(V)$ converges iff for every $\varepsilon$, $B_\varepsilon(V)$ converges.
 \end{lemma}
 \begin{proof}
-Suppose not and let $\varepsilon > 0$.
-Let $X(\varepsilon, R)$ be the set of $\xi = re^{i\theta} \in \CC$ such that $r < R$, $|\theta| < \varepsilon$, and $\hat V(2\xi) \hat V(-2\xi) + 1 = 0$. Then $X(\varepsilon, R)$ is a compact set which consists of zeroes of a nonconstant entire function, so is finite. In particular, $X(\varepsilon) = \bigcup_R X(\varepsilon, R)$ is discrete. By Froese's conjecture,
-$|N(\varepsilon, \pi - \varepsilon, R) + N(-\pi + \varepsilon, -\varepsilon, R) - \card X(\varepsilon, R)| = o(R^\rho)$ and so
-$$0 \neq \lim_{R \to \infty} \frac{N(\varepsilon, \pi - \varepsilon, R) + N(-\pi + \varepsilon, -\varepsilon, R)}{R^\rho} = \lim_{R \to \infty} \frac{\card X(\varepsilon, R)}{R^\rho}.$$
-Therefore $X(\varepsilon)$ is infinite; since $\Re$ has finite fibers as a projection $X(\varepsilon) \to \RR$, the infinite pigeonhole principle applied to the $\Re$-preimages of $[n, n + 1]$, $n \in \ZZ$, furnishes a sequence of $\xi_j \in X(\varepsilon)$ such that $|\Re \xi_j| \to \infty$.
-Moreover, since $\varepsilon$ was arbitrary, we may replace a $\xi_j$ with another $\xi_j'$ such that $|\Im \xi_j'| < 1$; so we may assume that for every $j$, $|\Im \xi_j| < 1$.
+Clearly $B_-(V)$ dominates the $B_\varepsilon(V)$, so if $B_-(V)$ converges then so do the $B_\varepsilon(V)$. Conversely, suppose that the $B_\varepsilon(V)$ converge.
 
-By Lemma \ref{RiemannLebesgue}, we have $\hat V(2\xi_j) \to 0$ and $\hat V(-2\xi_j) \to 0$. So
-$$1 = -\lim_{j \to \infty} \hat V(2\xi_j) \hat V(-2\xi_j) = 0,$$
-which is absurd.
+TODO: Show that in fact, if $s(\pi, \theta)$ does not exist or is nonzero, then $N(R, \pi, \theta) = \Omega(R^\rho)$ so $B_\theta(V)$ diverges. (This is important enough that it could be its own lemma).
+This implies that, since $B_\theta(V)$ is convergent $s(\pi, \theta)$ exists and is $0$, possibly except for $s(\pi, \pi)$. Once we have shown this, the Riemann-Lebesgue lemma guarantees that the resonances corresponding to $s(\pi, \pi)$'s nonexistence all have bounded imaginary part, but this implies that $B_-(V)$ converges.
+
+ Theorem \ref{indicator function is C1}.
+
+A similar argument applies to $2\pi$.
+
+
 \end{proof}
 
-\begin{proof}[Proof of Theorem \ref{conditional convergence of breit wigner}]
-To show that the Breit-Wigner series is not absolutely convergent, it suffices to show that
-$$\sum_{\lambda \in \Res V} \frac{|\Im \lambda|}{|\lambda|^2} = \infty.$$
-Therefore we bound this series from below.
+\begin{lemma}
+\label{epsilon absolute convergence}
+The following are equivalent:
+\begin{enumerate}
+\item The Breit-Wigner series converges.
+\item The Breit-Wigner series converges absolutely.
+\item For every $\varepsilon > 0$, $B_\varepsilon(V)$ converges.
+\item For every $\varepsilon > 0$, $B_\varepsilon(V)$ converges absolutely.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Note that $B_\varepsilon(V)$ is a sequence of negative terms, since $\Im \lambda = |\lambda| \sin \arg \lambda < -|\lambda| \sin \varepsilon < 0$. Therefore $B_\varepsilon V$ cannot converge conditionally, so (3) and (4) are equivalent. Clearly (2) implies (1) and (1) implies (3).
 
-Let $\delta$ be given by Lemma \ref{delta lower bound}. We can and do take $\delta$ so small that $\sin \delta > \delta/2$.
-Let $\Res_\delta V$ denote the set of resonances $re^{i\theta} \in \Res V$ such that $|\theta| \geq \delta$ and $|\theta - \pi| \geq \delta$.
-Let $N_\delta(R)$ be the number of $re^{i\theta} \in \Res_\delta V$ such that $r < R$. Then by our choice of $\delta$,
-$$|N(-\pi, \pi, R) - N_\delta(R)| = o(R^\rho).$$
-Since Froese's conjecture gives
-$$N(-\pi, \pi, R) = \frac{s(-\pi, \pi)}{2\pi \rho}R^\rho + o(R^\rho),$$
-it follows that
-$$N_\delta(R) = \frac{s(-\pi, \pi)}{2\pi \rho}R^\rho + o(R^\rho)$$
-as well. Now (TODO $s$ is nonzero on a positive measure set) so $N_\delta(R) \gtrsim R^\rho$.
+It remains to show that (4) implies (2). Note that
+$$B(V) = B_\varepsilon(V) + \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\Im \lambda}{|\lambda|^2}
+= B_\varepsilon(V) + \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\sin \arg \lambda}{|\lambda|^2}.$$
+If (1) fails, then $B(V) = \infty$, but if (3) is true, then $B_\varepsilon(V)$ is finite, so the remainders
+$$R_\varepsilon = \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\sin \arg \lambda}{|\lambda|^2}$$
+must all diverge. Notice that we can ignore $\lambda \in \Res V \cap \RR$ and hence assume that $\arg \lambda \neq 0$. Moreover,
+$$\sum_{\substack{\lambda \in \Res V\\\arg \lambda > 0}} \frac{\sin \arg \lambda}{|\lambda|^2} < \infty$$
+by Lemma \ref{density zero in upper half plane}. Since $R_\varepsilon$ diverges for every $\varepsilon$, it must be that
+$$\sum_{\substack{\lambda \in \Res V\\-\varepsilon < \arg \lambda < 0}} \frac{\sin \arg \lambda}{|\lambda|^2} = \infty.$$
+TODO This seems impossible to prove -- what we actually want is that (1) and (4) implies (2) which is stronger than (4) implies (2).
+If it is possible to prove, use a pigeonhole argument on the rays $1/n$ for $n > 1/\varepsilon$.
+\end{proof}
 
-Let $\lambda = re^{i\theta} \in \Res_\delta V$. We will assume for now that $\Re \lambda \geq 0$ and $\Im \lambda \geq 0$ to simplify notation, but analogous arguments go through in the other three cases. In this case, $0 < \delta \leq \theta \leq \pi/2$. If $\theta = \delta$, then $\Im \lambda = r \sin \delta > r\delta/2$.
-Otherwise, $\theta > \delta$. Let $\mu = \Re \lambda(1 + i\tan\delta)$. Then $\Re \mu = \Re \lambda$, so $\Im \lambda/\Re \lambda > \Im \mu/\Re \mu$. But $\arg \mu = \delta$, so
-$$\frac{\Im \lambda}{|\lambda|} = \frac{\Im \lambda}{\sqrt{(\Im \lambda)^2 + (\Re \lambda)^2}} > \frac{\Im \mu}{\sqrt{(\Im \mu)^2 + (\Re \mu)^2}} = \frac{\Im \mu}{|\mu|} > \frac{\delta}{2},$$
-the first inequality following because for any $t$, the function $x \mapsto x/\sqrt{t^2 + x^2}$ is strictly increasing. Therefore, for any $\lambda \in \Res_\delta V$, $2|\Im \lambda| > \delta|\lambda|$.
-
-Since $\Res_\delta V \subseteq \Res V$,
-\begin{align*}\sum_{\lambda \in \Res V} \frac{|\Im \lambda|}{|\lambda|^2}
-&\geq \sum_{\lambda \in \Res_\delta V} \frac{|\Im \lambda|}{|\lambda|^2}
-> \frac{\delta}{2} \sum_{\lambda \in \Res_\delta V} |\lambda|^{-1}
-\\&= \frac{\delta}{2} \sum_{r=0}^\infty \sum_{\substack{\lambda \in \Res_\delta V\\r \leq |\lambda| < r + 1}} |\lambda|^{-1}
-\geq \frac{\delta}{2} \sum_{r=0}^\infty \sum_{\substack{\lambda \in \Res_\delta V\\r \leq |\lambda| < r + 1}} \frac{1}{r + 1}
-\\&= \frac{\delta}{2} \sum_{r=0}^\infty \frac{N_\delta(r+1) - N_\delta(r)}{r + 1}
-\\&= \frac{\delta s(-\pi, \pi)}{4\pi\rho} \sum_{r=0}^\infty \frac{(r+1)^\rho - r^\rho}{r+1} + o(r^{\rho - 1})
-\\&\geq \frac{\delta s(-\pi, \pi)}{4\pi\rho} \sum_{r=1}^\infty \frac{1}{r} = \infty.
+\begin{lemma}
+\label{divergence of epsilon series}
+If $N(r, \pi + \varepsilon, 2\pi - \varepsilon) \gtrsim r$, then $B_\varepsilon(V)$ diverges.
+\end{lemma}
+\begin{proof}
+For convenience let
+$$N_\varepsilon(j) = N(j, \pi + \varepsilon, 2\pi - \varepsilon).$$
+We check
+\begin{align*}
+-B_\varepsilon(V) &= -\sum_{\lambda \in \Res^\varepsilon V} \frac{\Im \lambda}{|\lambda|^2} = -\sum_{\lambda \in \Res^\varepsilon V} \frac{\sin \arg \lambda}{|\lambda|}\\
+  &> \sin \varepsilon \sum_{\lambda \in \Res^\varepsilon V} |\lambda|^{-1} \geq \sin \varepsilon \sum_{j=0}^\infty \sum_{\substack{\lambda \in \Res^\varepsilon V\\|\lambda| \in [j, j+1)}} (j+1)^{-1}\\
+  &= \sin \varepsilon \sum_{j=1}^\infty \frac{N_\varepsilon(j) - N_\varepsilon(j-1)}{j} = \sin \varepsilon \sum_{j=1}^\infty N_\varepsilon(j)\left(\frac{1}{j} - \frac{1}{j-1}\right) \\
+  &= \sin \varepsilon N_\varepsilon(1) + \sin \varepsilon \sum_{j=2}^\infty \frac{N_\varepsilon(j)}{j(j+1)}.
 \end{align*}
-Therefore the Breit-Wigner series diverges.
+Under the growth assumption on $N_\varepsilon$, we have
+$$-B_\varepsilon(V) \gtrsim 1 + \sum_{j=2}^\infty \frac{j}{j(j+1)} = 1 + \sum_{j=3}^\infty j^{-1}$$
+which clearly diverges.
 \end{proof}
+
+
+\section{Divergence}
+Let $\rho$ be the order of $\hat V$, and let $F$ be the associated entire function. Then $\rho$ is also the order of $F$, since
+\begin{align*}\log \log \sup_{|z| = r} |F(z)| &= \log \log \sup_{|z| = r} |\hat V(2z)\hat V(-2z) + 1| \\
+  &\sim \sup_{|z| = r} \log(\log |\hat V(2z)| + \log |\hat V(-2z)|)\\
+  &\sim \sup_{|z| = r} \log \max_{\sigma \in \{1,-1\}} \log |\hat V(2\sigma z)|\\
+  &= \sup_{|z| = r} \log \log |\hat V(2z)|
+\end{align*}
+where we used the fact that $\rho \geq 1$ to remove the dependency on the summand $1$ and took $r$ large enough that $\log(A + B) \sim \log(\max(A, B))$. Precomposing with a constant factor does not affect order, so we are done.
+
+If $V$ is compactly supported, then by the Paley-Wiener theorem, $\hat V(z) = O(e^{h(\Im z)})$ where $h$ is a linear function which depends on $\supp V$. Therefore $\hat V$ is of exponential type $\sup\{|x|: x \in \supp V\} < \infty$. In particular, if $\hat V$ is of normal type (for example, if $F$ has completely regular growth), then $V$ has compact support if and only $\rho = 1$.
+\begin{conjecture}
+Suppose that $V$ satisfies Froese's conjecture and $F$ has completely regular growth. Then the Breit-Wigner series $B_V$ converges if and only if $V$ has compact support.
+\end{conjecture}
+We prove a weak form of this conjecture.
+\begin{theorem}
+\label{divergence of breit wigner}
+Suppose that $V$ satisfies Froese's conjecture and $F$ has completely regular growth. If $s$ is defined on $\{0, \pi\}$, then the Breit-Wigner series $B_V$ diverges. Conversely, if $V$ has compact support, then $s$ is not defined at $\{0, \pi\}$, and $B_V$ converges.
+\end{theorem}
+Of course, we already knew that if $V$ had compact support, then $B_V$ converges, as a consequence of Titchmarsh's theorem, but this is an amusing alternative proof. Note that this does not quite prove the conjecture, as it does not rule out the possibility that $s_F = c\delta_\pi + c'\delta_{2\pi}$ even if $V$ does not have compact support, or even that $s_F = 0$ identically (TODO: But I can probably fix that -- if this happens then $s_F$ has an indicator diagram, which should give control on the measure of $\ch\supp V$, or else $h$ may fail to be periodic!)
+
+\begin{proof}[Proof of Theorem \ref{divergence of breit wigner}]
+\end{proof}
+
 
 
 
