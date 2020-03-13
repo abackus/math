@@ -2233,6 +2233,103 @@ One direction is clear. For the converse, suppose $x$ wanders, so there is an op
 Now $x$ is not periodic, so there is an open $V \ni x$ such that for every $i \leq N$, $T^{-i}V \cap V$ is empty and $T^NV \subseteq U$. Therefore for every $i$, $T^{-i}V \cap V$ is empty.
 \end{proof}
 
+\chapter{Completely integrable systems}
+Ergodic systems are intended to be understood as ``chaotic"; therefore they can often be not useful in practice. We now consider more predictable dynamical systems.
+
+\section{Symplectic geometry}
+\begin{definition}
+Let $S$ be a (finite-dimensional, real) vector space. Then a \dfn{symplectic form} on $S$ is an antisymmetric, nondegenerate bilinear form. A \dfn{symplectic space} is a vector space equipped with a symplectic form.
+\end{definition}
+\begin{example}
+The canonical example of a symplectic space is $\RR^{2n}$, which it will be convenient to view as $T^*\RR^n$, the cotangent bundle of $\RR^n$. Let $I$ denote the identity matrix on $\RR^n$ and let $J = \begin{bmatrix}0 & I \\ -I & 0\end{bmatrix}$. Then $\sigma(z, w) = \langle Jz, w\rangle$ is the \dfn{standard symplectic form} on $\RR^{2n}$.
+In fact, if $(x_1, \dots, x_n, \xi_1, \dots, \xi_n)$ are coordinates on $\RR^{2n}$, and $\omega = \sum_j \xi_j dx_j$, then $\sigma = d\omega$. So $\sigma$ is a closed (hence exact) $2$-form.
+\end{example}
+Since symplectic spaces are vector spaces, we may always view them as having the standard differential structure of $\RR^{2n}$. In particular, it makes sense to ask for the linearization of a $C^1$-map $\kappa: S_1 \to S_2$, say $\partial \kappa$, and then if $\omega$ is a multilinear form on $S_2$, we can define the pullback $\kappa$ of $\omega$, a multilinear form on $S_1$, by
+$$\kappa^*\omega(v_1, ..., v_n) = \omega(\partial \kappa(v_1), ..., \partial \kappa(v_n)).$$
+\begin{definition}
+Let $(S_1, \sigma_1)$ and $(S_2, \sigma_2)$ be symplectic spaces. A \dfn{symplectomorphism} is a map $\kappa: S_1 \to S_2$ such that $\sigma_1 = \kappa^*\sigma_2$.
+\end{definition}
+\begin{example}
+Let $\kappa: \RR^{2n} \to \RR^{2n}$ be a linear map, and let $\sigma,J$ be standard. Let $\kappa(x, \xi) = (Ax + B\xi, Cx + D\xi)$; then $\kappa^*\sigma = \sigma$ iff the matrix $M = \begin{bmatrix}A&B\\C&D\end{bmatrix}$ satisfies $M^tJM=J$. This example motivates the definition of a symplectic matrix.
+\end{example}
+\begin{definition}
+Let $J$ be standard for $\RR^{2n}$; a \dfn{symplectic matrix} is a matrix $M \in \RR^{2n \times 2n}$ such that $M^tJM = J$. The \dfn{symplectic group} is the group of all symplectic matrices.
+\end{definition}
+\begin{example}
+There exist nonlinear symplectomorphisms. Let $\varphi: \RR^{2n} \to \RR$ be a smooth function such that the Hessian determinant of $\varphi$ at $(x_0, y_0)$ does not vanish, i.e.
+$$\det \partial_x \partial_y \varphi(x_0, y_0) \neq 0.$$
+For example, let $A \in \RR^{n \times n}$ be an invertible matrix, and consider the bilinear form $\varphi$ defined by $A$.
+
+Let $\xi_0 = \partial_x\varphi(x_0, y_0)$ and $\eta_0 = -\partial_y\varphi(x_0, y_0)$. Then the implicit function theorem defines a mapping close to $(x_0, \xi_0) \in T^*\RR^n$ by
+$$\kappa(x, \partial_x\varphi(x, y)) = (y, -\partial_y\varphi(x, y)).$$
+To see that $\kappa$ is a symplectomorphism, we note that
+\begin{align*}
+  \kappa^*(d\eta \wedge dy) &= d(-d_y\varphi) \wedge dy = (-\partial_y^2\varphi~dy) \wedge dy + (-\partial_x\partial_y\varphi~dx) \wedge dy\\
+    &= -\partial_x\partial_y \varphi~dx\wedge dy = \partial_x\partial_y\varphi~dy\wedge dx = d\xi \wedge dx.
+\end{align*}
+Therefore $\kappa$ defines a symplectomorphism from a neighborhood of $(x_0, \xi_0)$ to a neighborhood of $(y_0, \eta_0)$.
+\end{example}
+\begin{theorem}
+Let $(S, \sigma)$ be a symplectic space. Then there is an invertible linear symplectomorphism $S \to \RR^{2n}$.
+\end{theorem}
+\begin{proof}
+We prove this by the induction on the dimension $2n$ of $S$. Since $\sigma$ is antisymmetric and nondegenerate, $2n \geq 2$. Assume $2n = 2$. Then there are $e,f \in S$ such that $\sigma(e, f) = 1$, and $\{e, f\}$ is a basis of $S$. Define a linear map $\kappa$ by $\kappa(e) = (0, 1)$ and $\kappa(f) = (1, 0)$; then $\kappa$ is an invertible symplectomorphism.
+
+Now if $2n > 2$, there are $e_1,f_1$, linearly independent, such that $\sigma(e_1, f_1) = 1$. Let $S_1$ be the span of $\{e_1, f_1\}$, and let $S_0$ be the sum of the kernels of $\sigma(\cdot, w)$ for $w \in S_1$.
+Then the codimension of $S_0$ is $2$, and if $z = xe_1 + yf_1 \in S_0$, $0 = \sigma(z, e_1) = -y$ and $0 = \sigma(z, f_1) = x$, so $z = 0$. Therefore $S_1 \cap S_0 = 0$.
+Therefore $S_0 \oplus S_1 = S$.
+For every $z \in S_0$, if $\sigma(z, S_0) = 0$ then $\sigma(z, S) = 0$ so $z = 0$. Therefore $\sigma|_{S_0}$ is nondegenerate.
+So by the inductive hypothesis, we have an invertible linear symplectomorphism $\kappa_0: S_0 \to \RR^{2n - 2}$. Let $\kappa: S \to \RR^{2n}$ extend $\kappa_0$ by sending $e_1, f_1$ to $\RR^{2n}/\RR^{2n-2}$ as in the base case.
+\end{proof}
+We now consider manifolds whose tangent bundles are bundles of symplectic spaces.
+\begin{definition}
+Let $S$ be a $2n$-dimensional manifold equipped with a closed, nondegenerate $2$-form $\sigma$. Then $(S, \sigma)$ is called a \dfn{symplectic manifold}.
+\end{definition}
+In other words, on every tangent space, $\sigma$ defines an antisymmetric nondegenerate bilinear form which varies smoothly, and $d\sigma = 0$.
+\begin{example}
+Let $\HH^2$ be the hyperbolic plane; then its tangent bundle $T\HH^2$ can be turned into a symplectic manifold by setting coordinates $(x + iy, \xi + i\eta)$, $y > 0$, and letting
+$$\sigma = d\xi \wedge dx + d\eta \wedge dy.$$
+In fact the tangent bundle of $T\HH^2$ is diffeomorphic to the half-space of $\RR^4$, on which $\sigma$ is the standard symplectic form.
+\end{example}
+
+\section{Hamiltonian flows on symplectic spaces}
+We treat Hamiltonian flows first on symplectic spaces, revisiting symplectic manifolds later. So fix a symplectic space $(S, \sigma)$ and coordinates $(x, \xi)$ so that $\sigma = d\xi \wedge dx$.
+\begin{definition}
+For any function $f \in C^\infty(S)$, we let $H_f$, the \dfn{Hamiltonian vector field} of $f$, be defined by the relation $\sigma(\cdot, H_f) = df$.
+\end{definition}
+In other words,
+$$H_f = \sum_j \frac{\partial f}{\partial \xi_j}\partial x_j - \frac{\partial f}{\partial x_j}\partial \xi_j$$
+where $\{\partial x_j, \partial \xi_j\}$ define a basis for the tangent space.
+
+Any vector field $X$ determines a flow by the ODE $\cdot x = X(x)$. This can also be expressed by writing
+$$x(t) = \exp(tX)(x(0)).$$
+Thus $t \mapsto \exp(tX)$ is a one-parameter group and a diffeomorphism.
+So in particular we have defined a \dfn{Hamiltonian flow}.
+\begin{example}
+The notion of a symplectic manifold, and of a Hamiltonian flow, is motivated by classical mechanics. View $x$ as the position and $\xi$ as the momentum of a particle; let $V(x)$ be its potential energy and $m$ its mass. Then the energy of the particle is given by
+$$f(x, \xi) = \frac{|\xi|^2}{2m} + V(x).$$
+The Hamiltonian vector field is given by
+$$H_f = \frac{1}{m}\langle \xi, \partial_x \rangle - \langle \nabla V(x), \partial_\xi\rangle.$$
+Therefore the particle moves with velocity $\xi/m$, and its change in momentum is given by $-\nabla V(x)$. In particular, its acceleration $A$ satisfies \dfn{Newton's second law of motion},
+$$mA + \nabla V(x) = 0.$$
+\end{example}
+To continue further we will need to introduce a Lie algebra structure on the space $C^\infty(S)$.
+\begin{definition}
+The \dfn{Poisson bracket} is defined by
+$$\{f, g\} = \sigma(\nabla f, \nabla g).$$
+\end{definition}
+Thus the Poisson bracket also satisfies $\{f, g\} = H_fg$ and
+$$\{f, g\} = \sum_j \frac{\partial f}{\partial \xi_j} \frac{\partial g}{\partial x_j} - \frac{\partial f}{\partial x_j} \frac{\partial g}{\partial \xi_j}.$$
+Since vector fields act on functions as linear maps, it makes sense to talk about the commutator of vector fields, and then we have
+$$H_{\{f, g\}} = [H_f, H_g].$$
+One can check also that we have the Jacobi identity $\{f, \{g, h\}\} + \{g, \{h, f\}\} + \{h, \{f, g\}\} = 0$, so $\{\cdot, \cdot\}$ is a Lie bracket.
+
+For $\kappa$ a symplectomorphism and $X$ a vector field, let $\kappa_*X$ denote the pushforward of $X$ along $\kappa$.
+\begin{theorem}
+
+\end{theorem}
+
+
 
 
 
