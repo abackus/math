@@ -41,8 +41,11 @@
 \newcommand{\D}{\mathcal{D}}
 \newcommand{\card}{\operatorname{card}}
 \newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Dec}{\operatorname{Dec}}
+\newcommand{\diag}{\operatorname{diag}}
 \newcommand{\diam}{\operatorname{diam}}
 \newcommand{\End}{\operatorname{End}}
+\newcommand{\Expect}{\mathbf E}
 \DeclareMathOperator*{\esssup}{ess\,sup}
 \newcommand{\FF}{\mathcal{F}}
 \DeclareMathOperator*{\Fix}{Fix}
@@ -60,8 +63,10 @@
 \newcommand{\PGL}{\operatorname{PGL}}
 \newcommand{\PSL}{\operatorname{PSL}}
 \newcommand{\pic}{\vspace{30mm}}
+%\newcommand{\Pr}{\operatorname{Pr}}
 \newcommand{\Prim}{\operatorname{Prim}}
 \newcommand{\pset}{\mathcal{P}}
+\newcommand{\tr}{\operatorname{tr}}
 \newcommand{\Ric}{\operatorname{Ric}}
 \newcommand{\Rep}{\operatorname{Rep}}
 \newcommand{\Res}{\operatorname{Res}}
@@ -69,6 +74,7 @@
 \newcommand{\Q}{\mathcal Q}
 \newcommand{\RVect}{\RR\operatorname{-Vect}}
 \newcommand{\Sch}{\mathcal{S}}
+\DeclareMathOperator*{\sgn}{sign}
 \newcommand{\SL}{\operatorname{SL}}
 \newcommand{\Spec}{\operatorname{Spec}}
 \newcommand{\spn}{\operatorname{span}}
@@ -80,6 +86,10 @@
 \newcommand{\stdrep}{\rho_{\text{std}}}
 
 \newcommand{\dbar}{\overline\partial}
+
+\DeclareMathOperator*{\Dil}{Dil}
+\DeclareMathOperator*{\Mod}{Mod}
+\DeclareMathOperator*{\Trans}{Trans}
 
 \def\Xint#1{\mathchoice
 {\XXint\displaystyle\textstyle{#1}}%
@@ -2291,6 +2301,24 @@ Let $\HH^2$ be the hyperbolic plane; then its tangent bundle $T\HH^2$ can be tur
 $$\sigma = d\xi \wedge dx + d\eta \wedge dy.$$
 In fact the tangent bundle of $T\HH^2$ is diffeomorphic to the half-space of $\RR^4$, on which $\sigma$ is the standard symplectic form.
 \end{example}
+We now consider differential forms on symplectic manifolds.
+For $\kappa$ a symplectomorphism and $X$ a vector field, let $\kappa_*X$ denote the pushforward of $X$ along $\kappa$. That is, $\kappa_*X = \partial \kappa \circ X$.
+Recall that the pullback $\kappa^*$ is defined dually to the pushfoward, i.e. if $\eta$ is a $1$-form and $X$ is a vector field, we have
+$$\kappa^*\eta(X) = \eta(\kappa_*X).$$
+We extend this definition to $m$-forms by declaring that $\kappa^*$ preserves $\wedge$.
+\begin{definition}
+If $\eta$ is an $m+1$-form and $X$ is a vector field, define for vector fields $Y_1, \dots, Y_m$
+$$(X\lrcorner\eta)(Y_1, \dots, Y_m) = \eta(X, Y_1, \dots, Y_m).$$
+\end{definition}
+In particular, $X\lrcorner\eta$ is a $m$-form. One can check that if $\nu$ is a $k$-form and $\eta$ is an $m$-form then
+$$X\lrcorner(\nu \wedge \eta) = (X\lrcorner\nu) \wedge \eta + (-1)^k\nu \wedge (X\lrcorner\eta).$$
+None of the above used that $\kappa$ was a symplectomorphism but we will mainly be interested in the case that $\kappa$ is a symplectomorphism.
+
+\begin{example}
+Let $g: \RR^n \to \RR^n$ be a diffeomorphism and $w$ is a smooth function. Then
+$$\kappa(x, \xi) = (g(x), (\partial g(x)^t)^{-1}(\xi + \nabla w(x)))$$
+is a symplectomorphism of $\RR^{2n}$ and these are the only symplectomorphisms which lift from $g$.
+\end{example}
 
 \section{Hamiltonian flows on symplectic spaces}
 We treat Hamiltonian flows first on symplectic spaces, revisiting symplectic manifolds later. So fix a symplectic space $(S, \sigma)$ and coordinates $(x, \xi)$ so that $\sigma = d\xi \wedge dx$.
@@ -2322,14 +2350,1046 @@ Thus the Poisson bracket also satisfies $\{f, g\} = H_fg$ and
 $$\{f, g\} = \sum_j \frac{\partial f}{\partial \xi_j} \frac{\partial g}{\partial x_j} - \frac{\partial f}{\partial x_j} \frac{\partial g}{\partial \xi_j}.$$
 Since vector fields act on functions as linear maps, it makes sense to talk about the commutator of vector fields, and then we have
 $$H_{\{f, g\}} = [H_f, H_g].$$
-One can check also that we have the Jacobi identity $\{f, \{g, h\}\} + \{g, \{h, f\}\} + \{h, \{f, g\}\} = 0$, so $\{\cdot, \cdot\}$ is a Lie bracket.
+One can check also that we have the Jacobi identity $\{f, \{g, h\}\} + \{g, \{h, f\}\} + \{h, \{f, g\}\} = 0$, so $\{\cdot, \cdot\}$ is a Lie bracket. Moreover, the flow
+$$\varphi_t = \exp(tH_f)$$
+is a symplectomorphism.
 
-For $\kappa$ a symplectomorphism and $X$ a vector field, let $\kappa_*X$ denote the pushforward of $X$ along $\kappa$.
+While we defined the Poisson bracket on functions, it will be useful to talk about a Lie algebra structure on any symplectic space $(S, \sigma)$, so given vectors $v,w \in S$, let
+$$\{v, w\} = \sigma(v, w).$$
+We first prove the linear case of Darboux's theorem. To motivate this theorem, note that if $\{e_1, \dots, e_n, f_1, \dots, f_n\}$ is a basis of $(S, \sigma)$, it is useful that $\{e_i, e_j\} = 0$, $\{f_i, f_j\} = 0$, and $\{e_i, f_j\} = \delta_{ij}$.
+This is a similar condition to requiring that a basis of a Hilbert space is orthonormal. We say that such a basis is a \dfn{symplectic basis}.
+Darboux's theorem says that a symplectic linearly indepdendent set can always be extended to a symplectic basis.
+\begin{theorem}[linear Darboux theorem]
+\index{linear Darboux theorem}
+Let $S$ be a symplectic space of dimension $2n$ and $A,B \subset \{1, \dots, n\}$. Let $\{e_j\}_{j\in A}$ and $\{f_i\}_{i \in B}$ be linearly independent sets and suppose that $\{e_i, e_j\} = 0$, $\{f_i, f_j\} = 0$, and $\{e_i, f_j\} = \delta_{ij}$.
+Then there are $\{e_j\}_{j \notin A}$ and $\{f_i\}_{i \notin B}$ such that $\{e_i, e_j\} = 0$, $\{f_i, f_j\} = 0$, and $\{e_i, f_j\} = \delta_{ij}$.
+\end{theorem}
+\begin{proof}
+We first show that we may assume that $A = B$. In fact, suppose that the symmetric difference of these two sets is nonempty, say $J \in B \setminus A$.
+Then there is an $e_J$ such that for every $j \in A$, $\{e_J, e_j\} = 0$ and every $k \in B$, $\{e_J, f_k\} = \delta_{Jk}$.
+Here we used nondegeneracy of $\sigma$ and the linear independence hypothesis.
+One can check that $e_J$ is linearly independent of $e_j$ and $f_k$, so we can add $J$ to $A$ without contradicting the hypothesis.
+
+Suppose that $A = B \neq \{1, \dots, n\}$, and let $S'$ be the span of $\{e_j\}_{j \in A}$ and $\{f_j\}_{j \in A}$.
+Let $S_0$ be the \dfn{symplectic complement} of $S'$, i.e. the set of $z \in S$ such that for every vector $w \in S'$ we have $\sigma(z, w) = 0$
+Then $(S_0, \sigma)$ is a symplectic space. Choose a symplectic basis for $S_0$; then $S = S_0 \oplus S'$ and we're done.
+\end{proof}
+
+
+\section{Hamiltonian flows on symplectic manifolds}
+We now revisit Hamiltonian flows but for symplectic manifolds $(S, \sigma)$. If $f \in C^\infty(S)$ we define the Hamiltonian vector field $H_f$ for every $(p, z) \in TS$ by
+$$\sigma_p(z, H_f) = df_p(z).$$
+Here, if $dx_1, \dots, dx_n, d\xi_1, \dots, d\xi_n$ is a basis for $T_p^*S$, the differential $df_p$ is the covector
+$$df_p = \sum_{j=1}^n \frac{\partial f}{\partial x_j}(p) ~dx_j + \frac{\partial f}{\partial \xi_j}(p) ~d\xi_j.$$
+Writing $\partial_{x_1}, \dots, \partial_{x_n}$ for the dual basis of $T_pS$, $z = \sum_j c_j \partial_{x_j} + d_j \partial_{\xi_J}$, we have $dx_j(\partial_{\xi_k}) = \delta_{jk}$ and similarly for $\xi_j$, so
+$$df_p(\partial_{x_j}) = \frac{\partial f}{\partial \xi_k}(p)$$
+and similarly for $\xi_j$.
+We then define $\{f, g\} = H_fg$ as before, so
+$$H_f = \sum_{j=1}^n \frac{\partial f}{\partial \xi_j}\partial_{x_j} - \frac{\partial f}{\partial x_j}\partial_{\xi_j}.$$
+The notion of Poisson bracket still makes sense, as does the Jacobi identity. The proof of the Jacobi identity uses $d\sigma = 0$.
+\begin{definition}
+The \dfn{Hamiltonian flow} is defined by
+$$\varphi_t = \exp(tH_f).$$
+\end{definition}
+The Hamiltonian flow is again a symplectomorphism, $\varphi_t^*\sigma = \sigma$.
+In the classical mechanics interpretation of symplectic geometry, $f(x, \xi)$ is the energy of a particle with position $x$ and momentum $\xi$, and is known as the \dfn{Hamiltonian observable} of the dynamical system $(S, \sigma, \varphi)$.
+
+\begin{example}
+Take $f(x, \xi) = \xi^4 - x^4$. This is the Hamiltonian of the system $\cdot x = 4\xi^3$ and $\cdot \xi = 4x^3$. This can be solved as
+$$x(t) = \frac{x(0)}{\sqrt{1-8tx(0)^2}}$$
+which blows up in finite time. So we need a Hamiltonian which meets the hypotheses of Picard's theorem to be able to solve for the Hamiltonian flow.
+Here the problem is that energy is not conserved.
+\end{example}
+In fact, if $|\partial^2f| \leq C$ then $\varphi_t$ exists for all time, by Picard's theorem. This is in particular true if $f$ is smooth and $M$ is compact.
+
+It is useful to know that Hamiltonian flows are always measure-preserving where the measure is given by the symplectic form. So we can use the tools of ergodic theory to study Hamiltonian flows.
+
+\section{Complete integrability}
+\begin{definition}
+Let $D$ be a symplectic manifold of dimension $2n$ and $f \in C^\infty(D)$. Then $H_f$ is said to be a \dfn{completely integrable flow} if there are $f_1, \dots, f_n$, known as \dfn{integrals of motion}, such that $df_1, \dots, df_n$ are linearly independent, $\{f, f_j\} = 0$ and $\{f_i, f_j\} = 0$.
+\end{definition}
+Note that the Hamiltonian $f$ is an integral of motion; i.e. $H_ff = 0$, or in other words $\varphi_t^*f = f$. An integrable flow is one with maximally many independent integrals of motion.
+Intuitively an integral of motion is a conserved quantity. It should not be a surprise that energy is conserved.
+
+\begin{example}
+Take $f$ to only depend on momentum, and let $f_j(x, \xi) = \xi_j$. Then $H_f = \sum_j \partial_{\xi_j}f(\xi) \partial_{x_j}$ and $H_{f_j} = \partial_{x_j}$ so $\{f, f_j\} = 0$. In fact,
+$$\varphi_t(x, \xi) = (x + t\nabla f(\xi), \xi).$$
+Thus this is a completely integrable system.
+\end{example}
+
+Completely integrable systems are in some sense the opposite of ergodic systems: they have as many invariant sets as they possibly can!
+
+For example, let $L$ be a set where all the integrals of motion $f_j$ are constant. Since the $df_j$ are independent, $L$ is an $n$-dimensional submanifold. This follows from the implicit function theorem. Moreover the $H_{f_j}$ are a basis for the tangent space of $L$.
+
+Recall the following result.
 \begin{theorem}
-
+A vector field $X$ is tangent to a submanifold $L = \{g_1 = g_2 = \cdots = g_n = 0\}$ iff $Xg_j|_L = 0$.
 \end{theorem}
 
+\begin{example}[uncoupled harmonic oscillators]
+\index{uncoupled harmonic oscillators}
+Let $(q, p) \in \RR^{2n}$ be a coordinate system and let $\sigma = dp \wedge dq$. Let $\omega_j > 0$ be constants and put
+$$f(q, p)  = \frac{1}{2} \sum_j p_j^2 + \omega_j^2 q_j^2$$
+be the Hamiltonian of a family of $n$ uncoupled harmonic oscillators. Let
+$$f_j(q, p) = \frac{1}{2} \sum_j p_j^2 + \omega_j^2 q_j^2$$
+be the Hamiltonian of the $j$th oscillator. Then the $f_j$s are uncoupled so $\{f_j, f_k\} = 0$. Let $D$ be the open submanifold $f_j > 0$.
+We need to restrict to $D$ because on the tangent spaces of $q_j = 0$ or $p_k = 0$, the $df_j$ are not linearly independent.
+We have
+$$H_f = \sum_j p_j \partial_{q_j} - \omega_j^2q_j\partial_{p_j}.$$
+Moreover
+$$(q_j(t), p_j(t)) = (q_j(0)\cos(\omega_jt) + p_j(0)\omega_j^{-1}\sin(\omega_jt), p_j(0)\cos(\omega_jt) - \omega_j q_j(0)\sin(\omega_jt)).$$
+Interestingly, if we choose coordinates $(x, \xi) \in \TT^n \times \RR^n_+$ where
+$$q_j = \sqrt{\frac{2\xi_j}{\omega_j}}\cos(x_j)$$
+and $p_j = -\sqrt{2\xi_j\omega_j}\sin(x_j)$, then $f(q, p) = \sum_j\cos(\xi_j)$ and $dp \wedge dq = d\xi \wedge dx$. So the state space of this harmonic oscillator is identical to the positive tangent space of a torus.
+In these coordinates,
+$$\varphi_t(x, \xi) = (x + t\omega, \xi).$$
+\end{example}
 
+\section{The Liouville-Arnold-Jost theorem}
+\begin{example}
+Take $M = \HH^2 \times \RR^2$ and let
+$$f(x, y, \xi, \eta) = y^2(\xi^2 + \eta^2).$$
+Then $f_1 = f$ and $f_2 = \xi$ are integrals of motion. We should look for coordinates on which the flow is linear. Doing this is far from obvious, but a theorem guarantees that such coordinates exist for any completely integrable system.
+\end{example}
+
+\begin{theorem}[Liouville-Arnold-Jost]
+\index{Liouville-Arnold-Jost theorem}
+Suppose that $f = (f_1, \dots, f_n)$ are such that the $df_j$ are linearly independent, $\{f_i, f_j\} = 0$. Let $N = f^{-1}(0)$. If $N$ is compact and connected, then $N $ is diffeomorphic to $\TT^n$, and there is an open neighborhood $U$ of $N$ which admits coordinates $(x, \xi) \in \TT^n \times D_1$, where $0 \in D_1 \subset \RR^n$ is open,
+given by a map $\psi: \TT^n \times D^1 \to \to U$, and a local diffeomorphism $\mu$ near $0$ of $\RR^n$ such that
+$$\mu \circ f \circ \psi(\xi) = \xi$$
+and $\psi$ is a symplectomorphism.
+\end{theorem}
+In the coordinates $(x, \xi)$, the action of the Hamiltonian is linear. Unfortunately the construction of $(x, \xi)$ is far from easy in general; the Liouville-Arnold-Jost theorem is far from constructive.
+
+\begin{corollary}
+If $H_f$ is completely integrable then there are coordinates $(x, \xi)$ such that the Hamiltonian $f$ only depends on $\xi$.
+\end{corollary}
+In particular, if the Hessian of $f$ is nondegenerate in $(x, \xi)$ then we can solve for $\xi$ using the implicit function theorem, say $\nabla_\xi f = \omega$. In this case there is a vector $j$ orthogonal to $\omega$, and quotienting out by the lattice generated by $j$, we end up with an irrational rotation.
+
+We first prove a weak form of the Liouville-Arnold-Jost theorem, which intuitively says that symplectic geometry is locally trivial.
+\begin{theorem}[Darboux]
+\index{Darboux's theorem}
+Let $(M, \sigma)$ be a $2n$-dimensional symplectic manifold. Let $A,B \subseteq \{1, \dots, n\}$. Let $q_j, p_k \in C^\infty$ near $p_0 \in M$, $j \in A$, $k \in B$, and $\{q_i, q_j\}= 0 $, $\{p_k, p_\ell\} = 0$, $\{p_k, q_j\}= \delta_{kj}$.
+Assume that the $dp_k,dq_j$ are linearly independent.
+Then there is a symplectomorphism $\kappa$ from a neighborhood of $0 \in \RR^{2n}$ to a neighborhood of $p_0$, such that $\kappa^*q_j = x_j$, $\kappa^*p_k = \xi_k$.
+\end{theorem}
+
+To prove Darboux's theorem we need another theorem of differential geometry.
+\begin{theorem}[Frobenius]
+\index{Frobenius' theorem}
+Let $V_1, \dots, V_r$ be vector fields on $\RR^n$ and $r \leq n$. Suppose that the $V_j(0)$ are linearly independent and $[V_j, V_k] = \sum_\ell c_{jk\ell} V_\ell$, where the $c_{jk\ell} \in C^\infty$ near $0$.
+
+If $S$ is a submanifold of $\RR^n$ of codimension $r$ such that $T_0S+ \spn V_j(0) = \RR^n$, then the system of equations
+\begin{align*}
+V_ju&=f_j\\
+u|_S&=u_0
+\end{align*}
+has a unique solution near $0$ iff
+$$V_jf_i- V_if_j = \sum_k c_{ijk}f_k.$$
+
+In addition, there are local coordinates $(y_1, \dots, y_n)$ near $0$ and a $r \times r$ invertible matrix $B = (b_{ij})$ of smooth functions near $0$ such that
+$$\partial_{y_i} = \sum_{j=1}^r b_{ij}V_j.$$
+\end{theorem}
+\begin{proof}
+We first show that the third paragraph implies the second paragraph. The condition $V_jf_i - V_if_j = \sum_k c_{ijk}f_k$ is invariant under linear combinations so it suffices to check when $V_j = \partial_{x_j}$, where $S$ is given by $(x_1, \dots, x_r) = h(x_{r+1}, \dots, x_n)$.
+In this case the $c_{ijk} = 0$ and we are being asked to check
+$$\partial_{x_i}f_j - \partial_{x_j}f_i= 0$$
+or in other words $\omega = \sum_{j=1}^rf_j~dx_j$ is a closed form. Locally then it is exact, say $du = \omega$. Then $u$ solves the system of equations.
+
+We prove the third paragraph using induction on the dimension, say $m$. If $m = 1$ let $V_1 = a(x)\partial_x$ so $a(0) \neq 0$. Change coordinates to $y$ so that $dy = dx/a(x)$ and $y(0) = 0$.
+
+Now if $m \geq 2$, we may change variables so that $V_1 = \partial_{x_1}$. This is always possible for any nonvanishing vector field. Without loss of generality we may assume that if $j \geq 2$,
+$$V_j = \sum_{\ell=2}^m b_{j\ell} \partial_{x_\ell}$$
+by subtracting off $b_{j1}V_1$ from $V_1$.
+Let $x' = (x_2, \dots, x_m)$ and change variables in $x'$ using induction so that if $x_1 = 0$,
+$$V_j = \sum_{\ell=2}^r b_{j\ell}\partial_{x_\ell}.$$
+Thus we have discarded $(x_{m+1}, \dots, x_r)$.
+Then
+$$\frac{\partial b_{j\ell}}{\partial x_1} = V_1V_jx_\ell = [V_1, V_\ell]x_\ell = \sum_{k=2}^r c_{1jk}V_kx_\ell= \sum_{k=2}^r c_{1jk}b_{k\ell}.$$
+By uniqueness of ODE, it follows that $b_{j\ell}(x) = 0$ for $\ell > r$.
+\end{proof}
+
+\begin{proof}[Proof of Darboux's theorem]
+We can assume $p_0 = 0$. Set $x_j = q_j$ and $\xi_k = p_k$ where $j \in A$ and $k \in B$.
+By the linear Darboux theorem, we can extend $(x, \xi)$ to a full set of coordinates such that at $0$, $\{x_i, x_j\} = \{\xi_i, \xi_j\} = 0$ and $\{\xi_k, x_\ell\} = \delta_{k\ell}$.
+In particular, $H_{q_j}(0) = -\partial_{\xi_j}$ and $H_{p_k}(0) = \partial_{x_k}$.
+
+Suppose $J \notin A$ (the case for $B$ is similar). We must find $q_J$ such that $\{q_J, q_j\} = 0$ and $\{q_J, p_k\} = \delta_{Jk}$. We thus try to solve the equation
+$$H_{q_i}q_J = 0,\quad H_{p_k}q_J = \delta_{kJ},\quad q_J(x, \xi)= x_J$$
+when $\xi_j = 0$ and $x_k = 0$.
+The solution to this equation exists by Frobenius' theorem.
+\end{proof}
+
+An important special case to Darboux's theorem is when $A = \emptyset$ and $B = \{1, \dots, n\}$, i.e. we are given coordinates $\xi_1, \dots, \xi_n \in C^\infty$ such that $d\xi_j(p_0)$ are linearly independent and $\{\xi_i, \xi_j\} = 0$.
+One then can find coordinates $x_1, \dots, x_n$ such that $\sum_j d\xi_j \wedge dx_j$ is indistinguishable from the standard system of symplectic coordinates in $\RR^{2n}$.
+
+\begin{proof}[Proof of the Liouville-Arnold-Jost theorem]
+Let $\Phi: \RR^n/\Gamma \to f^{-1}(0)$ be our torus diffeomorphism, and $\psi_0$ be a local diffeomorphism from close to $0$ to close to $\rho \in f^{-1}(0)$, such that $\psi_0^*f_j = \xi_j$ and $\psi_0^*\sigma$ is the standard symplectic form.
+Let $\Phi_t$ be the Hamiltonian flow.
+
+If $|t|$ is small,
+$$\Phi_t \circ \psi_0(x, \xi) = \psi_0(x + t, \xi).$$
+We want to use this relation to define $\psi$, an extension of $\psi_0$. That would mean that for all $R$ there is a neighborhood of $0$, $D_2(R)$, such that $\Phi_t(\psi(0, \xi))$ is well-defined for $t \in B(0, R)$ and $\xi \in D_2(R)$. If not then there is an $R$ such that for all $r$, there are $|t| \leq R$, and $|\xi| \leq r$, such that $\Phi_t(\psi(0, \xi))$ is not well-defined.
+Then $\Phi_t(\psi_0(0, \xi)) \notin M$ which is impossible.
+
+Let $\gamma_j$ be the generators of $\Gamma$.
+
+\begin{lemma}
+The map $\theta: B(0, R) \times D_2(R) \to M$, $\theta(x, \xi) = \Phi_x(\psi(0, \xi))$ satisfies
+$$\theta^*\sigma = \sum_j d\xi_j \wedge dx_j.$$
+\end{lemma}
+\begin{proof}[Proof of lemma]
+If $(x, \xi)$ is small,
+$$\theta(x, \xi) = \Phi_x(\psi_0(0, \xi)) = \psi_0(x, \xi)$$
+and the claim follows from the fact that $\psi_0$ is a symplectomorphism.
+
+Now put $\theta_s(x, \xi) = \theta(x - s, \xi)$, which is defined on $B(s, R) \times D_2(R)$. Then
+$$\theta^*\sigma = (\Phi_s \circ \theta_s)^*\sigma = \theta_{-s}^*\Phi_s^*\sigma = \theta_{-s}^*\sigma$$
+so
+$$\theta^*\sigma = \sum_j d\xi_j \wedge (dx_j - ds_j)$$
+but the standard symplectic form is invariant under translation.
+\end{proof}
+
+We want to find $\gamma_j(\xi)$ such that
+$$\theta(\gamma_j(\xi), \xi) = \theta(0, \xi).$$
+This mimics the fact that $\theta(\gamma_j, 0) = \theta(0, 0)$.
+
+Now $\psi_0^{-1}(\theta(\gamma_k, 0)) = (0, 0)$ so if $(y, \eta)$ is small, the definition
+$$\rho(y, \eta) = \psi_0^{-1}(\theta(\gamma_k + y, \eta))$$
+makes sense (we put $\rho(0) = 0$). Then
+$$\xi_j = \psi_0^*f_j(x, \xi) = f_j(\theta(\gamma_k + y, \eta)) = f_j(\psi_0(y, \eta)) = \eta_j$$
+but $\rho = \psi_0^{-1} \circ \theta_{\gamma_k}$ and $\psi_0,\theta_{\gamma_k}$ are symplectomorphisms, so $\rho$ is a symplectomorphism.
+Then
+$$\rho^*\sum_jd\xi_j \wedge dx_j = \sum_j d\eta_j \wedge dy_j.$$
+This follows by the lemma. So
+$$\rho(y, \eta) = (y + \frac{\partial Q_k}{\partial \eta}(\eta), \eta)$$
+for some function $Q$ such that
+$$\frac{\partial Q_k}{\partial \eta}(0, 0) = 0.$$
+In particular if we put $(x, \xi) = \rho(y, \eta)$ we have $\xi = \eta$.
+Therefore, since $\psi_0$ is injective,
+$$\psi_0(y + \partial_\xi Q_k(\xi), \xi) = \psi_0(0,\xi)$$
+implies that we have the differential equation
+$$y + \frac{\partial Q_k}{\partial \xi} = 0.$$
+Thus $y$ is determined by $\xi$.
+This uniquely determines the function $\gamma_k$.
+Now, by the group property of $\Phi_t$, we can translate $\gamma_k$ for all times, using the periodicity
+$$\theta(x + \gamma_k(\xi), \xi) = \theta(x, \xi).$$
+Thus $\theta: \RR^n \times D_2 \to M$ is well-defined.
+
+Now forget that $k$ was the index used to describe the generators of the lattice $\Gamma$, and use it as a sequential index.
+
+If we define $\Gamma(\xi) = \{\sum_j m_j\gamma_j(\xi)\}$, then we have a map
+$$\theta_\xi: \frac{\RR^n}{\Gamma(\xi)} \to f^{-1}(\xi) \cap U.$$
+Now this map is surjective, but to check that it is injective, we notice that we just need to check when $\xi$ is close to $0$.
+If $(x_k, \xi_k)$ and $(x_k', \xi_k')$ are sequences of points (necessarily not in $\Gamma$) such that $\gamma_k \to 0$, $x_k - x_k' \notin \Gamma(\xi_k)$, and $\theta(x_k, \xi_k) = \theta(x_k', \xi_k')$.
+Passing to a subsequence, we choose $x,x'$ such that $x_k \to x$ and $x_k' \to x'$. Then $\theta(x, 0) = \theta(x', 0)$, so $x - x' \in \Gamma(0)$, so there is a $\gamma_k \in \Gamma(\xi_k)$, such that $d(x_k - x_k', \gamma_k)$ is small, but since $\Gamma$ is discrete it follows that $\gamma_k$ is a constant sequence.
+Translating by $\gamma_k$ we have $x_k - x_k' = 0 $. Thus close to any point $\theta_\xi$ is injective, hence $\theta_\xi$ is injective.
+
+Finally we must ``normalize periods", i.e. find symplectomorphisms to replace $\Gamma(\xi)$ with $\Gamma$.
+This is accomplished by a map $\sigma$ such that
+$$\sigma^*\sum_j d\xi_j\wedge dx_j = \sum_j d\eta_j \wedge dy_j.$$
+\end{proof}
+
+\section{The Toda lattice}
+We now consider the first example of a completely integrable system which is important in practice.
+
+Suppose we have $n$ particles in $\RR^N$, interacting according to the Hamiltonian
+$$H(q, p) = \sum_{j=1}^n \frac{p_j^2}{2m_j} + \sum_{i<j} V_{ij}(q_i - q_j).$$
+Here $q_i$ is the position of the $i$th particle and $p_i$ is its momentum.
+
+\begin{example}
+The planetary system is given by
+$$V_{ij}(q) = \frac{c_{ij}}{|q|}$$
+for some $c_{ij} = c(m_i, m_j)$.
+Here
+$$\dot q_j = \frac{m_j}{p_j}$$
+and
+$$\dot p_j = -\partial_{q_j} U(q)$$
+where
+$$-\partial_{q_j} U(q) = m_j\ddot q_j.$$
+Trying to understand this system (using $7$th-order perturbation theory by hand) lead to the discovery of Neptune.
+\end{example}
+
+\begin{definition}
+Let $W_j(x) = e^x$ be the potential, and $N = 1$. Here
+$$H(q, p) = \frac{1}{2} \sum_{j=1}^n p_j^2 + \sum_{j=1}^{n-1} e^{q_j - q_{j+1}},$$
+where the particles are lined up so $-\infty = q_0 < q_1 < \cdots < q_n < q_{n+1} = \infty$.
+This system is called the \dfn{Toda lattice}.
+\end{definition}
+We observe that the total momentum
+$$P = \sum_j p_j$$
+of the Toda lattice is conserved. Since $\{P, H\} = 0$, the Toda lattice is completely integrable when $n = 2$. But a miracle happens, and the Toda lattice is actually completely integrable for all $n$.
+But the state space of the Toda lattice is not compact so we cannot use the Liouville-Arnold-Jost theorem.
+\begin{theorem}
+There are integrals of motion $F_j$ for the Toda lattice, which are polynomials in $p_k$ and $e^{q_k - q_{k+1}}$.
+\end{theorem}
+To see this, we introduce \dfn{Flaschka's coordinates}. Here
+$$a_j = \frac{e^{(q_j-q_{j+1})/2}}{2}$$
+where $j < n$ and
+$$b_j = -\frac{p_j}{2}$$
+where $j \leq n$. Then
+$$\dot a_j = a_j(b_{j+1} - b_j)$$
+and
+$$\dot b_j = 2(a_j^2 - a_{j-1}^2).$$
+Now this is missing a dimension but note that $s \mapsto (q + (s, \dots, s), p)$ is an action of $\RR$ on $\RR^{2n}$ which preserves the system,
+namely translating all the $q_j$ by $t$, so we just need coordinates on $\RR^{2n-1} = \RR^{2n}/\RR$.
+
+Now let $L$ be the matrix with $b_i$ on the diagonal and $a_i$ on the subdiagonal and superdiagonal. Let $B$ be the matrix with $a_i$ on the superdiagonal and $-a_i$ on the subdiagonal.
+Then
+$$\frac{dL}{dt} = [B, L]$$
+if and only if $(q, p)$ is a solution of the Hamiltonian flow.
+\begin{definition}
+A pair of matrices $(B, L)$ such that $dL = [B, L]~dt$ if and only if the entries of $B,L$ satisfy a Hamiltonian flow $H$ are called a \dfn{Lax pair} for $H$.
+\end{definition}
+The fact that $(B, L)$ is a Lax pair for the Toda lattice is a ``miracle." It completely trivializes the study of the Toda lattice.
+\begin{example}
+The KdV equation is a PDE
+$$u_t = 6uu_x - u_{xxx}$$
+which admits a Lax pair. Here $L = -\partial_x^2 + u$ and $B = -4\partial_x^3 + 6u\partial_x + 3u_x$ are operators acting on $C^\infty$.
+\end{example}
+
+Note that $L$ is symmetric, so it is diagonalizable and its eigenvalues are real. The $a_j > 0$ since they are exponentials, and a computation shows that every eigenvalue has a $1$-dimensional eigenspace.
+In fact, if $\varphi$ is an eigenvector for the eigenvalue $\lambda$ and we normalize so $\varphi_n = 1$, $a_{k-1}\varphi_{k-1} + b_k\varphi_k = \lambda \varphi_k$, so $\varphi$ is uniquely defined by the normalization and a backwards recursion.
+Therefore $L$ only has simple eigenvalues. Therefore $\lambda_j(a, b)$, the $j$th eigenvalue of $L(a, b)$, determines a smooth function on $\RR^{n-1}_+ \times \RR^n$.
+This can be proven by using the implicit function theorem on the characteristic polynomial of $L$ when $(a, b)$ is close to $0$.
+
+In fact $\lambda_j$ is constant on any flow.
+\begin{definition}
+Two matrices are \dfn{isospectral} if their spectra are identical.
+\end{definition}
+We must show that the $L(a(t), b(t))$ are isospectral in $t$. To see this we solve the equation
+$$\partial_t U(t) = B(a(t), b(t)) U(t)$$
+where $U(0) = 1$. This is a system of ODE, so $U$ exists. Now $U(t)$ is an orthogonal matrix, since $U(0)$ is and
+$$\frac{d}{dt}(U(t)^TU(t)) = 0$$
+so $U(t)^TU(t) = U(0)^TU(0) = 1$. In other words, we have \dfn{unitary of Schrodinger propagation}.
+We also can show that $L(t)U(t) = U(t)L(0)$. By unitarity it suffices to show that
+$$\frac{d}{dt} U(t)^TL(t)U(t) = 0$$
+and this follows by a straight computation:
+\begin{align*}
+\dot U^TLU + U^TL\dot U + U^T\dot LU &= U^TB^TLU = U^TLBU = U^T[B, L]U \\
+&=U^T[L, B]U + U^T[B, L]U = 0.
+\end{align*}
+Therefore $L(a(t), b(t))$ is isospectral. So
+$$F_k(q, p) = \tr(L(a, b)^k)$$
+is a preserved quantity. In fact $F_1 = \tr L = -P/2$, while $F_2 = \tr L^2 = H/2$.
+
+As we require, the $dF_k$ are linearly independent. It suffices to show that the determinant
+$$\det\left(\frac{\partial F_k}{\partial \lambda_j}\right) \neq 0$$
+and we have $F_k = \sum_j \lambda_j^k$. So
+$$\det\left(\frac{\partial F_k}{\partial \lambda_j}\right) = n! \begin{vmatrix}1 & \cdots & 1\\
+\lambda_i & \cdots & \lambda_i\\
+\lambda_i^2 & \cdots & \lambda_i^2\\
+&\vdots\\
+\lambda_i^{n-1}& \cdots & \lambda_i^{n-1}\end{vmatrix} = n!\prod_{i<j} \lambda_j - \lambda_i$$
+by Vandermonde's determinant formula, which is nonzero since the eigenvalues are simple.
+
+We must show that $\{F_j, F_k\} = 0$ and it suffices to show $\{\lambda_j, \lambda_k\} = 0$.
+Let $\lambda = \lambda_j$, $\mu = \lambda_k$, $L\varphi = \lambda\varphi$, and $L\psi = \mu\psi$.
+Assume $||\varphi|| = ||\psi|| = 1$ and $\langle \varphi, \psi\rangle = 0$.
+If $f,g$ are smooth then
+$$\Psi^* \{f, g\}_* = \{\Psi^*f, \Psi^*g\},$$
+and the pushforward is along the change-of-coordinates $\Psi: (p, q) \mapsto (a, b)$.
+So we just want to show
+$$\{\lambda, \mu\}_* = 0.$$
+\begin{theorem}[Feynman-Hellman]
+\index{Feynman-Hellman theorem}
+Suppose $L$ is a differentiable one-parameter family of operators, and $L\varphi = \lambda\varphi$, where $\lambda$ is a simple eigenvalue. If $||\varphi|| = 1$ then
+$$\cdot \lambda = \langle (L\varphi)', \cdot \varphi\rangle.$$
+\end{theorem}
+\begin{proof}
+Differentiating $L\varphi$ using the Leibniz rule we have
+$$(L\varphi)' = (\lambda \varphi)' + \lambda\cdot \varphi.$$
+Now take the inner product with $\varphi$ on both sides and use the fact that $(||\varphi||)' = 1$.
+\end{proof}
+We have
+\begin{align*}
+\partial_{b_j} L &= e_j \otimes e_j\\
+\partial_{a_j} L &= e_j \otimes e_{j+1} + e_{j+1} \otimes e_j.
+\end{align*}
+so by the Feynman-Hellman theorem,
+\begin{align*}
+\partial_{b_j} \lambda &= \varphi_j^2\\
+\partial_{a_j} \lambda &= 2\varphi_{j+1}\varphi_j.
+\end{align*}
+Moreover
+$$4\{\lambda, \mu\}_* = \sum_j (a_j \partial_{a_j}\lambda - a_{j-1}\partial_{a_{j-1}}\lambda)\partial_{b_j}\mu - (a_j\partial_{a_j} \mu - a_{j-1}\partial_{a_{j-1}}\mu)\partial_{b_j}\lambda$$
+and plugging in the Feynman-Hellman computation,
+$$2\{\lambda, \mu\}_* = \sum_j (a_j \varphi_j\varphi_{j+1} - a_j\varphi_{j-1}\varphi_j)\psi_j^2 - (a_j\psi_j\psi_{j+1} - a_j\psi_{j-1}\psi_j)\varphi_j^2.$$
+We take the convention $a_0 = a_n = 0$. We introduce the Wronskian,
+$$W_j = a_j(\varphi_{j+1}\psi_j - \varphi_j \psi_{j+1}).$$
+Here we are thinking of the $\psi,\varphi$ as functions on finite sets, and viewing $W_j - W_{j-1}$ as the ``derivative" of $W_j$.
+In this sense $W_j$ is the Wronskian of $\varphi,\psi$.
+
+In fact,
+$$W_j - W_{j-1} = (\lambda - \mu)\varphi_j\psi_j.$$
+This can be verified by computing
+\begin{align*}
+L\varphi_j &= \lambda \varphi_j\psi_j\\
+L\psi_j &= \mu \psi_j \varphi_j
+\end{align*}
+and subtracting the two lines.
+
+It follows that
+$$W_j^2 - W_{j-1}^2 = (\lambda - \mu)(a_j\varphi_{j+1}\varphi_j - a_{j-1}\varphi_{j-1}\varphi_j)\psi_j^2 - A)$$
+where $A$ is the same as the previous term but with $\varphi$ replaced with $\psi$. Then
+$$2\{\lambda, \mu\}_* = \frac{1}{\lambda - \mu}\sum_j W_j^2 - W_{j-1}^2 = (\lambda - \mu)^{-1}(W_n^2 - W_0^2)$$
+since the Wronskians telescope, and by our convention we have $W_n = W_0 = 0$. So $\{\lambda, \mu\}_* = 0$.
+
+Now define
+$$x_j = |\langle \varphi_j, e_n\rangle|.$$
+We will study the evolution of $x$. Let
+$$f(z) = \langle (z - L)^{-1}e_n, e_n\rangle = \sum_j \frac{x_j^2}{z - \lambda_j}.$$
+
+Since the $a_j > 0$ it is no loss of information to replace $a_j$ with $a_j^2$. Define
+\begin{align*}
+\chi: \RR^{n-1}_- \times \RR^n \to \RR^n \times \{x \in \RR^n_+: ||x|| = 1\}\\
+(a^2, b) \mapsto (\lambda, x).
+\end{align*}
+If we can invert $\chi$ we will know how $(a, b)$ and hence $(q, p)$ evolves explicitly in terms of the eigenvalues $\lambda$ and scalars $x$.
+
+\begin{lemma}
+We have
+$$-\frac{\dot x_j}{x_j} = -\lambda_j + \sum_k \lambda_kx_k^2.$$
+Moreover, this flow preserves the set $\{x \in \RR^n_+: ||x|| = 1\}$.
+\end{lemma}
+\begin{proof}
+To see that $||x|| = 1$ is preserved, we simply expand out the definition of $||x||$, differentiate it, and notice that $||x||' = 0.$
+Moreover, if $\alpha_j = \log x_j$, then $\dot \alpha$ is Lipschitz and so exists for all time by a Picard-type theorem.
+
+As for the main claim,
+$$L(t)U(t) = U(t)L(0)$$
+so
+$$\varphi_k(t) = U(t) \varphi_k(0).$$
+Since $\cdot U = BU$,
+$$\cdot \varphi_k(t) = B(t)\varphi_k(t).$$
+Then
+$$\langle \cdot \varphi_k(t), e_n\rangle = a_{n-1}\langle \varphi_n, e_{n-1}\rangle + b_n x_k$$
+so
+$$\cdot x_k = - \lambda_k x_k + b_n x_k.$$
+Since $||x|| = 1$, $(||x||)' = 0$, so differentiating,
+$$0 = -\sum_k \lambda_k x_k^2 + b_n.$$
+\end{proof}
+
+The system given by the lemma is easy to solve. Set
+$$y_j(t) = y_j(0)e^{-\lambda_jt}$$
+and set
+$$x_j = \frac{y_j}{||y||}.$$
+Using this normalization,
+$$\frac{x_j(t)^2}{x_j(0)^2} = \frac{e^{-2\lambda_jt}}{\sum_k x_k(0)^2e^{-2\lambda_kt}}.$$
+We can therefore view $x$ as a linear dynamical system.
+Thus, if we can invert $\chi$, we will explicitly have solved the system $(q, p)$.
+
+We can view the situation as a commutative diagram
+$$
+\begin{tikzcd}
+(q(0), p(0)) \arrow[r]\arrow[d] &L(0) \arrow[r] & (\lambda, x(0))\arrow[d]\\
+(q(t), p(t)) & L(t)\arrow[l] & (\lambda, x(t))\arrow[l]
+\end{tikzcd}
+$$
+We are looking for the arrow $(\lambda, x(t)) \to L(t)$.
+
+Put
+$$f(z) = \langle (z-L)^{-1}e_n, e_n\rangle = \sum_j \frac{x_j^2}{z - \lambda_j}.$$
+\begin{theorem}[Stjeltes]
+We have
+$$f(z) = \frac{1}{z - b_n - \frac{a_{n-1}^2}{z - b_{n-1} - \frac{a_{n-2}^2}{z - b_{n-2} - \cdots}}}.$$
+\end{theorem}
+\begin{proof}
+Let $L_j$ be the matrix containing the first $j$ rows and columns of $L$. Let $\Delta_j(z) = \det(z - L_j)$.
+By Cramer's rule,
+$$f(z) = \frac{\Delta_{n-1}(z)}{\Delta_n(z)}.$$
+Moreover,
+$$\Delta_j(z) = (z - b_j)\Delta_{j-1}(z) - a_{j-1}^{-1}\Delta_{j-2}(z)$$
+by the recurrence definition of the determinant.
+Here we take $\Delta_0 = \Delta_{-1} = 0$.
+
+Let $\rho_j = \Delta_j/\Delta_{j-1}$, so
+$$\rho_j(z) = z - b_j - \frac{a_{j-1}^2}{\rho_j - 1}.$$
+Here we take $\rho_1(z) = z - b_1$.
+Then $\rho_n = f^{-1}$ gives the continued fraction expansion.
+\end{proof}
+Now $f = P_{n-1}/Q_n$ where
+$$P_{n-1}(z) = \sum_{j=1}^{n-1} x_j^2 \prod_{i \neq j} z - \lambda_i$$
+and
+$$Q_n(z) = \prod_{j=1}^n z - \lambda_j.$$
+A straight computation gives
+$$\frac{Q_n(z)}{P_{n-1}(z)} = z - \beta - \alpha\frac{Q_{n-2}(z)}{P_{n-1}(z)}.$$
+Thus
+$$f(z) = \frac{1}{z - \beta - \alpha g(z)}$$
+where $g=Q_{n-2}/P_{n-1}$ and $\alpha,\beta$ are uniquely determined by $x, \lambda$, and $g$ is of the same form as $f$, say
+$$g(z) = \sum_{j=1}^{n-1}\frac{\sigma_j}{z - \mu_j}$$
+so $\sigma_j$ is the residue of $\mu_j$ at $z$. Thus
+$$\sigma_j = -\frac{1}{\alpha f'(\mu_j)} > 0.$$
+
+We now show that the Toda lattice admits scattering, i.e. we can determine its behavior at $t = +\infty$ from its behavior at $t = -\infty$.
+\begin{theorem}
+There is a $\delta > 0$ such that $q_j(t) = \alpha_j^+t + \beta_j^+ + O(e^{-\delta t})$ as $t \to +\infty$ and $q_j(t) = \alpha_j^-t + \beta_j^- + O(e^{\delta t})$ as $t \to -\infty$, where
+$\lambda_i < \lambda_{i+1}$, $\alpha_j^+ = -2\lambda_{n-j+1}$, and $\alpha_j^- = -2\lambda_j$.
+\end{theorem}
+\begin{proof}
+$a_j(t)^2$ and $b_j(t)$ are rational functions of $e^{-\lambda_jt}$. Thus they have asymptotic expansions $c_1^\pm e^{\eta_1^\pm t}+c_2^\pm e^{\eta_2^\pm t} + \cdots$ as $t \to \pm \infty$ and $\eta_j^\pm = \sum_k m_{jk}^\pm \lambda_j$ where $m_{jk}^\pm \in \ZZ$.
+
+Now
+$$\int_{t_1}^{t_2}a_j^2 - a_{j-1}^2 = b_j(t_2) - b_j(t_1)$$
+telescopes, and since $2\sum_j b_j^2 + 4\sum_j a_j^2$ is a conserved quantity a sum of $b_j$ must be bounded. Therefore $a_j^2 \in L^1(dt)$.
+Since $a_j$ has an asymptotic expansion in exponentials, it follows that $a_j \to 0$. Thus $L(t) \to L(\pm \infty)$ which is a diagonal matrix.
+Solving $\dot a_j/a_j = b_{j+1} - b_j$ we have $b_j(+\infty) = \lambda_{n-j+1}$ and $b_{-j}(-\infty) = \lambda_j$.
+\end{proof}
+So the velocities are not just permuted, but are reversed in order.
+
+\section{The QR algorithm}
+We now apply the theory of completely integrable systems to study a diagonalization algorithm from numerical linear algebra.
+It was voted among the top ten algorithms of the last century, along with the fast Fourier transform, which confusingly was discovered by Gauss long before the last century.
+\begin{theorem}
+For every invertible real matrix $A$ there is a unique factorization $A = QR$ such that $R_{ii} > 0$, $Q$ is orthogonal, $R$ is upper triangular.
+\end{theorem}
+\begin{proof}
+Let $A = [a_1 \cdots a_n]$. Since $A$ is invertible the $a_i$ are linearly independent, so apply the Gram-Schmidt algorithm to $A$ to obtain an orthogonal matrix $Q$. Let
+$$R = \begin{bmatrix}
+\langle e_1, a_1\rangle & \langle e_1, a_2 \rangle & \cdots \\
+0 & \langle e_2, a_2 \rangle & \cdots\\
+&\vdots
+\end{bmatrix}$$
+then $A = QR$. If $Q_1R_1 = Q_2R_2$ then $Q_1^{-1}Q_2 = R_2 R_1^{-1}$ so $R_2R_1^{-1}$ is an upper triangular matrix which is positive on the diagonal and yet has determinant $1$, so $R_2 = R_1$.
+\end{proof}
+Given $A = QR$, let $T(A) = RQ$. Note that
+$$T(A) = Q^*QRQ = Q^{-1}AQ.$$
+Thus $T(A)$ and $A$ are isospectral, and $T$ preserves the space $B_{sa}$ of self-adjoint matrices.
+\begin{theorem}[Kublanovskya-Francis, 1961]
+\index{Kublanovskya-Francis theorem}
+If $A$ is positive-definite and self-adjoint with simple eigenvalues then
+$$\lim_{n \to \infty} T^n(A) = \diag(\lambda_i)$$
+where $\lambda_i$ are the eigenvalues of $A$, $\lambda_i > \lambda_{i+1}$.
+\end{theorem}
+That is, $T$ is a discrete isospectral system which converges to the diagonalization. This is analogous to the Toda lattice, where we had a continuous isospectral system which converged to the diagonalization.
+We proved that the convergence of $L$ is exponential, namely that
+$$||L(t) - L(\infty)|| = O(\exp(-2t\min_j(\lambda_j - \lambda_{j-1}))).$$
+Let $J$ be the space of tridiagonal matrices such that the subdiagonal and superdiagonal are positive and identical. An algebraic computation shows that $T$ sends $J$ to tridiagonal matrices.
+Recall from Toda lattice theory that there is a diffeomorphism $\chi: J \to \{(\lambda, x)\}$ where $\lambda_i > \lambda_{i+1} > 0$, $\lambda$ is the spectrum of the preimage $L$, $x_j > 0$, and $||x|| = 1$.
+Here $x$ is defined by the property that if $L = U\Lambda U^*$ then $x = U^*e_1$.
+\begin{lemma}
+Let
+$$(\lambda, x^k) = \chi(T^k(\chi^{-1}(\lambda, x_0))).$$
+Then
+$$||\Lambda^k x^0|| x^k = \Lambda^k x^0.$$
+\end{lemma}
+\begin{proof}
+It suffices to check this when $k = 1$. This can be checked by noting that the unitary matrix $U_1$ obtained by diagonalizing $T(\Lambda)$ is given by the Gram-Schmidt algorithm.
+\end{proof}
+Recall that the Toda flow is given by
+$$x(t) = \frac{e^{At}x(0)}{||e^{At}x(0)||}.$$
+Similarly we here have
+$$x^k = \frac{e^{Ak} x(0)}{||e^{Ak} x(0)||}$$
+where $A = \log \Lambda$.
+Thus in the coordinates $(x, \lambda)$ the QR algorithm is a discretized Toda flow, provided that our initial conditions were tridiagonal.
+
+We now construct a discrete Lax pair for the QR algorithm. For any matrix $A$, we may uniquely decompose
+$$A = \pi_SA + \pi_LA$$
+where $\pi_SA$ is anti-self-adjoint and $\pi_LA$ is lower triangular. In fact, $\pi_SA$ is given by taking the part of $A$ above the diagonal and reflecting it over the diagonal.
+Given a continuous function $G: \RR_+ \to \RR$ we extend it to self-adjoint matrices $L$ by
+$$G(L) = U G(\Lambda) U^*$$
+where $LU = U\Lambda$ is the diagonalization of $L$ given by the spectral theorem and $G$ acts on diagonal matrices pointwise.
+This is a functional calculus for self-adjoint operators.
+Let $B_G = \pi_S \circ G$. Then the map $L \mapsto [B_G(L), L]$ preserves tridiagonality. This can be easily checked for $G(\lambda) = \lambda^k$ and then may use a variant of the Stone-Weierstrass theorem.
+One may then check that if we define
+$$\cdot x(t) = G(\Lambda)x(t) - \langle G(\Lambda)x(t), x(t)\rangle x(t)$$
+then $\cdot L = [B_G(L), L]$. For appropriate $G$ this gives a Lax pair for the QR algorithm.
+
+\chapter{Complex dynamics}
+\section{Siegel's KAM theorem}
+Let $U,V$ be neighborhoods of $0$ in $\CC$. Assume $f: U \to V$ is holomorphic, $f(0) = 0$, $f'(0) = e^{2\pi i\theta}$ where $\theta$ is an irrational angle.
+We would like to find a conformal transformation $\varphi$ defined locally near $0$ which conjugates $f$ to rotation by $e^{2\pi i\theta}$.
+If this is the case, we will have lots of invariant sets for $f$, namely the $\varphi$-image of circles centered around $0$.
+Whether this is possible depends strongly on number-theoretic properties of $\theta$.
+
+One can view the rotation $e^{2\pi i \theta}$ as a simple Copernican model of the solar system; then the real solar system is a slight perturbation, and we would like to know that it is quasiperiodic. That is, a slight perturbation of $f$ preserves the dynamics.
+
+\begin{theorem}[Siegel]
+\index{Siegel's theorem}
+Suppose that $\theta$ is \dfn{diophantine} in the sense that there is a $C>0$ and $\mu$ large enough that for all $p, q \in \QQ$,
+$$\left|\theta - \frac{p}{q}\right| \geq \frac{C}{q^\mu}.$$
+Then there is a conformal transformation $\varphi$ such that
+$$f(\varphi(z)) = \varphi(e^{2\pi i \theta}z).$$
+\end{theorem}
+
+We first show that there are diophantine numbers. Let $\mu > 2$.
+Let $E$ be the set of all $\theta$ such that for infinitely many $p, q$, $|\theta - p/q| < q^{-\mu}$. Then for every $n$,
+$$E \subseteq \bigcup_{q \geq n}\bigcup_{p=0}^q [p/q- q^{-\mu}, p/q + q^{-\mu}]$$
+so
+$$|E| \leq \sum_{q \geq n}\sum_{p = 1}^q 2q^{1-\mu} = O(n^{2-\mu})$$
+so $E$ has measure $0$, hence most numbers are diophantine.
+
+So fix a diophantine number $\theta$ and let $\lambda = e^{2\pi i\theta}$.
+
+We now observe that if
+$$f(\varphi(z)) = \varphi(\lambda z),$$
+then $\varphi$ is automatically injective, hence conformal by the inverse function theorem. In fact if $\varphi(z) = \varphi(w)$ then
+$$\varphi(\lambda z) = f(\varphi(z)) = f(\varphi(w)) = \varphi(\lambda w)$$
+and iterating we see that
+$$\varphi(\lambda^n z) = \varphi(\lambda^n w)$$
+but the $\lambda^n z$ are a set with an accumulation point, and if two holomorphic functions agree on a set with an accumulation point then they agree everywhere.
+
+\begin{lemma}
+There is a $\varphi$ iff there is a $\delta > 0$ such that $f^n(z)$ is a bounded sequence if $|z| < \delta$.
+\end{lemma}
+\begin{proof}
+If $\varphi$ exists then
+$$f^n(z) = \varphi(\lambda^n \varphi^{-1}(z))$$
+which is obviously bounded.
+
+Conversely, assume a bound $M$ exists and let
+$$h_n(z) = \frac{1}{n}\sum_{m=0}^{n-1} \lambda^{-m} f^m(z)$$
+be the ergodic average. By assumption $|h_n(z)| \leq M$. By the Cauchy estimate for the disc $|z| < \delta/2$,
+$$|h_n'(z)| \leq \frac{2M}{\delta}$$
+so by the Ascoli theorem, we can pass to a Cauchy subsequence and assume $\lim_n h_n = h$ in $C^0$.
+By Morera's theorem $h$ is holomorphic, and
+$$h_n'(0) = \frac{1}{n} \sum_{m=0}^{n-1} \lambda^{-m} \lambda^m = 1$$
+so $h'(0) = 1$ and by the inverse function theorem $h$ has a conformal inverse $\varphi$.
+\end{proof}
+
+We now show that some hypothesis on $\theta$ is necessary.
+\begin{theorem}[Pfeiffer]
+\index{Pfeiffer}
+There is a $\theta$ such that for any polynomial $f$ of degree $\geq 2$, no $\varphi$ exists.
+\end{theorem}
+\begin{proof}
+Assume
+$$f(z) = z^d + \cdots + \lambda z.$$
+Assume $\varphi$ exists and is defined if $|z| < \delta$.
+Let $z_1, \dots, z_{d^n-1}$ be the nonzero fixed points of $f^n$, which exist since $f'(0) = \lambda \neq 0$.
+Then they are nonzero zeroes of
+$$f^n(z) - z = z^{d^n} + \cdots + (\lambda^n - 1)z.$$
+By assumption, $|z_j| \geq \delta$; since $|z| < \delta$ is conjugated to rotation. Thus
+$$\delta^{d^n} < \delta^{d^n - 1} \leq \prod_j |z_j| = |\lambda^n - 1|.$$
+The last equality is true because the $z_j$ are zeroes of a polynomial whose constant term is $\lambda^n - 1$.
+So we must find a $\theta$ such that for every $d,\delta$ we can find an $n$ such that
+$$\delta^{d^n} \geq |\lambda^n - 1|.$$
+
+For some sequence $q_k \in \NN$, to be determined, let
+$$\theta = \sum_{k=1}^\infty 2^{-q_k}.$$
+Then
+$$|1 - \lambda^{2^{q_k}}| \sim 2^{q_k-q_{k+1}}.$$
+Assume $\delta^{2^{q_k}} < |\lambda^{2^{q_k}} - 1|$, so
+$$\delta^{d^{2^{q_k}}} = O(2^{q_k - q_{k+1}}).$$
+Thus
+$$q_{k+1} = O_\delta(d^{2^{q_k}}).$$
+Now let
+$$\log q_{k+1} \geq ke^{q_k}$$
+which is a contradiction.
+\end{proof}
+
+We now prove Siegel's theorem. Siegel used an extremely complicated number-theoretic proof, but we will give Moser's proof, which easily follows from KAM theory.
+\begin{proof}[Proof of Siegel's theorem]
+Our goal is to construct $\varphi$ with the desired properties, which in particular imply
+$$\varphi(z) = z + O(z^2).$$
+Thus we define $\varphi(z) = z + \hat \varphi(z)$ so $\hat \varphi(z) = O(z^2)$, and write $f(z) = \lambda z + \hat f(z)$.
+As in the case of the cat map, we want to solve the equation
+$$\hat \varphi(\lambda z) - \lambda \hat \varphi(z) = \hat f(z + \hat \varphi(z))$$
+for $\hat \varphi$.
+Unfortunately the cat map was hyperbolic, while the dynamics here are rotational.
+Let
+$$\hat f(z) = \sum_{n=2}^\infty b_nz^n.$$
+
+Linearize the equation we want to solve, we get a function
+$$\hat \psi(z) = \sum_{n=2}^\infty c_nz^n,$$
+such that
+$$\hat \psi(\lambda z) - \lambda \hat \psi(z) = \hat f(z).$$
+Solving the Taylor series we have
+$$c_n = \frac{b_n}{\lambda^n - \lambda}.$$
+
+Since $\theta$ is diophantine, there are $C,\mu$ such that
+$$|\lambda^n - 1|^{-1} \leq C\frac{n^\mu}{\mu!}.$$
+Moreover $|\hat f'(z)| < \delta$ if $|z| < \varepsilon$ for some $\varepsilon > 0$.
+
+In fact, Cauchy estimates give us
+$$|b_j| \leq \frac{\delta}{j\varepsilon^{j-1}}.$$
+Assume $\eta < 1/5$ and $\eta$ is much smaller than $\varepsilon$. Then if $|z| < (1 - \eta)\varepsilon$,
+$$|\psi'| \leq \sum_{j=2}^\infty \frac{jb_j}{|\lambda^j - \lambda|}\varepsilon^{j-1}(1 - \eta)^{j-1} < \frac{C\delta}{\mu!} \sum_{j=1}^\infty j(j+1)\cdots(j + \mu - 1)(1 - \eta)^{j-1} = \frac{C\delta}{\eta^{\mu + 1}}$$
+where we used the Newton binomial formula.
+Thus if $C\delta < \eta^{\mu + 2}$, which is possible if $\varepsilon$ and hence $\delta$ are small enough, if $|z| < (1 - \eta)\varepsilon$ then
+$$|\hat \psi'(z)| \leq \eta.$$
+Thus $\psi$ carries $D(0, \varepsilon(1 - 4\eta))\to D(0, \varepsilon(1-3\eta))$ and similarly if $|z| = \varepsilon(1 - \eta)$,
+$$|\psi(z)| = |z + \hat \psi(z)| \geq \varepsilon(1 - 2\eta).$$
+
+Assume $|w| < \varepsilon(1 - 2\eta)$ and $|z| = \varepsilon(1 - \eta)$. Then
+$$|w| = |\psi(z)-(\psi(z) - w)| < |\psi(z)|.$$
+By Rouche's theorem, $\psi$ and $\psi - w$ have the same number of zeroes in $D(0, \varepsilon(1 - \eta))$.
+Then $\psi$ is a bijection $D(0, \varepsilon(1 - \eta)) \to D(0, \varepsilon(1 - 2\eta))$.
+We thus have a diagram
+$$\begin{tikzcd}
+D(0, \varepsilon(1 - 4\eta)) \arrow[r,"\psi"] & D(0, \varepsilon(1-3\eta)) \arrow[r,"f"] & D(0, \varepsilon(1 - 2\eta)) \arrow[r, "\psi^{-1}"] & D(0, \varepsilon(1 - \eta)).
+\end{tikzcd}$$
+Let $\psi \circ g = f \circ \psi$, so $g$ carries $D(0, \varepsilon(1 - 4\eta)) \to D(0, \varepsilon(1 - \eta))$.
+
+We now estimate $\hat g$, where $g(z) = \lambda z + \hat g(z)$. We have $\psi \circ g = f \circ \psi$. Thus
+$$f(\psi(z)) = \lambda z = \hat g(z) + \hat \psi(g(z)) = \lambda(z + \hat \psi(z) + \hat f(z + \hat \psi(z))).$$
+Therefore
+$$\hat g(z) + \hat \psi(\lambda z + \hat g(z)) = \lambda \hat \psi(z) + \hat f(z + \hat \psi(z)).$$
+Since $\hat f(z) = \hat \psi(\lambda z) - \lambda \hat \psi(z)$,
+$$\hat g(z) = \hat \psi(\lambda z) - \hat \psi(\lambda z + \hat g(z)) + \hat f(z + \hat \psi(z)) - \hat f(z).$$
+Let
+$$C = \max_{D(0, (1 - 4\eta)\varepsilon)} |\hat g|.$$
+Then
+$$C \leq \sup |\hat \psi'|C + \sup |f'|\sup|\hat \psi| \leq C\eta + \delta \sup|\hat \psi|.$$
+
+We apply Schwarz' lemma to $\hat \psi'$ to see
+$$|\hat \psi'(z)| \leq c_0 \frac{\delta|z|}{\varepsilon(1-\eta)\eta^{1 + \mu}}.$$
+Integrating both sides, we bound $|\hat \psi|$ and see that
+$$C \leq C\eta + \frac{c_0\delta^2}{2\eta^{\mu + 1}}(1 - \eta)\varepsilon.$$
+Solving for $C$,
+$$\max_{D(0, (1-4\eta)\varepsilon)} |\hat g| \leq \frac{c_0\delta^2}{2}\eta^{-\mu-1}\varepsilon.$$
+By a Cauchy estimate,
+$$|\hat g'(z)| \leq \frac{c_0\delta^2}{2\eta^{\mu + 2}}$$
+if $|z| < (1 - 5\eta)\varepsilon$.
+
+We now iterate: let $g_0 = f$, and let $\psi_{n+1} \circ g_{n+1} = g_n \circ \psi_{n+1}$. Let $\eta_k = \alpha^k\eta_0$, $\alpha < 1$, and
+$$R = \varepsilon \prod_k 1 - 5\eta_k > 0.$$
+Then $|\hat g'_n| \leq \delta_n \leq \eta_k^{\mu + 2} \to 0$. So $g_n \to \lambda$ and
+$$f \circ \varphi_n = \varphi_n g_n.$$
+A calculation using a Cauchy estimate shows that $|\varphi_{n+1} - \varphi_n| \leq \delta_nC \to 0$, so the $\varphi_n$ are a Cauchy sequence, say $\varphi_n \to \varphi$, and $f \circ \varphi = \varphi \circ \lambda$.
+\end{proof}
+
+\chapter{Entropy and information theory}
+We now consider a way to measure the complexity of a dynamical system. Though this was originally motivated by thermodynamics and statistical mechanics, it did not come to full form until work of Shannon in 1948.
+
+\section{Shannon's axioms of entropy}
+Fix a probability space $(X, \Sigma, \mu)$ and a partition $\mathcal P = (P_i)_i$ of $X$ (so $P_i \cap P_j$ is empty and $\bigcup_i P_i = X$). Let $p_i = \mu(P_i)$, so $p_i$ is the ``probability of finding a particle in $P_i$."
+Entropy is supposed to measure the ``uncertainty" of the box $P_i$ that we find the particle in.
+
+Equivalently, we seek motivation from ergodic theory. Let $(X_j, \Sigma_j, \mu_j, T_j)_j$ be a family of measure-preserving systems. Recall that $(X_1, T_1),(X_2,T_2)$ are isomorphic if there is an isomorphism of measurable spaces $\varphi: X_1 \to X_2$ such that $\varphi \circ T_1 = T_2 \circ \varphi$. (Note that $\varphi$ is not assumed to be an isomorphism of measure spaces.)
+We want an invariant which allows us to distinguish two measure-preserving systems. (This is analogous to algebraic topology.)
+
+We want a function $H$ defined on probability vectors $\vec p \in \Delta_n$, where $p_i = \mu(P_i)$ is obtained from the partition $\mathcal P$, and $\Delta_n$ is the $n$-simplex, and $H: \Delta_n \to \RR$. In this case, we let $H(\mathcal P) = H(\vec p)$.
+We want $H(\vec p, 0) = H(\vec p)$ (so adding an empty set to the partition does not affect the complexity) and $k \mapsto H(1/k, \dots, 1/k)$ is increasing (so complexity increases as the partition gets finer).
+
+If $\mathcal Q$ is also a partition, we let $\mathcal P \vee \mathcal Q$ be the set of all intersections of entries in $\mathcal P$ and in $\mathcal Q$. We will demand
+$$H(\mathcal P \vee \mathcal Q) = H(\mathcal P) + H(\mathcal Q|\mathcal P)$$
+where
+$$H(\mathcal Q|\mathcal P) = \sum_{P \in \mathcal P} \mu(P)\mu\left(\frac{\mu(Q_1 \cap P)}{\mu(P)}, \cdots, \frac{\mu(Q_k \cap P)}{\mu(P)}\right)$$
+is the ``conditional complexity" of $\mathcal Q$ given that we know $\mathcal P$.
+These conditions on $H$ are known as \dfn{Shannon's axioms}.
+
+\begin{theorem}[Shannon 1948]
+Suppose $H$ satisfies Shannon's axioms; then there is a constant $K \geq 0$ such that
+$$H(\vec p) = -K\sum_j p_j \log p_j.$$
+\end{theorem}
+Notice that this implies that $H$ is (up to a choice of Boltzmann constant, which amounts to a choice of physical units) the thermodynamic entropy, where $j$ ranges over a set of microstates, as defined by Boltzmann.
+\begin{proof}
+Define
+$$h(n) = H(1/n, \dots, 1/n).$$
+Assume $n = k\ell$, say $p_j = 1/k$, $q_i = 1/\ell$, where $\vec p,\vec q$ arise from partitions $\mathcal P,\mathcal Q$ respectively. Then
+$$h(n) = h(k\ell) = H(\mathcal P \vee \mathcal Q) = H(\mathcal P) + H(\mathcal Q|\mathcal P) = h(k) + \frac{1}{k}\sum_{j=1}^k h(\ell) = h(k) + h(\ell).$$
+Therefore $h$ is a multiplicative-to-additive isomorphism. The only such isomorphism defined on integers which is increasing is $\log$. In fact, we can use the monotonicity to show that for any $n$, if $k \geq \ell$,
+$$\left|\frac{h(k)}{h(2)} - \frac{\log k}{\log 2}\right| < \frac{1}{n}.$$
+Then if $\vec p$ is a rational point in $\Delta_n$,
+one can use this to show that $H(\vec p) = c \sum_j p_j\log p_j$. Continuity extends this to all of $\Delta_n$.
+\end{proof}
+
+\begin{definition}
+If $\vec p$ is the probability vector corresponding to the partition $\mathcal P$ of a fixed measure space, we define the \dfn{Shannon entropy} by
+$$H(\mathcal P) = H(\vec p) = -\sum_j p_j \log p_j.$$
+\end{definition}
+
+\section{Conditional entropy}
+We now give a more abstract setup for Shannon entropy. Given $\xi = \{A_j\}_j$ a partition of $(X, \Sigma, \mu)$, let $\xi(x) = A_j$ where $x \in A_j$. Then the join $\bigvee_i \xi_i$ is defined by
+$$\left(\bigvee_i \xi_i\right)(x) = \bigcap_i \xi_i(x).$$
+\begin{definition}
+The \dfn{information function} $I(\xi)$ of $\xi$ is defined by
+$$I(\xi, x) = -\log \mu(\xi(x)).$$
+\end{definition}
+Then entropy satisfies
+$$H(\xi) = \int_X I(\xi, x) ~d\mu(x).$$
+Indeed, $I(\xi, \cdot)$ is constant on any $A_j$, so it follows that
+$$\int_X I(\xi, x) ~d\mu(x) = -\sum_j \mu(A_j) \log \mu(A_j).$$
+\begin{definition}
+Let $\mathcal A \subseteq \Sigma$ be a sub-$\sigma$-algebra. The \dfn{conditional entropy} of $\xi$ with respect to $\mathcal A$ is defined by
+$$H(\xi|\mathcal A) = -\sum_j \int_X E(A_j|\mathcal A) \log(E(A_j|\mathcal A)) ~d\mu.$$
+\end{definition}
+Here
+$$E(A|\mathcal A) = E(1_A|\mathcal A)$$
+is the conditional expectation. If $\mathcal A$ is generated by a partition $\eta$,
+$$E(f|\mathcal A)(x) = \frac{1}{\mu(\eta(x))} \int_{\eta(x)} f ~d\mu,$$
+and we write $E(f|\eta) = E(f|\mathcal A)$. In particular,
+$$E(A|\eta)(x) = \frac{\mu(A \cap \eta(x))}{\mu(\eta(x))}.$$
+Unravelling the definitions, $H(\xi|\eta)$ agrees with the previous definition for conditional entropy that we gave.
+
+We think of $H(\xi|\eta)$ as the entropy given that we know everything about $\eta$. In particular, $H(\xi|\Sigma) = 0$ (where $\Sigma$ is the $\sigma$-algebra). To see this, note that $E(f|\Sigma)$ is constant for any $f$, so $E(A|\mathcal A) \in \{0, 1\}$ and hence $E(A|\mathcal A)\log E(A|\mathcal A) = 0$.
+On the other hand, $H(\xi) = H(\xi|\{0, X\})$.
+More generally if $\mathcal A \subseteq \mathcal B$ then
+$$H(\xi) \geq H(\xi|\mathcal A) \geq H(\xi|\mathcal B) \geq 0.$$
+If $T$ is measure-preserving then
+$$H(\xi|\mathcal A) = H(T^{-1}\xi|T^{-1}\mathcal A).$$
+In particular $H(\xi) = H(^{-1}\xi)$.
+We also have $H(\xi \vee \eta) \leq H(\xi) + H(\eta)$.
+
+\section{The entropy of a group action}
+Let $(X, \Sigma, \mu, T)$ be a measure-preserving system.
+\begin{lemma}
+For any partition $\xi$, the limit
+$$\lim_{N \to \infty} \frac{1}{N} H\left(\bigvee_{j=0}^{N-1} T^{-j}\xi\right) = \inf_N H\left(\bigvee_{j=0}^{N-1} T^{-j}\xi\right) > -\infty.
+$$
+\end{lemma}
+\begin{proof}
+Let
+$$a_N = H\left(\bigvee_{j=0}^{N-1} T^{-j}\xi\right).$$
+Since $H(\xi \vee \eta) \leq H(\xi) + H(\eta)$, we have
+$$0 \leq a_{N+M} \leq a_N + a_M,$$
+Therefore
+$$\lim_{N \to \infty} \frac{a_N}{N} = \inf_{N \to \infty} \frac{a_N}{N} > -\infty.$$
+\end{proof}
+
+\begin{definition}
+Let
+$$h(T, \xi, \mu) = \lim_{N \to \infty} \frac{1}{N}H\left(\bigvee_{j=0}^{N-1} T^{-j}\xi\right).$$
+Then we may define the \dfn{entropy} of the transformation $T$ by
+$$h(T, \mu) = \sup_\xi h(T, \xi, \mu),$$
+$\xi$ ranging over all finite partitions of $(X, \Sigma, \mu)$ into measurable sets.
+\end{definition}
+We have $h(T, \eta) \leq h(T, \xi) + H(\eta|\xi)$. Moreover,
+$$h(T, \xi) = \lim_{N \to \infty} H(\xi|\bigvee_{i\leq N} T^{-i}\xi).$$
+Trivially, the $\sigma$-algebra generated by $T^{-1}\bigvee_{j\leq k-1}T^{-j}\xi$ is contained in the $\sigma$-algebra generated by $T^{-1}\bigvee_{j\leq k} T^{-j}\xi$, so if we let
+$$b_k = H(\xi|T^{-1}\bigvee_{j \leq k}T^{-j}\xi)$$
+then the $b_k$ form a decreasing sequence, and is bounded from below, so say $b_k \to b$. In particular, $b_k$ converges in Cesaro mean to $b$, so
+$$\lim_{N \to \infty} H(\bigvee_{j \leq k} T^{-j}\xi) = \lim_{N \to \infty} H(\xi|T^{-1}\bigvee_{j \leq k}T^{-j}\xi).$$
+
+\begin{example}
+Take the partition $\xi$, $A_0 = \{x: x > 0\}$, $A_1 = \{x: x \leq 0\}$ of the circle $S^1 = \{(x, y): x^2 + y^2 = 1\}$. Let $T$ be the irrational rotation, so at each stae $\bigvee_{j\leq k} T^{-j}\xi$ has $2$ more sets than the previous stage. Thus
+$$H\bigvee_{j=0}^{N-1} T^{-j}\xi \leq \log 2N$$
+and dividing both sides by $N$ and taking $N \to \infty$ we see that
+$$h(T, \xi) = 0.$$
+
+On the other hand, for any transformation, $h(T^q) = qh(T)$, so if $T$ is a rational rotation of denominator $q$, $T^q = 1$ and $h(1) = 0$. Therefore $h(T) = 0$. More generally, this implies that any periodic transformation has $0$ entropy.
+\end{example}
+
+The definition of $h(T)$ is slightly useless because one cannot easily take a supremum over partitions. However, Sinai, a student of Kolmogorov, found a less useless equivalent definition.
+\begin{definition}
+Let $(X, \Sigma, \mu, T)$ be a measure-preserving system. A partition $\xi$ is said to be a \dfn{one-sided generator} of $\Sigma$ if $\Sigma$ is the $\sigma$-algebra generated by
+$$\{A: \exists j(A \in T^{-j}\xi)\}$$
+modulo $\mu$-null sets.
+\end{definition}
+
+\begin{theorem}[Sinai-Kolmogorov theorem]
+\index{Sinai-Kolmogorov theorem}
+If $(X, \Sigma, \mu, T)$ is a measure-preserving system and $\xi$ is a one-sided generator of $\Sigma$, then $h(T, \xi) = h(T)$.
+\end{theorem}
+
+\begin{example}
+For $(S^1, \Sigma, \mu, T)$ an irrational rotation and $\xi$ the above partition, $\xi$ is a one-sided generator, so $h(T, \xi) = 0$.
+\end{example}
+
+\begin{theorem}[martingale convergence theorem]
+\index{martingale convergence theorem}
+Let $\{\xi_n\}$ be a sequence of $\sigma$-algebra such that $\xi_{n+1}(x) \subseteq \xi_n(x)$.
+Let $\mathcal A$ the $\sigma$-algebra generated by $\bigcup_n \xi_n$. Then for any event $A$,
+$$\lim_{n \to \infty} E(A|\xi_n) = E(A|\mathcal A)$$
+in $L^2$.
+\end{theorem}
+We take this as a black box.
+
+\begin{proof}[Proof of Sinai-Kolmogorov theorem]
+By the martingale convergence theorem,
+$$h(T, \xi) = \lim_{n \to \infty} H(T, \xi_n)$$
+if $\xi_n$ refine to $\xi$.
+In fact, if $\xi$ is a one-sided generator and we put
+$$\xi_n = \bigvee_{j=1}^n T^{-j}\xi,$$
+this means
+$$h(T, \xi) = H(\xi|T^{-1}\Sigma).$$
+
+Now take
+$$\xi_n = \bigvee_{j=0}^n T^{-j}\xi,$$
+which actually generates all of $\Sigma$.
+Thus for any partition $\eta$,
+$$\lim_{n \to \infty} H(\eta|\xi_n) = H(\eta|\Sigma) = 0.$$
+Also
+$$h(T, \eta) \leq h(T, \xi_n) + H(\eta|\xi_n)$$
+so taking the limit,
+$$h(T, \eta) \leq h(T, \xi)$$
+and taking the supremum of both sides over $\eta$ we get the claim.
+\end{proof}
+
+\begin{corollary}
+Suppose that we are in the situation of the Sinai-Kolmogorov theorem but
+$$\bigvee_{j=-n}^n T^j\xi$$
+generates $\Sigma$, instead of $\bigvee_{j=0}^n T^{-j}\xi$. Then $h(T, \xi) = h(T)$.
+\end{corollary}
+\begin{proof}
+The proof is the same.
+\end{proof}
+
+\begin{example}
+Kolmogorov formulated the definition of entropy to try to understand a question of von Neumann: which asked if there was a measure-theoretic sense in which rolling a die is more complex than flipping a coin. In fact their entropies are not the same, and so as measure-preserving systems they are not isomorphic.
+
+To see this, take the one-sided Bernoulli shift $T$ on $k$ letters with probability vector $\vec p$. Let $C_\sigma$ be the cylinder set of Cantor space $k^\omega$ generated by the string $\sigma$.
+Let $\xi$ be the partition generated by all $C_\sigma$s where $\sigma$ has length $1$.
+
+Then
+$$h(T) = h(T, \xi) = \lim_{n \to \infty} \frac{1}{n}H(T^{-n+1}\xi) = \lim_{n\to\infty} \frac{1}{-n}\sum_{|\sigma| = n} p_{\sigma_0}\cdots p_{\sigma_n}\log p_{\sigma_0}\cdots p_{\sigma_n}.$$
+Thus
+$$h(T) = -\lim_{n \to \infty}\frac{1}{n}\sum_{j=1}^n p_{\sigma_j} \log p_{\sigma_j}.$$
+
+Thus if we have uniform probability vectors $(1/n,\dots, 1/n)$ of length $n$ then $h(T) = \log n$.
+\end{example}
+
+\begin{example}
+The entropy of the cat with eigenvalue $\lambda$ is $\log \lambda$. This is a tedious computation that we omit.
+\end{example}
+
+\begin{example}
+Let $E_m(x) = x\mod 1$ be the circle multiplication map with winding number $m \in (0, 1)$.
+Let
+$$\xi = \{(\ell/m, \ell+1/m): \ell\}$$
+be a partition, then
+$$T^{-j}\xi = \{(\ell/m^{j+1}, \ell+1/m^{j+1}): \ell\}$$
+which clearly generates the Borel $\sigma$-algebra $\Sigma$ as $n \to \infty$. Then
+$$h(T) = h(T, \xi) = \lim_{n \to \infty} \frac{1}{n}H(T^{-n+1}\xi) = \lim_{n \to \infty} \frac{1}{n} \sum_{\ell=0}^{m^n - 1} \frac{1}{m^n} = \log m.$$
+\end{example}
+
+\section{Topological entropy}
+We now relate the entropy defined above (which we now call \dfn{metric entropy}) to \dfn{topological entropy} defined in the sense of metric spaces (confusingly enough.)
+
+Fix a compact metrizable space $X$ and a continuous transformation $T: X \to X$.
+Any compact, second-countable Hausdorff space will do, by the Urysohn metrization theorem.
+
+\begin{definition}
+Given an open cover $\mathcal U$ of $X$, we define the \dfn{covering entropy}
+$$H(\mathcal U) = \log \min_\mathcal V \card \mathcal V$$
+where $\mathcal V$ ranges over all finite subcovers of $\mathcal U$.
+\end{definition}
+
+So an extremely complicated cover with lots of barely overlapping parts has very high entropy.
+
+\begin{definition}
+The \dfn{topological entropy} of $(X, T)$ is
+$$h_{top}(T, \mathcal U) = \lim_{n \to \infty} \frac{1}{n} H(\bigvee_{j=0}^{n-1} T^{-j}\mathcal U).$$
+We define
+$$h_{top}(T) = \sup_{\mathcal U} h_{top}(T, \mathcal U).$$
+\end{definition}
+
+The entropy $h_{top}(T)$ is supposed to measure the exponential growth of the orbits of $T$. In fact we can give counting laws for the number of periodic points in terms of $h_{top}$. But we will not do that today.
+
+Henceforth let $\mathcal M(T)$ be the space of $T$-invariant Borel probability measures on $X$.
+We proved previously the Krylov-Bogolibabov theorem, which guarantees that $\mathcal M(T)$ is nonempty, convex, and compact, and its extreme points are the ergodic measures of $T$.
+\begin{theorem}
+We have
+$$h_{top}(T) = \max_{\mu \in \mathcal M(T)} h(\mu).$$
+\end{theorem}
+Here the maximum is achieved because $\mathcal M(T)$ is compact.
+
+\begin{example}
+The Cantor space $m^\omega$ is metrizable as witnessed by
+$$d(x, y) = \theta^{\min_{x_i \neq y_i} i}$$
+where $\theta \in (0, 1)$ is fixed. This is actually an ultrametric; i.e. all triangles are isoceles.
+
+The topological entropy of any shift is
+$$h_{top}(T) = \log m,$$
+and this is attained by the cover by open cylinders; any other cover would add inefficiency.
+We were interested in Bernoulli probability measures on $m^\omega$ and they had metric entropy $\log m$ if the probability was distributed correctly.
+So topological and metric entropies agree here.
+\end{example}
+
+\begin{proof}[Proof that $h \leq h_{top}$]
+Given a Borel partition $\xi$ and a Borel measure $\mu$ we will find a cover $\mathcal U$ such that
+$$h_\mu(T, \xi) \leq h_{top}(T, \mathcal U) + 1 + \log 2$$
+and hence
+$$h_\mu(T^k, \xi) \leq h_{top}(T^k, \mathcal U) + 1 + \log 2$$
+which implies
+$$h_\mu(T, \xi) \leq h_{top}(T, \mathcal U) + \frac{1 + \log 2}{k}$$
+and taking the limit as $k \to \infty$ the claim follows.
+
+Let $\xi = \{A_1, \dots, A_k\}$ be a Borel partition. Since $\mu$ is Borel, there are $C_j$ so that $\mu(A_j \setminus C_j) < 1/k$.
+This gives a new partition
+$$\eta = \{C_1, \dots, C_k, X \setminus_{j=1}^k C_j$$
+by closed sets, plus an open set, such that
+$$h_\mu(T, \xi) \leq h_\mu(T, \eta) + 1$$
+Let
+$$U_j = X \setminus \bigcup_{i\neq j} C_i;$$
+then the $U_j$ form an open cover $\mathcal U$ of $X$.
+
+Since $\xi$ was a partition, for any $U_j$ there is an $x \in U_j$ such that $x \notin U_i$ if $i \neq j$.
+In particular, $\mathcal U$ is a \dfn{coarse cover} in the sense that it has no proper subcover, and
+$$H(\mathcal U) = \log \card \mathcal U = \log k.$$
+Moreover,
+$$\card \bigvee_{j=0}^{n-1} T^{-j}\eta \leq 2^n \card \bigvee_{j=0}^{n-1} T^{-j}\mathcal U.$$
+Here we are using the inequality
+$$(k+1)^n \leq 2^n k^n,$$
+the fact that $\card \eta = k + 1$, that $\mathcal U$ is coarse, and that $\card \mathcal U = k$.
+
+Thus
+$$H(\bigvee_{j=0}^{n-1} T^{-j}\eta) \leq \exp H(\bigvee_{j=0}^{n-1} T^{-j}\mathcal U) + \log 2,$$
+so
+$$h_\mu(T, \xi) \leq h_\mu(T, \eta) + 1 \leq h_{top}(\mathcal U) + 1 + \log 2.$$
+\end{proof}
+
+For the converse, we need to use the metric properties of $X$.
+\begin{definition}
+The \dfn{Bowen distance} of $T$ is given by
+$$d_n(x, y) = \max_j d(T^j(x), T^j(y)).$$
+The \dfn{Bowen ball} is defined by
+$$B(x, \varepsilon, n) = \{y \in X: d_n(x, y) < \varepsilon\}.$$
+\end{definition}
+If $d_n(x, y) < \varepsilon$, then until time $n$, the orbits of $x$ and $y$ must remain within $\varepsilon$ of each other.
+For hyperbolic systems with positive Lyapunov exponent, this requires that either $n$ be very small, or $d(x, y)$ be very small.
+
+\begin{definition}
+We say that $A \subseteq X$ is $(n, \varepsilon)$-\dfn{spanning} if
+$$\bigcup_{a \in A} B(a, \varepsilon, n) = X.$$
+The \dfn{spanning number} of $(n, \varepsilon)$ is
+$$\text{Span}(n, \varepsilon) = \min_A \card A$$
+where $A$ ranges over $(n, \varepsilon)$-spanning sets.
+\end{definition}
+Such sets must exist since $X$ is compact.
+
+\begin{definition}
+The \dfn{separating number} of $(n, \varepsilon)$ is
+$$\text{Sep}(n, \varepsilon) = \max_B \card B$$
+where $B$ ranges over sets such that whenever $x, y\in B$ either $x = y$ or $d_n(x, y) \geq \varepsilon$.
+The \dfn{covering number} of $(n, \varepsilon)$ is
+$$\text{Cov}(n, \varepsilon) = \min_{\mathcal U} \card \mathcal U$$
+where $\mathcal U$ is an open cover by sets whose Bowen $n$-diameter is at most $\varepsilon$.
+\end{definition}
+
+Then
+$$\text{Cov}(n, 2\varepsilon) \leq \text{Span}(n, \varepsilon) \leq \text{Sep}(n, \varepsilon) \leq \text{Cov}(n, \varepsilon).$$
+
+\begin{definition}
+The \dfn{Bowen entropy} is defined by
+$$H_\varepsilon(T) =\lim_{n \to \infty}\frac{\log \text{Cov}(n, \varepsilon)}{n}.$$
+\end{definition}
+
+\begin{lemma}
+We have
+$$h_{top}(T) = \sup_{\varepsilon > 0} H_\varepsilon(T).$$
+\end{lemma}
+\begin{proof}
+Fix $\mathcal U$. Let $\delta$ be the Lebesgue number of $\mathcal U$. Then
+$$\exp H(\bigvee_{j=0}^{n-1} T^{-j}\mathcal U) \leq \text{Span}(n, \delta/2)$$
+so
+$$h_{top}(T) \geq \sup_{\varepsilon > 0} H_\varepsilon(T).$$
+
+Conversely, if the diameter of every set in $\mathcal U$ is $<\varepsilon$ then
+$$\text{Sep}(n, \varepsilon) \leq \exp H(\bigvee_{j=0}^{n-1} T^{-j}\mathcal U)$$
+which proves the converse.
+\end{proof}
+
+\begin{proof}[Proof that $h_\top \leq \sup_\mu h_\mu$]
+For every $n$ choose $E_n \subset X$ to be $(n,\varepsilon)$-separated and maximal. Let $\nu_n$ be the uniform probability measure on $E_n$, which extends to an atomic measure on $X$ (just put delta functions at each point in $E_n$).
+
+Let
+$$\mu_n = \frac{1}{n}\sum_{j=0}^{n-1} T^j_*\nu_n$$
+where $S_*$ denotes pushforward by $S$.
+Here the set $F_n = \bigcup_{j=0}^{n-1}T^j E_n$ is $(0,\varepsilon)$-separated and $\mu_n$ is a uniform measure on $F_n$.
+
+Then
+$$H_\varepsilon(T) = \limsup_{n \to \infty} \frac{\log \card E_n}{n},$$
+and we pass to a subsequence where this sequence converges. We then pass to a subsequence again, using compactness of $\mathcal M(T)$, to find a limit point $\mu$ of the $\mu_n$.
+
+We then construct a Borel partition $\xi = \{A_0, \dots, A_{k-1}\}$ of $X$ such that $\mu(A_j) < \varepsilon$ and $\mu(\partial A_j) = 0$.
+Then
+$$\lim_{n \to \infty} H(\mu_n, \bigvee_{j=0}^{n-1}T^{-j}\xi) = H(\mu, \bigvee_{j=0}^{n-1} T^{-j}\xi),$$
+as a computation will check, and so
+$$\lim_{n\to\infty} \frac{1}{n} \log \card E_n = \lim_{n \to \infty} \frac{1}{n} H(\nu_n, \bigvee_{j=0}^{n-1}T^{-j}\xi) \leq \frac{1}{q} H(\mu, \bigvee_{j=0}^{q-1} T^{-j}\xi)$$
+and we now take $q \to \infty$.
+\end{proof}
 
 
 
@@ -3566,6 +4626,9 @@ Let $\alpha$ be a strongly continuous action of $\RR$ by isometries on a Banach 
     $$K_0(A_\theta) \cong \ZZ^2$$
     where $C(A_\theta) = (Z + Z\theta) \cap [0, \infty)$. So the K-theoretic group is not a complete invariant of the quantum tori, but the positive elements of the K-theoretic group give more information.
 \end{example}
+
+
+
 
 
 \part{Complex analysis}
@@ -5066,11 +6129,1320 @@ $$\int_{B(x_k, r_{k/2})} |K_k(x, x_k)|^2 e^{-2k\varphi(x)} ~dV(x) = \int_{B(y_k,
     A compact submanifold of $\PP^n$ is a projective variety.
 \end{proof}
 
+\section{Zworski's conjecture}
 
-\part{General relativity}
-\chapter{Lorentzian geometry}
-Lorentzian geometry is a generalization of Riemannian geometry that was motivated by physical axioms.
+\begin{conjecture}[Zworski]
+Let $\Pi_N: L^2(\PP^n \to O(N)) \to H^0(\PP^n \to O(N))$ be the Bergman projector, and consider the differential equation
+$$iu_t = \Pi_N(|u|_N^2u)$$
+on the finite-dimensional space $H^0(\PP^n \to O(N))$. Then this differential equation has a Lax pair and hence is a completely integrable system.
+\end{conjecture}
 
+
+\part{Harmonic analysis}
+\chapter{Rearrangement-invariant spaces}
+We are interested in studying integral transforms. One often only defines these transforms on test functions and extends them using a continuity argument. For example, the \dfn{Hilbert transform} is defined by
+$$Hf(x) = \frac{1}{\pi}\int_{-\infty}^\infty \frac{f(y)}{x-y}~dy.$$
+This makes no sense if $f(0) \neq 0$, for example, but one can fix this by taking
+$$Hf(x) = \lim_{\varepsilon \to 0} \frac{1}{\pi} \left(\int_{-\infty}^\varepsilon + \int_\varepsilon^\infty\right) \frac{f(y)}{x-y}~dy.$$
+Then $Hf$ converges if $f$ is a Schwartz function. One can then check that for every $p \in (1, \infty)$ there is a constant $C_p$ such that for every $f$ for which $Hf$ is defined,
+$$||Hf||_{L^p} \leq C_p ||f||_{L^p}.$$
+So $H$ extends uniquely to a bounded linear operator on $L^p$, since such $f$ are dense in $H$.
+
+We therefore consider certain generalizations of $L^p$ spaces. Fix a $\sigma$-finite measure space $(X, \Sigma, \mu)$.
+
+\begin{definition}
+A norm $||\cdot||$ is \dfn{rearrangement-invariant} if for every isomorphism of measure spaces $\Phi: X \to X$ and every measurable function $f$ we have
+$$||f|| = ||f \circ \Phi||.$$
+\end{definition}
+\begin{definition}
+A norm $||\cdot||$ is \dfn{monotone} if for all measure functions $f,g$ such that $|f| \leq |g|$ a.e. we have
+$$||f|| \leq ||g||.$$
+\end{definition}
+A rearrangement-invariant, monotone norm ignores the sign of a function, and is only interested in how ``tall" a function is versus how ``wide" the function is.
+Clearly $L^p$ norms are rearrangement-invariant and monotone.
+
+\section{Log-convexity for $L^p$ norms}
+Recall that $L^p$ norms are \dfn{log-convex}, i.e. if $\theta \in (0, 1)$ and
+$$\frac{1}{r} = \frac{1-\theta}{p} + \frac{\theta}{q},$$
+we have
+$$||f||_{L^r} \leq ||f||^{1-\theta}_{L^p} ||f||^\theta_{L^q}.$$
+This is essentially equivalent to the H\"older inequality. We give another proof of log-convexity.
+
+\begin{theorem}[three-lines lemma]
+\index{three-lines lemma}
+Let $f$ be holomorphic on the strip $0 \leq \Re z \leq 1$ of at most double-exponential growth. Suppose that $|f(z)| \leq A$ when $\Re z = 0$ and $|f(z)| \leq B$ when $\Re z = 1$. Then
+$$|f(z)| \leq A^{1-\Re z}B^{\Re z}.$$
+\end{theorem}
+\begin{proof}
+The hypothesis and conclusion are invariant under multiplying $f$ by $Ce^{cz}$ where $C,c \in \RR$, as long as we appropriately rescale $A,B$. Thus we may assume that $A = B = 1$, and want to show $||f||_{L^\infty} \leq 1$.
+
+Assume $f$ goes to $0$ at infinity, so there is an $N$ such that if $\Im z \geq N$, we have $|f(z)| \leq 1$. Then by the maximum principle, $||f||_{L^\infty} = 1$.
+
+Otherwise, note that
+$$f(z) = \lim_{\varepsilon \to 0} f(z)\exp(\varepsilon e^{i((\pi-\varepsilon)z+\varepsilon/2)}),$$
+and by assumption on $f$, it follows that the function in the limit goes to $0$, so the right-hand side is $\leq 1$.
+\end{proof}
+
+\begin{proof}[Proof of log-convexity]
+Let $f$ be a simple function and suppose $\mu(X) < \infty$. Let
+$$g(z) = \int_X |f|^z.$$
+Then $|g(z)| = O(e^{|z|})$ and $|g(s + it)| = ||f||_{L^s}^s$.
+The claim follows for $f$ by rescaling the three-lines lemma.
+
+The claim is invariant under monotone convergence and $\mu$ is $\sigma$-finite, so the assumptions that $f$ is simple and $\mu$ is finite can be dropped.
+\end{proof}
+
+Log-convexity allows us to prove that certain $L^p$ spaces embed in others.
+\begin{corollary}
+If $\mu(\supp f) < \infty$ and $p \leq q$ then
+$$||f||_{L^p} \leq \mu(\supp f)^{1/p-1/q}||f||_{L^q}.$$
+In particular, if $\mu(X) < \infty$, then $L^q(\mu) \subseteq L^p(\mu)$.
+\end{corollary}
+\begin{proof}
+This is obvious if $q = \infty$ and otherwise follows by log-convexity.
+\end{proof}
+
+\begin{definition}
+A \dfn{granular measure} is a measure $\nu$ such that there is a $\delta > 0$ such that for every set $A$ which is not $\nu$-null, $\nu(A) > \delta$.
+\end{definition}
+\begin{corollary}
+If $\mu$ is $\delta$-granular and $p \leq q$ then
+$$||f||_{L^q} \leq \delta^{1/q-1/p}||f||_{L^p}.$$
+In particular, $L^p(\mu) \subseteq L^q(\mu)$.
+\end{corollary}
+The proof is the same. In particular, $\ell^p$ spaces satisfy this estimate, and if $\card \supp f = N$, $f \in \ell^p$, then we have
+$$||f||_{\ell^q} \leq ||f||_{\ell^p} \leq N^{1/p-1/q}||f||_{\ell^q}$$
+if $q \geq p$.
+Though Lebesgue measure is not granular, if a function is constant on boxes which tile $\RR^n$, one can replace the Borel algebra with the $\sigma$-algebra generated by the boxes, and restrict Lebesgue measure to this $\sigma$-algebra; then it becomes granular.
+
+Now note that by log-convexity with $q = \infty$, if $p \leq q$ we have
+$$||f||_{L^q} \leq C^{1-p/q}||f||_{L^p}^{p/q}$$
+if $|f| \leq C$.
+On the other hand, if $|f| \geq c$ on $\supp f$ then replacing $f$ by $1/f$ in the above estimate we have
+$$||f||_{L^p} \leq c^{1-q/p}||f||_{L^q}^{q/p}.$$
+
+\section{Lorentz norms}
+Still fix a measure space $(X, \mu)$.
+\begin{definition}
+The \dfn{weak $L^p$ norm} is defined by
+$$||f||_{L^{p,\infty}} = \sup_{\lambda > 0} \lambda \mu(\{|f| \geq \lambda\})^{1/p}.$$
+\end{definition}
+\begin{theorem}[Chebyshev inequality]
+\index{Chebyshev inequality}
+One has
+$$||f||_{L^{p,\infty}} \leq ||f||_{L^p}.$$
+\end{theorem}
+\begin{proof}
+Take $\sup_\lambda$ of both sides of the inequality
+$$\lambda^p \mu(\{|f| \geq \lambda\}) \leq \int_{|f| \geq \lambda} \lambda^p~d\mu \leq \int_X |f|^p ~d\mu = ||f||_{L^p}^p.$$
+\end{proof}
+So $L^p \subseteq L^{p,\infty}$. This motivates the terminology ``weak $L^p$".
+
+Let $\lambda$ be the coordinate function on $\RR^+$. Recall that $d\lambda/\lambda$ is the Haar measure on $\RR^+$, the group of positive reals under multiplication.
+Now $L^\infty(d\lambda/\lambda) = L^\infty(\RR^+)$ since Haar and Lebesgue measures are mutually absolutely continuous. Thus we have
+$$||f||_{L^{p,\infty}} = p^0||\lambda \mu(\{|f| \geq \lambda\})^{1/p}||_{L^\infty(d\lambda/\lambda)}.$$
+This seems a little silly until we reason by metaphor with the following lemma.
+\begin{lemma}
+One has
+$$||f||_{L^p} = p^{1/p}||\lambda \mu(\{|f| \geq \lambda\})^{1/p}||_{L^p(d\lambda/\lambda)}.$$
+\end{lemma}
+\begin{proof}
+One has
+$$p\int_0^{|f(x)|} \lambda^p ~\frac{d\lambda}{\lambda} = \int_0^{|f(x)|} p\lambda^{p-1} ~d\lambda = |f(x)|^p$$
+by the fundamental theorem. Integrating both sides and using Fubini's theorem, we have
+\begin{align*}||f||_{L^p}^p &= p\int_X \int_0^{|f(x)|} \lambda^p ~\frac{d\lambda}{\lambda}~dx \\
+&= p\int_0^\infty \lambda^p \int_X 1_{|f(x)| \geq \lambda} ~dx~\frac{d\lambda}{\lambda} \\
+&= p\int_0^\infty \lambda^p \mu(\{|f| \geq \lambda\}) ~\frac{d\lambda}{\lambda}.
+\end{align*}
+The claim follows by taking $p$th roots.
+\end{proof}
+Thus we make the following definition.
+
+\begin{definition}
+The $(p,q)$th \dfn{Lorentz norm} is defined by
+$$||f||_{L^{p,q}} = p^{1/q}||\lambda\mu(\{|f| \geq \lambda\})^{1/p}||_{L^q(d\lambda/\lambda)}.$$
+\end{definition}
+Thus the definition of $L^{p,\infty}$ is consistent with that of the weak $L^p$ norm and we have $L^{p,p} = L^p$.
+
+We now consider certain approximate step functions that will allow us to determine what the Lorentz norms actually measure.
+\begin{definition}
+A \dfn{substep function} of height $H$ and width $W$ is a function $f$ such that $||f||_{L^\infty} \leq H$ and $\mu(\supp f) \leq W$.
+
+A $\delta$-\dfn{quasistep function} of height $H$ and width $W$ is a function $f$ such that $\delta H \leq |f| \leq H/\delta$ and $\delta W \leq \supp(f) \leq H/\delta$.
+\end{definition}
+Usually the exact value of $\delta$ is not important, and we suppress the $\delta$ by writing $|f| \sim H$.
+However, one is always implicitly fixed when working with a family of quasistep functions; for example, every function is trivially $0$-quasistep, which is not very useful.
+
+We can use substep and quasistep functions to understand the behavior of Lorentz norms.
+\begin{theorem}
+Let $f$ be a measurable function and let $p,q,A$ be given. Then the following are equivalent:
+\begin{enumerate}
+\item $||f||_{L^{p,q}} \lesssim_{p,q} A$.
+\item There is a decomposition $f = \sum_{m=-\infty}^\infty f_m$ where $f_m$ is quasistep of height $2^m$ and width $W_m$ such that the $\supp(f_m)$ are disjoint and
+$$\left(\sum_{m=-\infty}^\infty 2^{mq}W^{q/p}_m\right)^{1/q} \lesssim_{p,q} A.$$
+\item There is a pointwise estimate $|f| \leq \sum_{m=-\infty}^\infty 2^m1_{E_m}$ where
+$$\left(\sum_{m=-\infty}^\infty 2^{mq}\mu(E_m)^{q/p}\right)^{1/q} \lesssim_{p,q} A.$$
+\item There is a decomposition $f = \sum_{n=-\infty}^\infty f_n$ where $f_n$ is substep of width $2^n$ and height $H_n$ such that the $\supp(f_n)$ are disjoint, $H_n$ are nonincreasing, $H_{n+1} \leq |f_n| \leq H_n$ on $\supp f_n$, and
+$$\left(\sum_{n=-\infty}^\infty H_n^q2^{nq/p}\right)^{1/q} \lesssim_{p,q} A.$$
+\item There is a pointwise estimate $|f| \leq \sum_{n=-\infty}^\infty H_n 1_{E_n}$ where $\mu(E_n) \lesssim_{p,q} 2^n$ and
+$$\left(\sum_{n=-\infty}^\infty H_n^q2^{nq/p}\right)^{1/q} \lesssim_{p,q} A.$$
+\end{enumerate}
+\end{theorem}
+Intuitively, if $f$ is quasistep of height $H,W$ then $||f||_{L^{p,q}} \approx HW^{1/p}$, and this estimate propagates in \emph{sums} of quasistep functions in $\ell^q$ norm.
+
+
+\chapter{Decoupling theory}
+This chapter is based on Terry Tao's online course on harmonic analysis.
+
+\section{Square-root cancellation}
+If $z_j$ are ``random, independent" complex numbers, one intuitively expects
+$$\left|\sum_j z_j\right| \approx \sqrt{\sum_j |z_j|^2}.$$
+This is true for the expected value where the $z_j$ are given random, uniformly selected signs, up to a constant.
+This is \dfn{Khinchine's inequality}.
+
+Another way one can make the above claim rigorous is using Littlewood-Paley theory.
+\begin{theorem}[Littlewood-Paley estimates]
+\index{Littlewood-Paley estimates}
+Let $p \in (1, \infty)$, $A_j$ be the annuli in frequency space
+$$A_j = \{\xi \in \RR^d: 2^j \leq |\xi| \leq 2^{j+1}\}.$$
+Assume that $f_j$ are functions such that $\hat f_j$ are supported on disjoint annuli $A_{k_j}$. Then
+$$||\sum_j f_j||_{L^p} \lesssim_{p, d} ||\sqrt{\sum_j |f_j|^2}||_{L^p}.$$
+If the annuli are separated then we can replace $\lesssim_{p, d}$ with $\sim_{p,d}$.
+\end{theorem}
+We will prove this later on.
+We note however that it is trivial when $p = 2$. In fact, since the $\hat f_j$ have disjoint support, the $f_j$ are orthogonal by Plancherel's theorem.
+So by the Pythagorean theorem,
+$$||\sum_j f_j||_{L^2} = ||\sqrt{\sum_j |f_j|^2}||_{L^2}.$$
+If we even just have ``almost-orthogonality" we still get decent estimates in $L^2$.
+One can manipulate the $L^2$ estimate to get estimates in $L^{2^k}$, $k \geq 2$, but one needs something stronger than orthogonality here, and as $k \to \infty$ this becomes extremely complicated.
+
+To generalize to $p > 2$ where $p \neq 2^k$, we want to study \dfn{decoupling estimates}, those of the form
+$$||\sum_j f_j||_{L^p} \lesssim_{p, d} \sqrt{\sum_j ||f_j||_{L^p}^2}.$$
+This is weaker than a square root cancellation estimate, but it is much easier to prove.
+If $p = 2$ it follows easily by noting that
+$$||\sum_j |f_j|^2||_{L^1} \leq \sum_j |||f_j|^2||_{L^1}$$
+by the triangle inequality, and then taking the square root of both sides.
+One can therefore think of decoupling estimates as vast generalizations of the Pythagorean theorem.
+The reason these estimates are called decoupling estimates is that we start with the left-hand sides, where we take a norm of $\sum_j f_j$, and then on the right-hand side we take norms of each of the $f_j$s separately, and they ``decouple" in the sense that their norms no longer influence each other.
+
+One can iterate decoupling estimates in the sense that
+$$||\sum_{j_1, \dots, j_n} f_{j_1, \dots, j_n}||_{L^p} \lesssim_{p, d, n} \sqrt{\sum_{j_1, \dots, j_n} ||f_{j_1, \dots, j_n}||_{L^p}^2},$$
+simply by induction on $n$. Thus decoupling plays nicely with induction, though notice that the constant possibly depends on $n$.
+An important concept in the study of decoupling estimates is to control the dependency of the constant on $n$.
+
+\begin{proof}[Proof of Littlewood-Paley estimates]
+We first prove that if $|k_j - k_{j'}| \geq 2$ then
+$$||\sqrt{\sum_j |f_j|^2}||_{L^p} \lesssim_{p,d} ||\sum_j f_j||_{L^p}.$$
+
+Let $\psi$ be a bump function on $\{\xi: 1-\varepsilon < |\xi| < 2 + \varepsilon\}$ which is identically $1$ on $\{\xi: 1 < |\xi| < 2\}$.
+Let
+$$\widehat{P_{k_j}f}(\xi) = \psi(2^{-k_j}\xi)\hat f(\xi)$$
+so $P_{k_j}$ is a Fourier multiplier (actually a Littlewood-Paley projector), which is bounded $L^p \to L^p$.
+Let $f = \sum_j f_j$, so $f_j = P_{k_j}f_j$.
+Let $\epsilon_1, \dots, \epsilon_n$ be random signs, drawn uniformly and independently, and let
+$$P = \sum_j \epsilon_j P_{k_j}$$
+be a random Fourier multiplier, which again is bounded $L^p \to L^p$ uniformly in the choice of signs. (Here we use $p > 1$ and Calderon-Zygmund theory, or more accurately the Hormander-Mikhlin theorem.) Thus
+$$||\sum_j \epsilon_j f_j||_{L^p} \lesssim_{p,d} ||\sum_j f_j||_{L^p}.$$
+The claim then follows from Khinchine's inequality.
+
+To prove $\gtrsim_{p, d}$, use the triangle inequality to split up into two sums, one where the $k_j$ are odd and one where the $k_j$ are even.
+This trick is called \dfn{sparsification}. We work with each term separately so that $|k_j - k_{j'}| > 2$ and we meet the hypotheses of $\lesssim_{p, d}$.
+Now
+$$f_j = \epsilon_j P_{k_j} \sum_\ell \epsilon_\ell f_\ell,$$
+so
+$$f = \sum_j \epsilon_j P_{k_j} \sum_\ell \epsilon_\ell f_\ell.$$
+Again by Calderon-Zygmund theory,
+$$||\sum_j f_j||_{L^p} \lesssim_{p, d} ||\sum_j \epsilon_j f_j||_{L^p}$$
+and we use Khinchine's inequality again.
+\end{proof}
+
+\begin{lemma}
+Let $f_1, \dots, f_n$ have Fourier supports $\Omega_1, \dots, \Omega_n$.
+If any $\xi$ lies in at most $A_2$ of the $\Omega_i$ (``the $\Omega_i$ have overlap $A_2$") then
+$$||\sum_j f_j||_{L^2} \leq \sqrt{A_2} ||\sqrt{\sum_j |f_j|^2}||_{L^2}.$$
+If $\Omega_i + \Omega_j$ have overlap $A_4$ then
+$$||\sum_j f_j||_{L^4} \leq \sqrt[4]{A_4} ||\sqrt{\sum_j |f_j|^2}||_{L^4}.$$
+\end{lemma}
+\begin{proof}
+The first claim follows by using Plancherel to pass to Fourier space and then using Cauchy-Schwarz.
+
+For the second claim, note that
+$$||\sum_j f_j||_{L^4}^2 = \sum_{ij} f_if_j||_{L^2}$$
+and since $f_if_j$ has Fourier support $\Omega_i + \Omega_j$ this reduces the claim to the first claim.
+\end{proof}
+
+\section{Decoupling estimates}
+\begin{definition}
+Let $\mathcal U = \{U_1, \dots, U_n\}$ be a finite multiset of nonempty open sets and let $p \in [1, \infty]$. The \dfn{decoupling constant} $\Dec_p(\mathcal U)$ is the optimal constant in the inequality
+$$||\sum_j f_j||_{L^p} \leq \Dec_p(\mathcal U)\sqrt{\sum_j ||f_j||^2}$$
+whenever $f_j$ has Fourier support in $U_j$.
+\end{definition}
+If all but one of the $f_j$ vanish we see that $\Dec_p(\mathcal U) \geq 1$, and by Cauchy-Schwarz we have $\Dec_p(\mathcal U) \leq \sqrt{\card \mathcal U}$.
+Intuitively $\Dec_p(\mathcal U)$ measures how spread out $\mathcal U$ is: if they are ``more disjoint" then $\Dec_p(\mathcal U) \to 1$.
+
+One can check that if $U_i \subseteq U_i'$ then
+$$\Dec_p(U_1, \dots, U_n) \leq \Dec_p(U_1', \dots, U_n').$$
+We also have a triangle inequality
+$$\Dec_p(\mathcal U \cup \mathcal V) \leq \sqrt{\Dec_p(\mathcal U)^2 + \Dec_p(\mathcal V)^2}.$$
+If $L$ is an affine transformation then $L$ preserves $\Dec_p$, so $\Dec_p$ is dimensionless.
+
+They also interpolate: if $p_0 \leq p \leq p_1$ and
+$$\frac{1}{p} = \frac{1-\theta}{p_0} + \frac{\theta}{p_1},$$
+and
+$$||P_{U_j}f||_{L^{p_i}} \lesssim_{p_i,d} ||f||_{L^{p_i}},$$
+where $P_{U_j}$ is the Littlewood-Paley projector, then
+$$\Dec_p(\mathcal U) \lesssim_{p_0,p_1,p,d} \Dec_{p_1}(\mathcal U)^{1-\theta}\Dec_{p_0}(\mathcal U)^\theta.$$
+If we have partitions $U_j = \bigoplus_i U_{j,i}$ into open sets up to measure zero, then
+$$\Dec_p(\{U_{j,i}: j,i\}) \leq \Dec_p(\mathcal U)\sup_j \Dec_p(\{U_{j,i}:i\}).$$
+We can also add dummy dimensions: if $d' \geq 1$ then
+$$\Dec_p(\mathcal U) = \Dec_p(\{U_i \times \RR^{d'}: i\}).$$
+
+If $p = 2$, decoupling is easy: by a previous lemma, if the sets have overlap $A_2$, then
+$$\Dec_p(\mathcal U) \leq \sqrt{A_2}.$$
+
+We now prove $L^6$ decoupling for the parabola.
+\begin{theorem}
+Let $\delta > 0$, let $\phi(\xi) = (\xi, \xi^2)$ parametrize the parabola in $\RR^2$, let $\Sigma$ be a $\delta$-separated subset of $[-1, 1]$ and $\Omega = \phi(\Sigma)$, and take the parallelograms $R(\omega, \delta)$ centered on points $\omega$ of $\Omega$ with width $2\delta$, height $2\delta^2$,
+and slope equal to the slope of the parabola at $\omega$. Then for any $\varepsilon > 0$,
+$$\Dec_6(\{R(\omega, \delta): \omega \in \Omega\}) \lesssim_\varepsilon \delta^\varepsilon.$$
+\end{theorem}
+This theorem was proven in the early 2010s by Bourgain and Demeter. We will give an argument of Li published in 2018.
+If $p > 6$ then the above decoupling estimate fails; we omit the proof of this.
+
+To prove the above theorem, if $\delta > 0$ let
+$$D(\delta) = \sup_\Sigma \Dec_6(R(\omega, \delta): \omega \in \phi(\Sigma))$$
+where $\Sigma$ ranges over all $\delta$-separated subsets of $[-1, 1]$. Then
+$$1 \leq D(\delta) \lesssim \delta^{-1/2}.$$
+This is because in this case we would be decoupling $\sim \delta^{-1}$ many sets.
+We must show
+$$D(\delta) \lesssim_\varepsilon \delta^{-\varepsilon}.$$
+Note that $D$ is not necessarily increasing in $\delta$.
+If $\delta$ increases to $\delta + \varepsilon$, we cannot refine the partition $\Sigma_\delta$ to a partition $\Sigma_{\delta + \varepsilon}$ if $\varepsilon$ is too small -- so we end up with a completely different partition!
+
+We first show that $D$ is stable.
+\begin{lemma}
+If $\delta \sim \delta'$ then $D(\delta) \sim D(\delta')$.
+\end{lemma}
+\begin{proof}
+This claim is transitive, so we may actually prove it when $\delta$ and $\delta'$ are not symmetrical, say
+$$10\delta \leq \delta' \lesssim \delta.$$
+
+We first show $D(\delta) \lesssim D(\delta')$, i.e. if $\Sigma$ is $\delta$-separated then
+$$\Dec_6(R(\omega, \delta): \omega \in \phi(\Sigma)) \lesssim D(\delta').$$
+Using sparsification and the triangle inequality for $\Dec$ we may split up $\Sigma$ into finitely many pieces, each of which is $\delta'$ separated, and then assume that $\Sigma$ is $\delta'$-separated.
+Thus
+$$\Dec_6(R(\omega, \delta): \omega \in \phi(\Sigma)) \lesssim \Dec_6(R(\omega,\delta'): \omega \in \phi(\Sigma)) \lesssim D(\delta').$$
+
+Conversely, we must show that if $\Sigma'$ is $\delta'$-separated then
+$$\Dec_6(R(\omega', \delta'): \omega' \in \phi(\Sigma')) \lesssim D(\delta).$$
+That is,
+$$||\sum_{\omega'} f_{\omega'}||_{L^6} \lesssim D(\delta)\sqrt{\sum_{\omega'} ||f_{\omega'}||_{L^6}^2},$$
+for any $f_{\omega'} \in L^6(\RR^2)$ whose Fourier support is in $R(\omega', \delta')$.
+By breaking up the $R(\omega', \delta')$ into parallelograms $R(\phi(\xi),\delta) + (0, jc\delta^2)$ where $j = O(1)$ is an index and $c$ is a small absolute constant, and applying Littlewood-Paley projectors, we see the claim.
+\end{proof}
+
+\begin{lemma}
+Let $\delta \leq \delta_0.$ Let $\Sigma$ be $\delta$-separated and contained in an interval $I$ of length $2\delta_0$. Then
+$$\Dec_6(R(\omega, \delta):\omega \in \phi(\Sigma)) \lesssim D(\delta/\delta_0).$$
+\end{lemma}
+\begin{proof}
+If $\delta_0 \sim 1$ then this follows from the stability lemma. Otherwise, choose an absolute constant $c > 0$ and $\delta_0 < c$.
+Acting on the parabola by the Galilean group we may assume $I$ is centered at $0$.
+
+Now rescale the parabola by $(\xi_1, \xi_2) \mapsto (\xi_1/\delta_0, \xi_2/\delta_0^2)$. This has a nontrivial Jacobian but it's not a big deal. Then the claim is
+$$\Dec_6(R(\omega, \delta): \omega \in \phi(\Sigma)) \lesssim \Dec_6(R(\omega, 1): \omega \in \phi(\Sigma/\delta_0)).$$
+\end{proof}
+Thus we at least have a local induction in scales. In fact it implies
+$$D(\delta_1\delta_2) \lesssim D(\delta_1) D(\delta_2)$$
+by using the triangle inequality to split $\Sigma$ into small subsets where we can induct on scales.
+The trouble is that the implied constant in this estimate could be huge, and so every time we apply the induction hypothesis we could get a horrible buildup.
+So we need to replace this estimate with a slightly better estimate; annoyingly, nobody seems to know how to do this in general, other than trial and error.
+
+\begin{definition}
+Let $0 \leq \delta \leq \rho_1, \rho_2 \leq \nu \leq 1$. Let $M_{2,4}(\delta, \nu, \rho_1, \rho_2)$ be the best constant such that
+for any $\delta$-separated sets $\Sigma_1,\Sigma_2$ contained in intervals $I_1,I_2$ of lengths $\rho_1,\rho_2$, such that $d(I_1, I_2) \geq \nu$,
+and $f_{\omega_1},g_{\omega_2}$ collections of Schwartz functions whose Fourier support is contained in $R(\omega_1,\delta)$, $R(\omega_2,\delta)$,
+$$\int_{\RR^2}|\sum_{\omega_1 \in \phi(\Sigma_1) f_{\omega_1}}|^2 |\sum_{\omega_2 \in \phi(\Sigma_2)}|^4
+\leq M_{2,4}(\delta, \nu, \rho_1, \rho_2)^6 \sum_{\omega_1 \in \phi(\Sigma_1)} ||f_{\omega_1}||_{L^6}^2 \sum_{\omega_2 \in \phi(\Sigma_2)} ||g_{\omega_2}||_{L^6}^2$$
+\end{definition}
+We might as well think of $\nu = 1$ but it is convenient to be able to perturb it. Confusingly, we want to hold $\delta$ fix and induct on $\rho$.
+The reason for this madness is because we want to use Hilbert space theory, and this is possible because of the sum of squares in $f_{\omega_1}$.
+Otherwise we would use $3+3$ instead of $2+4$. In fact the $L^4$ term will look like a constant and then this reduces to basic facts about $L^2$.
+
+By Holder, we have
+$$\int_{\RR^2}|\sum_{\omega_1 \in \phi(\Sigma_1) f_{\omega_1}}|^2 |\sum_{\omega_2 \in \phi(\Sigma_2)}|^4
+\leq ||\sum_{\omega_1} f_{\omega_1}||_{L^6}^2 ||\sum_{\omega_1}||_{L^6}^4.$$
+Therefore
+$$M_{2,4}(\delta, \nu, \rho_1, \rho_2) \leq D(\delta).$$
+We will mainly be interested in when $\rho_1 = \rho_2 = \nu \gtrsim 1$.
+
+\begin{lemma}
+If $0 \leq \delta \leq \nu \leq 1$ then
+$$D(\delta) \lesssim \nu^{-O(1)} M_{2,4}(\delta, \nu, \nu, \nu) + D(\delta/\nu).$$
+\end{lemma}
+In this scenario, the $\nu^{-O(1)} \approx 1$ and $D(\delta/\nu)$ terms are basically irrelevant and so, heuristically, this lemma says that
+$$D(\delta) \lesssim M_{2,4}(\delta, \nu, \nu, \nu)$$
+which is what we want, because since the $L^4$ term is basically a constant, this reduces the $L^6$ decoupling problem to an $L^2$ problem.
+This gives a hint as to why $6$ is the optimal exponent.
+\begin{proof}
+Let $\Sigma$ be a $\delta$-separated subset of $[0, 1]$ and for each $\omega \in \phi(\Sigma)$, let $f_\omega \in L^6$ have Fourier support in $R(\omega, \delta)$.
+Normalizing, we assume $\sum_\omega ||f_\omega||_{L^6}^2 = 1$. We then must show
+$$\int_{\RR^2} |\sum_\omega f_\omega|^6 \lesssim \nu^{-O(1)} M_{2,4}(\delta, \nu, \nu, \nu)^6 + D(\delta/\nu)^6.$$
+Partition $\Sigma$ into components $\Sigma_I$ where each $\Sigma_I$ is contained in some subinterval $I$ of $[-1, 1]$ of length $\nu$.
+Let $\mathcal I$ index the intervals, so $\card \mathcal I = O(1/\nu)$. Then
+$$|\sum_{\omega \in \phi(\Sigma)} f_\omega(x)| \leq \sum_{I \in \mathcal I}|\sum_{\omega \in \phi(\Sigma_I)} f_\omega(x)|.$$
+Then for each $x$, the pigeonhole principle furnishes an $I_x$ such that
+$$|\sum_{\omega \in \phi(\Sigma)} f_\omega(x)| \lesssim |\sum_{\omega \in \phi(\Sigma_I)} f_\omega(x)|,$$
+the ``narrow case", or there are $I, J$ such that $d(I, J) \geq \nu$ and
+$$|\sum_{\omega \in \phi(\Sigma)} f_\omega(x)| \lesssim \nu^{-O(1)}|\sum_{\omega \in \phi(\Sigma_I)} f_\omega(x)||\sum_{\omega \in \phi(\Sigma_J)} f_\omega(x)|.$$
+In particular,
+$$|\sum_{\omega \in \phi(\Sigma)} f_\omega(x)| \lesssim \nu^{-O(1)} \sum_{d(I, J) \geq \nu} |\sum_{\omega \in \phi(\Sigma_I)} f_\omega|^2|\sum_{\omega \in \phi(\Sigma_J)} f_\omega|^4 + \sum_I |\sum_{\omega \in \phi(\Sigma_I)} f_\omega|^6.$$
+By definition,
+$$\int_{\RR^2} \sum_{\omega \in \phi(\Sigma_I)} f_\omega|^2|\sum_{\omega \in \phi(\Sigma_J)} f_\omega|^4 \lesssim M_{2,4}(\delta, \nu, \nu, \nu).$$
+Meanwhile, by the parabolic rescaling estimate,
+$$\int_{\RR^2} |\sum_{\omega \in \phi(\Sigma_I)} f_\omega|^6 \lesssim D(\delta/\nu)^6 (\sum_{\omega \in \phi(\Sigma_I)} ||f_\omega||_{L^6}^2)^3$$
+but by our normalization, after summing over $I$, this implies that
+$$\sum_I \int_{\RR^2} |\sum_{\omega \in \phi(\Sigma_I)} f_\omega|^6 \lesssim D(\delta/\nu)^6.$$
+\end{proof}
+Thus if we can get a good estimate in the endpoint case $\rho_1 = \rho_2 = \nu$ we are in good shape, as
+$$D(\delta) \approx M_{2,4}(\delta, \nu, \nu, \nu)$$
+when $\nu$ is much larger than $\delta$.
+On the other hand it's only easy to estimate $M_{2,4}(\delta, \rho_1, \rho_2, \nu)$ when $\rho_1,\rho_2$ are very small.
+
+Our next lemma allows to assume that \emph{one} of the $\rho$'s is very small:
+\begin{lemma}
+Suppose $0 \leq \delta \leq \rho_2^2 \leq \rho_1' \leq \rho_1 \leq \nu \leq 1$ and $\delta \leq \rho_2 \leq \nu$ then
+$$M_{2,4}(\delta, \nu, \rho_1, \rho_2) \lesssim \nu^{-O(1)}M_{2,4}(\delta, \nu, \rho_1', \rho_2).$$
+\end{lemma}
+\begin{proof}
+It suffices to show that
+$$\int_{\RR^2} |\sum_{\omega_1 \in \phi(\Sigma_1)} f_{\omega_1}|^2 |\sum_{\omega_2 \in \phi(\Sigma_2)} g_{\omega_2}|^4 \lesssim \nu^{-O(1)} M_{2,4}(\delta, \nu, \rho_1, \rho_2)^6$$
+whenever $\Sigma_1,\Sigma_2$ are of the appropriate lengths $\rho_1,\rho_2$ and separation $\delta,\nu$ and the $f_{\omega_i},g_{\omega_i}$ have Fourier support in $R(\omega_i,\delta)$. Here we normalize
+$$\sum_{\omega_1} ||f_{\omega_1}||_{L^6}^2 = ||\sum_{\omega_2} g_{\omega_2}||_{L^6}^4 = 1.$$
+We are viewing the integral we are trying to bound as a weighted sum of $L^2$-norms where the $L^4$-norms are weights.
+
+Partition $\Sigma_1$ into $\delta$-separated subsets $\Sigma_{1,I'}$ of intervals $I'$ of length $\rho_1'$ of bounded overlap.
+The left-hand side of the claim is given by $||\sum_{I'} F_{I'}G^2||^2_{L^2}$ where $F_{I'} = \sum_{\omega_1 \in \phi(\Sigma_{1,I'})} f_{\omega_1}$ and $G = \sum_{\omega_2}g_{\omega_2}$.
+But
+$$||F_{I'}G^2||_{L^2}^2 \leq M_{2,4}(\delta, \nu, \rho_1', \rho_2) \sum_{\omega_1} ||f_{\omega_1}||_{L^6}^2.$$
+So we must prove
+$$||\sum_{I'} F_{I'}G^2||_{L^2}^2 \lesssim \nu^{-O(1)} \sum_{I'} ||F_{I'}G^2||_{L^2}^2.$$
+
+After a Galilean transform we may assume $J$ is centered at $0$ and thus $I$ is at least $\gtrsim \nu$ from the origin.
+In this setting $G$ is Fourier supported on a small rectangle of height $O(\rho_2^2 + \delta)$, so it is almost constant in the vertical direction.
+A copmutation I missed means this implies the lemma.
+\end{proof}
+
+\begin{lemma}
+For any $0 \leq \delta \leq \rho_1 \leq \rho_2 \leq \nu \leq 1$,
+$$M_{2,4}(\delta, \nu, \rho_1, \rho_2) \lesssim \sqrt{M_{2,4}(\delta, \nu, \rho_2, \rho_1) D(\delta/\rho_2)}.$$
+\end{lemma}
+This follows by Hoelder's inequality. In fact, if $f$ is the sum of the $f_\omega$, $\omega \in \phi(I_1)$ where $|I_1| = \rho_1$ and similarly for $g$ and $\rho_2$,
+this lemma is equivalent to the inequality
+$$\int_{\RR^2} |f|^2|g|^4 \leq \int_{\RR^2} |f|^4|g|^2 \int_{\RR^2} |g|^6.$$
+This is true by the $L^6$ version of Hoelder, if we normalize $||f||_{L^6} = ||g||_{L^6} = 1$ and then rescale appropriately.
+This allows us to induct on the scales $\rho_j$ by ping-ponging back and forth between $\rho_j$.
+
+Let $\alpha$ be the least exponent such that for every $\delta > 0$, $D(\delta) \leq \delta^{ - \alpha - o(1)}$.
+Then
+$$\alpha = \limsup_{\delta \to 0} - \frac{\log D(\delta)}{\log \delta}.$$
+\begin{lemma}
+One has $\alpha = 0$.
+\end{lemma}
+\begin{proof}
+Suppose not; we will find an $\alpha'$ such that $D(\delta) \leq \delta^{ - \alpha' - o(1)}$, a contradiction.
+
+Let $\nu = \delta^\varepsilon$ for some $\varepsilon > 0$ which is independent of $\delta$ and to be chosen later.
+Then
+$$D(\delta) \lesssim \delta^{-O(\varepsilon)} M_{2,4}(\delta, \nu, \nu, \nu) + \delta^{(-1-\varepsilon)\alpha - o(1)}.$$
+Since $\alpha > 0$, the second term is harmless.
+We then need to control the first term.
+
+By an above lemma,
+$$M_{2,4}(\delta, \nu, \nu, \nu) \lesssim \delta^{-O(\varepsilon)} M_{2,4}(\delta, \nu, \nu^2, \nu).$$
+If $a \leq O(\varepsilon^{-1})$, we have
+$$M_{2,4}(\delta, \nu, \nu^{2a}, \nu^a) \leq M_{2,4}(\delta, \nu, \nu^a, \nu^{2a})^{1/2} D(\delta/\nu^a)^{1/2}$$
+and
+$$D(\delta/\nu^a)^{1/2} \lesssim (\delta/\nu^a)^{-(\delta + o(1))/2} = \delta^{-\alpha/2 + a\alpha\varepsilon/2 - o(1)}.$$
+Thus
+$$M_{2,4}(\delta, \nu, \nu^{2a}, \nu^a) \lesssim M_{2,4}(\delta, \nu, \nu^{2a}, \nu^a)^{1/2} \delta^{-\alpha/2-o(1)} \delta^{a\alpha\varepsilon/2}$$
+and by an above lemma,
+$$M_{2,4}(\delta, \nu, \nu^{2a}, \nu^a) \lesssim \nu^{-O(1)} M_{2,4}(\delta, \nu, \nu^{4a}, \nu^{2a})^{1/2} \delta^{-\alpha/2-o(1)}\delta^{a\alpha\varepsilon/2},$$
+or
+$$(\delta^\alpha M_{2,4}(\delta, \nu, \nu^{2a}, \nu^a))^{1/a} \lesssim (\delta^\alpha M_{2,4}(\delta, \nu, \nu^{4a}, \nu^{2a}))^{1/2a} \delta^{\alpha\varepsilon/2-O(\varepsilon/a)-o(1)}.$$
+Here if $a$ is large then we gain a small power of $\delta^\varepsilon$. If $k \leq -\log_2(4\varepsilon)$ then
+$$\delta^\alpha M_{2,4}(\delta, \nu, \nu^2, \nu) \lesssim_k (\delta^\alpha M_{2,4}(\delta, \nu, \nu^{2^{k+1}}, \nu^{2^k}))^{2^{-k}} \delta^{k\alpha\varepsilon}-O(\varepsilon)-o_k(1).$$
+Here $o_k(1)$ is a constant that $\to 0$ as $\delta \to 0$ as $k,\varepsilon$ are held constant.
+Thus
+$$\delta^\alpha M_{2,4}(\delta, \nu, \nu^2, \nu) \lesssim \delta^{k\alpha\varepsilon/2-O(\varepsilon)-o(1)}$$
+or
+$$D(\delta) \lesssim \delta^{-\alpha+k\varepsilon\alpha/2 - O(\varepsilon)+o(1)}+\delta^{(\varepsilon - 1)\alpha + o(1)}.$$
+This gives the desired contradiction.
+\end{proof}
+This completes the proof of the main theorem.
+
+\chapter{Pseudodifferential calculus}
+Let $\Sch$ denote the Schwartz space of $\RR$.
+Consider the position and momentum operators $X,D: \Sch \to \Sch$. We normalize them by $Xf(x) = xf(x)$ and $Df(x) = f'(x)/(2\pi i)$.
+Previously we have taken physical space and frequency space as separate but isomorphic, with the isomorphism $\RR \to \RR$ sending $X$ to $D$.
+But now we will be interested in considering the ``phase space", where we work with position and momentum together.
+This should be viewed as analoguous to how in music theory we indicate notes by their place in time, and their frequncies.
+
+However, there is no perfectly rigorous phase space, by the uncertainty principle: we cannot describe a point in phase space arbitrarily well because then it would be a point in physical space, hence is delocalized to frequency space.
+
+\section{The Kohn-Nirenberg quantization}
+We are interested in developing a functional calculus for the unbounded operators $X,D$.
+This is easy for polynomials; for example, the quantum harmonic oscillator $D^2 + X^2$ is a polynomial in $X,D$. Intuitively this should be associated to the polynomial
+$$a(x, \xi) = \xi^2 + x^2,$$
+and then we write $a(X, D)$ for the quantum harmonic oscillator.
+
+In general, given some function $a$ of phase space, we let
+$$a(X, D)f(x) = \int_{-\infty}^\infty a(x, \xi) \hat f(\xi) e^{2\pi i\xi} ~d\xi$$
+be the induced Fourier multiplier. The map $a \mapsto a(X, D)$ is called the \dfn{Kohn-Nirenberg quantization} of the \dfn{symbol} $a$.
+This is at first defined for $f \in \Sch$ and
+$$\partial_x^j \partial_\xi^\ell a(x, \xi) \lesssim_{a,j} \langle x\rangle^{O_{a,j,\ell}(1)} \langle \xi\rangle^{O_{a,j,\ell}(1)}.$$
+More generally, a functional calculus for functions defined on phase space is known as a \dfn{quantization} of phase space.
+Most interesting observables from quantum mechanics are in fact given by the Kohn-Nirenberg quantization.
+
+We denote the seminorms of $\Sch$ by
+$$||u||_{\alpha,\beta} = \sup_x |x^\alpha \partial^\beta u(x)|.$$
+\begin{lemma}
+If $a$ satisfies the above estimates then $a(X, D)$ is a bounded operator on $\Sch$.
+\end{lemma}
+\begin{proof}
+Let $f \in \Sch$ and $\alpha,\beta$ be given; we must show that $||a(X, D)f||_{\alpha,\beta}$ is bounded by finitely many Schwartz seminorms of $f$.
+By the Leibniz rule,
+\begin{align*}
+||a(X,D)f||_{\alpha,\beta} &= \sup_x \left|x^\alpha \partial^\beta \int_{-\infty}^\infty a(x, \xi) \hat f(\xi) e^{2\pi ix\xi} ~d\xi\right|\\
+&\lesssim_\beta \sup_x \sum_{\gamma \leq \beta} \left|x^\alpha \int_{-\infty}^\infty (\partial_x^\gamma a)(x, \xi) \hat f(\xi) \xi^{\beta - \gamma} e^{2\pi i x\xi} ~d\xi\right|.
+\end{align*}
+We treat each of these integrals separately. Since everything is Schwartz we can integrate by parts to get, for any $\mu$,
+$$\int_{-\infty}^\infty (\partial_x^\gamma a)(x, \xi) \hat f(\xi) \xi^{\beta - \gamma} e^{2\pi i x\xi} ~d\xi
+= \frac{(-1)^\mu}{(2\pi ix)^\mu} \int_{-\infty}^\infty \partial_\xi^\mu((\partial_x^\gamma a)(x, \xi) \hat f(\xi) \xi^{\beta - \gamma}) e^{2\pi ix\xi} ~d\xi.$$
+Since $\partial_\xi^\nu \partial_x^\gamma a$ is of polynomial growth in $\xi$ for any $\nu \leq \mu$ and $\hat f$ is Schwartz (in fact $f \mapsto \hat f$ is bounded on $\Sch$) we have
+$$\left|\int_{-\infty}^\infty \partial_\xi^\mu((\partial_x^\gamma a)(x, \xi) \hat f(\xi) \xi^{\beta - \gamma}) e^{2\pi ix\xi} ~d\xi\right|
+\lesssim_{a,\beta,\mu} \sum_{\delta,\delta' \leq C_{\beta,\mu}} ||f||_{\delta,\delta'}.$$
+Therefore
+$$\left|\int_{-\infty}^\infty (\partial_x^\gamma a)(x, \xi) \hat f(\xi) \xi^{\beta - \gamma} e^{2\pi i x\xi} ~d\xi\right|
+\lesssim_{a,\beta,\mu} \langle x\rangle^{-\mu} \sum_{\delta,\delta' \leq C_{\beta,\mu}} ||f||_{\delta,\delta'}.$$
+Taking $\mu = \alpha$,
+$$||a(X,D)f||_{\alpha,\beta} \lesssim_{a,\alpha,\beta} \sum_{\delta,\delta' \leq C_{\beta,\alpha}} ||f||_{\delta,\delta'}.$$
+Since $C_{\beta,\alpha} < \infty$ this is as desired.
+\end{proof}
+
+\begin{lemma}
+If $a,b$ are symbols such that $a(X, D) = b(X, D)$ then $a = b$.
+\end{lemma}
+\begin{proof}
+If $a(X, D) = b(X, D)$ then for every $f \in \Sch$,
+$$\int_{-\infty}^\infty (a(x, \xi) - b(x, \xi))\hat f(\xi)e^{2\pi i x\xi} ~d\xi = 0.$$
+In particular this is true when
+$$f(\xi) = e^{2\pi i\xi y}\chi(\xi)g(y, \xi)$$
+where $\chi$ is a smooth approimation to the indicator function of $[-N, N]$, $y \in \RR$ is to be determined, and $g(y, \xi)$ is a smooth approximation to the function which is $1$ when $a(x,\xi)/b(x,\xi) > 0$ and $-1$ otherwise. Plugging in $y = x$ and taking the limits as the approximations become rough, we have
+$$\lim_{N \to \infty} \int_{-N}^N |a(x, \xi) - b(x, \xi)| ~d\xi = 0.$$
+But this implies that $a = b$.
+\end{proof}
+
+A fundamental defect with any quantization is that it is not an algebra morphism:
+$$ab(X, D) \neq a(X, D)b(X, D).$$
+This is because $[x, \xi] = 0$ but $2\pi i[X, D] = -1$.
+This motivates semiclassical analysis, because in the limit where frequency is very large, $[X, D] \to 0$, and this is formalized by introducing a semiclassical parameter $h$ and taking $h \to 0$.
+As a useful consequence of $2\pi i[X, D] = -1$ we prove the Heisenberg uncertainty principle:
+\begin{theorem}[Heisenberg uncertainty principle]
+\index{Heisenberg uncertainty principle}
+If $x,\xi \in \RR$ and $f \in \Sch$, then
+$$||(X - x)f||_{L^2}||(D - \xi)f||_{L^2} \geq \frac{||f||_{L^2}^2}{4\pi}.$$
+\end{theorem}
+\begin{proof}
+By the Cauchy-Schwarz inequality we have
+$$|\langle [X - x]f, [D - \xi]f\rangle| \leq ||(X - x)f||_{L^2} ||(D - \xi)f||_{L^2}.$$
+Since $x,\xi$ commute with everything, $[X - x, D - \xi] = [X, D] = -1/2\pi i$. So
+$$|\langle [X - x, D - \xi]f, f\rangle| = \frac{||f||_{L^2}^2}{2\pi}.$$
+But also
+$$2|\langle [X - x]f, [D - \xi]f\rangle| = |\langle [X - x, D - \xi]f, f\rangle| = \frac{||f||_{L^2}^2}{2\pi}$$
+since $X$ is self-adjoint while $D$ is anti-self-adjoint.
+\end{proof}
+Physically, $||(X-x)f||_{L^2}/||f||_{L^2}$ should be viewed as the variance $\Delta x$ of the observable $X$ when applied to the wavefunction $f$. Similarly for $\Delta \xi$. So the Heisenberg uncertainty principle says
+$$(\Delta x)(\Delta \xi) \geq \frac{1}{4\pi}.$$
+The intuitive reason for the uncertainty principle is that $f$ is a function of one variable, yet we want to view it as a function of phase space (two variables), yet there is no smooth bijection $\RR \to \RR^2$.
+
+Fortunately, $ab(X, D) \approx a(X, D)b(X, D)$ where $\approx$ means ``equal up to lower order terms" here. For example $[X, D]$ is a zeroth-order operator.
+We need certain estimates on the growth of the symbol to make ``lower order terms" a rigorous definition, and then prove the above approximate commutativity relation.
+
+There are other interesting quantizations, but they essentially behave equivalently to the Kohn-Nirenberg quantization, so we restrict to this quantization in what follows.
+
+\begin{definition}
+Let $\alpha \in \RR$. A symbol $a$ has \dfn{order} $\alpha$ if it is smooth and
+$$\partial_x^j\partial_\xi^\ell a(x, \xi) \lesssim_{a,j,\ell} \langle \xi \rangle^{\alpha - \ell}.$$
+We let $S^\alpha$ denote the space of all symbols of order $\alpha$.
+In this case we say $a(X, D)$ is known as an \dfn{pseudodifferential operator} of order $\alpha$.
+\end{definition}
+Thus if $a \in S^\alpha$, then $a(x, \xi)$ is bounded in $x$ and grows like $\xi^\alpha$, even after it is differentiated.
+If one tiles phase space by rectangles which have $x$-width $1$ and $\xi$-width $\sim \xi$, then $a$ restricted to any rectangle is approximately constant.
+Thus at high frequencies $\xi \to \infty$, the effect of the uncertainty principle is unimportant, since there $a$ is so close to constant that we can localize it quite well.
+
+We let
+$$||a||_{\alpha,j,\ell} = \sup_{x,\xi} \frac{\partial_x^j\partial_\xi^\ell a(x, \xi)}{\langle \xi\rangle^{\alpha - \ell}}$$
+denote the $(j,\ell)$th Hormander seminorm for symbols of order $\alpha$.
+For example, fractional differential operators are pseudodifferential operators.
+
+A smooth linear differential operator is a pseudodifferential operator provided that its coefficients are bounded.
+\begin{example}
+The quantum harmonic oscillator $D^2 + X^2$ is not a pseudodifferential operator but it is locally a pseudodifferential operator of order $0$.
+\end{example}
+
+\section{The Calderon-Vallaincourt theorem}
+We start by proving a generalization of the Hormander-Mikhlin multiplier thoerem which shows that pseudodifferential operators of null order are bounded on $L^p$.
+The assumption on order is best-possible here; clearly $X,D$ are not bounded on $L^p$ for any $p$, and this remains for fractional operators such as $D^\varepsilon$.
+\begin{theorem}[Calderon-Vallaincourt]
+Every pseudodifferential operator of order $0$ extends to a bounded operator on $L^2$.
+\end{theorem}
+Actually, we can use Calderon-Zygmund theory to extend to this to $L^p$: once a Calderon-Zygmund operator is bounded on $L^q$ for some $q$, it is bounded on $L^p$ for every $p$. But we omit the proof.
+
+We will give two proofs of the Calderon-Vallaincourt theorem, both of which use sequences of operators which are ``almost orthogonal."
+One way to quantify the extent to which operators are almost orthogonal is if they meet the hypotheses of the Cotlar-Stein lemma:
+\begin{lemma}[Cotlar-Stein]
+Suppose that $T_1, \dots, T_n: H \to H'$ are linear operators such that the maps $T_i^*T_j: H \to H$ satisfy the estimate
+$$\sum_j ||T_i^*T_j||^{1/2} \leq A$$
+uniformly in $i$ and similarly the $T_iT_j^*: H' \to H'$ satisfy the estimate
+$$\sum_j ||T_iT_j^*||^{1/2} \leq B$$
+uniformly in $j$. Then
+$$||\sum_j T_j|| \leq \sqrt{AB}.$$
+\end{lemma}
+\begin{proof}
+Since $B(H)$ is a $C^*$-algebra we have
+$$||T_i|| = ||T_iT_i^*||^{1/2} \leq A.$$
+Similarly $||T_i|| \leq B$ and hence $||T_i|| \leq \sqrt{AB}$, the geometric mean. We want to iterate this estimate.
+
+Let $T = \sum_j T_j$.
+Iterating and using the fact that $B(H)$ is a $C^*$-algebra again, we see that
+$$||T|| \leq ||(T^*T)^m||^{1/(2m)}.$$
+This is in particular true when $m$ is a power of $2$. We have the bound
+$$||T|| \leq \sqrt[2m]{ \sum_j ||T^*_{i_1} T_{i_2} \cdots T^*_{i_{2m-1}} T_{i_{2m}}}||.$$
+Here the $i_j$ are a substring of some permutation of $n$.
+We split this up as
+$$||T|| \leq \sqrt[2m]{ \sum_j ||T^*_{i_1} T_{i_2}|| \cdots ||T^*_{i_{2m-1}} T_{i_{2m}}||}.$$
+This gives a bound $||T|| \leq n^{1/2m}A$. Similarly we can bound $||T|| \leq n^{1/2m}B$. Taking geometric means we have
+$$||T|| \leq n^{1/2m}\sqrt{AB},$$
+and iterating we see $||T|| \leq \sqrt{AB}$.
+\end{proof}
+If the $T_i$ have pairwise orthogonal images then $T_i^*T_j = 0$ whenever $i \neq j$; similarly for the adjoints.
+So if $A,B$ are minimal possible (say $A = \sum_j ||T_i||^2$) then the operators $T_i$ are actually orthogonal, and the size of $A$ measures ``how orthogonal" they are.
+
+The Cotlar-Stein lemma also has a useful corollary, which we will not need for the Calderon-Vallaincourt theorem.
+\begin{corollary}
+Suppose that we have a sequence of operators $T_i: H \to H'$ satisfying the bounds
+$$\sum_{j \leq J} ||T_i^*T_j||^{1/2} \leq A$$
+uniformly in $i,J$ and similarly
+$$\sum_{i \leq I} ||T_iT_j^*||^{1/2} \leq B$$
+uniformly in $I,j$. Then the infinite series $T = \sum_j T_j$ converges in the weak operator topology, and
+$$||T|| \leq \sqrt{AB}.$$
+\end{corollary}
+\begin{proof}
+The estimate on the infinite series follows from the fact that the estimate is uniformly true on partial sums by the Cotlar-Stein lemma.
+Now we must show that if $f \in H, g \in H'$, then
+$$\sum_i \langle g, T_if\rangle$$
+is a convergent series. Suppose not, so there are $f,g$ such that for every $C > 0$ there is an $I \in \NN$ such that
+$$\left|\sum_{i \leq I} \langle g, T_if\rangle\right| > C.$$
+This is in particular true when $C = ||f|| ||g|| \sqrt{AB}$, which is a contradiction by the Cotlar-Stein lemma.
+\end{proof}
+We can actually prove convergence in the strong operator topology, but omit the proof.
+
+Now recall that a symbol of order $0$ is a smooth function $a: \RR^2 \to \RR$ such that $\partial_xa(x,\xi)$ is bounded and $\partial_\xi^\ell a(x,\xi) = O(\xi^{-\ell})$.
+Let $a$ be a symbol of order $0$.
+
+We want to run a Littlewood-Paley decomposition on $a$, because these hypotheses imply that $a$ is ``approximately constant" on each of the dyadic pieces of $\RR$.
+Let $\phi$ be a bump function on $[-1,1]$ which is $1$ on $[-1/2,1/2]$ and consider the Littlewood-Paley decomposition
+$$a = \sum_k a_k$$
+where $a_0 = a(x)\phi$ and
+$$a_k(x, \xi) = (\phi(\xi/2^k) - \phi(\xi/2^{k+1}))a(x, \xi).$$
+To avoid technicalities, we don't want to have to worry about the infinite sum; by Fatou's lemma, we must then show
+$$||\sum_{k \leq K} a_k(X, D)||_{L^2} \lesssim_a ||f||_{L^2}$$
+uniformly in $K$. Each $a_k$ lives on a strip of $(x, \xi)$ where $\xi \sim 2^k$. Then
+$$\partial_x^j \partial_\xi^\ell a_k(x, \xi) \lesssim_{a,j,\ell} 2^{-k\ell}.$$
+Therefore
+$$K_k(x, y) = \int_{-\infty}^\infty a_k(x, \xi)e^{2\pi i(x-y)\xi}~d\xi$$
+has compact support and hence is the integral kernel of $a_k(X, D)$ by Fubini's theorem.
+
+We bound $K_k$. First, $a_k$ is bounded and supported on the interval $[2^k, 2^{k+1}]$ of length $2^k$ so by the triangle inequality,
+$$|K_k(x, y)| \leq ||a_k(x)||_{L^1} \lesssim_a 2^k.$$
+Integrating by parts in $\xi$,
+$$K_k(x, y) = \frac{-1}{2\pi i(x-y)} \int_{-\infty}^\infty \partial_\xi a_k(x,\xi)e^{2\pi i(x-y)\xi}~d\xi \lesssim_a \frac{2^k}{2^k|x-y|}.$$
+Iterating and using the previous bound to prevent blowup,
+$$|K_k(x, y)| \lesssim_{a,\ell} \frac{2^k}{\langle 2^{-\ell k}|x-y|^\ell}.$$
+
+We now bound $\partial_x K_k(x,y)$. If the derivatives fall on $a_k$ nothing happens. If they fall on the phase, we gain a term $2\pi i\xi$, but $\xi \sim 2^k$, so we lose a factor of $2^k$. Running the above argument again,
+$$|\partial_x K_k(x, y)| \lesssim_{a,\ell} \frac{2^{2k}}{\langle 2^{-\ell k}|x-y|^\ell}.$$
+The same thing happens for $\partial_y$.
+It follows from Young's inequality that
+$$||a_k(X, D)||_{L^2 \to L^2} \lesssim_a 1.$$
+It remains to remove the dependence on the number of terms in the Fatou sum $K$.
+To prove this uniform bound we will show that the $a_k(X, D)$ have ``almost orthogonal" ranges and coranges (i.e. row spaces), in two different ways.
+
+\begin{proof}[First proof]
+We claim
+$$||a_k(X, D) a_j(X, D)^* f||_{L^2} \lesssim_a 2^{-|j-k|}||f||_{L^2}$$
+and similarly for $a_k(X, D)^* a_j(X, D)^* f$. The Cotlar-Stein lemma then gives the theorem.
+Assume $j \leq k$ and work with $a_k(X, D) a_j(X, D)^*$; the other three cases are similar.
+
+By Fubini's theorem,
+$$K_{kj^*}(x, z)= \int_{-\infty}^\infty \overline{K_k}(y, x)K_j(y, z)~dy$$
+is the integral kernel of $a_k(X, D) a_j(X, D)^*$.
+We want to bound it using integration by parts.
+
+First,
+$$K_j(y, z) = \partial_y \int_{-\infty}^\infty \frac{a_j(y, \xi)}{2\pi i\xi} e^{2\pi i(y-z)\xi} ~d\xi - \int_{-\infty}^\infty \frac{\partial_ya_j(y,\xi)}{2\pi i\xi}e^{2\pi i(y-z)\xi}~d\xi.$$
+The second term here is harmless since $a$ is a symbol; we have
+$$\int_{-\infty}^\infty \frac{\partial_ya_j(y,\xi)}{2\pi i\xi}e^{2\pi i(y-z)\xi}~d\xi \sim_a 2^{-j}\int_{-\infty}^\infty a_j(y, \xi) e^{2\pi i(y-z)\xi} ~d\xi$$
+since we have a $\xi$ in the denominator and are integrating over $[2^j, 2^{j+1}]$.
+Thus
+$$\int_{-\infty}^\infty \overline{K_k}(y, x) \int_{-\infty}^\infty \frac{\partial_ya_j(y,\xi)}{2\pi i\xi}e^{2\pi i(y-z)\xi}~d\xi \sim 2^{-j+k}.$$
+This was desired. Similarly,
+$$\int_{-\infty}^\infty \overline{K_k}(y, x)\partial_y \int_{-\infty}^\infty \frac{a_j(y, \xi)}{2\pi i\xi} e^{2\pi i(y-z)\xi} ~d\xi ~dy
+= - \int_{-\infty}^\infty \partial_y \overline{K_k}(y, x) \int_{-\infty}^\infty \frac{a_j(y, z)}{2\pi i\xi} e^{2\pi i(y-z)\xi} ~d\xi ~dy \sim 2^{-j + k}.$$
+Here we used the fact that we took a complex conjugate to get $\xi$ in the numerator when we differentiated $k$.
+\end{proof}
+
+\begin{proof}[Second proof]
+Consider the integral kernel
+$$L_j(z, x) = \int_{2^j}^{2^{j+1}} e^{2\pi i(z-x)\xi} ~d\xi$$
+of the Littlewood-Paley projector $P_j$ to the scale $[2^j, 2^{j+1}]$.
+Let $F_{jk}$ be the integral kernel of the composite
+\begin{align*}
+F_{jk}(z, y) &= \int_{-\infty}^\infty L_j(z, x)K_k(x, y) ~dx\\
+&= \int_{-\infty}^\infty \int_{2^k}^{2^{k+1}} \int_{2^j}^{2^{j+1}} a_k(x, \eta) e^{2\pi i(x-y)\eta} e^{2\pi i(z-x)\xi} ~d\xi ~d\eta ~dx.
+\end{align*}
+We used the Fourier support property of $a_k$.
+\begin{lemma}
+One has
+$$||F_{jk}||_{L^2} \lesssim_a 2^{-|j-k|}.$$
+\end{lemma}
+\begin{proof}
+Note that
+$$||F_{jk}||_{L^2}^2 = \iint_{\RR^2} \left|\int_{-\infty}^\infty \int_{2^k}^{2^{k+1}} \int_{2^j}^{2^{j+1}} a_k(x, \eta) e^{2\pi i(x-y)\eta} e^{2\pi i(z-x)\xi} ~d\xi ~d\eta ~dx\right|^2 ~dy ~dz.$$
+We now integrate by parts in $dx$ to see
+$$\int_{-\infty}^\infty \int_{2^k}^{2^{k+1}}\int_{2^j}^{2^{j+1}} a_k(x, \eta) e^{2\pi i(x-y)\eta} e^{2\pi i(z-x)\xi} ~d\xi ~d\eta ~dx
+=  \int_{-\infty}^\infty  \int_{2^k}^{2^{k+1}}\int_{2^j}^{2^{j+1}} \partial_x(a_k(x,\eta)e^{2\pi i(z-x)\xi})\frac{e^{2\pi i(x-y)\eta}}{2\pi i\eta}~d\xi ~d\eta ~dx.$$
+We have $\partial_x a_k(x, \eta) \lesssim_a 1$ and $a_k(x, \eta) \lesssim_a 1$. Similarly we have $\eta \sim 2^k$ and $\xi \sim 2^j$, so the triple integral is
+$$\lesssim_a \frac{1 + 2^j}{2^k} \int_{-\infty}^\infty \int_{2^k}^{2^{k+1}}\int_{2^j}^{2^{j+1}} e^{2\pi i(z-x)\xi}e^{2\pi i(x-y)\eta} ~d\xi ~d\eta ~dx.$$
+This new triple integral is
+$$\lesssim_a \int_{-\infty}^\infty \frac{e^{2^{j+k}\pi ix} }{\langle (x-y)(x-z)\rangle} ~dx$$
+whose $L^2$ norm is $\lesssim_a 1$. Therefore if $k \geq j$ the $L^2$ norm is $\lesssim_a 2^{-|k-j|}$. The proof is similar when $j \geq k$, but we want to differentiate $e^{2\pi i(x-y)\eta}$ instead.
+\end{proof}
+We conclude that
+$$||P_ja_k(X, D)|| \lesssim_a 2^{-|k-j|}.$$
+Similarly for $a_k(X, D)P_j$, where the roles of $\eta$ and $\xi$ in the above proof are swapped.
+TODO
+\end{proof}
+
+\section{Composition estimates}
+\begin{lemma}
+Let $a(X, D)$ and $b(X, D)$ be pseudodifferential operators of order $\alpha,\beta$ respectively. Then the composite $a(X,D)b(X,D)$ is a pseudodifferential operator of order $\alpha + \beta$.
+\end{lemma}
+\begin{definition}
+The symbol of the composite $a(X,D)b(X,D)$ is denote $a*b$.
+\end{definition}
+\begin{proof}[Proof of lemma]
+We let
+$$a_R(x, \xi) = a(x, \xi)\phi(x/R)\phi(\xi/R)$$
+where $\phi$ is a standard bump function; then the $a_R$ obeys the same symbol estimates as $a$ uniformly in $R$, and $a_R \to a$ locally uniformly as $R \to \infty$.
+If $f$ is Schwartz, then $b(X,D)f$ is as well, so $a_R(X, D) b(X, D)f$ converges pointwise to $a(X, D)b(X, D)f$.
+
+Suppose that $a_R(X, D) b(X, D) = c_R(X, D)$ is a pseudodifferential operator with order uniform in $R$.
+Then the Ascoli theorem guarantees that there is a limit $c(X, D)$ of a subsequence $c_R(X, D)$ as $R \to \infty$, and then $c(X, D)$ is a limit of not just a subsequence but the full sequence. Here we are taking limits in the weak operator topology, which is all we need because we just require that limits be unique, and the weak operator topology is Hausdorff.
+By a similar argument, we can replace $b(X, D)$ with $b_R(X, D)$. So we may assume that $a,b$ are compactly supported, and hence justify any use of Fubini's theorem.
+
+We have
+$$\widehat{b(X,D)f}(\eta) = \iint_{\RR^2} b(y, \xi)\hat f(\xi)e^{2\pi i(y\xi-y\eta)} ~d\xi~dy$$
+hence
+$$a(X,D)b(X,D)f(x) = \iiint_{\RR^3} a(x,\eta)b(y,\xi)\hat f(\xi)e^{2\pi i(y\xi-y\eta+x\eta)}~d\xi~dy~d\eta.$$
+By Fubini's theorem,
+$$a*b(x,\xi) = \iint_{\RR^2} a(x,\eta)b(y,\xi)e^{2\pi i(y-x)(\xi-\eta)}~dy~d\eta.$$
+
+We must now show the symbol estimate
+$$\partial_x^j \partial_\xi^\ell (a*b)(x, \xi) \lesssim_{a,b,\alpha,\beta,j,\ell} \langle \xi\rangle^{\alpha + \beta - \ell}.$$
+We readily check
+$$\partial_x(a*b) = \partial_x * b + a \partial_x b,$$
+and similarly in $\xi$. Moreover $\partial_x$ sends $S^\alpha$ to itself and $\partial_\xi$ sends $S^\beta$ to $S^{\beta - 1}$.
+So by induction in $j$ and another in $\ell$, we see that we just need to check the case $j = \ell = 0$, i.e.
+$$(a*b)(x, \xi) \lesssim_{a,b,\alpha,\beta,j,\ell} \langle \xi \rangle^{\alpha + \beta}.$$
+We bound $a*b$ using the method of stationary phase.
+
+Applying a smooth partition of unity to $a$ in the frequency variable, we split $a$ into two functions, one supported on the set of $(x, \eta)$ such that $\langle \xi \rangle \sim \langle \eta \rangle$, and its complement.
+This cutoff preserves the symbol estimates for $a$.
+
+We now treat the case $\langle \xi \rangle \sim \langle \eta \rangle$. Let
+$$K_x(z) = \int_{-\infty}^\infty a(x, \eta)e^{2\pi ix\eta} ~d\eta,$$
+and then we have
+$$(a*b)(x, \xi) = \int_{-\infty}^\infty K_x(x - y)b(y, \xi) e^{2\pi i(y-x)\xi } ~dy.$$
+Integrating by parts and using our case assumption,
+$$K_x(z) \lesssim_{a,\alpha} \langle \xi\rangle^{\alpha + 1} \langle z\xi \rangle^{-2}.$$
+Since we have the estimate $b(y, \xi) \lesssim_b \langle \xi \rangle^\beta$, the claim follows.
+
+In the other case,
+$$(a*b)(x, \xi) = \iint_{\RR^2} \frac{a(x, \eta)}{(2\pi i(\eta - \xi))^m} \partial_y^m b(y, \xi) e^{2\pi i (y-x)(\xi - \eta)} ~dy~d\eta.$$
+This follows by iterated integration by parts. Let
+$$K_{x,m}(z) = \int_{-\infty}^\infty\frac{a(x, \eta)}{(2\pi i(\eta - \xi))^m}e^{2\pi iz\eta}~d\eta,$$
+so
+$$(a*b)(x, \xi) = \int_{-\infty}^\infty K_{x,m}(x-y) \partial_y^m b(y,\xi) e^{2\pi i(y-x)\xi}~dy,$$
+and if $m$ is large enough we have
+$$K_{x,m}(z) \lesssim_{a,\alpha} \langle \langle \xi\rangle^{\alpha + 1} \langle z\xi \rangle^{-2}$$
+as before.
+\end{proof}
+\begin{example}
+If $a(x,\xi) = a(x)$ and similarly for $b$,
+$$(a*b)(x, \xi) = a(x)\iint_{\RR^2} b(y)e^{2\pi i(y-x)(\xi-\eta)} ~dy~d\eta = a(x)b(x)$$
+by the Fourier inversion formula, as we would hope.
+
+If $a(x, \xi) = a(\xi)$ and similarly for $b$, we similarly have $a*b = ab$.
+\end{example}
+\begin{theorem}
+Let $a \in S^\alpha, b \in S^\beta$. Then $a*b-ab \in S^{\alpha + \beta - 1}$.
+\end{theorem}
+\begin{proof}
+We may again assume that $a,b$ are compactly supported, up to a locally uniform approximation.
+Such approximations preserve symbol class.
+
+By the fundamental theorem of calculus,
+$$a(x, \eta) = a(x, \xi) + (\eta - \xi)\int_0^1 \partial_2a(x, \xi + t(\eta - \xi)) ~dt.$$
+Thus
+\begin{align*}
+a*b(x, \xi) &= \lim_{R \to \infty} \int_{-R}^R \int_{-\infty}^\infty a(x, \eta) b(y, \xi) e^{2\pi i(y-x)(\xi - \eta)} ~dy ~d\eta\\
+&= \int_{-\infty}^\infty \lim_{R \to \infty} \int_{-R}^R b(y, \xi)\left(a(x, \xi) + (\eta - \xi)\int_0^1 \partial_2a(x, \xi + t(\eta - \xi)) ~dt\right)e^{2\pi i(y-x)(\xi - \eta)} ~dy ~d\eta\\
+&= \lim_{R \to \infty} \int_{-R}^R \int_{-\infty}^\infty  a(x, \xi) b(y, \xi) e^{2\pi i(y-x)(\xi - \eta)} ~dy~d\eta \\
+&\quad+ \iiint_{\RR^2 \times [0, 1]} (\eta - \xi)\partial_2a(x, \xi + t(\eta - \xi))b(y, \xi)e^{2\pi i(y-x)(\xi - \eta)} ~dt~dy~d\eta\\
+&= I + J
+\end{align*}
+We treat the first integral $I$ first. By the Fourier inversion formula,
+$$(ab)(x, \xi) = \iint_{\RR^2} a(y, \xi)b(y, \xi) e^{-2\pi i(y-x)\eta} ~dy~d\eta$$
+so
+\begin{align*}
+I - (ab)(x, \xi) &=\lim_{R \to \infty} \int_{-R}^R \int_{-\infty}^\infty  (a(x, \xi)e^{2\pi i(y-x)\xi} - a(y, \xi))b(y, \xi)e^{-2\pi i(y-x)\eta} ~dy ~d\eta\\
+&= \int_{-\infty}^\infty (a(x, \xi)e^{2\pi i(y-x)\xi} - a(y, \xi))b(y, \xi) \int_{-\infty}^\infty e^{-2\pi i(y-x)\eta} ~d\eta~dy\\
+&= \int_{-\infty}^\infty  (a(x, \xi)e^{2\pi i(y-x)\xi} - a(y, \xi))b(y, \xi) \delta(y - x) ~dy\\
+&= 0
+\end{align*}
+by Fubini's theorem; here $\delta$ is the Dirac mass. Therefore $a*b - ab = J$.
+
+It remains to show that $J \in S^{\alpha + \beta - 1}$, i.e.
+$$\partial_x^j \partial_\xi^\ell \iiint_{\RR^2 \times [0, 1]} (\eta - \xi)\partial_2a(x, \xi + t(\eta - \xi)) b(y, \xi) e^{2\pi i(y-x)(\xi - \eta)} ~dt ~dy ~d\eta \lesssim \langle \xi \rangle^{\alpha + \beta - \ell - 1}.$$
+By Fubini's theorem,
+$$\partial_x^j \partial_\xi^\ell J = \int_0^1 \partial_x^j \partial_\xi^\ell \iint_{\RR^2}(\eta - \xi)\partial_2a(x, \xi + t(\eta - \xi)) b(y, \xi) e^{2\pi i(y-x)(\xi - \eta)} ~dy ~d\eta ~dt.$$
+We now treat the inner integral. Letting $\zeta = \eta - \xi$, $\partial_x^j \partial_\xi^\ell$ of the inner integral is
+\begin{align*}
+&\sim_\ell \partial_x^j \sum_{\ell' \leq \ell} \iint_{\RR^2} \zeta \partial_\xi^{\ell'}(\partial_2a(x, \xi + t\zeta)) \partial_\xi^{\ell - \ell'}b(y, \xi)e^{2\pi i(x-y)\zeta}~dy~d\zeta\\
+&= \partial_x^j \sum_{\ell' \leq \ell} \iint_{\RR^2} \zeta \partial_2^{\ell' + 1} a(x, \xi + t\zeta)\partial_2^{\ell - \ell'} b(y, \xi) e^{2\pi i(x-y)\zeta} ~dy~d\zeta\\
+&\sim_j \sum_{\substack{j' \leq j\\\ell' \leq \ell}} \iint_{\RR^2} \zeta^{j-j'+1} \partial_1^{j'} \partial_2^{\ell' + 1} a(x, \xi + t\zeta) \partial_2^{\ell - \ell'} b(y, \xi) e^{2\pi i(x-y)\zeta} ~dy ~d\zeta
+\end{align*}
+and each of these integrals separately is
+\begin{align*}
+&= \iint_{\RR^2} \zeta \partial_2^{\ell' + 1} a(x, \xi + t\zeta)\partial_2^{\ell - \ell'} b(y, \xi) e^{2\pi i(x-y)\zeta} ~dy~d\zeta\\
+&= -\int_{-\infty}^\infty \partial_2^{\ell - \ell'} b(x - z, \xi) \int_{-\infty}^\infty \zeta^{j - j' + 1} \partial_1^{j'} \partial_2^{\ell' + 1} a(x, \xi + t\zeta) e^{2\pi iz\zeta} ~d\zeta ~dz\\
+&\sim_m \int_{-\infty}^\infty \partial_1^m \partial_2^{\ell - \ell'} b(x - z, \xi) \int_{-\infty}^\infty \zeta^{j-j'-m-1} \partial_1^{j'}\partial_2^{\ell' + 1} a(x, \xi + t\zeta) e^{2\pi iz\zeta} ~d\zeta ~dz
+\end{align*}
+for any $m$. Taking $m$ so large that both integrals converge we see that the above integral is bounded by
+$$\lesssim_{a,b,j,\ell} \langle \xi \rangle^{\alpha + \beta - j - \ell - 1}$$
+which was desired.
+\end{proof}
+
+Higher-order versions of this theorem are also true.
+
+\begin{corollary}[quantum correspondence]
+\index{quantum correspondence principle}
+Let $\{\cdot,\cdot\}$ denote the Poisson bracket and $a, b \in S^\alpha,S^\beta$ respectively. Let $[a, b]$ be the symbol of the commutator $[a(X, D), b(X, D)]$. Then
+$$2\pi i[a, b](X, D) - \{a, b\}(X, D) \in S^{\alpha + \beta - 1}.$$
+\end{corollary}
+\begin{proof}
+Let us work modulo $S^{\alpha + \beta - 1}$. Then $\{a, b\} = 0$, and
+$$[a, b] = a*b - b*a = ab - ba = 0.$$
+In particular, $\{a, b\}$ and $[a, b]$ are in the same coset.
+\end{proof}
+This suggests that if we view a symbol $a$ as a classical observable, then $a(X, D)$ is its quantization.
+In semiclassical analysis we are interested in the extremely high frequency regime, where lower-order symbols are negligible.
+The correspondence principle says that in the extremely high frequency regime, classical and quantum mechanics behave identically.
+
+\section{The Gabor transform}
+Fix a $\phi \in \Sch$, which is centered at $0$ with little spread, and $||\phi||_{L^2} = 1$.
+We are going to use $\phi$ to make an approximate phase portrait for some $f \in \Sch$, i.e. we want to know what the frequencies of $f$ are close to some fixed point $x$.
+To do this, we consider $f(\cdot)\overline \phi(\cdot - x)$ to localize $f$ to the point $x$. Taking the inner product with $e^{2\pi i\cdot\xi}$, we recover the frequencies close to $x$.
+\begin{definition}
+The \dfn{Gabor transform} of $f$ with respect to $\phi$ is
+$$T_\phi f(x, \xi) = \int_{-\infty}^\infty f(y) \overline \phi(y - x)e^{-2\pi iy\xi}~dy.$$
+\end{definition}
+The Gabor transform has many important applications in signal processing and microlocal analysis. In the former case we are mainly interested when $\phi$ is a Gaussian.
+By the uncertainty principle, the narrower $\phi$ is, the more information we get about the position and the less localized in frequency we are.
+In particular if $\phi$ is the Dirac mass then we get no information about the frequency at any one location as this is just the Fourier transform.
+\begin{lemma}
+The Gabor transform $T_\phi$ is a linear map $\Sch(\RR) \to \Sch(\RR^2)$.
+\end{lemma}
+\begin{proof}
+Linearity is clear. Now suppose $f \in \Sch(\RR)$; we must show $T_\phi f \in \Sch(\RR^2)$. Indeed,
+$$x^{\alpha_1} \xi^{\alpha_2} \partial_x^{\beta_1} \partial_\xi^{\beta_2} T_\phi f(x, \xi)
+\sim_{\beta_1} \sum_{\beta_1' \leq \beta_1} x^{\alpha_1} \xi^{\alpha_2} \int_{-\infty}^\infty f(y) \partial_x^{\beta_1'}
+\overline \phi(y - x) \partial_x^{\beta_1-\beta_1'} \partial_\xi^{\beta_2} e^{-2\pi iy\xi} ~dy$$
+and we will treat each summand separately. Each summand is
+\begin{align*}
+&\sim_\beta x^{\alpha_1} \xi^{\alpha_2 + \beta_1 - \beta_1'} \int_{-\infty}^\infty f(y)\overline \phi^{(\beta_2)}(y - x) y^{\beta_2} e^{-2\pi iy\xi} ~dy\\
+&\sim_\beta \int_{-\infty}^\infty f(y) \overline \phi^{(\beta_2)}(y-x) e^{-2\pi i y\xi} ~dy
+\end{align*}
+where we integrated by parts to replace powers of $\xi$ with powers of $y$ and then used the fact that $f$ is Schwartz to absorb a polynomial in $y$ into $f(y)$, and the fact that $x \mapsto \overline \phi^{(\beta_2)}(y-x)$ is Schwartz to absorb a polynomial in $x$.
+Now
+$$|x^{\alpha_1} \xi^{\alpha_2} \partial_x^{\beta_1} \partial_\xi^{\beta_2} T_\phi f(x, \xi)| \lesssim_{\alpha,\beta,\phi,f} \int_{-\infty}^\infty |f(y)\overline \phi^{(\beta_2)}(y-x)| ~dy \leq ||f\overline \phi^{(\beta_2)}||_{L^1(\RR)}$$
+which is finite since $f\overline \phi^{(\beta_2)}$ is Schwartz.
+\end{proof}
+\begin{lemma}
+The operator
+$$T_\phi^*F(y) = \iint_{\RR^2} F(x, \xi)\phi(y - x)e^{2\pi iy\xi}~dx~d\xi$$
+is a linear map $\Sch(\RR^2) \to \Sch(\RR)$ which is the adjoint to $T_\phi$ in the sense that $\langle T_\phi f, F\rangle = \langle f, T_\phi F\rangle$ for every $f \in \Sch(\RR)$ and $F \in \Sch(\RR^2)$.
+\end{lemma}
+\begin{proof}
+Again linearity is clear. We now check that $T_\phi^*$ sends Schwartz functions to Schwartz functions. If $F \in \Sch(\RR^2)$, we have
+$$y^\alpha \partial_y^\beta T_\phi^* F(y) = \iint_{\RR^2} F(x, \xi) e^{2\pi ix\xi} y^\alpha \partial_y^\beta \phi(y - x) ~dx ~d\xi$$
+and as $\phi$ is Schwartz it can absorb the operator $y^\alpha \partial_y^\beta$. Then
+$$|y^\alpha \partial_y^\beta T_\phi^* F(y)| \lesssim_{\alpha, \beta} \int_{-\infty}^\infty |\phi(y - x)| \int_{-\infty}^\infty |F(x, \xi)| ~d\xi ~dx.$$
+Since $F$ is Schwartz, $x \mapsto ||F(x, \cdot)||_{L^1}$ is Schwartz, and thus the outer integral is bounded.
+
+Now we check the adjoint property. We have
+\begin{align*}\langle T_\phi f, F\rangle &= \iiint_{\RR^3} f(y) \overline \phi(y - x) e^{-2\pi iy\xi} \overline{F(x, \xi)} ~dy ~dx ~d\xi\\
+&= \iiint_{\RR^3} f(x) \overline{F(x, \xi) \phi(y - x) e^{2\pi iy\xi}} ~dy ~d\xi ~dx\\
+&= \langle f, T_\phi^*F\rangle
+\end{align*}
+which was promised.
+\end{proof}
+\begin{lemma}
+For every $f \in \Sch(\RR)$, $T_\phi^* T_\phi f = f$.
+\end{lemma}
+\begin{proof}
+One has
+\begin{align*}
+T_\phi^* T_\phi f &= \iiint_{\RR^3} f(y) \overline \phi(y - x) \phi(z - x) e^{2\pi i(z - y)\xi} ~dy ~dx ~d\xi\\
+&= \iint_{\RR^2} f(y) \overline \phi(y - x) \phi(z - x) \int_{-\infty}^\infty e^{2\pi i(z - y)\xi} ~d\xi ~dy ~dx\\
+&= \iint_{\RR^2} f(y) \overline \phi(y - x) \phi(z - x) \delta(z - y) ~dy ~dx\\
+&= f(z) \int_{-\infty}^\infty |\phi(z - x)|^2 ~dx\\
+&= f(z)
+\end{align*}
+since $||\phi||_{L^2} = 1$.
+\end{proof}
+\begin{theorem}
+The Gabor transform $T_\phi$ extends to a linear isometry $L^2(\RR) \to L^2(\RR^2)$.
+\end{theorem}
+\begin{proof}
+$T_\phi$ is one-sided unitary by the above two lemmata, hence an isometry in $L^2$. Since Schwartz functions are dense we are done.
+\end{proof}
+
+We now show that pseudodifferential operators act as ``approximate multipliers" on phase space.
+\begin{definition}
+The \dfn{Kohn-Nirenberg-Wigner distribution} is
+$$W_\phi(x, \xi) = \phi(x)\overline{\hat \phi(\xi)}e^{-2\pi ix\xi}.$$
+\end{definition}
+So $W_\phi$ is an approximation to the convolution identity.
+\begin{theorem}
+For every compactly supported symbol $a$ and $f \in \Sch(\RR)$,
+$$T_\phi^*(a(T_\phi f)) = (a * W_\phi)(X, D)f.$$
+\end{theorem}
+\begin{proof}
+One has
+$$(a*W_\phi)(x, \xi) = \iint_{\RR^2} a(y, \eta) \phi(x - y)\overline{\hat \phi(\xi - \eta)} e^{-2\pi i(x-y)(\xi - \eta)} ~dy~d\eta.$$
+Therefore
+$$(a*W_\phi)(X, D)f(z) = \iiiint_{\RR^4} a(y, \eta) \phi(z - y) \overline{\hat \phi(\xi - \eta)} e^{-2\pi i(z-y)(\xi - \eta)} f(x)e^{2\pi i(z - x)\xi} ~dx ~d\xi ~dy ~d\eta.$$
+Meanwhile,
+$$T_\phi^*(aT_\phi f)(z) = \iiint_{\RR^3} a(x, \xi) f(y) \overline \phi(y - x) \phi(z - x) e^{2\pi i(z - y) \xi}~d\xi ~dy ~dx.$$
+These are equivalent by the Fourier inversion formula.
+\end{proof}
+
+
+\chapter{Almost pointwise convergence of Fourier series}
+In this chapter, let $T = \RR/\ZZ$ and let $f \in L^1(T)$. Recall that its Fourier coefficients are given by
+$$\hat f(n) = \int_T f(x)e^{-2\pi inx} ~dx.$$
+One of the oldest questions in harmonic analysis is when the Fourier inversion formula
+$$f(x) = \sum_{n \in \ZZ} \hat f(n) e^{2\pi inx}$$
+is valid. This holds uniformly and absolutely if $f \in C^\infty(T)$. Now consider the partial summation operators
+$$S_Nf(x) = \sum_{|n| \leq N} \hat f(n) e^{2\pi inx}.$$
+If $f \notin C^\infty(T)$, then it must be false that $S_Nf \to f$ uniformly, for the $S_Nf$ are smooth, but one might hope that they converge to $f$ in some weaker sense.
+Lusin conjectured in 1913 that for every $p \in [1, \infty]$ and every $f \in L^p(T)$, we have $S_Nf \to f$ almost pointwise.
+Kolmogorov proved in 1916 that this is false when $p = 1$; Carleson proved in the 1960s that it is true when $p \geq 2$; and Hunt proved that it is true when $p > 1$ by modifying Carleson's argument.
+\begin{definition}
+The operator $S_N$ is known as the \dfn{Dirichlet summation operator}.
+\end{definition}
+
+The reason why Lusin's problem is so phenomenally hard to solve is that any decomposition of phase space used to prove almost pointwise convergence must necessarily be invariant under modulation $\hat f \mapsto (\xi \mapsto \hat f(\xi - \xi_0)$ by the frequency $\xi_0$.
+But the Littlewood-Paley decomposition and the rising sun decomposition both privilege the frequency $0$, so are not invariant under modulation, so we must develop a much stronger decomposition of phase space which respects the action of the metaplectic group, as in the theory of the Gabor transform.
+
+\section{Convergence in $L^p$}
+We first show a much easier result: that at least the Dirichlet summation operators $S_N$ converge in (the strong operator topology of) $L^p$ to the identity.
+\begin{theorem}
+Suppose that $f \in L^p(T)$ and $p \in (1, \infty)$. Then $S_Nf \to f$ in the topology of $L^p(T)$.
+\end{theorem}
+To begin the proof, we first check that the $S_N$ are uniformly bounded on $L^p(T)$, but to do this we need to study a variant of the Hilbert transform adapted to periodic functions.
+
+To do this, let
+$$P_r(\theta) = \sum_{n \in \ZZ} r^{|n|}e^{2\pi in\theta}$$
+be the Poisson kernel adapted to the disc $D_r$ of radius $r$ in $\CC$.
+Given a harmonic function $g \in C^2(D_r)$ (so $\Delta g = 0$), let $\tilde g$ be its harmonic conjugate such that $\tilde g(0) = 0$.
+\begin{definition}
+The \dfn{Hilbert transform} on the unit disc is defined for smooth functions $f \in C^\infty(T)$ by
+$$Hf(x) = \lim_{r \to 1^-} (\widetilde{P_r*f})(\theta).$$
+\end{definition}
+If $f$ is already harmonic then it is clear that $Hf$ exists, and in fact $Hf = \tilde f$.
+But this is in particular true if $f$ is a polynomial, by complex analysis.
+\begin{lemma}
+If $n \neq 0$ then
+$$\widehat{\tilde f}(n) = -i \sgn n \hat f(n).$$
+\end{lemma}
+\begin{proof}
+If $f$ is constant then $\tilde f = 0$ and this is clear. If $f$ is holomorphic then $\tilde f = -if$ modulo constant functions and this is similarly clear. If $f$ is antiholomorphic, or a linear combination of the above, then taking complex conjugates and linear combinations we complete the proof.
+\end{proof}
+In particular, the Plancherel formula gives
+$$||\tilde f||_2^2 = ||f||_2^2 - |f(0)|^2 \leq ||f||_2^2,$$
+so the Hilbert transform satisfies the bound
+$$||Hf||_2 \leq ||\tilde u_f||_2 \leq ||u_f||_2 \leq ||f||_2.$$
+since the Poisson kernel is bounded on $L^2$. So $H$ extends to a bounded operator on $L^2$.
+One can similarly check that $H$ is a bounded linear mapping $L^1 \to L^{1,\infty}$
+
+\begin{lemma}
+If $p \in (1, \infty)$ then the Hilbert transform $H$ is bounded $L^p \to L^p$.
+\end{lemma}
+\begin{proof}
+By the above, and an interpolation, $H$ is bounded if $1 < p \leq 2$.
+We have $H^* = -H$, and by another interpolation, $H^*$ is bounded if $2 \leq p < \infty$. So $H$ is bounded.
+\end{proof}
+We therefore may define the bounded operator $T: L^p(T) \to L^p(T)$ by
+$$Tf = \frac{f}{2} + \frac{i}{2}Hf - \frac{\hat f(0)}{2}.$$
+But
+$$\widehat{Hf}(n) = -i\sgn n\hat f(n),$$
+so
+$$\widehat{Tf}(n) = \chi_{[1, \infty)} \hat f(n).$$
+
+\begin{lemma}
+For every $f \in L^p(T)$ and $N$ one has $||S_Nf||_p \leq ||f||_p$.
+\end{lemma}
+\begin{proof}
+We have
+$$S_Nf(x) = \sum_{n \in \ZZ} \chi_{[-N, N]}(x) \hat f(n) e^{2\pi inx} = e^{-2\pi i(N+1)x}T(e^{2\pi i(N+1)\cdot }f)(x) - e^{2\pi iNx}T(e^{-2\pi iN\cdot}f)(x)$$
+so
+$$||S_Nf||_p \leq 2 ||T||_p ||f||_p.$$
+\end{proof}
+We now prove the theorem. The $S_Nf$ are uniformly bounded in $L^p$, say $||S_Nf|| \leq 1$. On the other hand, if $g$ is a trigonometric polynomial,
+$$\limsup_{N \to \infty} ||S_Nf - f||_p \leq ||S_Nf - S_Ng||_p + ||g - f||_p + ||S_Ng - g||_p.$$
+Now $S_Ng = g$ if $N$ is larger than the degree of $g$, so
+$$\limsup_{N \to \infty} ||S_Nf - f||_p \leq \inf_g \sup_N ||S_N||_p||f - g||_p + ||f - g||_p = 0.$$
+where the $\inf$ is taken over all trigonometric polynomials $g$, which are dense in $L^p(T)$ by the Stone-Weierstrass theorem.
+
+We now prove the converse of the above theorem.
+\begin{theorem}
+If $p = 1$ or $p = \infty$, then there is an $f \in L^p(T)$ such that $S_Nf$ is unbounded in $L^p(T)$ as $N \to \infty$.
+\end{theorem}
+\begin{proof}
+To prove this, it suffices to show that the $S_N$ are not uniformly bounded in $L^p$ operator norm.
+If this is true, then by the Baire category theorem via the uniform boundedness principle, the $S_Nf$ cannot be uniformly bounded.
+
+The $S_N$ are convolution operators, say
+$$S_Nf = f * D_N$$
+where
+$$D_N(x) = \sum_{|n| \leq N} e^{2\pi inx}$$
+is the \dfn{Dirichlet kernel}. But the $D_N$ are unbounded in $L^1$ and in $L^\infty$, so by the converse to Young's inequality (which is true in $L^1$ but in the other $L^p$'s), $S_N$ blows up in $L^1$.
+
+The adjoint of a convolution operator is convolution with the reflected complex conjugate of the kernel. So the adjoint $S_N^*: L^1 \to L^1$ blows up in $L^1$, so $S_N: L^\infty \to L^\infty$ blows up too.
+\end{proof}
+
+\section{Equivalences to almost pointwise convergence}
+Recall that the $L^{p,\infty}$ norm is defined by
+$$||F||_{p,\infty} = \sup_{\lambda > 0} \lambda|\{x: |F(x)| \geq \lambda\}|^{1/p}.$$
+Here $|\cdot|$ denotes Lebesgue measure.
+Let $P_Nf$ denote the truncated Fourier series
+$$P_Nf = \sum_{n \leq N} \hat f(n) e^{2\pi inx}.$$
+Let $1_{D \leq N}$ denote the Fourier multiplier $\mathcal F^{-1}1_{\xi \leq N} \mathcal F$.
+
+
+\begin{theorem}
+Suppose $p \leq 2$. Then the following are equivalent:
+\begin{enumerate}
+\item For every $f \in L^p(T)$, $S_Nf \to f$ almost pointwise.
+\item There is no $f \in L^p(T)$ such that $\sup_N |S_Nf| = \infty$ almost everywhere.
+\item For every $f \in C^\infty(T)$,
+$$||\sup_N |S_Nf| ||_{p,\infty} \lesssim_p ||f||_p.$$
+\item For every $f \in C^\infty(T)$,
+$$||\sup_N |P_Nf| ||_{p,\infty} \lesssim_p ||f||_p.$$
+\item For every $f \in \Sch$,
+$$||\sup_N |1_{D \leq N}f|||_{p,\infty} \lesssim_p ||f||_p.$$
+\end{enumerate}
+\end{theorem}
+\begin{proof}[Proof that 3 implies 1]
+By hypothesis, for every $f \in C^\infty(T)$ and $N_0$,
+$$||\sup_{0 \leq N \leq N_0} |S_Nf|||_{p,\infty} \lesssim_p ||f||_p.$$
+Approximating a function in $L^p(T)$ by a function in $C^\infty(T)$ we see that the above inequality holds with the assumption $f \in C^\infty(T)$ dropped.
+By Fatou's lemma in the limit $N_0 \to \infty$ we see that the hypothesis actually holds for every $f \in L^p(T)$, rather than just every $f \in C^\infty(T)$.
+
+By the triangle inequality, for every $f \in L^p(T)$,
+$$||\limsup_{N \to \infty} |S_Nf - f|||_{p, \infty} \lesssim_p ||f||_p,$$
+but if $f \in C^\infty(T)$, then $S_Nf - f \to 0$ uniformly, hence in $L^\infty$, hence in $L^p$, hence in $L^{p, \infty}$.
+By dominated convergence, the above triangle inequality implies that we can approximate $f$ by a function in $C^\infty(T)$ even if $f \notin C^\infty(T)$ and conclude that $S_Nf - f \to 0$, which was to be shown.
+\end{proof}
+That 1 implies 2 is obvious. So we are almost ready to show that 1, 2, and 3 are equivalent, but to do that we need an inequality due to Paley and Zygmund.
+\begin{lemma}[Paley-Zygmund]
+\index{Paley-Zygmund inequality}
+Let $Z$ be a random variable and $\theta \in [0, 1]$. If the standard deviation of $Z$ is finite then
+$$\Pr(Z > \theta \Expect Z) \geq (1 - \theta)^2 \frac{(\Expect Z)^2}{\Expect(Z^2)}.$$
+\end{lemma}
+\begin{proof}
+We have
+$$\Expect Z = \Expect(Z1_{Z \leq \theta \Expect Z}) + \Expect(Z1_{Z > \theta \Expect Z}).$$
+The first term is $\leq \theta \Expect Z$; the second is an $L^2$ inner product, so by the Cauchy-Schwarz inequality,
+$$\Expect(Z 1_{Z > \theta \Expect Z}) \leq \sqrt{\Expect(Z^2) \Pr(Z > \theta \Expect Z)}.$$
+Thus
+$$(1 - \theta) \Expect Z \leq \sqrt{\Expect(Z^2) \Pr(Z > \theta \Expect Z)}.$$
+Squaring both sides and dividing by $\Expect(Z^2)$, which is legal since the second moment of $Z$ is finite (since its square root is the standard deviation) we see the claim.
+\end{proof}
+
+\begin{proof}[Proof that 2 implies 3]
+Suppose that 3 fails.
+Then for any $A > 0$ there is an $f \in L^p(T)$, $E \subseteq T$ measurable, $N_0 \in \NN$ and $\lambda > 0$ such that
+$$\sup_{0 \leq N \leq N_0} |S_Nf| \geq \lambda$$
+on $E$, and $\lambda |E|^{1/p} \geq A||f||_p$. Up to a rescaling we can assume $\lambda = 1$.
+
+Let $n \geq 1$ be the integer part of $1/|E|$. Then there are translations $E + x_1, \dots, E + x_n$ whose union has measure close to $1$.
+To see this, we choose the $x_i$ uniformly and independently at random; the probability that some $x$ satisfies $x \in E + x_i$ is $|E|$, so the expected value of the measure of $\bigcup_i E + x_i$ is $1 - (1 - |E|)^n$. Choosing deterministic $x_i$ so that
+$$\left|\bigcup_i E + x_i\right| \geq 1 - (1 - |E|)^n,$$
+and using $|n| \sim 1/|E|$ we see the claim.
+
+Let $\epsilon_i$ be Bernoulli signs, say
+$$\tilde f(x) = \sum_i \epsilon_i f(x - x_i),$$
+so by Khinchine's inequality, since $p \leq 2$,
+$$\Expect ||\tilde f||_p^p \sim_p ||\sqrt{\sum_i |f(\cdot - x_i)|^2}||_p^p \leq ||\sqrt[p]{\sum_i |f(\cdot - x_i)|^p}||_p^p = \sum_i ||f(\cdot - x_i)||_p^p.$$
+Hence $\Expect ||\tilde f||_p^p \lesssim_p n ||f||_p^p$. In particular,
+$$\Expect ||\tilde f||_p^p \lesssim_p A^{-p}.$$
+
+Since $S_N$ is a convolution operator, it commutes with translations, so
+$$S_N \tilde f(x) = \sum_i \epsilon_i S_Nf(x - x_i).$$
+But by definition of $\lambda = 1$, we have
+$$\sup_i \sup_{0 \leq N \leq N_0} |S_Nf(x - x_i)| \geq 1.$$
+Thus there is an $N_x$ such that
+$$\sup_i |S_{N_x}f(x - x_i)| \geq 1.$$
+In particular,
+$$Q_x = \sqrt{\sum_i |S_{N_x}f(x - x_i)|^2} \geq 1.$$
+So the $q$th moment of $x \mapsto S_{N_x}f(x - x_i)$ is $Q_x$, so by the Paley-Zygmund inequality,
+$$\Pr(|S_{N_x}\tilde f(x)| \gtrsim Q_x) \gtrsim 1.$$
+Thus
+$$\Pr(|S_{N_x}\tilde f(x)| \gtrsim 1) \gtrsim 1.$$
+Therefore
+$$\Expect|\{\sup_N |S_N\tilde f(x)| \gtrsim 1\}| \gtrsim 1,$$
+hence
+$$1 \geq \Expect|\{\sup_N |S_N \tilde f(x)| \gtrsim 1\}| \gtrsim 1 + A^p\Expect||\tilde f||_p^p$$
+since the new term is $\lesssim_p A^{-p}$ and hence is small.
+We choose the signs $\epsilon_i$ deterministically and run the heat flow to find a \emph{smooth} function $f_A$ such that
+$||f_A||_p \lesssim_p A^{-1}$, an $N_A$, and a Borel $E_A$ such that $|E_A| \sim_p 1$ and
+$$\sup_{0 \leq N \leq N_A} |S_Nf_A(x)| \gtrsim 1,$$
+for every $x$.
+
+Iterating (taking $A$ large enough based on the previous choices), we find a sequence of $f^m \in C^\infty(T)$, $N^m$, and $E^m$ such that $||f^m||_p \leq 2^{-m}$, $|E^m| \gtrsim_p 1$,
+$$\sup_{0 \leq N \leq N^m} |S_Nf^m(x)| \geq m + \sum_{m' < m} \sup_N ||S_Nf^{m'}||_\infty,$$
+and if $m' < m$ then
+$$\sup_{0 \leq N \leq N^{m'}} ||S_Nf^m||_\infty \leq 2^{-m}.$$
+By randomly translating the $E^m$ and applying the Borel-Cantelli lemma, almost surely, almost every $x$ will lie in infinitely many $E^m$.
+Assume this is the case.
+
+Let $f = \sum_m f^m$. Then $f \in L^p(T)$, and by the Borel-Cantelli assumption and the triangle inequality for almost every $x$ there are infinitely many $m$ such that
+$$\sup_{0 \leq N \leq N^m} |S_Nf(x)| \geq m - \sum_{m' > m} 2^{-m'} \geq m - 1.$$
+Therefore
+$$\sup_N |S_Nf(x)| = \infty,$$
+contradicting 2.
+\end{proof}
+
+\begin{proof}[Proof that 3 and 4 are equivalent]
+We have
+$$S_N = P_N - P_{-N-1}$$
+so the triangle inequality implies that 4 implies 3. So suppose 3.
+
+Let $e_M(x) = e^{2\pi iMx}$, so $||e_Mf||_p = ||f||_p$, hence
+$$||\sup_{N \geq 0} |P_N(e_Mf) - P_{-N-1}(e_Mf)|||_{p, \infty} \lesssim_p ||f||_p.$$
+Modulating by $M$,
+$$||\sup_{N \geq 0} |P_{N-M}f - P_{-N-M-1}f||_{p, \infty} \lesssim_p ||f||_p$$
+so
+$$||\sup_{N \geq -M} |P_Nf - P_{-N-2M-1}f||_{p, \infty} \lesssim_p ||f||_p.$$
+Choosing $N_0 < M$ we have
+$$\sup_{|N| \leq N_0} |P_Nf - P_{-N-2M-1}f||_{p, \infty} \lesssim_p ||f||_p$$
+but the $P_{-N-2M-1}f \to 0$ rapidly and uniformly as $M \to \infty$ so we can take $M \to \infty$ and then $N_0 \to \infty$.
+\end{proof}
+
+\begin{proof}[Proof that 4 implies 5]
+Let $K > 0$, suppose without loss of generality that $f$ is compactly supported, say on $[-A, A]$, and let
+$$f_K(x) = \sum_{n \in \ZZ} f(K(x - n))$$
+where $x \in T$ is taken $\mod 1$.
+If $K$ is large then $f_K$ is smooth and supported on $[-A/K, A/K] \mod 1$. Besides
+$$||f_K||_p = K^{-1/p} ||f||_p.$$
+Moreover,
+$$\widehat{f_K}(n) = K^{-1}\hat f(Kn).$$
+Therefore
+$$P_Nf_K(x) = K^{-1}\sum_{n \leq N} \hat f(Kn)e^{2\pi inx}.$$
+Notice that $P_Nf_K(x)$ looks like the integral
+$$\int_{-\infty}^N \hat f(\xi) e^{2\pi ix\xi} ~d\xi = 1_{D \leq N} f.$$
+We just need to make this limiting argument rigorous.
+
+By assumption
+$$|\{x \in [-1/2, 1/2]: \sup_{N \in \ZZ} K^{-1}|\sum_{n \leq N} \hat f(Kn)e^{2\pi inx}| \geq \lambda\}| \lesssim_p \lambda^{-p} ||f||_p^p.$$
+We can replace this supremum with a supremum over $\RR$ without changing the summation $n \leq N$. We rescale by $K$, and then for every compact intervals $I, J$,
+$$|\{x \in I: \sup_{N \in J} K^{-1} |\sum_{\substack{\xi \in K^{-1}\ZZ\\\xi \leq N}} \hat f(\xi)e^{2\pi ix\xi}| \geq \lambda\}| \lesssim_p \lambda^{-p}||f||_p^p.$$
+We can now take limits as $K \to \infty$ to get the desired integration formula and estimate.
+\end{proof}
+
+\begin{proof}[Proof that 5 implies 4]
+It suffices to check 4 for all trigonometric polynomials, by the Stone-Weierstrass theorem.
+So let $f$ be a trigonometric polynomials, so the Fourier transform of $f$ has finite support.
+
+Let $\eta$ be a Schwartz function with Fourier support in $[-1, 1]$, and let
+$$f_R(x) = f(x \mod 1)\eta(x/R).$$
+Then as $R \to \infty$ we have
+$$||f_R||_p \sim_{p, \eta} R^{1/p} ||f||_p.$$
+Moreover,
+$$\widehat{f_R}(x) = R \sum_{n=-A}^A \hat f(n) \hat \eta(R(\xi - n)).$$
+Hence
+$$\eta(x/R) \sup_N |P_Nf(x \mod 1)| \leq \sup_N 1_{D \leq N}(D) f_R(x)$$
+which implies that 5 implies 4.
+\end{proof}
+
+The significance of the operators $P_N$ and similarly $1_{D \leq N}$ is that they are translation-invariant, which is especially important when viewing $1_{D \leq N}$ as an operator on $\RR$. Moreover $1_{D \leq N}$ obeys scaling symmetry,
+
+\section{Kolmogorov's theorem}
+\begin{theorem}
+There is a $f \in L^1(T)$ such that $S_Nf \not \to f$ almost pointwise.
+\end{theorem}
+\begin{proof}
+In view of the previous section it suffices to show that
+$$f \mapsto \sup_N |1_{D \leq N}f|$$
+is not weakly $(1, 1)$.
+Let $H = -\pi i \sgn D$ be the Hilbert transform,
+$$Hf(x) = \int_{-\infty}^\infty \frac{f(y)}{x - y}~dy$$
+where the integral is meant in the sense of Cauchy principal value. Then
+$$1_{D \leq N}f(x) = \frac{f(x)}{2} + \frac{1}{2\pi i}\int_{-\infty}^\infty \frac{f(y)}{x - y}e^{2\pi iN(x-y)}~dy$$
+so it suffices to show that the \dfn{Carleson operator}
+$$Cf(x) = \sup_N \left|\frac{1}{2\pi i}\int_{-\infty}^\infty \frac{f(y)}{x - y}e^{2\pi iN(x-y)}~dy\right|$$
+is not weakly $(1, 1)$.
+
+Note that
+$$Cf(x) \leq \int_{-\infty}^\infty \frac{|f(y)|}{|x - y|}~dy$$
+so we must strongly use the fact that $|x|^{-1}$ is not $L^1$. In fact $Cf$ will just barely diverge, because we are taking a supremum, and so may choose $N$ so that the oscillation in the Carleson operator does not ``matter."
+
+Let $n$ be a large natural number and take
+$$1 = N_0 < N_1 < \cdots < N_n$$
+be such that $N_i$ is a natural number and $N_{i+1}/N_i$ is very large.
+Let $\varphi$ be a smooth cutoff, $||\varphi||_1 = 1$, supported on $[-1, 1]$, and let
+$$f(x) = \sum_{j=1}^n N_j \varphi(N_j(x-j)).$$
+(So $f$ is an approximation to a sum of Dirac masses, which become much steeper as $j$ grows.)
+Thus $||f||_1 = n$.
+
+Let $j_0 \in [n/3, 2n/3]$ be a natural number, $\delta > 0$ small, and estimate $Cf(x)$ for $x \in [j_0 + \delta, j_0 + 1 -\delta]$.
+Now
+$$Cf(x) \geq \left|\int_{-\infty}^\infty \frac{f(y)}{x - y}e^{2\pi iN_{j_0}(x - y)}~dy\right|.$$
+If $n$ is large enough depending on $\delta$, then $j_0$ is also large and the support of $f$ near $j_0$ is very skinny, so $f(x) = 0$.
+Thus this integral is not actually a principal value. Plugging in the definition of $f$,
+$$Cf(x) \geq |\sum_{j=1}^n \int_{-\infty}^\infty \frac{\varphi(t)}{x - j - N_j^{-1}t}e^{2\pi iN_{j_0}t/N_j} ~dt$$
+where we used $e^{-2\pi iN_0j} = 1$ since $N_0 \in \NN$.
+
+Since the $N_i$ grow like a geometric series we can sum them. If $j \leq j_0$, then we can integrate by parts to get
+$$\int_{-\infty}^\infty \frac{\varphi(t)}{x - j- N_j^{-1}t}\exp(2\pi iN_{j_0}t/N_j)~dt \lesssim_\varphi \frac{N_j}{N_{j_0}}$$
+and then sum to get the sum $j \leq j_0$ to be bounded by $1$.
+Meanwhile if $j > j_0$ then $\exp(2\pi itN_{j_0}/N_j)$ is almost constant, so
+$$\sum_{j=1}^n \int_{-\infty}^\infty \frac{\varphi(t)}{x - j - N_j^{-1}t}\exp(2\pi itN_{j_0}N_j) ~dt = \log n + O_\varphi(1).$$
+Thus as $n \to \infty$,
+$$|\{x : 2Cf(x) \geq \log n\}| \gtrsim n$$
+so $||Cf||_{1, \infty} \gtrsim n \log n$,
+yet $||f||_1 = n$, which implies that $C$ is not weakly $(1, 1)$.
+\end{proof}
+
+\section{Carleson's theorem}
+\begin{theorem}
+For every $f \in L^2(T)$, $S_Nf \to f$ almost pointwise.
+\end{theorem}
+By a previous lemma it suffices to show that the maximal operator
+$$f \mapsto |\sup_N 1_{D \leq N} f|$$
+is not weakly $(2, 2)$ on $\Sch(\RR)$, i.e.
+$$|\sup_N |1_{D \leq N} f|||_{2, \infty} \lesssim ||f||_2.$$
+We first linearize this estimate.
+Let $N(x)$ be a frequency which nearly attains the suprema value of $|1_{D \leq N} f(x)|$. Then it suffices to show
+$$||1_{D \leq N(X)}f||_{2, \infty} \lesssim ||f||_2.$$
+Here $1_{D \leq N(X)}$ is the Kohn-Nirenberg quantization of the rough symbol $(x, \xi) \mapsto 1_{\xi \leq N(x)}$.
+
+\begin{lemma}
+Let $p \in (1, \infty)$, $(X, \mu)$ a $\sigma$-finite measure space, $f: X \to \CC$ measurable, and $A > 0$. Then $||f||_{L^{p,\infty}(\mu)} \leq A$ if and only if for every $E$ of finite measure, $f \in L^1(E)$ and
+$$\int_E f ~d\mu \lesssim_p A\mu(E)^{1/p'}.$$
+\end{lemma}
+\begin{proof}
+We first show that if $f \in L^{p, \infty}(\mu)$ then $f \in L^1(E)$. If $f \in L^{p, \infty}(\mu)$ then for every $\lambda > 0$,
+$$\lambda^p \mu(|f| > \lambda) \leq ||f||_{L^{p, \infty}(\mu)}.$$
+In particular,
+$$\mu(|f| > \lambda) \lesssim_f \lambda^{-p}.$$
+So if $E_\lambda = \{x \in E: |f(x)| \leq \lambda\}$ then
+$$\int_E |f| ~d\mu \leq \int_{E_\lambda} \lambda ~d\mu + \int_{|f| > \lambda} |f|~d\mu.$$
+Since $L^\infty(\mu)$ is dense in $L^{p, \infty}(\mu)$, we can assume that $||f||_\infty < \infty$. Thus
+$$||f||_{L^1(E)} \lesssim_f \lambda \mu(E) + \lambda^{-p}.$$
+Therefore $f \in L^1(E)$.
+
+By taking a decreasing rearrangement of $f$ and then restricting to generators of the Borel $\sigma$-algebra, to check the claim it now suffices to check when $X = (0, \infty)$, $\mu$ is Lebesgue measure, $E = (0, R)$ for some $R > 0$, and $f$ is decreasing.
+Then
+$$||f||_{p, \infty} = \sup_{\lambda > 0} \lambda^{1/p} f(\lambda).$$
+If $||f||_{p, \infty} \leq A$ then for every $\lambda > 0$, $f(\lambda) \leq \lambda^{-1/p}A$. So by Hoelder duality,
+$$\int_E f~d\mu \leq A \int_E \lambda^{-1/p} ~d\lambda = A \int_0^R \lambda^{-1/p}~d\lambda \lesssim_p AR^{1/p'} = A\mu(E)^{1/p'}.$$
+Conversely, if for every $E$,
+$$\int_E f~d\mu \leq A\mu(E)^{1/p'}$$
+then
+$$\mu(E)^{-1/p'} \int_E f(\lambda) ~d\lambda \leq A.$$
+So by Holeder duality,
+$$\frac{1}{\mu(E)} \int_E \lambda^{1/p} f(\lambda) ~d\lambda \leq \mu(E)^{1/p-1} \int_E \lambda^{1/p} f(\lambda)~d\lambda \leq A.$$
+Thus the average of $\lambda^{1/p} f(\lambda)$ as $\lambda$ ranges over any Borel set $E \subset (0, \infty)$ such that $\mu(E) < \infty$ is $\leq A$.
+In particular $\lambda^{1/p} f(\lambda) \leq A$, i.e. $||f||_{p, \infty} \leq A$, which was to be shown.
+\end{proof}
+
+Thus it suffices to show that for every Borel set $E$, any measurable function $f: E \to \CC$, and $f \in \Sch$ that
+$$\int_{-\infty}^\infty 1_E(X)1_{D\leq N(X)}f \lesssim ||f||_2\sqrt{|E|}.$$
+Here the operator $1_E(X)1_{D\leq N(X)}$ is the Kohn-Nirenberg quantization of the rough symbol
+$$(x, \xi) \mapsto 1_E(x)1_{\xi \leq N(x)}.$$
+
+The above estimate is very weird. It has a lot of symmetries. First, if $\Trans_{x_0}$ is the translation operator
+$$\Trans_{x_0} f(x) = f(x - x_0)$$
+then both sides of the estimate are left invariant by $f \mapsto \Trans_{x_0}$, $N \mapsto \Trans_{x_0}$, $E \mapsto E + x_0$.
+Second, for every $\lambda > 0$ we have a dilation symmetry; if $\Dil_\lambda$ is the $L^2$ dilation operator,
+$$\Dil_\lambda f(x) = \lambda^{-1/2}f(x/\lambda).$$
+Here $f \mapsto \Dil_\lambda f$ $E \mapsto \lambda E$ and $N \mapsto (x \mapsto \lambda^{-1}N(x/\lambda))$.
+
+But the above estimates are preserved by Calderon-Zygmund theory. We have another symmetry which is not respected by Calderon-Zygmund theory, which is the modulation symmetry, where the modulation operator $\Mod_{\xi_0}$ satisfies
+$$\Mod_{\xi_0}f(x) = e^{2\pi i\xi_0} f(x),$$
+and we map $f \mapsto \Mod_{\xi_0}f$, $E$ is left invariant, and $x \mapsto N(x) + \xi_0$. This is NOT an invariant of the original estimate, but it is an invariant of the normed estimate
+$$||1_E(X)1_{D\leq N(X)}f||_1 \lesssim ||f||_2\sqrt{|E|}.$$
+This is highly problematic because none of the tools we have used above do not respect modulation. So we need to develop new tools to prove Carleson's theorem.
+
+We now prove Carleson's theorem over the next few sections.
+
+\section{Whitney-type decomposition}
+We first deal with the annoying operator $\hat f \mapsto (\xi \mapsto 1_{\xi \leq N(x)}\hat f(\xi))$.
+We want to approximate this as a sum of operators of the form $1_I1_J$ where $I$ is a cutoff in time and $J$ is a cutoff in frequency.
+Note that the open set $\{(x, \xi): \xi < N(x)\}$ can be written as an almost-disjoint countable union of dyadic tiles $I \times J$.
+Say that dyadic intervals $\omega_-,\omega_+$ are \dfn{close intervals} if their lengths are the same and their parents are adjacent, with $\omega_-$ to the left of $\omega_+$.
+One then has
+$$1_{\xi \leq N(x)} = \sum_{\omega_- \sim \omega_+} 1_{\omega_-}(\xi)1_{\omega_+}(N(x))$$
+where $\sim$ means close. Thus we are interested in the integral
+$$\sum_{\omega_- \sim \omega_+} \int_{-\infty}^\infty 1_E(x)1_{\omega_+}(N(x))1_{\omega_-}(D)f(x)~dx.$$
+We now rewrite
+$$1_{\omega_-}(D)f(x) = 1_{\omega_-}(D)^2 f = 1_{\omega_-}(D) 1_{\omega_-}(D)^* f = (f * \tilde \check 1_{\omega_-}) * \check 1_{\omega_-} (x).$$
+Here $\tilde u(x) = \overline{u(-x)}$ and $\check\cdot$ is the adjoint of the Fourier transform. Thus
+$$1_{\omega_-}(D)f(x) = \iint_{\RR^2} f(z)\overline{\check 1_{\omega_-}(z - y)}\check 1_{\omega_-}(x - y)~dy~dz = \int_{-\infty}^\infty \langle f, \check \Trans_y1_{\omega_-}\rangle \check \Trans_y1_{\omega_-}(x)~dy.$$
+
+
+
+
+\part{Partial differential equations}
+\chapter{Scattering theory}
+\section{One spatial dimension}
+\section{Meromorphic continuation in odd dimensions}
+\section{Rellich's theorem}
+\section{The scattering matrix}
+\section{Trace formulae}
+\section{Blackbox scattering}
+\section{Complex scaling}
+\section{Resonance-free regions}
+
+
+
+\chapter{General relativity}
 \section{Axioms of special relativity}
 \begin{definition}
     A \dfn{reference frame} is a coordinate system for $\RR^4 = \RR \times \RR^3$. A reference frame is said to be \dfn{inertial} if the motion of a body without external influence forms a straight line in $\RR^4$. Otherwise, the reference frame is said to be \dfn{accelerated}.
@@ -5183,10 +7555,9 @@ Let $(M, g)$ be a Lorentzian spacetime as above. Recall that we have a causal st
     Let $S \subseteq M$. The \dfn{chronological future} $I^+(S)$ is the set of points in $M$ that can be reached by a curve through the exponential map of the open future light cones of $S$. The chronological past is defined similarly, but with the open past light cone. The \dfn{causal future} and causal past are defined similarly, but for the closed light cones.
 \end{definition}
 
-\chapter{The Cauchy problem in general relativity}
+\section{The Einstein equation}
 We pose the Einstein equation as an initial-value problem on the Lorenztian manifold $(M, g)$.
 
-\section{The Einstein equation}
 If $\mathcal L$ is a Lagrangian density, then $\mathcal L$ does not have to be integrable, so long as we only take only compactly supported perturbations when we carry out the calculus of variations. That is why we emphasize that $\mathcal L$ is only a ``density" rather than a summable quantity.
 
 Throughout, we let $\delta g_{\alpha\beta}$ be a compcatly supported perturbation of the metric tensor $g_{\alpha\beta}$.
@@ -5356,7 +7727,7 @@ But $x$ lifts to a regular point in $M \coprod \hat M$ (and let us assume withou
 It follows that $M \cup \hat M$ is Hausdorff, and hence a globally hyperbolic development which contains $M$. So $M \cup \hat M = M$, and it follows that $\hat M = M$. So $M$ is a globally hyperbolic development.
 \end{proof}
 
-\chapter{General relativity in spherical symmetry}
+\section{Spherical symmetry}
 We now make a simplifying assumption to get rid of annoying obstructions in Lorentzian geometry: that of spherical symmetry.
 
 \begin{definition}
