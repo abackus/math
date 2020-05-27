@@ -7349,13 +7349,103 @@ so $||Cf||_{1, \infty} \gtrsim n \log n$,
 yet $||f||_1 = n$, which implies that $C$ is not weakly $(1, 1)$.
 \end{proof}
 
+\section{Averaged convergence in $L^1$}
+We now show that at least we have convergence in $L^1$ on average.
+
+\begin{definition}
+The \dfn{Fej\`er summation operator} is
+$$F_N = \frac{1}{N+1}\sum_{N'=0}^N S_{N'}.$$
+\end{definition}
+A common way to show that a sequence in $L^1$ converges almost pointwise is to use a Hardy-Littlewood estimate.
+\begin{definition}
+The \dfn{Hardy-Littlewood maximal function} of a function $f \in L^1(T)$ is
+$$Mf(x) = \sup_{r > 0} \frac{1}{2r} \int_{x-r}^{x+r} |f(y)| ~dy.$$
+\end{definition}
+We let
+$$A_rf(x) = \frac{1}{2r} \int_{x-r}^{x+r} |f(y)| ~dy$$
+be the averaging operator, so $Mf = \sup_r A_rf$.
+\begin{theorem}[Hardy-Littlewood]
+  \index{Hardy-Littlewood inequality}
+The Hardy-Littlewood maximal operator $M$ is weakly $(1, 1)$.
+\end{theorem}
+\begin{proof}
+We must show that for every $f \in L^1$ and $r > 0$ that
+$$|\{\sup_r |A_r f| \geq 1\}| \lesssim ||f||.$$
+But we can restrict to $f$ a continuous, nonnegative, compactly supported function and $r \in \{0, 1, \dots, R\}$ for some $R$ since $r \mapsto A_r$ is strong operator continuous and we can use monotone convergence. Then
+$$E = \{\sup_r |A_r f| \geq 1\}$$
+is compact. For every $x \in E$ there is a $r(x) > 0$ such that
+$$|B(x, r(x))| < \int_{B(x, r(x))} f(y) ~dy.$$
+We want to show
+$$|E| \lesssim \int_{-\infty}^\infty f(y) ~dy$$
+which would follow by summing the previous estimate if the balls were disjoint.
+
+We choose finitely many $B(x_i, r(x_i))$ to cover $E$, and run the Vitali covering algorithm to choose $B(x_i', r(x_i'))$ from that cover which are disjoint such that
+$$|B(x_i', r(x_i'))| \gtrsim |E|.$$
+We now can sum, at the price of the implied constant that we lost when we ran the Vitali covering algorithm.
+\end{proof}
+\begin{lemma}
+For every $f \in L^1(T)$,
+$$\sup_{N \geq 1} |F_Nf(x)| \lesssim Mf(x).$$
+\end{lemma}
+\begin{proof}
+The convolution kernel of $F_N$ is
+$$K_N(x) = \frac{\sin^2(Nx/2)}{N\sin^2(x/2)}.$$
+This follows by trig identity bashing.
+If $|x| < \pi/2$ (say) then $\sin^2(x/2) \sim x^2$, and otherwise $\sin^2(x/2) \sim 1$.
+Thus $K_N$ is nonnegative, and is bounded uniformly in $L^1(T)$:
+\begin{align*}||K_N||_1 &\sim \int_{-\pi/2}^{\pi/2} \frac{\sin^2(Nx/2)}{N(x/2)^2} ~dx + 2\int_{\pi/2}^\pi \sin^2(Nx/2)~dx \\
+  &\sim 4\int_0^{N\pi/2} \frac{\sin \theta}{\theta}~d\theta + \pi \\
+  &\leq 8
+\end{align*}
+if $N$ is large enough.
+
+Now $\sin^2(Nx/2)$ has a period of $2\pi/N$, with zeroes at $\pm 2k\pi/N$ for each $k$. In particular it has $\sim N$ zeroes on $[-\pi, \pi)$.
+We do not consider $0$ to be a zero of $\sin^2(Nx/2)$ since it is a zero of $1/x^2$.
+Write
+$$K_N(x) = \sum_{n \lesssim N} w_{n,N}(x)$$
+where $w_{n,N}$ is $K_N$ cut off to be between its $n$th and $n+1$th zeroes, and we take $w_{0,N}$ to be supported close to $0$.
+Thus $w_{n,N}$ is a rescaled, translated approximate delta function of width $\sim 1/N$,
+$$\sum_{n \lesssim N} ||w_{n,N}||_1 \leq 8.$$
+Thus $w_{n,N} * f \sim \Trans_{y_{n,N}} f/||w_{n,N}||_1$ where $y_{n,N}$ is the center of the support of $w_{n,N}$. In particular
+$$K_N * f \sim \sum_{n \leq N} \frac{\Trans_{y_{n,N}}f}{||w_{n,N}||_1} \sim \sum_{n \leq N} \frac{f(-y_{n,N})}{||w_{n,N}||_1} \leq 8Mf$$
+snice the second sum is an average of $||K_N||_1f$ at a sampling of uniformly distributed points.
+\end{proof}
+\begin{theorem}
+For every $f \in L^1(T)$, $F_Nf \to f$ almost pointwise.
+\end{theorem}
+\begin{proof}
+We first observe that if $S_Nf \to f$ almost pointwise then $F_Nf \to f$ almost pointwise. Indeed,
+$$F_Nf(x) = \sum_{|n| \leq N+1}\frac{N+1-n}{N+1} \hat f(n)e^{2\pi inx}$$
+which clearly approximates $S_Nf(x)$ if $N$ is large.
+So if $f$ is smooth, then $F_Nf \to f$ almost pointwise.
+
+Moreover, if $f$ is smooth, then by the Hardy-Littlewood inequality and the previous lemma,
+$$||\sup_N |F_Nf|||_{1, \infty} \lesssim ||Mf||_{1, \infty} \lesssim ||f||_1.$$
+Therefore $F_N$ is weakly $(1, 1)$ uniformly in $N$.
+
+We now choose a sequence of $f_k \in C^\infty(T)$ such that $||f_k - f||_1 < 2^{-k}$.
+By Markov's inequality,
+$$||f_k - f| \geq 1/k| \leq k ||f_k - f||_1 < k 2^{-k}$$
+so by the Borel-Cantelli lemma, the set of $x$ such that $f_k(x) - f(x) > 1/k$ for infinitely many $k$ has measure $0$.
+Therefore $f_k \to f$ almost pointwise.
+
+Since $F_N$ is weakly $(1, 1)$ uniformly in $N$ and $f_k \to f$ in $L^1$,
+$$\lim_{k \to \infty} ||\sup_N F_N|f_k - f|||_{1, \infty} = 0.$$
+Therefore $\sup_NF_N|f_k - f| \to 0$ in measure, so
+$$\lim_{k \to \infty} \sup_N |F_N f_k - F_N f| = 0$$
+in measure. We pass to a subsequence where we can use the Borel-Cantelli lemma to imply that the above limit converges almost pointwise.
+Since the convergence is uniform in $N$,
+$$|F_Nf - f| \leq |F_Nf - F_Nf_N| + |F_Nf_N - f_N| + |f_N - f| \to 0.$$
+This was desired.
+\end{proof}
+
 \section{Carleson's theorem}
 \begin{theorem}
 For every $f \in L^2(T)$, $S_Nf \to f$ almost pointwise.
 \end{theorem}
 By a previous lemma it suffices to show that the maximal operator
 $$f \mapsto |\sup_N 1_{D \leq N} f|$$
-is not weakly $(2, 2)$ on $\Sch(\RR)$, i.e.
+is weakly $(2, 2)$ on $\Sch(\RR)$, i.e.
 $$|\sup_N |1_{D \leq N} f|||_{2, \infty} \lesssim ||f||_2.$$
 We first linearize this estimate.
 Let $N(x)$ be a frequency which nearly attains the suprema value of $|1_{D \leq N} f(x)|$. Then it suffices to show
@@ -7402,17 +7492,14 @@ $$\Trans_{x_0} f(x) = f(x - x_0)$$
 then both sides of the estimate are left invariant by $f \mapsto \Trans_{x_0}$, $N \mapsto \Trans_{x_0}$, $E \mapsto E + x_0$.
 Second, for every $\lambda > 0$ we have a dilation symmetry; if $\Dil_\lambda$ is the $L^2$ dilation operator,
 $$\Dil_\lambda f(x) = \lambda^{-1/2}f(x/\lambda).$$
-Here $f \mapsto \Dil_\lambda f$ $E \mapsto \lambda E$ and $N \mapsto (x \mapsto \lambda^{-1}N(x/\lambda))$.
+Here $f \mapsto \Dil_\lambda f$, $E \mapsto \lambda E$ and $N \mapsto (x \mapsto \lambda^{-1}N(x/\lambda))$.
 
 But the above estimates are preserved by Calderon-Zygmund theory. We have another symmetry which is not respected by Calderon-Zygmund theory, which is the modulation symmetry, where the modulation operator $\Mod_{\xi_0}$ satisfies
 $$\Mod_{\xi_0}f(x) = e^{2\pi i\xi_0} f(x),$$
-and we map $f \mapsto \Mod_{\xi_0}f$, $E$ is left invariant, and $x \mapsto N(x) + \xi_0$. This is NOT an invariant of the original estimate, but it is an invariant of the normed estimate
+and we map $f \mapsto \Mod_{\xi_0}f$, $E$ is left invariant, and $N \mapsto N + \xi_0$. This is NOT an invariant of the original estimate, but it is an invariant of the normed estimate
 $$||1_E(X)1_{D\leq N(X)}f||_1 \lesssim ||f||_2\sqrt{|E|}.$$
 This is highly problematic because none of the tools we have used above do not respect modulation. So we need to develop new tools to prove Carleson's theorem.
 
-We now prove Carleson's theorem over the next few sections.
-
-\section{Whitney-type decomposition}
 We first deal with the annoying operator $\hat f \mapsto (\xi \mapsto 1_{\xi \leq N(x)}\hat f(\xi))$.
 We want to approximate this as a sum of operators of the form $1_I1_J$ where $I$ is a cutoff in time and $J$ is a cutoff in frequency.
 Note that the open set $\{(x, \xi): \xi < N(x)\}$ can be written as an almost-disjoint countable union of dyadic tiles $I \times J$.
@@ -7431,7 +7518,188 @@ $$1_{\omega_-}(D)f(x) = \iint_{\RR^2} f(z)\overline{\check 1_{\omega_-}(z - y)}\
 
 \part{Partial differential equations}
 \chapter{Scattering theory}
+Recall that the wave operator is
+$$\Box = \partial_t^2 + \Delta$$
+where $\Delta$ is the positive-definite Laplacian. Consider solutions to the wave equation $\Box u = 0$, where $u$ is defined on a spacetime slab $\Omega \times \RR$ where $\Omega \subset \RR^d$ is compact.
+We can solve the wave equation because in this case $\Delta$ has a compact inverse, hence a discrete spectrum
+$$\lambda_1 \leq \lambda_2 \leq \cdots \to \infty$$
+with an orthonormal basis of eigenfunctions $u_j$ and hence
+$$u(t, x) = \sum_j a_j e^{-it\lambda_j} u_j(x).$$
+That was kind of easy but we are interested in the opposite problem of this: solving the wave equation on the complement of $\Omega$.
+The intuition is that the waves are hitting the object $\Omega$ and bouncing off.
+In this case $\Delta$ does not have eigenvalues but instead has a continuous spectrum.
+Still we want to approximate a solution $u$ by
+$$u(t, x) \approx \sum_j e^{-it\lambda_j} u_j(x)$$
+where $\lambda_j$ are ``resonances" and $u_j$ are ``eigenfunctions", and the sum ``converges on compact sets as $t \to \pm \infty$".
+The intuition is that $\Re \lambda_j$ gives the frequency and $-\Im \lambda_j$ gives the rate of decay.
+
 \section{One spatial dimension}
+Instead of a strict barrier for now we will work with a potential (rather than simply a barrier), thus we are interested in the quantum Hamiltonian
+$$P_V = D^2 + V$$
+where $D = -i\partial$ on $\RR$ and $V \in L^\infty(\RR)$ has compact support.
+We want to solve
+$$(P_V - \lambda^2)u = f$$
+where $f \in L^2(\RR)$ but we do not assume $u \in L^2(\RR)$.
+We assume $\supp V, \supp f$ are compact subsets of $(-R, R)$ for some $R > 0$.
+Thus if $|x| > R$, $u$ is a linear combination of the outgoing solutions
+$$
+u(x) = \begin{cases}
+a_- e^{-i\lambda x}, &x<-R\\
+a_+ e^{i\lambda x}, &x>R
+\end{cases}
+$$
+and the incoming solutions
+$$
+u(x) = \begin{cases}
+b_- e^{i\lambda x}, &x<-R\\
+b_+ e^{-i\lambda x}, &x>R
+\end{cases}
+$$
+where we take the convention that $\arg \lambda \in [0, \infty)$.
+
+It follows that if $u$ is outgoing and $\Im \lambda > 0$ then $u$ decays exponentially, and hence $u \in L^2(\RR)$.
+Thus $\lambda$ is an eigenvalue in this case, if $f = 0$.
+
+We start with the case $V = 0$. We will use the Fourier transform to invert $D_x^2 - \lambda^2$. The resolvent has Schwartz kernel
+$$R_0(\lambda; x, y) = \frac{i}{2\lambda} e^{i\lambda|x-y|}$$
+which is valid when $\Im \lambda > 0$.
+Now if we take an analytic continuation of $R_0$ we will not get the inverse of $D_x^2 - \lambda^2$ since then $R_0$ would reflect around $\RR$, which holomorphic functions cannot do.
+
+\begin{theorem}
+The free resolvent $R_0$ extends to a meromorphic family of operators
+$$R_0(\lambda): L^2_{comp} \to L^2_{loc}$$
+such that if $\Im \lambda > 0$,
+$$||R_0(\lambda)||_{L^2 \to L^2} = d(\lambda^2, [0, \infty))^{-1} \leq (|\lambda| \Im \lambda)^{-1}.$$
+Moreover, if $\rho$ is a cutoff for a compact subset of $(-L, L)$ and $j \leq 2$,
+$$||\rho R_0(\lambda) \rho||_{L^2 \to H^j} \lesssim e^{2L\Im \lambda_-}|\lambda|^{-1}\langle\lambda\rangle^j.$$
+\end{theorem}
+\begin{proof}
+The Schwartz kernel extends meromorphically to the function
+$$R_0(\lambda; x, y) = \frac{i}{2\lambda}e^{i\lambda|x-y|}.$$
+
+Since the Fourier transform is unitary, if $\Im \lambda > 0$ and hence $u \in L^2$,
+$$||R_0(\lambda)u||_2 = ||\hat u/|\xi^2 - \lambda^2|||_2 \leq ||u||_2/d(\lambda^2, [0, \infty)).$$
+In general we use Schur's test. The estimate for $H^0 = L^2$ follows from the estimate
+$$\int_{-\infty}^\infty |\rho(x)\rho(y)R_0(\lambda;x,y)|~dx = |\lambda|^{-1}\int_{-\infty}^\infty |\rho(x)\rho(y)|e^{-\Im \lambda|x-y|}~dx \leq |\lambda|^{-1}e^{2L(\Im \lambda)_-}.$$
+The estimate for $H^2$ is just the Schauder estimate. Now interpolate to get it for $j \in (0, 2)$.
+\end{proof}
+
+\begin{theorem}
+Let $V \in L^\infty_{comp}(\RR \to \CC)$. Then
+$$R_V(\lambda) = (P_V - \lambda^2)^{-1}$$
+extends to a meromorphic family of operators
+$$R_V(\lambda): L^2_{comp} \to H^2_{loc}$$
+and if $\Im \lambda > 0$ then $R_V(\lambda)$ sends $L^2 \to L^2$, with finitely many poles as exceptions.
+\end{theorem}
+\begin{proof}
+First suppose $\Im \lambda$ is sufficiently large. We start by finding an approximate inverse to $D^2 + V - \lambda^2$, namely
+$$(P_V - \lambda^2)R_0(\lambda) = 1 + VR_0(\lambda)$$
+but
+$$||VR_0(\lambda)||_{L^2 \to L^2} = \frac{||V||_\infty}{(\Im \lambda)^2} < 1.$$
+So we can use Neumann series to write
+$$(1 + VR_0(\lambda))^{-1} = \sum_j (-1)^j (VR_0(\lambda))^j$$
+which converges in operator norm, and
+$$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.$$
+
+Now choose $\rho$, a cutoff function with compact support in $(-L, L)$, such that $\rho = 1$ on $\supp V$.
+Then
+$$\rho R_0(\lambda) \in B(L^2(\RR) \to H_{comp}^2(-L, L)).$$
+By the Rellich-Kondrachov theorem, $H^2(\RR)$ embeds compactly into $L^2(\RR)$, so $\rho R_0(\lambda) \in B_0(L^2(\RR))$, $B_0$ the compact $C^*$-algebra functor.
+Therefore we may invoke the Fredholm alternative to see that $1 + VR_0(\lambda) = 1 + V \rho R_0(\lambda)$ is a Fredholm operator of index $0$.
+(The second condition follows from traveling along the line $1 + t V\rho R_0(\lambda)$, where $t \in [0, 1]$, and using the fact that the function that sends a Fredholm operator to its index is continuous, hence constant on connected components of the space Fred$(L^2)$, with the operator norm.)
+We now pause the proof to recall the analytic Fredholm theorem.
+\end{proof}
+
+\begin{theorem}[analytic Fredholm theorem]
+Let $\Omega \subseteq \CC$ be connected and $A$ be a holomorphic family of Fredholm operators on $\Omega$ of index $0$. If $z_0 \in \Omega$ and $A(z_0)^{-1}$ exists, then $A^{-1}$ is a meromorphic family of operators.
+\end{theorem}
+\begin{proof}
+Let $z_1 \in \Omega$. If $A(z_1)$ is invertible then we have
+$$\partial_z(A(z)^{-1}) = -A(z)^{-1}\partial_zA(z)A(z)^{-1}$$
+close to $z$. Otherwise, let $u(z) = \dim \ker A(z)$. Consider the \dfn{Grushin operator}
+$$\tilde A(z) = \begin{bmatrix}A(z)&A_-\\A_+&0\end{bmatrix}.$$
+Here if $(e_1, \dots, e_n)$ are an orthonormal basis of $\ker A(z_1)$ and $(f_1, \dots, f_n)$ are an orthonormal basis of $\ker A(z_1)^*$, then
+$$A_+(u) = \begin{bmatrix}
+\langle u, e_1\rangle \\ \vdots \\ \langle u, e_n \rangle
+\end{bmatrix}$$
+and $A_-(u)(v_1, \dots, v_n) = \sum_j v_j f_j$.
+Then $\tilde A$ is invertible near $z_1$. But
+$$\tilde A(z)^{-1} = \begin{bmatrix}B(z)&B_+(z)\\B_-(z)&B_\mp(z)\end{bmatrix}$$
+and so $A$ is invertible iff $B_\mp$ is, since
+$$A(z)^{-1} = B(z) - B_+(z)B_\mp(z)^{-1}B_-(z).$$
+By construction $B_\pm$ is a meromorphic family of matrices. Thus its determinant has finitely many poles and zeroes. This means that $A^{-1}$ exists except at finitely many points.
+\end{proof}
+
+\begin{proof}[Proof of meromorphic continuation continued]
+By the above we see that $(1 + VR_0(\lambda))^{-1}$ is a meromorphic family of operators, and if $\Im \lambda > 0$ then
+$$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}$$
+carries $L^2$ to itself.
+
+The trouble is that we may get blowup if $\Im \lambda \leq 0$. Let
+$$K(\lambda) = VR_0(\lambda).$$
+Then $\rho K \rho$ is a meromorphic family of operators, so we think of $K$ as a ``meromorphic family" up to a cutoff.
+So
+$$(1 + K(\lambda)(1-\rho))^{-1} = 1 - K(\lambda)(1 - \rho)$$
+so
+$$(1 + K(\lambda))^{-1} = (1 + K(\lambda)\rho)^{-1}(1 + K(\lambda)(1 - \rho))$$
+and the Rellich-Kondrachov theorem and analytic Fredholm theorem show that we have an extension to $\Im \lambda \leq 0$.
+
+Finally, we recall that
+$$||K(\lambda)\rho||_{L^2 \to L^2} \lesssim |\lambda|^{-1}$$
+which means that $1 + K_V(\lambda)\rho$ is invertible if $|\lambda|$ is large and $\Im \lambda > 0$ so
+$$R_V(\lambda) = R_0(\lambda)(1 + K_V(\lambda)\rho)^{-1}(1 - K(\lambda)(1 - \rho))$$
+exists. Thus the set of poles in the upper-half plane is compact, but discrete by holomorphy, hence finite.
+\end{proof}
+
+\begin{definition}
+A pole of $R_V(\lambda)$ is called a \dfn{scattering resonance}. The \dfn{multiplicity} $m_R(\lambda)$ of $\lambda$ is the rank of $\oint_\lambda R_V(\zeta)~d\zeta$.
+\end{definition}
+
+We now interpret the scattering resonances by using them to solve the Helmholtz equation.
+\begin{theorem}
+If $\lambda$ is not a scattering resonance and $f \in L^2_{comp}(\RR)$ then
+$$(P_V - \lambda^2)u = f$$
+has a unique outgoing solution $u = R_V(\lambda)f$.
+\end{theorem}
+\begin{proof}
+Clearly this works if $\Im \lambda$ is sufficiently large since we defined $R_V(\lambda)$ to be the inverse of $P_V - \lambda^2$ there.
+But then we can use analytic continuation to extend this to all of $\CC$.
+
+To check uniqueness, write
+$$u = u_0 + \chi_+ u_+ e^{i\lambda \cdot} + \chi_- u_- e^{-i\lambda \cdot}$$
+where $\chi_\pm$ are cutoffs close to $\pm \infty$, $u_0$ has compact support and hence is in $L^2$, and $u_\pm$ are coefficients.
+Then we can check uniqueness for each of those terms.
+\end{proof}
+
+\begin{theorem}
+If $\lambda_0 \neq 0$ is a scattering resonance and $m_R(\lambda_0) > 0$ then there is an outgoing $u_1$ with
+$$(P_V - \lambda_0)u_1 = 0$$
+called a \dfn{resonant state}.
+\end{theorem}
+\begin{proof}
+For notational simplicity we check when $m_R(\lambda) = 1$. Then
+$$R_V(\lambda) = (\lambda - \lambda_0)^{-1}B_1 + B_0(\lambda)$$
+for some operators $B_0,B_1$ where $B_1$ has finite rank. But
+$$I - B_0(\lambda) = (\lambda - \lambda_0)^{-1}(P_V - \lambda_0^2)B_1$$
+and the only way this is possible is if both sides are holomorphic, so that $(P_V - \lambda_0^2)B_1 = 0$. Thus we can solve the equation.
+\end{proof}
+Here the assumption $m_R(\lambda_0) > 0$ means that $\lambda_0$ is not a double pole.
+
+We now study where the resonances are. If $V$ is real-valued then $P_V$ is self-adjoint.
+\begin{lemma}
+If $V$ is real and $\Im \lambda > 0$, $\lambda$ a resonance, then $\lambda$ is an eigenvalue and $\lambda = ir$, $r > 0$.
+\end{lemma}
+\begin{proof}
+We have
+$$u(x) = c_\pm e^{\pm i\lambda x}$$
+and $u \in L^2$ so $\lambda^2$ is an eigenvalue. Since $P_V$ is self-adjoint, $\lambda^2 \in \RR$.
+\end{proof}
+
+
+
+
+
+
 \section{Meromorphic continuation in odd dimensions}
 \section{Rellich's theorem}
 \section{The scattering matrix}
