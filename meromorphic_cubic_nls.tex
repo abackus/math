@@ -1,0 +1,262 @@
+
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{meromorphically continuing the resolvent}
+\author{Aidan Backus}
+\date{December 2019}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\CVect}{\mathbf{Vect}_\CC}
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\coker}{coker}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Cubic NLS stuff}
+We are interested in the equation
+$$i\partial_t u + \partial_x^2u/2 + q\delta_0 u + u|u|^2 = 0,$$
+the cubic NLS with a small Dirac perturbation ($0 < |q| \ll 1$).
+Up to a rescaling, we can take
+$$v_q(x) = \sech(|x| + \atanh q)$$
+to be the ground state solution to the cubic NLS with perturbation. One has $||v_q||_2^2 = 2(1 - q)$.
+
+\section{Symp geometry}
+Let $M$ be a symplectic manifold, $H$ a smooth function on $M$, which we interpret as the Hamiltonian.
+Then $dH$ is a $1$-form on $M$ -- if $(x_j)_j$ is a coordinate system on $M$ then
+$$dH = \sum_j \frac{\partial H}{\partial x_j}~dx_j.$$
+Since $M$ is a symplectic manifold, we have a fixed nongenerate $2$-form $\omega$ on tangent spaces $T_xM$, namely the symplectic form of $M$. So we have an isomorphism $T^*_xM \to T_xM$, $\varphi \mapsto w$, where for every $v \in T_xM$,
+$$(\varphi, v) = \omega(v, w).$$
+In particular since $dH$ is a $1$-form it can be identified with a vector field $\Xi_H: M \to TM$ such that
+$$(dH, v) = \omega(v, \Xi_H).$$
+The vector field $\Xi_H$ is known as the Hamiltonian vector field, and the induced flow $\RR \times M \to M$ is known as the Hamiltonian flow.
+The point is that the Hamiltonian flow preserves $H$.
+The linearization of $\Xi_H$ is a map $TM \to TM$ known as the Hamiltonian map. Hamiltonian maps are covered in Hormander III, 21.5, and more general considerations are in 21.1.
+
+We consider the symplectic structure on the \emph{real} Hilbert space $H^1(\RR \to \CC)$ determined by
+$$\omega(u, v) = \Im \int_{-\infty}^\infty u\overline v.$$
+Since $u\overline u = |u|^2$ is real, $\omega$ is a closed form, hence symplectic.
+Since $H^1(\RR \to \CC)$ is a symplectic vector space, every point looks like the origin so to specify a tangent vector is the same thing as specifying a point.
+
+We have an embedding
+\begin{align*}
+  H^1(\RR \to \CC) &\to H^1(\RR \to \CC)^2\\
+  u &\mapsto (u, \overline u)
+\end{align*}
+and any linear operator on $H^1(\RR \to \CC)$ gives a linear operator on the subspace $\Delta$ of $H^1(\RR \to \CC)^2$ given by vectors of the form $(u, \overline u)$.
+
+The cubic NLS with perturbation determines a Hamiltonian flow on $H^1(\RR \to \CC)$ with the Hamiltonian
+$$H_q(v) = \frac{1}{4}\int_{-\infty}^\infty |\partial_xv(x)|^2 - |v(x)|^4~dx - \frac{1}{2}q|v(0)|^2.$$
+Then
+$$\Xi_{H_q}(u) = -i \left(-\frac{1}{2}\partial_x^2u - |u|^2u - q\delta_0 u\right).$$
+Let $\mathcal F_q$ be the Hamiltonian map of $\Xi_{H_q}$. Writing $U = \begin{bmatrix}1&-i\\1&i\end{bmatrix}/\sqrt 2$, we let $\mathcal H_q/2 = U\mathcal F_qU^*/i$.
+Thus $\mathcal H_q$ can be thought of (up to a unitary change of coordinates) the linearization of the cubic NLS.
+
+Now
+$$\mathcal H_q = \begin{bmatrix}-\partial^2 + 1 \\&\partial^2 - 1\end{bmatrix} + v^2\begin{bmatrix}-4&-2\\2&4\end{bmatrix}-2q\delta_0\begin{bmatrix}1\\&-1\end{bmatrix}.$$
+In particular
+$$\mathcal H_0 = \begin{bmatrix}-\partial^2 + 1 \\&\partial^2 - 1\end{bmatrix} + \sech^2 \begin{bmatrix}-4 & -2\\2 & 4\end{bmatrix}.$$
+We should be thinking of $\mathcal H_q$ as a perturbation of $\mathcal H_0$.
+
+\section{The resolvent of $\mathcal H_0$}
+We want to compute the resolvent $R_0(\lambda) = (\mathcal H_0 - \lambda)^{-1}$.
+
+One has
+$$\mathcal H_0^2 = (\partial - 1)^2 + 12 \sech^4 + (\partial^2 - 1)\sech^2 \begin{bmatrix}4 & 2\\2 & 4\end{bmatrix} + \sech^2 \begin{bmatrix}4 & -2\\-2&4\end{bmatrix}(\partial^2 - 1).$$
+This is self-adjoint, so its spectrum is contained in $\RR$. In particular the spectrum of $\mathcal H_0$ is only purely real and purely imaginary.
+
+\section{Hamiltonian observables are Fredholm on tori}
+As an example of how to show that a linear operator is Fredholm we show that $V - \Delta$ is Fredholm on $\Torus^n$.
+This is ``equivalent" to having discrete spectrum, because if $P$ is Fredholm then the proof ``should" also be valid for $P - \lambda$ which hence should have a finite-dimensional eigenspace so none of the dumb stuff associated to continuous spectrum can happen. I think this is discussed in Evans 6.5 but I haven't checked.
+The goal is to show that $\mathcal H_0$ is Fredholm. One can then use analytic Fredholm theory to show that the resolvent $R_0$ has a meromorphic continuation to some Riemann surface.
+
+\begin{theorem}
+Let $V \in L^2(\Torus^n \to \CC)$, then $P = V - \Delta$ is Fredholm as an operator
+$$P: H^2(\Torus^n) \to L^2(\Torus^n).$$
+\end{theorem}
+\begin{proof}
+We must show that $\ker P$ and $\coker P$ are finite-dimensional.
+
+First for $\ker P$. Let the unit ball $B$ of $\ker P$ have the topology of $L^2$. If $u \in B$, then
+$$||u||_{H^2}^2 = \sum_{\xi \in \ZZ^n} (1 + |\xi|^2)|\hat u(\xi)|^2 = \int_{\Torus^n} |(1 + \Delta)u|^2 \leq ||u||_{L^2}^2 + ||Vu||_{L^2}^2.$$
+Since $V \in L^2$,
+$$||u||_{H^2}^2 \leq (1 + ||V||_{L^2}^2)|u||_{L^2}^2.$$
+so $B$ embeds continuously in $H^2$, but $H^2$ embeds compactly in $L^2$, so $B$ is homeomorphic to $B$ with the topology of $H^2$, and is compact.
+Since $\ker P$ has a compact unit ball, $\dim \ker P$ is finite by the converse to the Heine-Borel theorem.
+
+For $\coker P$, note that $P^* = V^* - \Delta$ meets the same hypotheses as $P$, so $\ker P^*$ is finite-dimensional by the above argument.
+Now $P$ is continuous, since
+$$||Pu||_{L^2} \leq ||Vu||_{L^2} + ||\Delta u||_{L^2} \leq ||V||_{L^2}(||u||_{L^2} + ||\Delta u||_{L^2}) \leq ||V||_{L^2} ||u||_{H^2}.$$
+So by the closed graph theorem, the graph of $P$ is closed and hence the image of $P$ is closed.
+Therefore $\coker P = \ker P^*$ which is finite-dimensional.
+\end{proof}
+
+Note that the above compact kernel trick works whenever we have an elliptic estimate, i.e.
+$$||u||_{H^2} \lesssim ||u||_{L^2} + ||Pu||_{L^2}.$$
+An interesting related estimate on functions
+$$\{u:u\in H^{s+1},~Pu \in H^s\} \to H^s$$
+is
+$$||u||_{H^{s+1}} \lesssim ||u||_{H^s} + ||Pu||_{H^s}.$$
+Here $s$ depends on the coefficient of the leading term of $P$.
+
+Also note that operators with a parametrix are Fredholm. In fact if $P$ has a parametrix, $Pu = \delta + f$ where $f = O(h^\infty)$ then $f$ is a compact operator and $\delta$ is the identity, so $P$ is invertible modulo the compact operator $f$.
+
+\section{Inverting $\Box$}
+Prof Zworski asked me for which function spaces the operator $\Box = \partial_t^2 - \partial_x^2$ is invertible, acting on $C^\infty(\Torus^1 \times [0, 1])$ (periodic in $x$, compact in $t$).
+See the energy estimates in Appendix E5 of Zworski-Dyatlov for a hint. TODO Solve me
+
+\section{The Bose invariant}
+Whenever we want to solve a second-order linear ODE, say
+$$(a\partial^2 + b\partial + c)\phi = 0,$$
+we introduce a quantity known as the Bose invariant. This is already useful for the Schrodinger equation with $a = -1$, $b = 0$, $c = V$. Let
+$$h(r) = \exp\int_0^r \frac{b}{2a}$$
+and let $A$ be the operator $A = a\partial^2 + b\partial + c$ (so the symbol of $A$ is $a\xi^2 + b\xi + c$) so that
+$$a(r)^{-1}h(r)A(r, \partial_r)h(r)^{-1} = \partial_r^2 + I(r)$$
+where
+$$I = \frac{4ac - 2ab' + 2ba' - b^2}{4a^2}$$
+is the \emph{Bose invariant}.
+Let $\psi = h\phi$, thus
+$$(\partial^2 + I)\psi = 0.$$
+Thus the Bose invariant allows us to eliminate the first-order term $b\partial$ and the factor $a$.
+Thus this change of variables allows us to henceforth assume $a = 1$, $b = 0$.
+
+To see how Bose invariants are affected by a change of variables we introduce the \emph{Schwarz derivative}
+$$\{r, y\} = \left(\frac{r''(y)}{r'(y)}\right)' - \frac{1}{2}\left(\frac{r''(y)}{r'(y)}\right)^2.$$
+Then if $I$ is the Bose invariant in $r$ and we change variables to $y$,
+$$J(y) = (r'(y))^2I(r(y)) + \frac{1}{2}\{r, y\}$$
+is the new Bose invariant in $z$.
+The map $I \mapsto J$ is known as a \emph{Liouville transform}.
+
+As an example one considers the hypergeometric equation, given in one variable $z$ by the kernel of the operator
+$$z(1-z)\partial_z^2 + (c - (a+b+1)z)\partial_z - ab.$$
+Its Bose invariant is
+$$I(a, b, c; z) = \frac{(1 - a^2 - b^2 + 2ab)z^2 + 2(-2ab+ac+bc-c)z + 2c - c^2}{4z^2(1-z)^2}.$$
+
+\chapter{$\mathcal H_0$ is Fredholm}
+\section{Change of coordinates}
+The operator
+$$\mathcal H_0 = \begin{bmatrix}-\partial^2 + 1 \\&\partial^2 - 1\end{bmatrix} + \sech^2 \begin{bmatrix}-4 & -2\\2 & 4\end{bmatrix}$$
+acts on functions $\RR \to \CC^2$. This is annoying so we use $\tanh$ to change coordinates from $\RR$ to $(0, 1)$ which is bounded.
+
+Let $y = \tanh x$, let $L = \begin{bmatrix}1 & \\ &-1\end{bmatrix}$, then
+$$\mathcal{\tilde H}_0 = \left(1 - (1 - y^2)^2 \partial_y^2\right)L + (1 - y^2)\begin{bmatrix}-4 & -2\\2 & 4\end{bmatrix}.$$
+This acts on functions $(-1, 1) \to \CC^2$.
+One hopes to show that $\mathcal R_0(\lambda) = \mathcal{\tilde H}_0 - \lambda^2$ is Fredholm on some open set, say $\Im \lambda \gg 1$.
+
+We also have
+$$\frac{1}{\sech^2(\atanh y + \atanh q)} = \frac{1}{(1 - q^2)(1 - y^2)} + \frac{2qy}{(1 - q^2)(1 - y^2)} + \frac{q^2y^2}{(1 - q^2)(1 - y^2)}.$$
+Therefore
+$$\mathcal{\tilde H}_q = \left(1 - (1 - y^2)^2 \partial_y^2\right)L + \tilde v_q(y) \begin{bmatrix}-4 & -2\\2 & 4\end{bmatrix} - 2q\delta_0 L$$
+where
+$$v_q(x) = \left(\frac{1}{(1 - q^2)(1 - y^2)} + \frac{2qy}{(1 - q^2)(1 - y^2)} + \frac{q^2y^2}{(1 - q^2)(1 - y^2)}\right)^{-1}.$$
+The operator $2q\delta_0L$ is ``compact" (since its image consists of rescaled delta functions) and can be thought of as having ``norm" $2|q|$ even though it doesn't literally send $L^2$ to itself.
+Here I'm thinking of multiplication by $\delta_0$ as having ``norm $1$" on some suitable space of distributions. No idea if this is legal.
+
+The function $v_q - v_0$ is ``small" in $L^\infty$ (hence as an operator on $L^2$). In fact $||v_q - v_0||_{L^\infty} \lesssim |q|$ if $|q|$ is small. To see this note that
+$$||\partial \tilde v_0||_{L^\infty} < 1$$
+so
+\begin{align*}|\sech^2(\atanh y + \atanh q) - \sech^2(\atanh y)| &= |\sech^2(\atanh y + q + O(q^3)) - \sech^2(\atanh y)| \\&< |q + O(q^3)| \lesssim |q|.\end{align*}
+Thus one can reasonably think of $\mathcal{\tilde H}_q$ as a perturbation of $\mathcal{\tilde H}_0$ and try to use $\mathcal R_0$ to meromorphically continue $\mathcal R_q$.
+In fact, by Neumann series methods, we prove that since
+$$\mathcal R_q(\lambda) = (\mathcal{\tilde H}_q - \mathcal{\tilde H}_0 + \mathcal{\tilde H}_0 - \lambda^2)^{-1} = (\mathcal{\tilde H}_0 - \lambda^2 + E(q))^{-1}$$
+where
+$$E_q = (\tilde v_q - \tilde v_0)\begin{bmatrix}-4 & -2\\2 & 4\end{bmatrix} - 2q\delta_0L$$
+and $||E_q|| \lesssim |q|$, so if $|q|$ is so small that
+$$||E_q|| < \frac{1}{||\mathcal R_0(\lambda)||},$$
+then
+$$||\mathcal R_q(\lambda)|| \leq \frac{||\mathcal R_0(\lambda)||}{1 - ||E_q||}.$$
+Thus we are really interested in $||\mathcal R_0(\lambda)||$!
+
+\section{Meromorphic continuation of $\mathcal{\tilde H}_0$}
+We adopt the convention
+$$||(u, v)||_X = ||u||_X + ||v||_X$$
+for all spaces $X$.
+
+This can probably be done algebraically using ODE techniques. We know that $\mathcal{\tilde H}_0$ is an ordinary differential opreator of order $2$ so its kernel is at most $2$-dimensoinal.
+One can check the cokernel using the adjoint trick or something, but we probably need the Baire category thm for that.
+In fact $\mathcal{\tilde H}_0^*$ meets the same hypotheses as $\mathcal{\tilde H}_0$ and is clearly continuous $H^2 \to L^2$ so the usual closed graph thm trick goes through.
+
+
+
+
+\newpage
+\printindex
+
+\end{document}
