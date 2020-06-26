@@ -26,6 +26,7 @@
 \newcommand{\PP}{\mathbb{P}}
 \newcommand{\DD}{\mathbb{D}}
 \newcommand{\TT}{\mathbb{T}}
+\newcommand{\Sphere}{\mathbb S}
 
 \newcommand{\AAA}{\mathcal A}
 \newcommand{\BB}{\mathcal B}
@@ -87,7 +88,10 @@
 
 \newcommand{\dbar}{\overline\partial}
 
+\DeclareMathOperator*{\Density}{Density}
 \DeclareMathOperator*{\Dil}{Dil}
+\DeclareMathOperator*{\Energy}{Energy}
+\DeclareMathOperator*{\Mass}{Mass}
 \DeclareMathOperator*{\Mod}{Mod}
 \DeclareMathOperator*{\Trans}{Trans}
 
@@ -1104,6 +1108,174 @@ Since $\lambda$ is in the resolvent set, $d(\lambda, \sigma(A)) > 0$. We can ass
 $$||(A - \lambda)^{-1}|| = \sup_{\mu \in \sigma(A)} |\lambda - \mu|^{-1}$$
 which proves the claim.
 \end{proof}
+
+\chapter{Measure theory on $\RR^n$}
+We now consider issues involving Lebesgue measure on $\RR^n$. I learned this material as part of preparing for Brown's diagnostic exam, from Pugh's ``Real Mathematical Analysis" and Evans-Gariepy's ``Fine Properties of Functions".
+
+Throughout this section, let $m$ denote Lebesgue measure on $\RR^n$.
+
+\section{Vitali coverings}
+\begin{definition}
+Let $X$ be a metric space.
+A \dfn{fine cover} of a set $A \subseteq X$ is a cover $\mathcal V$ such that for every $x \in A$ and $\varepsilon > 0$ there is a $V \in \mathcal V$ such that $V \subseteq B(x, \varepsilon)$.
+\end{definition}
+\begin{definition}
+Let $(X, \mu)$ be a measure space and $\varepsilon > 0$
+An $\varepsilon$-\dfn{efficient cover} of a set $A \subseteq X$ is a cover $\mathcal V$ such that
+$$\mu(A) \leq \varepsilon + \mu\bigcup \mathcal V.$$
+\end{definition}
+\begin{theorem}[Vitali covering lemma]
+\index{Vitali covering lemma}
+Let $A \subseteq \RR^n$. Then for every fine cover $\mathcal V$ of $A$ by infinite closed balls, there is an efficient, countable, disjoint subcover of $\mathcal V$ of almost all of $A$.
+\end{theorem}
+Note that we need not assume that $A$ is measurable, since we can always replace $m$ with Lebesgue outer measure $m^*$.
+\begin{proof}
+Since $A$ is $\sigma$-finite we may assume that $m^*(A) < \infty$, and then by a rearrangement that $A$ is bounded.
+Let $\varepsilon > 0$ and choose $W \supseteq A$ to be a bounded open set such that
+$$m(W) \leq m^*(A) + \varepsilon.$$
+Let
+$$\mathcal V_1 = \{V \in \mathcal V: V \subseteq W\}.$$
+Then $\mathcal V_1$ is a fine cover of $A$.
+Let $d_1 = \sup_{V \in \mathcal V_1} \diam V$. Then $d_1 < \infty$ since $W$ is bounded.
+Choose $V_1 \in \mathcal V_1$ with $\diam V_1 \geq d_1/2$.
+We will use a greedy algorithm to construct the subcover. Intuitively, $V_1$ is the ``largest element of $\mathcal V_1$", though of course the supremum $d_1$ may not be attained.
+
+Inductively define $\mathcal V_k$ to be the set of $V \in \mathcal V_{k-1}$ which do not meet $U_{k-1} = \bigcup_{j < k-1} V_j$,
+$d_k = \sup_{V \in \mathcal V_k} \diam V$, and choose $V_k \in \mathcal V_k$ to be ``maximal" in the sense that $\diam V_k \geq d_k/2$.
+Let $\mathcal V' = \{V_k\}_k$.
+Then $\mathcal V'$ is an efficient, countable, disjoint cover of something.
+
+If $\mathcal V_k$ is ever empty then this implies that $U_{k-1}$ covers $A$.
+So assume that $\mathcal V'$ is infinite, so that
+$$m\bigcup_k V_k = \sum_k m(V_k).$$
+Since this series converges we have
+$$\lim_{k \to \infty} d_k = 0.$$
+
+Let $5V_k$ denote the dilate of $V_k$ by $5$.
+\begin{lemma}
+For every $N$,
+$$A \setminus U_{N-1} \subseteq \bigcup_{k \geq N} 5V_k.$$
+\end{lemma}
+\begin{proof}
+Let $a \in A \setminus U_{N-1}$. Since $U_{N-1}$ is compact and $\mathcal V_1$ is fine, there is a $B \in \mathcal V_1$ such that $a \in B$ and $B \cap U_{N-1}$ is empty.
+Thus $B \in \mathcal V_N$.
+
+If the claim fails then $B \not \subseteq 5V_N$. But $V_N$ was chosen maximally so $V_N$ is disjoint from $B$. So $B \in \mathcal V_{N+1}$. In particular $B \in \mathcal V_k$ for every $k > N$.
+Thus $B$ could have been chosen as the possible candidate for $V_k$ for every $k > N$, so
+$$\lim_{k \to \infty} \diam B = 0$$
+which is nonsense since $B$ is independent of $k$.
+\end{proof}
+Now let $\delta > 0$ be given, and choose $N$ so that
+$$5^n \sum_{k \geq N} m(V_k) < \delta.$$
+But
+$$m^*(A \setminus U_{N-1}) \leq \sum_{k \geq N} m(5V_k) = 5^n \sum_{k \geq N} m(V_k) < \delta,$$
+so $A \setminus \bigcap_N U_N$ is null.
+\end{proof}
+
+\section{Lebesgue's density theorem}
+Throughout this section, fix a measurable set $E \subseteq \RR^n$.
+
+We let $\lim_{B \downarrow x} y(B)$ denote the limit of $y(B)$ as $B$ ranges over the net of all balls $B$ containing $x$, ordered by reverse inclusion.
+
+\begin{definition}
+The \dfn{density} of $E$ at a point $x$ is given by
+$$\Density x = \lim_{B \downarrow x} \frac{m(E \cap B)}{m(B)}.$$
+If $\Density x = 1$, we say that $x$ is a \dfn{density point} of $E$.
+\end{definition}
+\begin{example}
+An interior point is a density point.
+\end{example}
+\begin{definition}
+The \dfn{measure-theoretic interior} of $E$ is the set of density points of $E$.
+\end{definition}
+\begin{theorem}[Lebesgue density theorem]
+\index{Lebesgue density theorem}
+Almost all of $E$ is the measure-theoretic interior of $E$.
+\end{theorem}
+\begin{proof}
+As usual, we may assume that $E$ is bounded. Let $0 \leq a < 1$ and let
+$$E_a = \{x \in E: \liminf_{B \downarrow x} \frac{m(E \cap B)}{m(B)} < a\}.$$
+The quantity
+$$\liminf_{B \downarrow x} \frac{m(E \cap B)}{m(B)}$$
+is the lower density of $E$ at $x$.
+\begin{lemma}
+$m(E_a) = 0$.
+\end{lemma}
+\begin{proof}
+For every $x \in E_a$, choose a sequence of balls $B_{k,x} \downarrow x$ such that
+$$\frac{m(E \cap B_k)}{m(B_k)} < a.$$
+The set $\{B_{k,x}: k \in \NN,~x \in E_a\}$ is a fine cover of $E_a$.
+By the Vitali covering lemma we may choose a countable efficient cover $\{V_k\}_k$ of $E_a$ such that
+$$\sum_k m(V_k) < m^*(E_a) + \varepsilon.$$
+Then
+$$m^*(E_a) = \sum_k m^*(E_a \cap V_k) < a \sum_k m(V_k) \leq a(m^*(E_a) + \varepsilon).$$
+Solving for $m^*(E_a)$ we see that $m^*(E_a) \lesssim_a \varepsilon$, hence $m^*(E_a) = 0$.
+\end{proof}
+Now $E_a$ is an increasing chain, so $E_1 = \bigcup_{a < 1} E_a$ is null.
+If $x \notin E_1$ then for every $a < 1$,
+$$1 \geq \limsup_{B \downarrow x} \frac{m(E \cap B)}{m(B)} \geq \liminf_{B \downarrow x} \frac{m(E \cap B)}{m(B)} > a.$$
+Taking the limit as $a \to 1$ we see the claim.
+\end{proof}
+In the proof that $E_a$ is null we did not know a priori that $E_a$ is measurable. This shows the power of the Vitali covering lemma, which allows us to work with merely outer measures rather than measures.
+
+\begin{theorem}[Lebesgue differentiation theorem]
+\index{Lebesgue differentiation theorem}
+For every $f \in L^1_{loc}(\RR^n)$ and almost every $y \in \RR^n$,
+$$\lim_{B \downarrow y} \dashint_B f(x)~dx = f(y).$$
+\end{theorem}
+\begin{proof}
+We work our way up, checking increasingly complicated functions $f$.
+
+First when $f = 1_E$ and $E$ is measurable, then this is the Lebesgue density theorem.
+The claim then extends by linearity to simple functions.
+
+Now if $f \geq 0$ and $f \in L^1$, let
+$$A_\alpha = \{y \in \RR^n: \limsup_{B \downarrow y} \left|\dashint_B f(x)~dx - f(y)\right| > \alpha\}.$$
+Then $A_0 = \bigcup_{\alpha > 0} A_\alpha$ so it suffices to show that given $\alpha,\varepsilon > 0$, $m(A_\alpha) < \varepsilon$.
+
+Choose a simple function $f' \leq f$ such that $||f - f'||_1 < \varepsilon\alpha/4$. Let $g = f - f'$, and
+$$A'_\alpha = \{y \in \RR^n: \limsup_{B \to y} \left|\dashint_B g(x)~dx - g(y)\right| > \alpha\}$$
+satisfies $m(A_\alpha \Delta A'_\alpha) = 0$ (since points in the symmetric difference must be points where $f'$ contradicts the conclusion of the theorem).
+Writing $A'_{\alpha,+} = \{g > \alpha/2\}$ and
+$$A'_{\alpha,-} = \{y \in A'_\alpha: \limsup_{B \downarrow y} \dashint_B g(x)~dx > \alpha/2\}$$
+we see that $A' \subseteq A'_{\alpha,+} \cup A'_{\alpha,-}$ so it suffices to control the bad sets $A'_{\alpha,\pm}$.
+
+In fact,
+$$\frac{\alpha}{2}m(A'_{\alpha,+}) \leq \int_{A'_{\alpha,+}} g(x)~dx \leq ||g||_1 < \frac{\alpha\varepsilon}{4}.$$
+Thus $m(A'_{\alpha,+}) < \varepsilon/2$.
+
+Now let $\mathcal V$ be the set of balls $B$ such that
+$$\dashint_B g(x)~dx > \alpha/2.$$
+Then $\mathcal V$ is a fine cover of $A'_{\alpha,-}$, so let $\{V_i\}_i$ be the subcover returned by the Vitali covering algorithm.
+Then
+$$\frac{\alpha}{2}m^*(A'_{\alpha,-}) \leq \sum_i \frac{\alpha}{2} m(V_i) \leq \sum_i m(B_i) \dashint_{V_i} g(x) ~dx \leq ||g||_1 < \frac{\varepsilon\alpha}{4}.$$
+Thus $m(A'_{\alpha,-}) < \varepsilon/2$ as desired.
+
+The assumption that $f$ is nonnegative can be removed by breaking up $f$ into positive and negative parts and using linearity of the conclusion.
+
+Finally, the conclusion of the theorem is local, so the proof for $L^1$ cuts off to a proof for $L^1_{loc}$.
+\end{proof}
+We can actually reduce the assumption that $f \in L^1_{loc}$ to just that $f$ is measurable, using harmonic-analytic methods. We'll do this before the proof of Carleson's theorem later on.
+
+As a consequence of Lebesgue's differentiation theorem we prove a flavor of the fundamental theorem of calculus.
+\begin{definition}
+Let $f$ be a function on $[a, b]$; then its \dfn{indefinite integral} is
+$$x \mapsto \int_a^x f(t)~dt.$$
+\end{definition}
+\begin{corollary}
+\index{fundamental theorem of calculus}
+For every $f \in L^1([a, b])$, the indefinite integral $F$ of $f$ is an antiderivative of $f$ almost everywhere.
+\end{corollary}
+\begin{proof}
+By Lebesgue's differentiation theorem,
+$$\lim_{\varepsilon \to 0} \frac{F(x + \varepsilon) - F(x)}{\varepsilon} = \lim_{\varepsilon \to 0} \dashint_x^{x + \varepsilon} f(y)~dy = f(x)$$
+almost everywhere.
+\end{proof}
+
+
+
+
+
 
 
 \part{Dynamical systems}
@@ -6137,6 +6309,71 @@ $$iu_t = \Pi_N(|u|_N^2u)$$
 on the finite-dimensional space $H^0(\PP^n \to O(N))$. Then this differential equation has a Lax pair and hence is a completely integrable system.
 \end{conjecture}
 
+\chapter{Riemann surfaces and analytic continuation}
+These notes are based on Teleman's lectures on Riemann surfaces and consist of stuff I had to learn while studying the meromorphic continuation of NLS resolvents.
+
+Recall that there is no canonical way to define $\sqrt\cdot$ as a holomorphic function on some open subset of $\CC$ because it requires a choice of branch. However, there is a way to define $\sqrt\cdot$ on a surface that is not $\CC$.
+
+\begin{definition}
+A \dfn{concrete Riemann surface} is a set $S \subseteq \CC^2$ such that for every $(z, w) \in S$ there is an open $U \ni (z, w)$ and a holomorphic $F: U \to \CC$ such that $F(z, \cdot)$ is not identically $0$ and $S \cap U = \{F = 0\} \cap U$.
+It is said to be \dfn{nonsingular} if for every $(z, w)$, $F$ can be chosen so that $\nabla F(z, w) \neq 0$.
+Otherwise, $(z, w)$ is a \dfn{singularity}.
+\end{definition}
+Thus a concrete Riemann surface is locally a holomorphic variety.
+
+\begin{example}
+Let $S = \{(z, w): z = w^2\}$. Then $S$ can be viewed as the domain of $\sqrt\cdot$, by $\sqrt{(z, w)} = w$, and a choice of branch is the same thing as a holomorphic embedding of some open subset $U \subset \CC$ into $S$.
+\end{example}
+
+TODO: What about operator-valued Riemann surfaces? Is the above example the Riemann surface of the resolvent of a 1D Schrodinger equation?
+
+\section{Basic definitions}
+The definition of a concrete Riemann surface is a bit unfortunate because no such Riemann surface can be compact.
+\begin{definition}
+An \dfn{Riemann surface} is a one-dimensional complex manifold.
+\end{definition}
+\begin{example}
+$\PP^1$ is a Riemann surface known as the \dfn{Riemann sphere}. So is any open subset of $\PP^1$, by the Riemann mapping theorem.
+\end{example}
+Now we prove the obvious.
+\begin{lemma}
+Every nonsingular concrete Riemann surface is a Riemann surface.
+\end{lemma}
+\begin{proof}
+By the inverse function theorem, nonsingularity implies that the map $(z, w) \mapsto w$ is locally an isomorphism of Riemann surfaces.
+Obviously the domains of such isomorphisms form a holomorphic atlas.
+\end{proof}
+\begin{lemma}
+Every compact connected Riemann surface has only constant holomorphic functions.
+\end{lemma}
+\begin{proof}
+Just use the maximum principle.
+\end{proof}
+
+Now we show that in appropriate coordinates, every holomorphic mapping looks like $z \mapsto z^n$.
+This is analogous to the idea that every holomorphic function can only have finite-order zeroes; if we view $s = 0$ in the below theorem this is exactly what the theorem says.
+\begin{theorem}
+Let $f: R \to S$ be a holomorphic mapping of Riemann surfaces, $f(r) = s$, $f$ nonconstant near $r$.
+Then if $V \ni s$ is open, $\psi: V \to \DD$ a holomorphic chart such that $\psi(s) = 0$, then there is a holomorphic character $\phi: U \to \DD$, $U \ni r$ such that the diagram
+$$\begin{tikzcd} U \arrow[r,"f"] \arrow[d,"\phi"] & V \arrow[d,"\psi"]\\
+\DD \arrow[r,"z \mapsto z^n"] & \DD
+\end{tikzcd}$$
+commutes. Moreover $n$ does not depend on the choice of charts.
+\end{theorem}
+\begin{proof}
+Let $h: U \to \DD$ be a holomorphic chart, $h(r) = 0$. Let $g \circ h = \psi \circ f$, so $g$ is holomorphic near $0$.
+Let $n$ be the order of the zero. Then $g^{1/n}$ is holomorphic near $0$, and is a local isomorphism of Riemann surfaces.
+Thus we may take $\phi$ to be an appropriate rescaling of $g^{1/n} \circ h$.
+
+Moreover $n$ is the number of solutions to the equation $f(x) = y$ which converge to $r$ as $y$ converges to $s$, which is chart-independent.
+\end{proof}
+\begin{definition}
+The number $v_f(r) = n$ appearing in the above theorem is called the \dfn{valency} of $f$ at $r$.
+\end{definition}
+
+
+
+
 
 \part{Harmonic analysis}
 \chapter{Rearrangement-invariant spaces}
@@ -7500,19 +7737,452 @@ and we map $f \mapsto \Mod_{\xi_0}f$, $E$ is left invariant, and $N \mapsto N + 
 $$||1_E(X)1_{D\leq N(X)}f||_1 \lesssim ||f||_2\sqrt{|E|}.$$
 This is highly problematic because none of the tools we have used above do not respect modulation. So we need to develop new tools to prove Carleson's theorem.
 
+\section{Proof of Carleson's theorem, part I: mean reduction}
 We first deal with the annoying operator $\hat f \mapsto (\xi \mapsto 1_{\xi \leq N(x)}\hat f(\xi))$.
 We want to approximate this as a sum of operators of the form $1_I1_J$ where $I$ is a cutoff in time and $J$ is a cutoff in frequency.
 Note that the open set $\{(x, \xi): \xi < N(x)\}$ can be written as an almost-disjoint countable union of dyadic tiles $I \times J$.
-Say that dyadic intervals $\omega_-,\omega_+$ are \dfn{close intervals} if their lengths are the same and their parents are adjacent, with $\omega_-$ to the left of $\omega_+$.
-One then has
-$$1_{\xi \leq N(x)} = \sum_{\omega_- \sim \omega_+} 1_{\omega_-}(\xi)1_{\omega_+}(N(x))$$
-where $\sim$ means close. Thus we are interested in the integral
-$$\sum_{\omega_- \sim \omega_+} \int_{-\infty}^\infty 1_E(x)1_{\omega_+}(N(x))1_{\omega_-}(D)f(x)~dx.$$
-We now rewrite
-$$1_{\omega_-}(D)f(x) = 1_{\omega_-}(D)^2 f = 1_{\omega_-}(D) 1_{\omega_-}(D)^* f = (f * \tilde \check 1_{\omega_-}) * \check 1_{\omega_-} (x).$$
-Here $\tilde u(x) = \overline{u(-x)}$ and $\check\cdot$ is the adjoint of the Fourier transform. Thus
-$$1_{\omega_-}(D)f(x) = \iint_{\RR^2} f(z)\overline{\check 1_{\omega_-}(z - y)}\check 1_{\omega_-}(x - y)~dy~dz = \int_{-\infty}^\infty \langle f, \check \Trans_y1_{\omega_-}\rangle \check \Trans_y1_{\omega_-}(x)~dy.$$
+By a \dfn{tile} we mean a rectangle of area $1$ and dyadic tiles are tiles that are products of dyadic intervals.
 
+If $\omega$ is a dyadic frequency interval, we let $\omega_\pm$ denote the children of $\omega$, $\omega_+$ containing higher frequencies than $\omega_-$.
+Let $\eta$ be a bump function supported on $[0.1, 0.2]$ with $||\eta||_2 = 1$; all implied constants are allowed to depend on $\eta$.
+Let $\eta_\omega$ denote
+$$\eta_\omega(\xi) = \eta(\frac{\xi - \inf \omega}{|\omega|})$$
+which is supported on $\omega_-$.
+We claim
+$$\sum_\omega |\int_{-\infty}^\infty 1_E(X)1_{\omega_+}(N(X))|\eta_\omega|^2(D)f(x) ~dx| \lesssim ||f||_2 \sqrt{|E|}.$$
+Here the sum is over all dyadic intervals $\omega$.
+
+\begin{lemma}
+If one has
+$$\sum_\omega |\int_{-\infty}^\infty 1_E(X)1_{\omega_+}(N(X))|\eta_\omega|^2(D)f(x) ~dx| \lesssim ||f||_2 \sqrt{|E|}$$
+then Carleson's theorem holds.
+\end{lemma}
+\begin{proof}
+We need to average over translates of the claim to get a translation-invariant estimate. To do this, notice that
+$$\sum_\omega |\int_{-\infty}^\infty 1_E(X)1_{\omega_+}(N(X) + \xi_0)|\eta_\omega|^2(D)\Mod_{\xi_0}f(x)~dx| \lesssim ||f||_2\sqrt{|E|}.$$
+But
+$$|\eta_\omega|^2(D) \Mod_{\xi_0} = \Mod_{\xi_0}|\eta_{\omega - \xi_0}|^2(D).$$
+Thus
+$$\sum_\omega |\int_{-\infty}^\infty 1_E(X)1_{\omega_+ - \xi_0}(N(X))|\eta_{\omega - \xi_0}|^2(D)f(x)~dx| \lesssim ||f||_2\sqrt{|E|}.$$
+
+We now restrict to a finite range of scales. Let $K > 0$, so
+$$\sum_{|k| \leq K} \sum_{|\omega| = 2^{-k}} \int_{-\infty}^\infty 1_E(X)1_{\omega_+-\xi_0}(N(X))|\eta_{\omega - \xi_0}|^2(D)f(x)~dx \lesssim ||f||_2\sqrt{|E|}.$$
+For any $k$,
+$$\sum_{|\omega| = 2^{-k}} \int_{-\infty}^\infty 1_E(X)1_{\omega_+-\xi_0}(N(X))|\eta_{\omega - \xi_0}|^2(D)f(x)~dx$$
+is periodic in $\xi_0$ of period $2^{-k}$. Its average is
+$$2^k \iint_{\RR^2} 1_E(X) 1_{[\zeta + 2^{-k-1}, \zeta + 2^{-k}]}(N(X))|\eta_{[\zeta,\zeta+2^{-k}]}|^2(D)f(x)~dx~d\zeta.$$
+This is equal to
+$$\iint_{\RR^2} 1_E(x)2^k \int_{-\infty}^\infty 1_{[\zeta+2^{-k-1},\zeta+2^{-k}](N(x))}\eta(2^k(\xi-\zeta))^2~d\zeta ~\hat f(\xi)e^{2\pi ix\xi}~d\xi~dx.$$
+Using the change of variables $\zeta = N(x)-2^{-k}t$ we see this is equal to
+$$\iint_{\RR^2} 1_E(x)\Psi(2^k(N(x)-\xi))\hat f(\xi)e^{2\pi ix\xi}~d\xi~dx.$$
+Here
+$$\Psi(\xi) = \int_{1/2}^1 |\eta(t - \xi)|^2~dt.$$
+Averaging in $\xi_0$ over $[0, 2^K]$ we have
+$$\sum_{|k| \leq K} \iint_{\RR^2} 1_E(x)\Psi(2^k(N(x)-\xi))\hat f(\xi)e^{2\pi ix\xi}~d\xi~dx \lesssim ||f||_2\sqrt{|E|}.$$
+This estimate is uniform in $K$ so it remains true when we drop the constraint $\leq K$.
+
+We now want to use dilation symmetry, so we switch to multiplicative Haar measure $d\lambda/\lambda$. We have
+$$\sum_k \iint_{\RR^2} 1_E(x)\Psi(\lambda 2^k(N(x)-\xi)) \hat f(\xi)e^{2\pi ix\xi}~dx~d\xi \lesssim ||f||_2\sqrt{|E|}.$$
+Averaging over $\lambda \in [1,2]$ we see
+$$\iint_{\RR^2} 1_E(x) \sum_k \int_1^2 \Psi(\lambda 2^k(N(x)-\xi)) \frac{d\lambda}{\lambda}~\hat f(\xi)e^{2\pi ix\xi}~d\xi~dx \lesssim ||f||_2\sqrt{|E|}.$$
+Here
+$$\sum_k \int_1^2 \Psi(\lambda 2^k(N(x)-\xi))\frac{d\lambda}{\lambda}
+= \sum_k \int_{2^k}^{2^{k+1}}\Psi(\lambda(N(x)-\xi))\frac{d\lambda}{\lambda} = 1_{\xi\leq N(x)}\int_0^\infty \Psi(\lambda) \frac{d\lambda}{\lambda}$$
+since $\Psi$ is supported in $(0, \infty)$.
+Thus
+$$\iint_{\RR^2}1_E(x)1_{\xi \leq N(x)} \hat f(\xi)e^{2\pi ix\xi}~dx ~d\xi \lesssim ||f||_2 \sqrt{|E|}.$$
+This completes the reduction.
+\end{proof}
+
+We have
+$$|\eta_\omega|^2(D)f = f*\tilde \check \eta_\omega * \eta_\omega(x) = \iint_{\RR^2} f(z) \overline{\check \eta_\omega(z-y)}~dz~\eta_\omega(x-y)~dy
+=\int_{-\infty}^\infty \langle f, \Trans_y \check \eta_\omega \rangle \Trans_y \check \eta_\omega ~dy.$$
+
+Given a tile $P$ we write
+$$P = I_P \times \omega_P$$
+for the time and frequency intervals. As always we assume $|P| = 1$. We write $P_\pm = I_P \times (\omega_P)_\pm$.
+We write $|I_P|$ for the \dfn{spatial scale}, i.e. the length of $I_P$, and define the \dfn{frequency scale} to be $|\omega_P|$.
+Given such a tile, the \dfn{wavepacket} of the tile is
+$$\phi_P = \sqrt{|I_P|} \Trans_{\inf I_P} \check \eta_{\omega_P}.$$
+This is a Schwartz function with Fourier support in $(\omega_P)_-$ such that $||\phi_P||_2 = 1$ and is localized spatially in $I_P$ in the sense that away from $I_P$ it decays rapidly.
+So $\phi_P$ has ``phase space support" in $P_-$.
+
+\begin{lemma}
+To prove that
+$$\sum_\omega |\int_{-\infty}^\infty 1_E(X)1_{\omega_+}(N(X))|\eta_\omega|^2(D)f(x) ~dx| \lesssim ||f||_2 \sqrt{|E|}.$$
+it suffices to show that
+$$\sum_P |\langle f, \phi_P\rangle\langle \phi_P 1_{(\omega_P)_+}(N), 1_E\rangle| \lesssim ||f||_2\sqrt{|E|}.$$
+Here $P$ ranges over all tiles.
+\end{lemma}
+\begin{proof}
+We average over all spatial translations. We have
+$$\sum_{|k| \leq K} \sum_{|\omega|=2^{-k}} |\sum_{\omega_P = \omega} \langle f, \phi_P\rangle \langle \phi_P 1_{\omega_+}(N), 1_E\rangle| \lesssim ||f||_2\sqrt{|E|}.$$
+For any $x_0 \in \RR$ translation symmetry gives
+$$\sum_{|k| \leq K} \sum_{|\omega|=2^{-k}} |\sum_{\omega_P = \omega} \langle \Trans_{x_0} f, \phi_P\rangle \langle \phi_P 1_{\omega_+}(\Trans_{x_0}N), 1_{E+x_0}\rangle| \lesssim ||f||_2 \sqrt{|E|}.$$
+Using translation symmetry of Lebesgue measure we have
+$$\sum_{|k| \leq K} \sum_{|\omega|=2^{-k}} |\sum_{\omega_P = \omega} \langle f, \phi_{P+(x_0, 0)}\rangle \langle \phi_{P+(x_0,0)} 1_{\omega_+}(N), 1_E\rangle| \lesssim ||f||_2 \sqrt{|E|}.$$
+For a fixed $k$, the time scale is $2^k$ so the inner sum is periodic in $x_0$ with period $2^k$.
+It averages to
+$$\int_{-\infty}^\infty \langle f, \Trans_y \check \eta_\omega \rangle\langle \Trans_y \check \eta_{\omega_+}(N), 1_E\rangle ~dy.$$
+But we already proved that
+$$\int_{-\infty}^\infty \langle f, \Trans_y \check \eta_\omega \rangle \Trans_y \check \eta_\omega ~dy = |\eta_\omega|^2(D)f$$
+so in particular, the average over $x_0$ is
+$$\langle |\eta_\omega|^2(D) f1_{\omega_+}(N), 1_E\rangle.$$
+Thus
+$$\sum_{|k| \leq K} \sum_{|\omega|=2^{-k}} \langle |\eta_\omega|^2(D) f1_{\omega_+}(N), 1_E\rangle \lesssim ||f||_2 \sqrt{|E|}.$$
+This estimate is uniform in $K$, so it completes the reduction.
+\end{proof}
+Now let
+$$E_P^+ = \{x \in E: N(x) \in (\omega_P)_+\}.$$
+By the previous lemma, to prove Carleson's theorem it suffices to show
+$$\sum_P |\langle f, \phi_P\rangle \langle \phi_P, 1_{E_P^+}\rangle| \lesssim ||f||_2 \sqrt{|E|}.$$
+The thing that we now need to prove is good because it has been broken up into a triple sum: sum over scales, sum over a frequency, sum over the tiles in that frequency.
+We can restrict then to tiles that are of a desirable type.
+In fact, by monotone convergence it suffices to show that for every finite set $\mathcal P$ of tiles we have
+$$\sum_{P \in \mathcal P} |\langle f, \phi_P\rangle \langle \phi_P, 1_{E_P^+}\rangle| \lesssim ||f||_2 \sqrt{|E|}.$$
+Let us say that a finite set $\mathcal P$ is \dfn{good} if this holds.
+Notice that the nasty functions $f,N$ don't talk to each other, only to the explicitly defined function $\phi_P$.
+
+\section{Proof of Carleson's theorem, part II: Disjoint tiles on one scale}
+\begin{lemma}
+If $\mathcal P$ has cardinality one then $\mathcal P$ is good.
+\end{lemma}
+\begin{proof}
+We must show that
+$$\langle f, \phi_P\rangle\langle \phi_P, 1_{E_P^+}\rangle \lesssim ||f||_2 \sqrt{|E|}.$$
+By Cauchy-Schwarz we have
+$$\langle f, \phi_P\rangle \lesssim ||f||_2.$$
+Let $\chi_I$ be the indicator function of a set $I$ with a smooth, polynomially decaying tail.
+Then
+$$\phi_P(x) \lesssim |I_P|^{-1/2}\chi_{I_P}^M(x)$$
+for any $M$. Thus we can use Hoelder in two different ways.
+First,
+$$\langle \phi_P, 1_{E_P^+}\rangle \lesssim ||\phi_P||_1 \lesssim \sqrt{|I_P|}.$$
+Second,
+$$\langle \phi_P, 1_{E_P^+}\rangle \lesssim ||\phi_P||_\infty \sqrt{|E_P^+|} \lesssim |I_P|^{-1/2}|E|.$$
+Taking geometric means we see
+$$\langle \phi_P, 1_{E_P^+}\rangle \lesssim \sqrt{|E|}.$$
+\end{proof}
+The above proof shows that the estimate
+$$\langle \phi_P, 1_{E_P^+}\rangle \lesssim \sqrt{|E|}$$
+is not sharp if $|I_P|$ is much smaller or much larger than $|E|$. This will be important when we sum over $\mathcal P$ where $|\mathcal P|$ is large.
+
+\begin{lemma}
+If $\mathcal P$ is a set of tiles $P$ such that $|I_P| = 2^k$ then $\mathcal P$ is good.
+\end{lemma}
+\begin{proof}
+By dyadicity $\mathcal P$ is an almost disjoint set. We claim that therefore
+$$\sum_{P \in \mathcal P} \sqrt{|I_P|}|\langle \phi_P, 1_{E_P^+}\rangle| \lesssim |E|$$
+which we call a \dfn{mass estimate}.
+Moreover,
+$$\sum_{P \in \mathcal P} |\langle f, \phi_P\rangle|^2 \lesssim ||f||_2^2$$
+which we call an \dfn{energy estimate}.
+Combining with the bound
+$$\langle \phi_P, 1_{E_P^+}\rangle \lesssim ||\phi_P||_1 \lesssim \sqrt{|I_P|}$$
+we have
+$$\sum_{P \in \mathcal P} |\langle \phi_P, 1_{E_P^+}\rangle|^2 \lesssim |E|.$$
+Then Cauchy-Schwarz implies the lemma.
+
+To establish the mass estimate, first consider a rough version of $\phi_P$ which has no tail. Then we could replace $\chi_{I_P}$ with $1_{I_P}$. Then
+$$|I_P|^{1/2}\langle \phi_P, 1_{E_P^+}\rangle \lesssim |\{x \in E: (x, N(x)) \in P_+\}|$$
+but $N$ is a function, so it passes the vertial line test. That means that the $\{x \in E: (x, N(x)) \in P_+\}$ are disjoint sets. So we can sum both sides over $P \in \mathcal P$ and use
+$$\sum_{P \in \mathcal P}  |\{x \in E: (x, N(x)) \in P_+\}| = |E|.$$
+Now to check the tails. We have
+$$\sum_{P \in \mathcal P} \sqrt{|I_P|}|\langle \phi_P, 1_{E_P^+}\rangle| \leq \int_E \sqrt{|I_P|} \sum_{\substack{P \in \mathcal P\\N(x)\in (\omega_P)_+}} |\phi_P|.$$
+Again the claim follows by the vertical line test (only one of the $\phi_P$ is nonzero at any time) which gives that the sum in the integral is bounded uniformly in $|\mathcal P|$.
+
+Now we check the energy estimate. Since the $P$ are disjoint the $\phi_P$ are almost orthogonal. We have
+$$\sqrt{\sum_{P \in \mathcal P}|\langle f, \phi_P\rangle|^2} = \sum_{P \in \mathcal P} \overline{c_P}\langle f, \phi_P\rangle = \langle f, \sum_{P \in \mathcal P} c_P\phi_P\rangle$$
+where
+$$\sum_{P \in \mathcal P} |c_P|^2 = 1.$$
+Thus it suffices to show
+$$||\sum_{P \in \mathcal P} c_P\phi_P||_2^2 \lesssim 1.$$
+But
+$$||\sum_{P \in \mathcal P} c_P\phi_P||_2^2 = \sum_{P,P' \in \mathcal P} c_P\overline{c_P'}\langle \phi_P, \phi_{P'}\rangle.$$
+By dyadicity $\langle \phi_P, \phi_{P'}\rangle \neq 0$ is only possible when $\omega_P = \omega_{P'}$. In this case $\langle \phi_P, \phi_{P'}\rangle$ is a rapidly decaying function of $|I_P|$.
+\end{proof}
+The motivation for the terminology ``mass" is that mass should refer to the $L^1$ distribution of a function (here $1_E$).
+Energy should refer to its $L^2$ behavior (here the $L^2$ behavior of $f$).
+
+\section{Proof of Carleson's theorem, part III: Trees}
+In the previous section we considered when $\mathcal P$ was on a single scale. We have to consider tiles on the same scale, which may have overlap.
+If two dyadic intervals intersect, one is contained in the other. Thus we may put a partial order on tiles where $P \leq P'$ means that $I_P \subseteq I_{P'}$ and $\omega_{P'} \subseteq \omega_P$.
+In this order, short, fat tiles are big.
+
+If $\mathcal P$ is an antichain, then it is disjoint and the techniques of the above section easily imply that $\mathcal P$ is good.
+But we have some disjointness for $\mathcal P$s with nontrivial orders too; if $P > P'$ then either $P_+$ and $P_+'$ are disjoint, or $P_-$ and $P_-'$ are disjoint.
+\begin{definition}
+Let $P_T$ be a tile. A \dfn{tree} with top $P_T$ is a set $T$ of tiles $P$ such that $P \leq P_T$. If $P_\pm \leq (P_T)_\pm$ for all $P \in T$ we say that $T$ is a \dfn{$\pm$-tree}.
+\end{definition}
+Notice that the top is the longest and skinniest element of the tree (though it may not be contained in the tree). Therefore every element of the tree is either in a $+$-subtree or a $-$-subtree and hence we can partition any tree into a $+$-tree and a $-$-tree.
+Thus to check the claim for trees it suffices to check the claim for $\pm$-trees.
+
+We first consider the case of a $-$-tree $T$. In this case the $P^+$ for $P \in T$ are disjoint.
+We can prove something stronger than the claimed estimate
+$$\sum_{P \in T} \langle f, \phi_P\rangle \langle \phi_P, 1_E\rangle \lesssim ||f||_2\sqrt{|E|}$$
+because we are really only interested in $f$ close to the elements of $T$, which is local, but the right-hand side is global, because it contains a term $||f||_2$ that depends on the integral of $f$ over all over $\RR$.
+So we can do better; for example we might want to use
+$$\int_I f1_E \leq |I|\frac{|E \cap I|}{|I|} ||f||_{L^\infty(I)}$$
+or a similar estimate. Here $|E \cap I|/|I|$ is the Lebesgue density of $E$ in $I$.
+
+\begin{definition}
+A finite $-$-tree $T$ is a \dfn{regular $-$-tree} if there is an \dfn{energy} $\varepsilon$ and a \dfn{mass} $\mu$ such that for every $P \in T$,
+$$\langle f, \phi_P\rangle \lesssim \sqrt{|I_P|}\varepsilon$$
+and for every $P' \geq P$,
+$$\langle 1_E, \chi_{I_P'}^{10}\rangle \lesssim |I_P'| \mu.$$
+Moreover, we assume that
+$$\langle f, \phi_P\rangle \gtrsim \sqrt{|I_T|}\varepsilon$$
+and
+$$\langle 1_E, \chi_{I_T}^{10}\rangle \gtrsim |I_T|\mu$$
+so that the energy and mass are optimal.
+\end{definition}
+Intuitively this means that the mean of $f$ on a tile is $O(\varepsilon)$ and the density of $E$ on any extension of a tile is $O(\mu)$.
+
+\begin{definition}
+We say that a tree $T$ satisfies the \dfn{tree estimate} if
+$$\sum_{P \in T} |\langle f, \phi_P\rangle\langle\phi_P,1_{E_P^+}\rangle| \lesssim \varepsilon\mu|I_T|.$$
+\end{definition}
+\begin{lemma}
+If $T$ is a regular $-$-tree which satisfies the tree estimate then $T$ is good.
+\end{lemma}
+\begin{proof}
+We are given the estimates
+$$|I_T|^{-1/2}\langle f, \phi_{P_T}\rangle \gtrsim \varepsilon$$
+on energy and
+$$|I_T|^{-1}\langle 1_E, \chi_{I_T}^{10}\rangle \gtrsim \mu$$
+on mass. Since $||\phi_{P_T}||_2 = 1$, the Cauchy-Schwarz inequality gives
+$$\varepsilon \lesssim |I_T|^{-1/2}||f||_2.$$
+Similarly,
+$$\mu \lesssim |I_T|^{-1/2}\sqrt{|E|},$$
+Plugging these bounds into the tree estimate we see
+$$\sum_{P \in T} |\langle f, \phi_P\rangle\langle\phi_P,1_{E_P^+}\rangle| \lesssim ||f||_2 \sqrt{|E|}$$
+which was desired.
+\end{proof}
+We now show that all regular $-$-trees are good.
+\begin{lemma}
+If $T$ is a regular $-$-tree then $T$ satisfies the tree estimate.
+\end{lemma}
+To prove the tree estimate, we partition $\RR$ into intervals:
+\begin{lemma}
+For every nonempty finite tree $T$ there is a set $\mathcal J$ of dyadic intervals $\subset \RR$ which almost partition $\RR$ such that for every $J \in \mathcal J$:
+\begin{enumerate}
+\item For every $P \in T$ with $|I_P| < |J|$, $d(I_P, J) \gtrsim |J|$.
+\item There is a $P \in T$ such that $|I_P| \lesssim |J|$ and $d(I_P, J) \lesssim |J|$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+If $J$ is a dyadic interval, by $3J$ we mean $[\inf J - |J|, \sup J + |J|]$.
+Let $\mathbb P$ be the poset of all dyadic intervals such that $3J$ does not contain any $I_P$ such that $P \in T$, with respect to set inclusion.
+Let $\mathcal J$ denote the antichain of all maximal elements of $\mathbb P$.
+We claim that $\mathcal J$ is the desired set.
+
+We first show that $\mathcal J$ is almost a partition of $\RR$.
+Let $J, J' \in \mathcal J$, and suppose that $J \cap J'$ has positive measure.
+Let $J \oplus J'$ be the smallest dyadic interval containing $J \cup J'$; then the set $\mathbb P'$ of dyadic subintervals of $J \oplus J'$ is a tree (in the graph-theoretic sense).
+In particular, since $J \cap J'$ is the $\mathbb P'$-meet of $J, J'$, either $J \subseteq J'$ or vice versa. But $J,J'$ are maximal so $J = J'$. Therefore $\mathcal J$ is almost disjoint.
+
+Conversely, suppose that $x \in \RR$.
+Since $T$ is finite, and hence there is a $\delta > 0$ such that for every $P \in T$, $|I_P| > \delta$, we can almost surely find a dyadic interval $J$ such that $x \in J \in \mathbb P$. Now choose the maximal such $J$.
+
+Now fix a $J \in \mathcal J$. We check that $J$ meets the constraints of the lemma.
+
+First, fix a $P \in T$ such that $|I_P| < |J|$.
+Suppose that $d(I_P, J) < |J|$. By assumption, $3J$ does not cover $I_P$, yet $I_P \subseteq 3J$, a contradiction. Therefore $d(I_P, J) \geq |J|$.
+
+Conversely, we must find a $P \in T$ such that $|I_P| \lesssim |J|$ and $d(I_P, J) \lesssim |J|$.
+Let $J'$ be the parent of $J$, so $J' \notin \mathbb P$ and hence $3J'$ covers some $I_P$. Thus $J'$ is adjacent to $I_P$ or one of its ancestors. It is no loss to the estimates being made to assume that $J'$ is adjacent to $I_P$.
+In that case, the claim follows from the fact that $|J| \sim |J'|$.
+\end{proof}
+\begin{proof}[Proof of tree estimate for regular $-$-trees]
+We have
+$$\sum_{J \in \mathcal J} \sum_{P \in T} |\langle f,\phi_P\rangle| \int_J |\phi_P|1_{E_P^+} \lesssim \varepsilon \sum_{J \in \mathcal J} \sum_{P \in T} \int_J \chi_{I_P}^{100}1_{E_P^+}.$$
+We first consider the case of narrow tiles, $|I_P| < |J|$. By construction this implies $d(I_P, J) \gtrsim |J|$.
+Appealing to the decay rate of $\chi_{I_P}$ we have
+$$\int_J \chi_{I_P}^{100}1_{E_P^+} \lesssim \mu|J|\frac{|I_P|^{20}}{d(I_P,J)^{20}} \lesssim \mu|J|\frac{|I_P|^{10}}{|J|^{10}}\frac{|I_P|^{10}}{d(I_P, J)^{10}}.$$
+Fix a scale $|I_P| = 2^k$. Then the $I_P$ of this scale are all almost disjoint. It follows that
+$$\sum_{\substack{P \in T\\|I_P| = 2^k}} \frac{|I_P|^{10}}{d(I_P, J)^{10}} \lesssim \frac{|J|}{2^k}.$$
+Thus
+$$\sum_{\substack{P \in T\\|I_P| < |J|}} \int_J \chi_{I_P}^{100}1_{E_P^+} \lesssim \mu|J| \min(1, |I_T|/|J|)^9.$$
+By the decomposition lemma $|I_T| \lesssim |J|$ so the contribution from narrow tiles is acceptable.
+
+Now if a tile is wide, $|I_P| \geq |J|$, it follows that $|J| \leq |I_T|$ and $d(J, I_T) \lesssim |I_T|$.
+Thus the set of all such $J$ has bounded cardinality and suffices to check that for each $J$,
+$$\sum_{\substack{P \in T\\|I_P| \geq |J|}} \int_J \chi_{I_P}^{100} 1_{E_P^+} \lesssim \mu|J|.$$
+For every scale $2^k$ there is at most one choice $\omega_k = \omega_P$ as $P$ ranges over $T$, since $T$ is a $-$-tree. Thus
+$$E_P^+ = \{x \in \RR: N(x) \in \omega_k^+\}$$
+only depends on $2^k$ and not $P$.
+Summing up, we have
+$$\sum_{\substack{P \in T\\|I_P| \geq |J|}} \int_J \chi_{I_P}^{100}1_{E_P^+} \lesssim \int_J 1_{E_k^+}.$$
+Now because $T$ is a $-$-tree, the $\omega_k^+$ are almost disjoint. So so are the $E_k^+$. Thus
+$$\sum_k \int_J 1_{E_k^+} \lesssim |E \cap J|.$$
+By construction there is a tile $P'$ of scale $\sim |J|$ and $d(P', J) \lesssim |J|$ such that $P' \geq P$ where $d(I_P, J) \lesssim |J|$.
+By regularity we have
+$$|E \cap J| \lesssim \mu|J|$$
+which was desired.
+\end{proof}
+
+We now turn to $+$-trees. Here the $E_P^+$ may overlap but the $\langle f,\phi_P\rangle$ are orthogonal.
+\begin{definition}
+A finite tree $T$ is a \dfn{regular $+$-tree} if it is a $+$-tree with an \dfn{energy} $\varepsilon$ such that for every $P \in T$,
+$$\sqrt{\sum_{\substack{P' \in T\\P' \leq P}} |\langle f, \phi_{P'}\rangle|^2} \lesssim \varepsilon\sqrt{|I_P|}$$
+and a \dfn{mass} $\mu$ which is defined identically to the mass of a regular $-$-tree, such that the energy and the mass are optimal, i.e.
+$$\sqrt{\sum_{P \in T} |\langle f, \phi_P\rangle|^2} \gtrsim \varepsilon\sqrt{|I_T|}$$
+for energy, and the lower bound for mass.
+\end{definition}
+Thus by optimality of mass and the Cauchy-Schwarz inequality,
+$$\mu \lesssim \sqrt{\frac{|E|}{|I_T|}}.$$
+\begin{lemma}
+Let $T$ be a $+$-tree. Then for every vector $(c_P)_{P \in T}$ of complex numbers,
+$$||\sum_{P \in T} c_P\phi_P||_2^2 \lesssim \sum_{P \in T} |c_P|^2.$$
+In particular, one has
+$$\sum_{P \in T} |\langle f, \phi_P\rangle|^2 \lesssim ||f||_2^2.$$
+\end{lemma}
+\begin{proof}
+To prove the first claim we first observe that since $T$ is a $+$-tree, if $P \neq P'$ then $\phi_P \phi_{P'} = 0$ unless $\omega_P = \omega_{P'}$ in which case we have
+$$\langle \phi_P, \phi_{P'}\rangle \lesssim d(I_P, I_{P'})^{-100}/|I_P|^{-100}.$$
+But
+$$||\sum_{P \in T} c_P\phi_P||_2^2 = \sum_{P, P' \in T} c_P \overline{c_{P'}} \langle \phi_P, \phi_{P'}\rangle \lesssim \sum_{P, P' \in T} c_P \overline{c_{P'}}  d(I_P, I_{P'})^{-N}/|I_P|^{-N} \lesssim \sum_{P \in T} |c_P|^2$$
+taking $N$ large enough. This proves the first claim.
+
+To prove the second claim, note that
+$$\sqrt{\sum_{P \in T} |\langle f, \phi_P\rangle|^2} = \langle f, \sum_{P \in T} c_P \phi_P \rangle$$
+for some coefficients $c_P$ with $\sum_{P \in T} |c_P|^2 = 1$. Thus the first claim implies the second.
+\end{proof}
+Notice that this is just a slight modification of the original proof for tiles on one scale.
+It implies that
+$$\varepsilon \lesssim |I_T|^{-1/2}||f||_2$$
+which gives the following lemma.
+\begin{lemma}
+If $T$ is a regular $+$-tree which satisfies the tree estimate, then $T$ is good.
+\end{lemma}
+
+We now linearize the above estimate to make it easier to prove.
+\begin{lemma}
+If $T$ is a reguler $+$-tree then for every $\epsilon_P \in \CC$ with $\epsilon_P = 1$,
+$$\sum_{P \in T} \epsilon_P \langle f, \phi_P\rangle \langle \phi_P, 1_{E_P^+}\rangle \lesssim \varepsilon \mu |I_T|.$$
+In particular, $T$ satisfies the tree estimate.
+\end{lemma}
+\begin{proof}
+We can rewrite the left hand side as
+$$\sum_{J \in \mathcal J} \int_J \sum_{P \in T} \epsilon_P \langle f, \phi_P\rangle \phi_P 1_{E_P^+}.$$
+The proof in the case $|I_P| < |J|$ is the same as for regular $-$-trees, so we consider the case $|I_P| \geq |J|$ and assume that $T$ is nonempty.
+In that case, there is a $C > 0$ that doesn't depend on $P,J$ such that $CI_T$ contains $J$, or else the sum is empty.
+
+Now
+$$1_{E_P^+}(x) = 1_E(x)1_{N(x) \in \omega_P^+}.$$
+Thus the left-hand side is
+$$\sum_{J \in \mathcal J} \int_{J \cap E} \sum_{\substack{P \in T\\|I_P| \geq |J|\\N(x) \in \omega_P^+}} \epsilon_P \langle f, \phi_P\rangle \phi_P(x) ~dx.$$
+The intervals $\omega_P^+$ are nested since $T$ is a $+$-tree.
+Thus $N(x) \in \omega_P^+$ is equivalent to an estimate of the form $|I_P| \leq R(x)$.
+Now we rewrite the left-hand side as
+$$\sum_{J \in \mathcal J} \int_{J \cap E} \sum_{\substack{P \in T\\|I_P| \geq |J| \leq R(x)}} \epsilon_P \langle f, \phi_P\rangle \phi_P(x) ~dx.$$
+Let
+$$F(x) = \sum_{P \in T} \epsilon_P \langle f, \phi_P \rangle \phi_P(x).$$
+Then the integrand in the left-hand side is the Littlewood-Paley projection of $F$ to those intervals $\omega_P^+$ such that $|J| \leq |I_P| \leq |R(x)|$.
+\begin{lemma}
+If $x \in J$ and $I$ runs over all intervals (not just dyadic) containing $J$,
+$$\sum_{\substack{P \in T\\|J| \leq |I_P| \leq |R(x)|}} \epsilon_P \langle f, \phi_P\rangle \phi_P(x) \lesssim \sup_I \frac{1}{|I|} \int_I |F|.$$
+\end{lemma}
+\begin{proof}
+TODO
+\end{proof}
+Now by assumption on $\mathcal J$ and the definition of mass,
+$$|J \cap E| \lesssim \mu|J|.$$
+Thus we have a bound
+$$\lesssim \sum_{\substack{J \in \mathcal J\\J \subset CI_T}} \mu|J| \sup_I \frac{1}{|I|} \int_I |F|.$$
+Then we have bounds
+$$\lesssim \sum_{\substack{J \in \mathcal J\\J \subset CI_T}} \mu \int_J MF \lesssim \mu \int_{CI_T} MF \lesssim \mu|I_T|^{-1/2}||MF||_2 \lesssim \mu|I_T|^{-1/2}||F||_2 \lesssim |I_T|^{-1/2}\sqrt{\sum_{P \in T} |\langle f, \phi_P\rangle|^2 }.$$
+But by the definition of energy,
+$$\sum_{P \leq P_*} |\langle f, \phi_P\rangle|^2 \leq \varepsilon^2 |I_{P^*}|$$
+for any $P_* \in T$.
+We break up $T$ into its connected components, for which their tops $P_*$ have $I_{P^*}$ are almost disjoint.
+In particular,
+$$\sum_{P \in T} |\langle f, \phi_P\rangle|^2 \leq \varepsilon^2 |I_T|.$$
+This was desired.
+\end{proof}
+
+\section{Proof of Carleson's theorem, part IV: Decomposition into trees}
+Let $\mathcal P$ be an arbitrary finite collection of tiles.
+We want to decompose $\mathcal P$ into finitely many \dfn{forests}; i.e. disjoint unions of trees, as efficiently as you can.
+\begin{definition}
+Given a finite set $\mathcal P$ of tiles, let
+$$\Energy \mathcal P = \sup_T |I_T|^{-1/2} \sqrt{\sum_{P \in T} |\langle f, \phi_P\rangle|^2}$$
+where $T$ ranges over all $+$-trees $\subseteq P$ and
+$$\Mass \mathcal P = \sup_{P \in \mathcal P} \sup_{P' \geq P} |I_{P'}|^{-1} \int_{E_{P'}} \chi_{I_{P'}}^{10}$$
+where
+$$E_{P'} = \{x \in E: N(x) \in \omega_{P'}\}.$$
+By convention $\Energy \emptyset = \Mass \emptyset = 0$.
+\end{definition}
+TODO: Tree estimate
+\begin{lemma}[energy selection]
+Let $\mathcal P$ be a finite set and
+$$\Energy \mathcal P \leq \varepsilon.$$
+Then there is a forest $\mathcal T$ of disjoint subtrees $T$ of $\mathcal P$ such that
+$$\sum_{T \in \mathcal T} |I_T| \lesssim \varepsilon^{-2} ||f||_2^2$$
+and a remainder set $\mathcal P'$ such that
+$$\Energy \mathcal P' \leq \varepsilon/2.$$
+\end{lemma}
+\begin{lemma}[mass selection]
+Let $\mathcal P$ be a finite set and
+$$\Mass \mathcal P \leq \mu.$$
+Then there is a forest $\mathcal T$ of disjoint subtrees $T$ of $\mathcal P$ such that
+$$\sum_{T \in \mathcal T} |I_T| \lesssim \mu^{-1}|E|$$
+and a remainder set $\mathcal P'$ such that
+$$\Mass \mathcal P' \leq \mu/2.$$
+\end{lemma}
+We will prove the above two lemmata later.
+Suppose that $||f||_2$ and $|E|$ are nonzero. Then given $\mathcal P_n$ such that
+$$\Energy \mathcal P_n \leq 2^{-n/2} ||f||_2$$
+and
+$$\Mass \mathcal P_n \leq 2^{-n}|E|$$
+then we can partition $\mathcal P_n$ into a forest $\mathcal T_n$ with
+$$\sum_{T \in \mathcal T_n} |I_T| \lesssim 2^n$$
+and a remainder $\mathcal P_{n+1}$ which keeps the induction going.
+Thus for any finite set $\mathcal P = \mathcal P_{-N}$, $N$ chosen sufficiently large, we can write
+$$\mathcal P = \bigcup_n \bigcup_{T \in \mathcal T_n} T \cup \mathcal P_{-\infty}$$
+where $\mathcal P_{-\infty}$ is devoid of mass and energy.
+Then TODO, this decomposition proves the claim.
+\begin{proof}[Proof of mass selection]
+Let $\mathcal P_1$ be the set of all tiles $P'$ with $P' \geq P$ for some $P \in \mathcal P$ and
+$$|I_{P'}|^{-1} \int_{E_{P'}} \chi_{I_{P'}}^{10} > \mu/2$$
+so the tiles in $\mathcal P_1$ cannot be put in the remainder (i.e. \dfn{heavy} or \dfn{not light}). Let $\mathcal P_*$ be the set of maximal heavy tiles. Then every tile is light or under a tile in $\mathcal P_*$.
+So if $\mathcal T$ is the forest of all trees in $\mathcal P$ of $P \leq P_*$, $P_* \in \mathcal P$ we have a partition
+$$\mathcal P = \mathcal P' \cup \bigcup_{T \in \mathcal T} T.$$
+Here $\Mass \mathcal P' \leq \mu/2$. We must then show
+$$\sum_{T \in \mathcal T} \lesssim \frac{|E|}{\mu}.$$
+Note that the $T$ are almost disjoint. TODO: Prove this.
+\end{proof}
+\begin{proof}[Proof of energy selection]
+We need to isolate the high-energy trees in $\mathcal P$. We run the following algorithm:
+\begin{enumerate}
+\item Initialize $\mathcal T = \mathcal T_+ = \emptyset$ and $\mathcal P' = \mathcal P$.
+\item If $\Energy \mathcal P' \leq \varepsilon/2$ then halt.
+\item Since $\Energy \mathcal P' > \varepsilon/2$, $\mathcal P'$ contains a $+$-tree $T_+$ such that
+$$\sum_{P \in T_+} |\langle f, \phi_P\rangle|^2 > \varepsilon^2|I_{T_+}|/4.$$
+Choose $T_+$ such that the midpoint of $\omega_{T_+}$ is minimal. Add $T_+$ to $\mathcal T_+$.
+\item Let
+$$T = \{P \in \mathcal P': P \leq P_{T_+}\}$$
+be the largest tree in $\mathcal P'$ generated by elements of $T_+$. Remove $T$ from $\mathcal P'$ and add $T$ to $\mathcal T$.
+\item Let
+$$T^\pm = \{P \in \mathcal P': P \leq P_{T_+} \pm (|I_{T_+}|, 0)$$
+be the adjacent trees to $T$. Remove $T^\pm$ from $\mathcal P'$ and add $T^\pm$ to $\mathcal T$.
+\end{enumerate}
+Since $\mathcal P$ is finite the above algorithm halts. When it halts we have $\Energy \mathcal P' \leq \varepsilon/2$ and for every $T_+ \in \mathcal T_+$,
+$$\sum_{P \in T_+} |\langle f, \phi_P\rangle|^2 \sim \varepsilon^2 |I_{T_+}|.$$
+We want to show
+$$\sum_{T_+ \in \mathcal T_+} |I_{T_+}| \lesssim \varepsilon^{-2} ||f||_2^2$$
+and by output of the algorithm it follows that we must show
+$$\sum_{P \in \bigcup \mathcal T_+} |\langle f, \phi_P\rangle|^2 \lesssim ||f||_2^2.$$
+We already know that $\mathcal T_+$ is disjoint.
+\begin{lemma}
+If $P \in T_+ \in \mathcal T_+$, $P' \in T_+' \in \mathcal T_+$ and $\omega_{P_-} \subset \omega_{P_-'}$ then $I_{P'}$ is disjoint from $3I_{T_+}$.
+\end{lemma}
+\begin{proof}
+Suppose $\omega_{P_-} \subset \omega_{P_-}'$ and $I_{P'} \subset 3I_{T_+}$. Then there are three cases TODO
+\end{proof}
+TODO
+
+\end{proof}
 
 
 
@@ -7695,13 +8365,523 @@ $$u(x) = c_\pm e^{\pm i\lambda x}$$
 and $u \in L^2$ so $\lambda^2$ is an eigenvalue. Since $P_V$ is self-adjoint, $\lambda^2 \in \RR$.
 \end{proof}
 
+\section{Resonance expansion in 1D}
+On a compact domain we can write the solution of a PDE as sum of eigenfunctions.
+But we are working on a cocompact domain, so the best we can do is an asymptotic sum.
+Throughout, assume $V \in L^\infty(\RR \to \RR)$. This way we can use spectral theory for self-adjoint operators.
 
+As a review, consider the eigenvalue problem
+$$P_Vu = \lambda^2u$$
+on $(a, b)$ where $u(a) = u(b) = 0$.
+Here $P_V$ has discrete spectrum so we might hope to use its eigenvalues to find a generalized Fourier expansion of $u$.
+So now consider the wave equation
+$$D_t^2w - P_Vw = 0$$
+on $\RR \times (a, b)$. Then one has an explicit solution depending on initial data which is given by a Fourier series plus a polynomial in $\cosh,\sinh$. This was possible because $[a, b]$ is compact.
 
+Now for the cocompact case.
+\begin{theorem}
+Suppose that
+$$(D_t^2 - P_V)w = 0$$
+where $w(0) = w_0 \in H^1_{comp}$ and $\partial_tw(0) = w_1 \in L^2_{comp}$ are initial data.
+Then for any $A > 0$ we can write
+$$w(t, x) = \sum_{\Im \lambda_j > -A} \sum_{\ell=0}^{m_R(\lambda_j) - 1} t^\ell e^{-i\lambda_jt}f_{j,\ell}(x) + E_A(t, x)$$
+where the sum is finite, $(P_V - \lambda_j^2)^{\ell + 1}f_{j,\ell} = 0$,
+$$\sum_{\ell=0}^{m_R(\lambda_j) - 1} t^\ell e^{-i\lambda_jt}f_{j,\ell}(x) = -\Res_{\mu=\lambda_j} iR_V(\mu)w_1 + \mu R_V(\mu)w_0e^{-i\mu t},$$0
+and if $K > 0$, $\supp w_j \subseteq (-K, K)$,
+$$||E_A(t)||_{H^2[-K, K]} \leq C_{K,A} e^{-tA}(||w_0||_{H^1} + ||w_1||_{L^2})$$
+if $t > T_{K,A}$ is large enough.
+\end{theorem}
+The proof of this is quite tedious but follows from the following result and a change of contour.
+\begin{theorem}
+Suppose that $V \in L^\infty_{comp}(\RR \to \CC)$. Then if $\rho \in C^\infty_{comp}$ and $|\ch\supp V| \delta < 1$, then there are $A,C,T$ such that
+$$||\rho R_V(\lambda) \rho||_{L^2 \to H^j} \leq C|\lambda|^{j-1}e^{T(\Im \lambda)_-}$$
+if $\Im \lambda \geq -A -\delta \log(1 + |\lambda|)$.
+\end{theorem}
+\begin{proof}
+If $\rho_1$ has support in $[a, b]$ then by a previous estimate we have
+$$||\rho_1 R_0(\lambda) \rho_1||_{L^2 \to L^2} \leq C|\lambda|^{-1}e^{(b-a)|\Im \lambda|}$$
+but since
+$$\rho R_V(\lambda) \rho = \rho R_0(\lambda) \rho_1 (1 + VR_0(\lambda))\rho)^{-1} (1 - VR_0(\lambda)(1 - \rho_1))\rho$$
+where $\rho = 1$ on $\supp V$ and $\rho_1$ is a smooth approximation to $1_{\ch \supp V}$.
+We claim that
+$$||V \rho_1 R_0(\lambda) \rho_1||_{L^2 \to L^2} < 1/2.$$
+In fact if we put $[a, b] = \ch \supp V$, then
+$$||V \rho_1 R_0(\lambda) \rho_1||_{L^2 \to L^2} \leq C||V||_\infty e^{(b-a)|\Im \lambda|}/|\lambda|.$$
+If $\delta < 1/(b-a)$, $\Im \lambda > -A -\delta \log(1 + |\lambda|)$, and $|\lambda|$ is large enough then the bound is $< 1/2$.
+Thus $1 + V \rho_1 R_0(\lambda) \rho_1$ is invertible.
+\end{proof}
 
+Now suppose that $\ch \supp V$ is contained in $[-R + \varepsilon, R - \varepsilon]$.
+Then away from $[-R, R]$ we have for eigenfunctions of eigenvalue $\lambda^2$,
+$$u(x) = u_{in}(x) + u_{out}(x)$$
+where
+$$u_{in}(x) = b_{\sgn x} e^{-i\lambda|x|}$$
+and
+$$u_{out}(x) = a_{\sgn x} e^{i\lambda|x|}.$$
+Let $S(\lambda)$ be the \dfn{scattering matrix}, the linear map $(b_-, b_+) \mapsto (a_+, a_-)$.
+We will consider solutions of the form
+$$u^\pm(x) = e^{\pm i\lambda x} + v^\pm(x, \lambda)$$
+where $v^\pm(\lambda)$ is outgoing. Then
+$$v^\pm(x, \lambda) = -R_V(\lambda)(V(x)e^{\pm i\lambda x})$$
+Now let
+$$v^\pm_{\sgn x}(\lambda) = e^{-i\lambda|x|}v^\pm(x, \lambda)$$
+then
+$$S(\lambda) = 1 + A(\lambda)$$
+where
+$$A(\lambda) = \begin{bmatrix}v^+_+(\lambda) & v_+^-(\lambda)\\ v_-^+(\lambda) & v_-^-(\lambda)\end{bmatrix}.$$
+
+\begin{theorem}
+The function $A$ is a meromorphic function given by
+$$v^\omega_\theta(\lambda) = \frac{1}{2i\lambda} \int_{-\infty}^\infty e^{i\lambda(\omega - \theta)x}V(x)(1-e^{-i\lambda\omega x})R_V(\lambda)(e^{i\lambda\omega x}V(x))~dx.$$
+Moreover if
+$$E_\rho(\lambda): L^2(\RR) \to \CC^2$$
+is the operator
+$$E_\rho(\lambda)u = \left(\int_{-\infty}^\infty e^{-i\lambda x}u(x)\rho(x)~dx , \int_{-\infty}^\infty e^{i\lambda x}u(x)\rho(x) ~dx \right)$$
+where $\rho V = V$ then
+$$S(\lambda) = 1 + \frac{1}{2i\lambda}E_\rho(\lambda)(1 + VR_0(\lambda)\rho)^{-1} V E_\rho(\overline \lambda)^*.$$
+\end{theorem}
+The proof of this is just symbol-bashing.
+
+Note that the \dfn{transmission coefficient} is $t(\lambda) = 1 + v^+_+$ and $r_\pm(\lambda) = v^\mp_\pm(\lambda)$ are the \dfn{reflection coefficients}. Moreover we have
+$$S(-\lambda) = JS(\lambda)^{-1}J$$
+where $J = \begin{bmatrix}&1\\1\end{bmatrix}$.
+If $V$ is real and $\lambda \neq 0$ is real then $S(\lambda)$ is unitary.
+Thus if $V$ is real meromorphic continuation gives
+$$S(\overline \lambda)^* = S(\lambda)^{-1}.$$
+In particular $v_\theta^\omega$ is holomorphic in a neighborhood of $\RR$.
+\begin{theorem}
+If $\Im \lambda \geq 0$ and $|\lambda|$ is large enough then
+$$||e^{\mp i \lambda x}R_V(\lambda)(V(x)e^{\pm i\lambda x})||_{L^2 \to L^2} \lesssim |\lambda|^{-1}.$$
+\end{theorem}
+In particular,
+$$v_+^+(\lambda) = \frac{1}{2i\lambda}(\hat v(0) + O(|\lambda|^{-1})).$$
+\begin{proof}
+The integral kernel of
+$$R_0^\omega(\lambda) = e^{-i\lambda\omega x}R_0(\lambda)(e^{i\lambda\omega\cdot})$$
+is
+$$R_0^\omega(\lambda, x, y) = e^{-i\lambda\omega x}R_0(\lambda, x, y)e^{i\lambda\omega y} = \frac{i}{2\lambda}e^{i\lambda(|x-y|-\omega(x-y))}.$$
+As $|x - y| \geq \omega(x-y)$,
+$$||VR_0^\omega(\lambda)\rho||_{L^2 \to L^2} \lesssim \frac{1}{|\lambda|}$$
+if $\Im \lambda \geq 0$.
+
+Thus if $\Im \lambda \geq 0$ and $|\lambda|$ is large, $1 + VR_0^\omega(\lambda)\rho$ is invertible.
+Similarly $||R_0^\omega(\lambda)\rho||_{L^2\to L^\infty} \lesssim |\lambda|^{-1}$ and hence $1 + R_0^\omega(\lambda)\rho$ is invertible. This justifies the estimates on the integral kernel.
+\end{proof}
+
+\begin{theorem}
+Suppose that $\rho V = V$ and $D(\lambda) = \det(1 + VR_0(\lambda)\rho)$. Then
+$$\frac{\det D(-\lambda)}{D(\lambda)} = \det S(\lambda).$$
+\end{theorem}
+This follows from a straight computation and standard determinant identites.
 
 
 \section{Meromorphic continuation in odd dimensions}
+We first consider the free resolvent. Here $n \geq 3$ is odd.
+
+The free resolvent is
+$$R_0(\lambda) = (-\Delta - \lambda^2)^{-1}$$
+which sends $L^2 \to L^2$ when $\Im \lambda > 0$.
+The Fourier multiplier of $R_0(\lambda)$ is
+$$\frac{1}{|\xi|^2 - \lambda^2} = \int_0^\infty \frac{\sin t|\xi|}{|\xi|} e^{i\lambda t} ~dt.$$
+Let
+$$U(t) = \frac{\sin t\sqrt{-\Delta}}{\sqrt{-\Delta}}$$
+as defined by the functional calculus. Then
+$$R_0(\lambda) = \int_0^\infty e^{i\lambda t} U(t) ~dt.$$
+Here $U$ is the propogator of the wave equation. In fact if $(\varphi_0, \varphi_1)$ is initial data for the wave equation, thus $u(0) = \varphi_0$, $u'(0) = \varphi_1$, then
+$$u(t, x) = U(t)\varphi_1(x) + \partial_tU(t) \varphi_0(x)$$
+solves the wave equation $\Box u = 0$.
+
+Let $E_+$ be the fundamental solution of the wave equation. We have the strong Huygens principle,
+$$\supp E_+ = \{(x, t): |x| = |t|, ~t \geq 0\}.$$
+One can explicitly compute $E_+$ (see Evans' book) and then
+$$U(t, x, y) = E_+(t, x - y)$$
+if $t \geq 0$.
+\begin{theorem}
+The resolvent $R_0$ expands to an entire family of operators, and if $\rho$ is a cutoff then
+$$||\rho R_0(\lambda) \rho||_{L^2 \to H^j} \lesssim (1 + |\lambda|)^{j-1} e^{L(\Im \lambda)_-}$$
+for any $L$ larger than the diameter of $\supp \rho$ and $j \leq 2$.
+\end{theorem}
+\begin{proof}
+If $\Im \lambda > 0$ then
+$$\rho R_0(\lambda) \rho = \int_0^L e^{i\lambda t}\rho U(t)\rho~dt.$$
+The right-hand side is an entire family of operators on $L^2$.
+
+Now the Fourier multiplier satisfies
+$$\frac{\sin t|\xi|}{|\xi|} \leq |t|.$$
+Thus
+$$||U(t)||_{L^2 \to H^1} \lesssim ||U(t)||_{L^2 \to L^2} + ||\sqrt{-\Delta}U(t)||_{L^2 \to L^2} \lesssim 1 + |t|.$$
+Thus
+$$||\rho R_0(\lambda) \rho||_{L^2 \to H^1} \leq \int_0^L e^{(\Im \lambda)_- t}(1 + |t|) ~dt \leq (1 + L^2)e^{L(\Im \lambda)_-} \lesssim e^{L(\Im \lambda)_-}.$$
+One can use this to bootstrap an argument up to $H^2$.
+\end{proof}
+We now have
+$$R_0(\lambda, x, y) = \frac{1}{(2\pi)^n} \int_{\RR^n} \frac{e^{i(x-y)\xi}}{|\xi|^2 - \lambda^2}~d\xi
+= \frac{1}{(2\pi)^n} \int_0^\infty \int{\SS^{n-1}} \frac{e^{ir\omega(x-y)}}{r^2 - \lambda^2}~d\omega r^{n-1}~dr.$$
+We conclude that
+$$R_0(\lambda, x, y) = e^{i\lambda|x-y|}{|x-y|^{n-2}} P_n(\lambda|x-y|).$$
+Here $P_n$ is a polynomial of degree $(n-3)/2$ of leading term $k^{(n-3)/2}{4\pi(2\pi i)^{(n-3)/2}}$ and constant term $(n-3)!/(\pi^{(n-1)/2})$. In particular, if $n = 3$ then
+$$R_0(\lambda, x, y) = \frac{e^{i\lambda|x-y|}}{4\pi|x-y|}.$$
+\begin{theorem}
+If $\varphi$ is a compactly supported distribution then
+$$R_0(\lambda)\varphi(r\omega) = e^{i\lambda r}r^{-(n-1)/2}h(r, \omega)$$
+where
+$$h(r, \omega) \sim \sum_{j=0}^\infty h_j(\omega)r^{-j}$$
+as $r \to \infty$ and
+$$h_0(\omega) = \frac{1}{4\pi}\frac{\lambda}{2\pi i}^{(n-3)/2}\hat \varphi(\lambda\omega).$$
+\end{theorem}
+\begin{proof}
+We have
+$$|r\omega - y| = r\sqrt{1 - 2r^{-1}\omega y + r^{-2}|y|^2} \approx r - \omega y + \dots$$
+and similarly when we take both sides to the $-p$th power.
+Now use the previous theorem.
+\end{proof}
+
+We now invert the operator $P_V - \lambda^2$. Here $P_V = V - \Delta$. Let
+$$R_V(\lambda) = (P_V - \lambda^2)^{-1}.$$
+\begin{theorem}
+$R_V$ is meromorphic with finitely many poles in the upper-half plane. It extends to a meromorphic family of operators $L^2_{comp} \to L^2_{loc}$ on $\CC$.
+\end{theorem}
+\begin{proof}
+The proof is the same as in one dimension. We use the formula
+$$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda)\rho)^{-1}(1 - VR_0(\lambda)(1 - \rho)).$$
+\end{proof}
+
+As before scattering resonances are the poles of $R_V$. Their multiplicity is given by the dimension of the space
+$$A_1(L^2_{comp}) + \cdots + A_J(L^2_{comp})$$
+where
+$$R_V(\zeta) = \sum_{j=1}^J \frac{A_J}{(\zeta - \lambda)^j} + A(\zeta - \lambda)$$
+for $|\zeta - \lambda|$ small.
+\begin{theorem}
+If $\mu$ is a nonzero resonance of positive multiplicity $m_V(\mu)$, then for some $K(\mu) \leq m_V(\mu)$,
+$$R_V(\lambda) = -\sum_{k \leq K(\mu)} \frac{(P_V - \mu^2)^{k-1}}{(\lambda^2 - \mu^2)^k} \Pi_\mu + A(\lambda, \mu)$$
+where
+$$\Pi_\mu = -\frac{1}{2\pi i}\oint_\mu R_V(\lambda)2\lambda~d\lambda$$
+is the projection onto the kernel of $(P_V - \mu^2)^{K(\mu)}$.
+\end{theorem}
+\begin{proof}
+Define $\Pi_\mu = A_1$. Without loss of generality we can assume $A = 0$. Then
+$$A_{k+1} = (P_V - \mu^2)A_k $$
+so $(P_V - \mu^2)^{K(\mu)}\Pi_\mu = 0$.
+Since $\Pi_\mu$ has finite rank, one can use Jordan canonical form to show $K(\mu)$ is less than the rank of $\Pi_\mu$.
+But by the expansion formula for $R_V$ we know that $m_V(\mu)$ is the rank of $\Pi_\mu$.
+\end{proof}
+\begin{theorem}
+A nonzero complex number $\lambda_0$ is a resonance iff there is a nonzero $\varphi \in L^2_{comp}$ such that if $u = R_0(\lambda_0)\varphi$, then $(P_V - \lambda_0^2)u = 0$.
+\end{theorem}
+\begin{proof}
+One has
+$$0 = (P_V - \lambda_0^2)R_0(\lambda_0)\varphi = (1 + VR_0(\lambda_0))\varphi = (1 + VR_0(\lambda)(1 - \rho))(1 + VR_0(\lambda_0)\rho)\varphi.$$
+Since $1 + VR_0(\lambda_0)(1 - \rho)$ is invertible this implies that $1 + VR_0(\lambda_0)\rho$ has nontrivial kernel, so $(1 + VR_0(\lambda_0)\rho)^{-1} = \infty$.
+
+Conversely we use
+$$R_V(\lambda) = R_0(\lambda) - R_0(\lambda)VR_V(\lambda)$$
+and using the expansion of $R_V(\lambda)$ in terms of the projector $\Pi_{\lambda_0}$ we have
+$$-(P_V - \lambda_0^2)^{K-1}\Pi_{\lambda_0} = R_0(\lambda_0)V(P_V - \lambda_0^2)^{K-1}\Pi_{\lambda_0}.$$
+Suppose that
+$$(P_V - \lambda_0^2)^{K-1}\Pi_{\lambda_0}\psi$$
+is nonzero, and let
+$$\varphi = V(P_V - \lambda_0^2)^{K-1}\Pi_{\lambda_0}\psi \in L^2_{comp}.$$
+Since $\Pi_{\lambda_0}$ projects onto the kernel, $R_0(\lambda_0)\varphi \in \ker(P_V - \lambda_0^2)$.
+\end{proof}
+
+\section{Counting resonances}
+Recall that if $X$ is a compact Riemannian $n$-manifold then the operator $V - \Delta$ has discrete spectrum on $X$, and Weyl's law gives a bound
+$$\sim c_n |X| r^n$$
+on the cardinality of the set of eigenvalues of $V - \Delta$ of norm $\leq r$ and $|X|$ is the volume of $X$.
+We now generalize this to cocompact domains.
+
+\begin{theorem}
+Let $n \geq 3$, odd, $V \in L^\infty_c(\RR^n \to \CC)$. Then
+$$\sum_{|\lambda| \leq r} \lesssim r^n.$$
+\end{theorem}
+\begin{proof}
+Let $\rho$ be a cutoff and
+$$H_V(\lambda) = \det(1 - (VR_0(\lambda)\rho)^{n+1}).$$
+For this definition to make sense we need $(VR_0(\lambda)\rho)^p$ to be in the trace class when $p = n + 1$, and in fact we can prove it when $2p > n + 1$.
+
+Recall that if $(s_j(A))_j$ is a decreasing enumeration of the singular values of the compact operator $A$ then $s_{j+k}(A+B) \leq s_j(A) + s_k(B)$ and $s_{j+k}(AB) \leq s_j(A)s_k(B)$. Moreover,
+$$s_j(AB),s_j(BA) \leq ||B||s_j(A).$$
+It suffices to show that $(s_j(VR_0(\lambda)\rho)^p)_j \in \ell^1$.
+
+Let $\rho_1$ be a cutoff supported in $B(0, R)$. Let $T_R = \RR^n/R\ZZ^n$. Then $\rho_1 R_0(\lambda) \rho_1$ sends $L^2(T_R)$ to itself. Then
+$$s_j(\rho_1 R_0(\lambda) \rho_1) = s_j((1 - \Delta_{T_R})^{-1}(1 - \Delta_{T_R})\rho_1 R_0(\lambda)\rho_1).$$
+Thus we have a bound
+$$\leq s_j((1 - \Delta_{T_R})^{-1})||(1 - \Delta_{T_R})\rho_1 R_0(\lambda) \rho_1||.$$
+By the Weyl law,
+$$||(1 - \Delta_{T_R})^{-1}|| \lesssim j^{-2/n}.$$
+Moreover,
+$$||\rho_1 R_0(\lambda) \rho_1|| \lesssim ||(1 + |\lambda|)e^{R(\Im \lambda)_-}.$$
+Thus
+$$s_j(\rho_1 R_0(\lambda) \rho_1) \lesssim |\lambda|j^{-2/n}e^{R(\Im \lambda)_-}.$$
+Thus
+$$s_j((VR_0(\lambda)\rho)^p) \lesssim |\lambda|^pj^{-2p/n}\exp(O(\Im \lambda)_-).$$
+This is summable and proves the claim.
+
+Let $m_H(\lambda)$ be the multiplicity of a zero of $H(\lambda)$. Then
+$$m_R(\lambda) \leq m_H(\lambda).$$
+To see this, we first check when $m_R(\lambda) \leq 1$. In fact, if there is a double pole of $R_V$, then there is a finite-rank perturbation of $R_V$ which has two single poles, by the content of the previous section, so the case of single poles suffices.
+Since $n$ is odd,
+$$1 - (VR_0(\lambda))^{n+1} = \sum_{j \leq n} (-VR_0(\lambda)\rho)^j (1 + VR_0(\lambda)\rho).$$
+Now $1 + VR_0(\lambda)\rho$ can be continuously deformed to $1$ so it is a Fredholm operator of rank $0$.
+It follows that $1 + VR_0(\lambda)\rho$ has nontrivial kernel, since it has nontrivial cokernel.
+This implies that $H$ has a zero at $\lambda$ which was desired.
+
+Now recall Jensen's formula, that if $H$ is holomorphic then
+$$\int_0^r \frac{n(t)}{t}~dt + \log|H(0)| = \frac{1}{2\pi} \int_0^{2\pi} \log|H(re^{i\theta})|~d\theta.$$
+Here $n$ is the zero-counting formula of $H$.
+We have
+$$H(\lambda) \leq \prod_j 1 + s_j((VR_0(\lambda)\rho)^{n+1}).$$
+But
+$$ s_j((VR_0(\lambda)\rho)^{n+1}) \leq ||V||_\infty^{n+1}s_{[j/(n+1)]}(\rho R_0(\lambda) \rho)^{n+1}.$$
+This estimate works because singular values are decreasing.
+So we want to bound $s_j(\rho R_0(\lambda) \rho)$. We have when $\Im \lambda \geq 0$
+$$s_j(\rho_1 R_0(\lambda) \rho_1) \lesssim j^{-1/n}$$
+and
+$$s_k((VR_0(\lambda)\rho)^{n+1}) \lesssim k^{-(n+1)/n}.$$
+But
+$$|H(\lambda)| \leq \prod_k 1 + s_k((VR_0(\lambda)\rho)^{n+1})$$
+but
+$$\prod_\ell 1 + x_\ell \leq \exp \sum_\ell x_\ell$$
+so
+$$H(\lambda) \lesssim \exp \sum_k k^{-(n+1)/n}.$$
+
+Now to bound when $\Im \lambda < 0$. By Stone's formula,
+$$R_0(\lambda, x, y) - R_0(-\lambda, x, y) = C \lambda^{n-2} \int_{\Sphere^{n-1}} e^{i\lambda\langle \omega, x-y\rangle}~d\omega.$$
+Let
+$$E_\rho(\lambda, x, \omega) =\rho(x)e^{i\lambda\langle \omega, x\rangle}$$
+so
+$$\rho(R_0(\lambda) - R_0(-\lambda)) = C\lambda^{n-2}E_\rho(\overline \lambda)^* E_\rho(\lambda).$$
+It turns out that
+$$s_j(\rho R_0(\lambda) \rho) \leq C|\lambda|^{n-2}||E_\rho(\overline \lambda)||s_{[j/2]}(E_\rho(\lambda))+s_{[j/2]}(\rho R_0(-\lambda) \rho) \leq C \exp(C|\lambda|)s_{[j/2]}(E_\rho(\lambda)) + Cj^{-1/n}.$$
+
+So we must estimate $s_j(E_\rho(\lambda))$. But
+$$s_j(E_\rho(\lambda)) \leq s_j((1 - \Delta_{\Sphere^{n-1}})^{-\ell})||(1 - \Delta_{\Sphere^{n-1}})^{\ell}E_\rho(\lambda)||.$$
+By the Weyl law we can bound
+$$s_j((1 - \Delta_{\Sphere^{n-1}})^{-\ell}) \leq C^\ell j^{-(2\ell)/(n-1)}.$$
+Pulling out the $\rho$ and then applying Cauchy estimates,
+$$||(1 - \Delta_{\Sphere^{n-1}})^{\ell}E_\rho(\lambda)|| \lesssim C^\ell \exp(O(|\lambda|))(2\ell)!.$$
+Therefore
+$$s_j(E_\rho(\lambda)) \lesssim C^\ell j^{-(2\ell)/(n-1)}\exp(O(|\lambda|))(2\ell)!.$$
+Take $\ell = (j/O(e))^{1/(n-1)}$.
+
+Putting everything together we get
+$$|H(\lambda)| \leq \exp(O|\lambda|^n).$$
+\end{proof}
+
+To see that this is only an upper bound we prove that there are potentials with no resonances at all.
+
+\begin{theorem}
+Let $k \geq 1$ be odd.
+Let $(r, \theta, x')$ be cylindrical coordinates in $\RR^{k+2}$, $x_1 = r\cos\theta$, $x_2 = r\sin\theta$.
+Suppose $V \in L^\infty_c(\RR^{k+2}, \CC)$, where
+$$V(r, \theta, x') = e^{im\theta}W(r, x'),$$
+$W \in L^\infty_c(\RR^k \times [0, \infty))$.
+If $m \neq 0$ then $R_V$ is entire, so $V$ has no resonances.
+\end{theorem}
+\begin{proof}
+Assume $R_V$ has a pole. Then
+$$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda)\rho)^{-1}(1 - VR_0(\lambda)(1 - \rho)).$$
+So $R_V$ has a simple pole iff $(1 + VR_0(\lambda)\rho)^{-1}$ has a pole.
+In particular $1 + VR_0(\lambda)\rho$, which has Fredholm index $0$, has nontrivial kernel for $\lambda$ a pole. Thus there is a $u \in L^2$ such that
+$$(1 + VR_0(\lambda)\rho)u = 0.$$
+Thus
+$$u = -V\rho R_0(\lambda)\rho u.$$
+Let $\Pi_\ell$ project onto the $\ell$th Fourier mode.
+We may assume that $\rho$ does not depend on $\theta$, in which case $\Pi_\ell$ commutes with $\rho R_0(\lambda) \rho$.
+Thus
+$$u = -e^{im\theta}W\rho R_0(\lambda)\rho u.$$
+Thus
+$$\Pi_{j+m}u = e^{im\theta}W\rho R_0(\lambda)\rho \Pi_j u.$$
+Thus
+$$||\Pi_{j+m}u||_2 \lesssim ||\rho R_0(\lambda) \rho \Pi_j u||_2.$$
+
+We now give control over Fourier modes.
+\begin{lemma}
+For every $f \in L^2$,
+$$||\rho R_0(\lambda)\rho \Pi_\ell f||_2 \lesssim e^{C(\Im \lambda)_-}\langle \ell\rangle^{-1}||f||_2.$$
+\end{lemma}
+\begin{proof}
+Let $u = \rho R_0(\lambda)\rho \Pi_\ell f$. Then
+$$||u||_{H^1} = ||\rho R_0(\lambda)\rho \Pi_\ell f||_{H^1} \leq Ce^{C(\Im \lambda)_-}||f||_2.$$
+Moreover
+$$||u||_{H^1}^2 \geq \langle -\Delta u, u\rangle.$$
+In polar coordinates,
+$$-\Delta = D_r^2 - iD_r/r - \Delta_{x'} + \ell^2 r^{-2}.$$
+But $u$ has compact support so we can integrate by parts to get
+$$\langle -\Delta u, u\rangle = \int_{\RR^k} \int_0^\infty \int_0^{2\pi} |\partial_ru|^2 + |\nabla u|^2 + \ell^2r^{-2}|u|^2~dV \geq \langle \ell^2r^{-2} u, u \rangle \gtrsim \ell^2 ||u||_2^2.$$
+Thus we can bound the $L^2$ norm in terms of $H^1$ norm which has the bound that we want.
+\end{proof}
+We have
+$$||\Pi_{j+m}u||_2 \lesssim ||\rho R_0(\lambda)\rho \Pi_j \Pi_j u||_2 \lesssim e^{C(\Im \lambda)_-}\langle j\rangle^{-1}||\Pi_j u||_2.$$
+Let $a_j = ||\Pi_j u||_2$ and $C_j =  e^{C(\Im \lambda)_-}\langle j\rangle^{-1}$.
+\begin{lemma}
+Let $(a_j)_{j \in \ZZ}$ go to zero in both directions and suppose that there is a $m$ and there are $C_j$ such that $a_{j+m} \leq C_j$, $C_j \leq 1$ for all $|j|$ large enough. Then $a = 0$.
+\end{lemma}
+\begin{proof}
+We have
+$$|a_j| \leq C_{j-m}|a_{j-m}| \leq \cdots \leq \prod_{k=1}^p C_{j-km}|a_{j-mp}| \lesssim |a_{j-mp}| \to 0$$
+as $p \to \infty$. Here the infinite product is bounded since the $C_j$ are.
+\end{proof}
+Therefore $u = 0$ almost everywhere, a contradiction.
+\end{proof}
+
 \section{Rellich's theorem}
+Recall that in 1 dimension, if $(P_V - \lambda^2)u = 0$ then at infinity we can write
+$$u(x) = b_{\sgn x}e^{-i\lambda|x|} + a_{\sgn x}e^{i\lambda|x|}$$
+and the term $a_{\sgn x}e^{i\lambda|x|}$ is an outgoing wave. We want to generalize to higher dimensions and write
+$$u^\pm(x) = e^{\pm i\lambda x} + v^\pm(x, \lambda)$$
+where $v^\pm$ is an outgoing wave.
+
+\begin{definition}
+If $(P_V - \lambda^2)u = f$, $\lambda \in \RR \setminus 0$, $f \in L^2_c(\RR^n)$, $n \geq 3$ odd, we say that $u$ is an \dfn{outgoing wave} if there is a $g\in L^2_c(\RR^n)$, $u = R_0(\lambda)g$.
+We say that $u$ is an \dfn{incoming wave} if $u = R_0(-\lambda)g$.
+\end{definition}
+We want $w(\lambda, \omega)$ to solve $(P_V - \lambda^2)w(\lambda, \omega) = 0$,
+$$w(x, \lambda, \omega) = e^{-i\lambda\langle \lambda, \omega\rangle} + u(x, \lambda, \omega),$$
+$u$ outgoing, $\omega \in \Sphere^{n-1}$, viz.
+$$u = -R_V(\lambda)(Ve^{-i\lambda\langle\bullet,\omega}).$$
+In that case
+$$u(x) = \frac{e^{\pm i\lambda|x|}}{|x|^{(n-1)/2}}a(x/|x|)+ O(x^{-(n-1)/2})$$
+at infinity.
+
+\begin{theorem}[Rellich]
+\index{Rellich's theorem}
+Suppose $V \in L^\infty_c(\RR^n \to \RR)$. If $\lambda \in \RR \setminus 0$ there are no outgoing solutions to the operator $P_V - \lambda^2$; if and only if $R_V$ is holomorphic near $\lambda$.
+\end{theorem}
+\begin{proof}
+If $R_V$ has a pole at $\lambda$ then $I + VR_0(\lambda)$ is not invertible, so there is a
+$$g = \rho g = -VR_0(\lambda)g$$
+so $u = R_0(\lambda)g$ is an outgoing solution.
+
+Conversely, if $u = R_0(\lambda)g$ is an outgoing solution then $(1 + VR_0(\lambda)\rho)g = 0$ so $m_R(\lambda) > 0$.
+Suppose $w = -R_0(\lambda)Vw$, $(P_V - \lambda^2)w = 0$. Thus $w$ is outgoing.
+We claim $w(x) = O(|x|^{-(n-1)/2})$, and then claim that $w$ has compact support, and then claim that $w = 0$.
+
+To prove the first claim, we note that
+$$w(x) = \frac{e^{i\lambda|x|}}{|x|^{(n-1)/2}}(h(x/|x|) + O(1/|x|)).$$
+Here
+$$h(\theta) = c_n \lambda^{(n-3)/2}\hat V_w(\lambda\theta).$$
+Thus $(\partial_r - i\lambda)w = O(r^{(n-1)/2})$ (here $|x| = r$).
+Since $V,\lambda \in \RR$,
+$$0 = \int{B(0, R)} |w(P_V - \lambda^2)\overline w (P_V - \lambda^2)w\overline w| = \int_{B(0, R)} \overline w\Delta w - w \Delta \overline w$$
+so
+$$0 = \int_{\partial B(0, R)} \partial_rw\overline w - \partial_r\overline ww = \int_{\partial B(0, R)} (i\lambda w + \cdots)\overline w - (-i\lambda w + \cdots)w = 2i\lambda \int_{\partial B(0, R)} |w|^2 + O(R^{-1})$$
+hence the first claim.
+
+To see the second claim, note that by the irst claim, the top order term of $w$ in the asymptotics is $0$.
+We know
+$$\hat V(\xi) = 0$$
+on $\Sigma \cap \RR^n = \{\xi: |\xi|^2 = \lambda^2\} \cap \RR^n$, since $h(0) = 0$, so $\hat V$ vanishes on $\Sigma$. Hence
+$$\hat V(\xi)(|\xi|^2 - \lambda^2)^{-1}$$
+is entire. Since
+$$\hat V(\xi) = \hat w(\xi)(|\xi|^2 - \lambda^2)$$
+the Paley-Weiner theorem implies that $w$ has compact support.
+
+For the third claim we appeal to a Carleman estimate:
+\begin{lemma}[semiclassical Carleman estimate]
+\index{semiclassical Carleman estimate}
+For every $R > 0$ there is a $\varphi \in C^\infty(\RR^n \to \RR)$ such that for every $h > 0$ and $u \in H^2(\RR^n)$ such that $\supp u \subseteq B(0, R)$,
+$$||h^2e^{\varphi/h}\Delta e^{-\varphi/h}u||_{L^2} \geq Ch^2||u||_{L^2}.$$
+\end{lemma}
+\begin{proof}
+Let
+$$P_\varphi = -h^2e^{\varphi/h}\Delta e^{-\varphi h}$$
+so we want to show that
+$$||P_\varphi||_{L^2 \to L^2} \geq Ch^2.$$
+Now
+$$||P_\varphi u||_{L^2} = \langle P_\varphi^*P_\varphi u, u\rangle = ||P_\varphi^*u||_{L^2} + \langle [P_\varphi^*, P_\varphi]u, u\rangle
+\geq \langle [P_\varphi^*, P_\varphi]u, u\rangle.$$
+Now
+$$[P_\varphi^*, P_\varphi] = -8h^3\sum_{j,k=1}^n \partial_{j,k}\varphi \partial_{j,k}u + 4h\langle \nabla \varphi, \nabla|\nabla \varphi|^2u - 8h^3\langle \nabla \Delta\varphi, \Delta u\rangle - 2h^3(\Delta^2\varphi)u.$$
+Take
+$$\varphi(x) = \frac{|x|^2}{2} + 2(R+1)x_1.$$
+Then $\varphi$ is convex. Thus
+$$[P_\varphi^*, P_\varphi] = 8h(-h^2\Delta + (x + 2(R+1)x_1)^2)$$
+which has sufficient positivity.
+\end{proof}
+
+Let $u = e^{\varphi/h}w$, so
+\begin{align*}0 &= h^2||e^{\varphi/h}(P_V - \lambda^2)w||_{L^2} \\
+&= ||e^{\varphi/h}(-h^2\Delta + h^2V- h^2\lambda^2)e^{-\varphi/h}u||_{L^2}\\
+& \geq h^2 ||e^{\varphi/h}\Delta e^{-\varphi/h}u||_{L^2} - Ch^2||u||_{L^2}\\
+&\geq Ch^{1/2}||u||_{L^2}-Ch^2||u||_{L^2}.
+\end{align*}
+Taking $h \to 0$ we see that $u = 0$, so $w = 0$.
+\end{proof}
+
+\begin{theorem}[Rellich]
+\index{Rellich's theorem}
+Suppose $P$ is a self-adjoint operator on $H^2$, $\chi$ a cutoff with
+$$B(0, R) \subset \{\chi = 1\} \subset \supp \chi \subset B(0, 2R)$$
+$P(1 - \chi) = -\Delta(1 - \chi)$. If $\lambda > 0$, $u \in H^2_{loc}$, $(P - \lambda^2) = 0$,
+$$\lim_{R \to \infty} \int_{\partial B(0, R)} ((\partial_r - i\lambda)u)^2 = 0$$
+then for every $|x| > R$, $u(x) = 0$.
+In particular if the \dfn{Sommerfeld radiation condition}
+then the conclusion of the theorem holds.
+\end{theorem}
+\begin{proof}
+Let
+$$f = [\Delta, \chi]u = -(\Delta + \lambda^2)(1 - \chi)u.$$
+Then $(1 - \chi)u = R_0(\lambda)f$.
+To see this, note that
+$$w = (1 - \chi)u - R_0(\lambda)f$$
+solve $(\Delta + \lambda^2)w = 0$. If $G = (\partial_r - i\lambda)w/(2i\lambda)$, then arguing as in the proof of the other Rellich theorem we see that
+$$0 \geq \frac{1}{2}\int_{\partial B(0, R)} |w|^2 - 2\int_{\partial B(0, R)}|G|^2$$
+and by hypothesis
+$$\frac{1}{R}\int_{\partial B(0, R)}|w|^2 \to 0,$$
+and $\supp \hat w \subset \{|\xi|^2 = \lambda^2\}$, hence $w = 0$.
+
+Now if $\chi_1$ is a cutoff, $\chi_1 = 1$ on $\supp \chi$,
+$$-i\langle [-\Delta, \chi_1]R_0(\lambda)f, R_0(\lambda)f\rangle = |c_n|^2\lambda^{n-2} \int_{\Sphere^{n-1}}|\hat f(\lambda\theta)|^2~d\theta$$
+but the above quadratic form is $0$, so $\hat f(\lambda\theta) = 0$ on $\Sphere^{n-1}$.
+We can then repeat the proof of the other Rellich theorem.
+\end{proof}
+The quantity $i\langle[\Delta, \chi_1]u, u\rangle$ is known as the \dfn{quantum flux} which is positive for outgoing solutions and negative for incoming solutions.
+
+\begin{theorem}
+Let $V \in C^\infty_c(\RR^n \to \RR)$, $f$ a distribution of compact support, $(P_V - \lambda^2)u = f$, $\lambda \in \RR \setminus 0$. Then the following are equivalent:
+\begin{enumerate}
+\item As $x \to \infty$,
+$$u(x) = e^{i\lambda|x|}w(x/|x|)|x|^{-(n-1)/2} + O(|x|^{-(n+1)/2}).$$
+\item $(\partial_r - i\lambda)u = o(r^{-(n-1)/2})$ where $|x| = r$.
+\item $u = R_V(\lambda)f$.
+\item There is a distribution $g$ of compact support such that $u = R_0(\lambda)g$.
+\end{enumerate}
+\end{theorem}
+This follows pretty easily from the above.
+
+\begin{theorem}
+If $\lambda \in \RR \setminus 0$, then
+$$e^{-i\lambda\langle x,\omega\rangle}\sim (\lambda|x|)^{-(n-1)/2}(c_n^+ e^{-i\lambda|x|}\delta_\omega(x/|x|) + c_n^- e^{i\lambda|x|}\delta_{-\omega}(x/|x|) )$$
+as $|x| \to \infty$, with
+$$c_n^\pm = (2\pi)^{(n-1)/2}e^{\pm \pi/4(n-1)i}.$$
+The remainder is $O(|x|^{-1})$.
+\end{theorem}
+\begin{proof}
+We apply the method of stationary phase.
+Without loss of generality assume that $\omega = (1, 0, \cdots, 0)$. Then $\theta \mapsto \langle \theta, \omega\rangle$ has antipodal critical points $\pm 1 = (\pm 1, 0, \cdots, 0)$.
+Thus we may assume that the test function $\varphi$ is supported close to the critical points $\pm 1$ because everywhere else the contribution is $O(h^\infty)$ where $h = (r\lambda)^{-1}$, and the integral is
+$$\int_{\Sphere^{n-1}} e^{-i\lambda r\langle \omega,\theta\rangle} \varphi(\theta)~d\theta.$$
+
+We consider the pole $+1$ because the other is similar. Write $\theta = (\sqrt{1 - |t|^2}, t)$, $t \in \RR^{n-1}$.
+The Jacobian of this change of coordinates is
+$$J(t) = 1 + O(t^2)$$
+and
+$$I_h = \int_{B(0, 1) \subset \RR^{n-1}} e^{-\sqrt{1 - |t|^2}/h} \varphi(\sqrt{1 - |t|^2}, t)J(t)~dt$$
+and stationary phase gives
+$$I_h = (2\pi h)^{(n-1)/2}e^{i\pi/4(n-1)}(\varphi(1, 0) + O(h)).$$
+\end{proof}
+
+\begin{theorem}
+Let $P$ be a self-adjoint operator, $P(1 - \chi) = -\Delta(1 - \chi)$, $F_\ell$ Schwartz functions, $f_\ell, g_\ell \in \Sphere^{n-1}$, $\lambda \in \RR \setminus 0$, $(P - \lambda^2)u_\ell = F_\ell$,
+$$u_\ell(r\theta) = r^{-(n-1)/2}(e^{i\lambda r}f_\ell(\theta) + e^{-i\lambda r}g_\ell(\theta)) + O(r^{-(n+1)/2}).$$
+Then
+$$2i\lambda\int_{\Sphere^{n-1}}(g_1\overline g_2 - f_1\overline f_2) = \int_{\RR^n} F_1\overline u_2 - u_1\overline F_2.$$
+\end{theorem}
+This follows from selfadjointness and Green's theorem.
+
+
+
 \section{The scattering matrix}
 \section{Trace formulae}
 \section{Blackbox scattering}
