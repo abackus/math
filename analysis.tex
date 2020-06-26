@@ -6325,8 +6325,6 @@ Thus a concrete Riemann surface is locally a holomorphic variety.
 Let $S = \{(z, w): z = w^2\}$. Then $S$ can be viewed as the domain of $\sqrt\cdot$, by $\sqrt{(z, w)} = w$, and a choice of branch is the same thing as a holomorphic embedding of some open subset $U \subset \CC$ into $S$.
 \end{example}
 
-TODO: What about operator-valued Riemann surfaces? Is the above example the Riemann surface of the resolvent of a 1D Schrodinger equation?
-
 \section{Basic definitions}
 The definition of a concrete Riemann surface is a bit unfortunate because no such Riemann surface can be compact.
 \begin{definition}
@@ -6370,6 +6368,225 @@ Moreover $n$ is the number of solutions to the equation $f(x) = y$ which converg
 \begin{definition}
 The number $v_f(r) = n$ appearing in the above theorem is called the \dfn{valency} of $f$ at $r$.
 \end{definition}
+
+\begin{definition}
+View $\PP^1 = \CC \cup \{\infty\}$. Let $X$ be a Riemann surface. A function $f: X \to \PP^1$ is said to be a \dfn{meromorphic function} on $X$ if it can be locally written as a quotient of holomorphic functions $X \to \CC$.
+\end{definition}
+A meromorphic function is the same thing as a holomorphic function $X \to \PP^1$ which is not identically $\infty$. Its poles are the preimages of $\infty$, and the order of the pole is just the valency.
+Clearly the collection of meromorphic functions on a connected Riemann surface forms a field. The only nontrivial thing being claimed here is that they are an integral domain, which follows because every holomorphic function has full support.
+
+\section{Holomorphic mappings of compact Riemann surfaces}
+Recall the open mapping theorem: a nonconstant holomorphic map is open, in the sense that open sets push forward to open sets. This can be proven using the residue calculus.
+\begin{corollary}
+Let $f: X \to Y$ be a nonconstant holomorphic map, $X$ a connected compact Riemann surface. Then $f(X)$ is a compact connected component of $Y$.
+\end{corollary}
+\begin{proof}
+Since $f$ is an open continuous map of a compact connected set, $f(X)$ is open, compact, and connected, hence clopen and connected, hence a connected component.
+\end{proof}
+\begin{corollary}
+A nonconstant holomorphic map between compact connected Riemann surfaces is constant.
+\end{corollary}
+\begin{corollary}
+A holomorphic function on a compact connected Riemann surface is constant.
+\end{corollary}
+Just like any theorem in complex analysis we can use the above to prove the fundamental theorem.
+\begin{corollary}[fundamental theorem]
+  \index{fundamental theorem of algebra}
+A nonconstant polynomial is surjective.
+\end{corollary}
+The point is that the theorem that holomorphic functions on compact Riemann surfaces are surjective is just a generalization of the fundamental theorem.
+
+We now reduce the study of meromorphic functions from analysis to algebraic geometry.
+\begin{theorem}
+A meromorphic function on $\PP^1$ can be written uniquely as
+$$z \mapsto p(z) + \sum_{ij}\frac{c_{ij}}{(z - p_i)^j}$$
+where $p$ is a polynomial, the $c_{ij}$ are constants, $p_i$ are poles, and the sum is finite.
+\end{theorem}
+\begin{corollary}
+Every meromorphic function on $\PP^1$ is rational.
+\end{corollary}
+\begin{proof}[Proof of theorem]
+Let $f: \PP^1 \to \PP^1$ be meromorphic and nonconstant (otherwise the claim is trivial).
+Then the poles of $\PP^1$ are isolated, so finite since $\PP^1$ is compact.
+Subtract off the principal parts at each pole except for poles at $\infty$.
+Then we are left with a meromorphic function whose only pole is at $\infty$; i.e. an entire function.
+But the only entire functions which do not have an essential singularity on $\PP^1$ are polynomials.
+\end{proof}
+\begin{corollary}
+A meromorphic function on $\PP^1$ can be uniquely written as
+$$z \mapsto c\frac{\prod_{i=1}^n z - z_i}{\prod_{j=1}^m z - p_j}.$$
+\end{corollary}
+\begin{proof}
+Let $f: \PP^1 \to \PP^1$ be meromorphic and nonconstant.
+Then $f$ is rational so it has finitely many zeroes and poles. Factoring out those zeroes and poles we see that $f$ must be a polynomial with no zeroes, hence a constant by the fundamental theorem.
+\end{proof}
+\begin{corollary}
+A meromorphic function on $\PP^1$ has as many zeroes as poles.
+\end{corollary}
+\begin{proof}
+Let
+$$f(z) = \frac{\prod_{i=1}^n z - z_i}{\prod_{j=1}^m z - p_j}.$$
+If $n \neq m$ then $\infty$ has valence $n - m$, hence has a zero of order $n - m$ if $n > m$, or a pole of order $m - n$ if $n < m$.
+\end{proof}
+
+Before generalizing the notion of the degree of a polynomial to more general functions on compact Riemann surfaces, we need to recall some topological preliminaries.
+\begin{definition}
+A \dfn{proper map} of Hausdorff spaces is a map such that the preimage of every compact set is compact.
+\end{definition}
+\begin{lemma}
+If $X$ is a compact Hausdorff space and $Y$ is a Hausdorff space, then any continuous map $X \to Y$ is proper.
+\end{lemma}
+\begin{proof}
+The preimage of a closed set is closed and hence compact.
+\end{proof}
+\begin{lemma}
+Let $f: X \to Y$ be a continuous proper map and $X,Y$ Hausdorff. Let $y \in Y$ and $U \ni f^{-1}(y)$ open. Then there is a $V \ni y$ such that $f^{-1}(V) \subseteq U$.
+\end{lemma}
+\begin{proof}
+Let $\mathcal V$ be the set of open neighborhoods of $y$ which admit a compact closure. Then $\bigcap_{V \in \mathcal V} \overline V = \{y\}$ since $Y$ is Hausdorff.
+So $\bigcap_{V \in \mathcal V} f^{-1}(\overline V) = f^{-1}(y)$. Therefore
+$$\emptyset = U^c \cap \bigcap_{V \in \mathcal V} f^{-1}(\overline V) = \emptyset.$$
+By the finite intersection property of the compact set $\bigcap_{V \in \mathcal V} f^{-1}(\overline V)$, there is already an empty finite intersection.
+\end{proof}
+We count the zeroes and poles of a holomorphic map. To do this we need to choose a basepoint of the codomain that will play the role of zero, but in reality this choice of basepoint doesn't matter.
+\begin{definition}
+Let $f: X \to Y$ be a proper holomorphic map of connected Riemann surfaces (say, a holomorphic map of compact connected Riemann surfaces), $y \in Y$. Then the number
+$$\deg f = \sum_{x \in f^{-1}(y)} v_f(x)$$
+is the \dfn{degree} of $f$.
+\end{definition}
+\begin{theorem}
+With hypotheses as in the definition of degree, $\deg f$ is finite and independent of the choice of basepoint $y$.
+\end{theorem}
+\begin{proof}
+Since $f$ is proper, $f^{-1}(y)$ is compact, hence finite since it is discrete, say
+$$f^{-1}(y) = \{x_1, \dots, x_n\}.$$
+Let $U_j$ be holomorphic charts at each $x_j$. Since $f$ is proper, there is a holomorphic chart $V \ni y$ such that $f^{-1}(V) \subseteq \bigcup_j U_j$.
+In the coordinates $(\bigcup_j U_j, V)$, $f(z) = z^n$.
+Since $X,Y$ are connected this propagates by an open cover to all of $X,Y$.
+\end{proof}
+
+\section{Elliptic functions}
+The meromorphic functions on $\PP^1$, which turns out to be the unique compact connected Riemann surface of genus $0$, were exactly the rational functions.
+This is kind of boring so now we turn to meromorphic functions on a compact connected Riemann surface of genus $1$.
+Such a function is the same thing as a doubly periodic function on $\CC$, i.e. a meromorphic function $f: \CC \to \PP^1$ such that there are noncollinear $\omega_1,\omega_2 \in \CC$, with
+$$f(z) = f(z + k\omega_1) = f(z + k\omega_2)$$
+for any $z \in \CC$, $k \in \ZZ$. Rescaling, we may assume that $\omega_1 = 1$, and write $\tau = \omega_2$ after the rescaling.
+Clearly such a function drops to a fuction on a torus, which is compact, and hence cannot be a holomorphic function.
+\begin{definition}
+An \dfn{elliptic function} is a meromorphic function on a torus $\CC/L$, where $L$ is a lattice generated by two noncollinear complex numbers.
+\end{definition}
+We will always identify $\CC/L$ with a choice of fundamental domain in $\CC$, which is a parallelogram.
+Note that by shifting the fundamental domain slightly we may and do assume that there are neither any zeroes nor poles on the boundary of the parallelogram.
+We may view $\CC/L$ as an abelian group by addition modulo $L$.
+\begin{theorem}
+Let $f: \CC/L \to \PP^1$ be an elliptic function, and let $z_1, \dots, z_n, p_1, \dots, p_m$ be the zeroes and poles of $f$. Then $n = m$, $\sum_j \Res(f, p_j) = 0$, and $\sum_j z_j = \sum_j p_j$.
+\end{theorem}
+\begin{proof}
+To see $n = m$, use the argument principle: let $\gamma$ be the boundary of the parallelogram $\CC/L$, so that
+$$\frac{1}{2\pi i} \int_\gamma \frac{f'(u)}{f(u)} ~du = n - m.$$
+But by periodicity the integral along the top of the parallelogram cancels with the integral along the bottom; similarly for the left and right. Thus $n -m  =0$.
+
+By residue calculus,
+$$\frac{1}{2\pi i} \int_\gamma f(u)~du=\sum_j \Res(f, p_j)$$
+and for the same reason as above the integral is $0$.
+
+Now
+$$\frac{1}{2\pi i} \int_\gamma u\frac{f'(u)}{f(u)} ~du = \sum_j z_j - p_j$$
+but
+$$\int_0^1 u\frac{f'(u)}{f(u)} ~du + \int_{1+\tau}^\tau u\frac{f'(u)}{f(u)} ~du = \int_0^1 u\frac{f'(u)}{f(u)} - (u + \tau)\frac{f'(u)}{f(u)}~du = -\tau \int_0^1 \frac{f'(u)}{f(u)}~du = -\tau(\log f(1) - \log f(0)).$$
+Now $f(0) = f(1)$ but $\log f(1) - \log f(0)$ is just some multiple of $2\pi i$ since $\log$ is multivalued. Thus
+$$\sum_j z_j - p_j = k\tau$$
+for some $k \in \ZZ$.
+\end{proof}
+
+As a consequence an elliptic function cannot have a single simple pole on $\CC/L$. Therefore it must have at least two poles. The simplest way to accomplish this is to put them both in the same place.
+\begin{definition}
+Let $L$ be a lattice containing $0$ and $L^*$ its nonzero elements.
+The \dfn{Weierstrass $\wp$-function} for $L$ is the function
+$$\wp(u) = \frac{1}{u^2} + \sum_{\omega \in L^*} \frac{1}{(u - \omega)^2} - \frac{1}{\omega^2}.$$
+\end{definition}
+\begin{lemma}
+$\wp$ drops to an elliptic function on $\CC/L$.
+\end{lemma}
+\begin{proof}
+We first check that the series converges locally uniformly on $\CC$. Since a sum of finitely many terms is clearly rational and a locally uniform limit of rational functions is meromorphic, this implies that $\wp$ is meromorphic.
+
+To see this, let $K \subset \CC$ be compact. Then if $u \in K$ and $\omega \in L \setminus K$,
+$$\left|\frac{1}{(u - \omega)^2} - \frac{1}{\omega^2}\right| < \frac{|u|^2 + 2|u\omega|}{|\omega|^2|u - \omega|^2} = \frac{|u|^2}{|\omega|^2|u - \omega|^2} + \frac{2|u|}{|\omega||u - \omega|^2}.$$
+Since $K$ is compact we have $|u| \lesssim 1$ and $|u - \omega| \gtrsim |\omega|$. Therefore
+$$\left|\frac{1}{(u - \omega)^2} - \frac{1}{\omega^2}\right| \lesssim |\omega|^{-4} + |\omega|^{-3} \lesssim |\omega|^{-3}.$$
+Clearly $\sum_{\omega \in L^*} |\omega|^{-3}$ converges.
+
+Thus we may differentiate $\wp$ to see that
+$$\wp'(u) = -2\sum_{\omega \in L} (u - \omega)^{-3}.$$
+This function is clearly periodic in $L$, so drops to an elliptic function on $\CC/L$. Thus
+$$\wp(u) - \wp(u + \omega) = C$$
+for some constant $C$. Moreover, $\wp$ is even, viz. $\wp(u) = \wp(-u)$. But if $u = -\omega/2$,
+$$C = \wp(u) - \wp(u + \omega) = 0,$$
+so $\wp$ is elliptic.
+\end{proof}
+\begin{corollary}
+The degree of $\wp: \CC/L \to \PP^1$ is $2$.
+\end{corollary}
+\begin{corollary}
+Let $\omega_1,\omega_2$ generate the lattice $L$. Then the critical points of $\wp$ are exactly $\omega_1/2$, $\omega_2/2$, and $\omega_1/2 + \omega_2/2$.
+\end{corollary}
+\begin{proof}
+Since $\wp$ is even, $\wp'$ is odd. Thus $\wp'(\omega_1/2) + \wp'(-\omega_1/2) = 0$, but $\wp'(\omega_1/2) = \wp'(-\omega_1/2)$. Same for the others.
+Since $\deg \wp' = 3$, there can be no other zeroes.
+\end{proof}
+\begin{corollary}
+Let $e_i$ be the values of $\wp$ at its critical points. Then the $e_i$ are distinct and the equation $\wp(z) = e_i$ has a double solution $z$.
+For any $w \neq e_i$, $\wp(z) = w$ has two simple solutions $z$.
+\end{corollary}
+\begin{proof}
+Since they are critical points, the $e_i$ have double solutions. Note there can be no other solutions since $\wp$ is of degree $2$.
+Moreover if they are not distinct, the $e_i$ would have a solution of order $4$, contradicting the degree of $\wp$.
+\end{proof}
+\begin{theorem}
+For every elliptic function $f$ there are rational functions $R_0,R_1$ such that
+$$f = R_0 \circ \wp + \wp' (R_1 \circ \wp).$$
+Moreover the term $R_0 \circ \wp$ is the even part of $f$ (so $\wp'(R_1 \circ \wp)$ is the odd part of $f$).
+\end{theorem}
+\begin{proof}
+Decompose $f$ into its even and odd parts and so suppose that $f$ is either even or odd. If $f$ is odd, then $f/\wp'$ is even, so assume that $f$ is even.
+Now $\wp$ is an even elliptic surjection $\CC/L \to \PP^1$, so if $f: \CC/L \to \PP^1$ is continuous, there is a continuous map $R: \PP^1 \to \PP^1$ such that
+$$\begin{tikzcd}
+\CC/L \arrow[r,"f"] \arrow[dr,"\wp"] & \PP^1 \arrow[d,"R"] \\
+&\PP^1
+\end{tikzcd}$$
+commutes. Away from the four points $e_i,\infty$, $\wp$ is locally an isomorphism of Riemann surfaces, so if $R \circ \wp$ is holomorphic away from the four bad points, so is $R$, and hence $R$ is rational.
+But a continuous function which is holomorphic on a codiscrete set is holomorphic everywhere.
+\end{proof}
+\begin{corollary}
+An elliptic function is uniquely defined modulo constant terms by the principal parts of its poles. Conversely, any arrangement of poles $p_k$ satisfying
+$$\sum_k \Res(f, p_k) = 0$$
+defines an elliptic function.
+\end{corollary}
+\begin{proof}
+A rational function on $\PP^1$ is defined by its principal parts.
+\end{proof}
+
+We now show that $\wp$ is defined as the solution of a certain differential equation.
+This gives an algebraic characterization of elliptic functions, which is useful to number theory.
+To accomplish this, we need the Laurent expansion of $\wp$.
+\begin{lemma}
+There are constants $G_j(L)$ such that
+$$u^2\wp(u) = 1 + 3G_4(L)u^4 + 5G_6(L)u^6 + 7G_8(L)u^7 + \cdots.$$
+\end{lemma}
+\begin{proof}
+If $|u| < |\omega|$ then
+$$(u - \omega)^{-k} = \frac{(-1)^k}{\omega^k}\left(1 + k\frac{u}{\omega} + \frac{k(k+1)}{2!} \frac{u^2}{\omega^2} + \frac{k(k+1)(k+2)}{3!}\frac{u^3}{\omega^3} + \cdots\right).$$
+Plugging this into the definition of $\wp$, the odd terms all cancel since $\wp$ is even, and the claim follows.
+\end{proof}
+\begin{theorem}
+There are constants $g_2,g_3$ such that
+$$(\wp')^2 = 4\wp^3 - g_2\wp - g_3.$$
+\end{theorem}
+\begin{proof}
+Compare the first few terms in the Laurent expansion of $\wp'$ with those of the Laurent expansion of $4\wp^3 - g_2\wp - g_3$.
+Such terms agree so their difference is an elliptic function with no poles and a zero, hence $0$.
+\end{proof}
 
 
 
