@@ -41,6 +41,7 @@
 \DeclareMathOperator{\sech}{sech}
 
 \DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\rank}{rank}
 
 \newcommand{\dbar}{\overline\partial}
 
@@ -253,7 +254,57 @@ This can probably be done algebraically using ODE techniques. We know that $\mat
 One can check the cokernel using the adjoint trick or something, but we probably need the Baire category thm for that.
 In fact $\mathcal{\tilde H}_0^*$ meets the same hypotheses as $\mathcal{\tilde H}_0$ and is clearly continuous $H^2 \to L^2$ so the usual closed graph thm trick goes through.
 
+\section{Another way of arguing for Fredholm}
+In this section consider the free Hamiltonian
+$$H_0 = (\Delta - 1)L.$$
+Let $H = H_0 + V$ such that:
+\begin{enumerate}
+  \item $V$ is an exponentially-decaying, bounded, matrix-valued potential (so $V \in L^\infty(\RR \to \CC^{2 \times 2})$).
+  \item $H^2$ is self-adjoint, so its spectrum is contained in $\RR \cup i\RR$.
+\end{enumerate}
+For example we could take
+$$V(x) = \sech^2(|x|)A$$
+where
+$$A = \begin{bmatrix}-4 & -2\\ 2 & 4\end{bmatrix}.$$
+We can worry about $q$-perturbations later.
 
+Let $z$ be a spectral parameter.
+Then
+$$(H_0 - z)(1 - R_0(z)V) = H_0 - z + (H_0 - z)R_0(z)V = H_0 - z + V = H - z.$$
+Therefore if $R_V(z) = (H - z)^{-1}$ we have
+$$R_V(z) = (1 - R_0(z)V)^{-1}R_0(z).$$
+Thus we are interested in when $R_0(z)V$ is invertible.
+Let $S$ be the spectrum of $R_0(z)$, so
+$$S = (-\infty, -1) \cup (1, \infty).$$
+
+First note that $||V||_{L^2 \to L^2} = ||V||_{L^\infty}$. On the other hand
+$$||R_0(z)||_{L^2 \to L^2} = \frac{1}{d(z, S \setminus 0)} \leq \frac{1}{d(z, \RR)} = \frac{1}{|\Im z|}.$$
+Thus if $|\Im z|^{-1} < ||V||_{L^\infty}$, $1 - R_0(z)V$ is invertible and hence $R_V(z)$ exists.
+Thus in particular we have convergence of the resolvent in the first quadrant $\Im z \gtrsim_V 1$, $\Re z > 0$, as well as in the second quadrant, $\Im z \gtrsim_V 1$, $\Re z < 0$.
+There we have the estimate
+$$||R_V(z)||_{L^2 \to L^2} \leq \frac{1}{\Im z}.$$
+
+Moreover $R_0(z)V$ is compact. To see this note that $R_0(z)$ is bounded, and so we just have to show that $V$ is compact.
+To do this we approximate $V$ by an operator $V_n = \pi_nV$ where $\pi_n$ is a projection onto the space $X_n$ simple functions which are supported on $[-n, n]$ and constant on $[m/n, (m+1)/n]$ for each $|m| < n^2$.
+Since $\dim X_n = n^2$, $\rank V_n = n^2$. Moreover
+$$||V - V_n||_{L^\infty} \leq ||1 - \pi_n||_{L^2 \to L^2} ||V||_{L^\infty}$$
+and $Vu$ can be approximated in $L^2$ by an exponentially decaying, continuous function; for exponentially decaying, continuous $f$, let us show $\pi_nf \to f$ uniformly in $f$ (which then implies $||1 - \pi_n|| \to 0$).
+Say $f(x) = O(e^{-\gamma|x|})$, then
+$$||\pi_nf - f||_{L^2} \leq ||\pi_nf - f|[-n, n]||_{L^2} + ||f||_{L^2(\RR \setminus [-n, n])}$$
+but
+$$||f||_{L^2(\RR \setminus [-n, n])} \leq 2||f||_{L^2}e^{-n\gamma}$$
+provided $n$ is large enough, by the pigeonhole principle.
+Moreover, by Riemann integrability of $|f|^2$, $\pi_nf \to f$ uniformly on compact sets, hence in $L^2$. Therefore
+$$||\pi_nf - f||_{L^2} \leq o_n(1)||f||_{L^2} + ||f||_{L^2}e^{-n\gamma}$$
+which vanishes. Thus $V_n \to V$ in the operator norm of $L^2 \to L^2$.
+
+Since $R_0(z)V$ is compact, $(1 - R_0(z)V)^{-1}$ is Fredholm even if $\Im z$ is not large.
+Thus it admits an analytic continuation to the whole complex plane, except for a discrete set $P$ of poles of finite rank and the set $S$.
+Moreover $R_0(z)$ is holomorphic away from $0$, so $R_V(z)$ extends to $\CC$.
+
+It would be nice if we had a bound on $R_V(\lambda)$ for $\Im \lambda < 0$.
+
+We want to compute the monodromy of $R_V(z)$.
 
 
 \newpage
