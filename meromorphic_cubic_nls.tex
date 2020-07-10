@@ -41,6 +41,10 @@
 \DeclareMathOperator{\sech}{sech}
 
 \DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\rank}{rank}
 
 \newcommand{\dbar}{\overline\partial}
@@ -268,23 +272,22 @@ where
 $$A = \begin{bmatrix}-4 & -2\\ 2 & 4\end{bmatrix}.$$
 We can worry about $q$-perturbations later.
 
-Let $z$ be a spectral parameter.
+Let $\lambda^2$ be a spectral parameter.
 Then
-$$(H_0 - z)(1 - R_0(z)V) = H_0 - z + (H_0 - z)R_0(z)V = H_0 - z + V = H - z.$$
-Therefore if $R_V(z) = (H - z)^{-1}$ we have
-$$R_V(z) = (1 - R_0(z)V)^{-1}R_0(z).$$
-Thus we are interested in when $R_0(z)V$ is invertible.
-Let $S$ be the spectrum of $R_0(z)$, so
+$$(H_0 - \lambda^2)(1 - R_0(\lambda)V) = H_0 - \lambda^2 + (H_0 - \lambda^2)R_0(\lambda)V = H_0 - \lambda + V = H - \lambda.$$
+Therefore if $R_V(\lambda) = (H - \lambda^2)^{-1}$ we have
+$$R_V(\lambda) = (1 - R_0(\lambda)V)^{-1}R_0(\lambda).$$
+Thus we are interested in when $1 - R_0(\lambda)V$ is invertible.
+Let $S$ be the spectrum of $H_0$, so
 $$S = (-\infty, -1) \cup (1, \infty).$$
 
 First note that $||V||_{L^2 \to L^2} = ||V||_{L^\infty}$. On the other hand
-$$||R_0(z)||_{L^2 \to L^2} = \frac{1}{d(z, S \setminus 0)} \leq \frac{1}{d(z, \RR)} = \frac{1}{|\Im z|}.$$
-Thus if $|\Im z|^{-1} < ||V||_{L^\infty}$, $1 - R_0(z)V$ is invertible and hence $R_V(z)$ exists.
-Thus in particular we have convergence of the resolvent in the first quadrant $\Im z \gtrsim_V 1$, $\Re z > 0$, as well as in the second quadrant, $\Im z \gtrsim_V 1$, $\Re z < 0$.
-There we have the estimate
-$$||R_V(z)||_{L^2 \to L^2} \leq \frac{1}{\Im z}.$$
+$$||R_0(\lambda)||_{L^2 \to L^2} = \frac{1}{d(\lambda^2, S \setminus 0)} \leq \frac{1}{d(\lambda^2, \RR)} = \frac{1}{2 \Re \lambda \Im \lambda}.$$
+Thus if $\Re \lambda \Im \lambda \gtrsim_V 1$, and $\lambda$ is in Quadrant I then $1 - R_0(\lambda)V$ is invertible and hence $R_V(\lambda)$ exists.
+Thus in particular we have convergence of the resolvent in Quadrant I, where we have the estimate
+$$||R_V(\lambda)||_{L^2 \to L^2} \leq \frac{1}{2 \Re \lambda \Im \lambda}.$$
 
-Moreover $R_0(z)V$ is compact. To see this note that $R_0(z)$ is bounded, and so we just have to show that $V$ is compact.
+Moreover $R_0(\lambda)V$ is compact. To see this note that $R_0(\lambda)$ is bounded, and so we just have to show that $V$ is compact.
 To do this we approximate $V$ by an operator $V_n = \pi_nV$ where $\pi_n$ is a projection onto the space $X_n$ simple functions which are supported on $[-n, n]$ and constant on $[m/n, (m+1)/n]$ for each $|m| < n^2$.
 Since $\dim X_n = n^2$, $\rank V_n = n^2$. Moreover
 $$||V - V_n||_{L^\infty} \leq ||1 - \pi_n||_{L^2 \to L^2} ||V||_{L^\infty}$$
@@ -298,13 +301,282 @@ Moreover, by Riemann integrability of $|f|^2$, $\pi_nf \to f$ uniformly on compa
 $$||\pi_nf - f||_{L^2} \leq o_n(1)||f||_{L^2} + ||f||_{L^2}e^{-n\gamma}$$
 which vanishes. Thus $V_n \to V$ in the operator norm of $L^2 \to L^2$.
 
-Since $R_0(z)V$ is compact, $(1 - R_0(z)V)^{-1}$ is Fredholm even if $\Im z$ is not large.
-Thus it admits an analytic continuation to the whole complex plane, except for a discrete set $P$ of poles of finite rank and the set $S$.
-Moreover $R_0(z)$ is holomorphic away from $0$, so $R_V(z)$ extends to $\CC$.
+Since $R_0(\lambda)V$ is compact, $1 - R_0(\lambda)V$ is Fredholm even if $\Re \lambda \Im \lambda$ is not large, as long as we're in Quadrant I.
+So by analytic Fredholm theory its inverse $(1 - R_0(\lambda))^{-1}$ is meromorphic on Quadrant I.
+This implies that $R_V(\lambda)$ is defined for $\lambda$ in Quadrant I.
 
-It would be nice if we had a bound on $R_V(\lambda)$ for $\Im \lambda < 0$.
+We want bounds on $R_V(\lambda)$ outside of Quadrant I. This might not be possible but consider Haoren's paper that bounds the exponentially weighted resolvent $VR_V(\lambda)V$ instead.
 
-We want to compute the monodromy of $R_V(z)$.
+Froese's paper does the same thing, but uses symmetry in the resolvent $R_0$.
+For example, one might try to look into what happens to $R_0(-\lambda)$ or $R_0(\overline\lambda)$ and apply
+$$R_V(\lambda) = (1 - R_0(\lambda))^{-1}R_0(\lambda).$$
+To do this we need to compute the Green function of $R_0(\lambda)$. For the operator $-\Delta - k^2$, the green function is
+$$G_0(x, y, k) = \frac{i}{2k}e^{ik|x-y|}.$$
+Thus for the operator $(-\Delta - k^2)L$, the resolvent is $LG_0(k)$.
+This allows us to not worry about the $L$.
+Take $k^2 = \lambda^2 - 1$, so $k = \sqrt{\lambda^2 - 1}$. Here $\sqrt\cdot$ was chosen to be holomorphic away from the positive real axis (so $k$ is holomorphic in $\lambda$ on the upper half plane).
+Then we have
+$$R_0(x, y, \lambda) = L\frac{i}{2\sqrt{\lambda^2 - 1}}e^{i\sqrt{\lambda^2 - 1}|x-y|}.$$
+Now to play around with branch cuts.
+
+
+\chapter{The Riemann surface}
+\section{Constructing the Riemann surface}
+aka Aidan pretends to know algebraic geometry.
+
+Suppose that we want to construct the Riemann surface of a vector-valued holomorphic function $F: Y \to \CC^n$ where $Y \subseteq \CC$ is an open set.
+This works as long as we can find a polynomial $\widetilde F: \CC^{n+1} \to \CC$ such that
+$$\widetilde F(z, \vec w) = 0$$
+exactly if $F(z) = \vec w$. In that case, I think we're justified in taking the system of equations $\widetilde F(z, \vec w) = 0$ to define a subvariety $X$ of $\CC^{n+1}$.
+Since this is a system of $n$ equations and $n + 1$ unknowns, ``locally linearizing" or something should imply that if the equations are ``independent" (which should happen if $F$ is nontrivial) that $X$ is an algebraic curve, and if $X$ is nonsingular that means that $X$ is a Riemann surface.
+We can view $X$ as the Riemann surface of $F$ by defining its analytic continuation $\overline F: X \to \CC^n$ by $F(z, \vec w) = \vec w$.
+This is actually an analytic continuation after we choose an inclusion map $\iota: Y \to X$, which is the same thing as choosing a branch of $F$, since then $\iota(z) = (z, \vec w)$ for some $\vec w$ such that $F(z) = \vec w$, and
+$$F(z) = \vec w = \overline F(\iota(z)).$$
+
+Now we make the above rambling rigorous.
+
+If $F$ is a holomorphic map, we let $\nabla F$ denote the total holomorphic derivative of $F$.
+I'm pretty sure the following lemma is well-known but I couldn't find a good reference.
+\begin{definition}
+Let $X,Y$ be complex manifolds.
+A \dfn{holomorphic submersion} is a holomorphic map $F: X \to Y$ if $\nabla F$ is surjective on holomorphic tangent spaces.
+\end{definition}
+The criterion for being a holomorphic submersion says that
+$$\rank \nabla F = \dim Y$$
+where all dimensions are computed over $\CC$.
+\begin{lemma}
+Let $U \subseteq \CC^n$ be an open set, $Y$ a complex manifold of (complex) dimension $k$, $k \leq n$, $y \in Y$, and $F: U \to Y$ a holomorphic submersion.
+Then $F^{-1}(y)$ is a complex submanifold of $\CC^n$ of dimension $n - k$.
+\end{lemma}
+\begin{proof}
+Since $F$ is a submersion, there is a permutation $\sigma$ of $\{1, \dots, n\}$ such that the columns $\sigma(k+1), \dots, \sigma(n)$ of $\nabla F$ are linearly independent.
+Let $G: U \to Y \times \CC^{n - k}$ be the map
+$$G(z) = (z_{\sigma(1)}, \dots, z_{\sigma(k)}, F(z)).$$
+Then $\nabla G$ has full rank and maps between vector spaces of the same dimension, so $\nabla G$ is an isomorphism.
+So by the holomorphic inverse function theorem, $G$ is locally invertible, and $G^{-1}$ is holomorphic.
+
+Locally, let
+$$f(z)_j = G^{-1}(z, y)_{\sigma(n-j)},$$
+$j \in \{0, \dots, n - k + 1\}$, $z \in \CC^{n - k}$.
+Then $f$ is holomorphic and locally the graph of $f$ is $X = F^{-1}(y)$.
+That is, for any $x_0 \in X$ we can find a $U \ni x_0$ such that $X \cap U = \{(z, f(z)): z \in U'\}$ for some $U'$.
+But then the map $z \mapsto (z, f(z))$, $U \to U'$, is a holomorphic chart, and the transition maps are just the identity on $\CC^{n-k}$, so $X$ is a complex manifold of dimension $n - k$.
+\end{proof}
+Now if $f: U \to \CC^m$ is a holomorphic map and $F(z, f(z)) = 0$ for all $z$, we can define the \emph{Riemann surface} of $f$ to be the manifold $X = F^{-1}(0)$. Then the map $\pi: X \to \CC^m$, $\pi(z, w) = w$, is an analytic continuation of $f$ after one chooses an embedding $U \to X$.
+
+There's another definition of the Riemann surface of a holomorphic map, namely that of its maximal analytic continuation.
+Fix $f: U \to \CC^m$.
+Define a category $A(f)$, whose objects are commutative diagrams of holomorphic maps
+$$\begin{tikzcd}
+X \arrow[r,"\pi"] & \CC^m\\
+U \arrow[u,"\iota"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where $\iota$ is injective and $X$ is a connected Riemann surface.
+We call the above diagram, or equivalently the tuple, $(X_1, \pi_1, \iota_1)$, an analytic continuation of $f$.
+A morphism $\psi: (X_1, \pi_1, \iota_1) \to (X_2, \pi_2, \iota_2)$ in $C(f)$ is a commutative diagram of holomorphic maps
+$$\begin{tikzcd}
+X_2 \arrow[r,"\pi_2"] & \CC^m\\
+X_1 \arrow[u,"\psi"] \arrow[r,"\pi_1"] & \CC^m \arrow[u]\\
+U \arrow[u,"\iota_1"] \arrow[bend left=60,uu,"\iota_2"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where the map $\CC^m \to \CC^m$ is equality.
+Since the diagram
+$$\begin{tikzcd}
+X_1 \arrow[rr,"\psi"] && X_2\\
+&U \arrow[ul,"\iota_1"] \arrow[ur,"\iota_2"]
+\end{tikzcd}
+$$
+commutes it follows that $\psi$ is injective, i.e. $X_1$ is a submanifold of $X_2$.
+
+Clearly $(U, f, \id)$ is the initial object in $A(f)$.
+\begin{theorem}[Riemann]
+$A(f)$ has final objects.
+\end{theorem}
+\begin{proof}
+By Zorn's lemma. Since all maps are injective, the skeleton of $A(f)$ is a poset $P$, which is clearly nonempty.
+Given a chain $C$ in $P$, let $X$ be the union of the chain, $\pi$ and $\iota$ the induced maps. Then $(X, \pi, \iota)$ is clearly an upper bound on $C$.
+\end{proof}
+The final object is the maximal analytic continuation of $f$. As we will show the Riemann surface of $f$ is its maximal analytic continuation.
+To do this we need to introduce yet a third notion of Riemann surface.
+
+\begin{definition}
+Let $X$ be a complex manifold.
+A \dfn{holomorphic cover} is a surjective holomorphic map $\pi: Y \to X$, $Y$ a complex manifold, such that every $x \in X$ is contained in an open $U \ni x$ such that $\pi^{-1}(U)$ is a disjoint union of isomorphic copies $V$ of $U$, and $\pi: V \to U$ is an isomorphism.
+\end{definition}
+Let $\pi_1(X)$ be the fundamental group of the complex manifold $X$.
+\begin{definition}
+Let $X$ be a complex manifold, $\gamma \in \pi_1(X)$, $U \subseteq X$, $f: U \to Y$ a holomorphic map.
+We say that $f$ has \dfn{monodromy} along $\gamma$ if for any two analytic continuations $g_1,g_2$ of $f$ along $\gamma$, $g_1 = g_2$.
+If $H$ is the group of all $\gamma$ such that $f$ has monodromy along $\gamma$, the group $\pi_1(X)/H$ is called the \dfn{monodromy group} of $f$.
+\end{definition}
+To see that $H$ is normal note that it is the kernel of the action of $\pi_1(X)$ by ``rotating $f$ about its singularities".
+
+For example if $X = \CC \setminus 0$, $U$ the right-half plane, $\pi_1(X) = \ZZ$, and $z \mapsto 1/z$ has monodromy along any element of $\pi_1(X)$, while $x \mapsto \sqrt x$ only has monodromy along the trivial loop.
+
+We now appeal to the Galois theory of covering spaces.
+\begin{definition}
+A \dfn{deck transformation} of a holomorphic cover $\pi: Y \to X$ is an isomorphism $\varphi: Y \to Y$ such that $\varphi$ permutes the fibers of $\pi$: $\pi \circ \varphi = \pi$.
+The group of deck transformations of $\pi$ is known as the \dfn{Galois group} $\Gal(\pi)$ of $\pi$.
+\end{definition}
+The fundamental group $\pi_1(X)$ acts on a cover $\pi: Y \to X$ by deck transformations, so we have a morphism of groups
+$$\pi_1(X) \to \Gal(\pi).$$
+That is, if $\gamma$ is a loop, we may lift $\gamma$ along $\pi$, say to a path $\widetilde \gamma$, which may not be a loop, and if $y \in Y$ we may choose the beginning point of $\widetilde \gamma$ to be $y$ (simply by taking the basepoint of $\pi_1(X)$ to be $\pi(y)$ -- so this only makes sense if $X$ is connected).
+Then the endpoint of $\widetilde \gamma$ is the image of $y$ under $\gamma$.
+
+For example, if $X = \CC/\Gamma$ is an elliptic curve (so $\Gamma$ is a lattice), then the projection map $\CC \to X$ is a holomorphic cover, and $\pi_1(X) \cong \ZZ^2$.
+To see how $\pi_1(X)$ acts on $\CC$, fix $z \in \CC$; then $z + \Gamma$ is a point on the elliptic curve $X$.
+If $\gamma \in \pi_1(X)$ is a loop based at $z + \Gamma$, $\gamma$ lifts to a path $\widetilde \gamma$ through $\CC$ which starts at $z$ and ends at some point $w$ such that $z - w \in \Gamma$. Thus $\gamma z = w$.
+Moreover $z - w$ did not depend on $z$, but only on $\gamma$, so $\gamma$ acts on $\CC$ by translation by $z - w$.
+In fact, the above construction gives an explicit isomorphism $\ZZ^2 \to \Gamma$.
+
+Let $G$ be a Galois group, say of $Z \to X$. Then if $H$ is a normal subgroup of $G$, we can find a Galois cover $Y \to X$ such that $Z \to Y$ is a Galois cover of $Y$, $\Gal(Y \to X) = G/H$, and $\Gal(Z \to Y) = H$.
+Conversely, every Galois group is a quotient of $\pi_1(X)$ as we reasoned above.
+This is one form of the fundamental theorem of Galois theory.
+
+\begin{lemma}
+Let $X,Y$ be connected Riemann surfaces, $f: X \to \CC^m$ and $g: Y \to \CC^m$ holomorphic, and $\iota: X \to Y$ a holomorphic embedding.
+Then $(Y, g, \iota)$ is an analytic continuation of $f$ if and only if there is a holomorphic cover $\pi: Y \to X$ such that $\Gal(\pi)$ is a quotient of the monodromy group $\pi_1(X)/H$ of $f$ and $\iota$ is a section of $\pi$.
+\end{lemma}
+\begin{proof}
+This follows from the definitions once we declare that $\pi^{-1}(x)$ should consist of those elements $y \in Y$ such that there is a branch $j$ of $f$ (i.e. an embedding $j: X \to Y$ such that $g \circ j = f$) such that $j(x) = y$.
+Then clearly any such $j$ is a section of $\pi$ (in particular this is true for $\iota$) and $\pi_1(X)/H$ acts on $Y$ by permuting branches (i.e. by deck transformations).
+\end{proof}
+As a consequence the maximal such connected Riemann surface $Y$ must make the relevant diagrams commute that $Y$ be final in the category of analytic continuations.
+
+\begin{definition}
+A variety $X$ is said to be an \dfn{irreducible variety} if there is an irreducible polynomial $g$ such that $X$ is defined by $g = 0$.
+\end{definition}
+
+\begin{theorem}
+Let $U \subseteq \CC$ be an open set, $f: U \to \CC^m$ a holomorphic function, and $F: \CC^{1 + m} \to \CC^m$ a polynomial such that:
+\begin{enumerate}
+\item $F$ is a holomorphic submersion.
+\item The variety $X$ defined by $F = 0$ is irreducible.
+\end{enumerate}
+Let $\pi: X \to \CC^m$ be the natural projection. Then $(X, \pi)$ is the maximal analytic continuation of $f$.
+\end{theorem}
+To prove this I need a black box lemma from modern algebraic geometry.
+\begin{lemma}
+A variety is irreducible iff it is connected.
+\end{lemma}
+\begin{proof}
+Since $F$ is a holomorphic submersion, $X$ is a complex manifold of dimension $1+m - 1 = m$, hence a Riemann surface.
+Since $X$ is nonsingular it is connected, $\pi$ is holomorphic, and obviously $\pi$ is an analytic continuation of $f$.
+In particular $X \to Y$, $Y$ the domain of any choice of analytic continuation of $f$ to a discontinuous function inside $\CC$, is a holomorphic cover.
+Since $X$ is irreducible it is connected.
+
+Moreover, if $\pi_1(Y)/H$ is the monodromy group of $f$, then clearly $\pi_1(Y)/H$ acts freely on $X$; otherwise $\pi$ would have a nontrivial monodromy group. Therefore $X$ is the maximal holomorphic cover of $Y$.
+\end{proof}
+
+
+
+\section{Meromorphic continuation of the free resolvent}
+Let $D = -i\partial$ be the momentum observable.
+Then
+$$H_0 - z = \begin{bmatrix}
+D^2 + 1 - z\\
+&-D^2 - 1 -z
+\end{bmatrix}.$$
+We are interested in the resolvent $R_0(z) = (H_0 - z)^{-1}$.
+
+Let $R$ be the resolvent of the classical Schrodinger operator,
+$$R(\lambda)(D - \lambda^2) = 1.$$
+Then
+$$R(x, y, \lambda) = \frac{i}{2\lambda} e^{i\lambda|x-y|}.$$
+Here we take $\lambda = \sqrt z$ where we are taking the branch of $\sqrt\cdot$ which forces $\Im z \geq 0$; i.e.
+$$\sqrt{re^{i\theta}} = e^{i\theta/2}\sqrt r,$$
+$\theta \in [0, 2\pi]$ (so that $\theta/2 \in [0, \pi]$). This branch is discontinuous at $\theta = 2\pi$, hence on $\RR_+$.
+
+We need to treat the two resolvents $D^2 + 1 - z$ and $-D^2 - 1 - z$ separately.
+For the first resolvent, $D^2 + 1 - z$, we are plugging in $\lambda^2 = z - 1$, and we need $\Im \lambda \geq 0$.
+Taking $\widetilde z = z - 1$, we see that we need $\widetilde z \notin \RR_+$, i.e. $z \notin [1, \infty)$.
+Similarly, for $-D^2 - 1 - z$, this is defined when $z \notin (-\infty, -1]$. Thus
+$$R_0(x, y, z)_{jj} = \frac{i}{2} \exp(i\sqrt{(-1)^{1-j}z -1}|x-y|)((-1)^{1-j}z -1)^{-1/2}$$
+and $R_0(x,y,z)_{jk} = 0$ if $j \neq k$.
+This is clearly holomorphic in $z$ for $z \notin S$ where
+$$S = (-\infty, -1], [1, \infty)$$
+is the spectrum of $H_0$.
+
+Now fix $(x, y)$; then we can view $R_0$ as a map $\CC \setminus S \to \CC^2$ by
+$$R_0(z)_j = \frac{i}{2} \exp(i\sqrt{(-1)^{1-j}z -1}|x-y|)((-1)^{1-j}z -1)^{-1/2}).$$
+The map $w \mapsto \exp(iw|x-y|)/w$ is clearly holomorphic on $\CC \setminus 0$ and has a simple pole at $0$.
+In particular no choice of branch is made for it; so to understand the Riemann surface of $R_0$ it suffices to consider the Riemann surface of the function $z \mapsto w$,
+$$w_j = \sqrt{(-1)^{1-j}z-1}.$$
+That is, $w_j^2 = (-1)^{1-j}z - 1$. Thus the Riemann surface $\Sigma$ is the algebraic variety in $\CC^3 = \{(z, w_1, w_2)\}$ defined by the equations
+$$F_j(z, w_1, w_2) = w_j^2 + (-1)^jz + 1 = 0.$$
+For a point $(z, w_1, w_2)$ of $\Sigma$, we define
+$$R_0(x, y, z, w_1, w_2)_j = \frac{i}{2} \frac{\exp(iw_j|x-y|)}{w_j}.$$
+
+\begin{lemma}
+$\Sigma$ is a nonsingular algebraic curve.
+\end{lemma}
+\begin{proof}
+We can locally linearize $F$ as
+$$\nabla F(z, w_1, w_2) = \begin{bmatrix}-1 & 2w_1 & 0\\1 & 0 & 2w_2\end{bmatrix}.$$
+Then $\rank \nabla F(z, w_1, w_2) = 2$ as long as it is false that $w_1 = w_2 = 0$.
+However the set $Z = \{(z, w_1, w_2): w_1 = w_2 = 0\}$ does not meet $\Sigma$ since on $Z \cap \Sigma$, $-z = -1 = z$.
+Thus $F$ is a submersion $\CC \setminus Z \to \CC^2$.
+
+Since $\CC^3 \setminus Z$ is an open submanifold of $\CC^3$ and $F$ is a submersion, it follows that $\Sigma$ is a complex manifold of dimension $1$, defined to be the zero set of the polynomial $F$.
+Therefore $\Sigma$ is a nonsingular algebraic curve.
+\end{proof}
+We now construct charts that cover most of $\Sigma$ to describe its geometry. Given signs $\sigma,\tau$, let
+$$\varphi_\sigma^\tau(z) = (z, \sqrt{z-1}_\sigma, \sqrt{-z-1}_\tau)$$
+where
+$$\sqrt{re^{i\theta}}_\pm = e^{i\theta/2}\sqrt r,\quad\theta \in [0, \pm 2\pi),$$
+so $\sqrt{re^{i\theta}}_\pm \in \CC_\pm$, $\CC_+$ the upper half-plane and $\CC_-$ the lower half-plane.
+We view
+$$\varphi_\sigma^\tau: \CC \setminus S \to U_\sigma^\tau \subset \Sigma$$
+as a holomorphic chart.
+\begin{lemma}
+The charts $U_\sigma^\tau$ are disjoint and cover the open dense subset
+$$\Sigma' = \{(z, w_1, w_2) \in \Sigma: z \notin S\}$$
+of $\Sigma$.
+\end{lemma}
+\begin{proof}
+Clearly any $(z, w_1, w_2) \in \Sigma$ can be approximated by an element of $\Sigma'$ by perturbing $z$ and adjusting the values of $w_1,w_2$ as necessary. Thus $\Sigma'$ is open and dense.
+
+Let $(z, w_1, w_2) \in \Sigma'$. We claim that $w_1 = \sqrt{z-1}_{\sgn \Im w_1}$ and $w_2 = \sqrt{-z-1}_{\sgn \Im w_2}$.
+In fact,
+$$w_1^2 = z - 1.$$
+Thus $w_1$ is a square root of $z - 1$, and $z - 1 \notin [0, \infty)$ implies that $\Im w_1 \neq 0$.
+Since $z - 1$ only has two square roots, one in each of $\CC_+$ and $\CC_-$, we can recover $w_1$ by the claimed formula.
+A similar argument works for $w_2$.
+In particular,
+$$(z, w_1, w_2) \in U_{\sgn \Im w_1}^{\sgn \Im w_2}.$$
+
+Finally, to see that the charts are disjoint, note that if $w_j \in \RR$ then $z \in S$, a contradiction. Thus
+$$U_\sigma^\tau = \{(z, w_1, w_2) \in S: \sgn \Im w_1 = \sigma,~\sgn \Im w_2 = \tau\}.$$
+In particular the $U_\sigma^\tau$ are disjoint.
+\end{proof}
+From this we can see that $\Sigma$ has four sheets, which intersect at the branch cuts $\Sigma \setminus \Sigma'$.
+This seems fishy because last time we agreed that $\Sigma$ should have three sheets but oh well.
+
+By the theory we see that the maximal analytic continuation of $R_0$ is defined on $\Sigma$ by
+$$R_0(x, y, z, w)_{jj} = \frac{i}{2w_j}\exp(iw_j|x-y|).$$
+
+\section{Meromorphic continuation of resolvents for compactly supported potentials}
+In the previous section we let $\Sigma$ be a certain nonsingular algebraic curve, and meromorphically continued the free resolvent to $\Sigma$.
+Now let $V$ be a compactly supported, matrix-valued potential, $\rho$ a cutoff such that $\rho V = V$, and
+$$P_V = \diag(D^2 + 1, -D^2 - 1) + V.$$
+We must show that the resolvent $R_V(z) = (P_V - z)^{-1}$ has Riemann surface $\Sigma$.
+Since $\rho$ is arbitrary it suffices to show this for $\rho R_V(z) \rho$.
+Now
+$$R_V(z) = (1 - R_0(z)V)^{-1}R_0(z)$$
+TODO: follow Zworski's continuation
+
+
+\section{Meromorphic continuation of resolvents for $\sech^2$ by exponential expansion}
+In general meromorphically continuing a noncompactly supported resolvent to $\Sigma$ might not be possible. But one hopes to be able to do it for $\sech^2$ because it admits an expansion in terms of exponentials.
+
+Let $y = e^x$. Then
+$$\sech^2 x = 4\frac{y^2}{(y^2 + 1)^2}.$$
+Now near infinity we have
+$$4\frac{y^2}{(y^2 + 1)^2} = -2\sum_{n=2}^\infty n\cos(n\pi/2)y^{-n}.$$
+That means that
+$$\sech^2 x = -2\sum_{n=2}^\infty n\cos(n\pi/2)e^{-nx}.$$
+Allegedly one can handle each of these terms on a ``strip" of $\Sigma$.
+
 
 
 \newpage
