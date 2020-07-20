@@ -45,6 +45,7 @@
 \DeclareMathOperator{\Gal}{Gal}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\rank}{rank}
 
 \newcommand{\dbar}{\overline\partial}
@@ -459,15 +460,15 @@ To prove this I need a black box lemma from modern algebraic geometry.
 \begin{lemma}
 A variety is irreducible iff it is connected.
 \end{lemma}
-\begin{proof}
-Since $F$ is a holomorphic submersion, $X$ is a complex manifold of dimension $1+m - 1 = m$, hence a Riemann surface.
-Since $X$ is nonsingular it is connected, $\pi$ is holomorphic, and obviously $\pi$ is an analytic continuation of $f$.
+The proof uses Riemann's inequality.
+\begin{proof}[Proof of theorem]
+Since $F$ is a holomorphic submersion, $X$ is a complex manifold of dimension $1+m - m = 1$, hence a Riemann surface.
+Since $X$ is nonsingular, $\pi$ is holomorphic, and obviously $\pi$ is an analytic continuation of $f$.
 In particular $X \to Y$, $Y$ the domain of any choice of analytic continuation of $f$ to a discontinuous function inside $\CC$, is a holomorphic cover.
 Since $X$ is irreducible it is connected.
 
 Moreover, if $\pi_1(Y)/H$ is the monodromy group of $f$, then clearly $\pi_1(Y)/H$ acts freely on $X$; otherwise $\pi$ would have a nontrivial monodromy group. Therefore $X$ is the maximal holomorphic cover of $Y$.
 \end{proof}
-
 
 
 \section{Meromorphic continuation of the free resolvent}
@@ -555,15 +556,111 @@ This seems fishy because last time we agreed that $\Sigma$ should have three she
 By the theory we see that the maximal analytic continuation of $R_0$ is defined on $\Sigma$ by
 $$R_0(x, y, z, w)_{jj} = \frac{i}{2w_j}\exp(iw_j|x-y|).$$
 
+\begin{lemma}
+\label{exponential bound on free resolvent}
+Let $L > 0$ and let $\rho$ be a cutoff such that $\supp \rho \subseteq (-L, L)$ and $\rho V = V$.
+Let $\chi$ be a cutoff such that $\chi = 1$ on $\supp \rho$.
+Then for every $(z, w_1, w_2) \in \Sigma$,
+$$||\chi R_0(z, w_1, w_2) \rho||_{\mathcal H^0(\RR) \to \mathcal H^2((-L, L))} \lesssim 1 + L\langle z\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+In particular, $\rho R_0(z, w_1, w_2) \rho$ is a compact operator on $L^2$.
+\end{lemma}
+\begin{proof}
+Abuse notation to write $z = (z, w_1, w_2)$.
+Recall the interior Schauder estimate: if $\overline U$ is compact, $u \in H^2(\RR)$, then
+$$||u||_{H^2(U)} \lesssim_U ||u||_{L^2(\RR)} + ||D^2u||_{L^2(\RR)}.$$
+In particular if $\chi$ is a cutoff, $\chi = 1$ on $\supp \rho$, $u \in \mathcal H^2$, then
+$$||\rho u||_{\mathcal H^2} \lesssim_\chi ||\chi u||_{\mathcal H^0} + ||\chi D^2 u||_{\mathcal H^0}.$$
+Taking $u = R_0(z)\rho f$ we see that
+$$||\rho R_0(z)\rho f||_{\mathcal H^2} \lesssim ||\chi R_0(z) \rho f||_{\mathcal H^0} + ||\chi D^2 R_0(z) \rho f||_{\mathcal H^0}.$$
+
+We bound $||\chi R_0(z) \rho f||_{\mathcal H^0}$ first using Schur's test. Let
+$$G(x, y, z) = \chi(x) \frac{\exp(\sqrt{z-1}|x-y|)}{\sqrt{z-1}} \rho(y);$$
+then
+$$||G(z)||_{L^2 \to L^2}^2 \leq \sup_{(x, y) \in \RR^2} ||G(\cdot, y, z)||_{L^1}\cdot||G(x, \cdot, z)||_{L^1}.$$
+Since
+\begin{align*}
+||G(\cdot, y, z)||_{L^1} &= \int_{-\infty}^\infty \chi(x) \frac{|\exp(i\sqrt{z-1}|x-y|)|}{|\sqrt{z-1}|}\rho(y)~dx\\
+&\leq \frac{\rho(y)}{|\sqrt{z-1}|} \int_{-2L}^{2L} |\exp(i\sqrt{z-1}|x-y|)~dx\\
+&\leq \frac{1}{|\sqrt{z-1}|} \int_{-2L}^{2L} |\exp(4Li\sqrt{z-1})\\
+&\lesssim \frac{L}{|\sqrt{z-1}|} \exp(4 |\Im\sqrt{z-1}|).
+\end{align*}
+The same bound is clearly valid on $||G(x, \cdot, z)||_{L^1}$ by symmetry. Taking square roots,
+$$||G(z)||_{L^2 \to L^2} \lesssim \frac{L}{|\sqrt{z-1}|} \exp(4 |\Im\sqrt{z-1}|).$$
+Similarly if we define
+$$G'(x, y, z) = \chi(x) \frac{\exp(\sqrt{-z-1}|x-y|)}{\sqrt{-z-1}} \rho(y)$$
+then we have
+$$||G'(z)||_{L^2 \to L^2} \lesssim \frac{L}{|\sqrt{-z-1}|} \exp(4 |\Im \sqrt{-z-1}|).$$
+In particular,
+$$||\chi R_0(z) \rho f||_{\mathcal H^0} \lesssim L \max\left(\frac{\exp(4 |\Im \sqrt{z-1}|)}{|\sqrt{z-1}|}, \frac{\exp(4 |\Im \sqrt{-z-1}|)}{|\sqrt{-z-1}|} \right) ||f||_{\mathcal H^0}.$$
+But we defined $\Sigma$ by the relations $w_1 = \sqrt{z-1}_\pm$, $w_2 = \sqrt{-z-1}_\pm$, so one has
+$$||\chi R_0(z) \rho f||_{\mathcal H^0} \lesssim L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}.$$
+
+Treating the second term,
+$$D^2R_0(z) = \diag(1, - 1) - \diag(1-z,1+z)R_0(z)$$
+so
+$$||\chi D^2 R_0(z) \rho f||_{\mathcal H^0} \leq ||\rho f||_{\mathcal H^0} + ||\chi R_0(z) \rho f||_{\mathcal H^0} + ||\chi z R_0(z) \rho f||_{\mathcal H^0}.$$
+The second term in this sum was already bounded and the first is trivially bounded by $||f||_{\mathcal H^0}$.
+The final term is
+$$\lesssim |z|L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}$$
+so we can bound
+$$||\chi R_0(z) \rho||_{\mathcal H^0 \to \mathcal H^2} \lesssim 1 + L\langle z\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+This proves the first claim.
+The second claim follows by the Rellich-Kondrachov theorem.
+\end{proof}
+
 \section{Meromorphic continuation of resolvents for compactly supported potentials}
 In the previous section we let $\Sigma$ be a certain nonsingular algebraic curve, and meromorphically continued the free resolvent to $\Sigma$.
-Now let $V$ be a compactly supported, matrix-valued potential, $\rho$ a cutoff such that $\rho V = V$, and
+Now let $V$ be a compactly supported, matrix-valued potential, $\rho$ a (scalar-valued) cutoff such that $\rho V = V$, and
 $$P_V = \diag(D^2 + 1, -D^2 - 1) + V.$$
 We must show that the resolvent $R_V(z) = (P_V - z)^{-1}$ has Riemann surface $\Sigma$.
 Since $\rho$ is arbitrary it suffices to show this for $\rho R_V(z) \rho$.
-Now
-$$R_V(z) = (1 - R_0(z)V)^{-1}R_0(z)$$
-TODO: follow Zworski's continuation
+Let $L > 0$ be so large that $\rho(x) = 0$ whenenever $|x| > L$.
+
+Let $\mathcal H^k = H^k \oplus H^k$ where $H^k$ is the Sobolev space $H^k = W^{2,k}$.
+Let $||V||$ denote the operator norm of $V$ as a multiplication operator on $\mathcal H^0$; we will assume $||V|| < \infty$.
+Let $\langle\cdot\rangle$ be the Japanese angle bracket.
+
+\begin{lemma}
+If $\Im z > 1/||V||$ then $R_V(z)$ exists and has the representation formula
+$$R_V(z) = R_0(z)(1 + VR_0(z))^{-1}.$$
+Besides, $||R_0(z)|| \leq |\Im z|^{-1}$.
+\end{lemma}
+\begin{proof}
+Clearly the spectrum of $H_0$ is contained in $\RR$.
+By spectral theory,
+$$||R_0(z)|| \leq d(z, \RR)^{-1} = \frac{1}{|\Im z|}.$$
+If $\Im z > 1/||V||$ then
+$$||R_0(z)V|| \leq ||R_0(z)||\cdot ||V|| \leq \frac{||V||}{\Im z} < 1.$$
+This implies that $VR_0(z)$ is a sufficiently small perturbation that $1 + VR_0(z)$ is invertible.
+
+One has
+\begin{align*}(H_V - z)R_0(z) &= \begin{bmatrix}D^2 + V + 1 - z\\& -D^2 + V - 1 - z\end{bmatrix}\begin{bmatrix}(D^2 + 1 - z)^{-1}\\&(-D^2-1-z)^{-1}\end{bmatrix}\\
+ &= \begin{bmatrix}1 + V(D^2 + 1 - z)^{-1}\\&1 + V(-D^2 - 1 - z)^{-1}\end{bmatrix}
+ \\& = 1 + VR_0(z).
+ \end{align*}
+Inverting both sides,
+$$(1 + VR_0(z))^{-1} = R_0(z)^{-1}R_V(z)$$
+or in other words the claimed formula.
+\end{proof}
+
+\begin{theorem}
+The resolvent $R_V$ extends to meromorphic family of operators
+$$\rho R_V(z) \rho: \mathcal H^0 \to \mathcal H^2$$
+on $\Sigma$.
+\end{theorem}
+\begin{proof}
+We first define $K = VR_0$.
+Then for any cutoff $\chi$, $\chi K \chi$ is a meromorphic family of operators on $\Sigma$, which acts on $L^2$, with poles at $\pm 1$ (the discrete spectrum of $H_0$). Here $\pm 1$ is identified with $(\pm 1, 0, 0) \in \Sigma$.
+Since $\rho V = V$,
+$$(1 + K(z)(1-\rho))^{-1} = 1 - K(z)(1 - z).$$
+Moreover if $\Im z \gg 1$ then $1 + K(z)$ is invertible, so
+$$(1 + K(z))^{-1} = (1 + K(z)\rho)^{-1}(1 - K(z)(1 - \rho)).$$
+Substituting into $R_V(z)$ we see that
+$$R_V(z) = R_0(z)(1 + K(z)\rho)^{-1}(1 - K(z)(1 - \rho)).$$
+
+Since $V = V\chi$, Lemma \ref{exponential bound on free resolvent} implies that $K(z)\rho$ is compact, so $1 + K(z)\rho$ is a meromorphic family of Fredholm operators, and by analytic Fredholm theory, $z \mapsto (1 + K(z)\rho)^{-1}$ is a meromorphic family of operators on $\Sigma$.
+But that implies that $R_V$ extends to a meromorphic family of operators on $\Sigma$.
+\end{proof}
 
 
 \section{Meromorphic continuation of resolvents for $\sech^2$ by exponential expansion}
@@ -572,10 +669,44 @@ In general meromorphically continuing a noncompactly supported resolvent to $\Si
 Let $y = e^x$. Then
 $$\sech^2 x = 4\frac{y^2}{(y^2 + 1)^2}.$$
 Now near infinity we have
-$$4\frac{y^2}{(y^2 + 1)^2} = -2\sum_{n=2}^\infty n\cos(n\pi/2)y^{-n}.$$
+$$4\frac{y^2}{(y^2 + 1)^2} = -2\sum_{\substack{n \geq 2\\n\text{ even}}}(-1)^{n/2} ny^{-n}.$$
 That means that
-$$\sech^2 x = -2\sum_{n=2}^\infty n\cos(n\pi/2)e^{-nx}.$$
+$$\sech^2 x = -2\sum_{\substack{n \geq 2\\n\text{ even}}}(-1)^{n/2} ne^{-nx}.$$
 Allegedly one can handle each of these terms on a ``strip" of $\Sigma$.
+
+\section{garbage}
+
+
+some junk that is wrong:
+TODO: Reprove this lemma.
+\begin{lemma}
+For every $z \in \CC_+$,
+$$||\rho R_0(z) V|| \lesssim 1 + \frac{\langle z \rangle}{\Im z}$$
+as an operator $\mathcal H^0(\RR) \to \mathcal H^2((-L, L))$.
+\end{lemma}
+\begin{proof}
+We compute
+\begin{align*}
+  ||f||_{\mathcal H^2} &\lesssim ||f||_{\mathcal H^0} + ||\diag(D^2, -D^2) f||_{\mathcal H^0}\\
+  &= ||f||_{\mathcal H^0} + ||(H_0(z) + \diag(z + 1, z - 1))f||_{\mathcal H^0}.
+\end{align*}
+TODO: This is NOT valid, this only works under the hypotheses of Schauder estimates.
+
+Thus
+\begin{align*}||\rho R_0(z) f||_{\mathcal H^0} &\leq ||R_0(z) f||_{\mathcal H^0}\\
+&\lesssim ||R_0(z)f||_{\mathcal H^0} + ||(1 + \diag(z + 1, z - 1)R_0(z))f||_{\mathcal H^0}\\
+&\lesssim (|\Im z|^{-1} + 1)||f||_{\mathcal H^0} + ||zR_0(z)f||_{\mathcal H^0}\\
+&\lesssim \left(1 + \frac{\langle z\rangle}{\Im z} \right)f
+\end{align*}
+which proves the operator norm estimate.
+\end{proof}
+
+By the Rellich-Kondrachov theorem, $\rho R_0(z)$ is a compact operator and hence $1 + VR_0(z)$ is Fredholm as long as $\Im z > 0$.
+Thus by analytic Fredholm theory, $R_V$ is a meromorphic family of operators on $\CC_+$, which we identify with the upper-half sheet of the chart $U_+^+$ of $\Sigma$ by
+$$z \mapsto \varphi_+^+(z) = (z, \sqrt{z-1}_+, \sqrt{-z-1}_+).$$
+
+We now extend $R_V$ to all of $\Sigma$.
+
 
 
 
