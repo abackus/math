@@ -1,0 +1,783 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\sinc}{sinc}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{PDE, HW 3} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[5.2]
+Show the interpolation inequality
+$$||u||_{C^{0+\gamma}} \leq ||u||_{C^{0+\beta}}^{\frac{1-\gamma}{1-\beta}} ||u||_{C^{0+1}}^{\frac{\gamma-\beta}{1-\beta}}$$
+whenever $0 < \beta < \gamma \leq 1$.
+\end{exer}
+
+We need a lemma:
+\begin{lemma}
+For any $a_1,a_2,b_1,b_2 \geq 0$ and $0 < p < 1$ one has
+$$a_1^p b_1^{1-p} + a_2^p b_2^{1-p} \leq (a_1 + a_2)^p (b_1 + b_2)^{1-p}.$$
+\end{lemma}
+\begin{proof}
+Let
+$$f(a_1, a_2, b_1, b_2) = a_1^p b_1^{1-p} + a_2^p b_2^{1-p} - (a_1+a_2)^p (b_1+b_2)^{1-p}.$$
+In the basis $(da^1, da^2, db^1, db^2)$,
+$$df = \begin{bmatrix}
+pa_1^{p-1} b_1^{1-p} - p(a_1 + a_2)^{p-1}(b_1 + b_2)^{1-p}\\
+pa_2^{p-1} b_2^{1-p} - p(a_1 + a_2)^{p-1}(b_1 + b_2)^{1-p}\\
+(1-p)a_1^p b_1^{-p} - (1-p)(a_1 + a_2)^p(b_1 + b_2)^{-p}\\
+(1-p)a_2^p b_2^{-p} - (1-p)(a_1 + a_2)^p(b_1 + b_2)^{-p}
+\end{bmatrix}.$$
+Some algebra then shows that $df(a_1, a_2, b_1, b_2) = 0$ iff $a_1/b_1 = a_2/b_2$.
+Suppose that $a_1/b_1 = a_2/b_2 = c$. Then
+$$f(a_1, a_2, b_1, b_2) = c^p(b_1 + b_2 - b_1 - b_2) = 0.$$
+We therefore want to show that the variety $a_1/a_2 = b_1/b_2$ consists of maxima of $f$.
+In fact that region divides $\RR^4_+$ into the regions $a_1/b_1 > a_2/b_2$ and $a_1/b_1 < a_2/b_2$.
+So it suffices to show that for each such region, there exists a point $p = (a_1, a_2, b_1, b_2)$ with $f(p) < 0$; then, by symmetry of $f$, we can restrict to $a_1/b_1 > a_2/b_2$.
+We can then normalize $a_2 = b_1 = b_2 = 1$ and take $a_1 \to \infty$; then the claim is
+\begin{equation}
+\label{holder inequality}
+\lim_{x \to \infty} x^p + 1 - 2^{1-p}(x+1)^p < 0.
+\end{equation}
+Since $0 < p < 1$, some straightforward calculus implies (\ref{holder inequality}).
+\end{proof}
+
+Let $[\cdot]_\alpha$ denote the $\alpha$th H\"older seminorm, thus
+$$||u||_{C^{0+\alpha}} = ||u||_{L^\infty} + [u]_\alpha.$$
+We first interpolate the seminorms:
+\begin{align*}
+[u]_\beta^{\frac{1-\gamma}{1-\beta}} [u]_1^{\frac{\gamma-\beta}{1-\beta}}
+&= \left(\sup_{x \neq y} \frac{|u(x) - u(y)|}{|x - y|^\beta}\right)^{\frac{1-\gamma}{1-\beta}}\left(\sup_{x \neq y} \frac{|u(x) - u(y)|}{|x - y|}\right)^{\frac{\gamma-\beta}{1-\beta}}\\
+&\geq \sup_{x \neq y} |u(x) - u(y)| \cdot |x - y|^{-\beta\frac{1-\gamma}{1-\beta}} \cdot |x - y|^{\frac{\gamma - \beta}{1 - \beta}}\\
+&= \sup_{x \neq y} \frac{|u(x) - u(y)|}{|x - y|^\gamma}\\
+&= [u]_\gamma.
+\end{align*}
+Here we used
+$$-\beta\frac{1 - \gamma}{1 - \beta} - \frac{\gamma - \beta}{1 - \beta} = \frac{\beta - 1}{1 - \beta}\gamma = -\gamma.$$
+Therefore, if $p = (1-\gamma)/(1 - \beta)$,
+\begin{align*}
+||u||_{C^{0+\gamma}} &= ||u||_{L^\infty} + [u]_\gamma \\
+&\leq ||u||_{L^\infty}^p ||u||_{L^\infty}^{1 - p} +
+[u]_\beta^p [u]_1^{1 - p}\\
+&\leq (||u||_{L^\infty} + [u]_\beta)^p + (||u||_{L^\infty} + [u]_\beta)^p\\
+&= ||u||_{C^{0+\beta}}^{\frac{1-\gamma}{1-\beta}} ||u||_{C^{0+1}}^{\frac{\gamma-\beta}{1-\beta}}.
+\end{align*}
+Here the second inequality is due to the lemma and the fact that $p < 1$ (since $\gamma < \beta$).
+
+
+\begin{exer}[5.14]
+Show that if $n > 1$ then
+$$u(x) = \log \log \left(1 + \frac{1}{|x|} \right)$$
+is $\in W^{1,n}(B(0, 1))$ in $\RR^n$ despite $u \notin L^\infty(B(0, 1))$.
+\end{exer}
+
+We first note that since $\log \log s \lesssim s^\varepsilon$ as $s \to \infty$, the same holds for $\log \log (1+s)$, and hence
+$$\left|\log \log \left(1 + \frac{1}{r}\right)\right|^n \lesssim r^{-\varepsilon}.$$
+That gives a bound
+\begin{align*}
+||u||_{L^n(B(0,1))}^n &= \int_{B(0, 1)} |u|^n = \int_0^1 \int_{\partial B(0, r)} |u(r, \theta)|^n ~dS(\theta) ~dr\\
+&= \int_0^1 n2\alpha_n r^{n-1} \left|\log \log \left(1 + \frac{1}{r}\right)\right|^n ~dr\\
+&\lesssim \int_0^1 r^{n-(1 + \varepsilon)} ~dr \lesssim 1
+\end{align*}
+since $n \geq 2$.
+
+Meanwhile $|\nabla u(r, \theta)| = |\partial_r u(r, \theta)|$ since $u$ is radial, so
+$$|\nabla u(x)|^n = \left||x|(|x|+1) \log\left(1 + \frac{1}{|x|}\right) \right|^{-n}.$$
+For $|x| \lesssim 1$, we get $|x| + 1 \lesssim 1$ and hence
+$$|\nabla u(x)|^n \lesssim |x|^{-n} \left|\log\left(1 + \frac{1}{|x|}\right) \right|^{-n}.$$
+A similar argument to the bound on $\log \log(1+1/r)$ implies
+$$\left|\log \left(1 + \frac{1}{r}\right)\right|^n \lesssim r^{-\varepsilon}.$$
+Therefore
+\begin{align*}
+||\nabla u||_{L^n(B(0,1))}^n &= \int_{B(0, 1)} |\nabla u|^n = \int_0^1 \int_{\partial B(0, r)} |\nabla u(r, \theta)|^n ~dS(\theta) ~dr\\
+&= \int_0^1 n2\alpha_n r^{n-1} \left|\log \left(1 + \frac{1}{r}\right)\right|^n ~dr\\
+&\lesssim \int_0^1 r^{n-(1 + \varepsilon)} ~dr \lesssim 1
+\end{align*}
+so $u \in W^{1,n}(B(0, 1))$.
+However, it is clear that as $r \to 0$, $\log(1+1/r) \to 0$, so $\log \log(1 + 1/r) \to -\infty$, implying $u \notin L^\infty(B(0, 1))$.
+
+\begin{exer}[5.18]
+Suppose that $U$ is bounded. Show that if $u \in W^{1,p}(U)$ then $|u| \in W^{1,p}(U)$.
+Show that if $u \in W^{1,p}(U)$ then $u^+,u^- \in W^{1,p}(U)$ and $\nabla u^+ = \nabla u$ almost everywhere on $\{u > 0\}$ ($\nabla u^+ = 0$ elsewhere), and $\nabla u^- = \nabla u$ almost everywhere on $\{u < 0\}$ ($\nabla u^- = 0$ elsewhere).
+Show that $\nabla u = 0$ almost everywhere on $\{u = 0\}$.
+\end{exer}
+
+We introduce the function
+$$F_\varepsilon(z) = 1_{z \geq 0}(\sqrt{z^2 + \varepsilon^2} - \varepsilon).$$
+\begin{lemma}
+One has $F_\varepsilon \circ u \to u^+$ in $W^{1,p}$.
+\end{lemma}
+\begin{proof}
+We first check $F_\varepsilon \circ u \to u^+$ almost everywhere. Indeed,
+$$F_\varepsilon(u(x)) = 1_{u \geq 0}(\sqrt{u(x)^2 + \varepsilon^2} - \varepsilon) \sim 1_{u \geq 0}u(x) = u^+(x).$$
+Moreover, $u \in L^p$ and $|F_\varepsilon \circ u| \lesssim \max(|u|, 1)$; since $U$ is bounded, dominated convergence implies that $F_\varepsilon \circ u \to u^+$ in $L^p$.
+
+Now assume that $u$ is smooth and nonnegative. Then
+\begin{align*}
+\nabla(F_\varepsilon \circ u) - \nabla u &= \frac{\nabla(u^2 + \varepsilon^2)}{2\sqrt(u^2 + \varepsilon)} - \nabla u\\
+&= \nabla u \left(\frac{u}{\sqrt{u^2 + \varepsilon^2}} - 1\right)
+\end{align*}
+which converges to $\nabla u$ almost everywhere, so by dominated convergence, $F_\varepsilon \circ u \to u$ in $W^{1,p}$.
+The pullback operator $F_\varepsilon^*$ is linear, so for general smooth $u$, $F_\varepsilon \circ u \to u^+$ in $W^{1,p}$.
+That implies $F_\varepsilon \circ u \to u^+$ for any $u$ in $W^{1,p}$, by a standard approximation argument.
+\end{proof}
+
+It follows that if $u \in W^{1,p}$, $u^\pm \in W^{1,p}$. Since $|u| = u^+ + u^-$ the same goes for $|u|$.
+The convergence in $W^{1,p}$ implies that $\nabla u^\pm = \nabla u$ almost everywhere on $\{\pm u > 0\}$.
+Moreover on $\{\pm u \geq 0\} = \{\mp u > 0\}$ one has $\nabla u^\mp = \nabla u$ so $\nabla u^\pm = 0$.
+In particular, on $\{u = 0\} = \{u \geq 0\} \cap \{u \leq 0\}$ one has $\nabla u^\pm = 0$ so $\nabla u = 0$.
+
+\begin{exer}[5.19]
+Show that if $u \in H^1(U)$ then $\nabla u = 0$ on $\{u = 0\}$.
+\end{exer}
+
+Let $\phi$ be a smooth, bounded, nondecreasing function with $\phi'$ bounded and $\phi(z) = z$ if $|z| \leq 1$.
+Let
+$$u^\varepsilon(x) = \varepsilon \phi\left(\frac{u(x)}{\varepsilon}\right).$$
+One has
+$$\partial_j u^\varepsilon(x) = \phi'\left(\frac{u(x)}{\varepsilon}\right) u_j(x)$$
+so
+$$\nabla u^\varepsilon(x) = \phi'\left(\frac{u(x)}{\varepsilon}\right) \nabla u(x).$$
+We first bound $u^\varepsilon$ in the weak topology of $H^1$.
+\begin{lemma}
+If $U$ is bounded, then $u^\varepsilon \to 0$ weakly in $H^1$ and strongly in $L^2$.
+\end{lemma}
+\begin{proof}
+The claim is that $u^\varepsilon \to 0$ strongly in $L^2$ and $\nabla u^\varepsilon \to 0$ weakly in $L^2$.
+
+We obtain the first limit by showing $||u^\varepsilon||_{L^2} \to 0$. In fact, we may use dominated convergence, since $\phi \in L^\infty$ and $U$ was assumed bounded, to get
+\begin{align*}
+\lim_{\varepsilon \to 0} ||u^\varepsilon||_{L^2}^2 &= \lim_{\varepsilon \to 0} \int_{\{u \neq 0\}} \varepsilon^2 \left|\phi\left(\frac{u(x)}{\varepsilon}\right)\right|^2 ~dx\\
+&= \int_{\{u \neq 0\}} \lim_{\varepsilon \to 0}\varepsilon^2\left|\phi\left(\frac{u(x)}{\varepsilon}\right)\right|^2~dx.
+\end{align*}
+We used $\phi(0) = 0$ to eliminate the integral over $\{u = 0\}$.
+But
+$$\left|\lim_{\varepsilon \to 0}\varepsilon\phi\left(\frac{u(x)}{\varepsilon}\right)\right| \leq ||\phi||_{L^\infty} \lim_{\varepsilon \to 0}\varepsilon = 0,$$
+which gives the claim.
+
+As for the second limit, we note that
+$$||\nabla u^\varepsilon||_{L^2} \leq ||\phi'(u/\varepsilon)||_{L^2} \cdot ||\nabla u||_{L^2}$$
+by the Cauchy-Schwarz inequality. Since $U$ is bounded, it follows that
+$$||\phi'(u/\varepsilon)||_{L^2} \lesssim ||\phi'||_{L^\infty} \cdot ||\nabla u||_{L^2},$$
+a uniform in $\varepsilon$. So the Banach-Alaoglu theorem, for every sequence $\varepsilon_j \to 0$ there is a subsequence $\varepsilon_{j_k} \to 0$ and a vector field $F$ such that
+$$F = \lim_{k \to \infty} \nabla u^{\varepsilon_{j_k}}$$
+in the weak topology of $L^2$. But $u^\varepsilon \to 0$ in the strong topology of $L^2$, so $F = 0$. This shows that $\nabla u^\varepsilon \to 0$ in the weak topology of $L^2$, which is what we wanted.
+\end{proof}
+The problem is local, so we can apply a cutoff and hence assume that $U$ is bounded.
+It follows that
+$$\lim_{\varepsilon \to 0} \langle \nabla u^\varepsilon, \nabla u\rangle_{L^2} = \lim_{\varepsilon \to 0} \langle u^\varepsilon, u\rangle_{H^1} - \langle u^\varepsilon, u\rangle_{L^2} = 0.$$
+But if $E = \{u = 0\}$ then $\phi'(u/\varepsilon)|E = 1$ since $\phi(x) = x$ if $|x|$ is small, so
+\begin{align*}||\nabla u||_{L^2(E)} &= \int_E |\nabla u(x)|^2 \phi'\left(\frac{u(x)}{\varepsilon}\right)~dx \\
+&\leq \int_U |\nabla u(x)|^2 \phi'\left(\frac{u(x)}{\varepsilon}\right)~dx\\
+&= \langle \nabla u^\varepsilon, \nabla u\rangle_{L^2}.
+\end{align*}
+Since the right-hand side can be made arbitrarily small, one has $\nabla u = 0$ in $L^2(E)$, which implies the claim.
+
+\begin{exer}[5.21]
+Show that if $u, v \in H^s(\RR^n)$ and $s > n/2$ then $uv \in H^s(\RR^n)$ with
+$$||uv||_{H^s} \lesssim ||u||_{H^s} \cdot ||v||_{H^s}.$$
+\end{exer}
+
+Let $[\cdot]$ denote the Japanese bracket, so $||f||_{H^s} = ||[\cdot]^s f||_{L^2}$.
+We need two easy facts about the Japanese bracket:
+\begin{lemma}
+One has
+$$[\xi]^s \lesssim [\xi - \eta]^s + [\eta]^s,$$
+the implied constant allowed to depend on $s$.
+\end{lemma}
+\begin{proof}
+If $|\xi - \eta| \lesssim 1$ then $[\xi - \eta]^s \sim 1$ and $|\xi| \lesssim |\eta| + 1$, so the claim follows by applying the binomial series.
+If $|\xi| \lesssim 1$ then $[\xi] \sim 1$ and there is nothing to prove.
+If $|\eta| \lesssim 1$ then $[\eta] \sim 1$ and $[\xi - \eta]^s \sim [\xi]^s$, so there is nothing to prove.
+Otherwise $[\xi - \eta] \sim |\xi - \eta|$, $[\xi] \sim |\xi|$, and $[\eta] \sim |\eta|$.
+In that case the claim follows by applying the binomial series.
+\end{proof}
+\begin{lemma}
+$[\cdot]^{-s} \in L^2$.
+\end{lemma}
+\begin{proof}
+Recall that $2s + 1 - n > 1$. Then
+\begin{align*}
+||[\cdot]^{-s}||_{L^2}^2 &= \int_{\RR^n} (1 + |\xi|^2)^{-s}~d\xi \lesssim 1 + \int_{B(0, R)^c} \frac{d\xi}{|\xi|^{2s}}\\
+&= 1 + \int_R^\infty \int_{\partial B(0, r)} \frac{dr}{r^{2s}} = 1 + \int_R^\infty \frac{dr}{r^{2s+1-n}} \lesssim 1
+\end{align*}
+provided that $R > 0$ is so large that $[\cdot]^s \sim |\cdot|^s$ away from $B(0, R)$.
+\end{proof}
+Now we use Tonelli's theorem, Young's convolution inequality with $1 + 1/2 = 1 + 1/2$, and the Cauchy-Schwarz inequality to bound
+\begin{align*}
+||uv||_{H^s}^2 &= ||[\cdot]^s \widehat{uv}||_{L^2}^2 = ||[\cdot]^s \hat u * \hat v||_{L^2}^2\\
+&= \iint_{\RR^n \times \RR^n} |[\xi]^s \hat u(\xi - \eta) \hat v(\eta)|^2 ~d\xi ~d\eta\\
+&\lesssim \iint_{\RR^n \times \RR^n} |[\xi - \eta]^s \hat u(\xi - \eta) \hat v(\eta)|^2 + |[\eta]^s \hat u(\xi - \eta) \hat v(\eta)|^2 ~d\xi ~d\eta\\
+&= ||([\cdot]^s \hat u) * \hat v||_{L^2}^2 + ||\hat u * ([\cdot]^s \hat v)||_{L^2}^2\\
+&\leq ||[\cdot]^s \hat u||_{L^2}^2 ||\hat v||_{L^1}^2 + ||[\cdot]^s \hat v||_{L^2}^2 ||\hat u||_{L^1}^2\\
+&= ||u||_{H^s}^2 \left(\int_{\RR^n} |\hat v(\xi)| [\xi]^s [\xi]^{-s}~d\xi\right)^2 + ||v||_{H^s} \left(\int_{\RR^n} |\hat u(\xi)| [\xi]^s [\xi]^{-s}~d\xi\right)^2\\
+&= ||u||_{H^s}^2 \langle [\cdot]^{-s}, [\cdot]^s \hat v\rangle_{L^2}^2 + ||v||_{H^s}^2 \langle [\cdot]^{-s}, [\cdot]^s \hat v\rangle_{L^2}^2\\
+&\lesssim ||u||_{H^s}^2 \cdot ||v||_{H^s}^2.
+\end{align*}
+This was the desired bound.
+
+
+\begin{exer}[6.1]
+Show that if $\Delta u = cu$, $\Delta w = cw$, and $v = u/w$ then $-\Div(w^2\nabla v) = 0$. Conversely, show that if $-\Div(a\nabla v) = 0$ and $u = v\sqrt a$ then there is a $c$ such that $\Delta u = cu$.
+\end{exer}
+
+For the first direction,
+\begin{align*}
+\Div(w^2 \nabla(u/w)) &= \sum_i \partial_i(w^2 \partial_i(u/w)) = \sum_i 2\partial_iw w\partial_i(u/w) + w^2 \partial_i^2(u/w)\\
+&= \sum_i 2\partial_i u\partial_i w - 2(\partial_iw)^2u/w + w\partial_i^2u - 2\partial_iu\partial_iw - u\partial_i^2w + 2u(\partial_iw)^2/w\\
+&= u\sum_i \partial_i^2w - w\sum_i \partial_i^2u\\
+&= u\Delta w - w\Delta u = 0.\end{align*}
+We used a computer to help simplify the computation above.
+
+For the converse, we set
+$$c = \frac{\Delta a}{2a} - \frac{|\nabla a|^2}{4a^2},$$
+which makes sense since $a > 0$. Then, because
+$$\nabla \frac{1}{\sqrt a} = -\frac{\nabla a}{2a^{3/2}},$$
+one has
+\begin{align*}
+\Delta u &= \Div \frac{v\nabla a + 2a\nabla v}{2\sqrt a}\\
+&= \frac{1}{2\sqrt a} \Div(v \nabla a) + \frac{1}{\sqrt a} \Div(a \nabla v)  + \langle v \nabla a + 2a\nabla v, \nabla\frac{1}{\sqrt a} \rangle\\
+&= \frac{1}{2\sqrt a}(\langle \nabla v, \nabla a\rangle) + \frac{v}{2}\langle \nabla a, \nabla \frac{1}{\sqrt a} \rangle + a\langle \nabla v, \nabla \frac{1}{\sqrt a} \rangle\\
+&= \frac{1}{2\sqrt a}(\langle \nabla v, \nabla a\rangle + v\Delta a) - \frac{v}{4a^{3/2}}|\nabla a|^2 - \frac{1}{2\sqrt a} \langle \nabla v, \nabla a\rangle\\
+&= \frac{v}{2\sqrt a}\Delta a - \frac{v}{4a^{3/2}}|\nabla a|^2 \\
+&= cv\sqrt a = cu
+\end{align*}
+which was desired.
+
+\begin{exer}[6.4]
+Let $U \subseteq \RR^n$ be connected.
+Let $f \in L^2(U)$. Show that the Neumann problem $-\Delta u = f$ has a solution $u \in H^1(U)$ iff
+$$\int_U f = 0.$$
+\end{exer}
+
+First assume that $u \in H^1(U)$ satisfies $-\Delta u = f$, $\partial_\nu u = 0$.
+By elliptic regularity, it is in fact true that $u \in H^2_{loc}(U)$, so we can write $\Delta u = \Div \nabla u$.
+So, by the divergence theorem,
+$$\int_U f = -\int_U \Div \nabla u = -\int_{\partial U} \langle \nu, \nabla u\rangle ~dS = -\int_{\partial U} \frac{\partial u}{\partial \nu}~dS = 0.$$
+
+Conversely, let
+$$X^s = \left\{g \in H^s(U): \int_U g = 0\right\}.$$
+We claim $X^s$ is a Hilbert space under the same inner product as $H^s(U)$; this follows if $X^s$ is closed.
+In fact, since $U$ is bounded, the Japanese bracket $[\cdot]$ satisfies $[\cdot] \in L^2$, which implies that $1 \in H^{-1}$ (since $||1||_{H^{-1}} = ||[\cdot]||_{L^2}$), and $X^s$ is nothing more than $1^\perp$ under the usual pairing $H^s \times H^{-s} \to \CC$.
+Since $1^\perp$ is closed the claim holds.
+
+We introduce the elliptic bilinear form
+$$B(u, v) = \langle \nabla u, \nabla v\rangle_{L^2},$$
+so $B \in (X^1 \otimes X^1)^*$.
+Poincar\'e's inequality says that for every $u \in X^0$,
+$$||u||_{L^2} = ||u - (u)||_{L^2} \lesssim ||\nabla u||_{L^2}.$$
+where $(u)$ is the mean of $u$ (so $(u) = 0$). Moreover $X^1 \subseteq X^0$.
+Since $|B(u, u)| = ||\nabla u||_{L^2}^2$ by definition,
+$$||u||_{X^1}^2 \lesssim ||u||_{L^2}^2 + ||\nabla u||_{L^2}^2 \lesssim ||\nabla u||_{L^2}^2 = |B(u, u)|.$$
+Therefore $B$ is coercive, and by the Cauchy-Schwarz inequality,
+$$|B(u, v)| \leq ||\nabla u||_{L^2} \cdot ||\nabla v||_{L^2} \leq ||u||_{X^1} \cdot ||v||_{X^1}.$$
+So $B$ is a Lax-Milgram form.
+
+It follows that for every $f \in X^{-1}$ there is a $u \in X^1$ such that for every $v \in X^1$,
+$$\langle \nabla u, \nabla v\rangle_{L^2} = B(u, v) = \langle f, v\rangle_{L^2}.$$
+Indeed, the natural pairing $H^{-s} \times H^s \to \CC$ restricts to a pairing $X^{-s} \times X^s \to \CC$ induced by the $L^2$ inner product.
+Also, $H^{-1} \subseteq L^2$, so the condition $f \in X^{-1}$ only imposes that $\int_U f = 0$, which was given.
+
+Therefore $-\Delta u = f$. By elliptic regularity, $u \in H^2_{loc}$, so another application of the divergence theorem shows that $u$ satisfies the Neumann condition.
+
+\begin{exer}[6.15]
+Let $U$ be a smoothly moving region; let $\lambda(\tau)$ be an eigenvalue of the Dirichlet Laplacian of $U(\tau)$ with eigenfunction $w(\tau)$, chosen so that $w(\tau)$ and $\lambda(\tau)$ are smooth in $\tau$ and $||w(\tau)||_{L^2} = 1$. Prove the Hadamard variational formula
+$$\dot \lambda(\tau) = -\int_{\partial U(\tau)} \left|\frac{\partial w}{\partial \nu}\right|^2 \mathbf v\cdot \nu~dS.$$
+\end{exer}
+
+Since $(\lambda, w)$ is an eigenpair of the Dirichlet Laplacian,
+$$\langle \Delta w + \lambda w, w\rangle_{L^2} = 0.$$
+Differentiating,
+\begin{align*}0 &= \frac{d}{d\tau} \langle \Delta w(\tau) + \lambda(\tau) w(\tau), w(\tau)\rangle_{L^2}\\
+& = \int_{\partial U(\tau)} (\Delta w(\tau) +\lambda(\tau) w(\tau))w(\tau) \mathbf v\cdot \nu \\
+&\qquad+ \int_{U(\tau)} (\Delta w(\tau) + \lambda(\tau)w(\tau)) \dot w(\tau) + (\Delta \dot w(\tau) + \lambda(\tau) \dot w(\tau))w(\tau) + \dot \lambda(\tau)w(\tau)^2.
+\end{align*}
+Treating the boundary term, we note that $\lambda(\tau) w(\tau) = 0$ since $\Delta$ was assumed Dirichlet. We can then integrate by parts to get
+$$\int_{\partial U(\tau)} (\Delta w(\tau) +\lambda(\tau) w(\tau))w(\tau) \mathbf v\cdot \nu = \int_{\partial U(\tau)} \left|\frac{\partial w}{\partial \nu}\right|^2 \mathbf v\cdot \nu~dS.$$
+Now we treat the interior term.
+The term $(\Delta w(\tau) + \lambda(\tau)w(\tau)) \dot w(\tau)$ clearly drops out, and commuting mixed partials also kills the term
+$$(\Delta \dot w(\tau) + \lambda(\tau) \dot w(\tau))w(\tau) = \frac{\partial}{\partial t} \Delta w(t) + \lambda(\tau) w(t) \bigg|_{t = \tau} = 0.$$
+Finally, since $||w(\tau)||_{L^2} = 1$, we get
+$$\int_{U(\tau)}\dot \lambda(\tau)w(\tau)^2 = \dot \lambda(\tau)$$
+which gives the claim.
+
+\begin{exer}[Extra 1]
+Let $\mathcal M$ be the Hardy-Littlewood maximal operator. Given a radial function $g$ write $\tilde g$ for its radial profile.
+Suppose that $u$ is a radial solution to the homogeneous wave equation on $\RR^3$ with $u(0) = 0$ and $\partial_t u(0) = u_1$. Show that
+$$|\tilde u(r, t)| \lesssim \mathcal M \tilde v_1(t)$$
+where $\tilde v_1(s) = s\tilde u_1(s)$.
+Conclude that, whenever $u$ is a radial solution to the homogeneous equation,
+$$||u||_{L^2_t(\RR \to L^\infty_x(\RR^3))}^2 \lesssim \int_{\RR^3} |\partial_t u(0)|^2 + |\nabla u(0)|^2.$$
+Prove the Stricharz estimates
+$$||u||_{L^p_t(\RR \to L^q_x(\RR^3))}^2 \lesssim \int_{\RR^3} |\partial_t u(0)|^2 + |\nabla u(0)|^2$$
+whenever $1/p + 3/q = 1/2$.
+\end{exer}
+
+Let $\tilde v(t, r) = r \tilde u(t, r)$.
+
+\begin{lemma}
+\label{Neumann solution}
+If $u$ solves the wave equation with smooth initial data $u(0) = 0$, $\partial_t u(0) = u_1$, and $u_1$ is smooth, then $\tilde v$ solves the wave equation on $(0, \infty)$ with Neumann boundary condition and initial data $\tilde v(0) = 0$, $\partial_t \tilde v(0) = \tilde v_1$.
+\end{lemma}
+\begin{proof}
+We first show $\Box \tilde v = 0$. If $|x| = r$ then
+\begin{align*}
+\Box u(t, x) &= (\Delta - \partial_t) u(t, x) = \frac{1}{r^2} \frac{\partial}{\partial r} \left(r^2 \frac{\partial \tilde u}{\partial r}(t, r)\right) - \frac{\partial \tilde u}{\partial t}(t, r)\\
+&= \left(\Box + \frac{2}{r} \frac{\partial}{\partial r}\right) \tilde u(t, r)\\
+&= \frac{\partial}{\partial r} \left(\frac{1}{r} \frac{\partial \tilde v}{\partial r}(t, r) - \frac{\tilde v(t, r)}{r^2} \right) - \frac{1}{r} \frac{\partial^2 \tilde v}{\partial r^2}(t, r) +
+\frac{2}{r}\left(\frac{1}{r} \frac{\partial \tilde v}{\partial r}(t, r) - \frac{\tilde v}{r^2}\right)\\
+&= \frac{\Box \tilde v}{r}(t, r)
+\end{align*}
+and since $r > 0$ it follows that $\Box \tilde v = 0$, since $u$ solves the wave equation.
+
+We now check the boundary condition.
+Since $u_1$ is smooth, so is $\tilde v$.
+If $v(t, x) = |x| u(t, x)$ then $\tilde v$ is the radial profile of $v$.
+Since $v$ is radial, if $e$ is a unit vector in $\RR^3$, then for any $r > 0$ one has
+$$\tilde v(r) = v(re) = v(-re).$$
+In particular, $\tilde v$ extends smoothly to an even function on $\RR$, so $\partial_r \tilde v(0) = 0$.
+
+If $|x| = r$ then
+$$\tilde v(0, r) = |x| u(0, x) = 0.$$
+Similarly,
+$$\frac{\tilde v}{\partial t}(0, r) = |x| \frac{\partial u}{\partial t}(0, x) = r \frac{\partial \tilde u}{\partial t}(0, r) = r\tilde u_1(r) = \tilde v_1(r).$$
+Thus $\tilde v$ satisfies the constraints on initial data.
+\end{proof}
+
+In what follows, if $w: [0, \infty)$ is a smooth function with $w'(0) = 0$ then we let $w^\sharp$ denote the even extension of $w$, thus $w^\sharp = w$ whenever $w$ is defined and $w^\sharp(s) = w(-s)$ otherwise.
+
+\begin{lemma}
+If $u$ is a solution to the wave equation with initial data $u(0) = 0$, $\partial_t u(0) = u_1$, then
+\begin{equation}
+\label{maximal inequality}
+||\tilde u(t)||_{L^\infty} \lesssim \mathcal M\tilde v_1(t).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Assume first that $u$ has smooth initial data and apply Lemma \ref{Neumann solution} to $\tilde v$.
+Since $\tilde v$ is a Neumann solution to the wave equation, $\tilde v^\sharp$ is a solution to the wave equation on $\RR$, with initial data $\tilde v^\sharp(0) = 0$, $(\tilde v^\sharp)'(0) = \tilde v_1^\sharp$, so by d'Alembert's formula,
+$$\tilde v^\sharp(t, r) = \frac{1}{2} \int_{r - t}^{r + t} \tilde v_1^\sharp(s) ~ds.$$
+Fix $r, t \geq 0$. If $r \geq t$ then $r - t \geq t - r$ so
+\begin{align*}
+|\tilde u(t, r)| &= \frac{|\tilde v(t, r)|}{r} \leq \frac{1}{2r} \int_{r - t}^{r + t} |\tilde v_1^\sharp(s)|~ds\\
+&\leq \frac{1}{2r} \int_{t - r}^{t + r} |\tilde v_1^\sharp(s)| ~ds \leq \mathcal M\tilde v_1^\sharp(t).
+\end{align*}
+We now estimate
+$$\mathcal M\tilde v_1^\sharp(t) = \sup_{s > 0} \frac{1}{2s} \int_{t - s}^{t + s} |\tilde v_1^\sharp(\alpha)| ~d\alpha.$$
+If $t - s$ and $t + s$ have the same sign then it is clear that
+$$\frac{1}{2s} \int_{t - s}^{t + s} |\tilde v_1^\sharp(\alpha)| ~d\alpha \leq \mathcal M\tilde v_1(t).$$
+Otherwise, $t - s < 0 < t + s$, so
+$$\frac{1}{2s} \int_{t - s}^{t + s} |\tilde v_1^\sharp(\alpha)| ~d\alpha \leq \frac{1}{2s} \int_0^{t + s} |\tilde v_1(\alpha)| ~d\alpha + \frac{1}{2s} \int_{t - s}^0 |\tilde v_1(-\alpha)|~d\alpha \leq 2\mathcal M\tilde v_1(t)$$
+which was the bound that we needed, at least when $r \geq t$.
+If $r \leq t$,
+\begin{align*}
+\tilde u(t, r) &= \frac{1}{2r} \int_{r - t}^{r + t} \tilde v_1^\sharp(s) ~ds \\
+&= \frac{1}{2r} \left[\int_{r - t}^0 \tilde v_1^\sharp(s) ~ds + \int_0^{r + t} \tilde v_1^\sharp(s) ~ds \right]\\
+&= \frac{1}{2r} \left[\int_0^{t + r} \tilde v_1(s) ~ds - \int_0^{t - r} \tilde v_1(s) ~ds\right]\\
+&= \frac{1}{2r} \int_{t - r}^{t + r} \tilde v_1(s) ~ds.
+\end{align*}
+Therefore
+$$|\tilde u(t, r)| \leq \mathcal M\tilde v_1(t).$$
+
+Finally, we extend (\ref{maximal inequality}) using an approximation argument, since smooth initial data is dense in the space of initial data (since we assume throughout that the initial data is in $L^2$).
+\end{proof}
+
+By the estimate (\ref{maximal inequality}) and the Hardy-Littlewood maximal inequality,
+\begin{align*}
+||u||_{L^2_tL^\infty_x}^2 &= \int_0^\infty ||u(t)||_{L^\infty}^2~dt
+= \int_0^\infty ||\tilde u(t)||_{L^\infty}^2~dt \\
+&\lesssim \int_0^\infty |\mathcal M\tilde v_1(t)|^2~dt
+\lesssim \int_0^\infty |\tilde u_1(t)|^2 r^2~dr \\
+&= \frac{1}{4\pi} \int_0^\infty \int_{\partial B(0, r)} |u_1(r, \theta)|^2 ~dS(\theta)~dr
+\lesssim ||u_1||_{L^2}^2
+\end{align*}
+which gives a bound
+$$||u||_{L^2_tL^\infty_x} \lesssim ||u_1||_{L^2}.$$
+We now treat the case $u_1 = 0$; to do this, we will need some results about oscillatory integrals on the sphere.
+
+\begin{lemma}
+For every $x \in \RR^3$ and $\rho > 0$,
+\begin{equation}
+\label{oscillatory integral}
+\int_{\partial B(0, 1)} e^{i\rho\langle x, \omega\rangle} ~dS(\omega) = 4\pi \sinc(\rho |x|)
+\end{equation}
+where $\theta \sinc \theta = \sin \theta$ is the sampling function and $B(0, 1)$ is the unit ball of $\RR^3$.
+In particular, if $w$ is a radial Schwartz function on $\RR^3$, then its Fourier transform satisfies
+\begin{equation}
+\label{radial fourier}
+\hat w(\xi) = \frac{4\pi}{|\xi|} \int_0^\infty \tilde w(r) \sin(r|\xi|) r~dr.
+\end{equation}
+\end{lemma}
+\begin{proof}
+I got this proof from Lemma 3.2 in Dyatlov-Zworski.
+We first check that the right-hand side of (\ref{oscillatory integral}) does not depend on rotations in $x$. Indeed, if $R$ is a rotation then $\langle Rx, \omega\rangle = \langle x, R^*\omega\rangle$, which can be absorbed by a change of coordinates in $\omega$.
+So we may replace $x = |x|e$, where $e$ is the first unit vector in $\RR^3$.
+We may then make the change of coordinates
+$$\omega = (\pm \sqrt{1 - r^2}, r\sigma)$$
+where $\sigma$ is a point on the unit circle in $\RR^2$ (so $r\sigma$ is a point in the unit disk in $\RR^2$).
+Then
+\begin{align*}
+\int_{\partial B(0, 1)} e^{i\rho|x|\langle e, \omega\rangle} ~dS(\omega) &= 2\pi \int_0^1 (e^{i\rho|x|\sqrt{1 - r^2}} + e^{-i\rho|x|\sqrt{1 - r^2}} \frac{r}{\sqrt{1 - r^2}}~dr\\
+&= 4\pi \int_0^1 \cos(\rho|x| y) ~dy\\
+&= 4\pi \sinc(\rho |x|)
+\end{align*}
+which proves (\ref{oscillatory integral}); (\ref{radial fourier}) follows by applying (\ref{oscillatory integral}) to
+$$\hat w(\xi) = \int_0^\infty w(r) \int_{\partial B(0, r)} e^{-ir\langle\xi, \omega\rangle}~dS(r\omega) ~dr$$
+and simplifying.
+\end{proof}
+
+\begin{lemma}
+Let $u$ be a radial solution to the wave equation with initial data $u(0) = u_0$, $\partial_t u(0) = 0$. Then one has
+$$||u||_{L^2_tL^\infty_x} \lesssim ||\nabla u_0||_{L^2}.$$
+\end{lemma}
+\begin{proof}
+We first assume that $u$ is Schwartz.
+The Fourier transform of $\Box$ in the spatial variable alone factors as
+$$\hat \Box(\xi) = (\partial + i|\xi|)(\partial - i|\xi|).$$
+Solving the ODE $\hat \Box(\xi) \hat u(\cdot, \xi)$ for each fixed $\xi$, one obtains
+$$\hat u(t, \xi) = \hat u_0(\xi) \cos(t|\xi|).$$
+By the Fourier inversion formula and (\ref{radial fourier}),
+\begin{align*}
+u(t, x) &= \frac{1}{8\pi^3} \int_{\RR^3} \hat u_0(\xi) \cos(t|\xi|) e^{i\langle x, \xi\rangle} ~d\xi\\
+&= \frac{1}{\pi^2} \int_{\RR^3} \frac{1}{|\xi|} \int_0^\infty \tilde u_0(r) \sin(r|\xi|) r~dr \cos(t|\xi|)  e^{i\langle x, \xi\rangle} ~d\xi\\
+&= \frac{1}{\pi^2} \int_0^\infty \frac{1}{\rho} \int_0^\infty \tilde u_0(r) \sin(r\rho) r~dr \cos(t\rho) \int_{\partial B(0, \rho)} e^{i\rho\langle x,\omega\rangle} ~dS(\rho\omega) ~d\rho.
+\end{align*}
+Applying (\ref{oscillatory integral}),
+$$\int_{\partial B(0, \rho)} e^{i\rho\langle x, \omega\rangle} ~dS(\rho\omega) = 4\pi \frac{\rho}{|x|} \sin(\rho|x|),$$
+so
+$$u(t,x) = \frac{4}{\pi|x|} \int_0^\infty \sin(\rho|x|) \int_0^\infty \tilde u_0(r)\sin(r\rho)r~dr \cos(t\rho) ~d\rho.$$
+An integration by parts gives
+$$\int_0^\infty \tilde u_0(r) \sin(r\rho) r~dr = -\frac{1}{\rho^2} \int_0^\infty \tilde u_0'(r) (\sin(r\rho) - r\rho \cos(r\rho)) ~dr,$$
+so by Fubini's theorem,
+\begin{align*}
+u(t, x) &= -\frac{4}{\pi |x|} \int_0^\infty \frac{\sin(|x|\rho)}{\rho^2} \cos(t\rho) \int_0^\infty \tilde u_0'(r) (\sin(r\rho) - r\rho \cos(r\rho)) ~dr~d\rho\\
+&= -\frac{4}{\pi |x|} \int_0^\infty r \tilde u_0'(r) \int_0^\infty \sin(|x|\rho) \cos(t\rho) (\sin(r\rho) - r\rho \cos(r\rho)) \frac{d\rho}{r\rho^2} ~dr\\
+&= -\frac{4}{\pi|x|} \int_0^\infty r \tilde u_0'(r) K(r, t, |x|) ~dr
+\end{align*}
+where
+$$K(r, t, s) = \int_0^\infty \sin(s\rho) \cos(t\rho) (\sin(r\rho) - r\rho \cos(r\rho)) \frac{d\rho}{r\rho^2}$$
+is an integral kernel which localizes its argument in a neighborhood of $r = t = s$, since $K(r, t, s)$ is an oscillatory integral which experiences cancellation unless $r = t = s$.
+
+Let $Tw(t) = t\tilde w'(t)$ whenever $w$ is a radial smooth function on $\RR^3$.
+Since $K$ is a localizing integral kernel,
+$$|u(t, x)| \lesssim \frac{1}{t} \int_0^{2t} s |\tilde u_0'(s)| ~ds \leq \mathcal M(Tu_0).$$
+By the Hardy-Littlewood maximal inequality,
+\begin{align*}
+||\mathcal M(Tu_0)||_{L^2}^2 &\lesssim 4\pi \int_0^\infty |\tilde u_0'(r)|^2 r^2~dr \\
+&= \int_{\RR^3} |\nabla u_0(y)|^2 ~dy = ||\nabla u_0||_{L^2}^2
+\end{align*}
+which proves the claim. If $u$ is not Schwartz then one can approximate $u$ by Schwartz functions, since we assumed $\nabla u_0 \in L^2$.
+\end{proof}
+
+Putting the two bounds above together we have
+\begin{equation}
+\label{bound 1}
+||u||_{L^2_tL^\infty_x} \lesssim ||\nabla u_0||_{L^2} + ||u_1||_{L^2}.
+\end{equation}
+Moreover, by the Gagliardo-Nirenberg inequality and conservation of energy,
+\begin{align*}
+||u(t)||_{L^6} &\lesssim ||\nabla u(t)||_{L^2} \leq ||\nabla u(t)||_{L^2} + ||\Delta u(t)||_{L^2}\\
+&\lesssim ||\nabla u_0||_{L^2} + ||u_1||_{L^2}
+\end{align*}
+so we obtain the complementary bound
+\begin{equation}
+\label{bound 2}
+||u||_{L^\infty_t L^6_x} \lesssim ||\nabla u_0||_{L^2} + ||u_1||_{L^2}
+\end{equation}
+to (\ref{bound 1}), at least when $u$ is smooth; then an approximation argument promotes (\ref{bound 2}) to all $u$.
+
+We now need a version of Riesz-Thorin interpolation for mixed norms.
+As usual, given $p_0, p_1$ we define $p_\theta$ to satisfy
+$$\frac{1}{p_\theta} = \frac{1 - \theta}{p_0} + \frac{\theta}{p_1}.$$
+It will be convenient to state the lemma in a higher generality than we need, since we want to prove it from classical Riesz-Thorin interpolation, which is stated in such generality.
+\begin{lemma}
+Let $p_0, p_1, q_0, q_1, r \in [1, \infty]$. Let $T: L^r \to L^{p_0}L^{q_0} + L^{p_1}L^{q_1}$ be a linear operator.
+Then for any $\theta \in [0, 1]$,
+$$||T||_{L^r \to L^{p_\theta}L^{q_\theta}} \leq ||T||_{L^{r_0} \to L^{p_0}L^{q_0}}^{1 - \theta} ||T||_{L^r \to L^{p_1}L^{q_1}}^\theta.$$
+\end{lemma}
+\begin{proof}
+Given $f \in L^r$, set $S(t)f = (Tf)(t)$. Then $S(t)$ carries $L^r$ into $L^{q_0} \cap L^{q_1}$.
+We may assume that $S(t)$ actually carries $L^r$ into $L^0 \cap L^\infty$, since $L^0 \cap L^\infty$ is dense in $L^s$ for any $s \in [1, \infty]$.
+For any $t \in \RR$ and $u \in L^{p_0}L^0 \cap L^{p_1}L^\infty$,
+$$||u(t)||_{L^\infty} = \lim_{s \to \infty} ||u(t)||_{L^s}.$$
+So it suffices to prove the bound with $q_0,q_1 < \infty$, since we can then approximate $||u(t)||_{L^\infty}$.
+By a similar argument, we may assume that $p_0,p_1 < \infty$.
+
+By a rescaling argument, we may assume that $|f||_{L^r} = 1$. Then if $u = Tf$, the classical Riesz-Thorin bound
+$$||S(t)||_{L^r \to L^{q_\theta}} \leq ||S(t)||_{L^r \to L^{q_0}}^{1 - \theta} ||S(t)||_{L^r \to L^{q_1}}^\theta$$
+implies the estimate
+$$
+||u(t)||_{L^{q_\theta}} \leq ||u(t)||_{L^{q_0}}^{1 - \theta} ||u(t)||_{L^{q_1}}^\theta.
+$$
+Therefore
+\begin{equation}
+\label{u bound}
+||u||_{L^{p_\theta}L^{q_\theta}} = \left(\int_0^\infty ||u(t)||_{L^{q_\theta}}^{p_\theta}\right)^{1/p_\theta} \leq \left(\int_0^\infty ||u(t)||_{L^{q_0}}^{(1-\theta)p_\theta} ||u(t)||_{L^{q_1}}^{\theta p_\theta}\right)^{1/p_\theta}.
+\end{equation}
+If we set
+$$h_\theta(t) = ||u(t)||_{L^{q_\theta}}$$
+then
+$$||h_\theta||_{L^{p_\theta}} = ||u||_{L^{p_\theta}L^{q_\theta}}.$$
+Moreover, by H\"older's inequality applied with $1/p_\theta = (1-\theta)/p_0 + \theta/p_1$ and (\ref{u bound}),
+\begin{align*}
+||u||_{L^{p_\theta}L^{q_\theta}} &\leq ||h_0^{1-\theta} h_1^\theta||_{L^{p_\theta}} \leq ||h_0^{1-\theta}||_{L^{p_0/1-\theta}} ||h_1^\theta||_{L^{p_1/\theta}}\\
+&\leq ||h_0||_{L^{p_0}}^{1 - \theta} ||h_1||_{L^{p_1}}^\theta = ||u||_{L^{p_0}L^{q_0}}^{1 - \theta} ||u||_{L^{p_1}L^{q_1}}^\theta.
+\end{align*}
+This was the desired bound.
+\end{proof}
+We now apply the Riesz-Thorin lemma with $r = 2$.
+The hypothesis $1/p + 3/q = 1/2$ implies $q \in [6, \infty]$, so set $q_0 = \infty$ and $q_1 = 6$; then, setting $\theta = 6/q$, one has $q_\theta = q$.
+Then $1/p + \theta/2 = 1/2$; that is, $1/p = (1-\theta)/2$. So if $p_0 = 2$, $p_1 = \infty$, it follows that $p = p_\theta$.
+We view initial data $(u_0, u_1) \in H^1 \times L^2$ as an element $u^\flat (\nabla u_0, u_1)$ of $L^2(\RR \to \RR^2)$.
+Since $u_0 \in H^1$, $u_0 \in L^2$, so $u_0$ is uniquely determined by $\nabla u_0$, and so if $u = Tu^\flat$ is the solution to the wave equation with initial data $u^\flat$, then the estimates (\ref{bound 1}) and (\ref{bound 2}) imply that $T$ is a bounded linear map
+$$T: L^2(\RR \to \RR^2) \to L^2L^\infty \cap L^\infty L^6.$$
+Therefore the Riesz-Thorin lemma implies that $T$ is a bounded linear map $L^2(\RR \to \RR^2) \to L^pL^q$, which is what we wanted to show.
+
+\begin{exer}[Extra 2]
+Prove Weyl's law in the plane.
+\end{exer}
+
+We want to show that for every piecewise smooth bounded open set $U \subseteq \RR^2$, the Dirichlet eigenvalues satisfy
+$$\lambda_k(U) \sim \frac{4\pi k}{|U|}.$$
+In class, we proved this when $U$ is a rectangle. Let us say that $U$ is Weyl if $U$ satisfies Weyl's law.
+\begin{lemma}
+\label{monotonicity of H1}
+If $V \subseteq U$ are open sets then $H^1_0(V) \subseteq H^1_0(U)$.
+\end{lemma}
+\begin{proof}
+If $u \in H^1_0(V)$ then there are $u_k \in C^\infty_c(V) \subseteq C^\infty_c(U)$ with $u_k \to u$ in $H^1(V)$. But then $(u_k)$ is a Cauchy sequence in $H^1(U)$ since $||u_k - u_\ell||_{H^1(U)} = ||u_k - u_\ell||_{H^1(V)}$; so they must converge to a function $\tilde u \in H^1_0(U)$ with $\tilde u|V = u$.
+Since the $u_k$ are all supported in $V$, $\tilde u|(V \setminus U) = 0$, so $u = \tilde u$ if we extend $u$ by $0$.
+\end{proof}
+
+\begin{lemma}
+\label{enumerate direct sum}
+Let $V, W$ be disjoint Weyl sets. Let $(\lambda_k')$ be an increasing enumeration of the real numbers that are Dirichlet eigenvalues of $V$ or $W$, with multiplicity. Then
+\begin{equation}
+\label{enum dir sum form}
+\lambda_k' = \inf_{\substack{E \subseteq H_0^1(V) \oplus H_0^1(W)\\\dim E = k}} \sup_{u \in E} \frac{||\nabla u||_{L^2(V)}^2 + ||\nabla u||_{L^2(W)}^2}{||u||_{L^2(V \cup W)}^2}.
+\end{equation}
+Similarly, if $(\mu_k')$ is an increasing enumeration of the Neumann eigenvalues of $V$ or $W$, then
+$$\mu_k' = \inf_{\substack{E \subseteq H^1(V) \oplus H^1(W)\\\dim E = k}} \sup_{u \in E} \frac{||\nabla u||_{L^2(V)}^2 + ||\nabla u||_{L^2(W)}^2}{||u||_{L^2(V \cup W)}^2}.$$
+\end{lemma}
+\begin{proof}
+The argument is similar in Dirichlet and Neumann cases, so we restrict to the Dirichlet case.
+Since $u|V$ and $u|W$ (extended by $0$ to $V \cup W$) are orthogonal, the claim (\ref{enum dir sum form}) is equivalent to
+\begin{equation}
+\label{edsf2}
+\lambda_k' = \inf_{\substack{E \subseteq H_0^1(V) \oplus H_0^1(W)\\\dim E = k}} \sup_{u \in E} \frac{||\nabla u||_{L^2(V)}^2 + ||\nabla u||_{L^2(W)}^2}{||u||_{L^2(V)}^2 + ||u||_{L^2(W)}^2}.
+\end{equation}
+
+Let $u_i'$ be the eigenfunction corresponding to $\lambda_i'$, extended by $0$ to all of $V \cup W$.
+Then
+\begin{equation}
+\label{rayleigh of basis vector}
+\frac{||\nabla u_i'||_{L^2(V)}^2 + ||\nabla u_i'||_{L^2(W)}^2}{||u_i'||_{L^2(S_i)}^2 + ||u_i'||_{L^2(S_i)}^2} = \frac{||\nabla u_i'||_{L^2(S_i)}^2}{||u_i'||_{L^2(S_i)}^2} = \lambda_i'
+\end{equation}
+where $S_i = V$ if $u_i'$ was an eigenfunction of $V$ and $S_i = W$ otherwise.
+We will attain the claimed infimum in (\ref{edsf2}) provided that $E$ is spanned by $u_1', \dots, u_k'$. Indeed, in that case, the supremum is attained by $u_k'$ since the $\lambda_i'$ are increasing in $i$.
+
+Conversely, if $E \subseteq H_0^1(V) \oplus H_0^1(W)$ and $\dim E = k$, let $p_k$ be the projection of $H^1_0(V) \oplus H^1_0(W)$ onto the orthocomplement $F$ of $\spn(u_1', \dots, u_{k-1}')$.
+Since $\dim E = k$, $p_k$ does not annihilate $E$, so there is a $w \in E$ such that
+$$\frac{||\nabla w||_{L^2(V)}^2 + ||\nabla w||_{L^2(W)}^2}{||w||_{L^2(V)}^2 + ||w||_{L^2(W)}^2} \geq \inf_{v \in F} \frac{||\nabla v||_{L^2(V)}^2 + ||\nabla v||_{L^2(W)}^2}{||v||_{L^2(V)}^2 + ||v||_{L^2(W)}^2}.$$
+Moreover $(u_j')_{j \geq k}$ is an orthonormal basis of $F$, so (\ref{rayleigh of basis vector}) gives
+$$\frac{||\nabla w||_{L^2(V)}^2 + ||\nabla w||_{L^2(W)}^2}{||w||_{L^2(V)}^2 + ||w||_{L^2(W)}^2} \geq \lambda_k'.$$
+Therefore
+$$\lambda_k' \leq \sup_{u \in E} \frac{||\nabla u||_{L^2(V)}^2 + ||\nabla u||_{L^2(W)}^2}{||u||_{L^2(V)}^2 + ||u||_{L^2(W)}^2}$$
+which completes the proof of (\ref{edsf2}).
+\end{proof}
+
+
+\begin{lemma}
+Let $U_1, \dots, U_n$ be disjoint Weyl sets. Suppose that $U = \bigcup_i U_i \cup Z$ where $Z \subseteq \bigcup_i \partial U_i$ is the finite union of piecewise smooth curves.
+Then, if $U$ is open, $U$ is a Weyl set.
+\end{lemma}
+\begin{proof}
+We induct on $n$. This is clear if $n = 1$, so it suffices to check when $n = 2$, say $U = V \cup W \cup Z$ with $V,W$ Weyl and nonempty, $Z \subseteq \partial V \cup \partial W$ the finite union of piecewise smooth curves, and $V \cap W$ empty.
+In that case, $|Z| = 0$ since $\dim U = 2 > 1 = \dim Z$, so $|U| = |V| + |W|$.
+
+By Lemma \ref{monotonicity of H1}, $H^1_0(V), H^1_0(W) \subseteq H^1_0(U)$ so we may view $H^1_0(V) \oplus H^1_0(W)$ as a subspace of $H^1_0(U)$.
+Similarly, $H^1(U) \subseteq H^1(V) \oplus H^1(W)$, so we have a chain of inclusions
+\begin{equation}
+\label{inclusions}
+H^1_0(V) \oplus H^1_0(W) \subseteq H^1_0(U) \subseteq H^1(U) \subseteq H^1(V) \oplus H^1(W).
+\end{equation}
+
+We enumerate the Dirichlet eigenvalues $\lambda_k(V),\lambda_j(W)$ as $\lambda_k'$, as in Lemma \ref{enumerate direct sum}, and similarly for the Neumann eigenvalues $\mu_k'$.
+Since $||u||_{L^2(V \cup W)} = ||u||_{L^2(U)}$, and $\nabla u|V \perp \nabla u|W$, for any of the four spaces $F$ appearing in (\ref{inclusions}) one has
+$$\rho_k = \inf_{\substack{E \subseteq F\\\dim E = k}} \sup_{u \in E} \frac{||\nabla u||_{L^2(U)}^2}{||u||_{L^2}^2},$$
+where $\rho_k = \lambda_k'$ if $F = H^1_0(V) \oplus H^1_0(W)$, $\rho_k = \lambda_k(U)$ if $F = H^1_0(U)$, $\rho_k = \mu_k(U)$ if $F = H^1(U)$, and $\rho_k = \mu_k'$ if $F = H^1(V) \oplus H^1(W)$.
+Reversing the inequalities in (\ref{inclusions}), then, one obtains
+$$\lambda_k' \geq \lambda_k(U) \geq \mu_k(U) \geq \mu_k'.$$
+So it remains to bound $\lambda_k'$ and $\mu_k'$.
+
+If $\Omega$ is a Weyl set, then by definition
+$$\lambda_k(\Omega) \sim \frac{4\pi k}{|\Omega|};$$
+it is equivalent to say that given $\rho > 0$, the number $N_k(\Omega, \rho)$ of Dirichlet eigenvalues under $\rho$ is
+$$N_k(\Omega, \rho) \sim \frac{|\Omega|}{4\pi} \rho.$$
+But then the number $N_k'(\rho)$ of $\lambda_k'$'s under $\rho$ is
+$$N_k'(\rho) = N_k(V, \rho) + N_k(W, \rho) \sim \frac{|V| + |W|}{4\pi} \rho = \frac{|U|}{4\pi}.$$
+A similar bound holds on the number of $\mu_k'$'s under $\rho$; thus for any $\varepsilon > 0$ and large $k$,
+$$\frac{4\pi k}{|U|} - \varepsilon \leq \mu_k(U) \leq \lambda_k(U) \leq \frac{4\pi k}{|U|} + \varepsilon$$
+which was the bound that we needed.
+\end{proof}
+
+\begin{lemma}
+\label{unions are weyl}
+Every open set which is a finite union of open rectangles that are parallel to the coordinate axes is Weyl.
+\end{lemma}
+\begin{proof}
+Let $V$ be as in the lemma; we can decompose almost all of $V$ into a disjoint union of open rectangles: we simply write $V = \bigcup_i V_i$, $V_i$ open rectangles, and then in turn write $V_i = \bigcup_j W_{ij} \cup Z_i$ where $W_{ii} = V_i \setminus \bigcup_j \overline{V_j}$, $W_{ij} = V_i \cap V_j$ for $i \neq j$, and $Z_i = V_i \cap \bigcup_j \partial V_j$.
+Then the $W_{ij}$ are open rectangles and $V = \bigcup_{i \leq j} W_{ij} \cup \bigcup_i Z_i$; the first union is disjoint and the second is null, so the claim follows.
+\end{proof}
+
+\begin{lemma}
+\label{sandwich}
+If $U$ is an open set then there is a finite union $V \subseteq U$ of open rectangles parallel to the coordinate axes such that $|U| - |V|$ is arbitrarily small, and a finite union $W \supseteq U$ of open rectangles parallel to the coordinate axes such that $|W| - |U|$ is arbitrarily small.
+\end{lemma}
+\begin{proof}
+If $|U| - |V| \geq \delta$ for every $V$, and $\delta > 0$ is the optimal such constant, then $U \setminus \overline V$ is nonempty, since $|\partial V| = 0$ (since $V$ was assumed piecewise smooth).
+Then if $x \in U \setminus \overline V$, we can take a small $\ell^\infty$ ball around $x$ and add it to $V$; but then $\delta$ is not an optimal constant, a contradiction.
+The proof for $|W|-|U|$ is similar.
+\end{proof}
+
+If $U$ is an arbitrary open set, and $V \subseteq U \subseteq W$ sandwiches $U$ by Weyl sets, then
+$$\frac{4\pi k}{|V|} \sim \lambda_k(V) \leq \lambda_k(U) \leq \lambda_k(W) \sim \frac{4\pi k}{|W|}.$$
+In particular, if $\varepsilon > 0$ is given and $k$ is large enough,
+$$\frac{4\pi k}{|V|} - \varepsilon < \lambda_k(U) < \frac{4\pi k}{|W|} + \varepsilon.$$
+Using Lemmata \ref{unions are weyl} and \ref{sandwich}, it follows that
+$$\frac{4\pi k}{|U|} - \varepsilon < \lambda_k(U) < \frac{4\pi k}{|U|} + \varepsilon$$
+and hence $U$ is Weyl.
+
+\end{document}

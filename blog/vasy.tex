@@ -1,0 +1,312 @@
+\documentclass[12pt]{article}
+\usepackage[pdftex,pagebackref,letterpaper=true,colorlinks=true,pdfpagemode=none,urlcolor=blue,linkcolor=blue,citecolor=blue,pdfstartview=FitH]{hyperref}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{color}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\newcommand{\EE}{\mathbb E}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\Hess}{\operatorname{Hess}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\Out}{Out}
+
+\DeclareMathOperator{\Diffeo}{Diffeo}
+
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\SO}{\operatorname{SO}}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{5px}
+
+\input{macrosblog}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+In this post I would like to walk through a paper of Zworski, ``Resonances for asymptotically hyperbolic manifolds: Vasy's method revisited", which discusses a proof technique of Vasy for showing that the resolvent of a Laplace-Beltrami operator extends by meromorphic continuation to the entirety of $\mathbf C$.
+
+\begin{definition}
+An \emph{even asymptotically hyperbolic manifold} is a Riemannian manifold $(M, g)$ is the interior of a compact manifold $\overline M$ with nonempty boundary such that there is a neighborhood $U$ of $\partial M$ and a diffeomorphism
+$$y: U \to [0, 1] \times \partial M$$
+such that $\partial M = \{y = 0\}$, $dy_1$ is nonzero on $\partial M$, and there are Riemannian metrics $h(y_1^2)$ on $\partial M$ such that
+$$g = \frac{dy_1^2 + h(y_1^2)}{y_1^2}$$
+on $U$.
+\end{definition}
+
+Suppose $(M, g)$ is a Riemannian manifold.
+We write $|\cdot|$ to mean the norm induced on the tangent and cotangent spaces of $M$ by $g$.
+Moreover, $g$ induces a volume form and hence a measure on $M$.
+We denote by $L^p(g)$ and $H^s(g)$ the spaces one obtains from the measure induced by $g$.
+
+The point of the above definition is that near $\partial M$, the manifold looks like a perturbation of hyperbolic space. Indeed, in the coordinates given by the upper half-space model of hyperbolic space, one has
+$$g = \frac{dy_1^2 + (dy')^2}{y_1^2}$$
+where $y = (y_1, y') \in [0, \infty) \times \RR^n$.
+Moreover, since $dy_1$ is nonzero on $\partial M$, $y$ can be chosen so that $|dy_1| = 1$ on $\partial M$, i.e. $\nabla y_1$ is something like the inner unit normal field of $\overline M$.
+
+\begin{definition}
+Let $(M, g)$ be a Riemannian manifold. The \emph{Laplace-Beltrami operator} $-\Delta_g$ of $(M, g)$ is the pseudodifferential operator on $M$ with symbol $|\xi|^2$.
+\end{definition}
+
+Suppose that the dimension of $\partial M$ is $n$.
+The spectrum of $-\Delta_g$ is contained in $[0, \infty)$, so $-\Delta_g - \zeta(n - \zeta)$ is invertible on $H^2(g)$ if $\text{Re } \zeta > n$, so there exists a resolvent $R(\zeta): L^2(g) \to H^2(g)$.
+Let $\overline C^\infty(M)$ denote the space of smooth functions which extend across $\partial M$ and $\dot C^\infty(M)$ denote the space of smooth functions which extend across $\partial M$ to a function with support in $M$.
+Then by elliptic regularity, $R(\zeta)$ maps $\dot C^\infty(M) \to C^\infty(M)$.
+
+Expanding out $-\Delta_g$ in coordinates, we can compute that if
+$$P(\lambda) = 4(x_1D_{x_1}^2 - (\lambda + i)D_{x_1}) - \Delta_h +i\gamma(x)(2x_1D_{x_1} - \lambda - i(n-1)/2)$$
+where $x = (y_1^2, y')$, $\lambda = i(\zeta - n/2)$, and $\gamma(y) = -\partial_{y_1}(\det h(y))/\det h(y)$, then
+$$y_1^{-\zeta}(-\Delta_g - \zeta(n-\zeta))y_1^\zeta = x_1 P(\lambda).$$
+The motivation for doing this change of coordinates is that we will extend $\overline M$ to a new compact manifold $X = M \cup \{x_1 \leq 0\}$ where $x$ is a coordinate valued in $[-1, 1] \times \partial M$ rather than $[0, 1] \times \partial M$ as $y$ was.
+
+We set $d\mu = \overline h(x) ~dx$ where $\overline h = \det h$.
+Then $\mu$ is a measure on $X$ which defines $L^2(X)$ and $H^s(X)$.
+With respect to $\mu$, $P(\lambda)^* = P(\overline \lambda)$.
+
+Now we introduce the function space $\mathcal Y^s$, the space of restrictions of functions in $H^s(Z)$, where $Z$ is any compact extension of $X$, to the interior of $X$, and $\mathcal X^s$, the space of $u \in \mathcal Y^{s+1}$ such that $P(0)u \in \mathcal Y^s$.
+Note that the dependency on $\lambda$ is only in lower-order terms of $P(\lambda)u$, so $P(0)u \in \mathcal Y^s$ iff $P(\lambda)u \in \mathcal Y^s$.
+
+\begin{theorem}
+If $\text{Im } \lambda > - s - 1/2$ then $P(\lambda)$ is Fredholm $\mathcal X^s \to \mathcal Y^s$.
+\end{theorem}
+
+\begin{theorem}
+If $\text{Im } \lambda > 0$, $\lambda^2 + n^2/4$ is not an eigenvalue of $-\Delta_g$, and $s > -\text{Im } \lambda - 1/2$, then $P(\lambda)$ is invertible $\mathcal X^s \to \mathcal Y^s$.
+\end{theorem}
+
+\section{Preliminaries}
+Let $X$ be a compact manifold with boundary.
+Let $\Psi^m(X)$ be the space of pseudodifferential operators on $X$ and let $\sigma$ be the principal symbol map; that is, $\sigma$ assigns $P \in \Psi^m(X)$ the unique homogeneous smooth function of order $m$ which, modulo operators of order $m - 1$, quantizes to $P$.
+If $P$ is actually a differential operator then $\sigma(P)$ is a polynomial of order $m$.
+
+Appendix B of H\"ormander defines $\overline H^s(\RR^d_+)$ to be the space of restrictions of elements of $H^s(\RR^d)$ to $\RR_+^d$ with the quotient topology, and $\dot H^s(\RR^d_+)$ to be the space of elements of $H^s(\RR^d)$ with support in $\RR_+^d$.
+Since $X$ is locally modelled on $\RR_+^d$, this defines the spaces $\overline H^s(X)$ and $\dot H^s(X)$, which satisfy the duality relation
+$$(\overline H^s(X))^* = \dot H^{-s}(X)$$
+given by the $L^2$ inner product of any top form on $X$.
+
+\begin{definition}
+Let $N$ be a compact manifold and $P \in \Psi^m([0, T] \times N)$, $p = \sigma(P)$.
+We say that $P$ is a \emph{hyperbolic pseudodifferential operator} with respect to time if for every $(t, y, \eta) \in [0, T] \times T^*N$ with $\eta \neq 0$, the equation
+$$p(t, y, \tau, \eta) = 0,$$
+has exactly $m$ distinct solutions $\tau \in T_t^*[0, T]$.
+\end{definition}
+
+Here $T_t^*[0, T]$ denotes the cotangent space of $[0, T]$ at $t$.
+
+Let
+$$P = D_t^2 + P_1(t, x, D_x)D_t + P_0(t, x, D_x)$$
+act on $\RR \times N$ where $N$ is a closed manifold and
+$$P_j \in C^\infty([0, T) \to \Psi^{2-j}(N))$$
+is a strictly hyperbolic on $N$ with respect to $t$. Then for every $f \in A_s = \overline H^s([0, T) \times N)$, there is a unique $u \in B_s = \overline H^{s+1}([0, T) \times N)$ with $Pu = f$; in particular,
+$$||u||_{\overline H^{s+1}([0, T) \times N)} \leq C ||f||_{\overline H^s([0, T) \times N)}.$$
+In particular, as a map $A_s \to B_s$, $P$ is an isomorphism.
+It follows that
+$$||u||_{\overline H^{s+1}((0, T) \times N)} \leq C ||f||_{\overline H^s((0, T) \times N)} + C ||u||_{\overline H^{s+1}((0, \delta) \times N)}$$
+whenever $\delta > 0$; the point is that $u$ may be quite singular at $0$, since it is a boundary point of $[0, T) \times N$.
+
+Now the operator $P(\lambda)$ is of the form $P$ where $t = 1 + x_1$ and $T = 1 - \varepsilon$, at least when $x_1 < 0$ (and if $x_1 > 0$ then we can instead take $t = -\varepsilon-x_1$).
+Indeed, we can factor out an $x_1$ and get
+$$P(\lambda) = x_1(D_{x_1}^2 - P_1(x)D_{x_1} + P_0(x, D_{x'}))$$
+where $P_1 \in \Psi^0$ is smooth and $P_0 \in \Psi^2$ is elliptic away from $x_1 \neq 0$.
+The trouble is at the boundary, $x_1 = 0$.
+
+We shall also need a uniqueness result for $P(\lambda)$: if $u \in \dot C^\infty(X \cap \{x_1 \leq 0\})$ and $P(\lambda)u = 0$ then $u = 0$.
+
+The proofs of the above results can mainly be found in H\"ormander's book, but the uniqueness result is in Zworski; I will omit the proof.
+
+\section{Propagation of singularities}
+We first review propagation of singularities, a famous theorem of H\"ormander.
+As usual let $X$ be a smooth compact manifold with boundary.
+
+If $p \in S^m(T^*X)$ is a symbol we let $H_p$ be the Hamiltonian vector field associated to $p$.
+I think the intuition is that if $P$ is the quantization of $p$, we are supposed to think of $\partial_t - P$ as a sort of Schr\"odinger operator, which acts on $L^2(X)$ in a way that is the ``quantum version" of how $H_p$ acts on $T^*X$.
+A particle with position $x$ and momentum $\xi$ which moves tangent to $H_p$ would, in a quantum world, start as a function microlocalized to $(x, \xi)$ in $L^2(X)$ and then evolve according to $\partial_t - P$.
+
+\begin{definition}
+Let $P \in \Psi^m(X)$, $p = \sigma(P)$.
+Suppose that $p(x, \xi) = 0$, and $H_p$ and $\xi \partial_\xi$ are linearly dependent at $(x, \xi)$.
+Then we say that $(x, \xi) \in T^*X$ is \emph{radial} for $P$.
+\end{definition}
+
+The intuition is that $\xi \partial_\xi$ is the radial vector field for each cotangent space of $X$, so the momentum should ``escape to infinity" if the particle in question is travelling on a (scalar multiple of) $\xi \partial_\xi$.
+
+\begin{definition}
+Let $P \in \Psi^m(X)$, $U, V, W \subseteq T^*X$ open sets.
+We say that $U$ is \emph{forward controlled} by $V$ in $W$ if for every $(x, \xi) \in U$ there is $T > 0$ such that for every $t$, $e^{-tH_p}(x, \xi) \in W$, and $e^{-TH_p}(x, \xi) \in V$.
+\end{definition}
+
+In other words, if $U$ is forward controlled by $V$ in $W$, then for every particle $(x, \xi) \in U$, we can travel backwards in time along the classical trajectory of $(x, \xi)$ without leaving $W$ and eventually find ourselves in $V$.
+
+Let $A \in \Psi^m(X)$ be a pseudodifferential operator.
+Recall that its wavefront set $WF(A) \subseteq T^*X$ is the largest conic set outside of which $A$ is the quantization of a Schwartz symbol.
+We think of $A$ as being ``supported in $WF(A)$" modulo a harmless error term.
+We let $Ell(A) \subseteq T^*X$ be the conic set of points at which $A$ is elliptic, i.e. if $(x, \xi) \in Ell(A)$ then for every $c > 0$ large enough, then $\sigma(A)(x, c\xi) \sim c^m$.
+
+\begin{theorem}[H\"ormander's propagation of singularities]
+Let $P \in \Psi^m(X)$ and let $U \subseteq T^*X$ be a conic open set of nonradial points for $P$.
+Suppose that $A,B,B_1 \in \Psi^0(X)$, $WF(1 - B_1) \cap U$ is empty, and $WF(A) \cup WF(B) \subseteq U$.
+If $WF(A)$ is forward controlled by $Ell(B)$ in $U$ then for every $(N, s) \in \RR^2$ there is $C > 0$ such that
+$$||Au||_{H^{s+m-1}} \leq C||B_1Pu||_{H^s} + C||Bu||_{H^{s+m-1}} + C||u||_{H^{-N}}.$$
+\end{theorem}
+To get the intuition for propagation of singularities, we can assume $B_1$ is the identity and $U = T^*X$ is all of phase space.
+We can more or less ignore the term $||u||_{H^{-N}}$ since pseudodifferential calculus always picks up error terms like that, so more or less the propagation of singularities says
+$$||Au||_{H^{s+m-1}} \leq C||Pu||_{H^s} + C||Bu||_{H^{s+m-1}}.$$
+Then $A, B$ are like cutoffs to regions $WF(A),WF(B)$ of phase space, which act on the wavefunction $u$ by microlocalizing it to those regions.
+Forward control means that a classical particle $(x, \xi) \in WF(A)$ was previously in $Ell(B)$.
+The quantities $s + m - 1$ suggest that we gain $m - 1$ derivatives when we solve $Pu = f$, which seems to be about the best gain you can get in general; I'm not too sure why this is but the point is that $P$ is definitely not elliptic in general, and you need something like elliptic regularity to gain $m$ derivatives.
+Meanwhile, $B$ can be viewed as being elliptic near its wavefront set since we have forward control.
+Essentially what's going on here is that inverting $P$ cannot create new singularities, at least at these nonradial points.
+I don't have a great intuition for why this is true but maybe I should review the proof in H\"ormander when this is all over.
+
+Okay so that's classical propagation of singularities. Now we need a radial version.
+
+Let $X$ be as in the previous sections, so we have coordinates $x$ with $Y = \partial M = \{x_1 = 0\}$.
+Near $\partial M$, if $q(x, \xi') = |\xi'|^2_{h(x)}$ is the symbol of the Laplace-Beltrami operator on $(\partial M, h(x))$, let
+$$p(x, \xi) = x_1\xi_1^2 + q(x, \xi').$$
+Assume that $p = \sigma(P)$ where $P$ is a differential operator of order $2$.
+We write $q(x_1)(x', \xi')$ for $q(x_1, x', \xi')$. Then
+$$H_p = \xi_1(2x_1 \partial_{x_1} - \xi_1 \partial_{\xi_1}) + \partial_{x_1} q(x, \xi') \partial_{\xi_1} + H_{q(x_1)}.$$
+Therefore the set of radial points of $P$ is exactly the conormal bundle $N^*Y = \{(0, x', \xi_1, 0): x' \in Y, \xi_1 \in \RR\}$,
+since
+$$H_p|N^*Y = -\xi_1(\xi\partial_\xi)$$
+(since $\xi = \xi_1$ there).
+
+Now $N^*Y = p^{-1}(0) \cap \psi^{-1}(Y)$ where $\psi: T^*X \to X$ is the natural projection, since $p(x, \xi) = 0$ iff $\xi' = 0$ and $x_1 = 0$ or $\xi_1 = 0$.
+Let $\Sigma_+$ be the source of the flow of $H_p$ in $p^{-1}(0)$ and $\Sigma_-$ the sink.
+Let $\Gamma_\pm = \Sigma_\pm \cap \psi^{-1}(Y)$.
+
+\begin{theorem}[radial propagation of singularities]
+Write $P = P_0 + iQ$ where $P_0,Q$ are real self-adjoint in $L^2(dx_1 \otimes dh)$.
+Let
+$$s_\pm = \sup_{(x', \xi_1) \in \Gamma_\pm} |\xi_1|^{-1} \sigma(Q)(0, x', \xi_1, 0) - \frac{1}{2}.$$
+If $s > s_+$ then for every $B_1 \in \Psi^0(X)$ with $WF(1 - B_1) \cap \Gamma_+$ empty, then there exists $A \in \Psi^0(X)$ with $\Gamma_\pm \subseteq Ell(A)$ such that:
+\begin{enumerate}
+\item For every $u \in C^\infty_c(X)$,
+$$||Au||_{H^{s+1}} \leq C||B_1Pu||_{H^s} + C||u||_{H^{-N}}.$$
+\item There is $B \in \Psi^0(A)$ such that $WF(B) \cap \Gamma_-$ is empty and for every $u \in C^\infty_c(X)$,
+$$||Au||_{H^{-s}} \leq C||B_1Pu||_{H^{-s-1}} + C||Bu||_{H^{-s}} + C||u||_{H^{-N}}.$$
+\end{enumerate}
+\end{theorem}
+
+The idea behind the proof for $s_+$ is to construct $F_s \in \Psi^{s+1/2}(X)$ if $s > s_+$ then
+$$||F_su||_{H^{1/2}}^2 \leq C||B_1Pu||_{H^s} ||F_su||_{H^{1/2}} + C||B_1u||_{H^{s+1/2}}^2 + C||u||_{H^{-N}}^2.$$
+In fact we can take
+$$F_s(x, D) = \psi_1(x_1) \psi_1(-\Delta_h/D_{x_1}^2) \psi_2(D_{x_1})D_{x_1}^{s+1/2}$$
+where $\psi_1$ is a cutoff to a small neighborhood of $0$, $\psi_2$ is a cutoff to $\{t: t \geq 2\}$, and $\psi_1(-\Delta_h/D_{x_1}^2)$ is the quantization of $\psi_1(-\xi_1^{-2}q(x, \xi))$,
+which makes sense since $\psi_2(D_{x_1})$ localizes to $\xi_1$ large and the singularity $\xi_1^{-2}$ is only at the frequency $\xi_1 = 0$.
+This operator is elliptic away from $\{\xi_1 = 0\}$, at least assuming $x_1$ is small enough.
+Thus there is a cutoff $A$ such that $WF(A)$ is contained in $Ell(F_s)$.
+
+
+
+
+
+
+
+
+\end{document}

@@ -1,0 +1,377 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Fluid dynamics, HW 6} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+I discussed these problems with Tai Gobetti Borges. Also I've been sick so I didn't do them until the last minute, and there's lots of sloppiness as a result.
+
+\begin{exer}
+Prove Lemma 2 of Chapter 7. That is, let $v_0 \in \dot H^s(\RR^d)$ and $h \in L^2_T\dot H^{s-1}$.
+Let $v \in C_T\Sch'$ be the solution of the forced heat equation
+$$\partial_t v = \nu \Delta v + h$$
+with initial data $v(0) = v_0$.
+Show that
+\begin{equation}
+\label{v in spaces}
+v \in C_t\dot H^s \cap \bigcap_{p \in [2, \infty]} L^p_T \dot H^{s+2/p}
+\end{equation}
+and moreover, if
+$$\langle \alpha, \beta\rangle_s = \int_{\RR^d} \hat \alpha(\xi) \overline{\hat \beta(\xi)} |\xi|^{2s} ~d\xi,$$
+then
+\begin{equation}
+\label{energy balance}
+||v(t)||_{\dot H^s}^2 + 2\nu \int_0^t ||\nabla v(t')||_{\dot H^s}^2 ~dt' = ||v_0||_{\dot H^s}^2 + 2\int_0^t \langle h(t'), v(t')\rangle_s ~dt'.
+\end{equation}
+Furthermore,
+\begin{equation}
+\label{L^pH^s bound}
+||v||_{L^p_T \dot H^{s + 2/p}} \leq \nu^{-1/p}(||v_0||_{\dot H^s} + \nu^{-1/2}||h||_{L^2_T \dot H^{s-1}})
+\end{equation}
+and
+\begin{equation}
+\label{timespace bound}
+\left(\int_{\RR^d} ||\hat v(\xi)||^2_{L^\infty} |\xi|^{2s} ~d\xi\right)^{1/2} \leq ||v_0||_{\dot H^s} + (2\nu)^{-1/2} ||h||_{L^2_T \dot H^{s-1}}.
+\end{equation}
+\end{exer}
+
+Taking the Fourier transform of Duhamel's formula, we get
+\begin{equation}
+\label{Fourier Duhamel}
+\hat v(\xi, t) = e^{-\nu t|\xi|^2} \hat v_0(\xi) + \int_0^t e^{-\nu(t - t')|\xi|^2} \hat h(\xi, t') ~dt'.
+\end{equation}
+Computing the $\dot H^{s+2/p}$ norm of (\ref{Fourier Duhamel}), we get
+$$||\hat v(t)||_{\dot H^{s+2/p}}^2 \leq \int_{\RR^d} e^{-2\nu t|\xi|^2} |\hat v_0(\xi)|^2 |\xi|^{2s+4/p} ~d\xi + \iint_{\RR^d \times [0, t]} e^{-2\nu(t - t')|\xi|^2} |\hat h(\xi, t')|^2 |\xi|^{2s+4/p} ~dt' ~d\xi.$$
+
+We first prove the $L^p_T \dot H^{s + 2/p}$ bound (\ref{L^pH^s bound}).
+It suffices to prove it in the cases $v_0 = 0$ and $h = 0$.
+First suppose $h = 0$. Then
+\begin{align*}
+||v||_{L^\infty_T \dot H^s}^2 &= \sup_{t \leq T} ||v(t)||_{\dot H^s}^2 = \sup_{t \leq T} \int_{\RR^d} e^{-2\nu t|\xi|^2} |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi\\
+&= \int_{\RR^d} |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi \leq ||v_0||_{\dot H^s}^2.
+\end{align*}
+On the other hand, if $v_0 = 0$, then by the Cauchy-Schwarz inequality
+\begin{align*}
+||v||_{L^\infty_T \dot H^s}^2 &= \sup_{t \leq T} ||v(t)||_{\dot H^s}^2\\
+&= \sup_{t \leq T} \iint_{\RR^d \times [0, t]} e^{-2\nu(t - t')|\xi|^2} |\xi|^2 ~dt' ~d\xi \cdot \sup_{t \leq T} \iint_{\RR^d \times [0, t]} |\hat h(\xi, t')|^2 |\xi|^{2(s-1)} ~dt' ~d\xi\\
+&\leq \frac{1}{2\nu} \int_{\RR^d} \int_0^T |\hat h(\xi, t')|^2 ~dt' ~|\xi|^{2(s-1)} ~d\xi\\
+&= \frac{||h||_{L^2_T\dot H^{s-1}}}{2\nu}.
+\end{align*}
+That is,
+\begin{equation}
+\label{LpHs right}
+||v||_{L^\infty_T \dot H^s} \leq ||v_0||_{\dot H^s} + (2\nu)^{-1/2} ||h||_{L^2_T \dot H^{s-1}}.
+\end{equation}
+Furthemore, by Tonelli's theorem, $h = 0$ implies
+\begin{align*}
+||v||_{L^2_T \dot H^{s + 1}}^2 &= \int_0^T ||v(t)||_{\dot H^{s + 1}}^2 ~dt = \iint_{[0, T] \times \RR^d} e^{-2\nu t|\xi|^2} |\hat v_0(\xi)|^2 |\xi|^{2s + 2} ~d\xi ~dt\\
+&= \int_{\RR^d} |\hat v_0(\xi)|^2 |\xi|^{2s} \int_0^T e^{-2\nu t|\xi|^2} |\xi|^2 ~dt ~d\xi \leq \frac{1}{\nu} \int_{\RR^d} |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi.
+\end{align*}
+Similarly, if $v_0 = 0$,
+\begin{align*}
+||v||_{L^2_T \dot H^{s + 1}}^2 &= \int_0^T \int_{\RR^d} \left|\int_0^t e^{-\nu(t - t')|\xi|^2} \hat h(\xi, t') ~dt'\right|^2 |\xi|^{2(s+1)} ~d\xi ~dt\\
+&\leq \int_0^T e^{-2\nu t|\xi|^2} |\xi|^2 \int_{\RR^d} \int_0^t |\hat h(\xi, t')|^2 |\xi|^{2(s-1)} ~dt' \int_0^t e^{2\nu t' |\xi|^2} |\xi|^2 ~dt' ~d\xi ~dt\\
+&\leq \frac{1}{2T\nu} \int_0^T \int_{\RR^d} \int_0^t |\hat h(\xi, t')|^2 |\xi|^{2(s-1)} ~dt'~d\xi~dt\\
+&= \frac{1}{2T\nu} \int_0^T \int_{\RR^d} \int_0^T |\hat h(\xi, t')|^2 |\xi|^{2(s-1)} ~dt'~d\xi~dt\\
+&= \frac{||\hat h||_{L^2_T \dot H^{s-1}}}{2\nu}
+\end{align*}
+and hence
+\begin{equation}
+\label{LpHs left}
+||v||_{L^2_T \dot H^{s + 1}} \leq \nu^{-1/2} ||v_0||_{\dot H^s} + (2\nu)^{-1/2} ||h||_{L^2_T \dot H^{s-1}}.
+\end{equation}
+
+We now use interpolation to combine the inequalities (\ref{LpHs right}, \ref{LpHs left}).
+We might as well assume $v$ is Schwartz, in which case we can replace $v$ by $\nabla^s v$.
+So it is no loss of generality to assume $s = 0$. In that case, H\"older's inequality gives
+$$||v(t)||_{\dot H^{2/p}} \leq ||v(t)||_{L^2}^{(p-2)/p} ||v(t)||_{\dot H^1}^{2/p}.$$
+Applying H\"older's inequality again, it follows that
+$$||v||_{L^p_T \dot H^{s + 2/p}} \leq ||v||_{L^2_T H^{s + 1}}^{p/2} ||v||_{L^\infty_T H^s}^{(p-2)/p}$$
+and this implies (\ref{L^pH^s bound}).
+
+To see the continuity in $\dot H^s$ we bound
+\begin{align*}
+||v(t) - v(t')||_{\dot H^s}^2 &= \int_{\RR^d} \left|e^{-\nu t|\xi|^2} - e^{-\nu t'|\xi|^2}\right|^2 |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi\\
+&\leq \sup_{r > 0} \left|e^{-\nu tr^2} - e^{-\nu t'r^2}\right|^2 ||v_0||_{\dot H^s}
+\end{align*}
+which vanishes as $t' \to t$. This completes the proof of (\ref{v in spaces}).
+
+Now we prove the energy balance equation (\ref{energy balance}).
+By an approximation argument, we might as well assume that $v,h$ are Schwartz.
+Since the fractional derivative $\nabla^s$ commutes with the heat operator $\partial_t - \nu \Delta$, $v$ solves the heat equation iff
+$$\partial_t \nabla^s v = \nu \Delta \nabla^s v + \nabla^s h$$
+(which makes sense by Schwartzness). Thus we can replace $||v(t)||_{\dot H^s}$ with $||\nabla^s v(t)||_{L^2}$, and henceforth assume that $s = 2$.
+That is, we must show
+\begin{equation}
+\label{L^2 energy balance}
+||v(t)||_{L^2}^2 + 2\nu\int_0^t ||\nabla v(t')||_{L^2}^2 ~dt' = ||v_0||_{L^2}^2 + 2\int_0^t \langle h(t'), v(t')\rangle ~dt'
+\end{equation}
+(here and in the sequel, inner products are taken in $L^2$).
+So define the energy
+$$E(t) = ||v(t)||_{L^2}^2,$$
+thus
+\begin{align*}
+E'(t) &= 2\int_{\RR^d} v(t, x) \partial_t v(t, x) ~dx = 2\int_{\RR^d} v(t, x)(\nu \Delta v(t, x) + h(t, x)) ~dx\\
+&= 2\langle h(t), v(t)\rangle -2\nu ||\nabla v(t)||_{L^2}^2.
+\end{align*}
+We may now apply the fundamental theorem of calculus to conclude (\ref{L^2 energy balance}) and hence (\ref{energy balance}).
+
+Let us finally prove (\ref{timespace bound}).
+Again we can reduce to the cases $h =0$ and $\hat v_0 = 0$.
+If $h = 0$, then we explicitly compute
+\begin{align*}
+\int_{\RR^d} ||\hat v(\xi)||_{L^\infty}^2 |\xi|^{2s} ~d\xi &= \int_{\RR^d} \sup_t e^{-2\nu t|\xi|^2} |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi\\
+&= \int_{\RR^d} |\hat v_0(\xi)|^2 |\xi|^{2s} ~d\xi= ||v_0||_{\dot H^s}^2.
+\end{align*}
+On the other hand, if $v_0 = 0$, then as usual we may assume that $h$ is Schwartz, and replace $h$ with $\nabla^s h$, so that it suffices to show
+\begin{equation}
+\label{reduced timespace bound}
+\int_{\RR^d} ||\hat v(\xi)||_{L^\infty}^2 |\xi|^2 ~d\xi \leq \frac{||h||_{L^2_TL^2}^2}{2\nu}.
+\end{equation}
+To see this, we bound
+\begin{align*}
+\int_{\RR^d} ||\hat v(\xi)||_{L^\infty}^2 |\xi|^2 ~d\xi &= \int_{\RR^d} \sup_{t \in [0, T]} |\xi \hat v(\xi, t)|^2 ~d\xi\\
+&= \int_{\RR^d} \sup_{t \in [0, T]} \left|\int_0^t e^{\nu(t' - t)|\xi|^2}\xi \hat h(\xi, t') ~dt'\right|^2 ~d\xi\\
+&\leq \int_{\RR^d} \sup_{t \in [0, T]} \int_0^t e^{\nu(t' - t)|\xi|^2} |\xi|^2 ~dt' \int_0^t |\hat h(\xi, t')|^2 ~dt' ~d\xi
+\end{align*}
+using the Cauchy-Schwarz inequality. By the fundamental theorem,
+$$\int_0^t e^{\nu(t' - t)|\xi|^2}|\xi|^2 ~dt' = \frac{1 - e^{-2\nu t|\xi|^2}}{2\nu} \leq \frac{1}{2\nu}.$$
+Therefore
+\begin{align*}
+\int_{\RR^d} ||\hat v(\xi)||_{L^\infty}^2 |\xi|^2 ~d\xi &\leq \frac{1}{2\nu}\int_{\RR^d} \sup_{t \in [0, T]} \int_0^t |\hat h(\xi, t')|^2 ~dt' ~d\xi\\
+&= \frac{1}{2\nu} \int_{\RR^d} \int_0^T |\hat h(\xi, t)|^2 ~dt~d\xi\\
+&= \frac{1}{2\nu} \int_0^T ||h(t)||_{L^2}^2 ~dt = \frac{||h||_{L^2_TL^2}^2}{2\nu}
+\end{align*}
+which is exactly (\ref{reduced timespace bound}). This completes the proof of (\ref{timespace bound}).
+
+
+\begin{exer}
+Consider the Navier-Stokes equations with $\nu > 0$ and $d = 3$. Let $p \in (3, \infty)$ and $u_0 \in L^p_\sigma(\RR^3)$.
+
+Recall Theorem 6 of Chapter 7: if $u_0 \in \Sch'_\sigma$ and for some $T > 0$,
+\begin{equation}
+\label{Kato bound}
+||e^{\nu t\Delta} u_0||_{K_p(T)} \lesssim \nu,
+\end{equation}
+then there is a unique solution of the Navier-Stokes equation in the $K_p(T)$-ball $B(0, 2||e^{\nu t\Delta} u_0||_{K_p(T)})$, where $K_p(T)$ is Kato's space.
+Use this to show that there is $T \in (0, \infty)$ depending only on $||u_0||_{L^p}$, $\nu$, and $p$ such that there is a unique solution $u \in K_p(T)$.
+
+Explain why $u \in C([0, T] \to L^p(\RR^3))$.
+
+Let $T_{u_0} \in (0, \infty]$ denote the blowup time in Kato's space. Show that if $T_{u_0} < \infty$ then we have a lower bound on the blowup rate:
+$$||u_0||_{L^p} \gtrsim_{\nu, p} (T_{u_0} - t)^{(3/p - 1)/2}.$$
+\end{exer}
+
+By Young's inequality and an iterated integration by parts argument,
+$$||e^{t\Delta}||_{L^p \to L^p} \leq \int_{\RR^3} \iint_{T^*\RR^3} e^{i(x-y)\xi - t|\xi|^2} ~dy ~d\xi ~dx \lesssim 1.$$
+It follows that $e^{\nu t\Delta}$ is bounded on $L^p$ uniformly in $\nu,t$, as we will use repeatedly.
+
+We now look for conditions for the bound (\ref{Kato bound}) in Kato's space to hold. It is equivalent to
+$$\sup_{t \in (0, T]} t^{(1 - 3/p)/2} ||e^{\nu t\Delta} u_0||_{L^p} \lesssim \nu^{1.5(p^{-1} - 1)}$$
+using the fact that
+$$\frac{\frac{3}{p} - 1}{2} - 1 = 1.5\left(\frac{1}{p} - 1\right).$$
+Using our bounds on $e^{\nu t\Delta}$, we see that if
+$$T^{(1 - 3/p)/2} ||u_0||_{L^p)} \lesssim \nu^{1.5(p^{-1} - 1)},$$
+then there is a solution of the Navier-Stokes equation $u$ such that
+$$||u||_{K_p(T)} \leq 2||e^{\nu t\Delta} u_0||_{K_p(T)}.$$
+In particular, the blowup time $T_{u_0}$ must satisfy
+\begin{equation}
+\label{blowup time}
+T_{u_0} \gtrsim_{\nu,p} ||u_0||_{L^p}^{-\frac{2p}{p-3}}.
+\end{equation}
+Now suppose $t > 0$; then applying the bound (\ref{blowup time}) with time $0$ replaced by $t$ and $u_0$ replaced by $u(t)$, we conclude that
+$$T_{u_0} - t \geq T_{p,\nu}(u(t)) \gtrsim ||u(t)||_{L^p}^{-\frac{2p}{p - 3}}.$$
+In other words,
+$$||u(t)||_{L^p} \gtrsim (T_{u_0} - t)^{(3/p-1)/2}$$
+because
+$$\frac{3 - p}{2p} = \frac{3/p - 1}{2}.$$
+Thus we have proven both existence of solutions and blowup rate.
+
+To get the continuity, recall that we just have to check continuity at $0$, and write
+$$u(t) = e^{\nu t\Delta}u_0 + B(u, u).$$
+One has $e^{\nu t\Delta}u_0 \to u_0$ pointwise; as $e^{\nu t\Delta}$ is uniformly bounded in $t$ on $L^p$ it follows that $e^{\nu t\Delta} \to 1$ in the strong operator topology of $L^p$, by dominated convergence.
+So let $w = B(u, u)$. Then
+$$||w||_{L^\infty([0, t] \to L^{p/2})} \lesssim \frac{||u||_{K_p(t)}^2}{\nu}.$$
+On the other hand,
+$$||u||_{K_p(t)} \leq 2||e^{\nu t\Delta} u_0||_{K_p(t)}$$
+and so
+\begin{equation}
+\label{bound on w}
+||w||_{L^\infty([0, t] \to L^{p/2})} \lesssim \frac{||e^{\nu t\Delta} u_0||_{K_p(t)}^2}{\nu}
+\end{equation}
+which vanishes as $t \to 0$.
+Therefore $w(0) = 0$, so $u \in C([0, T] \to L^p)$.
+
+Now we show uniqueness.
+Suppose that $u_1, u_2 \in K_p(T)$ have initial data $u_0$ and let $u_{12} = u_1 - u_2$, $w_j = B(u_j, u_j)$.
+Then, as we proved in class, $w \in K_{p/2}(T)$, $w_{12} = w_1 - w_2 = u_{12}$,
+and
+$$\partial_t u_{12} = \nu \Delta u_{12} + f$$
+where the heat forcing satisfies
+$$f = Q(e^{\nu t\Delta} u_0, w_{12}) + Q(w_{12}, e^{\nu t\Delta} u_0) + Q(w_2, w_{12}) + Q(w_{12}, w_1).$$
+As $e^{\nu t\Delta}$ is also bounded $L^p \to L^{p/2}$, we get $e^{\nu t\Delta} u_0, w_1, w_2, w_{12} \in L^{p/2}$.
+
+Let $q$ be the H\"older dual to $p/4$, and set
+$$s = -3\left(\frac{1}{2} - \frac{1}{q}\right).$$
+Then $-2s < 3$ so the Gagliardo-Nirenberg inequality says that $||a||_{L^q} \lesssim ||a||_{\dot H^{-s}}$. Taking adjoints, we conclude $||a||_{\dot H^s} \lesssim ||a||_{L^{p/4}}$. In particular,
+\begin{equation}
+\label{first Q bound}
+||Q(a,b)||_{\dot H^{s-1}} \lesssim ||a \otimes b||_{L^{p/4}} \leq ||a||_{L^{p/2}} ||b||_{L^{p/2}},
+\end{equation}
+so $f \in \dot H^{s-1}$.
+
+For any $\varepsilon > 0$ we can find a Schwartz function $u_0^b$ such that $u_0^a = u_0 - u_0^b$ satisfies $||u_0^a|| < \varepsilon \nu$.
+Then if $g = f - Q(e^{\nu t\Delta} u_0^b, u_{12}) - Q(u_{12}, e^{\nu t\Delta} u_0^b)$, we have
+$$||g(t)||_{\dot H^{s-1}} \lesssim (||u_0^a||_{L^{p/2}} + ||w_1||_{L^{p/2}} + ||w_2||_{L^{p/2}}) ||u_{12}||_{L^{p/2}}.$$
+Moreover, $||u_{12}||_{L^{p/2}} \lesssim ||u_{12}(t)||_{\dot H^s}$, so if $\varepsilon$ is small and $t < t_0 \ll 1$, the bound (\ref{bound on w}) on $w_j$ implies then
+\begin{equation}
+\label{g bound}
+||g(t)||_{\dot H^{s-1}} \leq \frac{\nu}{4} ||u_{12}(t)||_{\dot H^{s+1}}.
+\end{equation}
+
+Since $u_0^b$ is Schwartz, in particular it is in $L^r$ for every $r > 1$.
+If we set $r$ so that
+$$\frac{1}{2} + \frac{1}{r} = \frac{4}{p},$$
+then we can modify (\ref{first Q bound}) to
+$$||Q(a, b)||_{\dot H^{s-1}} ||a||_{L^r} ||b||_{L^2}.$$
+In particular, $u_{12} \in L^2$.
+Combining this with (\ref{g bound}) and using the H\"older inequality $||a||_{L^2} \leq ||a||_{\dot H^{-s}} ||a||_{\dot H^s}$, we conclude
+$$||f||_{\dot H^{s - 1}} \leq \frac{\nu}{4} ||u_{12}(t)||_{\dot H^{s + 1}} + C||u_0^b||_{L^r}||u_{12}(t)||_{\dot H^s}^{1/2} ||u_{12}(t)||_{\dot H^{-s}}^{1/2}$$
+assuming $t < t_0$.
+We don't particularly care about $||u_0^b||_{L^r}$ since it's finite, so we absorb it.
+
+We now bound
+\begin{align*}
+||u_{12}(t)||_{\dot H^s}^2 + 2\nu\int_0^t ||u_{12}(t')||_{\dot H^{s+1}}^2 &\leq 2 \int_0^t ||f(t')||_{\dot H^{s-1}} ||u_{12}(t')||_{\dot H^{s+1}} ~dt'\\
+&\leq 2\int_0^t \frac{\nu}{4} ||u_{12}(t')||_{\dot H^{s+1}} + C||u_{12}||_{\dot H^s}^{1/2} ||u_{12}||_{\dot H^{s+1}}^{3/2} ~dt'.
+\end{align*}
+Therefore
+$$||u_{12}(t)||_{\dot H^s}^2 + \nu \int_0^t ||u_{12}(t')||_{\dot H^{s+1}} ~dt' \lesssim \frac{1}{\nu^3} \int_0^t ||u_{12}(t')||_{\dot H^s}^2 ~dt'$$
+assuming $t < t_0$.
+
+So by Gr\"onwall's lemma, $u_{12}|[0, t_0] = 0$.
+Since $u_{12}$ is given by the heat equation, in particular $u_{12} \in C([0, T] \to L^p)$.
+So we can repeat the argument in class to conclude that the set on which $u_{12} = 0$ is nonempty, open, and closed, so $u_{12} = 0$ everywhere.
+
+
+
+
+\end{document}

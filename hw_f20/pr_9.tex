@@ -1,0 +1,287 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\newcommand{\Var}{\operatorname{Var}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability, HW 9} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+
+\begin{exer}
+Suppose that $I: S \to [0, \infty]$ has compact level sets. Show that the infimum of $I$ over any nonempty closed set is attained.
+\end{exer}
+
+We first check that $I$ is lower semicontinuous. By assumption, $\{I > y\}$ is open for every $y$, so for every $\varepsilon > 0$ and $x \in S$ there is an open $U \subseteq S$, $x_0 \in U$, such that $f > f(x_0) - \varepsilon$ on $U$; indeed, one can take $U = \{I > f(x_0) - \varepsilon\}$.
+
+So if $(x_n)$ is a convergent sequence in $S$ then
+\begin{equation}
+\label{lsc definition}
+\liminf_{n \to \infty} f(x_n) \geq f\left(\lim_{n \to \infty} x_n\right).
+\end{equation}
+Now if $K \subseteq S$ is closed and $I$ does not attain its infimum on $K$, then we can take a sequence $(x_n)$ in $K$ such that $f(x_n)$ tends to the infimum of $f|K$.
+Since $I$ has compact level sets and $(f(x_n))$ is bounded from above, say $f(x_n) \leq y$, $(x_n)$ is contained in a compact subset
+$$\{x \in S: f(x) \leq y\} \cap K$$
+of $K$ and therefore is precompact in $K$.
+So there is a subsequence $(x_{n_k})_k$ which converges in $K$.
+By (\ref{lsc definition}),
+$$\inf_K f = \lim_{k \to \infty} f(x_{n_k}) \geq f\left(\lim_{k \to \infty} x_{n_k}\right) \geq \inf_K f$$
+so the inequalities collapse and $I$ takes its infimum at $\lim_k x_{n_k}$.
+
+\begin{exer}
+Let $(X_n)$ be an $S$-valued random sequence which satisfies the large deviation principle with respect to $I$.
+Let $B$ be a Borel set such that
+$$\lambda = \inf_{\overline B} I = \inf_{B^o} I.$$
+Let $F = \{x \in \overline B: I(x) = \lambda\}$. Show that for every $\varepsilon > 0$, if
+$$B_\varepsilon = \{y \in S: d(y, F) < \varepsilon\},$$
+then
+$$\lim_{n \to \infty} \PP(X_n \in B_\varepsilon \cap B|X_n \in B) = 1.$$
+\end{exer}
+
+Define probability measures $\mu_n$ on $B$ by setting
+$$\mu_n(E) = \frac{\PP(X_n \in E)}{\PP(X_n \in B)}$$
+whenever $E \subseteq B$ is Borel. We claim that $(\mu_n)$ satisfies the large deviation principle with respect to $J = I - \lambda$.
+In fact, if we let $\nu_n$ be the distribution of $X_n$, then $\nu_n$ satisfies the LDP with respect to $I$, and, rescaling $\nu_n$, we see that $(\nu_n/\PP(X_n \in B))_n$ would satisfy the LDP with respect to $J$ if $\nu_n/\PP(X_n \in B)$ was in fact a probability measure; but this can be enforced by restricting $\nu_n/\PP(X_n \in B)$ to $E$ and thus recovering $\mu_n$.
+
+It follows that
+$$B_\varepsilon = \{y \in \overline B: d(y, \{J = 0\}) < \varepsilon\}.$$
+For every $\delta > 0$ and every $y \in \overline B$ there is a $\varepsilon_y > 0$ so small that the ball $B(y, \varepsilon_y)$ satisfies
+$$J|B(y, \varepsilon_y) \geq -\delta,$$
+a consequence of semicontinuity.
+But $\{J \leq 0\}$ is compact, yet $J \geq 0$ everywhere, since if $J(x) < 0$ and $x \in G$, $G$ open $\subseteq B$, then
+$$\liminf_{n \to \infty} \frac{1}{n} \log \mu_n(G) \geq -\inf_G J \geq -J(x) > 0$$
+so that $\log \mu_n(G) > 0$, contradicting that $\mu_n$ is a probability measure; so $\{J = 0\} = \{J \leq 0\}$ is compact.
+Therefore there are finitely many $y_1, \dots, y_N \in \overline B$ for which $(B(y_i, \varepsilon_{y_i}))_i$ already covers $\{J = 0\}$.
+Then as long as $\varepsilon < \min_i \varepsilon_{y_i}/2$,
+$$J|B_\varepsilon \geq -\delta.$$
+In particular, if $n$ is large enough,
+$$\frac{1}{n} \log \mu_n(B_\varepsilon) \geq -2\delta,$$
+or in other words
+$$\mu_n(B_\varepsilon) \geq e^{-2n\delta}.$$
+That implies $X_n \in B_\varepsilon$ with overwhelming probability, assuming $X_n \in B$.
+
+\begin{exer}
+Let $\mathcal A$ denote the set of all open convex subsets of $\RR^d$.
+Suppose that for any $A \in \mathcal A$,
+$$L_A = -\lim_{n \to \infty} \frac{1}{n} \log \mu_n(A)$$
+exists and may be $\infty$. Show that $(\mu_n)$ satisfies the weak LDP with rate function
+$$I(x) = \sup_{x \in A} L_A.$$
+\end{exer}
+
+We first give an alternate formula for $I$.
+Let $x \in \RR^d$. If $x \in A \subseteq B$, then $\log \mu_n(A) \leq \log \mu_n(B)$, so $L_A \geq L_B$.
+Given $B$ we can always take $A$ to be a sufficiently small ball around $x$; so the supremum $I(x)$ is approximated from below by $L_A$ where $A$ ranges over balls of arbitrarily small radius, and since $L_{B(x, \varepsilon)}$ is increasing as $\varepsilon \to 0$, it follows that
+$$I(x) = \lim_{\varepsilon \to 0} L_{B(x, \varepsilon)}.$$
+
+Let us check the conditions of the weak LDP.
+\begin{enumerate}
+\item $I$ is lower semicontinuous and $[0, \infty]$-valued. Indeed, for any $A$, $\log \mu_n(A) \leq 0$ since $\mu_n$ is a probability measure, so $L_A \in [0, \infty]$; then the same is true for $I$.
+To check lower semicontinuity, suppose that $(x_m)$ is a convergent sequence in $S$, say $x_m \to x$.
+If $m$ is so large that $|x_m - x| < \varepsilon_0$, then by restricting to $\varepsilon < \varepsilon_0$, $B(x, \varepsilon) \subseteq B(x_m, 2\varepsilon)$ and hence
+\begin{align*}
+I(x) &= \lim_{\varepsilon \to 0}\left(- \lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x, \varepsilon))\right)\\
+&\geq \lim_{\varepsilon \to 0}\left( -\lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x_m, \varepsilon))\right).
+\end{align*}
+Taking a limit in $m$ of both sides,
+\begin{align*}
+I(x) &\geq \limsup_{m \to \infty}\lim_{\varepsilon \to 0}\left( - \lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x_m, \varepsilon))\right)\\
+&= \limsup_{m \to \infty} I(x_m).
+\end{align*}
+That implies that $I$ is lower semicontinuous.
+\item The LDP lower bound on compact sets. Let $F \subseteq \RR^d$ be compact. Fix $\delta > 0$ and let $I_\delta = I - \delta$, and let $x \in F$.
+Then, by definition of $I$, there is a $\varepsilon_x > 0$ so small that
+$$\lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x, \varepsilon_x)) < -I_\delta(x).$$
+The $A_x = B(x, \varepsilon_x)$ form an open cover of $F$, so there are $x_1, \dots, x_k \in F$ such that $(A_{x_i})_i$ also forms an open cover.
+So
+\begin{align*}
+\limsup_{n \to \infty} \frac{1}{n} \log \mu_n(F)& \leq \limsup_{n \to \infty} \frac{1}{n} \log \sum_i \mu_n(A_{x_i})\\
+&= \max_i \limsup_{n \to \infty} \frac{1}{n} \log \mu_n(A_{x_i})\\
+&\leq -\min_i I_\delta(x_i) \leq -\inf_{x \in F} I_\delta(x).
+\end{align*}
+Taking $\delta \to 0$ we see that
+$$\limsup_{n \to \infty} \frac{1}{n} \log \mu_n(F) \leq -\inf_F I$$
+which was claimed.
+\item The LDP upper bound. Let $G \subseteq \RR^d$ be open. We want to show that
+$$\liminf_{n \to \infty} \frac{1}{n} \log \mu_n(G) \geq \sup_{x \in G}\lim_{\varepsilon \to 0} \lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x, \varepsilon)).$$
+Let $x \in G$. If $\varepsilon$ is small enough then $B(x, \varepsilon) \subseteq G$, so $\log \mu_n(B(x, \varepsilon)) \leq \log \mu_n(G)$.
+Therefore
+$$\liminf_{n \to \infty} \frac{1}{n} \log \mu_n(G) \geq \lim_{n \to \infty} \frac{1}{n} \log \mu_n(B(x, \varepsilon)).$$
+The remains true after we take a limit in $\varepsilon$ and supremum in $x$ of the right-hand side.
+\end{enumerate}
+
+\begin{exer}
+Let $(X_n)$ denote an iid $\RR^d$-valued random sequence. Let $\mu_n$ be the distribution of $\overline X_n$.
+Suppose that if $B$ is a nonempty open set then $\PP(X_1 \in B) > 0$.
+Let $\mathcal A$ denote the set of all open convex subsets of $\RR^d$.
+\begin{enumerate}
+\item Given $A \in \mathcal A$, let $a_n = -\log \mu_n(A)$. Show that $a_n$ is finite.
+\item Show that $(a_n)$ is subadditive.
+\item Show that for any finite subadditive sequence $(a_n)$,
+$$\lim_{n \to \infty} \frac{a_n}{n} = \inf_{n \geq 1} \frac{a_n}{n}.$$
+\item Show that $(\mu_n)$ satisfies a weak LDP.
+\end{enumerate}
+\end{exer}
+
+\begin{enumerate}
+\item The only way that this could fail is if $\mu_n(A) = 0$. Since $A$ is convex, it is closed under convex combinations, hence under means.
+So if $X_1, \dots, X_n \in A$, then $\overline X_n \in A$. In particular, by independence,
+$$\mu_n(A) = \PP(\overline X_n \in A) \geq \PP\left(\bigwedge_{i=1}^n X_i \in A\right) = \prod_{i=1}^n \PP(X_i \in A) = \mu_1(A)^n$$
+and the right-hand side is nonzero by assumption.
+\item First, $\overline X_{n+m}$ is a convex combination of $\overline X_n$ and $\sum_{n<i\leq n + m} X_i/m$. So if $\overline X_n \in A$ and $\sum_{n<i\leq n + m} X_i/m \in A$, then $\overline X_{n+m} \in A$. So
+\begin{align*}\PP(\overline X_{n+m} \in A) &\geq \PP\left(\overline X_n \in A \wedge \frac{1}{m}\sum_{i=n+1}^{n+m} X_i \in A\right) \\
+&= \PP(\overline X_n \in A) \PP\left(\frac{1}{m}\sum_{i=n+1}^{n+m} X_i \in A\right)\\
+&= \PP(\overline X_n \in A) \PP(\overline X_m \in A) \\
+&= \mu_n(A) \mu_m(A).\end{align*}
+Taking logarithms of both sides then gives $-a_{n+m} \geq -a_n - a_m$ which is what we wanted.
+\item Let $L = \inf_n a_n/n$. Certainly
+$$\liminf_{n \to \infty} \frac{a_n}{n} \geq L$$
+so must show a complementary bound on $\limsup_n a_n/n$.
+Let $\varepsilon > 0$; then there is an $n$ such that $a_n/n < L + \varepsilon$, so that
+$$a_n \leq n(L + \varepsilon).$$
+Now suppose that $m = qn + r$ where $q \geq 0$ and $0 \leq r < n$. Then
+$$a_m = a_{n+n+\cdots+n+r} \leq qa_n + a_r \leq qa_n + \max_{r<n} a_r$$
+so
+$$\frac{a_m}{m} \leq \frac{qa_n}{m} + \frac{\max_r a_r}{m}.$$
+One can take $n$ so large that $\max_r a_r/m < \varepsilon$. For $m$ large one has $|qn/m - 1| < \varepsilon$ so
+$$\frac{a_m}{m} < \frac{qa_n}{qn}(1 + \varepsilon) + \varepsilon < L + 3\varepsilon$$
+so
+$$\limsup_{m \to \infty} \frac{a_m}{m} \leq L$$
+which was desired.
+\item We just showed that
+$$L_A = -\lim_{n \to \infty} \frac{1}{n} \log \mu_n(A) = \lim_{n \to \infty} \frac{a_n}{n} = \inf_{n \geq 1} \frac{a_n}{n} = -\sup_{n \geq 1} \frac{1}{n} \log \mu_n(A)$$
+exists. So this immediately follows from the previous exercise with rate fucntion $I = \sup_{x \in A} L_A$.
+\end{enumerate}
+
+
+\end{document}

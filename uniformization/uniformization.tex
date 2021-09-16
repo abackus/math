@@ -1,0 +1,540 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Uniformization]{The uniformization theorem}
+\author{Aidan Backus}
+\date{May 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Olo}{\mathscr O}
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\Smooth}{\mathscr E}
+\newcommand{\Test}{\mathscr D}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{uniformization.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\begin{abstract}
+We discuss a proof of the uniformization theorem.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+In these notes we will prove the uniformization theorem:
+
+\begin{theorem}[uniformization theorem]
+Let $X$ be a simply connected Riemann surface. Then up to isomorphism, either $X = \CC$, $X = \DD$, or $X = \PP^1$.
+\end{theorem}
+
+The significance of the uniformization theorem is that it totally classifies universal covers of Riemann surfaces.
+
+There are a handful of proofs of the uniformization theorem.
+Many involve identifying the complex structure on $X$ with a conformal class of Riemannian metrics on $X$, and then classifying the Riemannian metrics on $X$, either by an exhaustion argument or by running the Ricci flow on $X$.
+However, the proof that we give is the one that appears in Forster \cite[Chapter 3]{gilligan2012lectures}, and is almost purely complex-analytic, though it does appeal to some functional analysis.
+
+It will be convenient to prove the uniformization theorem with a slightly different hypothesis.
+If $X$ is compact, then $X$ has genus $0$, and hence is isomorphic to $\PP^1$, so we might as well assume that $X$ is noncompact.
+
+Let $d'$ be the \emph{holomorphic} differential, so $d'f$ is locally $f(z) ~dz$ for a holomorphic function $f$, and $d'\omega = 0$ for a holomorphic $1$-form $\omega$.
+
+\begin{definition}
+The \dfn{holomorphic de Rham cohomology} $H^\bullet_\Olo(X, \CC)$ of $X$ is the cohomology of the cochain complex defined by the boundary map $d'$.
+\end{definition}
+
+If $X$ is simply connected and $\omega$ is a holomorphic $1$-form, then we may fix $z_0 \in X$ and define $f$ by
+$$f(z) = \int_{z_0}^z \omega$$
+where the choice of path does not matter because every curve in $X$ is contractible.
+Therefore $H^1_\Olo(X, \CC) = 0$.
+Thus it suffices to show:
+
+\begin{proposition}
+\label{main prop}
+Let $X$ be a noncompact Riemann surface with $H^1_\Olo(X, \CC) = 0$. Then up to isomorphism, either $X = \CC$, $X = \DD$, or $X = \PP^1$.
+\end{proposition}
+
+\section{Preliminaries}
+\subsection{Functional analysis}
+By a test function on $Y$ we mean a smooth function with compact support in $Y$.
+We write $\Test$, $\Smooth$, $\Olo$, and $\Mero$ for the presheaves of compactly supported smooth, smooth, holomorphic, and meromorphic functions respectively.
+Let $\Omega$ be the sheaf of holomorphic $1$-forms.
+All of these except $\Test$ are actually sheaves.
+
+On any Riemann surface, the Laplace equation can be written as $d'd''f = 0$; in coordinates it can be written $\Delta f = 0$.
+Solutions of the Laplace equation are called harmonic.
+
+\begin{theorem}
+\label{solving the dirichlet problem}
+Let $Y$ be an open subset of $\CC$.
+Suppose that for every $y \in \partial Y$ there is a disk $D$ which does not meet $\overline Y$, such that $y \in \partial D$.
+Then the Dirichlet problem for the Laplace equation on $Y$ is well-posed.
+\end{theorem}
+
+For the proof, see Forster \cite[Theorem 22.18]{gilligan2012lectures}.
+
+We turn $\Test$ into a presheaf of topological vector spaces by declaring that in $\Test(Y)$, a sequence $f_n$ converges to $f$ if there is a compact $K \subseteq Y$ such that $\supp f \cup \bigcup_n \supp f_n \subseteq K$ and for every linear differential operator $P$ on $K$ with constant coefficients, $Pf_n \to Pf$.
+We let $\Test'$ be the dual sheaf of $\Test$; that is, $\Test'(Y)$ is the topological vector space of bounded linear maps $\Test(Y) \to \CC$.
+We call $\Test'$ the sheaf of distributions.
+
+\begin{definition}
+A \dfn{holomorphic distribution} $f$ is one such that for every $g \in \Test(Y)$, $\langle f, \dbar g\rangle = 0$.
+\end{definition}
+
+\begin{theorem}[Weyl's elliptic regularity lemma]
+Let $f$ be a holomorphic distribution on $Y$. Then there is a holomorphic function, which we also denote $f$, such that for every $g \in \Test(Y)$,
+$$\int_Y fg ~dV = \langle f, g\rangle.$$
+\end{theorem}
+For the proof, see Evans \cite[\S2.2]{evans2010partial}, who proves it for \emph{harmonic} distributions.
+
+We recall that since the Cauchy-Riemann operator $d''$ is elliptic, we can locally invert it in the following sense.
+For every $\omega \in \Smooth^{0,1}(X)$ and $Y \Subset X$, we can find $f \in \Smooth(Y)$ such that $d''f = \omega|Y$.
+For the details, see Forster \cite[Corollary 14.16]{gilligan2012lectures}.
+Alternatively, one can use Hadamard's parametrix construction \cite[Theorem 17.1.1']{hörmander1994analysis}.
+
+We turn $\Smooth$ into a sheaf of Fr\'echet spaces, under the seminorms $u \mapsto ||\partial^\alpha u||_{L^\infty(K)}$ whenever $K$ is a compact set contained in a coordinate chart.
+Then every linear map $\Smooth(Y) \to \CC$ has compact support.
+So the dual presheaf $\Smooth'$ of topological vector spaces is called the sheaf of compactly supported distributions.
+Similarly we define $(\Smooth')^{0,1}$.
+
+We turn $\Olo$ into a sheaf of Fr\'echet spaces, by restricting the topology from $L^\infty_{loc}$.
+
+We will need the following form of the Hanh-Banach theorem:
+\begin{theorem}[Hanh-Banach]
+Let $A \subseteq B \subseteq E$ be locally convex spaces.
+If for every $\varphi \in E'$ such that $\varphi|A = 0$ satisfies $\varphi|B = 0$, then $A$ is dense in $B$.
+\end{theorem}
+One can prove this as a consequence of the locally convex Hanh-Banach separation theorem (since if it fails, then $A$ is convex and closed in $B$, and so can be separated).
+See Lang \cite[Appendix IV, Theorem 1.2]{lang1993real}.
+
+\subsection{Runge exhaustions}
+In this section we construct exhaustions of noncompact Riemann surfaces, which have useful connectivity properties, and are well-behaved with respect to Laplace's equation.
+
+\begin{definition}
+Let $Y \subseteq X$. The \dfn{Runge hull} $h(Y)$ of $Y$ is the union of $Y$ with all precompact components of $X \setminus Y$.
+A \dfn{Runge set} is a set which is equal to its Runge hull.
+\end{definition}
+
+If $Y$ is an open set, then every component of $X \setminus Y$ is closed.
+Thus an open set $Y$ is a Runge set iff every component of $X \setminus Y$ is not compact.
+Therefore the Runge hull of a Runge set $Y$ is $Y$ itself, and $Y \subseteq Z$ implies $h(Y) \subseteq h(Z)$.
+Let $Y$ be a Runge set. Then if $Y$ is closed or compact, so is $h(Y)$.
+This is a straightforward exercise in point-set topology.
+
+%\begin{definition}
+%A \dfn{Runge exhaustion} of $X$ is a sequence of Runge compact sets $K_j$ such that $K_{j-1} \subseteq K_j^o$ and $\bigcup_j K_j = X$.
+%\end{definition}
+
+%\begin{lemma}
+%Every noncompact Riemann surface has a Runge exhaustion.
+%\end{lemma}
+%\begin{proof}
+%Let $X$ be a Riemann surface.
+%Then $X$ is second-countable, so there are compact sets $L_j \subseteq L_{j+1}$ such that $\bigcup_j L_j = X$.
+%Let $K_0 = h(L_0)$.
+%Given $K_0, \dots, K_{m-1}$, let $M$ be a compact set whose interior contains $L_{m-1} \cup K_{m-1}$.
+%Let $K_m$ be the Runge hull of $M$; then $K_m$ is compact by Lemma \ref{Runge of compact is compact}.
+%Then $(K_j)$ is a Runge exhaustion of $X$.
+%\end{proof}
+
+%TODO: Can we omit the above stuff
+
+We now show that any two compact sets with proper containment sandwich a Runge set.
+
+\begin{lemma}
+\label{Runge sandwich}
+Let $K_1, K_2$ be compact subsets of $X$ such that $K_1 \subseteq K_2^o$ and $K_2$ is Runge.
+Then there is a Runge open set $Y \subseteq X$ contained in $K_2$ such that the Dirichlet problem for the Laplace equation on $Y$ is well-posed.
+\end{lemma}
+\begin{proof}
+For every $x \in \partial K_2$ we can find a compact coordinate disc $D$ centered on $x$ which does not meet $K_1$.
+Since $\partial K_2$ is compact, let $D_0, \dots, D_{m-1}$ be a cover of $\partial K_2$ by such discs, and let $Y = K_2 \setminus \bigcup_{j < m} D_j$.
+Then $Y$ is open and contains $K_1$. By construction, $Y$ meets the hypotheses of Theorem \ref{solving the dirichlet problem}, so the Dirichlet problem is well-posed.
+
+Since $K_2$ is Runge, every component of $X \setminus K_2$ is not precompact.
+On the other hand, every $D_j$ meets a component of $X \setminus K_2$, and is connnected.
+Therefore no component of $X \setminus Y$ is precompact; therefore $Y$ is Runge.
+\end{proof}
+
+\begin{lemma}
+\label{connected component of Runge}
+For every Runge open set $Y$, the components of $Y$ are also Runge open sets.
+\end{lemma}
+\begin{proof}
+Let $Y_i$ be the components of $Y$, and let $A_i$ be the components of $A = X \setminus Y$, so that the $A_i$ are closed but not compact.
+The claim is trivial if $A$ is empty, so assume otherwise.
+Since $X$ is connected, for every $i$, $\overline Y_i$ meets $A$.
+
+Now we claim that if $C$ is a component of $X \setminus Y_i$, then $C$ meets $A$.
+The only way that this could fail is if $C \subseteq Y$, and thus there is $j$ such that $C \cap Y_j$ is nonempty.
+But $C$ is closed and $Y_j$ is connected, so $\overline Y_j \subseteq C$, and since $\overline Y_j$ meets $A$, so does $C$.
+
+In particular, $C$ meets some $A_k$, but $C$ is a component and $A$ is connected, so $A_k \subseteq C$.
+Since $A_k$ is closed but not compact, $C$ must not be precompact, so $Y_i$ is Runge.
+\end{proof}
+
+\begin{theorem}
+\label{Runge open covers}
+Every noncompact Riemann surface $X$ has a Runge open cover $(Y_j)$ such that $Y_j \Subset Y_{j+1}$ and for every $j$, $Y_j$ is connected and the Dirichlet problem on $Y_j$ is well-posed.
+\end{theorem}
+\begin{proof}
+Since $X$ is second-countable, it suffices to show that for every compact set $K \subseteq X$ there is a Runge open set $Y \Subset X$ such that $K \subseteq Y$, $Y$ is connected, and the Dirichlet problem on $Y$ is well-posed.
+
+Let $K'$ be a connected compact set containing $K$, and $K''$ a compact set such that $K' \subset (K'')^o$.
+By Lemma \ref{Runge sandwich}, we can find a Runge open set $Y'$ such that $K' \subseteq Y' \subseteq K''$ and the Dirichlet problem on $Y'$ is well-posed.
+Let $Y$ be the component of $Y'$ that contains $K'$; by arbitrarily extending Dirichlet data on $\partial Y'$ to $\partial Y$, we can solve the Laplace equation on $Y$.
+By Lemma \ref{connected component of Runge}, $Y$ is Runge.
+\end{proof}
+
+\section{Analysis on noncompact Riemann surfaces}
+\subsection{Existence of Runge approximations}
+Let us now prove the Runge approximation theorem, which says that we can approximate in $\Olo$ a local holomorphic function by a global holomorphic section, provided that our Riemann surface is not compact.
+
+\begin{lemma}
+\label{compactly supported holomorphic}
+Let $Z$ be an open subset of $X$, $S \in (\Smooth')^{0,1}(X)$, and suppose that for every $g \in \Test(Z)$, $\langle S, d''g\rangle = 0$. Then there is $\sigma \in \Omega(X)$ such that for every $\omega \in \Test^{0,1}(Z)$,
+$$\langle S, \omega\rangle = \iint_Z \sigma \wedge \omega.$$
+\end{lemma}
+\begin{proof}
+By a partition of unity argument, we may restrict to the domain $Y$ of a coordinate $z$.
+For every $f \in \Test(Y)$, let $\tilde f$ be the $(0,1)$-form $f ~d\overline z$, extended to all of $X$.
+Then we can define a holomorphic distribution $\tilde S$ on $Y$ by $\langle \tilde S, f\rangle = \langle S, \tilde f\rangle$.
+In particular, by Weyl's lemma there is $h \in \Olo(Y)$ such that for every $f \in \Test(Y)$,
+$$\langle S, \tilde f\rangle = \iint_Y h(z)f(z) ~dz \wedge d\overline z.$$
+Thus we can set $\sigma = h~dz$.
+\end{proof}
+
+\begin{lemma}
+\label{Runge lemma}
+Let $Y$ be a precompact open Runge subset of a noncompact Riemann surface $X$.
+Then for every open set $Y'$ such that $Y \subseteq Y' \Subset X$, the image of the natural map $\Olo(Y') \to \Olo(Y)$ is dense.
+\end{lemma}
+\begin{proof}
+Let $\beta: \Olo(Y') \to \Olo(Y)$ be the natural map.
+It suffices by the Hanh-Banach theorem to show that for every compactly supported distribution $T$ on $Y$, if $T$ annihilates $\beta(\Olo(Y'))$, then $T$ annihilates $\Olo(Y)$.
+
+Let
+$$V = \{(\omega, f) \in \Smooth^{0,1}(X) \times \Smooth(Y'): d''f = \omega|Y'\}.$$
+Since $Y'$ is precompact, we can invert $d''$ and so for every $\omega$ find $f$ such that $(\omega, f) \in V$.
+Define a compactly supported distribution $S: \Smooth^{0,1}(X) \to \CC$ to make the diagram
+$$\begin{tikzcd}
+V \arrow[r] \arrow[d] & \Smooth(Y') \arrow[r,"\beta"] & \Smooth(Y) \arrow[d,"T"]\\
+\Smooth^{0,1}(X) \arrow[rr,"S"] && \CC
+\end{tikzcd}$$
+commute.
+
+Let $K = \supp T$. Then by Lemma \ref{compactly supported holomorphic}, there is $\sigma \in \Omega(X \setminus K)$ such that
+$$\langle S, \omega\rangle = \iint_{X \setminus K} \sigma \wedge \omega$$
+whenever $\omega \in \Smooth^{0,1}(X)$ and $\supp \omega \Subset X \setminus K$.
+If $L = \supp S$, then $\supp \sigma \subseteq K \cup L$.
+
+Since every component of $X \setminus h(K)$ is not precompact, it meets $X \setminus K \cup L$.
+So $\sigma|X \setminus h(K) = 0$.
+That is, if $\omega \in \Smooth^{0,1}(X)$ and $\supp \omega \Subset X \setminus h(K)$, then $\langle S, \omega\rangle = 0$.
+
+Let $f \in \Olo(Y)$. Since $Y$ is Runge, $h(K) \subseteq Y$, so there is $g \in \Smooth(X)$ wth $f = g$ near $h(K)$ and $\supp g \Subset Y$.
+So
+$$\langle T, f\rangle = \langle T, g|Y\rangle = \langle S, d''g\rangle.$$
+Since $g$ is holomorphic near $h(K)$, $\supp(d''g) \Subset X \setminus h(K)$ so $\langle S, d''g\rangle = 0$.
+Thus $\langle T, f\rangle = 0$.
+\end{proof}
+
+\begin{theorem}[Runge approximation]
+Let $X$ be a noncompact Riemann surface, $Y$ an open set whose complement contains no compact component.
+Then every holomorphic function on $Y$ can be approximated in $\Olo(Y)$ by an element of $\Olo(X)$.
+\end{theorem}
+\begin{proof}
+Let $f \in \Olo(Y)$, $K \subset Y$ is compact, and $\varepsilon > 0$; we must find $F \in \Olo(X)$ with
+\begin{equation}
+\label{Runge bound}
+||f - F||_{L^\infty(K)} \lesssim \varepsilon.
+\end{equation}
+Since we only care about compact subsets of $Y$, we might as well assume $Y$ is precompact.
+Then by Theorem \ref{Runge open covers}, we can find a Runge open cover $(Y_j)$ such that $Y \Subset Y_1$ and $Y_j \Subset Y_{j+1}$.
+By Lemma \ref{Runge lemma} we can find $f_1 \in \Olo(Y_1)$ with
+$$||f_1 - f||_{L^\infty(K)} < \varepsilon.$$
+Now by Lemma \ref{Runge lemma} and induction we can find $f_n$ so that
+$$||f_n - f_{n-1}||_{L^\infty(K)} \leq ||f_n - f_{n-1}||_{L^\infty(\overline Y_{n-2})} < \frac{\varepsilon}{2^n}.$$
+Thus there is $F \in \Olo(X)$ which is the pointwise limit of the $f_n$, which satisfies (\ref{Runge bound}).
+\end{proof}
+
+\subsection{Existence of Weierstrass products}
+We now show a version of the Weierstrass products theorem for noncompact Riemann surfaces.
+This will follow easily once we show that all divisors on a noncompact Riemann surface are linearly equivalent -- equivalently, every line bundle on a Riemann surface is trivial.
+The idea here is that, to show that every line bundle is trivial, we must show $H^1(X, \Olo^*)$ is trivial -- but to do that, we will first need to show $H^1(X, \Olo) = 0$, and then show that we can take the ``logarithm" of a nonnegative cocycle in $Z^1(X, \Olo^*)$.
+
+\begin{theorem}[Mittag-Leffler]
+\label{noncompact has no sheaf cohomology}
+Let $X$ be a noncompact Riemann surface. Then $H^1(X, \Olo) = 0$.
+\end{theorem}
+\begin{proof}
+Since $H^1(X, \Olo) = \Smooth^{1,0}(X)/d''\Smooth(X)$, it suffices to show that for every $\omega \in \Smooth^{0,1}(X)$ there is $f \in \Smooth(X)$ such that $d''f = \omega$.
+To do this, we first note that we can do this in a precompact open set $Y \Subset X$, since $d''$ is locally invertible.
+
+By Theorem \ref{Runge open covers}, we can set $Y_0 = Y$ and choose $Y_j \subseteq Y_{j+1}$ so that $(Y_j)$ is an open cover of $X$ and $Y_j$ is a connected open Runge set whenever $j > 0$.
+First choose $f_0 \in \Smooth(Y_0)$ so that $d''f_0 = \omega|Y_0$.
+Given $f_0, \dots, f_n$, set $g_{n+1} \in \Smooth(Y_{n+1})$ to satisfy $d''g_{n+1} = \omega|Y_{n+1}$.
+Then $g_{n+1}|Y_n - f_n$ is holomorphic, so we can find a Runge approximation $h \in \Olo(Y_{n+1})$ to $g_{n+1} - f_n$, and then set $f_{n+1} = g_{n+1} - h$.
+Then $d''f_{n+1} = \omega|Y_{n+1}$ and $||f_{n+1} - f_n||_{L^\infty(Y_{n-1})} < 2^{-n}$.
+Then the $f_n$ form a Cauchy sequence that must converge to a solution $f$ of $d''f = \omega$.
+\end{proof}
+
+\begin{lemma}
+\label{line bundles are topologically trivial}
+Every divisor on a noncompact Riemann surface has a weak solution.
+\end{lemma}
+\begin{proof}
+Let $D$ be a divisor.
+After applying a partition of unity we may assume that $D$ is a single point $a_0$.
+By Lemma \ref{Runge lemma} we can find compact Runge sets $K_j$ with $a_0 \notin K_0$, $K_j \subseteq K_{j+1}$, and $\bigcup_j K_j = X$.
+
+So we must show that there is a weak solution $\varphi$ of $a_0$ with $\varphi|K_0 = 1$.
+Indeed, since $K_0$ is Runge, the component $U$ containing $a_0$ is not precompact.
+So there is $a_1 \notin K_1$ and a curve from $a_1$ to $a_0$ in $U$.
+Iterating we get $a_k \in X \notin K_k$ and curves $c_k$ from $a_{k+1}$ to $a_k$.
+In particular, $\partial c_k = a_{k+1} - a_k$, and there are weak solutions $\varphi_k$ of the divisors $\partial c_k$ which are $1$ on $K_{j+k}$.
+Then $\varphi = \prod_k \varphi_k$ is a weak solution of $a_0$.
+\end{proof}
+
+\begin{theorem}[Weierstrass product]
+\label{exp sheaf cohomology is trivial}
+Let $X$ be a noncompact Riemann surface. Then $H^1(X, \Olo^*) = 0$.
+\end{theorem}
+\begin{proof}
+Let $D$ be a divisor.
+We can solve $D$ in any simply connected coordinate chart, so we can choose an open cover $(U_i)$ of simply connected sets such that there are $f_i \in \Mero^*(U_i)$ with $(f_i) = D|U_i$.
+Then $f_{ij} = f_i/f_j \in \Olo^*(U_i \cap U_j)$.
+Let $\psi$ be a weak solution of $D$, which exists by Lemma \ref{line bundles are topologically trivial}.
+Then we can write $\psi|U_i = e^{\varphi_i} f_i$ (since $\psi|U_i/f_i$ has no zeroes or poles).
+Then $f_{ij} = e^{\varphi_j - \varphi_i}$, so $\varphi_{ij} = \varphi_i - \varphi_j \in \Olo(U_i \cap U_j)$.
+Also $\varphi_{ij} + \varphi_{jk} = \varphi_{ik}$, so $\Phi = (\varphi_{ij})$ is a cocycle for $\Olo$.
+Since $H^1(X, \Olo) = 0$ by Mittag-Leffler's theorem, it follows that $\Phi$ is a coboundary, so $(f_{ij})$ is also a coboundary.
+Therefore there is a global solution $f$ to $D$.
+\end{proof}
+
+If $H^1(X, \Olo^*) = 0$ and $g$ is a nonconstant meromorphic function on $X$, then any solution $f$ to $-(dg)$ defines a holomorphic $1$-form $f~dg$ with no zeroes.
+
+\section{Holomorphic de Rham cohomology}
+We now study properties of the holomorphic de Rham cohomology $H^\bullet_\Olo(X, \CC)$ of a Riemann surface $X$, obtaining a form of the Riemann mapping theorem as a consequence.
+We will then show the uniformization theorem by taking an exhaustion of $X$ by sets isomorphic to $\DD$.
+
+If $H^1_\Olo(X, \CC) = 0$ then every function in $\Olo^*(X)$ has a logarithm and a square root. The proofs are as usual.
+It follows that every harmonic function on $X$ is the real part of a holomorphic function.
+
+Let us first show the version of the Riemann mapping theorem that was known to Riemann:
+
+\begin{lemma}
+\label{easy Riemann mapping theorem}
+Suppose that $X$ is a noncompact Riemann surface, $Y \Subset X$ is a connected open set, $a \in Y$, and $H^1_\Olo(Y, \CC) = 0$.
+If the Dirichlet problem for the Laplace equation on $Y$ is well-posed, then there is an isomorphism $f: Y \to \DD$ with $f(a) = 0$.
+\end{lemma}
+\begin{proof}
+By the Weierstrass product theorem, there is a holomorphic function $g$ on $X$ which is nonzero on $X \setminus a$, with a single zero at $a$.
+In particular, $\log |g|$ is continuous on $\partial Y$, so there is a continuous function $u: \overline Y \to \RR$ such that $u = \log |g|$ on $\partial Y$ and $\Delta u = 0$ on $Y$.
+Then $u$ is the real part of a holomorphic function $h$ on $Y$.
+Let $f = e^{-h}g$.
+
+Now we show $f(Y) \subseteq \DD$.
+In fact, if $y \in Y \setminus a$,
+$$|f(y)| = e^{-u(y)} |g(y)| = e^{\log|g(y)| - u(y)}.$$
+In particular, $\varphi = |f|$ extends continuously to $\overline Y$, and $\varphi = 1$ on $\partial Y$.
+Thus, by the maximum principle, $|f| < 1$ on $Y$.
+
+If $r < 1$ and $Y_r = \{|f| \leq r\}$, then $Y_r$ is a closed subset of $\overline Y$ and a subset of $Y$, so that $Y_r$ is compact in $Y$.
+Therefore $f: Y \to \DD$ is a proper morphism, so $f$ attains each value the same amount of times, but $f$ attains zero exactly once, so $f$ is bijective, and hence an isomorphism.
+\end{proof}
+
+We write $\DD_r$ for $\{z \in \CC: |z| < r\}$.
+By Cauchy's estimate, we see that if $f: \DD_r \to \DD_s$ then
+$$|f'(0)| \leq \frac{s}{r}.$$
+
+Recall Montel's theorem, which says that a closed and bounded\footnote{A subset of a Fr\'echet space is said to be bounded if it is bounded in every seminorm.} subset of $\Olo(\DD)$ is compact.
+In particular the sets $\{f \in \Olo(\DD): f(\DD) \subseteq \DD_r, f(0) = 0\}$ are compact.
+Now if $G$ is an open subset of $\PP^1$ such that $\PP^1 \setminus G$ contains an open set, then $G$ can be mapped to a subset of $\DD_r$ for some $r$. Thus the sets
+$$\{f \in \Olo(\DD): f(\DD) \subseteq G, f(0) = w\},$$
+$w \in G$, are compact.
+
+Let $\mathscr S$ be the space of embeddings $F: \DD \to \CC$ with $F(0) = 0$ and $F'(0) = 1$.
+
+\begin{lemma}
+As a subset of $\Olo(\DD)$, $\mathscr S$ is compact.
+\end{lemma}
+\begin{proof}
+Let $(f_n)$ be a sequence in $\mathscr S$.
+Let $r_n > 0$ be the maximum radius such that $\DD_{r_n} \subseteq f_n(\DD)$.
+The inverse $\varphi_n$ of $f_n$ maps $\DD_{r_n}$ into $\DD$, so $1 = \varphi_n'(0) \leq r_n^{-1}$; therefore $r_n \leq 1$.
+Moreover, by definition of $r_n$, there is $a_n \in \partial \DD_{r_n}$ with $a_n \notin f_n(\DD)$.
+So let $g_n = f_n/a_n$; then $g_n$ is an embedding, $\DD \subseteq g_n(\DD)$, and $1 \notin g_n(\DD)$.
+
+Let $\psi(z)$ be the square root of $z - 1$, chosen so $\psi(0) = i$.
+Let $U = \psi(\DD)$.
+Then, since $g_n(\DD)$ is isomorphic to $\DD$ and so simply connected, and $1 \notin g_n(\DD)$, $\psi$ extends to $g_n(\DD)$.
+Let $h_n = \psi \circ g_n$; then $h_n = \sqrt{g_n - 1}$.
+
+Suppose that $w, -w \in h_n(\DD)$. Then there are $z_1,z_2 \in \DD$ such that $w = h_n(z_1)$ and $-w = h_n(z_2)$.
+Then $w = w^2$, so $g_n(z_1) = g_n(z_2)$, but $g_n$ is an embedding so $z_1 = z_2$.
+Therefore $w = -w$ so $w = 0$, and hence $g_n(z_1) = 1$, a contradiction.
+So if $w \in h_n(\DD)$ then $-w \notin h_n(\DD)$.
+
+Since $\DD \subseteq g_n(\DD)$, $U \subseteq h_n(\DD)$.
+Thus $-U$ does not meet $h_n(\DD)$.
+Since $-U$ is an open set contained in $\PP^1 \setminus \bigcup_n h_n(\DD)$, it follows that the $(h_n)$ have a convergent subsequence.
+But
+$$f_n = a_n(1 + h_n^2)$$
+and $|a_n| \leq 1$ is uniformly bounded, so $(f_n)$ has a convergent subsequence, say of limit $f$.
+
+Finally we show that $f$ is an embedding. If not, then there is $a \in \CC$ such that $f - a$ has at least two zeroes.
+By local stability of zeroes, there are arbitrarily large $n$ such that $f_n - a$ has at least two zeroes, even though $f_n$ is an embedding.
+So $f$ is an embedding.
+\end{proof}
+
+\begin{lemma}
+\label{maps between discs}
+If $Y$ is a proper open connected subset of $\DD$ or $\CC$ with $H^1_\Olo(Y, \CC) = 0$ then there is $r < 1$ and a holomorphic map $f: Y \to \DD_r$ with $f(0) = 0$ and $f'(0) = 1$.
+\end{lemma}
+\begin{proof}
+Let $a \notin Y$, and let
+$$\varphi(z) = \frac{z - a}{1 - \overline az}.$$
+Then $0 \notin \varphi(Y)$; let $g$ be a square root of $\varphi|Y$.
+Then $g(Y) \subseteq \DD$, so let $b = g(0)$ and
+$$\psi(z) = \frac{z - b}{1 - \overline bz}.$$
+Then $h = \psi \circ g: Y \to \DD$ satisfies $h(0) = 0$ and
+$$h'(0) = \frac{\psi'(b)\varphi'(0)}{2g(0)} = \frac{1 - |a|^2}{2b(1 - |b|^2)} = \frac{1 + |b|^2}{2b}$$
+since $b^2 + a = 0$. So $|h'(0)| > 1$, so set $r = 1/|h'(0)|$ and $f = h/h'(0)$.
+\end{proof}
+
+\section{Proof of Proposition \ref{main prop}}
+By Lemma \ref{Runge open covers}, let $Y_n \Subset Y_{n+1}$ be connected Runge open sets with $\bigcup_n Y_n = X$, such that every the Dirichlet problem for the Laplace equation on $Y_n$ is well-posed.
+
+Let $\omega$ be a holomorphic $1$-form on $Y_n$.
+By the Weierstrass product theorem, there is a holomorphic $1$-form $\omega_0$ on $X$ with no zeroes, so let $f = \omega/\omega_0$.
+Let $(f_n)$ be a Runge approximation of $f$ in $\Olo(X)$.
+Then if $\alpha \in H_1(Y_n, \CC)$,
+$$\lim_{n \to \infty} \int_\alpha f_n \omega_0 = \int_\alpha \omega.$$
+But as $H^1_\Olo(X, \CC) = 0$, the left-hand side is zero, so $\int_\alpha \omega = 0$.
+Therefore $H^1_\Olo(Y_n, \CC) = 0$, so by Lemma \ref{easy Riemann mapping theorem}, $Y_n$ is isomorphic to $\DD$.
+
+Let $a \in Y_0$ and $z$ a coordinate at $a$.
+Then there are $r_n > 0$ and isomorphisms $f_n: Y_n \to \DD_{r_n}$ such that $f_n(z) = 0$ and $df_n|_{z=0} = dz|_{z=0}$.
+In particular, $r_n \leq r_{n+1}$, since the map $h_n = f_{n+1} \circ f_n^{-1}$ satisfies $h(0) = 0$ and $h'(0) = 1$, and thus $1 = h'(0) \leq r_{n+1}/r_n$ by Cauchy's estimate.
+Let $R = \lim_n r_n$; then we claim that $X$ is isomorphic to $\DD_R$.
+
+To accomplish this, we first find a subsequence of the $(f_n)$ which converges in $\Olo(Y_m)$ for each $m$.
+The map $z \mapsto f_0^{-1}(r_0z)$ is an isomorphism $\DD \to Y_0$; set
+$$g_n(z) = \frac{1}{r_0} f_n(f_0^{-1}(r_0z));$$
+then $g_n \in \mathscr S$, so we can find a subsequence $(f_{n_{0,k}})_k$ which converges in $\Olo(Y_0)$.
+Repeating this process with $(f_n)$ replaced by $(f_{n_{j,k}})_k$, we can find a subsequence $(f_{n_{j+1,k}})_k$ which conveges in $\Olo(Y_{j+1})$ by induction, and then diagonalize to get a subsequence which converges in $\Olo(Y_m)$ for each $m$, say to $f \in \Olo(X)$.
+Then $f$ is an embedding with $f(a) = 0$ and $df|_{z = 0} = dz|_{z = 0}$.
+
+Since each of the $f_n$ map into $\DD_R$ by definition, so does $f$.
+So we just need to show that $f$ is surjective.
+If not, then $f(X)$ is a proper open connected subset of $\DD_R$, so by Lemma \ref{maps between discs}, there is $r < R$ and a holomorphic map $g: f(X) \to \DD_r$ with $g(0) = 0$ and $g'(0) = 1$.
+If $n$ is large enough then $r_n > r$, and then $h = g \circ f \circ f_n^{-1}$ sends $\DD_{r_n} \to \DD_r$, $h(0) = 0$, and $h'(0) = 1$; but by Cauchy's estimate this implies $r_n \leq r$.
+This is a contradiction, so $f$ is surjective.
+
+
+%\tableofcontents
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\printbibliography
+
+
+\end{document}

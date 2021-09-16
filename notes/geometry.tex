@@ -1,0 +1,2607 @@
+
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Geometry notes}
+\author{Aidan Backus}
+\date{2021}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\Olo}{\mathscr O}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\Cau}{\mathbf{Cau}}
+\newcommand{\ISF}{\mathbf{ISF}}
+\newcommand{\Simp}{\mathbf{Simp}}
+\newcommand{\Sch}{\mathscr S}
+
+\DeclareMathOperator{\GL}{GL}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\dom}{dom}
+
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Ass}{Ass}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Div}{Div}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Harm}{Harm}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Pic}{Pic}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Res}{Res}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiomx}[theorem]{Axiom}
+\newtheorem{theoremxx}[theorem]{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definitionx}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{examplex}[theorem]{Example}
+\newtheorem{exercisex}{Exercise}[chapter]
+\newtheorem{problem}[theorem]{Problem}
+
+\newenvironment{axiom}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\axiomx}
+  {\popQED\endexamplex}
+
+\newenvironment{definition}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\definitionx}
+  {\popQED\endexamplex}
+
+\newenvironment{example}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\examplex}
+  {\popQED\endexamplex}
+
+  \newenvironment{exercise}
+    {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\exercisex}
+    {\popQED\endexamplex}
+
+  \newenvironment{theoremx}
+        {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\theoremxx}
+        {\popQED\endexamplex}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Riemann surfaces}
+In this chapter we begin discussing algebraic geometry.
+Algebraic geometry is the study of projective varieties over $\CC$; compact Riemann surfaces give the dimension $1$ case.
+
+\begin{definition}
+Let $X$ be a surface. If $\varphi_1,\varphi_2$ are charts on $X$ valued in $\CC$, we say that $\varphi_1,\varphi_2$ are \dfn{compatible charts} if the transition functions $\varphi_2 \circ \varphi_1^{-1}$ is holomorphic.
+\end{definition}
+
+\begin{definition}
+Let $X$ a surface. A \dfn{complex atlas} on $X$ is an open cover of $X$ by compatible charts.
+Two complex atlases $A,B$ are \dfn{compatible atlases} if for every $\varphi \in A, \psi \in B$, $\varphi,\psi$ are compatible charts.
+\end{definition}
+
+\begin{definition}
+A \dfn{complex structure} is an equivalence class of complex atlases with respect to compatibility.
+A \dfn{Riemann surface} is a connected surface with a choice of complex structure.
+\end{definition}
+
+Let us give examples of Riemann surfaces.
+We first note that open subsets of Riemann surfaces are Riemann surfaces, simply by taking restrictions of charts. Trivially $\CC$ is a Riemann surface, where the identity is a global chart.
+So every open set in $\CC$ is a Riemann surface.
+
+\begin{definition}
+The \dfn{Riemann sphere}, or \dfn{projective line}, $\PP^1$, is the Riemann surface defined by taking the topological one-point compactification $\CC \to S^2$, and taking the charts $\varphi: \CC \to \CC$ to be the identity and $\psi: \PP^1 \setminus \{0\}$ to be $\psi(z) = 1/z$.
+\end{definition}
+
+To see that $\PP^1$ is in fact a Riemann surface, we note that $\psi \circ \varphi^{-1}(z) = 1/z$, and similarly for $\varphi^{-1} \circ \psi$.
+
+\begin{definition}
+Let $\omega_1,\omega_2 \in \CC$ be linearly independent over $\RR$. Let $\Gamma$ be the free abelian discrete group generated by $\omega_1,\omega_2$, equipped with its action on $\CC$ by translation.
+Let $T_\Gamma = \CC/\Gamma$ be the space of orbits of $\Gamma$ and $\pi: \CC \to T_\Gamma$ be the projective map.
+We put a complex structure on $T_\Gamma$ as follows.
+Let $U$ be a subset of a fundamental domain of the action of the $\Gamma$, so $\pi|U$ is a bijection. Then declare that the charts are $(\pi|U)^{-1}$.
+We say that $T_\Gamma$ is a \dfn{complex torus} or \dfn{elliptic curve}.
+\end{definition}
+
+\section{Holomorphic maps}
+We introduce the morphisms of the category of Riemann surfaces.
+\begin{definition}
+A map $f: X \to Y$ between Riemann surfaces is a \dfn{holomorphic map} if for every pair of charts $\varphi: U \to X$, $\psi: V \to Y$ there is a commutative diagram
+$$\begin{tikzcd}
+X \arrow[r,"f"] & Y \\
+U \arrow[u,"\varphi"] \arrow[r] & V \arrow[u,"\psi"]
+\end{tikzcd}$$
+in which the bottom arrow commutes.
+\end{definition}
+
+\begin{definition}
+A holomorphic bijection $f: X \to Y$ is a \dfn{biholomorphic map} if $f^{-1}$ exists and is holomorphic. If a biholomorphic map $X \to Y$ exists, we say that $X,Y$ are \dfn{biholomorphic surfaces}.
+If $f$ is biholomorphic onto its image, we say that $f$ is an \dfn{embedding}.
+\end{definition}
+
+The fundamental problem for Riemann surfaces, introduced by Riemann himself, is: if $S$ is a topological surface, how many distinct (i.e. up to biholomorphic isomorphism) complex structures exist on $S$?
+Solving this problem in general requires one to use Teichm\"uller theory and moduli stacks of curves, and is still an active area of research.
+This is different than in the smooth category, where there is exactly one smooth structure one can put on a surface.
+
+\begin{example}
+Liouville's theorem shows that $\CC$ has at least two Riemann surface structures on it: the disc and the plane.
+\end{example}
+
+\begin{definition}
+A \dfn{holomorphic function} on $X$ is a holomorphic map $X \to \CC$.
+The space of holomorphic functions on $X$ is denoted $\Olo(X)$.
+\end{definition}
+
+\begin{theoremx}[removal of singularities]
+If $f \in \Olo(X \setminus A)$, $A$ is finite, and $f$ is bounded near $A$, then $f \in \Olo(X)$.
+\end{theoremx}
+
+\begin{theoremx}[analytic continuation]
+If $f, g: X \to Y$ are holomorphic, $A \subseteq X$ is not discrete, and $f|A = g|A$, then $f = g$.
+\end{theoremx}
+
+These theorems are both local, so by taking charts we can pass to the case that $X$ is an open subset of $\CC$, in which case they are trivial.
+They are especially powerful when $X$ is compact, so that $A$ is either discrete or infinite.
+
+\begin{definition}
+We say that $f \in \Olo(U)$ is a \dfn{meromorphic function} on $X$ if $U \subseteq X$ is open, $X \setminus U$ is discrete, and
+$$\lim_{z \to z_0} |f|(z_0) = \infty$$
+whenever $z_0 \notin U$.
+Points in $X \setminus U$ are called \dfn{poles} of $f$.
+The space of meromorphic functions on $X$ is denoted $\Mero(X)$.
+\end{definition}
+
+We note that $\Olo$ and $\Mero$ both have the structure of a sheaf of rings.
+Since, if $(U, z)$ is a chart, $\Mero(U)$ is exactly the space of meromorphic functions in the usual sense on some open subsets of $\CC$, we may expand $f \in \Mero(X)$ as a Laurent series
+$$f(z) = \sum_{k=-\infty}^\infty a_k z_k$$
+at least in the coordinate chart $(U, z)$.
+
+\begin{theorem}
+Let $f \in \Mero(X)$ and define $\hat f \in \Olo(X \to \PP^1)$ by $\hat f = f$ away from the poles of $f$, and $\hat f(p) = \infty$ for every pole $p$ of $f$.
+Conversely, $\hat f \in \Olo(X \to \PP^1)$ is either constant or restricts to a meromorphic function on $X$.
+\end{theorem}
+\begin{proof}
+By the definition of a one-point compactification, $\hat f$ is continuous. In particular, $\hat f$ is locally bounded in charts, so by removal of continuities $f$ extends to the holomorphic function $\hat f$.
+
+Conversely, let $A = \hat f^{-1}(\infty)$. If $A = X$ then $\hat f$ is constant. Otherwise, $A$ is discrete, and $X \setminus A$ is open, so $f = \hat f|(X \setminus A)$ is a meromorphic function on $X$.
+\end{proof}
+
+We now check that locally, holomorphic maps are monomials.
+
+\begin{theorem}
+Let $f: X \to Y$ be a nonconstant holomorphic map, $a \in X$, $b = f(a)$.
+Then there are coordinates near $a,b$ in which $a = b = 0$ and
+$$f(z) = z^k$$
+where $k \in \NN$, $k \geq 1$, and $k$ does not depend on the choice of coordinates.
+\end{theorem}
+\begin{proof}
+Let $\varphi: U \to \CC$ be a chart with $\varphi(a) = 0$ and $\psi: V \to \CC$ a chart with $\psi(b) = 0$.
+Let $F: \varphi(U) \to \psi(V)$ be the local representation of $f$.
+Then $F$ has a zero at $0$, say of order $k$, thus
+$$F(z) = z^k G(z)$$
+where $G(0) \neq 0$. Taking a biholomorphic isomorphism does not change the order of a zero, so $k$ does not depend on the choice of coordinates.
+Shrinking $U$ if necessary, we can assume that $G$ is nonzero on all of $\varphi(U)$.
+We can then ramify the logarithm to find a $H$ with $G = H^k$.
+In these coordinates we have
+$$F(z) = (zH(z))^k.$$
+Let $\alpha(z) = zH(z)$. Then, after shrinking $U$ as necessary again, $\alpha$ is a holomorphic embedding $\varphi(U) \to \CC$.
+Indeed, $\alpha'(0) = H(0)$ is nonzero, so the claim follows by the inverse function theorem.
+We can then replace $\varphi$ with $\alpha \circ \varphi$, and in those coordinates we have $F(z) = z^k$, as desired.
+\end{proof}
+
+\begin{corollary}[open mapping theorem]
+Every holomorphic map is open.
+\end{corollary}
+\begin{proof}
+This can be checked locally, and locally the map is $z^k$, which is open.
+\end{proof}
+
+\begin{corollary}
+Every injective holomorphic map is an embedding.
+\end{corollary}
+\begin{proof}
+By the open mapping theorem, we just need to check that $f^{-1}$ is holomorphic.
+But $f(z) = z^k$ and $f$ is injective, so $k = 1$, so $f^{-1}(w) = w$ is holomorphic.
+\end{proof}
+
+\begin{corollary}[maximum principle]
+Let $f: X \to \CC$ be a holomorphic function. Then $f$ is constant or $|f|$ attains a maximum.
+\end{corollary}
+\begin{proof}
+If $r = \max |f|$ is attained, say $r = |f(a)|$, then $f(X) \subseteq \overline{B(0, r)}$.
+By the open mapping theorem, $f(X)$ is open if $f$ is not constant, even though $f(X)$ meets $\partial B(0, r)$.
+\end{proof}
+
+\begin{corollary}[Liouville's theorem]
+If $X$ is compact and $f: X \to \CC$ is holomorphic then $f$ is constant.
+\end{corollary}
+\begin{proof}
+The maximum principle and extreme value theorem imply this.
+\end{proof}
+
+\begin{proposition}[GAGA for $\PP^1$]
+If $f \in \Mero(\PP^1)$ then $f$ is a rational map.
+\end{proposition}
+\begin{proof}
+This holds if $f$ is constant; otherwise, the set $A$ of poles of $f$ is discrete and compact, so $A$ is finite, say $A = \{a_1, \dots, a_n\}$.
+After replacing $f$ with $1/f$ if necessary (which does not affect whether $f$ is a rational map) we may assume that $A \subset \CC$.
+Therefore we may let
+$$h_\ell(z) = \sum_{j = -k_\ell}^{-1} c_k (z - a_\ell)^j$$
+be the principal part of $f$ at $a_\ell$.
+Then $f - (h_1 + \dots + h_n) \in \Olo(\PP^1)$ is constant; since the $h_\ell$ are rational maps the claim then holds.
+\end{proof}
+
+This is the essence of the GAGA principle of Serre, which says that a projective variety over $\CC$ is the same thing as a complex compact manifold (that has enough meromorphic functions).
+Thus much of complex analysis is equivalent to algebraic geometry.
+
+\section{Covering spaces of Riemann surfaces}
+Since we assume that Riemann surfaces are connected, and they are locally euclidean, they are always path-connected, and thus we may define their fundamental group, and consider the covering space of a Riemann surface.
+
+\begin{example}
+The map $p_k: \CC^* \to \CC^*$, $p_k(z) = z^k$ is a covering space.
+Indeed, $p_k'$ is never zero, so by the inverse function theorem $p_k$ is a local homeomorphism.
+If $p_k(b) = a$, then there are $U \ni a$, $V \ni b$ such that $p_k$ is a homeomorphism $V \to U$.
+In particular,
+$$p_k^{-1}(U) = \bigcup_{j=0}^{k-1} \omega^j V$$
+where $\omega$ generates the group of $k$th roots of unity.
+If $V$ is taken small enough, then the $\omega^j V$ are disjoint, hence the claim.
+\end{example}
+
+\begin{example}
+For similar reasons, $\exp: \CC \to \CC^*$ is a covering space.
+Indeed, $\exp'$ is never zero, and so for every $a \in \CC^*$ we can find $U \ni a$ such that
+$$\log U = \bigcup_{n \in \ZZ} V + 2\pi ni$$
+with $V$ sufficiently small.
+\end{example}
+
+\begin{example}
+The projection $\CC \to T_\Gamma$, $T_\Gamma$ an elliptic curve, is a covering space.
+\end{example}
+
+The above examples realize $\CC$ as the universal cover of $\CC^*$ and $T_\Gamma$.
+On the other hand, $\PP^1$ is simply connected and so cannot be covered by $\CC$.
+
+The homotopy lifting property tells us when we can take a logarithm of a function. Consider the universal cover
+$$\exp: \CC \to \CC^*.$$
+If $f: X \to \CC^*$ is holomorphic then we want to lift $f$ to a map $\hat f: X \to \CC$ which commutes with the universal cover.
+This is exactly the question of finding a logarithm of $f$.
+
+\begin{lemma}
+Let $X,Y,Z$ be connected manifolds.
+Let $p: Y \to X$ be a local homeomorphism, $f: Z \to X$ continuous, and $g_1, g_2: Z \to Y$ lifts of $f$ along $p$.
+If there is $z_0$ with $g_1(z_0) = g_2(z_0)$ then $g_1 = g_2$.
+\end{lemma}
+\begin{proof}
+Let $T \subseteq Z$ be the equalizer of $g_1,g_2$. Then $T \ni z_0$ is nonempty and closed.
+Let $w \in T$. Then there is a neighborhood $U$ of $g_1(w) = g_2(w)$ which is homeomorphic along $p$ to a neighborhood of $f(w)$.
+Then $g_i = p^{-1}\circ f$ near $w$ so $T$ is open.
+Therefore $T = Z$.
+\end{proof}
+
+\begin{lemma}
+If $p: Y \to X$ is holomorphic and a local homeomorphism and $g: Z \to Y$ is a continuous lift of a holomorphic map $Z \to X$ along $p$, then $g$ is holomorphic.
+\end{lemma}
+\begin{proof}
+Locally, $g$ is $p^{-1} \circ f$, which is holomorphic by the inverse function theorem.
+\end{proof}
+
+In particular, if the logarithm of a function exists, then it is automatically holomorphic.
+
+In general lifts may not exist for local homeomorphisms, but they will for covering spaces.
+This motivates why covering spaces are useful for complex analysis.
+We recall the path-lifting property: paths always lift along covering spaces, and the lifts are in bijection with the possible starting points of the path.
+Similarly, homotopies of paths always lift along covering spaces, determined by the starting points of each of the paths (as long as the starting points of the paths together form a path).
+If we impose that the homotopy lift has a single starting point, then it also has a single endpoint.
+
+We recall that if $p: Y \to X$ is a covering space then the pushforward $p_*: \pi_1(Y) \to \pi_1(X)$ is injective.
+Indeed, if $\gamma$ is a loop in $Y$ annihilated by $p_*$ then there is a homotopy $H$ in $X$ which witnesses this, and $H$ lifts to a homotopy in $Y$ which witnesses that $\gamma$ is nullhomotopic.
+
+\begin{theorem}
+Let $p: Y \to X$ be a covering space, $f: Z \to X$ continuous. Then $f$ lifts to a map $Z \to Y$ iff $f_* \pi_1(Z) \subseteq p_*(\pi_1(Y))$.
+\end{theorem}
+\begin{proof}
+If a lift exists then the claim follows by functoriality.
+Conversely, let $z_0, w \in Z$, and let $\alpha: z_0 \to w$ be a path in $Z$.
+Then there is a lift $\tilde \alpha: y_0 \to y_1$ of $f_*\alpha$ in $Y$.
+Let $\tilde f(w) = y_1$.
+If we have another path $\alpha': z_0 \to w$ then $\alpha' \circ \alpha^{-1}$ is a loop at $z_0$, so $f_*(\alpha' \circ \alpha^{-1}) \in p_*(\pi_1(Y))$ by assumption.
+Thus there is a $\gamma \in \pi_1(Y)$ with $p_*\gamma = f_*(\alpha' \circ \alpha^{-1})$.
+On the other hand, $p_*(\tilde \alpha' \circ \tilde \alpha^{-1}) = p_*(\gamma)$.
+Since $p_*$ is injective this implies $\tilde \alpha \circ \tilde \alpha^{-1} = \gamma$.
+So $\tilde f(w)$ does not depend on the choice of $\alpha$.
+\end{proof}
+
+\begin{corollary}
+Suppose that $Z$ is simply connected, $p: Y \to X$ a covering space, $f: Z \to X$ continuous. Then $f$ lifts to a map $Z \to Y$.
+\end{corollary}
+\begin{proof}
+In the previous theorem, $f_* \pi_1(Z) = 0$.
+\end{proof}
+
+\begin{corollary}
+If $U$ is a simply connected Riemann surface, $f: U \to \CC^*$ holomorphic, then $f$ has a holomorphic logarithm.
+\end{corollary}
+\begin{proof}
+A logarithm of $f$ is a lift of $f$ along the covering space $\exp: \CC \to \CC^*$.
+\end{proof}
+
+We recall that every connected manifold has a universal cover; that it is unique by abstract nonsense; and that it is the unique simply connected covering space.
+
+\begin{definition}
+A \dfn{Galois covering space} is a covering space $p: Y \to X$ such that the deck group of $p$ acts transitively on each fiber of $p$.
+\end{definition}
+
+\begin{example}
+The covering space $p_k: \CC^* \to \CC^*$ is Galois. If $p_k(z_1) = p_k(z_2)$ then there is a root of unity $\omega$ such that $z_2 = \omega z_1$.
+But $\omega$ is a deck transformation since $(\omega z)^k = z^k$.
+\end{example}
+
+\begin{theoremx}[Galois theory for covering spaces]
+Let $X$ be a connected manifold and $p: \tilde X \to X$ its universal cover. Then $p$ is Galois and its deck group is $\pi_1(X)$.
+Moreover, if $q: Y \to X$ is any covering space, then there is a unique covering space $f: \tilde X \to Y$ with $f: \tilde X \to Y$, and $f$ is the universal cover of $Y$.
+In addition, there is a subgroup $G$ of $\pi_1(X)$ such that $Y = \tilde X/G$ with quotient map $f$, and $G$ is a normal subgroup of $\pi_1(X)$ iff $q$ is Galois.
+If $q$ is Galois, then $\pi_1(Y) = \pi(X)/G$.
+\end{theoremx}
+
+We omit the proof since this is not a topology class.
+
+\begin{example}
+The universal cover of $\CC^*$ is $\exp: \CC \to \CC^*$. Its deck group is isomorphic to $\ZZ$ since $\varphi$ commutes with $\exp$ exactly if $\varphi(z) = 2\pi ik$ for some $k \in \ZZ$.
+This gives a proof that $\pi_1(\CC^*) = \ZZ$.
+\end{example}
+
+A motivation for covering spaces is \dfn{uniformization} -- that is, the classification of Riemann surfaces up to homeomorphism.
+Now $\PP^1$ is simply connected, so it is its own universal cover.
+If $T_\Gamma$ is an elliptic curve, then $\Gamma$ acts on $\CC$ by translation and $T_\Gamma = \CC/\Gamma$, so the universal cover of $T_\Gamma$ is $\CC$.
+If $\HH$ denotes the hyperbolic plane and $\DD$ the disc, then $\exp: \HH \to \DD^*$ is the universal cover.
+But $\PP^1$, $\HH$, and $\CC$ are the only possible universal covers of Riemann surfaces, as we will see.
+
+\section{Branched coverings}
+In complex analysis it is convenient to generalize the notion of covering space somewhat.
+
+\begin{definition}
+A \dfn{discrete map} is a holomorphic map with discrete fibers.
+\end{definition}
+
+\begin{definition}
+Let $p: Y \to X$ be an open discrete map. A \dfn{branch point} $y \in Y$ is a point such that for every $V \ni y$ open, $p|V$ is not a homeomorphism.
+If $p$ has no branch points, we say that $p$ is an \dfn{unbranched map}.
+\end{definition}
+
+\begin{lemma}
+An open discrete map is unbranched iff it is a local homeomorphism.
+\end{lemma}
+\begin{proof}
+Just expand out the definitions.
+\end{proof}
+
+\begin{lemma}
+The set of branch points of a nonconstant holomorphic map is discrete.
+\end{lemma}
+\begin{proof}
+One has $f'|B = 0$, so if $B$ clusters then $f' = 0$ identically.
+\end{proof}
+
+\begin{lemma}
+If $X$ is a Riemann surface, $Y$ a connected surface, $p: Y \to X$ a local homeomorphism, then there is a unique complex structure on $Y$ for which $p$ is holomorphic.
+\end{lemma}
+\begin{proof}
+Let $(U, \varphi)$ be a chart on $X$.
+Define charts on $Y$ by $\{(V, \varphi \circ p)$ where $p|V$ is a homeomorphism $V \to U$.
+This clearly defines a complex structure on $Y$.
+Uniqueness follows because we can invert $p$ locally to get a biholomorphic isomorphism.
+\end{proof}
+
+\begin{definition}
+A \dfn{proper map} is a holomorphic map $f$ such that the preimage of every compact set under $f$ is compact.
+\end{definition}
+
+Between compact Riemann surfaces, every holomorphic map is proper.
+
+\begin{lemma}
+Let $f: Y \setminus f^{-1}(A) \to X \setminus A$ be a proper map, $B$ the branch points of $f$, $A = f(B)$.
+Then $f$ is a covering space.
+\end{lemma}
+\begin{proof}
+Let $x \in X \setminus A$.
+By properness, the preimage of $x$ is finite, say $f^{-1}(x) = \{y_1, \dots, y_n\}$.
+Let $V_i \ni x_i$ be such that $f|V_i$ is an embedding and the $V_i$ are disjoint, then $W = \bigcap_i f(V_i)$ is nonempty.
+Then $f^{-1}(W)$ is evenly covered.
+\end{proof}
+
+\begin{definition}
+Let $f: Y \to X$ be a holomorphic map.
+If $f(z) = z^k$ near $y$, then we say that the \dfn{order} of $y$, $v(f, y) = k$.
+\end{definition}
+
+It follows that
+$$\sum_{y \in f^{-1}(x)} v(f, y)$$
+does not depend on $x$ provided that $f$ is proper.
+
+\begin{lemma}
+Let $f$ be a proper map.
+Let $x$ be a branch point of $f$, $f^{-1}(x) = \{y_1, \dots, y_m\}$, with $k_i$ the order of $y_i$.
+Then $\sum_i k_i$ is the number of sheets of $f$ as a covering space (away from its branch points).
+\end{lemma}
+\begin{proof}
+The degree of a covering space is constant, and in a punctured neighborhood of $x$, $f$ has degree $\sum_i k_i$.
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a compact Riemann surface.
+Let $f \in \Mero(X)$; then the number of zeroes of $f$ equals the number of poles of $f$, counted with multiplicity.
+\end{corollary}
+\begin{proof}
+Expanding out the definitions, $f$ defines a proper map $X \to \PP^1$.
+$$\sum_{x \in f^{-1}(0)} v(f, x) = \sum_{x \in f^{-1}(\infty) v(f, x)}$$
+as desired.
+\end{proof}
+
+Let us compute the moduli space of covering spaces of $\DD^*$.
+Recall that $p_k$ denotes the map $p_k(z) = z^k$.
+In what follows we use $\HH$ to mean the left half-plane, which isomorphic to the upper half-plane but makes notation easier.
+
+\begin{theorem}
+Let $X$ be a Riemann surface, $f: X \to \DD^*$ a holomorphic covering space.
+If $f$ has infinitely many sheets then $f$ is isomorphic to the covering space $\exp: \HH \to \DD^*$.
+Otherwise, $f$ is isomorphic to the covering space $p_k: \DD^* \to \DD^*$.
+\end{theorem}
+\begin{proof}
+Since $\exp$ is the universal cover, there is a covering space $\psi: \HH \to X$ which commutes with $\exp, f$.
+By Galois theory, the deck group of $\psi$ is a subgroup $G$ of $\pi_1(\DD^*) = \ZZ$.
+So either $G$ is the trivial group or $G = k\ZZ$ acts on $\HH$ by translation by $2\pi ink$.
+If $G$ is trivial then $\psi$ is an isomorphism.
+Otherwise $X$ is a quotient of $\HH$ by the action of $G$, so $X$ is a cylinder.
+Every cylinder is isomorphic to $\DD^*$, identifying one end of the tube with $0$ and the other end with $\partial \DD$.
+\end{proof}
+
+\begin{theorem}
+Let $X$ be a Riemann surface, $f: X \to \DD$ a proper nonconstant map such that $f$ is unbranched over $\DD^*$.
+Then there is a $k \geq 1$ and an isomorphism $\varphi: X \to \DD$ such that $f = p_k \circ \varphi$.
+\end{theorem}
+\begin{proof}
+Let $X^* = f^{-1}(\DD^*)$.
+Then $f|X^*$ is a covering space of $\DD^*$, with only finitely many sheets since $f$ is proper.
+Thus there is an isomorphism $\varphi^*: X^* \to \DD^*$ of covering spaces between $p_k$ and $f$.
+We claim that $f^{-1}(0)$ is a point, so that $\varphi^*$ extends to an isomorphism of Riemann surfaces $\varphi: X \to D$.
+
+So suppose that $f^{-1}(0) = \{b_1, \dots, b_n\}$, $B$ a disk around $0$, and $f^{-1}(B) = \bigcup_i V_i$ where $b_i \in V_i$ and the $V_i$ are disjoint.
+But $f^{-1}(B)$ is isomorphic to $p_k^{-1}(B)$ which is $D(0, r^{1/k})^*$, which is connected.
+Therefore $n = 1$.
+\end{proof}
+
+\section{Sheaves on Riemann surfaces}
+\begin{definition}
+Let $X$ be a topological space and $C$ a category.
+A \dfn{presheaf} $\mathscr F$ on $X$ valued in $C$ is a map which assigns each open set $U$ of $X$ to some $\mathscr F(U) \in C$ equipped with \dfn{restrictions}
+$$\rho_V^U: \mathscr F(U) \to \mathscr F(V)$$
+whenever $V \subseteq U$ which compose, thus $\rho_W^V \circ \rho_V^U = \rho_W^U$ and $\rho_U^U = 1$.
+We write $f|V = \rho_V^U(f)$ whenever $f \in \mathscr F(U)$.
+\end{definition}
+
+\begin{example}
+The continuous functions $C$, holomorphic functions $\Olo$, and meromorphic functions $\Mero$ form presheaves on any Riemann surface valued in algebras over $\CC$.
+\end{example}
+
+\begin{definition}
+Let $X$ be a topological space and $C$ a category.
+A \dfn{sheaf} $\mathscr F$ on $X$ valued in $C$ is a presheaf such that for every $U \subseteq X$ open and open covers $\mathcal U$ of $U$:
+\begin{enumerate}
+\item If $f,g \in \mathscr F(U)$ such that for every $V \in \mathcal U$, $f|V = g|V$, then $f = g$.
+\item If for every $V \in \mathcal U$ there is $f_V \in \mathscr F(V)$ such that $f_V|V \cap W = f_W|V \cap W$ for all $V, W \in \mathcal U$, then there is $f \in \mathscr F(U)$ such that for every $V$, $f|V = f_V$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+Let $X$ be a topological space.
+Let $x \in X$ and $\mathscr F$ a presheaf on $X$ valued in a category with colimits.
+The \dfn{stalk} $\mathscr F_x$ is the colimit of $\mathscr F(U)$ as $U$ shrinks down to $x$.
+A \dfn{germ} at $x$ is an element of $\mathscr F_x$.
+\end{definition}
+
+Let $\mathscr F$ be a presheaf, valued in a concrete category.
+We will construct a topological space $|\mathscr F|$ which as an underlying set is the disjoint union of the stalks of $\mathscr F$, so we get a fiber bundle structure
+$$p: |\mathscr F| \to X$$
+which sends all the germs at $x$ to $x$.
+
+\begin{theorem}
+There is a topology on the set $|\mathscr F|$ such that $p$ is continuous and a local homeomorphism.
+\end{theorem}
+\begin{proof}
+We define a base of sets
+$$[U, f] = \{[z, f]: z \in U\}$$
+whenever $U \subseteq X$ is open and $f \in \mathscr F(U)$.
+Here $[z, f]$ denotes the image of $f$ in $\mathscr F_x$ when we take the colimit over the diagram of open neighborhoods of $z$, so $[U, f]$ is the set of all germs obtained by restricting $f$.
+Every germ is in the image of some $f$ so the $[U, f]$ form a cover of $|\mathscr F|$.
+
+Now if $\varphi \in [U, f] \cap [V, g]$ and $\varphi$ is a germ at $x$ then $\varphi = f_x = g_x$.
+Therefore there is a $W \subseteq U \cap V$ such that $f|W = g|W$, by definition of colimit.
+Let $h = f|W$; then $[W, h] \subseteq [U, f] \cap [V, g]$.
+Therefore the $[U, f]$ form a topological base.
+
+If $W \subseteq X$ is open then
+$$p^{-1}(W) = \bigcup_{f \in \mathscr F(W)} [W, f]$$
+is open and hence $p$ is continuous. Moreover, if $[U, f]$ is given then
+$$p|[U, f]: [U, f] \to U$$
+is a homeomorphism.
+So $p$ is locally a homeomorphism.
+\end{proof}
+
+\begin{definition}
+The \dfn{\'etal\'e space} of $\mathscr F$ is $|\mathscr F|$.
+\end{definition}
+
+Sheaves are not useful in the smooth category, except in the study of de Rham cohomology.
+This is because if there are too many partitions of unity then the \'etal\'e space will fail to be Hausdorff.
+(I think this has to do with the fact that sheaf cohomology becomes trivial in that case.)
+
+If $f$ is a section of a sheaf and $x$ is a point, the germ of $f$ at $x$ is denoted $f_x$.
+
+\begin{definition}
+A sheaf $\mathscr F$ has the \dfn{identity property} if for every open connected set $Y$ and $f,g \in \mathscr F(Y)$, if there is a $a \in Y$ such that $f_a = g_a$ then $f = g$.
+\end{definition}
+
+\begin{example}
+The sheaf $\Olo$ has the identity property. Indeed if $f_x = g_x$ then there is an open neighborhood $W$ of $x$ such that $f|W = g|W$, so $f = g$.
+\end{example}
+
+Thus sheaves are, in fact, useful in the study of complex analysis, even though they're not in real analysis.
+
+\begin{proposition}
+If $\mathscr F$ is a sheaf with the identity property on a manifold, then $|\mathscr F|$ is Hausdorff.
+\end{proposition}
+\begin{proof}
+Suppose that $f_x \neq g_y$.
+If $x \neq y$ then there are open sets $U \ni x, V \ni y$ which are disjoint, so $[U, f]$ and $[V, g]$ separate $f_x,g_y$.
+Otherwise, there are $U, V \ni x$ such that $f \in \mathscr F(U)$, $g \in \mathscr F(V)$.
+So there is a $W \subseteq U \cap V$ which is connected and open, since the underlying space is a manifold.
+We claim that $[W,f],[W,g]$ separate $f,g$.
+If not, then there is a $z \in W$ such that $f_z = g_z$, so by the identity theorem $f = g$ and hence $f_x = g_y$, a contradiction.
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a Riemann surface. Then $|\Olo_X|$ has the structure of a disjoint union of Riemann surfaces such that $p: |\Olo_X| \to X$ is holomorphic.
+\end{corollary}
+\begin{proof}
+Since $|\Olo_X|$ is a Hausdorff space and $p$ is a local homeomorphism, $|\Olo_X|$ is a surface and $p$ defines a complex structure on $|\Olo_X|$.
+\end{proof}
+
+Technically we should show that each component of $|\Olo_X|$ is second countable.
+However this is not actually very important, because this follows from the fact that $|\Olo_X|$ has a complex structure, according to a theorem of Rado.
+We omit the proof.
+
+Let us use sheaves to study analytic continuation.
+Here we use $I$ to mean the unit interval.
+\begin{definition}
+Let $X$ be a Riemann surface and $u$ a path in $X$ starting at $a \in X$.
+An \dfn{analytic continuation} of a germ $f_a$ on $X$ along $u$ is a lift $\hat u: I \to |\Olo_X|$ with $\hat u(0) = f_a$.
+\end{definition}
+Note that $p: |\Olo_X| \to X$ is not a covering space.
+Indeed, $p: |\Olo_\CC| \to \CC$ is not a covering space because a germ of $1/z$ cannot be analytically continued along any path which ends at $0$.
+This is the canonical example of a local homeomorphism which is not a covering space.
+
+What does the definition really mean?
+Let $u: I \to X$ be a path and $f_a$ a germ at $a$.
+Then if we can lift $u$ to $\hat u$ which starts at $\hat u(0) = f_a$, then for each point $t \in [0, 1]$, there is some basic open set $[V_t, f_t]$ in $|\Olo_X|$ around $\hat u(t)$.
+By compactness of $I$ there are finitely many such basic open sets $[V_i, f_i]$.
+These drop to open sets $V_i \subseteq X$ and finitely many holomorphic functions $f_i: V_i \to \CC$.
+Then they glue together to a function $f: W \to \CC$ where $W = \bigcup_i V_i$ is an open set that contains $u(I)$.
+So from a germ and a path which lifts along $p$ we can find an honest-to-god holomorphic function defined closed to that path.
+
+\begin{lemma}
+Let $d: |\Olo| \to |\Olo|$ be the differentiation map, thus
+$$df_z = (f')_z.$$
+Then $d$ is a covering space.
+\end{lemma}
+\begin{proof}
+The map $d$ is well-defined because every germ extends to a holomorphic function on an honest-to-god open set, and as long as that open set is small enough the choice of open set does not matter.
+
+Now let $f_a \in [U, f]$ be a germ.
+If $U$ is small enough then $U$ is simply connected so there is a $F \in \Olo(U)$ with $F' = f$.
+So
+$$d^{-1}([U, f]) = \bigcup_C [U, F + c]$$
+and since each of the $[U, F + c]$ locally look like $\Omega$, if $U$ is small enough then $d$ is a covering space.
+Here $F$ is far from $F+c$, $c \neq 0$, because they never define the same germ.
+\end{proof}
+
+\begin{definition}
+Let $\Omega$ be an open subset of $\CC$, $f \in \Olo(\Omega)$, $\gamma$ a path in $\Omega$.
+A \dfn{primitive} of $f$ along $\gamma$ is a path of germs $F_t$, $t \in I$, at $\gamma(t)$, such that $F_t' = f_{\gamma(t)}$.
+\end{definition}
+
+We abused notation to write $F_t$ for the germ at $\gamma(t)$.
+The point is that a primitive along $\gamma$ is only defined in a very small neighborhood of $\gamma$, rather than all of $\Omega$.
+
+\begin{theorem}[fundamental theorem]
+Let $X$ be a Riemann surface, $\gamma$ a path in $X$, and $f \in \Olo(X)$. Then
+\begin{equation}
+\label{primitive Cauchy}
+\int_\gamma f(z) ~dz = F_1(\gamma(1)) - F_0(\gamma(0)).
+\end{equation}
+\end{theorem}
+\begin{proof}
+If $X$ is convex then this is obvious (in that it can be proven using the Cauchy-Goursat triangle trick or something idk).
+But, as in the construction of an analytic continuation, we can cover $\gamma(I)$ by finitely many convex sets and apply (\ref{primitive Cauchy}) in each convex set.
+Since any two primitives are equal up to a constant what we get is independent of the choice of primitive.
+Thus we get (\ref{primitive Cauchy}) in general.
+\end{proof}
+
+\begin{theorem}[Cauchy]
+Let $X$ be a Riemann surface, $\Gamma: \gamma_0 \to \gamma_1$ a based homotopy of paths in $X$, and $f \in \Olo(X)$. Then
+$$\int_{\gamma_0} f = \int_{\gamma_1} f.$$
+\end{theorem}
+\begin{proof}
+Consider the based homotopy of germs $G(s, t) = f_{\Gamma(s, t)}$ where $\Gamma(s, t) = \gamma_s(t)$.
+Lift $G$ to a based homotopy $\tilde G: I^2 \to |\Olo|$ along $d$; thus for every $s \in I$, $\tilde G(s, 0) = \tilde G(0, 0)$.
+Then by definition of $d$, $\tilde G$ is a homotopy of primitives of $f$, so
+$$\int_{\gamma_0} f(z) ~dz = \tilde G(0, 1)(\Gamma(0, 1)) - \tilde G(0, 0)(\Gamma(0, 0))$$
+by (\ref{primitive Cauchy}).
+Moreover if $t \{0, 1\}$ then
+$$\tilde G(1, t) = \tilde G(0, t)$$
+since $\tilde G$ is a based homotopy, so
+\begin{align*}\int_{\gamma_1} f(z) ~dz &= \tilde G(1, 1)(\Gamma(1, 1)) - \tilde G(1, 0)(\Gamma(1, 0))\\
+&= \tilde G(0, 1)(\Gamma(0, 1)) - \tilde G(0, 0)(\Gamma(0, 0))\\
+&= \int_{\gamma_0} f(z) ~dz
+\end{align*}
+which was desired.
+\end{proof}
+
+\begin{theorem}[monodromy theorem]
+Let $u: u_0 \to u_1$ is a based homotopy of paths, $u_0(0) = a$, $u_0(1) = b$.
+If $\varphi \in \Olo_a$ has an analytic continuation along every path $u_s$, then the analytic continuation along $u_0$ is equal to the analytic continuation along $u_1$.
+\end{theorem}
+\begin{proof}
+Let $\hat u$ be the lift of $u$ to $|\Olo|$.
+Then $\hat u$ is unique since homotopy lifts are unique if they exist.
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a simply connected Riemann surface, $a \in X$, and $\varphi \in \Olo_a$.
+If $\varphi$ has an analytic continuation along every path starting at $a$, then there is a global section $f \in \Olo(X)$ such that $f_a = \varphi$.
+\end{corollary}
+\begin{proof}
+Given any $x$, choose a path $\gamma: a \to x$, and let $\varphi_x$ be the germ at $x$ obtained by the analytic continuation of $\varphi$ along $\gamma$.
+By monodromy, since $\pi_1(X) = 0$, $\varphi_x$ does not depend on $\gamma$.
+So we can define $f(x) = \varphi_x(x)$.
+Then $f$ is holomorphic in a neighborhood of $x$, so $f$ is globally holomorphic.
+\end{proof}
+
+\section{Analytic continuation to global sections}
+Let us now consider how to globally continue a germ, even in the case that $\pi_1(X)$ is nonzero.
+There are two approaches to this: multivalued functions, or to define the Riemann surface of the germ.
+The latter was the historical motivation for defining Riemann surfaces in the first place.
+
+\begin{definition}
+Let $p: Y \to X$ be an unbranched map, $p(y) = x$.
+The \dfn{pullback} by $p$
+$$p^*_x: \Olo_x \to \Olo_y$$
+on the stalks of $\Olo$ defined by $p^*f_x = (f \circ p)_y$.
+Since $p$ is unbranched, we can also define the \dfn{pushforward} $p_* = (p^*)^{-1}$.
+\end{definition}
+
+\begin{definition}
+Let $a \in X$, $\varphi \in \Olo_a$.
+An \dfn{analytic continuation} of $\varphi$ is an unbranched covering space
+$$p: Y \to X$$
+equipped with a global section $f \in \Olo(Y)$ such that if $p(b) = a$ then $p_*(f_b) = \varphi$.
+\end{definition}
+
+\begin{example}
+Let $a \in X^*$, $g(z) = z^{1/n}$ defined in some open set $U \ni a$. Consider
+$$Y^* = \{(z, w) \in (\CC^*)^2: w = z^n\}.$$
+Define $p: Y^* \to \CC^*$, $p(z, w) = w$. Then $g(p(z, w)) = g(z^n) = z$.
+So we set $f$ to be the projection onto the first coordinate of $Y^*$ onto $\CC$.
+Therefore $(p, f)$ is an analytic continuation of $g$.
+
+Notice that $Y^*$ is isomorphic to $\CC^*$. We can extend $Y^*$ to
+$$Y = \{(z, w) \in \CC^2: w = z^n\}$$
+which is homeomorphic but not isomorphic to $\CC$. We can see this by noting that $p$ is not conformal to $0$.
+\end{example}
+
+\begin{example}
+Let $Y^* = \{(z, w) \in (\CC^*)^2: w = e^z\}$.
+Then $Y^*$ defines the analytic continuation of $\log$, and defines an infinite-sheeted covering space of $\CC^*$.
+\end{example}
+
+\begin{definition}
+Let $a \in X$.
+Let $p: Y \to X$, $f: Y \to \CC$ define an analytic continuation of $\varphi \in \Olo_a$.
+We say that $(p, f)$ is the \dfn{maximal analytic continuation} of $\varphi$ if for every analytic continuation $q: Z \to X$, $g: Z \to \CC$, of $\varphi$, there is an $F: Z \to Y$ such that $g = f \circ F$ and $q = p \circ F$.
+\end{definition}
+
+By general abstract nonsense, maximal analytic continuations are unique up to unique isomorphism.
+
+\begin{theorem}
+For every $\varphi \in \Olo_a$, $a \in X$, there is a unique maximal analytic continuation of $\varphi$.
+\end{theorem}
+\begin{proof}
+Let $Y$ be the connected component of $\varphi$ in the \'etal\'e space $|\Olo|$.
+Let $p: Y \to X$ be the map that sends a germ to its basepoint.
+Let $f(\eta) = \eta_{p(\eta)}$ whenever $\eta \in Y$.
+Then $f(\varphi) = \varphi(a)$.
+Maximality follows from the definition of analytic continuation along paths; any larger analytic continuation would extend off of $Y$ into another connected component of $|\Olo|$.
+\end{proof}
+
+\chapter{Line bundles on Riemann surfaces}
+This chapter follows lectures of Georgios Daskalopolus.
+
+\section{Vector bundles}
+Let $K$ be a topological field. Recall that a vector bundle of rank $n$ over $K$ on a topological space $X$ consists of a continuous map
+$$p: E \to X$$
+such that $p^{-1}(x) = E_x$ is equipped with a homeomorphism $h_x: E_x \to K^n$ such that for every sufficiently small open $U \subseteq X$, $p^{-1}(U)$ is identified with $U \times K^n$ by a homeomorphism
+$$h: p^{-1}(U) \to U \times K^n$$
+such that $h|E_x = h_x$.
+A morphism of vector bundles $E \to F$ will be a continuous map which commutes with the projections $p_E,p_F$.
+
+\begin{definition}
+A \dfn{trivial vector bundle} on $X$ is a vector bundle which is isomorphic to $X \times K^n$.
+\end{definition}
+
+\begin{example}
+The tangent bundle $TS^3$ is trivial since $S^3$ is a Lie group, so we can parallel transport tangent vectors all around $S^3$ using the multiplication action of $S^3$ on $S^3$.
+The hairy ball theorem says that $TS^2$ is nontrivial.
+\end{example}
+
+Suppose $X$ is a manifold and $K \in \{\RR, \CC\}$.
+By a linear chart on $X$ we mean a chart $U$ such that $p^{-1}(U)$ is identified with $U \times K^n$.
+If $U,V$ are linear charts we can form the transition map $h_{UV}: U \cap V \to \GL(n, K)$ which identifies the $K^n$ in $U \times K^n$ with the $K^n$ in $V \times K^n$.
+
+Let $X$ be a manifold.
+If $(U_i)_i$ is an open cover of $X$ by charts and we are given maps $h_{ij}: U_i \cap U_j \to \GL(n, \CC)$ which satisfy the cocycle relation, then there exists a vector bundle $E$ with transition maps $h_{ij}$.
+If $F$ is also a vector bundle with transition maps $g_{ij}$ and $f: E \to F$ is a morphism of vector bundles, then in local coordinates we get maps
+$$f_i: U_i \times K^n \to U_i \times K^n$$
+which preserves $U_i$, i.e. for every $v \in K^n$ there is a $w \in K^n$ with $f_i(x, v) = (x, w)$.
+Conversely, if we are given local morphisms $f_i$ which satisfy the transition relation
+$$f_i(h_{ij}(v_j)) = f_i(v_i) = g_{ij}(f_j(v_j))$$
+on the overlaps $(U_i \times U_j) \times K^n$; that is, $f_i \circ h_{ij} = g_{ij} \circ f_j$, then we can find a global morphism $f: E \to F$.
+
+\begin{definition}
+A \dfn{section} of a vector bundle $p: E \to X$ is a map $s: X \to S$ such that $p(s(x)) = x$ for every $x \in X$.
+The sheaf of sections will be denoted $\Gamma(E)$ or $\Omega^0(E)$.
+\end{definition}
+
+Every vector bundle has local sections.
+Indeed, if $U$ is a linear chart of $E$, we can set
+$$e_i(x) = (x, e_i)$$
+where the $e_i$ are a coordinate basis of $K^n$.
+
+Suppose that $h_i: E_i \to U_i \times K^n$ is a local trivialization and $s \in \Gamma(E, X)$.
+Then we get local sections $s_i \in \Gamma(E, U_i)$ which satisfy
+$$s_i = h_{ij} \circ s_j$$
+where $h_{ij} = h_i \circ h_j^{-1}$ are the transition maps.
+Conversely, if we are given local sections which commute with the transition maps, then we may define a global section.
+
+An important philosophy in the theory of vector bundles is that every operation in the category of vector spaces also holds in the category of vector bundles.
+
+\begin{definition}
+Let $E,F$ be vector bundles over $X$ with transition maps $h,g$ respectively.
+Define the \dfn{direct sum vector bundle} $E \oplus F$ to be the vector bundle with transition maps $h_{ij} \oplus g_{ij}$.
+Define the \dfn{tensor product vector bundle} $E \otimes F$ to be the vector bundle with transition maps $h_{ij} \otimes g_{ij}$.
+Define the \dfn{dual vector bundle} $E^*$ to be the vector bundle with transition maps $h_{ji}^*$.
+\end{definition}
+
+One can also define the $\Hom$-bundle $\Hom(E, F)$, and presumably any other bundle associated to a functor from the category of vector spaces to itself.
+
+\section{Holomorphic line bundles}
+We restrict to the setting of $K = \CC$, $X$ a Riemann surface, and requiring that all maps involved are holomorphic.
+
+\begin{definition}
+A \dfn{line bundle} is a vector bundle of rank $1$.
+\end{definition}
+
+In the setting of holomorphic line bundles we may not expect global sections to exist.
+
+\begin{lemma}
+Let $L \to X$ be a line bundle.
+Let $s$ be a holomorphic global section which is never zero.
+Then $L$ is trivial, as we can define an isomorphism $h: L \to X \times \CC$, by
+$$h(x, \alpha s(x)) = (x, \alpha s(x))$$
+whenever $\alpha \in \CC$.
+\end{lemma}
+\begin{proof}
+Indeed, $s(x)$ spans $E_x$, so the definition of $h$ makes sense.
+\end{proof}
+
+\begin{proposition}
+Let $X$ be a Riemann surface.
+The tangent bundle $TX$ and cotangent bundle $T^*X$ are holomorphic line bundles over $X$.
+\end{proposition}
+\begin{proof}
+Suppose we have a cover by open sets $U_i$ and coordinate maps $z_i: U_i \to \CC$.
+The transition maps for $T^*X$ are given by $g_{ij} = dz_j/dz_i$.
+The chain rule says that the sections of $T^*X$ are $1$-forms, as they should be.
+The tangent bundle is as desired, by duality.
+\end{proof}
+
+Fix a linear chart $U$.
+On $U$ we define the vector fields over $\RR$ $\partial_x,\partial_y \in \Gamma(TX, U)_\RR$ by setting $\partial_x(z) = (z, e_1)$, and $\partial_y = (z, e_2)$.
+We also define the vector field over $\CC$, $\partial_z \in \Gamma(TX, U)_\CC$ by setting $\partial_z(z) = (z, 1)$.
+This gives a isomorphism over $\RR$ of the real tangent bundle and the holomorphic tangent bundle, say by $\partial_x \mapsto \partial_z$, $\partial_y \mapsto i\partial_z$.
+We also define the $1$-form $dz$ to be the dual to $\partial_z$, thus $dz(\partial_z) = 1$.
+
+We will write $\Omega_h^1$ for the sheaf of holomorphic $1$-forms.
+
+Let $X$ be a Riemann surface.
+Let $TX$ denote, for now, the real tangent bundle, and let $TX^\CC = TX \otimes \CC$, the tensor product taken over $\RR$.
+Then $TX^\CC$ is a rank-$4$ vector bundle over $\RR$, so it can be given the structure of a rank-$2$ vector bundle over $\CC$.
+More generally, if $E$ is a real bundle, then we can define a complex bundle $E^\CC$ which has the same transition functions, since $\GL(2, \RR) \subset \GL(2, \CC)$.
+If we identify $2\partial_z = \partial_x - i\partial_y$ then $\partial_z,\overline{\partial_z}$ span $TX^\CC$.
+We then write
+$$TX^\CC = T^{1,0}X \oplus T^{0,1}X$$
+where $T^{1,0X}$ is spanned by $\partial_z$, $T^{0,1}X$ is spanned by $\overline{\partial_z}$.
+Then $T^{1,0}X,T^{0,1}X$ are line bundles over $\CC$, and we have an $\RR$-isomorphism $T^{1,0}X \to T^{0,1}X$.
+
+We identify the holomorphic tangent space with $T^{1,0}X$.
+To see why we are allowed to do this, let $z$ and $w$ be two different local coordinates on $X$, so the vector fields $\partial_z$ and $\partial_w$ both span the complex line $T^{1,0}X$.
+Then
+$$\frac{\partial}{\partial w} = \frac{\partial z}{\partial w} \frac{\partial}{\partial z}$$
+which is exactly how the holomorphic tangent space transforms.
+
+Meanwhile $T^{0,1}X$ is an antiholomorphic line bundle, in the sense that we have an $\RR$-linear isomorphism of bundles $T^{1,0}X \to T^{0,1}X$ given by $z \mapsto \overline z$.
+This is clearly not holomorphic but it is the complex conjugate of a holomorphic map.
+
+We similarly decompose the complexified cotangent bundle
+$$(T^*X)^\CC = (T^{1,0})^*X \oplus (T^{0,1})^*X$$
+where $(T^{1,0})^*X$ is the holomorphic cotangent bundle.
+We then write the exterior power
+$$\Lambda^k (T^*X)^\CC = \bigoplus_{p + q = k} \Lambda^p (T^{1,0})^*X \wedge \Lambda^q (T^{0,1})^*X.$$
+We are only interested in surfaces, so we simply have $\Lambda^0 (T^*X)^\CC$ is the trivial line bundle and
+$$\Lambda^2 (T^*X)^\CC = (T^{1,0})^*X \wedge (T^{0,1})^*X.$$
+This space is spanned by the $2$-form $dz \wedge d\overline z$.
+The above decomposition of $2$-forms is the \dfn{Hodge decomposition} for Riemann surfaces.
+Let
+$$\Omega^k X = \Lambda^k (T^*X)^\CC.$$
+
+We then introduce the exterior derivative $d: \Omega^k \to \Omega^{k+1}$ which satisfies
+$$d(f_I ~dx_I) = df_I \wedge dx_I.$$
+In particular, the exterior derivative maps
+$$d: \Omega^{p,q} \to \Omega^{p+1,q} \oplus \Omega^{p,q+1}.$$
+In particular, if $f$ is a smooth function we can write
+$$df = d'f + d''f$$
+where $d'f = \partial_z f ~dz$ and $d''f = \overline \partial_z f ~d\overline z$.
+More generally, we decompose the map $d$ into
+$$d': \Omega^{p,q} \to \Omega^{p+1,q}$$
+and
+$$d'': \Omega^{p,q} \to \Omega^{p,q+1}$$
+which satisfies $(d')^2 = 0$, $(d'')^2 = 0$, and $d'd'' + d''d' = 0$.
+
+A deep theorem of Nirenberg and Newlander shows that every manifold which admits a decomposition of the exterior derivative $d = d' + d''$ which satisfies the above criteria admits a complex structure.
+Thus the decomposition $d = d' + d''$ is the same data as a complex structure.
+
+Now we recall that $\Omega^k$ is functorial: if $f: X \to Y$ is a smooth map then the pullback $f^*: \Omega^k(Y) \to \Omega^k(X)$ is defined by
+$$(f^*\omega)_x(X_1, \dots, X_k) = \omega_{f(x)}((df)_xX_1, \dots, (df)_xX_k).$$
+Then $df^* = f^*d$ and $f^*(\omega \wedge \eta) = f^*\omega \wedge f^*\eta$, so the differential forms define a cohomology theory.
+We also have $f^*(dg) = d(g \circ f)$ and more generally $f^*(g\omega) = (g \circ f) \cdot f^*\omega$.
+
+\section{Residues of differential forms}
+The invariant definition of a residue requires us to work with $1$-forms rather than functions.
+
+\begin{definition}
+A $1$-form is said to be \dfn{holomorphic} if it can be written locally in the form $f~dz$.
+\end{definition}
+
+\begin{definition}
+Let $a \in X$. Let $\omega$ be a holomorphic $1$-form on $X \setminus a$. The \dfn{residue} of $\omega$ at $a$ is
+$$\Res_a \omega = c_{-1}$$
+where
+$$\omega = \sum_{n=-\infty}^\infty c_n z^n ~dz.$$
+\end{definition}
+
+Remarkably, the other coefficients, say $c_{10}$, depend on a choice of coordinates, but $c_{-1}$ does not.
+
+\begin{theorem}
+The residue is well-defined.
+\end{theorem}
+\begin{proof}
+We may assume that $X$ is an open submanifold $V$ of $\CC$ and $a = 0$.
+
+Suppose that $\omega = dg$ is exact. Then $g$ is meromorphic with a pole at $0$, and
+$$\Res_0 \omega = 0.$$
+Indeed, in this case, we can write
+$$g(z) = \sum_{n=-\infty}^\infty c_n z^n$$
+and thus
+$$\omega = \sum_{n-\infty}^\infty nc_n z^{n-1} ~dz.$$
+Then $\Res_0 \omega = 0 \cdot c_0 = 0$.
+
+Now if $\varphi \in \Olo(V)$ and $\varphi$ has a single zero at $0$, then
+$$\Res_0 \frac{d\varphi}{\varphi} = 1.$$
+Indeed, we can write $\varphi = zh$ where $h(0) \neq 0$, so $d\varphi = h~dz + z ~dh$.
+Then $d\varphi/\varphi = dz/z + dh/h$. Now we apply the Cauchy integral formula at $0$ and use the fact that $h \neq 0$.
+
+Now suppose $\omega = f~dz$ and
+$$f(z) = \sum_{n=-\infty}^\infty c_n z^n.$$
+Then
+$$\omega = dg + c_{-1} \frac{dz}{z}$$
+where
+$$g(z) = \sum_{n \neq -1} \frac{c_n}{n+1} z^{n+1}.$$
+Now let $h$ be a change of coordinates. Then
+$$h^*\omega = d(h \circ g)+ c_{-1} \frac{dh}{h}.$$
+Since $d(h \circ g)$ is exact we might as well assume $d(h \circ g) = 0$. Thus
+$$\Res_0 h^*\omega = c_{-1} \Res_0 \frac{dh}{h} = c_{-1} = \Res_0 \omega$$
+as desired.
+\end{proof}
+
+Recall that $H^p_{dR}(X)$ is the space of closed $p$-forms modulo exact $p$-forms on $X$, i.e. the $p$th de Rham cohomology of $X$.
+In particular the Hurcewiz theorem implies that $H^1_{dR}(X)$ is the abelianization of $\pi_1(X)$, so that $H^1_{dR}(X) = 0$ if $X$ is simply connected.
+
+\begin{theorem}
+Let $\omega$ be a closed $1$-form and $u,v$ two based-homotopic paths in $X$. Then
+$$\int_u \omega = \int_v \omega.$$
+\end{theorem}
+\begin{proof}
+Let $\pi: \tilde X \to X$ be the universal cover of $X$.
+Since $\tilde X$ is simply connected and $\omega$ is closed, $p^*\omega$ is exact, say $p^*\omega = dF$.
+Then
+\begin{align*}\int_u \omega &= \int_{p^*u} p^*\omega = \int_{p^*u} dF\\
+&= F(p^*u(1)) - F(p^*u(0)) = F(p^*v(1)) - F(p^*v(0))\\
+&= \int_{p^*v} dF = \int_v \omega
+\end{align*}
+as desired.
+\end{proof}
+
+This can even be extended to the case that $u,v$ are just homotopic rather than based-homotopic, assuming they are loops.
+
+\begin{corollary}
+Let $\omega$ be a closed $1$-form and $u,v$ are homotopic, then
+$$\int_u \omega = \int_v \omega.$$
+\end{corollary}
+\begin{proof}
+Let $w$ be a path from the basepoint of $u$ to the basepoint of $v$.
+Then $[u] = [w][v][w]^{-1}$ in $\pi_1(X)$. Then
+$$\int_u \omega = \int_{wvw^{-1}} \omega = \int_w \omega + \int_v \omega - \int_w \omega$$
+as desired.
+\end{proof}
+
+That corollary shows that the following definition makes sense.
+
+\begin{definition}
+Let $\omega$ be a closed $1$-form. Define a map
+$$a_\omega: \pi_1(X) \to \CC$$
+by
+$$a_\omega(\sigma) = \int_\sigma \omega,$$
+the \dfn{period} of $\omega$.
+\end{definition}
+
+By additivity, the period is a morphism of groups.
+For example it factors through the abelianization $H_1(X)$ of $\pi_1(X)$.
+
+\begin{theorem}
+Let $\omega$ be a closed $1$-form. Then the period $a$ of $\omega$ is zero iff $\omega$ is exact.
+\end{theorem}
+\begin{proof}
+If $\omega$ is exact then this is obvious.
+Conversely, let $p: \tilde X \to X$ be the universal cover of $X$.
+Then $p^*\omega$ is exact since $\pi_1(\tilde X) = 0$, and $\sigma \in \pi_1(X)$ induces a deck map of $\tilde X$, so
+$$dF = (p \circ \sigma)^* \omega = \sigma^* p^* \omega = d(F \circ \sigma)$$
+provided $dF = p^*\omega$.
+If $a_\omega = 0$, write $a_\sigma = F \circ \sigma - F$.
+We claim $a_\sigma = a_\omega(\sigma)$. In fact
+$$a_\omega(\sigma) = \int_{p^*\sigma} dF = F(p^*\sigma(1)) - F(p^*\sigma(0)) = F(\sigma(x)) - F(x) = a_\sigma(x)$$
+where $x = p^*\sigma(0)$ and $\sigma$ is viewed as a deck transformation.
+But we are assuming that $a_\omega = 0$ so $a_\sigma = 0$.
+Since $\sigma$ was arbitrary, $F$ is invariant under the action of $\pi_1(X)$, thus $F$ is constant on every fiber of $p$.
+So $F$ drops to a map $f: X \to \CC$ such that $F = f \circ p$, and hence $df = \omega$.
+\end{proof}
+
+Since $X$ is orientable, every $2$-form can be written $f~dV$ where $dV = dz \wedge d\overline z$ is the volume form.
+Therefore the zeroth and second de Rham cohomologies of $X$ are
+$$H^0(X) = H^2(X) = \CC.$$
+We now show that de Rham's theorem holds for $H^1(X)$.
+By the above theorem, the map $\Phi(\omega) = a_\omega$ drops from closed forms to $H^1_{dR}(X)$ where we use $dR$ to denote the de Rham cohomology, and so $\Phi$ defines a map
+$$\Phi: H^1_{dR}(X) \to H^1_{sing}(X)$$
+where $sing$ denotes singular cohomology, thus
+$$H^1_{sing}(X) = \Hom(\pi_1(X)^{ab}, \CC)$$
+is the Pontraygin dual of the abelianization of $\pi_1(X)$.
+
+We will later show that $\Phi$ is an isomorphism.
+Since we know $\Phi$ is injective, if $X$ has genus $g$ then we just need to show
+$$\dim H^1_{dR}(X) = 2g.$$
+This will be done with sheaf cohomology.
+
+\section{Dolbeault and sheaf cohomology}
+Now we treat the case when we break up the de Rham complex into holomorphic and antiholomorphic parts.
+A $1$-form is holomorphic iff it is of the form $f~dz$ where $f$ is holomorphic.
+
+One has a commutative square
+$$\begin{tikzcd}\Omega^{0,0}(X) \arrow[d,"\partial"] \arrow[r,"\dbar"] & \Omega^{0,1}(X) \arrow[d,"\partial"]\\
+\Omega^{1,0}(X) \arrow[r,"\dbar"] & \Omega^{1,1}(X)\end{tikzcd}.$$
+Note however that the two paths in this square are not exact.
+
+\begin{lemma}
+If $X$ is compact and $\omega_1,\omega_2$ are holomorphic $1$-forms with $a_{\omega_1} = a_{\omega_2}$ then $\omega_1 = \omega_2$.
+\end{lemma}
+\begin{proof}
+Let $\omega = \omega_1 - \omega_2$; then $a_\omega = 0$.
+So $\omega$ is exact, say
+$$\omega = \partial f + \dbar f.$$
+Since $\omega$ is holomorphic, $\dbar f = 0$ and $f$ is holomorphic.
+Since $X$ is compact, $f$ is constant, and hence $\omega = 0$.
+\end{proof}
+
+The chain complex induced by $\dbar$
+$$0 \to \Omega^{1,0}(X) \to \Omega^{1,1}(X) \to 0$$
+induces a cohomology theory
+$$0 \to H^{1,0}(X) \to H^{1,1}(X) \to 0$$
+where $H^{1,0}(X)$ is the kernel of $\dbar$ and $H^{1,1}(X)$ is the cokernel of $\dbar$.
+
+\begin{definition}
+The chain complex $\dbar$ is called the \dfn{Dolbeault complex}.
+The cohomology theory associated to $\dbar$ is called \dfn{Dolbeault cohomology}.
+\end{definition}
+
+\begin{definition}
+The \dfn{Hodge number} $h^{p,q}(X)$ is the dimension of $H^{p,q}(X)$.
+\end{definition}
+
+We have just showed that $h^{1,0} - h^{1,1}$ is the Fredholm index of $\dbar$.
+I think this is a trivial case of the Atiyah-Singer index theorem.
+
+To proceed any further we need to talk about sheaf cohomology.
+\begin{definition}
+Assume $\mathscr F$ is a sheaf valued in an abelian category on a manifold $X$ and $q \in \NN$.
+If $\mathcal U$ is an open cover of $X$, let
+$$C^q(\mathcal U, \mathscr F) = \prod_{U_0, \dots, U_q \in \mathcal U} \mathscr F\left(\bigcap_{j=0}^q U_j\right)$$
+be the $q$-\dfn{sheaf cochain group} associated to $\mathscr F$.
+Define
+$$\delta: C^q(\mathcal U, \mathscr F) \to C^{q+1}(\mathcal U, \mathscr F)$$
+as follows.
+Let
+$$(\delta f)_{U_0, \dots, U_q} = \sum_{\ell=0}^{q+1} (-1)^\ell f_{U_0,\dots,\widehat{U_\ell},\dots,U_{q+1}}\bigg|\bigcap_{\ell=0}^{q+1} U_\ell.$$
+In particular, $\delta: C^0 \to C^1$ has
+$$(\delta f)_{U,V} = (f_V - f_U)|U \cap V$$
+and $\delta: C^1 \to C^2$ has
+$$(\delta f)_{U,V,W} = (f_{V,W} - f_{U,W} + f_{U,V})|U \cap V \cap W.$$
+Since this is an alternating sum $\delta^2 = 0$.
+Define the $q$-\dfn{sheaf cocycle group} $Z^q(\mathcal U, \mathscr F)$ to be the kernel of $\delta: C^q \to C^{q+1}$ and the $q$-\dfn{sheaf boundary group} $B^q(\mathcal U, \mathscr F)$ to be the image of $\delta: C^{q-1} \to C^q$.
+Then we obtain the $q$-\dfn{sheaf cohomology group}
+$$H^q(\mathcal U, \mathscr F) = \frac{Z^q(\mathcal U, \mathscr F)}{B^q(\mathcal U, \mathscr F)}$$
+with respect to $\mathcal U$.
+\end{definition}
+This definition is problematic because it depends on the choice of open cover.
+The fix will be to take a limit over finer and finer covers.
+
+Consider $\delta: C^0 \to C^1$.
+If $(\delta f)_{U,V} = 0$ then $f_V - f_U = 0$ on $U \cap V$.
+Thus $\ker \delta$ is the space of sections that agree on all overlaps, in other words
+$$H^0(X, \mathscr F) = \mathscr F(X)$$
+is the space of global sections, independent of the choice of cover.
+
+\begin{example}
+A holomorphic line bundle consists of the data of an open cover $\mathcal U$ and transition maps $g_{UV}: U \cap V \to \CC^*$, $U,V \in \mathcal U$, where
+$$g_{UV}g_{VW} = g_{UW}.$$
+Let $\mathscr O^*$ be the sheaf of nonzero holomorphic functions under multiplications.
+Then $g_{UV} \in \ker \delta$ where $\delta$ is the boundary map of the sheaf cohomology of $\mathscr O^*$.
+So $Z^1(\mathcal U, \mathscr O^*)$ is the space of holomorphic line bundles of $X$ which trivialize under elements of $\mathcal U$.
+Similarly $B^1(\mathcal U, \mathscr O^*)$ will be the space of trivial line bundles.
+So $H^1(X, \mathscr F)$, once it has been shown to not depend on $\mathcal U$, will be the moduli space of holomorphic line bundles on $X$.
+In particular that moduli space has the structure of an abelian group.
+\end{example}
+
+Let $\tau: \mathcal U \to \mathcal V$ be a refinement.
+Now define $\tau: Z^1(\mathcal U) \to Z^1(\mathcal V)$ which maps a cocycle $(f_{U_1\cap U_2})$ to $(f_{\tau(U_1) \cap \tau(U_2)})$.
+This easily can be generalized to $Z^p$.
+Once this is done, we have $[\delta, \tau] = 0$, so $\tau$ drops to a map on cohomology, $\tau: H^p(\mathcal U) \to H^p(\mathcal V)$.
+
+\begin{lemma}
+Let $\mathcal V$ be a refinement of $\mathcal U$.
+The map
+$$\tau: H^1(\mathcal U, \mathscr F) \to H^1(\mathcal V, \mathscr F)$$
+is independent of the refinement map chosen, and is injective.
+
+Moreover, $\tau$ is functorial in the sense that $\mathcal U \to \mathcal V \to \mathcal W$ is a sequence of refinements, then $\tau_{\mathcal W}^{\mathcal V} \tau_{\mathcal V}^{\mathcal U} = \tau_{\mathcal W}^{\mathcal U}$.
+\end{lemma}
+\begin{proof}
+This is a boring exercise.
+As an example we show that $\tau$ is injective on $H^1$.
+The other $H^p$ are similar but the notation is worse.
+
+Let $\mathcal U = \{U_\alpha\}_{\alpha \in A}$, $\mathcal V = \{V_i\}_{i \in I}$.
+By the first part we may choose a refinement, which induces a map $\tau: I \to A$.
+Suppose $\tau[f] = 0$, then there is a cocycle $g$ such that $(\tau f)_{k \ell} = g_k - g_\ell$ on $V_k \cap V_\ell$.
+On $U_\alpha \cap V_k \cap V_\ell$ we get
+$$g_k - g_\ell = f_{\tau(k) \tau(\ell)} - f_{\tau(k)\alpha} + f_{\alpha \tau(\ell)} = f_{\alpha(\tau) \ell} - f_{\alpha(\tau) k}.$$
+That is,
+$$g_k + f_{\alpha(\tau) k} = g_\ell + f_{\alpha \tau(\ell)}.$$
+Since $\mathscr F$ is a sheaf, there is $h_\alpha \in \mathscr F(U_\alpha)$ such that $h_\alpha|U_\alpha \cap V_k = f_{\alpha \tau(k)} + g_k$.
+On $U_\alpha \cap U_\beta \cap V_k$ we have $f_{\alpha \beta} = f_{\alpha(\tau) k} + f_{\tau(k) \beta} = h_\alpha - h_\beta$.
+Therefore $f$ is a coboundary and dies in $H^1$.
+\end{proof}
+
+Therefore we can consider the poset of all covers with respect to refinement, and it is meaningful to take the colimit over that poset of the cohomology.
+
+\begin{definition}
+Let $\mathscr F$ be a sheaf on $X$ as above.
+The \dfn{sheaf cohomology} $H^p(X, \mathscr F)$ is defined to be the colimit of $H^p(\mathcal U, \mathscr F)$ taken over all open covers $\mathcal U$.
+\end{definition}
+
+Now let's show that sheaf cohomology is totally useless as a tool for studying real analysis.
+
+\begin{definition}
+Let $\mathscr F$ be a sheaf. We say that an open set $U$ is \dfn{acyclic} with respect to $\mathscr F$ if $H^p(\mathscr F|U) = 0$.
+\end{definition}
+
+\begin{proposition}
+Every sheaf of smooth differential forms is acyclic on every open set.
+\end{proposition}
+\begin{proof}
+Let $\mathcal U$ be a locally finite open cover of the open set and $\rho$ a partition of unity subordinate to $\mathcal U$.
+Let $f$ be a cocycle and let $g_i = \sum_j \rho_j f_{ij}$.
+Then
+$$(\delta g)_{ij} = \sum_k \rho_k(f_{ik} - f_{jk}) = \sum_k \rho_k f_{ij} = f_{ij}.$$
+Therefore $f$ is a coboundary.
+\end{proof}
+
+\begin{theorem}[Leray]
+If $\mathscr A$ is an acyclic cover for $\mathscr F$, then
+$$H^p(\mathscr A, \mathscr F) = H^p(X, \mathscr F).$$
+\end{theorem}
+\begin{proof}
+Let $\mathscr B$ be a refinement of $\mathscr A$.
+It suffices to show that the map $\tau: H^p(\mathscr A, \mathscr F) \to H^p(\mathscr B, \mathscr F)$ is an isomorphism, i.e. that any cocycle $f$ for $\mathscr B$ is a coboundary, or equivalently is a cocycle for $\mathscr A$.
+
+Let $U \in \mathscr A$, then $\mathscr B$ intersects with $U$ to a cover $\mathscr B_U$ of $U$.
+Then if $V_1, V_2 \in \mathscr B$, since $\mathscr A$ is cyclic we can find a cocycle $g$ with
+$$f_{V_1V_2} = g_{UV_1} - g_{UV_2}.$$
+If $U'$ is also an open set then
+$$g_{U' V_1} - g_{U V_1} = g_{U' V_2} - g_{U V_2}$$
+on the intersection of all these open sets.
+
+Thus we can glue the $g$'s together to get $F_{UU'}$ which restricts to $g_{U' V} - g_{U V}$ for any $V \in \mathscr B$.
+Then $F$ is a cocycle for $\mathscr A$.
+Let $h_\alpha = g_{\tau(\alpha),\alpha}|V_\alpha$.
+We conclude
+$$F_{\tau(\alpha) \tau(\beta)} - f_{\alpha\beta} = h_\beta - h_\alpha$$
+so $g$ is a cocycle for $\mathscr A$.
+\end{proof}
+
+\section{The category of sheaves}
+\begin{definition}
+Let $\mathscr F$ and $\mathscr G$ be sheaves. A \dfn{morphism of sheaves} $\alpha: \mathscr F \to \mathscr G$ consists of morphisms
+$$\alpha(U): \mathscr F(U) \to \mathscr G(U)$$
+which commute with the restriction maps $\mathscr F(U) \to \mathscr F(V)$ and $\mathscr G(U) \to \mathscr G(V)$ whenever $V \subseteq U$.
+\end{definition}
+
+\begin{definition}
+The \dfn{kernel} $\ker \alpha$ of a morphism of sheaves $\alpha$ consists of the sheaf $U \mapsto \ker \alpha(U)$.
+If the kernel is trivial, we say that $\alpha$ is \dfn{injective}.
+\end{definition}
+
+\begin{definition}
+Let $\Omega^p$ be the sheaf of $p$-forms, and $\Omega^{p,q}$ the sheaf of $(p,q)$-forms.
+\end{definition}
+
+\begin{example}
+The map $\dbar: \Omega^0 \to \Omega^{0,1}$ is a morphism of sheaves, and $\ker \dbar = \Olo$.
+The map $\dbar: \Omega^{1,0} \to \Omega^2$ is also a morphism of sheaves with $\ker \dbar$ the sheaf of holomorphic $1$-forms.
+\end{example}
+
+\begin{example}
+Let $\Olo^*$ be the sheaf of nonvanishing holomorphic functions under multiplication.
+Then $\exp: \Olo \to \Olo^*$ is a morphism of sheaves and $\ker \exp$ is $2\pi \ZZ$.
+\end{example}
+
+A morphism of sheaves $\alpha: \mathscr F \to \mathscr G$ induces a morphism on stalks $\alpha_x: \mathscr F_x \to \mathscr G_x$ defined by
+$$\alpha_x([f]) = [\alpha(f)]$$
+whenever $f$ is a representative of the germ $[f]$ at $x$.
+
+\begin{definition}
+Let $\alpha$ be a morphism of sheaves. We call $\alpha$ \dfn{surjective} if the maps on stalks are all surjective.
+\end{definition}
+
+Thus we can talk about exact sequences of sheaves.
+
+\begin{lemma}
+$\alpha$ is injective iff $\alpha$ is injective on stalks.
+\end{lemma}
+\begin{proof}
+If $\alpha$ is injective then obviously $\alpha$ is injective on stalks.
+So assume $\alpha: \mathscr F \to \mathscr G$ is injective on stalks and fix $U$ open.
+Then if $f \in \mathscr F(U)$, $\alpha(U)f = 0$, then for every $x$, $\alpha_x(f_x) = 0$.
+So since $\alpha$ is injective on stalks, $f_x = 0$ and by the sheaf property $f = 0$.
+\end{proof}
+
+The same is not true for surjectivity, which is why the definitions of injectivity and surjectivity are not analogous.
+These are the definitions of injective and surjective which agree with their categorical definitions.
+
+As a consequence of the above lemma, a sequence of sheaves is exact iff it is exact on stalks.
+
+\begin{example}
+Consider the exact sequence of sheaves
+$$0 \to \ZZ \to \Olo \to \Olo^* \to 0$$
+where as usual $\Olo \to \Olo^*$ is given by the exponential map, and $\ZZ \to \Olo$ is given by $n \mapsto (z \mapsto 2\pi in)$.
+To see that it really is exact, we can check on stalks, using the fact that around every point we can locally find a logarithm for any function in $\Olo^*$.
+This is not exact on the level of open sets, since the map $\Olo(\CC^*) \to \Olo^*(\CC^*)$ is not surjective (i.e. not every nonvanishing function on $\CC^*$ has a logarithm).
+This example motivates the localization functor in commutative algebra, as if we pass to local rings things become much nicer (since every function has a logarithm).
+\end{example}
+
+Algebraic topology is the study of getting long exact sequences from short exact sequences.
+We expect the same thing to work here.
+
+\begin{theorem}[zigzag lemma in sheaf cohomology]
+Let
+$$0 \to \mathscr F \to \mathscr G \to \mathscr H \to 0$$
+be a short exact sequence of sheaves. Then there is a long exact sequence in cohomology
+$$0 \to H^0(\mathscr F) \to H^0(\mathscr G) \to H^0(\mathscr H) \to H^1(\mathscr F) \to \cdots.$$
+Here the maps $H^p \to H^p$ are quotients of alternating sums of the maps on local sections.
+\end{theorem}
+\begin{proof}
+The sequence is evidently exact away from the connecting morphisms
+$$\delta_p: H^{p-1}(\mathscr H) \to H^p(\mathscr F).$$
+We will construct $\delta_1$ on the level of an open cover $\mathcal U$ and then take a colimit over all such covers; the other $\delta_p$ are similar, as the only difference is that the notation is cleaner.
+Let $\beta_0: H^0(\mathscr G) \to H^0(\mathscr H)$ and let $h_i \in U_i$, $U_i \in \mathscr U$.
+Then $\beta_0$ is surjective so there is $g_i \in H^0(\mathscr G)$ with $\beta_0(g_i) = h_i$.
+Then $g$ splits as $g_i - g_j = \alpha(f_{ij})$ where $\alpha: \mathscr F \to \mathscr G$ and $f_{ij} \in \mathscr F(U_i \cap U_j)$.
+All these maps are well-defined so we can set $\delta_1(h)_{ij} = f_{ij}$.
+Now a boring diagram chase shows that $\delta$ is exact.
+\end{proof}
+
+We can use the zigzag lemma after solving some PDE, for example:
+
+\begin{lemma}[$\dbar$-Poincar\'e lemma with compact support]
+Let $X$ be a disc of radius $R$. For every $g \in C^\infty_c(X)$ there is $f \in C^\infty(X)$ such that $\dbar f = g$.
+\end{lemma}
+\begin{proof}
+Let
+$$f(\zeta) = \frac{1}{2\pi i} \iint_\CC \frac{g(z)}{z - \zeta} ~dz \wedge d\overline z.$$
+Then $f \in C^\infty(X)$. To see this, let $z = \zeta + re^{i\theta}$, and
+$$dz \wedge d\overline z = -2ri ~dr \wedge d\theta.$$
+Thus
+\begin{align*}
+f(\zeta) &= \frac{-2i}{2\pi i} \iint_\CC \frac{g(\zeta + re^{i\theta})}{re^{i\theta}}r ~dr \wedge d\theta \\
+&= -\frac{1}{\pi} \iint_\CC g(\zeta + re^{i\theta}) e^{-i\theta} ~dr \wedge d\theta
+\end{align*}
+which is clearly smooth in $\zeta$.
+
+Differentiating, we get
+\begin{align*}
+\dbar f(\zeta) &= -\frac{1}{\pi} \iint_\CC \dbar_\zeta g(\zeta + re^{i\theta}) e^{-i\theta} ~dr \wedge d\theta\\
+&= -\frac{1}{\pi} \lim_{\varepsilon \to 0} \int_0^{2\pi} \int_\varepsilon^R \dbar_\zeta g(\zeta + re^{i\theta}) e^{-i\theta} ~dr \wedge d\theta\\
+&= \frac{1}{2\pi i} \lim_{\varepsilon \to 0} \iint_{X \setminus B_\varepsilon} \dbar_z(g(\zeta + z)) ~\frac{dz \wedge d\overline z}{z} \\
+&= \frac{1}{2\pi i} \lim_{\varepsilon \to 0} \iint_{X \setminus B_\varepsilon} \dbar_z\frac{g(\zeta + z)}{z} ~dz \wedge d\overline z.
+\end{align*}
+Let
+$$\omega = \frac{1}{2\pi i} \frac{g(\zeta + z)}{z} ~dz$$
+which is a $1$-form on $X \setminus B_\varepsilon$.
+Then
+$$d\omega = -\frac{1}{2\pi i} \dbar_z\frac{g(\zeta + z)}{z} ~dz \wedge d\overline z.$$
+Thus
+\begin{align*}
+\dbar f(\zeta) &= -\lim_{\varepsilon \to 0} \iint_{X \setminus B_\varepsilon} d\omega = -\int_{\partial(X \setminus B_\varepsilon)} \omega\\
+&= \int_{\partial B_\varepsilon} \omega
+\end{align*}
+since the orientation of $\partial B_\varepsilon$ is opposite of its orientation as viewed as a subset of $\partial(X \setminus B_\varepsilon)$, and because $g$ is not supported near $\partial X$.
+But then
+\begin{align*}
+\dbar f(\zeta) &= \lim_{\varepsilon \to 0} \frac{1}{2\pi i} \int_0^{2\pi} \frac{g(\zeta + \varepsilon e^{i\theta})}{\varepsilon e^{i\theta}} i\varepsilon e^{i\theta} ~d\theta \\
+&= \lim_{\varepsilon \to 0} \frac{1}{2\pi} \int_0^{2\pi} g(\zeta + \varepsilon e^{i\theta}) ~d\theta,
+\end{align*}
+the mean of $g$ on the circle $\zeta + \partial B_\varepsilon$. Since $g$ is smooth this converges to $g(\zeta)$.
+\end{proof}
+
+\begin{theorem}[$\dbar$-Poincar\'e lemma]
+Let $X$ be a disc of radius $R$. For every $g \in C^\infty(X)$ there is $f \in C^\infty(X)$ such that $\dbar f = g$.
+\end{theorem}
+\begin{proof}
+Consider a monotone sequence $R_n \to R$ and let $X_n$ be the disc of radius $R_n$.
+Let $\psi_n \in C^\infty_c(X_{n+1})$ be a cutoff to $X_n$.
+By the $\dbar$-Poincar\'e lemma with compact support, there is $f_n \in C^\infty(X)$ such that $\dbar f_n = g\psi_n$.
+
+Now let $\tilde f_n \in C^\infty(X)$ satisfy $\dbar \tilde f_n = g$ on $X_n$ and
+$$||\tilde f_{n+1} - \tilde f_n||_{L^\infty(X_{n-1})} < 2^{-n}.$$
+To see that $\tilde f_n$ exists, let $\tilde f_1 = f_1$.
+Given $\tilde f_1, \dots, \tilde f_n$,
+$$\dbar(f_{n+1} - \tilde f_n) = g - g = 0$$
+on $X_n$. Therefore $f_{n+1} - \tilde f_n$ is holomorphic.
+If $p$ is a Taylor polynomial for $f_{n+1} - \tilde f_n$ of high degree, then
+$$||f_{n+1} - \tilde f_n - p||_{L^\infty(X_{n-1})} < 2^{-n}.$$
+So set $\tilde f_{n+1} = f_{n_1} - p$.
+
+Now let
+$$F_n = \sum_{k=n}^\infty \tilde f_{k+1} - f_k.$$
+Then $F_n$ is holomorphic on $X_n$.
+Set
+$$f = \tilde f_n + F_n.$$
+This does not depend on the choice of $n$.
+To see this, let us show
+$$\tilde f_n + F_n = \tilde f_{n+1} + F_{n+1}.$$
+In other words we must show
+$$F_{n+1} - F_n = \tilde f_{n+1} - \tilde f_n $$
+which is clear by a telescoping argument.
+Also
+$$\dbar f = \dbar \tilde f_n = g$$
+on $X_n$, but $n$ was arbitrary, so $\dbar f = g$.
+\end{proof}
+
+As an amusing consequence we show that we can invert the Laplace operator on any disc.
+
+\begin{corollary}
+Let $X$ be a disc of radius $R$. For every $g \in C^\infty(X)$ there is $f \in C^\infty(X)$ such that $\Delta f = g$.
+\end{corollary}
+\begin{proof}
+Recall
+$$\Delta = 4\partial \dbar.$$
+By the $\delta$-Poincar\'e lemma, there is $f_1,f_2$ with $\dbar f_1 = g$ and $\dbar f_2 = \overline f_1$.
+Let $f = \overline f_2/4$. Then $\Delta f = g$.
+\end{proof}
+
+I think we can use this to give another proof of the Riemann mapping theorem which avoids the normal families.
+
+\begin{corollary}
+We have a short exact sequence of sheaves
+$$0 \to \Olo \to \Omega^0 \to \Omega^{0,1} \to 0$$
+where $\Omega^0 \to \Omega^{0,1}$ is given by $\dbar$ and $\Olo \to \Omega^0$ is the inclusion map.
+\end{corollary}
+\begin{proof}
+The Cauchy-Riemann equations show exactness at $\Olo$ and $\Omega^0$.
+Now if $g ~d\overline z \in \Omega^{0,1}$ then by the $\dbar$-Poincar\'e lemma there is $f \in \Olo$ such that $\dbar f = g$ which shows exactness at $\Omega^{1,0}$.
+This works because locally every Riemann surface looks like a disc, so wecan apply the $\dbar$-Poincar\'e lemma on stalks.
+\end{proof}
+
+By similar reasoning we get the de Rham exact sequence
+$$0 \to \CC \to \Omega^0 \to \Omega^1 \to 0$$
+where $\Omega^0 \to \Omega^1$ is given by $d$, as well as
+$$0 \to \CC \to \Olo \to \Omega_{hol}^1 \to 0$$
+where $\Olo \to \Omega_{hol}^1$ is $d$ and $\Omega_{hol}^1$ is the sheaf of holomorphic $1$-forms.
+We also get a de Rham short exact sequence
+$$0 \to \Omega_{hol}^1 \to \Omega^{1,0} \to \Omega^2 \to 0$$
+where $\Omega_{hol}^1 \to \Omega^{1,0}$ is the inclusion map and $d$ sends $\Omega^{1,0}$ to $\Omega^2$.
+
+\begin{example}
+Let us take the long exact sequence in cohomology of the short exact sequence
+$$0 \to \Olo \to \Omega^0 \to \Omega^{0,1} \to 0.$$
+We get
+$$0 \to H^0(\Olo) \to H^0(\Omega^0) \to H^0(\Omega^{0,1}) \to H^1(\Olo) \to H^1(\Omega^0).$$
+But $\Omega^0$ is a fine sheaf so $H^1(\Omega^0) = 0$. Therefore
+$$H^1(\Olo) = \frac{H^0(\Omega^{0,1})}{H^0(\Omega^0)} = \frac{\Omega^{0,1}(X)}{\Omega^0(X)}$$
+by exactness.
+The map $H^0(\Omega^0) \to H^0(\Omega^{0,1})$ is $d''$, so $H^1(\Olo)$ is the space of global $(0,1)$-forms modulo the space of global exterior Cauchy-Riemann derivatives.
+Since the Dolbeault cohomology is induced by the diagram
+$$0 \to \Omega^0(X) \to \Omega^{0,1}(X) \to 0$$
+where the middle arrow is $d''$, $H^1(\Olo)$ is the first Dolbeault cohomology of $X$.
+\end{example}
+
+\begin{example}
+Consider the exact sequence
+$$0 \to \CC \to \Omega^0 \to \Omega^1 \to 0$$
+which gives a long exact sequence
+$$0 \to H^0(\CC) \to H^0(\Omega^0) \to H^0(\Omega^1) \to H^1(\CC) \to H^1(\Omega^0).$$
+Again $H^1(\Omega^0) = 0$ so
+$$H^1(\CC) = \frac{H^0(\Omega^1)}{H^0(\Omega^0)}$$
+is the first de Rham cohomology of $X$.
+Using the canonicity of the Eilenberg-Steenrod axioms, this is also the singular cohomology of $X$ with values in $\CC$, as one would expect.
+\end{example}
+
+\section{Dolbeault cohomology}
+Let us compute the Dolbeault cohomology of a Riemann surface.
+We first show that it is finite-dimensional.
+
+Recall Montel's theorem: if $\Omega$ is an open set in $\CC$ and $\mathcal F \subseteq \Olo(\Omega)$ is locally uniformly $L^\infty$, then $\mathcal F$ is precompact with respect to locally $L^\infty$ convergence.
+This can also be phrased as the follows:
+\begin{theorem}[Montel]
+Let $\Omega_1$ be precompact in $\Omega_2 \subseteq X$, and let $L: \Olo(\overline \Omega_2) \to \Olo(\overline \Omega_1)$ be the restriction map.
+Then $L$ is a compact operator with respect to the $L^\infty$ norm.
+\end{theorem}
+Intuitively this is saying that extensible holomorphic functions are a tiny subspace of holomorphic functions.
+
+\begin{theorem}[Schwartz]
+If $E, F$ are Banach spaces and $u, v: E \to F$ are bounded linear operators, $u$ surjective, $v$ compact, then the cokernel $F/F'$ of $u + v$ is finite-dimensional.
+\end{theorem}
+\begin{proof}
+Just show that $F/F'$ has a compact unit ball.
+\end{proof}
+
+We will write $h^p(X, \mathscr F) = \dim H^p(X, \mathscr F)$.
+
+\begin{theorem}
+If $X$ is compact then $h^1(X, \Olo)$ is finite.
+\end{theorem}
+\begin{proof}
+It suffices to show that if $\mathscr A = (U_i)$ is a (necessarily finite, since $X$ is compact) open cover of $X$ equipped with isomorphisms $f_i: U_i \to \DD$, then $h^1(\mathscr A, \Olo) < \infty$.
+Indeed, $\mathscr A$ is an acyclic cover by the $\dbar$-Poincar\'e lemma so we may apply Leray's theorem.
+Identifying $U_i$ with the unit disc we let $U_i(r)$ be the disc of radius $r$.
+Now fix $r_0 < 1$ so large that $\mathscr A(r) = \{U_i(r)\}$ is still a cover and assume that $r_0 < r < 1$.
+Let $Z_b^1(r)$ be the space of $1$-cocycles in $Z^1(\mathscr A(r), \Olo)$ which are in $L^\infty$.
+Let $B^1_b(r) = B^1(\mathscr A(r), \Olo) \cap Z^1_b(r)$.
+Similarly define $C_b^0(r)$ to $Z_b^1(r)$.
+
+\begin{lemma}
+The connecting homomorphism $\delta: C^0(\mathscr A(r), \Olo) \to B^1(\mathscr A(r), \Olo)$, $(\delta f)_{ij} = f_j - f_i$, has
+$$\delta^{-1}(B_b^1(r)) = C^0_b(r).$$
+\end{lemma}
+\begin{proof}
+We first show $C^0_b(r) \subseteq \delta^{-1}(B_b^1(r))$.
+If $f \in C^0_b(r)$ then $(\delta f)_{ij} - f_j - f_i \in B^1_b(r)$.
+So $f \in \delta^{-1}(B_b^1(r))$.
+
+Conversely, if $f \in \delta^{-1}(B_b^1(r))$, then $f_j - f_i \in L^\infty(U_i(r) \cap U_j(r))$.
+Set
+$$M_{ij} = ||f_j - f_i||_{L^\infty} < \infty.$$
+We claim that $M_{ij} < \infty$ in fact propagates to $U_i(r) \cup U_j(r)$ to show $f_i, f_j \in L^\infty$!
+
+By the maximum principle, the maximum of $f_i$ is on $\partial U_i(r)$.
+By compactness of $\partial U_i(r)$ it suffices to show that for every $a \in \partial U_i(r)$ there is $V \ni a$ on which $f_i$ is bounded to show that $f_i$ extends to $L^\infty(U_i(r))$.
+(Note that $f_i$ extends over $U_i(r)$ since $f_i$ is defined on $U_i$!)
+In fact
+$$|f_i| \leq M_{ij} + |f_j|$$
+if $\partial U_i(r) \cap U_j(r)$.
+However, there is some $j$ with this property by how we constructed the cover.
+This guarantees the finiteness of the $L^\infty$ norm.
+\end{proof}
+
+\begin{lemma}
+The $L^\infty$ Dolbeault cohomology $H^1_b(r) = Z^1_b(r)/B_b^1(r)$ is finite-dimensional.
+\end{lemma}
+\begin{proof}
+The map
+\begin{align*}
+Z^1(\mathscr A) \oplus C^0(\mathscr A(r)) &\to Z^1(\mathscr A(r))\\
+(f, g) &\mapsto (f_{ij} + (\delta g)_{ij})_{ij}
+\end{align*}
+is surjective. Since $\mathscr A(r)$ is a refinement of the acyclic cover $\mathscr A$, we have an isomorphism $H^1(\mathscr A, \Olo) \to H^1(\mathscr A(r), \Olo)$.
+But
+$$H^1(\mathscr A(r), \Olo) = \frac{Z^1(\mathscr A(r))}{\delta C^0(\mathscr A(r))}.$$
+Therefore the map
+$$Z^1(\mathscr A) \to  \frac{Z^1(\mathscr A(r))}{\delta C^0(\mathscr A(r))}$$
+is surjective.
+Taking the direct sum of both sides by $\delta C^0(\mathscr A(r))$ we see the claim (since everything is a vector space and so we can invert a quotient by taking a direct sum).
+
+Choose $r < \rho < 1$.
+Then the above map factors through the restriction map
+$$Z^1(\mathscr A) \oplus C^0(\mathscr A(r)) \to Z^1(\mathscr A(\rho)) \oplus C^0(\mathscr A(r)) \to Z^1(\mathscr A(r)).$$
+So the map
+$$Z^1(\mathscr A(\rho)) \oplus C^0(\mathscr A(r)) \to Z^1(\mathscr A(r))$$
+is surjective.
+We now claim that
+$$u: Z^1_b(\rho) \oplus C^0_b(r) \to Z^1_b(r)$$
+is also surjective.
+If $f \in Z^1_b(r)$ then $f_{ij} = h_{ij} + (\delta g)_{ij}$ where $f_{ij} \in L^\infty$ and $h_{ij}$ is extensible off of $U_i(r) \cap U_j(r)$ and therefore $h_{ij} \in L^\infty(U_i(r) \cap U_j(r))$.
+So $\delta g_{ij} \in L^\infty$ and therefore $g \in C^0_b(r)$ by the first lemma.
+Therefore $u$ is surjective, and has the form
+$$u(f, g) = f + \delta g.$$
+
+Meanwhile,
+\begin{align*}
+v: Z^1_b(\rho) \oplus C^0_b(r) &\to Z^1_b(r)\\
+(f, g) \mapsto -f
+\end{align*}
+is compact by Montel's theorem.
+Also $(u + v)(f, g) = \delta g$.
+The image of $\delta$ is closed and its cokernel is $H^1_b(r)$, which is finite-dimensional by Schwartz' theorem.
+\end{proof}
+
+With these lemmata proven, choose $r < \rho < 1$.
+Since $\mathscr A(r)$ is a refinement of $\mathscr A$ and $\mathcal A$ is acyclic, we have a refining isomorphism
+$$H^1(\mathscr A, \Olo) \to H^1(\mathscr A(r), \Olo).$$
+Therefore we may show $h^1(\mathscr A(r), \Olo) < \infty$.
+But the map $H^1(\mathscr A, \Olo) \to H^1(\mathscr A(r), \Olo)$ factors through the restriction map $H^1(\mathscr A, \Olo) \to H^1_b(\mathscr A(\rho), \Olo)$, which is well-defined on $L^\infty$ cohomology by the first lemma.
+But by the second lemma, $h^1_b(\mathscr A(\rho), \Olo) < \infty$, so $h^1(\mathscr A(r), \Olo) < \infty$.
+\end{proof}
+
+\begin{definition}
+The \dfn{geometric genus} of $X$ is
+$$g(X) = \dim H^1(X, \Olo)$$
+assuming that $X$ is compact.
+\end{definition}
+
+Recall that if $X$ is compact then $H^1(X, \CC)$ is finite-dimensional.
+
+\begin{definition}
+The \dfn{Betti number} of $X$ is
+$$b_1(X) = \dim H^1(X, \CC)$$
+assuming that $X$ is compact. The \dfn{topological genus} of $X$ is $g = b_1/2$.
+\end{definition}
+
+A priori it is not even obvious that the topological genus is an integer, but in fact we will show that the geometric and topological genera coincide.
+The point is that the topological genus could be defined purely entirely in terms of Eilenberg-Steenrod axioms, even though we defined it using de Rham cohomology.
+However the geometric genus can only be defined using the sheaf of holomorphic functions.
+
+Before we check this fact let us compute $H^1(\PP, \Olo)$.
+
+\begin{lemma}
+One has $H^1(\PP, \Olo) = 0$.
+\end{lemma}
+\begin{proof}
+If $U_1 = \PP^1 \setminus \{\infty\}$ and $U_2 = \PP^1 \setminus \{0\}$, then by the $\dbar$-Poincar\'e lemma, $U_1,U_2$ form an acyclic cover.
+Every section $f$ of $\Olo$ determines a cocycle $f_{12} \in Z^1(\{U_1, U_2\}, \Olo)$, but $f_{12} \in \Olo(U_1 \cap U_2) = \Olo(\CC \setminus \{0\})$. Thus $f_{12}$ has a Laurent series
+$$f_{12}(z) = \sum_{n=-\infty}^\infty c_n z^n = f_1(z) - f_2(z)$$
+where $f_1$ is the sum over positive terms and so is holomorphic on $U_1$, and $f_2$ is the sum over negative terms and is holomorphic on $U_2$.
+Therefore $f_{12}$ is a coboundary, so $H^1(\PP, \Olo) = 0$.
+\end{proof}
+
+\section{The first Chern class}
+Consider the exact sequence
+$$0 \to \ZZ \to \Olo \to \Olo^* \to 0$$
+given by the exponential map. The long exact sequence includes
+$$\cdots \to H^1(X, \ZZ) \to H^1(X, \Olo) \to H^1(X, \Olo^*) \to H^2(X, \ZZ) \to \cdots.$$
+Recall that $H^1(X, \Olo^*)$ is the moduli space of line bundles on $L$, and $H^2(X, \ZZ) = \ZZ$.
+
+\begin{example}
+If $X$ is a disc, then $X$ is contractible and by the $\dbar$-Poincar\'e lemma and a diagram chase we get
+$$H^1(X, \Olo) = H^1(X, \Olo^*) = 0$$
+so all line bundles on $X$ are trivial.
+This would be rather hard to show otherwise.
+\end{example}
+
+\begin{definition}
+Let
+$$\delta: H^1(X, \Olo^*) \to H^2(X, \ZZ)$$
+be the connecting morphism, and $L$ a line bundle.
+The first \dfn{Chern class} $c_1(L)$ is $c_1(L) = \delta(L)$.
+\end{definition}
+
+The first Chern class is an integer, whose sign is determined by a choice of orientation of $X$.
+
+\begin{example}
+Since $H^1(\PP^1, \Olo) = 0$, the long exact sequence for $\PP^1$ is
+$$0 \to H^1(\PP^1, \Olo^*) \to H^2(\PP^1, \ZZ) \to 0.$$
+Therefore $c_1$ is an isomorphism on $\PP^1$. So the space of line bundles of $\PP^1$ is isomorphic to $\ZZ$, and the Chern class is a complete invariant.
+\end{example}
+
+The above example worked because $\PP^1$ has zero genus.
+More generally, the kernel of $c_1$ is the image of $H^1(X, \Olo)$ in $H^1(X, \Olo^*)$, thus
+$$\ker c_1 = \frac{H^1(X, \Olo)}{H^1(X, \ZZ)} = \frac{\CC^g}{\ZZ^{2g}}.$$
+But this is nothing more than a torus.
+
+\begin{definition}
+The \dfn{Jacobian variety} of $X$ is $\ker c_1$.
+\end{definition}
+
+It follows that the Jacobian variety of any algebraic curve is an elliptic curve.
+It is the connected component of the identity in the topological group $H^1(X, \Olo^*)$, and thus the space of holomorphic structures on the trivial line bundle on $X$.
+
+\section{The Riemann-Roch theorem}
+\begin{definition}
+A \dfn{divisor} on $X$ is a map $X \to \ZZ$ whose support is discrete.
+The abelian ordered group of divisors is denoted $\Div X$.
+\end{definition}
+Therefore a divisor is a choice of integers on finitely many points in each compact subset of $X$.
+
+\begin{definition}
+If $f \in \Mero^*(X)$, the space of not identically $0$ meromorphic functions, the \dfn{divisor} of $f$, $(f)$, is defined by setting $(f)(x) = 0$ if $x$ is neither a zero nor pole, $(f)(x) = k$ if $f$ has a zero of order $k$ at $x$, and $(f)(x) = -k$ if $f$ has a pole of order $k$ at $x$.
+\end{definition}
+
+Note that $(f) \geq 0$ iff $f$ is holomorphic. Also $(fg) = (f) + (g)$, so $(\cdot)$ is a group homomorphism $\Mero^*(X) \to \Div X$.
+
+\begin{definition}
+If $\omega \in \Mero^1(X)^*$, we define the \dfn{divisor} of $\omega$, $(\omega)$, by writing $\omega = f~dz$ and setting $(\omega) = (f)$.
+\end{definition}
+
+The divisor of a meromorphic $1$-form is well-defined because multiplying by a Jacobian neither creates nor destroys poles or zeroes.
+
+\begin{definition}
+Let $D, D'$ be divisors. We say that $D \sim D'$, or $D,D'$ are \dfn{linearly equivalent divisors}, if there is a meromorphic function $f$ with $D - D' = (f)$.
+\end{definition}
+
+We will mainly be interested in $\Div X$ modulo linear equivalence, since this will turn out to be $H^1(X, \Olo^*)$, the moduli space of line bundles on $X$. In that case we can recover the first Chern class by summing up the divisor:
+
+\begin{definition}
+If $D$ is a divisor and $X$ is compact we define $\deg D = \sum_x D(x)$.
+\end{definition}
+
+\begin{definition}
+Let $D$ be a divisor, and $\Olo_D$ be the \dfn{sheaf associated to the divisor} $D$,
+$$\Olo_D(U) = \{f \in \Mero(U): (f) \geq -D\}$$
+where $(0) \geq -D$ for all $D$ by convention.
+\end{definition}
+
+For example $\Olo_0 = \Olo$.
+
+\begin{example}
+If $P(p) = 1$ and $P(x) = 0$ if $x \neq p$, then $\Olo_P$ is the sheaf of meromorphic functions with at least a simple pole at $p$ and holomorphic everywhere else.
+\end{example}
+
+\begin{proposition}
+If $D, D'$ are divisors and $D \sim D'$ then $\Olo_D \cong \Olo_{D'}$.
+\end{proposition}
+\begin{proof}
+Suppose that $D - D' = (\psi)$.
+Define a morphism of sheaves by, for every $f \in \Olo_D(U)$, $f \mapsto \psi f$.
+Then $\psi f \in \Olo_{D'}(U)$ and this map is an isomorphism since $g \mapsto \psi^{-1}g$ is its inverse.
+\end{proof}
+
+Now we give a special case of the Kodaira vanishing theorem from algebraic geometry, which says that divisors of negative degree cannot have nonvanishing sheaf cohomology.
+
+\begin{proposition}
+Let $X$ be compact and $\deg D < 0$. Then $H^0(X, \Olo_D) = 0$.
+\end{proposition}
+\begin{proof}
+Assume $f \in H^0(X, \Olo_D)$. If $f$ is nonzero then $(f) \geq -D$. Then $\deg (f) \geq -\deg D > 0$.
+So $f$ has strictly more zeroes than poles, violating the residue theorem.
+\end{proof}
+
+\begin{definition}
+Let $p \in X$. The \dfn{skyscraper} at $p$, denoted $\CC_p$, is $\CC_p(U) = 0$ if $p \notin U$ and $\CC_p(U) = \CC$ if $p \in U$.
+\end{definition}
+
+The skyscraper is the sheaf-theoretic form of a Dirac measure.
+
+\begin{proposition}
+One has $H^0(X, \CC_p) = \CC$ and $H^1(X, \CC_p) = 0$.
+\end{proposition}
+\begin{proof}
+The value of the zeroth cohomology is by definition.
+Now let $\mathscr A$ be an acyclic cover such that $p$ lies in exactly one set $U_0 \in \mathscr A$.
+Let $f \in Z^1(\mathscr A, \CC_p)$, thus $f_{ij} + f_{jk} = f_{ik}$.
+If $p \notin U_i \cap U_j$ then $f_{ij} = 0$.
+Otherwise the relation $f_{00} + f_{00} = f_{00}$, since $p$ is only in $U_0$, gives $f_{00} = 0$.
+Therefore $f$ is a coboundary.
+\end{proof}
+
+Let $D$ be a divisor, $p \in X$. We want an exact sequence
+$$0 \to \Olo_D \to \Olo_{D + p} \to \CC_p \to 0$$
+which will give us lots of data about the cohomology of line bundles.
+If $f \in \Olo_D(U)$ then $(f) \geq -D \geq -D - p$, so we get an inclusion map $\alpha: \Olo_D \to \Olo_{D + p}$.
+To define a map $\beta: \Olo_{D + p} \to \CC_p$, fix $U$.
+If $p \notin U$, we set $\beta_U = 0$.
+Otherwise, $p \in U$, and we choose coordinates in which $p = 0$. Then if
+$$f(z) = \sum_{n=-k-1}^\infty c_n z^n,$$
+then $k = D(p)$ and we can let $\beta_U(f) = c_{-k-1}$.
+Thus $\ker \beta$ is the sheaf of functions of whose poles are at worst of order $k$ at $p$, which is exactly $\Olo_D$.
+Conversely we can always construct $f \in \Olo_{D + p}(U)$ with order at most a pole of order $k + 1$ at $p$,
+so we really did construct a short exact sequence.
+
+\begin{theorem}[Riemann-Roch]
+Let $g$ be the geometric genus of a compact Riemann surface $X$. Then
+$$h^0(X, \Olo_D) - h^1(X, \Olo_D) = 1 - g + \deg D.$$
+\end{theorem}
+\begin{proof}
+We prove this by tree induction: first we prove it when $D = 0$, then for every $p \in X$, we show that if it is true for $D$, then it is true for $D \pm p$.
+If $D = 0$ then the claim is that
+$$1 - g = 1 - g + 0$$
+which is obvious.
+
+Now assume that it is true for $D$ and consider the long exact sequence induced by the skyscraper sequence
+$$0 \to H^0(\Olo_D) \to H^0(\Olo_{D+p}) \to \CC \to H^1(\Olo_p) \to H^1(\Olo_{D+p}) \to 0.$$
+Let $V$ be the image of $H^0(\Olo_{D+p})$ in $\CC$ and $W = \CC/V$.
+Then
+$$\dim V + \dim W = 1 = \deg(D+p) - \deg D.$$
+Moreover, from the long exact sequence,
+$$h^0(\Olo_{D+p}) = h^0(\Olo_D) + \dim V.$$
+We also get
+$$h^1(\Olo_D) = h^1(\Olo_{D+p}) + \dim W.$$
+Summing up we get
+$$h^0(\Olo_{D + p}) - h^1(\Olo_{D + p}) = \deg(D+p) + h^0(\Olo_D) - h^1(\Olo_D) - \deg D.$$
+By our inductive hypothesis,
+$$h^0(\Olo_D) - h^1(\Olo_D) - \deg D = 1 - g$$
+so this gives the claim.
+Reversing the above argument we get the claim for $D - p$.
+\end{proof}
+
+The Riemann-Roch theorem is a simple case of the Atiyah-Singer index theorem, which says that the Fredholm index of an elliptic pseudodifferential operator on a vector bundle $V$ can be computed purely from the cohomology of $V$.
+Once we show that $g$ is the topological genus and $\deg D$ is the first Chern class of a line bundle, $1 - g + \deg D$ is a purely topological number.
+Meanwhile $h^0(X, \Olo_D) - h^1(X, \Olo_D)$ is the Fredholm index of $\dbar$ acting on smooth sections of the line bundle whose holomorphic sections are $\Olo_D$.
+Another famous special case is the Gauss-Bonnet theorem.
+To see this, consider the de Rham complex. Taking adjoints with respect to the Riemannian metric, we get an elliptic operator
+$$d + d^*: \Omega^0 \oplus \Omega^2 \to \Omega^1.$$
+Then the Gauss-Bonnet theorem says that the Fredholm index of $d + d^*$ is the Euler characteristic.
+The relationship between $d^*$ and the Gaussian curvature is given by Hodge theory.
+
+The classification of Riemann surfaces of genus zero follows from the Riemann-Roch theorem.
+
+\begin{corollary}
+Let $X$ be a compact Riemann surface of geometric genus $g$, and suppose that $a \in X$.
+Then there is a nonconstant meromorphic function $f$ with a pole of order $\leq g + 1$ at $a$, such that $f$ is holomorphic on $X \setminus \{a\}$.
+\end{corollary}
+\begin{proof}
+Let $D = (g+1)a$.
+By the Riemann-Roch theorem,
+$$h^0(X, \Olo_D) - h^1(X, \Olo_D) = (1 - g) + g + 1 = 2.$$
+Therefore $h^0(X, \Olo_D) \geq 2$.
+The space of constant functions in $H^0(X, \Olo_D)$ has dimension $1$.
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a compact Riemann surface of geometric genus $g$.
+Then $X$ is a branched covering space of $\PP^1$ with at most $g + 1$ sheets.
+\end{corollary}
+\begin{proof}
+Let $f: X \to \PP^1$ be the nonconstant map obtained from the Riemann-Roch theorem.
+Since the pole has order $\leq g + 1$, the covering has at most $g + 1$ sheets.
+\end{proof}
+
+\begin{corollary}
+The only compact Riemann surface of geometric genus $0$ is $\PP^1$.
+\end{corollary}
+\begin{proof}
+If $f$ is a nonconstant branched covering space with at most $1$ sheet, then $f$ is an isomorphism.
+\end{proof}
+
+One consequence of the Riemann-Roch theorem is that an elliptic curve can be written as
+$$y^2 = x^3 + ax + b.$$
+This classifies compact Riemann surfaces of geometric genus $1$.
+
+Let us show that the Riemann-Roch theorem is really a statement about line bundles.
+Let $E$ be a vector bundle and $\mathscr A$ a linear atlas.
+Then we obtain transition functions $g_{ij}$ which are cocycles of sheaf cohomology with coefficients in $\GL(n, \CC)$.
+More precisely, $g_{ij} = h_i h_j^{-1}$ where $h_i$ is the $i$th chart of $\mathscr A$.
+
+If $s: X \to E$ is a section of a vector bundle $p: E \to X$, we obtain local sections $s_i: V \to V \times \CC^n$ whenever $V$ is the image of a linear chart.
+The transition relation is that $s_i = g_{ij}s_j$.
+Let $\Olo_E$ be the sheaf of holomorphic sections of $E$.
+Then $\Olo_E$ is locally free over $\Olo$, in the sense that $\Olo_E(U) = \Olo(U)^{\oplus n}$ whenever $U$ is a linear chart.
+Similarly let $\Mero_E$ be the sheaf of meromorphic sections.
+
+\begin{theorem}
+Let $X$ be a compact Riemann surface, $E \to X$ a holomorphic vector bundle.
+Then $h^1(X, \Olo_E)$ is finite.
+\end{theorem}
+\begin{proof}
+The proof is the same as for when $E$ is trivial, as the point is that $\dbar$ is Fredholm.
+\end{proof}
+
+\begin{theorem}
+Let $X$ be a compact Riemann surface, $E \to X$ a vector bundle, $a \in X$.
+Then there is $f \in \Olo_E(X \setminus a)$ which is meromorphic on $X$.
+\end{theorem}
+\begin{proof}
+Let $U$ be a linear chart at $a$.
+Consider the section $s_j(z) = (z^{-j}, 0, \dots, 0)$ on $U$.
+Now let $\mathscr A = \{U, X \setminus a\}$.
+Then $s_j$ defines a cocycle for $\mathscr A$.
+Let $k = h^1(X, \Olo_E)$, so $s_0, \dots, s_k$ are linearly dependent, thus there is a holomorphic chain $\eta$ and $c \in \CC^{k+1}$ such that
+$$\sum_{j=0}^k c_j s_j = \eta_2 - \eta_1$$
+on $U \setminus a$.
+Therefore $\eta_1$ defines a meromorphic global section.
+\end{proof}
+
+\begin{definition}
+Let $D$ be a divisor. Let $E_D$ be the line bundle such that $\Olo_{E_D} = \Olo_D$.
+\end{definition}
+
+To see why $E_D$ exists, let $(U_i)$ be a cover where $D|U_i$ consists of at most one point and $\psi_i$ is a meromorphic function on $U_i$ which is a multiple of $D|U_i$ and has no other zeroes or poles.
+Now set $g_{ij} = \psi_i/\psi_j$. Since $\psi_i$ has no zeroes or poles on $U_j$, $g_{ij}$ is a transition map.
+Let $E_D$ be the line bundle given by the transition maps $g_{ij}$.
+
+\begin{proposition}
+With the above construction and $U$ an open set, $\Olo_{E_D}(U) = \Olo_D(U)$.
+\end{proposition}
+\begin{proof}
+Let $f \in \Olo_D(U)$. Since $(f)_x \geq -D(x) = -(\psi_i)_x$, $(f\psi_i) \geq 0$, so there is $f_i \in \Olo(U_i)$ with $f_i = f\psi_i$.
+Then $f_i = g_{ij}f_j$ so $f \in \Olo_{E_D}(U)$.
+This process can be reversed to prove the other inclusion.
+\end{proof}
+
+Recall that $D,D'$ are linearly equivalent if $D - D'$ is the divisor of a global meromorphic section.
+The linearly trivial divisors form a subgroup of $\Div X$, normal since $\Div X$ is abelian.
+
+\begin{definition}
+Let $\Pic X$, the \dfn{Picard group} of $X$, to be the abelian group of divisors modulo linear equivalence.
+\end{definition}
+
+\begin{theorem}
+There is a natural isomorphism $\alpha: H^1(X, \Olo^*) \to \Pic X$.
+\end{theorem}
+\begin{proof}
+Let $\xi \in H^1(X, \Olo^*)$ and fix an open cover of $U_i$s.
+Let $E$ be the associated line bundle of $\xi$ and $g_{ij}$ its transition relation.
+Let $f$ be a nonzero meromorphic section of $E$, so locally it is $f_i = g_{ij}f_j$.
+Let $D$ be the divisor which on $U_i$ is the divisor of $(f_i)$, and set $\alpha(\xi) = [D]$ where $[\cdot]$ is the map that annihilates linearly trivial divisors.
+
+Let $\tilde f$ be another meromorphic section and $\tilde D$ be the associated divisor.
+Then if $\varphi = \tilde f/f$, $\tilde D - D = (\varphi)$.
+Therefore $[\tilde D - D] = 0$.
+So $\alpha$ is well-defined.
+Since every divisor has an associated line bundle, $\alpha$ is surjective
+
+Finally suppose $\alpha(\xi) = 0$, thus there is a meromorphic section $f$ such that $\alpha(\xi) = [(f)]$.
+Suppose $\xi$ induces a cocycle $g$, then $g_{ij} = f_i/f_j$ so $g$ is a coboundary.
+\end{proof}
+
+\section{Serre duality and Hodge theory}
+Let $X$ be a compact Riemann surface.
+Consider the short exact sequence
+$$0 \to \Omega \to \tilde \Omega^{1,0} \to \tilde \Omega^2_{cl} \to 0$$
+where $\Omega$ is the sheaf of holomorphic $1$-forms, $\tilde \Omega^{1,0}$ is the sheaf of smooth $1,0$-forms, and $\tilde \Omega^2_{cl}$ is the sheaf of closed $2$-forms.
+Then we get a right exact sequence in cohomology
+$$H^0(X, \tilde \Omega^{1,0}) \to H^0(X, \tilde \Omega^2_{cl}) \to H^1(X, \Omega) \to 0.$$
+Thus $\omega \in H^1(X, \Omega)$ can be represented by an element of $H^0(X, \tilde \Omega^2_{cl})$.
+
+\begin{definition}
+Let $\omega \in H^1(X, \Omega)$. The \dfn{residue} of $\omega$ is
+$$\Res \omega = \frac{1}{2\pi i} \iint_X \omega$$
+where $\omega$ is represented as a closed $2$-form.
+\end{definition}
+
+Let $D$ be a divisor. Then multiplication defines a map $\Omega_{-D} \times \Omega_D \to \Omega$ where $\Omega_D(U)$ consists of meromorphic $1$-forms whose poles are no worse than $-D$.
+
+\begin{definition}
+The \dfn{Serre pairing} is the map
+\begin{align*}
+H^0(X, \Omega_{-D}) \times H^1(X, \Olo_D) &\to H^1(X, \Omega)\\
+(\omega, (f_{ij})_{ij}) &\mapsto (\omega f_{ij})_{ij}.
+\end{align*}
+\end{definition}
+
+The Serre pairing induces a linear map
+$$i_D: H^0(X, \Omega_{-D}) \to H^1(X, \Olo_D)^*.$$
+In the language of line bundles, there is a \dfn{dualizing sheaf} $\Omega$ -- the sheaf of sections of the cotangent bundle of $X$ -- a line bundle such that for every line bundle $L$ we get an isomorphism
+$$i_L: H^0(X, \Omega \otimes L^*) \to H^1(X, L)^*.$$
+
+\begin{theorem}[Serre]
+The map $i_D$ is a natural isomorphism.
+\end{theorem}
+\begin{proof}
+TODO
+\end{proof}
+
+Applying Serre duality to $D = 0$ we get an isomorphism
+$$H^1(X, \Olo)^* \to H^0(X, \Omega) = \Omega(X).$$
+Since $g = h^1(X, \Olo)$, the space of holomorphic $1$-forms $\Omega(X)$ has dimension $g$.
+
+Taking the dual of Serre duality, we get an isomorphism $H^1(X, \Olo_{-D}) \to H^1(X, \Omega_D)^*$.
+Indeed, $\Omega$ is the sheaf of sections of $(T^{1,0}X)^*$ -- that is, global meromorphic $1$-forms.
+Let $K$ be a \dfn{canonical divisor} -- that is, the divisor of a global meromorphic $1$-form.
+Then $K$ is uniquely defined up to linear equivalence.
+So $\Omega = \Olo_K$, so we get an isomorphism $H^0(X, \Omega_{-D-K}) \to H^1(X, \Olo_{D + K})^*$.
+But $\Omega_{-D-K} \cong \Olo_{-D}$ and $H^1(X, \Olo_{D + K}) \cong H^1(X, \Omega_D)$ where all the isomorphism are natural.
+
+Now let $K$ be a canonical divisor. Then $\deg K = 2g - 2$.
+Indeed, by the Riemann-Roch theorem
+$$h^0(X, \Olo_K) - h^1(X, \Olo_K) = 1 - g + \deg K$$
+but by Serre duality, $h^0(X, \Olo_K) = h^0(X, \Omega) = h^1(X, \Olo) = g$ while $h^1(X, \Olo_K) = 1$.
+
+We conclude that every elliptic curve has genus $1$, since $dz$ drops to a generator of $H^0(X, (T^{1,0}X)^*)$.
+Therefore $\deg K = 0$, so $2g = 2$.
+
+\begin{theorem}[Riemann-Hurwitz]
+Let $Y$ be a compact Riemann surface.
+Let $f: X \to Y$ be an $n$-sheeted branched covering space.
+Let $b(x) = v(x) - 1$ where $f(z) = z^{v(x)}$ for some chart at $x$.
+Let $b = \sum_x b(x)$ be the \dfn{branching number} of $x$.
+Then
+$$g(X) = \frac{b}{2} + n(g(Y) - 1) + 1.$$
+\end{theorem}
+\begin{proof}
+Let $\omega$ be a meromorphic $1$-form on $Y$.
+Then we can write $\omega = \psi(w) ~dw$ and $f^*\omega = k\psi(z^k) z^{k-1}~dz$ in coordinates at $x \in X$ where $f(z) = z^k$.
+Then
+$$(f^*\omega)(x) = k (\omega)(w) + (k-1) = v(x) (\omega)(f(x)) + b(x).$$
+Therefore $(f^*\omega)(x) = v(x)(\omega)(f(x)) + b(x)$.
+Summing up,
+$$\sum_y \sum_{x \in f^{-1}(y)} (f^*\omega)(x) = \sum_y \sum_{x \in f^{-1}(y)} b(x)$$
+so
+$$\sum_x (f^*\omega)(x) = n \sum_y (\omega)(y) + b$$
+so $2g(X) - 2 = n(2g(Y) - 2) + b$.
+\end{proof}
+
+We now introduce a Hodge star operator for Riemann surfaces.
+Suppose $\omega = f ~dz + g~d\overline z$, then $\overline \omega = \overline g ~dz + \overline f ~d\overline z$.
+\begin{definition}
+The \dfn{Hodge star operator} is the operator
+$$*: \tilde \Omega^1 \to \tilde \Omega^1(X)$$
+defined by $*(\omega_1 + \omega_2) = i(\overline \omega_1 - \overline \omega_2)$, where $\omega_1 \in \Omega^{1,0}$ and $\omega_2 \in \Omega^{0,1}$.
+\end{definition}
+Then we can easily compute $*^2 = -1$.
+We also check
+$$d*(\partial f + \dbar f) = i\partial \dbar \overline f - i\dbar \partial \overline f = 2i \partial \dbar f.$$
+
+\begin{definition}
+A $1$-form $\omega$ is \dfn{harmonic} if $d\omega = d*\omega = 0$.
+Let $\Harm X$ be the space of harmonic $1$-forms.
+\end{definition}
+
+\begin{proposition}
+The following are equivalent:
+\begin{enumerate}
+\item $\omega$ is harmonic.
+\item $\omega$ is the sum of a holomorphic and an antiholomorphic form.
+\item For every $a$ there is a $U$ open and a harmonic function $f$ with $\omega = df$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The equivalence of the first three is obvious because $\partial,\dbar$ anticommute.
+Now suppose $\omega$ is harmonic.
+By the Poincar\'e lemma we can locally write $\omega = df$ and $d*\omega = 0$. Therefore $d*df = 0$ but $d*d= -2i\Delta$.
+The converse is similar.
+\end{proof}
+
+In particular $\Harm X = \Omega(X) \oplus \overline{\Omega(X)}$.
+So $\dim \Harm X = 2g$.
+
+\begin{theorem}[Hodge]
+One has a natural isomorphism $H^1(X, \CC) \cong \Harm X$.
+In particular, the topological and geometric genera are equal.
+\end{theorem}
+
+This follows from Hodge theory in general.
+
+\section{Abel's theorem and principal divisors}
+Let $X$ be a compact Riemann surface, and $\Div_P(X)$ be the set of principal divisors on $X.$
+By a solution to a divisor $D$ we mean $f$ such that $(f) = D$.
+Thus a divisor is soluble iff it is principal.
+Furthermore, we say that $f$ is a weak solution of $D$ iff $f$ is smooth on $X_D = \{x \in X: D(x) \geq 0\}$ and for every $a \in X$ there are coordinates $z$ near $a$ such that $z(a) = 0$ and $f(z) = \psi(z) z^k$ where $k = D(a)$ and $\psi$ is smooth without a zero.
+
+Let $f$ be a weak solution of $D$. Then $f$ is a solution of $D$ iff $f$ is holomorphic on $X_D$.
+
+\begin{lemma}
+Let $a_1, \dots, a_n \in X$, $k_1, \dots, k_n \in \ZZ$, and let $D = \sum_i k_i a_i$.
+Suppose that $f$ is a weak solution of $D$. Then there is $g \in C^\infty(X)$ such that
+$$\frac{1}{2\pi i} \iint_X \frac{df}{f} \wedge dg = \sum_{i=1}^n k_i g(a_i).$$
+\end{lemma}
+\begin{proof}
+Choose coordinates $z_j$ centered on $a_j$ that witness that $f$ is a weak solution. If $g$ is supported away from $D$,
+$$\iint_X \frac{df}{f} \wedge dg = - \iint_X dg \wedge \frac{df}{f} = - \iint_X d(g ~df) = 0$$
+since $X$ is a closed surface.
+So we can cut off $g$ to $g_j$ close to $a_j$, then
+$$\iint_X \frac{df}{f} \wedge dg = \sum_j \iint_{U_j} \frac{df}{f} \wedge dg_j = \sum_j \iint_{U_j} k_j \frac{dz_j}{z_j} \wedge dg_j + \frac{d\psi_j}{\psi_j} \wedge dg_j$$
+where $f = z_j^{k_j} \psi_j$ and $U_j$ is an open set near $g_j$.
+The second term is exact since $\psi_j$ is nonzero (and so we can rewrite it as $d(\log \psi_j ~dg_j)$), thus
+$$\iint_X \frac{df}{f} \wedge dg = \sum_j k_j \iint_{U_j} \frac{dz_j}{z_j} \wedge dg_j.$$
+Then
+$$\iint_{U_j} \frac{dz_j}{z_j} \wedge dg_j = -\lim_{r \to 0} \iint_{r < |z_j| \leq r_j} d(g_j ~dz_j/z_j) = \lim_{r \to 0} \int_{|z_j| = r} g_j ~\frac{dz_j}{z_j} = 2\pi i g_j(a_j)$$
+as desired.
+\end{proof}
+
+\begin{lemma}
+Let $c$ be a path in $X$. Then there is a weak solution $f$ to $\partial c$ such that for every holomorphic $1$-form $\omega$ such that $d\omega - 0$,
+$$\int_c \omega = \frac{1}{2\pi i} \iint_X \frac{df}{f} \wedge \omega.$$
+\end{lemma}
+\begin{proof}
+First assume $c$ is in a chart $z$, and assume then that $c$ is in the unit disc, $c(0) = a$, $c(1) = b$.
+Choose $r < 1$ and a $\log$-branch so that $\log((z-b)/(z-a))$ is well-defined on $r < |z| < 1$.
+Then set
+$$f(z) = \begin{cases}\exp(\psi(z) \log\frac{z-b}{z-a}), &r < |z|\\
+\frac{z-b}{z-a}, &|z| \leq r
+\end{cases}$$
+where $\psi = 1$ on $D_r$ and there is $r' \in (r, 1)$ such that $\psi = 0$ away from $D_{r'}$.
+Then by the previous lemma,
+$$\frac{1}{2\pi i} \iint_X \frac{df}{f} \wedge \omega = \frac{1}{2\pi i} \iint_X \frac{df}{f} \wedge dg = g(b) - g(a) = \int_c dg$$
+where we set $dg = \omega$.
+If $c$ is not a chart, use a partition of unity.
+\end{proof}
+
+\begin{theorem}[Abel]
+A divisor $D$ is principal iff there is a chain $c$ such that $\partial c = D$ and for every holomorphic $1$-form $\omega$,
+$$\int_c \omega = 0.$$
+\end{theorem}
+\begin{proof}
+Suppose that there is $c$ with $\partial c = D$ and $\int_c \omega = 0$ for every $\omega$.
+We want to show $D = (f)$ for some $f$.
+By the previous lemma, there is a weak solution $f$ such that for every $\omega$,
+$$\int_c \omega = \frac{1}{2\pi i} \iint_X \frac{df}{f} \wedge \omega = \frac{1}{2\pi i} \iint_X \frac{d''f}{f} \wedge \omega,$$
+where the last equality is because $\omega$ is holomorphic. Then there is $\psi$ such that $f(z) = z^k\psi(z)$, thus
+$$d''f(z) = d''(z^k\psi(z)) = z^k d''\psi(z).$$
+Also
+$$\iint_X \frac{d'' \psi}{\psi} \wedge \omega = 0$$
+since $(0,1)$-forms are orthogonal to holomorphic $1$-forms.
+Now we claim that $F = e^{-g}f$ is holomorphic, hence is the solution to $D$.
+In fact
+$$\dbar F = \dbar(e^{-g}f) = -e^{-g} \dbar g f + e^{-g} \dbar f$$
+but $f\dbar g = \dbar f$ so $\dbar F = 0$.
+
+Conversely, let $D$ be a nonzero divisor, $D = (f)$, and $\omega$ is given.
+Let $Y = \PP^1 \setminus \{f(a_1), \dots, f(a_r)\}$, then $f: f^{-1}(Y) \to Y$ is a covering space, say with $n$ sheets.
+If $V \subseteq Y$ is a local trivialization of this covering map, $\varphi_i: V \to U_i$ one of the isomorphisms, define the trace of $\omega$ on $V$ to be $\sum_i \varphi_i^* \omega$.
+This is a holomorphic $1$-form on $Y$, and extends to $\PP^1$ since it extends as $z^{1/n - 1}$ over each singularity, which is a ``pole" of order $1/n - 1 > -1$ and hence is removable.
+Now let $\gamma$ be a path $0 \to \infty$ in $Y$.
+Then $f^{-1}(\gamma)$ is a chain $c = c_1 + \dots + c_n$ which connects zeroes to poles and
+$$\int_c \omega = \int_\gamma \text{tr } \omega = 0.$$
+Here the last inequality follows because $\PP^1$ has genus $0$ and we can use de Rham cohomology.
+\end{proof}
+
+Now consider the \dfn{Abel-Jacobi map}
+$$\Phi: \Div_0(X) \to \Jac X.$$
+Here the Jacobian variety $\Jac X$ is defined as follows: let $\omega_1, \dots, \omega_g$ be a basis of holomorphic $1$-forms on $X$, and consider the \dfn{period lattice} $P(\omega_1, \dots, \omega_g)$, which is generated by
+$$\left(\int_a \omega_1, \dots, \int_a \omega_g\right) \in \CC^g$$
+where $a \in H_1(X, \ZZ)$. Once we have shown that $P(\omega_1, \dots, \omega_g)$ is a lattice we can set
+$$\Jac X = \frac{\CC^g}{P(\omega_1, \dots, \omega_g)}.$$
+To construct $\Phi$, let $D \in \Div_0(X)$.
+Let $c$ be a $1$-chain with $\partial c = D$.
+Set
+$$\Phi(D) = \left(\int_c \omega_1, \dots, \int_c \omega_g\right)$$
+modulo $P(\omega_1, \dots, \omega_g)$.
+Here we need the quotient to make sure that the choice of $c$ doesn't matter.
+Then the kernel of $\Phi$ consists of \emph{principal} divisors.
+
+\begin{lemma}
+If $g \geq 1$, then there are $a_1, \dots, a_g \in X$ such that for every holomorphic $1$-form $\omega$, if $\omega(a_1) = \dots = \omega(a_g) = 0$, then $\omega = 0$.
+\end{lemma}
+\begin{proof}
+Fix $a \in X$ and let $L_a$ be the evaluation map at $a$.
+The kernel of $L_a$, $H_a$, has codimension $\leq 1$. Thus
+$$\bigcap_{a \in X} H_a = 0.$$
+Thus a counting argument gives the claim.
+\end{proof}
+
+\begin{lemma}
+$P(\omega_1, \dots, \omega_g)$ is a lattice.
+\end{lemma}
+\begin{proof}
+Let $a_1, \dots, a_g$ be as in the previous lemma, and $z_j$ a coordinate at $a_j$ with $\omega_i = \varphi_{ij} ~dz_j$.
+The $\varphi_{ij}(a_j)$ form a matrix $A$. We claim that $A$ has rank $g$.
+If not then there are $\lambda_j \in \RR$ such that
+$$\sum_j \lambda_j \omega_i(a_j) = 0$$
+so by the lemma $\lambda = 0$.
+Let $U_i$ be the (necessarily simply connected) domain of $z_i$ and define a map
+\begin{align*}
+F: U_1 \times \cdots \times U_g &\to \CC^g\\
+(x_1, \dots, x_g) &\mapsto \left(\sum_{j=1}^g \int_{a_j}^{x_j} \omega_1, \dots, \sum_{j=1}^g \int_{a_j}x^{x_j} \omega_g\right).
+\end{align*}
+Let $J$ be the Jacobian matrix of $F$ at $a = (a_1, \dots, a_g)$; then
+$$J_{i\ell} = \varphi_{i\ell}(a_\ell).$$
+Therefore $J$ has rank $g$, so by the inverse function theorem, $F$ is locally invertible at $a$.
+But $F(a) = 0$, so there is open $W \ni 0$ such that $F$ maps $U_1 \times \cdots \times U_g$ to $W$.
+
+If $\Gamma$ is our supposed lattice, we need to show that near $0$, $\Gamma$ is discrete.
+That is, we need to show that if the $U_i$ are small enough then $\Gamma \cap W$ is a singleton.
+If not, there is $t \in \Gamma \cap W$ which is nonzero.
+By Abel's theorem, there is a meromorphic function $f$ such that $(f) = z_j - a_j$.
+Let $c_j/z_j$ be the principal part of $f$ at $a_j$; then by the residue theorem,
+$$0 = \Res f\omega_i = \sum_{j=1}^k c_i \varphi_{ij}(a_j)$$
+so $c_i = 0$ and hence $f = 0$, a contradiction.
+
+Finally we show that $\Gamma$ does not span a proper subspace of $\CC^g$.
+If it did, then there would be a covector $\ell \in (\RR^{2g})^*$ which vanishes on $\Gamma$ but $\ell \neq 0$.
+Let $\hat \ell$ be the corresponding covector over $\CC$ with $\Re \hat \ell = \ell$.
+Then if $c_j$ are the coefficients of $\hat \ell$,
+$$\ell\left(\int_a \omega_1, \dots, \int_a \omega_g\right) = \int_a \Re \sum_{j=1}^g c_j \omega_j = 0$$
+so that
+$$\sum_{j=1}^g c_j \omega = 0$$
+which implies $c = 0$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Jacobi]
+The Abel-Jacobi map $\Phi$ is surjective.
+\end{theorem}
+\begin{proof}
+Let $p \in \Jac X$, say $p = [\xi]$ where $\xi \in \CC^g$.
+Recall that if $U_1, \dots, U_g$ are charts, then there is open $W \ni 0$ such that
+$$F: U_1 \times \cdots \times U_g \to W$$
+is a diffeomorphism.
+Let $N$ be a large integer, so that $\xi/N \in W$.
+Let $c = \sum_i [a_i, z_i]$ be a $1$-chain such that
+$$\frac{\xi}{N} = \left(\int_c \omega_1, \dots, \int_c \omega_g\right).$$
+Then $\xi/N = \Phi(c)$.
+\end{proof}
+
+\section{Proof of Serre duality}
+The proof of Serre duality is long and boring. However, we need to give all the details because otherwise no student will bother to learn them themselves. Or something.
+
+We define a right resolution of the sheaf $\Omega$ of holomorphic $1$-forms by
+$$0 \to \Omega \to \tilde \Omega^{1,0} \to \Omega^2_{cl} \to 0$$
+where $\Omega^2_{cl}$ is the sheaf of closed $2$-forms, which gives a left resolution of $H^1(X, \Omega)$ as
+$$\cdots \to \tilde \Omega^{1, 0}(X) \to \Omega^2_{cl}(X) \to H^1(X, \Omega) \to 0.$$
+
+\begin{definition}
+If $\xi \in H^1(X, \Omega)$ can be represented by $\omega \in \Omega^2_{cl}(X)$ we set
+$$\Res \xi = \frac{1}{2\pi i} \iint_X \omega,$$
+the \dfn{residue} of $\xi$.
+\end{definition}
+
+The residue of a first cohomology class is clearly well-defined since $d\tilde \Omega^{1, 0}$ is annihilated by integration.
+
+Now let $D$ be a divisor. We get a map
+\begin{align*}
+\Omega_{-D} \times \Olo_D &\to \Omega\\
+(\omega, f) &\mapsto f\omega
+\end{align*}
+since the zeroes in $\Omega_{-D}$ and poles in $\Olo_D$ necessarily cancel each other out to give a holomorphic $1$-form.
+Now if $\xi \in H^1(X, \Olo_D)$ is a cocycle, say $\xi = (f_{ij})$, we can then define $\omega \xi = (\omega f_{ij})$, whenever $\omega \in \Omega_{-D}(X)$, and we get a sequence of maps
+$$\Omega_{-D}(X) \times H^1(X, \Olo_D) \to H^1(X, \Omega) \to \CC$$
+given by $\Res: H^1(X, \Omega) \to \CC$.
+This sequence of maps induces a bilinear map $\langle \cdot, \cdot\rangle: \Omega_{-D}(X) \times H^1(X, \Olo_D) \to \CC$.
+
+\begin{definition}
+We define a map
+$$i_D: H^0(X, \Omega_{-D}) \to H^1(X, \Olo_D)^*$$
+to be induced by the bilinear map $\langle \cdot, \cdot\rangle: \Omega_{-D}(X) \times H^1(X, \Olo_D) \to \CC$, called the \dfn{Serre isomorphism}.
+\end{definition}
+
+We must show that the Serre isomorphism is an isomorphism, so that
+$$h^0(X, \Omega_{-D}) = h^1(X, \Olo_D).$$
+
+\begin{definition}
+Let $\mathscr A$ be an open cover of $X$.
+Let
+$$\delta: C^0(\mathscr A, \Mero^1) \to C^1(\mathscr A, \Mero^1)$$
+be the coboundary map.
+A \dfn{Mittag-Leffler distribution} is a cocycle $\mu \in C^0(\mathscr A, \Mero^1)$ such that $\delta \mu$ is a holomorphic cocycle.
+\end{definition}
+
+\begin{definition}
+Let $\mu = (\omega_i)$ be a Mittag-Leffler distribution. We define the \dfn{residue} of $\mu$ to be
+$$\Res \mu = \sum_{x \in X} \Res_x \omega_i.$$
+\end{definition}
+
+The residue is well-defined since $\omega_i - \omega_j$ is holomorphic on $U_i \cap U_j$, so that we can choose a cover where each of the poles is contained in exactly one open set and everywhere else it's holomorphic and has no residue.
+
+Let $\mu$ be a Mittag-Leffler distribution.
+Then $\delta \mu \in Z^1(\mathscr A, \Omega)$, so $[\delta \mu] \in H^1(X, \Omega)$, which has a residue in the sense of left resolutions.
+
+\begin{lemma}
+\label{Serre theorem 1}
+Let $\mu$ be a Mittag-Leffler distribution.
+One has $\Res \mu = \Res [\delta \mu]$.
+\end{lemma}
+\begin{proof}
+Fix $\mathscr A = (U_i)$ fine enough, then $\delta \mu \in Z^1(\mathscr A, \tilde \Omega^{1, 0})$.
+Since $\omega_j - \omega_i$ is meromorphic but $\tilde \Omega^{1, 0}$ is an acyclic sheaf, we can find $(\sigma_i) \in C^0(\mathscr A, \tilde \Omega^{1, 0})$ such that $\omega_j - \omega_i = \sigma_j - \sigma_i$.
+Moreover, $\omega_j - \omega_i$ is holomorphic, thus
+$$d(\sigma_j - \sigma_i) = d(\omega_j - \omega_i) = 0$$
+which implies that $d\sigma_j = d\sigma_i$ on $U_i \cap U_j$.
+That is, there is $\tau \in \tilde \Omega_{cl}^2(X)$ such that $\tau|U_i = d\sigma_i$.
+
+Using the right resolution
+$$\cdots \to \tilde \Omega^2_{cl}(X) \to H^1(X, \Omega) \to 0$$
+we claim that $\delta \mu$ is represented by $\tau$ in $\tilde \Omega^2_{cl}(X)$.
+To do this, recall the proof of the snake lemma.
+We know that $\tau = d\sigma_i$, and $\sigma_j - \sigma_i = \omega_j - \omega_i$, but this was how the proof of the snake lemma constructed the right resolution of $H^1(X, \Omega)$.
+Thus
+$$\Res [\delta \mu] = \frac{1}{2\pi i} \iint_X \tau.$$
+Let $a_1, \dots, a_n$ be the poles of $\mu$ and let $X' = X \setminus \{a_1, \dots, a_n\}$.
+That is, $\sigma_i - \omega_i = \sigma_j - \omega_j$ on $U_i \cap U_j \cap X'$.
+Thus $d\sigma_i = d\sigma_j = \tau|U_i \cap U_j$.
+So there is $\sigma \in \tilde \Omega^{1, 0}(X')$ such that $\sigma|U_i = \sigma_i - \omega_i$ which implies $\tau = d\sigma$.
+Define $(V_k, z_k)$ to be coordinates around $z_k$ contained in some element $U_{i_k}$ of $\mathscr A$, and let $V_k'$ be a small ball in $V_k$ around $a_k$.
+Let $f_k \in C^\infty_c(V_k)$ be a smooth cutoff to $V_k'$.
+Let $g = 1 - \sum_k f_k$, thus the germ of $g$ at any pole is $0$.
+A priori $\sigma$ is not smooth at $a_k$ since $\sigma \in \tilde \Omega^{1, 0}(X')$.
+But then $g\sigma \in \tilde \Omega^{1, 0}(X)$.
+Thus
+$$\iint_X d(g\sigma) = 0$$
+by Stokes' theorem.
+Also on $V_k' \setminus X'$,
+$$d(f_k\sigma) = d\sigma_{i_k} - d\omega_{i_k} = d\sigma_{i_k}.$$
+Hence
+$$\tau = d(g\sigma) + \sum_k d(f_k\sigma)$$
+and hence
+\begin{align*}
+\iint_X \tau &= \sum_k \iint_X d(f_k\sigma) = \sum_k \iint_{V_k} d(\sigma_{i_k} - \omega_{i_k})\\
+&= -\sum_k \int_{\partial V_k} d\sigma_{i_k} - d\omega_{i_k} = -\sum_k \int_{V_k} d\omega_{i_k} \\
+&= \sum_k \iint_{V_k} \omega_{i_k} = \sum_k \Res_{a_{i_k}} \omega_{i_k}\\
+&= \Res \mu
+\end{align*}
+as desired.
+\end{proof}
+
+\begin{lemma}
+\label{Serre theorem 2}
+For every divisor $D$, the Serre isomorphism
+$$i_D: H^0(X, \Omega_{-D}) \to H^1(X, \Olo_D)^*$$
+is injective.
+\end{lemma}
+\begin{proof}
+We must show that for every $\omega \in H^0(X, \Omega_{-D})$ there is $\xi \in H^1(X, \Olo_D)$ such that $\langle \omega, \xi\rangle$ is nonzero.
+Pick $a \in X$ such that $D(a) = 0$, so we can find coordinates $(U_0, z)$ at $a$ such that $D|U_0 = 0$.
+Then we can write $\omega = f~dz$ where $f$ is holomorphic on $U_0$.
+Let $\mathscr A$ be the open cover $\{U_0, U_1\}$ where $U_1 = X \setminus a$.
+Let $\eta = (f_0, f_1)$ where $f_0 = 1/zf$ and $f_1 = 0$ be a cocycle for $\mathscr A$.
+Then $\omega\eta = (dz/z, 0)$ is a Mittag-Leffler distribution since on $U_0 \cap U_1$, $dz/z$ is holomorphic.
+Then if we set $\xi = [\delta \eta]$, then $\xi \in H^1(X, \Olo_D)$.
+Then
+$$\omega\xi = \omega[\delta \eta] = [\delta(\omega \eta)]$$
+so by Lemma \ref{Serre theorem 1},
+$$\langle \omega, \xi\rangle = \Res [\delta(\omega \eta)] = \Res \omega\eta = 1$$
+since $dz/z$ clearly has residue $1$ at $a$ and $0$ is holomorphic.
+\end{proof}
+
+It remains to show that $i_D$ is surjective. This turns out to be a huge pain in the ass.
+
+\begin{lemma}
+\label{Serre theorem 3}
+There is $k_0 \in \ZZ$ such that for every divisor $D$,
+$$h^0(X, \Omega_D) \geq \deg D + k_0.$$
+\end{lemma}
+\begin{proof}
+Let $K$ be a canonical divisor. Then
+$$h^0(X, \Omega_D) = h^0(X, \Olo_{D + K}).$$
+Indeed, $\Omega = \Olo_K$ since $K$ is the divisor corresponding in $H^1(X, \Olo^*)$ to the cotangent bundle.
+By the Riemann-Roch theorem,
+\begin{align*}
+h^0(X, \Olo_{D + K}) &= h^1(X, \Olo_{D+K}) + 1 - g + \deg(D + K)\\
+&= 1 - g + \deg D + \deg K.
+\end{align*}
+So let $k_0 = 1 - g + \deg K$.
+\end{proof}
+
+The trouble here is that we need Serre duality to show $\deg K = 2g - 2$, but of course when the proof is done we get $k_0 = g - 1$.
+
+If $D' \to D$ then the inclusion map $\Olo_{D'} \to \Olo_D$ gives a short exact sequence
+$$0 \to \Olo_{D'} \to \Olo_D \to \mathscr F \to 0$$
+where $\mathscr F$ is a skyscraper sheaf, and hence acyclic. So we get a right resolution
+$$\cdots \to H^1(X, \Olo_{D'}) \to H^1(X, \Olo_D) \to 0.$$
+Dualizing, we get a left resolution
+$$0 \to H^1(X, \Olo_D)^* \to H^1(X, \Olo_{D'})^* \to \cdots.$$
+In particular, we get a commutative diagram
+$$\begin{tikzcd}
+0 \arrow[r] & H^1(X, \Olo_D)^* \arrow[r,"i_{D'}^D"] & H^1(X, \Olo_{D'})^*\\
+0 \arrow[r] & H^1(X, \Omega_{-D}) \arrow[u,"i_D"] \arrow[r] & H^1(X, \Omega_{D'})^* \arrow[u,"i_{D'}"]
+\end{tikzcd}
+$$
+of injective maps.
+
+\begin{lemma}
+\label{Serre theorem 4}
+Suppose that $i_{D'}^D(\lambda) = i_{D'}(\omega)$. Then $\omega \in H^0(X, \Omega_{-D})$ and $i_D(\omega) = \lambda$.
+\end{lemma}
+\begin{proof}
+A straightforward diagram chase.
+\end{proof}
+
+Let $B$ be a divisor and $\psi \in H^0(X, \Olo_B)$.
+Then $\psi$ defines a map $\Olo_{D - B} \to \Olo_B$ given by multiplication against $\psi$.
+The adjoint of this map defines a commutative diagram
+$$\begin{tikzcd}
+H^1(X, \Olo_D)^* \arrow[r] & H^1(X, \Olo_{D - B})^*\\
+H^0(X, \Omega_{-D}) \arrow[u,"i_D"] \arrow[r] & H^0(X, \Omega_{B - D}) \arrow[u,"i_{D - B}"]
+\end{tikzcd}$$
+which commutes by naturality.
+
+\begin{lemma}
+\label{Serre theorem 5}
+The map $H^1(X, \Olo_D)^* \to H^1(X, \Olo_{D - B})^*$ is injective.
+\end{lemma}
+\begin{proof}
+Let $A = (\psi)$.
+Then $A \geq -B$ and the maps induced by $\psi$ and $1/\psi$ give an isomorphism $\Olo_{D+A} \to \Olo_D$.
+We also have an inclusion $\Olo_{D - B} \to \Olo_{D + A}$ and hence a commutative diagram
+$$\begin{tikzcd}
+\Olo_{D - B} \arrow[rr] \arrow[dr] && \Olo_D\\
+& \Olo_{D + A} \arrow[ur]
+\end{tikzcd}$$
+of sheaves, which gives a diagram of the same form in cohomology.
+Since the $H^1$ of a skyscraper sheaf vanishes, the map $H^1(X, \Olo_{D - B}) \to H^1(X, \Olo_{D + A})$ is an isomorphism. We already know that $H^1(X, \Olo_{D + A}) \to H^1(X, \Olo_D)$ is an isomorphism, so $H^1(X, \Olo_{D - B}) \to H^1(X, \Olo_D)$ is also an isomorphism.
+\end{proof}
+
+To complete the proof of Serre duality, let $p \in X$ and $D_n = D - np$.
+Now define, given $\lambda \in H^1(X, \Olo_D)^*$,
+$$\Lambda = \{\psi\lambda: \psi \in H^0(X, \Olo_{np})\}.$$
+By Lemma \ref{Serre theorem 5}, the natural map $H^0(X, \Olo_{np}) \to \Lambda$ is injective=.
+But then
+$$\dim \Lambda \geq h^0(X, \Olo_{np}) \geq 1 - g + n$$
+by the Riemann-Roch theorem.
+Also
+$$\dim i_{D_n}(H^0(X, \Omega_{-D_n})) = h^0(X, \Omega_{-D_n}) \geq n + k_0 - \deg D$$
+by Lemma \ref{Serre theorem 3}.
+By the Riemann-Roch theorem,
+$$h^1(X, \Olo_{D_n}) - h^0(X, \Olo_{D_n}) = g - 1 - \deg D + n$$
+and if $n$ is large enough then it follows that
+$$h^1(X, \Olo_{D_n}) = g - 1 + n - \deg D$$
+so
+$$\dim \Lambda + \dim i_{D_n}(H^0(X, \Omega_{-D_n})) = 1 - g + 2n + k_0 - \deg D$$
+and so the pigeonhole principle implies that
+$$\dim \Lambda \cap i_{D_n}(H^0(X, \Omega_{-D_n})) \geq 1.$$
+Thus there is $\psi \in H^0(X, \Olo_{np})$ which is nonzero, and $\omega \in H^0(X, \Omega_{-D_n})$, such that $\psi\lambda = i_{D_n}(\omega)$.
+If $A = (\psi)$ then $D' = D_n - A$ satisfies $D' \leq D$, thus we have a commutative diagram
+$$\begin{tikzcd}
+H^1(X, \Olo_D)^* \arrow[r, "i_{D'}^D"] & H^1(X, \Olo_{D'})^*\\
+H^0(X, \Omega_{-D}) \arrow[u,"i_D"] \arrow[r] & H^0(X, \Olo_{-D}) \arrow[u,"i_{D'}"]
+\end{tikzcd}.$$
+Then
+$$i_{D'}^D\lambda = \frac{\psi}{\psi}\lambda = \frac{i_{D_n}(\omega)}{\psi} = i_{D_n}(\omega/\psi)$$
+which gives $\lambda = i_D(\omega/\psi)$.
+This implies that $i_D$ is surjective and so completes the proof of Serre duality.
+
+\chapter{Commutative algebra basics}
+Let us begin discussing commutative algebra following Eisenbud. This will probably skip a lot of details as I'm mainly trying to get the intuitions.
+
+All rings are commutative.
+
+\section{Local rings}
+We interpret a ring $R$ as follows.
+The primes of $R$ are points of the \dfn{affine scheme} $\Spec R$.
+For $p \in \Spec R$ and $f \in R$, we write $f(p)$ for the image of $f$ in $R/p$.
+The ``geometrically meaningful" points are the maximal ideals.
+Thus we have a ``bundle of fields" over $\Spec R$ consisting of \dfn{residue class fields} $R/p$, and an element of $R$ is a section of this bundle of fields.
+
+Affine schemes are equipped with the \dfn{Zariski topology}, i.e. the weakest topology which makes every element of $R$ continuous.
+So the closed sets of $\Spec R$ correspond to ideals, namely the closed set corresponding to the ideal $I$ is $\{p \in \Spec R: I \subseteq p\}$.
+Bigger ideals correspond to smaller closed sets, since if $I = 0$ then $\{p \in \Spec R: 0 \subseteq p\} = \Spec R$.
+
+A $R$-module $M$ consists of ``sections of a vector bundle".
+Indeed, given the projection map $R \to R/p$ we get a map of $R$-modules $M \to M/p$ where $M/p$ carries the structure of a vector space over the residue class field $R/p$.
+We write $m(p)$ for the image of $m$ in $M/p$.
+
+A subset of a ring is \dfn{multiplicative} if it is closed under multiplication.
+In particular, if $p$ is a prime ideal, then its complement $p^c$ is multiplicative.
+
+\begin{definition}
+Let $R$ be a ring, $M$ a $R$-module, and $U$ a multiplicative subset of $R$.
+Then the \dfn{localization} of $M$ away from $U$, $M[U^{-1}]$, is the $R$-module obtained from $M$ by first modding out by $\{m \in M: \exists u \in U(mu = 0)\}$ and then adjoining formal inverses $m/u$ for every $m \in M$ and $u \in U$ as freely as possible.
+If $p$ is a prime ideal, we write $M_p = M[(p^c)^{-1}]$.
+\end{definition}
+
+Let $\varphi: R \to R[U^{-1}]$ be the localization map.
+The correspondence $p \mapsto \varphi^{-1}(p)$ is a bijection between the primes of $R[U^{-1}]$ and the primes of $R$ not meeting $U$.
+So, the idea of localization away from $U$ is to replace $\Spec R$ with its open subscheme corresponding to the complement of the ideal generated by $U^c$.
+In particular $\Spec R_p = \{0, p\}$.
+This motivates the following definition.
+
+\begin{definition}
+A \dfn{local ring} is a ring with just one maximal ideal.
+\end{definition}
+
+In $\Spec R_p$ we have forgotten about all the data of the functions in $R$ except their behavior near $p$.
+The fact that we modded out by zero-divisors means that we even forgot about their derivatives.
+All we care about is their behavior at $p$.
+
+We have a natural isomorphism $R[U^{-1}] \otimes M \to M[U^{-1}]$, namely $r/u \otimes m \mapsto rm/u$.
+
+\begin{definition}
+The \dfn{support} $\supp M$ of a module $M$ is the set of primes $p$ such that $M_p \neq 0$.
+The \dfn{annihilator} $\Ann M$ is the largest ideal $I$ such that $IM = 0$.
+\end{definition}
+
+Now if $p$ is not in $\supp M$, then $M_p = 0$, so all the elements of $M$ must vanish near $p$.
+That is certainly what it means for a section of a vector bundle to not be in the support.
+
+\begin{lemma}
+Let $M$ be a finitely generated module.
+The support $\supp M$ is the set of all $p \in \Spec R$ such that $\Ann M \subseteq p$.
+\end{lemma}
+\begin{proof}
+This follows from the fact that $M_p = 0$ iff $M$ is annihilated by an element of $p^c$.
+But in fact, if $M$ is generated by $m_1, \dots, m_n$, and $m_i$ is annihilated by $u_i \in p^c$, then $\prod_i u_i$ annihilates $M$.
+\end{proof}
+
+\begin{definition}
+An element $m \in M$ \dfn{stalkwise locally} satisfies a property $P$ if for every maximal ideal $p$, the image of $m$ in $M_p$ satisfies $P$.
+\end{definition}
+
+\begin{lemma}
+For every $m \in M$, $m = 0$ iff $m$ is stalkwise locally $0$.
+\end{lemma}
+\begin{proof}
+Let $I$ annihilate $m$, then $m_p = 0$ iff $I$ is not contained in $p$.
+But $m = 0$ iff $p = R$, which happens iff $I$ is not contained in any maximal ideal of $R$ (since Zorn's lemma says that every prime ideal is contained in a maximal ideal if it's not $R$).
+\end{proof}
+
+\section{Localization and flat modules}
+It is clear that localization $M \mapsto M[U^{-1}]$ is a functor.
+In fact it is a very well-behaved functor, as we now discuss.
+
+If $x,y$ are objects in a category, their biproduct $x \oplus y$ is defined to be both their product and coproduct, if both exist and are equal.
+
+\begin{definition}
+A \dfn{preadditive category} is a category $C$ such that every $\Hom$-set is equipped with the structure of an abelian group, such that composition distributes over addition.
+An \dfn{abelian category} is a preadditive category which contains a zero object and is closed under finite biproducts, such that every morphism has a kernel and a cokernel, every monomorphism is a kernel, and every epimorphism is a cokernel.
+\end{definition}
+
+Clearly the category of $R$-modules is abelian, since every $\Hom$-set has the structure of a $R$-module (and thus an abelian group).
+The converse is also true: every abelian category embeds in a category of modules.
+We will not prove this fact but we will always have an embedding of an abelian category in a category of modules in mind when we talk about abelian categories.
+In any case we will never need an abelian category that is not a full subcategory of some category of modules.
+
+There are two important facts about abelian categories.
+The first is that currying (``the fundamental theorem of introductory computer science") makes sense.
+Namely, $\Hom$ and $\otimes$ are bifunctors in an abelian category, and we have
+$$\Hom(a, \Hom(b, c)) = \Hom(a \otimes b, c).$$
+More concretely, a bilinear map $A \times B \to C$ is the same data as a linear map $A \otimes B \to C$.
+
+The second important fact about abelian categories is that, because they have kernels and cokernels, exact sequences make sense.
+In particular, the notion of a short exact sequence does:
+
+\begin{definition}
+An \dfn{exact functor} is a functor $F: A \to B$, where $A,B$ are abelian categories, such that for every short exact sequence
+$$0 \to a \to b \to c \to 0$$
+in $A$, the sequence
+$$0 \to F(a) \to F(b) \to F(c) \to 0$$
+is short exact in $B$.
+\end{definition}
+
+\begin{lemma}
+Tensoring with a module preserves cokernels.
+\end{lemma}
+\begin{proof}
+By currying, tensoring with a module is left-adjoint to Homming.
+Therefore it is cocontinuous, and cokernels are colimits.
+\end{proof}
+
+Dually, Homming with a module preserves kernels. The proof is the same.
+
+\begin{example}
+Tensoring with $\ZZ/2$ is not exact. We have an exact sequence
+$$0 \to 3\ZZ \to \ZZ \to \ZZ/3 \to 0$$
+which tensors to
+$$0 \to 0 \to \ZZ/2 \to 0 \to 0$$
+which is clearly not exact.
+\end{example}
+
+\begin{definition}
+A \dfn{flat module} is a module $M$ such that tensoring with $M$ is an exact functor.
+\end{definition}
+
+A module $M$ is flat iff tensoring with $M$ preserves monomorphisms.
+Indeed, a functor is exact iff it preserves monomorphisms and epimorphisms.
+
+Localization preserves flatness:
+
+\begin{theorem}
+For every flat module $F$, $F[U^{-1}]$ is flat.
+\end{theorem}
+\begin{proof}
+Let $M' \to M$ be a monomorphism. We must show that the induced map
+$$F[U^{-1}] \otimes M' \to F[U^{-1}] \otimes M$$
+is a monomorphism as well.
+But this induced map is naturally isomorphic to the map
+$$F \otimes M'[U^{-1}] \to F \otimes M[U^{-1}]$$
+obtained by extending the map $F \otimes M' \to F \otimes M[U^{-1}]$ induced by $F \otimes M' \to F \otimes M$, which is a monomorphism since $F$ is flat.
+Furthermore, if $m \in M'$ and $m/u = 0$ in $M[U^{-1}]$ then there is $v \in U$ such that $vm = 0$ in $M$ and hence in $M'$ since everything is monic.
+Thus $m/u = 0$ in $M'[U^{-1}]$.
+\end{proof}
+
+\section{Associated primes}
+We will abuse terminology by writing $\Ann m$ for the annihilator of the \emph{span} $(m)$ of $m$,
+$$\Ann m = \Ann(mR).$$
+
+\begin{definition}
+A prime $p$ is \dfn{associated} to $M$ if there is $m \in M$ such that $p = \Ann m$.
+The set of associated primes to $M$ is called the \dfn{assassin} $\Ass M$ of $M$.
+\end{definition}
+
+We will abuse notation and write $\Ass I$ for $\Ass R/I$.
+
+\begin{lemma}
+Let $U$ be a multiplicative set.
+If $I$ is an ideal which is maximal among those not meeting $U$ then $I$ is prime.
+\end{lemma}
+\begin{proof}
+Suppose $f,g \notin I$. We must show $fg \notin I$.
+By maximality of $I$, $I + (f)$ and $I + (g)$ meet $U$, say $i + af, j + bg \in U$ where $i,j \in \Ann m$.
+If $fg \in I$ then $(i + af)(bg + j) \in I$, so $I$ meets $U$.
+\end{proof}
+
+This is basically just a souped up version of the proof that every maximal ideal is prime.
+We record this proof here because we will need the idea again in the following proof:
+
+\begin{lemma}
+Let $I$ be an ideal which is maximal in the set $\{\Ann m: m \in M\}$.
+Then $I \in \Ass M$.
+\end{lemma}
+\begin{proof}
+We must show that $I$ is prime.
+Actually, if $rs \in I$, $s \notin I$, and $I = \Ann m$, then $rsm = 0$ but $sm \neq 0$, so $(r) + I \subseteq \Ann sm$.
+Thus $(r) + I = I$ by maximality, so $r \in I$.
+\end{proof}
+
+\begin{lemma}
+If $R$ is a Noetherian ring and $M$ is a nonzero $R$-module then $\Ass M$ is nonempty.
+\end{lemma}
+\begin{proof}
+Every chain $C$ in $\{\Ann m: m \in M\}$ has only finite length, so $C$ has a maximal element.
+So by Zorn's lemma, $\{\Ann m: m \in M\}$ has a maximal element.
+\end{proof}
+
+\begin{lemma}
+If $0 \to A \to B \to C$ is a short exact sequence of modules then
+$$\Ass A \subseteq \Ass B \subseteq \Ass A \cup \Ass C.$$
+\end{lemma}
+\begin{proof}
+That $\Ass A \subseteq \Ass B$ is clear.
+Now let $p \in \Ass B \setminus \Ass A$.
+If $\Ann m = p$, thus $(m) \cong R/p$, then every nonzero submodule $N$ of $(m)$ also has $\Ann N = p$.
+So $(m) \cap A = 0$, so $(m)$ is isomorphic to its image in $C$.
+So $p \in \Ass C$.
+\end{proof}
+
+\begin{lemma}
+If $R$ is a Noetherian ring and $M$ is a finitely generated $R$-module, then there is a filtration
+$$0 = M_0 \subset M_1 \subset M_2 \subset \cdots \subset M_n = M$$
+with $M_{i+1}/M_i$ isomorphic to $R/p_i$ where $p_i$ are primes.
+\end{lemma}
+\begin{proof}
+If $M \neq 0$ then let $p_1 \in \Ass M$.
+So let $M_1$ be isomorphic to $R/p_1$.
+Now repeat inductively with $M$ replaced by $M/M_1$.
+Since $M$ is a Noetherian module, this process must stop after a finite amount of time $n$.
+\end{proof}
+
+\begin{theorem}
+If $R$ is a Noetherian ring and $M$ is a finitely generated $R$-module, then $\Ass M$ is a nonempty finite set, and its elements are minimal among those containing $\Ann M$.
+\end{theorem}
+\begin{proof}
+We already proved that this is nonempty, and its relation to $\Ann M$ is just a definition chase.
+To see that it is finite, consider a filtration
+$$0 = M_0 \subset M_1 \subset M_2 \subset \cdots \subset M_n = M$$
+equipped with prime ideals $p_i$ such that $M_{i+1}/M_i \cong R/p_i$.
+We induct on $n$; namely we have a short exact sequence
+$$0 \to M_{n - 1} \to M_n \to \frac{R}{p_{n - 1}} \to 0$$
+so $\card \Ass M_n \leq \card \Ass M_{n - 1} + \card \Ass R/p_{n - 1}$.
+If $q$ annihilates $R/p_{n - 1}$ then $q$ contains $p_{n - 1}$, so $\card \Ass R/p_{n - 1} = 1$.
+\end{proof}
+
+\begin{theorem}[prime avoidance]
+Let $I_1, \dots, I_n, J$ be ideals in $R$ such that $J \subseteq \bigcup_i I_i$ and either:
+\begin{enumerate}
+\item if $i \geq 3$ then $I_i$ is prime, or
+\item $R$ contains an infinite field.
+\end{enumerate}
+Then there is $i$ such that $J \subseteq I_i$.
+\end{theorem}
+\begin{proof}
+If $R$ contains an infinite field $k$ then the $I_i$ and $J$ are vector spaces over $k$, so the claim is obvious.
+Also if $n = 1$ the proof is trivial.
+So we might as well assume (by induction and after reindexing) that $n \geq 2$, all but $2$ of the $I_i$ are prime, and $J$ is not a subset of $\bigcup_{i \neq i_0} I_i$ for any $i_0$.
+In that case, there are $x_i \in J$ such that $x_i \in I_i \setminus \bigcup_{j \neq i} I_j$.
+
+If $n = 2$ then $x_1 + x_2 \notin I_1$ and $\notin I_2$, so $x_1 + x_2 \notin J$, contradiction.
+
+If $n \geq 3$, then we may assume that $I_1$ is prime after reiindexing, so $x_1 + \prod_{j > 1} x_j \notin I_k$ for any $k$, hence $\notin J$, contradiction.
+\end{proof}
+
+
+
+
+
+\newpage
+\printindex
+\printbibliography
+
+\end{document}

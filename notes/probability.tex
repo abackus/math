@@ -1,0 +1,2194 @@
+
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Logic notes}
+\author{Aidan Backus}
+\date{2021}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\Cau}{\mathbf{Cau}}
+\newcommand{\ISF}{\mathbf{ISF}}
+\newcommand{\Simp}{\mathbf{Simp}}
+\newcommand{\Sch}{\mathscr S}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\dom}{dom}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\Var}{Var}
+
+\newcommand{\Fin}{\mathsf{Fin}}
+\newcommand{\Seq}{\mathsf{Seq}}
+\DeclareMathOperator{\lh}{lh}
+
+\newcommand{\RCA}{\mathbf{RCA}}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiomx}[theorem]{Axiom}
+\newtheorem{theoremxx}[theorem]{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definitionx}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{examplex}[theorem]{Example}
+\newtheorem{exercisex}{Exercise}[chapter]
+\newtheorem{problem}[theorem]{Problem}
+
+\newenvironment{axiom}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\axiomx}
+  {\popQED\endexamplex}
+
+\newenvironment{definition}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\definitionx}
+  {\popQED\endexamplex}
+
+\newenvironment{example}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\examplex}
+  {\popQED\endexamplex}
+
+  \newenvironment{exercise}
+    {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\exercisex}
+    {\popQED\endexamplex}
+
+  \newenvironment{theoremx}
+        {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\theoremxx}
+        {\popQED\endexamplex}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Martingales}
+\begin{definition}
+A \dfn{filtered probability space} is a probability space equipped with a \dfn{filtration}; i.e. an increasing sequence of $\sigma$-algebras of measurable sets.
+\end{definition}
+
+\begin{definition}
+Let $\mathcal F$ be a filtration.
+A stochastic process $X$ is \dfn{adapted} if $X_n$ is $\mathcal F_n$-measurable.
+It is \dfn{predictable} if $X_n$ is $\mathcal F_{n-1}$-measurable.
+\end{definition}
+
+We think of $Y$ being $\mathcal G$-measurable if knowledge of which events in $\mathcal G$ are true is enough to determine the value of $Y$.
+
+\begin{definition}
+Let $\mathcal F$ be a filtration.
+A \dfn{martingale} with respect to $\mathcal F$ is an adapted stochastic process $X$ such that
+$$E(X_{n+1}|\mathcal F_n) = X_n.$$
+A \dfn{submartingale} instead satisfies $E(X_{n+1}|\mathcal F_n) \geq X_n$; a supermartingale is defined dually.
+\end{definition}
+
+The intuition is that martingales, on average, stay the same.
+
+\begin{theoremx}
+Fix a filtration $\mathcal F$ and a stochastic process $X$. Then:
+\begin{enumerate}
+\item $X$ is a submartingale with respect to $\mathcal F$ iff $-X$ is a supermartingale with respect to $\mathcal F$.
+\item If $X$ is a martingale with respect to $\mathcal F$ then
+$$E(X_m|\mathcal F_n) = X_n$$
+for every $m \geq n + 1$.
+\item If $X$ is a submartingale with respect to $\mathcal F$ and $\mathcal F^X$ is the filtration of $\sigma$-algebras such that $\mathcal F^X_n$ is the $\sigma$-algebra generated by $X_n$, then $X$ is a submartingale with respect to $\mathcal F^X$.
+\end{enumerate}
+\end{theoremx}
+The proofs are trivial.
+
+\section{Examples of martingales}
+\begin{example}
+Suppose that $X_i$ are iid random variables and $E(X_1) = 0$.
+Let $S_n = \sum_{i \leq n} X_i$.
+Let $\mathcal F_0$ be the trivial $\sigma$-algebra and $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Then $S$ is a martingale with respect to $\mathcal F$.
+Indeed,
+$$E(S_{n+1}|\mathcal F_n) = E(S_n + X_{n+1}|\mathcal F_n) = S_n + E(X_{n+1}|\mathcal F_n) = S_n + E(X_{n+1}) = S_n$$
+so $S$ is a martingale.
+
+In general, $S_n - \mu$ will be a martingale if $E(X_1) = \mu$.
+\end{example}
+
+\begin{example}
+Suppose that $X_i$ are iid random variables and $E(X_1) = \mu$.
+Let
+$$M_n = \frac{1}{\mu^n} \prod_{i \leq n} X_i.$$
+Let $\mathcal F_0$ be the trivial $\sigma$-algebra and $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Then $M$ is a martingale with respect to $\mathcal F$.
+Indeed, $E(M_{n+1}|\mathcal F_n) = M_n$.
+\end{example}
+
+\begin{definition}
+Let $X_i$ be iid random variables, $\mathcal F_0$ the trivial $\sigma$-algebra, $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Let $S_0 = 0$ and $S_n = \sum_{i \leq n} X_i$.
+Let $\theta \in \RR$.
+Let $\phi(t) - \log E(e^{tX_1})$ be the moment-generating function of $X_1$.
+Let $M_0 = 1$ and $M_n = e^{\theta S_n - n\phi(\theta)}$.
+Then $M$ is a martingale with respect to $\mathcal F$, the \dfn{Wald martingale} generated by $X$.
+\end{definition}
+
+\begin{definition}
+Let $\mathcal F$ be a filtration and $X \in L^1$ a random variable.
+Let $Y_n = E(X|\mathcal F_n)$.
+Then $Y$ is a martingale with respect to $\mathcal F$, the \dfn{Doob martingale} generated by $X$.
+\end{definition}
+
+Let $X$ be a Doob martingale given by $Y \in L^1$.
+That $X_n \in L^1$ follows because $E|X_n| \leq E|Y|$.
+Then
+$$E(X_{n+1}|\mathcal F_n) = E(E(X|\mathcal F_{n+1})|\mathcal F_n) = E(X|\mathcal F_n) = X_n$$
+so indeed $Y$ is a martingale.
+
+\begin{lemma}
+Let $\mathbb F$ be a set of sub-$\sigma$-algebras and $X \in L^1$.
+Then $(E(X|\mathcal F))_{\mathcal F \in \mathbb F}$ is uniformly integrable.
+\end{lemma}
+\begin{proof}
+Recall that a set $\mathcal X$ of random variables is uniformly integrable iff
+$$\lim_{\lambda \to \infty} \sup_{X \in \mathcal X} \int_{|X| > \lambda} |X| ~d\PP = 0.$$
+We have
+$$\int_{|E(X|\mathcal F)| > \lambda} |E(X|\mathcal F)| ~d\PP \leq \int_{E(X|\mathcal F) > \lambda} |X| ~d\PP$$
+since $\{E(X|\mathcal F) > \lambda\} \in \mathcal F$.
+Moreover,
+$$\PP(E(X|\mathcal F) > \lambda) \leq \frac{1}{\lambda} E(|E(X|\mathcal F)|)
+\leq \frac{1}{\lambda} E(E(|X||\mathcal F))
+= \frac{1}{\lambda} E(|X|)
+$$
+by Chebyshev's inequality.
+Therefore
+$$\lim_{\lambda \to \infty} \PP(E(X|\mathcal F) > \lambda) = 0$$
+uniformly in $\mathcal F$.
+\end{proof}
+
+As a consequence, Doob martingales are uniformly integrable.
+We will later show the converse, so that a martingale is Doob iff it is uniformly integrable.
+
+\begin{example}
+Let $X$ be a stochastic process of iid random variables with $f$ the probability density of $X_1$.
+Let $g$ be a probability density such that $f = 0$ implies $g = 0$ almost everywhere.
+Then $g(X_i)/f(X_i)$ is almost surely finite so we may define
+$$M_n = \prod_{i=1}^n \frac{g(X_i)}{f(X_i)}.$$
+As usual, let $\mathcal F_0$ be the trivial $\sigma$-algebra and $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Then $M$ is a martingale with respect to $\mathcal F$. Indeed
+$$E(M_{n+1}|\mathcal F_n) = E(M_n \frac{g(X_{n+1})}{f(X_{n+1})}|\mathcal F_n) = M_n E(\frac{g(X_{n+1})}{f(X_{n+1})}|\mathcal F_n) = M_n (\frac{g(X_{n+1})}{f(X_{n+1})})$$
+since $g(X_{n+1})/f(X_{n+1})$ is independent of $\mathcal F_n$. Then
+$$M_n (\frac{g(X_{n+1})}{f(X_{n+1})}) = M_n \int_{-\infty}^\infty \frac{g(x)}{f(x)} g(x) ~dx = M_n.$$
+So $M$ is actually a nonnegative martingale.
+However, $M$ is not a Doob martingale by the previous results.
+\end{example}
+
+\begin{lemma}
+Suppose that $X$ is a martingale with respect to $\mathcal F$ and $\phi: \RR \to \RR$ is convex.
+If for every $n$, $\phi(X_n) \in L^1$, then $\phi(X)$ is a submartingale with repect to $\mathcal F$.
+\end{lemma}
+\begin{proof}
+The only nontrivial thing to check is the martingale formula
+$$
+E(\phi(X_{n+1})|\mathcal F_n) \geq \phi(E(X_{n+1}|\mathcal F_n)) = \phi(X_n)
+$$
+owing to Jensen's formula.
+\end{proof}
+
+Similarly if $X$ is a submartingale and $\phi$ is convex and increasing then $\phi(X)$ is a submartingale.
+
+\section{Decomposition theorems}
+A stochastic process $A$ is increasing if for every $n$, $A_{n+1} \geq A_n$ almost surely.
+We therefore can write every submartingale as the sum of a martingale and an error process, which is predictable and increasing.
+
+\begin{theorem}[Doob decomposition]
+Let $X$ be a submartingale.
+Then there is a unique martingale $M$ and a unique stochastic process $A$ such that $X = M + A$ and $A$ is predictable and increasing, and $A = 0$.
+\end{theorem}
+\begin{proof}
+Suppose $X$ is a submartingale with respect to $\mathcal F$.
+Given $X = M + A$ we want
+$$E(X_{n+1}|\mathcal F_{n+1}) = E(M_{n+1}|\mathcal F_n) = E(A_{n+1}|\mathcal F_n) = M_n + A_{n+1}$$
+but $M_n = X_n - A_n$ so we must have $A_{n+1} = A_n + E(X_{n+1}|\mathcal F_n) - X_n$.
+This shows uniqueness and motivates the following construction.
+
+Let $A_0 = 0$ and $A_{n+1} = A_n + E(X_{n+1}|\mathcal F_n) - X_n$.
+Since $X$ is a submartingale,
+$$E(X_{n+1}|\mathcal F_n) \geq X_n$$
+so $A$ is increasing. To see that $A$ is predictable we use induction. Clearly $A_0$ is predictable. Moreover if $A_n$ is predictable then it is $\mathcal F_{n-1}$-measurable, hence $\mathcal F_n$-measurable.
+Moreover $E(X_{n+1}|\mathcal F_n)$ is $\mathcal F_n$-measurable, and so is $X_n$.
+So $A_n$ is predictable.
+
+Then let $M = X - A$. It remains to show that $M$ is a martingale.
+We have
+$$E(M_{n+1}|\mathcal F_n) = E(X_{n-1} - A_{n-1}|\mathcal F_n) = E(X_{n+1}|\mathcal F_n) - E(A_{n+1}|\mathcal F_n)$$
+so
+$$E(M_{n+1}|\mathcal F_n) = E(X_{n-1}|\mathcal F_n) - (A_n + E(X_{n+1}|\mathcal F_n) - X_n) = X_n - A_n = M_n$$
+so $M$ is a martingale.
+\end{proof}
+
+In continuous time, Doob decomposition is a highly nontrivial theorem but it is very useful.
+
+\begin{theorem}[Krickeberg decomposition]
+Let $(X, \mathcal F)$ be a $L^1$-uniformly bounded martingale.
+Then there are unique nonnegative $L^1$-uniformly bounded martingales $X^\pm$ with $X = X^+ - X^-$.
+\end{theorem}
+\begin{proof}
+Let $X^+$ be the positive part of $X$, fix $n$, and if $m \geq n$,
+$$Z_m = E(X_m^+|\mathcal F_n).$$
+Then $E(Z_m) \lesssim 1$ and $Z_m$ is increasing:
+The function $x \mapsto x^+$ is convex so $X^+$ is a submartingale and hence
+$$Z_m \leq E(E(X_{m+1}^+|\mathcal F_m)|\mathcal F_n) = E(X_{m+1}^+|\mathcal F_n) = Z_{m+1}.$$
+Taking $m \to \infty$ we get a limit, $Z_m \to Y_n$.
+Then $Y_n \geq 0$ and
+$$E(Y_n) = E(X_m^+) \lesssim 1$$
+by monotone convergence. Then $Y$ is adapted and
+\begin{align*}
+E(Y_{n+1}|\mathcal F_n) &= E(\lim_{n \to \infty} E(X_m^+|\mathcal F_{n+1})|\mathcal F_n)\\
+& = \lim_{n \to \infty} E(E(X_m^+|\mathcal F_{n+1})|\mathcal F_n)\\
+&= \lim_{n \to \infty} E(X_m^+|\mathcal F_n) = Y_n.
+\end{align*}
+Therefore $Y$ is a martingale.
+Similarly one can define a martingale $W$ using the convex function $x \mapsto x^-$.
+Then
+$$Y_n - W_n = \lim_{m \to \infty} E(X_m^+|\mathcal F_n) - \lim_{m \to \infty} E(X_m^-|\mathcal F_n) = \lim_{m \to \infty} X_n = X_n.$$
+Therefore $X = Y - Z$.
+\end{proof}
+
+\section{The martingale transform}
+\begin{definition}
+Let $(M, \mathcal F)$ be a martingale, $(A, \mathcal F)$ be a predictable process.
+Define $(A \cdot M)_0 = 0$ and
+$$(A \cdot M)_n = \sum_{j=1}^n A_j(M_j - M_{j-1}).$$
+We call $A \cdot M$ the \dfn{martingale transform} of $A,M$.
+\end{definition}
+
+\begin{lemma}
+Let $A \cdot M$ be a martingale transform.
+If $A \cdot M$ is integrable then it is a martingale.
+\end{lemma}
+\begin{proof}
+Adaption is easy. Also
+$$E((A \cdot M)_{n+1}|\mathcal F_n) = (A \cdot M)_n + E(A_{n+1}(M_{n+1}-M_n)|\mathcal F_n) = (A\cdot M)_n + A_{n+1}E(M_{n+1} - M_n|\mathcal F_n)$$
+so
+$$E((A \cdot M)_{n+1}|\mathcal F_n) = E(M_{n+1}|\mathcal F_n) - M_n = 0$$
+since $M$ is a martingale. Therefore
+$$E((A \cdot M)_{n+1}|\mathcal F_n) = (A\cdot M)_n$$
+which gives the claim.
+\end{proof}
+Similarly if $A$ is a predictable nonnegative process and $M$ is a submartingale then $A \cdot M$ is a submartingale.
+
+Notice that $(A \cdot M)_n$ looks like the definition of a Riemann sum.
+We think of it as sort of like the Lebesgue-Stieljes integral
+$$A \cdot M = \int_\Omega A ~dM.$$
+
+We interpret the martingale transform in terms of gambling.
+Let $X_n$ denote your winnings per dollar bet on turn $n$.
+Then $X_n$ is a random variable.
+Let $\mathcal F_n = \sigma(X_1, \dots, X_n)$ and assume
+$$E(X_n|\mathcal F_{n-1}).$$
+Suppose that we bet $A_n$ dollars on turn $n$. Then $A_n$ is determined by the capital that we already have, but not the capital we will have, thus $A_n$ is $\mathcal F_{n-1}$-measurable and $A$ is predictable.
+On turn $n$ we win $A_nX_n$ dollars. So let
+$$Y_n = \sum_{m \leq n} A_mX_m$$
+denote our capital after turn $n$.
+Then
+$$Y_n = \sum_{m \leq n} A_m(M_m - M_{m-1})$$
+where $M$ is the martingale $M_m = \sum_{j \leq m} X_j$.
+That is, $Y$ is the martingale transform $A \cdot M$.
+
+\section{Optional sampling}
+Fix a filtered probability space, say filtration $\mathcal F$.
+
+\begin{definition}
+A \dfn{stopping time} is a random variable $\tau$ valued in $\NN \cup \{\infty\}$ such that for every $n$, $\{\tau \leq n\} \in \mathcal F_n$.
+In that case, we set, for any stochastic process $X$,
+$$X_\tau(\omega) = X_{\tau(\omega)}(\omega)$$
+with the convention $X_\infty = \limsup_{n \to \infty} X_n$.
+\end{definition}
+
+Thus $X_\tau$ is a random variable.
+The intuition here is that $\tau$ is a random time representing the time some process stops, and $\{\tau \neq n\} \in \mathcal F_n$ means that we know that the process has stopped up to time $n$.
+We don't know if the process is going to stop at time $n$ without knowing what events happen in the future.
+
+\begin{example}
+Let $B$ be a Borel set, $X$ a stochastic process with $\sigma(X_1, \dots, X_n) \subseteq \mathcal F_n$, and let $\tau$ be the first time that $X \in B$, that is,
+$$\tau = \min_{X_n \in B} n.$$
+Then $\tau$ is a stopping time, called the \dfn{first hitting time} of $X$.
+\end{example}
+
+\begin{example}
+With $B,X,\mathcal F$ as above, we let $\tau$ be the final time that $X \in B$. Then $\tau$ is the \dfn{last hitting time} of $X$.
+But $\tau$ is not a stopping time in general, since we need to know that $X_{n+k} \notin B$, $k \geq 0$, which depends on $\mathcal F_{n+k}$.
+\end{example}
+
+Let $\sigma,\tau$ be stopping times. Then $\min(\sigma,\tau)$, $\max(\sigma,\tau)$, and $\sigma + \tau$ are stopping times.
+Also the constant function $\tau = n$ is a stopping time.
+
+\begin{definition}
+A \dfn{bounded stopping time} $\tau$ satisfies for some $k$, $P(\tau \leq k) = 1$, while a \dfn{finite stopping time} satisfies $P(\tau < \infty) = 1$.
+\end{definition}
+
+\begin{theorem}[optional sampling]
+Let $X$ be a martingale and $\tau$ is a stopping time.
+Then the \dfn{stopped process} $X^\tau = X_{\min(\tau, n)}$ is also a martingale.
+\end{theorem}
+\begin{proof}
+Let
+$$A_n = 1_{\tau \geq n} = 1 - 1_{\tau \leq n - 1}.$$
+Then $A$ is bounded, nonnegative, and predictable.
+Therefore $A \cdot X$ is a martingale but
+$$(A \cdot X)_n = \sum_{j=1}^n A_j(X_j - X_{j-1}) = \sum_{j=1}^n 1_{\tau \geq j}(X_j - X_{j-1}).$$
+If $\tau = k$, then the sum telescopes to give
+$$(A \cdot X)_n = \begin{cases}
+X_n - X_0, & n \leq k\\
+X_k - X_0, & n < k.
+\end{cases}$$
+That is,
+$$(A \cdot X)_n = X_{n \wedge k} - X_0$$
+so
+$$X_{n \wedge \tau} = X_0 + (A \cdot X)_n.$$
+Since $A \cdot X$ is a martingale and $X_0$ is not a stochastic process, $X_{\cdot \wedge \tau}$ is a martingale.
+\end{proof}
+
+\begin{example}
+Let $X$ be an iid random sequence, $P(X_1 = \pm 1) = 1/2$.
+Set $S_n = \sum_{j \leq n} X_j$, $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Then $S_n$ is a martingale, which we call a \dfn{symmetric random walk} on $\ZZ$.
+We think of $S_n$ as the position of a random walker on $\ZZ$ at time $n$.
+
+Let $\tau = \min\{n: S_n = 1\}$.
+Define the Wald martingale
+$$M_n = \frac{e^{\theta S_n}}{(E(e^{\theta X_1})^n)},$$
+$\theta > 0$. Then
+$$E(e^{\theta X_1}) = \cosh \theta$$
+and $M_0 = 1$.
+By optional sampling, $M_{\tau \wedge \cdot}$ is a martingale, and
+$$E(M_{\tau \wedge n}) = E(M_0) = 1.$$
+Also $S_{\tau \wedge n} \leq 1$ so
+$$E(M_{\tau \wedge n}) \leq \frac{e^\theta}{(\cosh \theta)^{\tau \wedge n}} \leq e^\theta.$$
+Thus $M_{\tau \wedge n} \lesssim 1$ and we can use dominated convergence:
+$$\lim_{n \to \infty} M_{\tau \wedge n} = \begin{cases}
+M_\tau, &\tau < \infty\\
+0, &\tau = \infty
+\end{cases}$$
+since $(\cosh \theta)^{-n} \to 0$ implies
+$$E(M_\tau 1_{\tau < \infty}) = E(\lim_{n \to \infty} M_{\tau \wedge n}) = \lim_{n \to \infty} E(M_{\tau \wedge n}) = E(M_0) = 1.$$
+Since $S_\tau = 1$ if $\tau < \infty$,
+$$E(\frac{e^{\theta}}{(\cosh \theta)^\tau}1_{\tau < \infty}) = 1.$$
+That is,
+$$E(\frac{1}{(\cosh \theta)^\tau}1_{\tau < \infty}) = e^{-\theta}.$$
+Taking $\theta \to 0$ and using monotone convergence we get
+$$E(1_{\tau < \infty}) = 1.$$
+Therefore $\tau$ is finite.
+So with probability $1$, a symmetric random walk will get to $1$.
+Also
+$$E((\cosh \theta)^{-\tau}) = e^{-\theta}.$$
+Let $1/\alpha = \cosh \theta$. Then
+$$E(\alpha^\tau) = \alpha \sum_{n=0}^\infty \alpha^n P(\tau = n) = \sum_{n=1}^\infty \alpha^n P(\tau = n - 1).$$
+Taking a binomial expansion,
+$$E(\alpha^\tau) = \sum_{m=1}^\infty \binom{1/2}{m} (-1)^{m+1} \alpha^{2m}.$$
+Comparing terms we get $P(\tau = n) = 0$ if $n$ is even.
+This is a fancy way of arguing that we need an odd number of steps to get to $1$.
+\end{example}
+
+\begin{example}
+Let $M$ be the Wald martingale for $S$ a random walk.
+Let $\tau$ be the first time that $S > 0$.
+It would be nice if $E(M_\tau) = E(M_0)$ but this is not true in general.
+The counterexample is the doubling strategy.
+
+Here's the strategy. If I lose $1$, next time I will bet $2$.
+If I lose again, I will bet $4$, and then so on, and keep doubling.
+Let $X_i$ be iid with $P(X_i = \pm 1) = 1/2$, and $A_n$ the betting strategy, so $A_n = 2^{n-1}$ if $X_1 = X_2 = \cdots = X_n = -1$ and $n \geq 2$, $A_1 = 1$, and $A_n = 0$ otherwise.
+Then $M_n = \sum_{i\leq n} X_i$ is a martingale and $(A \cdot M)_n$ is our capital at time $n$.
+Let $\tau$ be the stopping time, the first time when $A \cdot M > 0$.
+Then $E((A \cdot M)_\tau) = 1 \neq 0 = E((A \cdot M)_0)$.
+So $A \cdot M$ is a NOT a martingale and it seems like the doubling strategy beats the norm in the limit as time goes to infinity.
+
+But in reality, we have a finite amount of capital $K$, and so we should actually consider the stopping time $\sigma$ that is the first time when $A \cdot M > 0$ or $A \cdot M < -2K$.
+With very high probability we expect to lose everything. In fact by optional sampling,
+$$E(M_{\sigma \wedge n}) = E(M_0) = 0$$
+but as $n \to \infty$, $M_{\sigma \wedge n} \to M_\sigma$ and $-2K < M_\sigma \leq 1$.
+Therefore we may use dominated convergence to see that $E(M_\sigma) = 0$.
+So even this doubling strategy cannot beat a fair game.
+\end{example}
+
+\section{Martingale convergence}
+Fix a filtration $\mathcal F$ throughout.
+
+\begin{definition}
+Fix any $a < b$ and let $X$ be an adapted process.
+Define the stopping times $\tau_0 = 0$, $\tau_{2m+1}$ the first time after $\tau_{2m}$ such that $X_n \leq a$, $\tau_{2m+2}$ the first time after $\tau_{2m+1}$ such that $X_n \geq b$.
+Thus $\tau_0 \leq \tau_1 \leq \cdots$.
+Let
+$$U_n(a, b) = \sup_{\tau_{2m} \leq n} m$$
+be the number of times $X$ has crossed from $a$ to $b$ before time $n$.
+Then $U$ is called the \dfn{upcrossing} of $X$.
+\end{definition}
+
+Every upcrossing is an adapted martingale process.
+
+Let $X$ be a supermartingale.
+Then $X$ is decreasing on average, i.e. it represents the gambler's capital in a game which is unfair to the gambler.
+The gambler might try to beat $X$ by betting some quantity starting when $X$ goes below some threshold $a$, and then stop playing when $X$ goes above the threshold $b > a$.
+That is, let $A_n = 1$ if $\tau_m < n \leq \tau_{m+1}$ where $\tau$ is the sequence of stopping times in the definition of upcrossing and $m$ is a fixed odd integer, and otherwise $A_n = 0$; the gambler bets $A_n$ on turn $n$.
+One might think that the gambler would win by at least $b - a$ using this betting strategy, since they stop playing exactly once they've made that much capital.
+However, the gambler's total winning before turn $n$ is
+$$(A \cdot X)_n = \sum_{j=1}^n A_j(X_j - X_{j-1}).$$
+But since $A$ is a betting strategy, it is predictable, so $A \cdot X$ is a supermartingale.
+Therefore
+$$E((A \cdot X)_n) \leq E((A \cdot X)_0) = 0.$$
+In particular, the gambler should not expect to ever win enough to get $b - a$ capital.
+
+\begin{lemma}[Doob's upcrossing inequality]
+Let $X$ be a supermartingale with upcrossing $U$ and $a < b$. Then
+$$E(U_n(a, b)) \leq \frac{E(X_n - a)^-}{b - a}.$$
+\end{lemma}
+\begin{proof}
+TODO FIX ME@!
+\end{proof}
+
+\begin{theorem}
+Let $X$ be a supermartingale such that
+$$\sup_n E(X_n^-) < \infty.$$
+Then there is $X_\infty \in L^1$ such that $X_n \to X_\infty$ almost surely.
+\end{theorem}
+\begin{proof}
+Let $a < b$ and let $U$ be the upcrossing of $X$.
+By Doob's upcrossing inequality and the hypothesis,
+\begin{align*}
+E(U_n(a, b)) &\leq \frac{E(X_n - a)^-}{b - a} \leq \frac{E(X_n^- + |a|)}{b - a}\\
+&\leq \frac{\sup_m E(X_m^-) + |a|}{b - a} \lesssim 1
+\end{align*}
+Since $U$ is an increasing adapted process and
+$$\lim_{n \to \infty} E(U_n(a, b)) \lesssim 1,$$
+if $U_\infty$ denotes the total number of upcrossings, then monotone convergence says
+$$E(U_\infty(a, b)) \lesssim 1.$$
+Let
+$$\Lambda(a, b) = \{\liminf_{n \to \infty} X_n < a < b < \limsup_{n \to \infty} X_n\}.$$
+Then $U_\infty(a, b)|\Lambda(a, b) = \infty$.
+But we showed $U_\infty(a, b) \in L^1$ so $P(\Lambda(a, b)) = 0$.
+Therefore
+$$P\left(\bigcup_{a < b} \Lambda(a, b)\right) = 0$$
+(since we can restrict to $a,b \in \QQ$ and get a countable union).
+If $\lim_n X_n$ does not exist then $\bigcup_{a < b} \Lambda(a, b)$ is true, so $\lim_n X_n$ exists almost surely.
+
+Now let $X_\infty = \lim_n X_n$. We need to show $X_\infty \in L^1$.
+But
+$$||X_n||_{L^1} = E(X_n^+ - X_n^- + 2X_n^-) \leq E(X_n + 2X_n^-) \leq E(X_0) + 2E(X_n^-) \lesssim E(X_0) + 1 < \infty$$
+since $X$ is a supermartingale.
+By Fatou's lemma,
+$$||X_\infty||_{L^1} \leq \limsup_{n \to \infty} ||X_n||_{L^1} < \infty$$
+as desired.
+\end{proof}
+
+\begin{corollary}
+Let $X$ be a submartingale and
+$$\sup_n E(X_n^+) < \infty.$$
+Then there is $X_\infty \in L^1$ such that $X_n \to X_\infty$ almost surely.
+\end{corollary}
+
+\begin{corollary}
+Let $X$ be a martingale such that
+$$\min_\pm \sup_n E(X_n^\pm) < \infty.$$
+Then there is $X_\infty \in L^1$ such that $X_n \to X_\infty$ almost surely.
+\end{corollary}
+
+\begin{definition}
+Let $X$ be a supermartingale.
+If there is a $Y \in L^1$ such that $Y$ is $\mathcal F_\infty$-measurable and for every $n$,
+$$E(Y|\mathcal F_n) \leq X_n$$
+we call $Y$ the \dfn{last element} of $X$.
+\end{definition}
+
+The same definition can be adapted to martingales and submartingales.
+Note that the previous convergence theorem does not imply that $X_\infty$ is the last element, but we can strengthen it slightly to get this.
+
+Last elements may not be unique.
+For example, if $X$ is a supermartingale and $Y$ is a last element, then $Y - 1$ is also a last element.
+
+\begin{theorem}
+Let $X$ be a supermartingale. Then $(X_n^-)_n$ is uniformly integrable iff $X$ has a last element.
+If $X$ has a last element, then $\lim_n X_n$ is a last element.
+\end{theorem}
+\begin{proof}
+Let $Y$ be a last element of $X$.
+Then $E(X_m|\mathcal F_n) \leq X_n$ and $E(Y|\mathcal F_n) \leq X_n$.
+By Jensen's inequality,
+$$X_n^- \leq E(Y|\mathcal F_n)^- \leq E(Y^-|\mathcal F_n)$$
+but $E(Y^-|\mathcal F_n)$ is a Doob martingale and hence is uniformly integrable.
+
+Conversely, assume $(X_n^-)_n$ is uniformly integrable.
+Then $X_\infty = \lim_n X_n$ exists and $X_\infty \in L^1$.
+We must show $E(X_\infty|\mathcal F_n) \leq X_n$.
+Let $A \in \mathcal F_n$. Then we must show
+$$\int_A E(X_\infty|\mathcal F_n) ~dP \leq \int_A X_n ~dP.$$
+In fact,
+$$\int_A E(X_\infty|\mathcal F_n) ~dP = \int_A X_\infty ~dP$$
+but $E(X_m|\mathcal F_n) \leq X_n$ if $m \geq n$ since $X$ is a supermartingale, so
+$$\int_A X_m ~dP = \int_A E(X_m|\mathcal F_n) ~dP \leq \int_A X_n ~dP.$$
+The $X_m$ are not uniformly integrable but
+$$\int_A X_m ~dP = \int_A X_m^+ ~dP - \int_A X_m^- ~dP$$
+and the $X_m^-$ are uniformly integrable, so
+$$\lim_{m \to \infty} \int_A X_m^- ~dP = \int_A X_\infty^- ~dP.$$
+By Fatou's lemma,
+$$\liminf_{m \to \infty} \int_A X_m^+ ~dP \geq \int_A \lim_{m \to \infty} X_m^+ ~dP = \int_A X_\infty^+ ~dP.$$
+Therefore
+$$\int_A X_\infty ~dP \leq \liminf_{m \to \infty} \int_A X_m ~dP \leq \int_A X_n ~dP$$
+since $X$ is a supermartingale.
+\end{proof}
+
+The theorem can be adapted to submartingales easily.
+Combining the results for supermartingales and submartingales, we have:
+
+\begin{corollary}
+Let $X$ be a martingale. Then $X$ has a last element iff $(|X_n|)_n$ is uniformly integrable.
+If $X$ has a last element, then $\lim_n X_n$ is a last element of $X$, and $X$ is a Doob martingale.
+\end{corollary}
+
+\begin{lemma}
+Let $X$ be a stochastic process and $P,Q$ probability measures.
+Suppose that $P$ thinks the $X$ are iid of distribution $\mu$ and $Q$ thinks the $X$ are iid of distribution $\nu$.
+If $\mu \neq \nu$ but $\mu,\nu$ are mutually absolutely continuous, then $P \perp Q$.
+
+Moreover, there exist martingales without least elements.
+\end{lemma}
+\begin{proof}
+Let $\mathcal F$ be the filtration associated to $X$, then
+$$\frac{dQ}{dP}|_{\mathcal F_n} = \prod_{j=1}^n \frac{d\nu}{d\mu}(X_j).$$
+Therefore $P|\mathcal F_n,Q|\mathcal F_n$ are mutually absolutely continuous.
+Let
+$$M_n = \prod_{j=1}^n \frac{d\nu}{d\mu}(X_j).$$
+Then $M$ is an adapted process and
+$$E^P(M_n) = 1$$
+(since the $d\nu/d\mu(X_j)$ are independent and
+$$E^P(\frac{d\nu}{d\mu}(X_j) = \int_{-\infty}^\infty \frac{d\nu}{d\mu}x ~d\mu(x) = \int_{-\infty}^\infty ~d\nu = 1$$
+as desired)
+so that $M_n \in L^1(P)$.
+In particular, $M$ is a martingale according to $P$.
+Since $\sup_n E(M_n^-) = 0$, $P$ thinks that there is a $M_\infty = \lim_n M_n$.
+In fact, by Jensen's inequality,
+$$E^P(\log M_n) = E^P\sum_{j=1}^n \log \frac{d\nu}{d\mu}(X_i) < \sum_{j=1}^n \log E^P \frac{d\nu}{d\mu}(X_i) = 0$$
+almost surely.
+Therefore $E^P(\log M_n) < 0$.
+By the strong law of large numbers, $\log M_n \to -\infty$ almost surely, according to $P$.
+Therefore $M_n \to 0$ almost surely, according to $P$.
+Therefore $(M_n)_n$ cannot be uniformly integrable, or else $M$ would have a last element.
+
+Now $M \to 0$ almost surely according to $P$.
+But reversing the process, looking at $dP/dQ$ instead, we get a martingale $1/M$, and $1/M \to 0$ almost surely according to $Q$.
+This is only possible if $P \perp Q$.
+\end{proof}
+
+Suppose that $\tau$ is a stopping time, and let $\mathcal F_\tau$ be the $\sigma$-algebra of events up to time $\tau$, thus
+$$\mathcal F_\tau = \{A \in \mathcal F: A \cap \{\tau \leq n\} \in \mathcal F_n\}.$$
+If $\tau = n$ then $\mathcal F_\tau = \mathcal F_n$.
+Moreover, $\mathcal F_\tau$ is a $\sigma$-algebra, and if $\sigma \leq \tau$ then $\mathcal F_\sigma \subseteq \mathcal F_\tau$ (that is, more time means we get more information).
+In the definition we can replace $\{\tau \leq n\}$ with $\{\tau = n\}$.
+Moreover,
+$$\mathcal F_{\sigma \wedge \tau} = \mathcal F_\sigma \cap \mathcal F_\tau.$$
+
+Now let us show that the supermartingale property holds even for nondeterministically chosen times.
+
+\begin{theorem}
+Suppose $(X, \mathcal F)$ is a supermartingale and $\sigma,\tau$ are stopping times with $\sigma \leq \tau$ almost surely.
+Then
+$$E(X_\tau|\mathcal F_\sigma) \leq X_\sigma$$
+almost surely, assuming that either $\sigma,\tau$ are both bounded, or $X$ has a last element.
+\end{theorem}
+\begin{proof}
+We first show $X_\tau \in L^1$. This holds if $\tau$ is bounded, so assume $X$ has a last element $X_\infty$.
+Then $X_\infty \in L^1$, and
+$$X_\tau = \lim_{n \to \infty} X_{\tau \wedge n}$$
+so by Fatou's lemma
+$$E|X_\tau| \leq \lim_{n \to \infty} E|X_{\tau \wedge n}| \leq \lim_{n \to \infty} E(X_{\tau \wedge n}) + 2E(X_{\tau \wedge n}^-).$$
+We have $E(X_{\tau \wedge n}) \leq E(X_0)$ since $X$ is a supermartingale. Furthermore
+$$E(X_\infty|\mathcal F_n) \leq X_n.$$
+Taking the negative of both sides we get
+$$X_n^- \leq E(X_\infty|\mathcal F_n)^-$$
+and by the convexity of $x \mapsto x^-$ we may use Jensen's inequality to see
+$$E(X_\infty|\mathcal F_n)^- \leq E(X_\infty^-|\mathcal F_n).$$
+But
+\begin{align*}
+X_{\tau \wedge n}^- &= \sum_{j=0}^{n-1} E(X_{\tau \wedge n}^- 1_{\tau = j}) + E(X_{\tau \wedge n}^- 1_{\tau \geq n})\\
+&= \sum_{j=0}^{n-1} E(X_j^- 1_{\tau = j}) + E(X_n^- 1_{\tau \geq n})\\
+&\leq \sum_{j=0}^{n-1} E(X_\infty^0 1_{\tau = j}) + E(X_\infty^- 1_{\tau \geq n}) = E(X_\infty^-).
+\end{align*}
+Since $X_\infty^- \in L^1$, Fatou's lemma shows now that $X_\tau \in L^1$.
+A similar argument shows $X_\sigma \in L^1$.
+
+We now show
+$$E(X_\tau|\mathcal F_\sigma) \leq X_\sigma.$$
+The left-hand side is $\mathcal F_\sigma$-measurable, so we just need to show that for every $A \in \mathcal F_\sigma$,
+$$E(1_A E(X_\tau|\mathcal F_\sigma)) \leq E(1_A X_\sigma).$$
+By definition of conditional expectation,
+$$E(1_A E(X_\tau|\mathcal F_\sigma)) = E(1_A X_\tau).$$
+For every $n \in \NN \cup \{\infty\}$ we show
+$$E(1_A 1_{\sigma = n} X_\tau) \leq E(1_A 1_{\sigma = n} X_\sigma).$$
+If $n = \infty$ then both sides are $X_\infty$ and there is nothing to show.
+Otherwise, let $A_n = A \cap \{\sigma = n\} \in \mathcal F_n$.
+Then on $A_n$, $\tau \geq n$, so
+$$E(1_{A_n} X_n) = E(1_{A_n} 1_{\tau \geq n} X_n) = E(1_{A_n} 1_{\tau = n} X_\tau) + E(1_{A_n} 1_{\tau \geq n + 1} X_n).$$
+Therefore
+\begin{align*}
+E(1_{A_n} X_n) &\geq E(1_{A_n} 1_{\tau = n} X_\tau) + E(1_{A_n} 1_{\tau \geq n + 1} E(X_{n+1}|\mathcal F_n)) \\
+&= E(1_{A_n} 1_{\tau = n} X_\tau) + E(1_{A_n} 1_{\tau \geq n + 1} X_{n+1})\\
+&= E(1_{A_n} 1_{\tau = n} X_\tau) + E(1_{A_n} 1_{\tau = n + 1} X_\tau) + E(1_{A_n} 1_{\tau \geq n + 2} X_{n+1}).
+\end{align*}
+Iterating we have
+$$E(1_{A_n} X_n) \geq E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) + E(1_{A_n} 1_{\tau \geq k + 1} X_{k+1}).$$
+If $\sigma,\tau$ are both bounded then if $k$ is large enough it follows that
+$$E(1_{A_n} X_n) \geq E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) = E(1_{A_n} X_\tau),$$
+and summing in $n$, we get $E(1_A X_\sigma) \geq E(1_A X_\tau)$ as desired.
+On the other hand, if $X_\infty$ is the last element of $X$, then
+\begin{align*}E(1_{A_n} X_n) &\geq E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) + E(1_{A_n} 1_{\tau \geq k + 1} X_{k+1})\\
+\geq E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) + E(1_{A_n} 1_{\tau \geq k + 1} E(X_\infty|\mathcal F_{k+1}))\\
+&= E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) + E(1_{A_n} 1_{\tau \geq k + 1} X_\infty).
+\end{align*}
+Taking $k \to \infty$ using dominated convergence,
+$$E(1_{A_n} 1_{n \leq \tau \leq k} X_\tau) \to E(1_{A_n} 1_{n \leq \tau < \infty} X_\tau)$$
+while
+$$E(1_{A_n} 1_{\tau \geq k + 1} X_\infty) \to E(1_{A_n} 1_{\tau = \infty} X_\tau).$$
+Adding up,
+$$E(1_{A_n} X_\sigma) = E(1_{A_n} X_n) \geq E(1_{A_n} X_\tau).$$
+This was desired.
+\end{proof}
+
+Of course, the analogous result
+$$E(X_\tau|\mathcal F_\sigma) \geq X_\sigma$$
+holds for submartingales.
+
+\section{Submartingale inequalities}
+Let us first control the tail probability of a submartingale in weak $L^1$.
+
+\begin{theorem}[first submartingale inequality]
+Suppose $(X, \mathcal F)$ is a submartingale.
+Let $X_n^* = \max_{0 \leq k \leq n} X_k$. Then for any $\lambda > 0$,
+$$P(X_n^* \geq \lambda) \leq \frac{1}{\lambda} E(1_{X_n^* \geq \lambda} X_n) \leq \frac{1}{\lambda} E(X_n^+).$$
+\end{theorem}
+\begin{proof}
+The inequality
+$$\frac{1}{\lambda} E(1_{X_n^* \geq \lambda} X_n) \leq \frac{1}{\lambda} E(X_n^+)$$
+is trivial since $1_{X_n^* \geq \lambda} \leq 1$ and $X_n \leq X_n^+$.
+
+For the other inequality, define
+$$\tau = n \wedge \inf_{X_k \geq \lambda} k.$$
+Then $\tau$ is a bounded stopping time, $\tau \leq n$.
+By optional stopping,
+$$E(X_n|\mathcal F_\tau) \geq X_\tau.$$
+For every $A \in \mathcal F_\tau$,
+$$E(1_A X_n) = E(1_A E(X_n|\mathcal F_\tau)) \geq E(1_A X_\tau).$$
+In particular, take $A = \{X_n^* \geq \lambda\}$.
+By definition of $\tau$, $\{X_n^* \geq \lambda\} = \{X_\tau \geq \lambda\}$, so $A \in \mathcal F_\tau$.
+We conclude
+$$E(1_A X_n) = E(1_{X_\tau \geq \lambda} X_\tau) \geq \lambda P(X_n^* \geq \lambda)$$
+as desired.
+\end{proof}
+
+\begin{theorem}[second submartingale inequality]
+Let $(X, \mathcal F)$ be a submartingale.
+Let
+$$X_n^* = \min_{0 \leq k \leq n} X_k.$$
+Then
+$$P(X_n^* \leq -\lambda) \leq \frac{E(X_n^+) - E(X_0)}{\lambda}.$$
+\end{theorem}
+\begin{proof}
+Let
+$$\tau = n \wedge \inf_{X_\tau \leq k} k.$$
+Then
+$$\{X_n^* \leq -\lambda\} = \{X_\tau \leq -\lambda\} \in \mathcal F_\tau$$
+so by optional sampling,
+$$E(X_n|\mathcal F_\tau) \geq X_\tau$$
+and
+$$E(X_\tau|\mathcal F_0) \geq X_0.$$
+Therefore
+\begin{align*}
+E(X_0) &\leq E(X_\tau) = E(1_{X_\tau \leq -\lambda} X_\tau) + E(1_{X_\tau > -\lambda} X_\tau)\\
+&\leq -\lambda P(X_\tau \leq -\lambda) + E(1_{X_\tau > -\lambda} X_n)\\
+&\leq -\lambda P(X_\tau \leq -\lambda) + E(X_n^+).
+\end{align*}
+This can be rearranged to the desired inequality.
+\end{proof}
+
+\begin{lemma}
+Let $(X, \mathcal F)$ be a nonnegative supermartingale.
+Then
+$$P(\sup_n X_n > \lambda) \leq \frac{E(X_0)}{\lambda}.$$
+\end{lemma}
+\begin{proof}
+Let
+$$\tau = \inf_{X_n > \lambda} n.$$
+Then
+$$\{\sup_n X_n > \lambda\} = \{\tau < \infty\}.$$
+By optional stopping and the fact that $X$ has a last element (since $X$ is nonnegative),
+$$E(X_0) \geq E(X_\tau).$$
+But
+$$E(X_\tau) = E(1_{\tau < \infty} X_\tau) + E(1_{\tau = \infty} X_\tau) \geq \lambda P(\tau < \infty)$$
+as desired.
+\end{proof}
+
+\begin{theorem}[Doob maximal inequality]
+Let $(X, \mathcal F)$ be a nonnegative submartingale and
+$$X_n^* = \max_{0 \leq k \leq n} X_k.$$
+Then for every $1 < p < \infty$,
+$$||X_n^*||_{L^p} \leq \frac{p}{p - 1} ||X_n||_{L^p}.$$
+\end{theorem}
+\begin{proof}
+We can assume $X_n \in L^p$.
+Then $(X^p, \mathcal F)$ is a nonnegative supermartingale by Jensen's inequality.
+It follows that $X^*_n \in L^p$.
+
+Now
+$$(X_n^*)^p = \int_0^{X_n^*} p \lambda^{p-1} ~d\lambda$$
+by the fundamental theorem of calculus, so
+$$E((X_n^*)^p) = E\int_{X_n^*} p\lambda^{p-1} ~d\lambda = E\int_0^\infty p\lambda^{p-1} 1_{\lambda \leq X_n^*} ~d\lambda.$$
+By Tonelli's theorem,
+$$E((X_n^*)^p) = \int_0^\infty E(p\lambda^{p-1} 1_{X_n^* \geq \lambda}) ~d\lambda = \int_0^\infty p\lambda^{p-1} P(X_n^* \geq \lambda) ~d\lambda.$$
+By the first submartingale inequality,
+$$P(X_n^* \geq \lambda) \leq \frac{1}{\lambda} E(1_{X_n^* \geq \lambda} X_n)$$
+implies
+$$\frac{1}{\lambda} E(1_{X_n^* \geq \lambda} X_n) \leq \int_0^\infty p\lambda^{p-2} E(1_{X_n^* \geq \lambda} X_n) ~d\lambda.$$
+By Tonelli's theorem and H\"older's inequality,
+\begin{align*}\int_0^\infty p\lambda^{p-2} E(1_{X_n^* \geq \lambda} X_n) ~d\lambda &= E\left(X_n \int_0^{X_n^*} p\lambda^{p-2} ~d\lambda\right)\\
+&= E\left(X_n \frac{p}{p-1} (X_n^*)^{p-1}\right) = \frac{p}{p - 1} ||X_n(X_n^*)^{p-1}||_{L^1}\\
+&\leq \frac{p}{p - 1} ||X_n||_{L^p} ||(X_n^*)^{p-1}||_{L^q}
+\end{align*}
+where $p,q$ are H\"older dual.
+That is,
+$$||X_n^*||_{L^p}^p \leq \frac{p}{p - 1} ||X_n||_{L^p} ||(X_n^*)^{p-1}||_{L^q}$$
+but
+$$||(X_n^*)^{p-1}||_{L^q} = ||X_n^*||_{L^p}^{p-1}$$
+so the conclusion follows.
+\end{proof}
+
+\begin{theorem}[Levy convergence]
+Let $(X_n)$ be an integrable stochastic process, $|X_n| \leq Y \in L^1$ with $X_\infty = \lim_n X_n$ almost surely.
+Let $\mathcal F$ be a filtration and $\mathcal G$ a descending chain of $\sigma$-algebras of measurable sets.
+Let $\mathcal F_\infty = \sigma \bigcup_n \mathcal F_n$ and $\mathcal G_\infty = \bigcap_n \mathcal G_n$.
+Then
+$$\lim_{n \to \infty} E(X_n|\mathcal F_n) = E(X_\infty|\mathcal F_\infty)$$
+and similarly for $\mathcal G$.
+\end{theorem}
+\begin{proof}
+Let us first treat the case $\mathcal F$.
+
+Let us first show the special case $X_n = X$ almost surely.
+Let $Y_n = E(X|\mathcal F_n)$.
+Then $Y$ is an uniformly integrable martingale, so there is a last element $Y_\infty \in L^1$.
+We must show $Y_\infty = E(X|\mathcal F_\infty)$, thus for every event $A \in \mathcal F_\infty$,
+$$E(1_A Y_\infty) = E(1_A E(X|\mathcal F_\infty)) = E(1_A X).$$
+By definition of $\mathcal F_\infty$, we may assume $A \in \mathcal F_n$, and then the claim holds by definition of $Y_n$.
+
+Consider the general case $|X_n| \leq Y$, in which case $X_n \to X_\infty \in L^1$ by dominated convergence.
+Let
+$$Z_m = \sup_{n \geq m} |X_n - X_\infty| \leq 2Y.$$
+Fix $m$; then if $n \geq m$ one has
+$$E(|X_n - X_\infty||\mathcal F_n) \leq E(Z_m|\mathcal F_n)$$
+and taking the limit superior of both sides,
+$$\limsup_{n \to \infty} E(|X_n - X_\infty||\mathcal F_n) \leq \limsup_{n \to \infty} E(Z_m|\mathcal F_n).$$
+By the special case $X_n = X$ with $X = Z_m$,
+$$\lim_{n \to \infty} E(Z_m|\mathcal F_n) = E(Z_m|\mathcal F_\infty)$$
+almost surely.
+In particular,
+$$\limsup_{n \to \infty} E(|X_n - X_\infty||\mathcal F_n) \leq \lim_{m \to \infty} E(Z_m|\mathcal F_\infty) = 0$$
+by dominated convergence, since $Z_m \to 0$ by definition.
+
+Now let us treat the case of $\mathcal G$.
+The trouble is that $Y_n = E(X|\mathcal G_n)$ is not a martingale but rather a ``backwards martingale", as we are actually LOSING information over time rather than gaining it!
+Fix $m$ and define the stochastic process
+$$Z_m = Y_{m - n}$$
+whenever $n \leq m$.
+Then consider the filtration $\mathcal F_n = \mathcal G_{m - n}$.
+Then $(Z, \mathcal F)$ is a martingale to time $m$.
+By Doob's upcrossing inequality,
+$$U_m(a, b, Z) \leq \frac{E(Z_m - a)^+}{b - a} \leq \frac{E|Z_m| + |a|}{b - a}$$
+but $Z_m = Y_0 = E(X|\mathcal G_0)$ so
+$$U_m(a, b, Z) \leq \frac{E|X| + a}{b - a}.$$
+Now $Y$ converges almost surely, say to $Y_\infty$, so we want to show $Y_\infty = E(X|\mathcal G_\infty)$, thus for every $A \in \mathcal G_\infty$,
+$$E(1_A Y_\infty) = E(1_A X).$$
+But
+$$E(1_A X) = E(1_A Y_n)$$
+so by dominated convergence,
+$$E(1_A X) = E(1_A Y_\infty)$$
+as desired.
+\end{proof}
+
+\begin{corollary}[strong law of large numbers]
+If $X = (X_n)_n$ are iid random variables with $E(X_1) = \mu$ then
+$$\lim_{n \to \infty} \frac{1}{n} \sum_{j\leq n} X_j = \mu$$
+almost surely.
+\end{corollary}
+\begin{proof}
+Let $S_n = \sum_{j \leq n} X_j$. Let $\mathcal F_n = \sigma(S_n, X_{n+1}, X_{n+2}, \dots)$.
+Thus $\mathcal F_n$ knows the data of samples $n + 1, n + 2, \dots$ but only the average of the first $n$ samples, so $\mathcal F$ is a decreasing filtration.
+By Levy's convergence theorem,
+$$\lim_{n \to \infty} E(X_1|\mathcal F_n) = E(X_1|\mathcal F_\infty)$$
+but $E(X_1|\mathcal F_n) = E(X_1|S_n)$ since $X_1$ is independent of $X_{n+1}, X_{n+2}, \dots$.
+Thus $S_n = nE(X_1|\mathcal F_n)$ and hence
+$$\lim_{n \to \infty} \frac{S_n}{n} = E(X_1|\mathcal F_\infty)$$
+almost surely, but $\lim_n S_n/n$ is $\mathcal F_\infty$-measurable since $\mathcal F_\infty$ is the tail $\sigma$-algebra of $X$.
+Therefore $\lim_n S_n/n$ is constant almost surely by Kolmogorov's law, so $E(X_1|\mathcal F_\infty)$ is determinstic with expected value $E(X_1) = \mu$, thus $E(X_1|\mathcal F_\infty) = \mu$ as desired.
+\end{proof}
+
+\section{$L^2$ martingales}
+We say that a martingale $(X, \mathcal F)$ is bounded in $L^2$ if
+$$E(|X_n|^2) \lesssim 1.$$
+This is weaker than a martingale simply being square-integrable, i.e. $E(|X_n|^2) < \infty$ but not uniformly.
+
+\begin{lemma}
+Assume $X$ is a square-integrable martingale.
+If $i < m < j < k$ then $X_m - X_i$ and $X_k - X_j$ will be orthogonal.
+\end{lemma}
+\begin{proof}
+Since $X_m - X_i$ is $\mathcal F_j$-measurable,
+$$E(E((X_m - X_i)(X_k - X_j)|\mathcal F_j)) = E((X_m - X_i) E(X_k - X_j|\mathcal F_j)) = 0$$
+since $E(X_k - X_j|\mathcal F_j) = 0$.
+\end{proof}
+
+\begin{lemma}
+Assume $X$ is a square-integrable martingale.
+Then
+$$E(X_n^2) = E(X_0^2) + \sum_{i=0}^{n-1} E((X_{i+1} - X_i)^2).$$
+\end{lemma}
+\begin{proof}
+One has
+$$X_n = X_0 + \sum_{i=0}^{n-1} X_{i+1} - X_i.$$
+Now square and take expected value to get
+$$E(X_n^2) = E\left(\left(X_0 +\sum_{i=0}^{n-1} X_{i+1} - X_i\right)^2\right).$$
+By orthogonality all the terms cancel except for the ones that we want.
+\end{proof}
+
+\begin{lemma}
+Assume $X$ is a square-integrable martingale.
+Then $X$ is bounded in $L^2$ iff
+$$\sum_{j=1}^\infty E((X_j - X_{j-1})^2) < \infty,$$
+in which case
+$$X_\infty = \lim_{n \to \infty} X_n$$
+exists and the convergence is both almost sure and in $L^2$.
+\end{lemma}
+\begin{proof}
+The bounds in $L^2$ follow from the previous lemma, as do their converse.
+So suppose that $X$ is bounded in $L^2$.
+Then $X$ is uniformly integrable so $X_\infty$ exists and is the limit almost surely.
+
+Assume $j \geq n$. Then
+$$E((X_j - X_n)^2) = \sum_{k=n}^{j-1} E((X_{k+1} - X_k)^2)$$
+by orthogonality, so
+$$E((X_j - X_n)^2) \leq \sum_{k=n}^\infty E((X_{k+1} - X_k)^2).$$
+Also by Fatou's lemma,
+$$\liminf_{j \to \infty} E((X_j - X_n)^2) \geq E\left(\liminf_{j \to \infty} (X_j - X_n)^2\right) = E((X_\infty - X_n)^2).$$
+Therefore
+$$E((X_\infty - X_n)^2) \leq \sum_{k=n}^\infty E((X_{k+1} - X_k)^2).$$
+Therefore
+$$\lim_{n \to \infty} E((X_\infty - X_n)^2) = 0$$
+as desired.
+\end{proof}
+
+If $X$ is a square-integrable martingale then $X^2$ is a submartingale since $x \mapsto x^2$ is convex.
+
+\begin{definition}
+Let $X$ be a square-integrable martingale, and consider the Doob decomposition
+$$X_n^2 = M_n + A_n$$
+where $M$ is a martingale and $A_0 = 0$.
+We call $A$ the \dfn{quadratic variation process} of $X$, written $A = [X]$.
+\end{definition}
+
+Let $[X]$ be a quadratic variation processs. Then $[X]$ is predictable and increasing.
+
+\begin{lemma}
+Let $X$ be a square-integrable martingale.
+Then
+$$E((X_{n+1} - X_n)^2|\mathcal F_n) = [X]_{n+1} - [X]_n$$
+and
+$$E[X]_\infty = \lim_{n \to \infty} E(X_n^2) - E(X_0^2).$$
+Moreover, $X$ is bounded in $L^2$ iff $E[X]_\infty < \infty$.
+\end{lemma}
+\begin{proof}
+By orthogonality and the Doob decomposition $X = M + [X]$,
+$$E((X_{n+1} - X_n)^2|\mathcal F_n) = E(X_{n+1}^2 - X_n^2|\mathcal F_n) = E(M_{n+1} + [X]_{n+1} - M_n - [X]_n|\mathcal F_n) = [X]_{n+1} - [X]_n$$
+since
+$$E(M_{n+1} - M_n|\mathcal F_n) = 0$$
+since $M$ is a martingale, and $[X]$ is predictable.
+
+For the second property,
+$$E(X_n^2) = E(X_0^2) + \sum_{j=1}^{n-1} E((X_j - X_{j-1})^2)$$
+and taking the expected value in the first property we get
+$$E((X_j - X_{j-1})^2) = E([X]_{j+1} - [X]_j)$$
+thus, summing and telescoping (and using $E[X]_0 = 0$),
+$$E(X_m^2) - E(X_0^2) = E[X]_m.$$
+By monotone convergence, since $[X]$ is increasing, the second claim follows.
+
+The third result follows from the second.
+\end{proof}
+
+\begin{theorem}
+Let $X$ be a square-integrable martingale.
+Then $X$ converges almost surely to a finite random variable on $\{[X]_\infty < \infty\}$.
+Conversely, if $|X_n - X_{n-1}| \lesssim 1$ almost surely, then $[X]_\infty < \infty$ almost surely on $\{\lim_n X_n \in \RR\}$.
+\end{theorem}
+\begin{proof}
+Without loss of generality, assume $X_0 = 0$.
+Fix $a > 0$.
+Define the stopping time $\tau$ to be the first time $n$ with $[X]_{n+1} \geq a$.
+This is well-defined because $[X]$ is predictable.
+By definition $X_n^2 - [X]_n$ defines a martingale.
+Also $X_{\tau \wedge n}$ and $X_{n \wedge \tau}^2 - [X]_{n \wedge \tau}$ define martingales by optional stopping.
+In particular $X_{\tau \wedge n}$ is square-integrable.
+
+Let $A_n = [X]_{n \wedge \tau}$ so $A_0 = 0$ and $A_n \leq A_{n+1}$.
+Moreover $A$ is predictable, and $A$ is the quadratic variation process of $X^\tau_n = X_{n \wedge \tau}$.
+By definition $A_n \leq a$.
+In particular $X^\tau$ has a limit almost surely.
+On the set $\{[X]_\infty < a\}$, $\tau = \infty$ and hence $\lim_n X_n \in \RR$ almost surely.
+Now take $a \to \infty$.
+
+Conversely, assume $|X_{n+1} - X_n| \leq C$ almost surely.
+We must show $[X]_\infty$ is almost surely finite whenever $\lim_n X_n$ exists.
+Without loss of generality assume $X_0 = 0$.
+Fix $k$ and let
+$$\tau = \inf_{|X_n| \geq k} n$$
+be the first hitting time.
+If $n \leq \tau$ then $|X_n| \leq k$ so $|X_\tau| \leq C + k$.
+This bound shows that the stopped process $X^\tau$ is an $L^2$ martingale with quadratic variation
+$$[X^\tau]_n = [X]_{\tau \wedge n}$$
+as
+$$E[X]_{\tau \wedge n} = E(X^2_{\tau \wedge n}) \leq C + k$$
+so by monotone convergence $E[X]_\tau \leq C + k$.
+Moreover $P(\tau = \infty \cap [X]_\infty = \infty) = 0$ since if that event were to happen then $\sup_n |X_n| \leq k$ but $[X]_\infty = \infty$, which is almost surely a contradiction.
+Therefore $P(X_n \text{ is Cauchy } \cap [X]_\infty = \infty) = 0$.
+This was desired.
+\end{proof}
+
+\begin{corollary}
+If $(X_n)$ are independent $L^2$ random variables and $EX_i = 0$, so that $\sigma_i^2 = EX_i^2$ is the variance of $X_i$, then:
+\begin{enumerate}
+\item If $\sigma \in \ell^2$ then $S_n = \sum_{i \leq n} X_i$ is almost surely Cauchy.
+\item If $\sup_n |X_n| \lesssim 1$ and $S_n$ is almost surely Cauchy then $\sigma \in \ell^2$.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Let $\mathcal F$ be the filtration generated by $X$.
+Then $S$ is a $L^2$ martingale.
+Also
+$$[S]_{n+1} - [S]_n = E((S_{n+1} - S_n)^2|\mathcal F_n) = E(X_{n+1}^2|\mathcal F_n) = E(X_{n+1}^2) = \sigma_{n+1}^2.$$
+Taking $[S]_0 = 0$ we get
+$$[S]_n = \sum_{i=1}^n \sigma_i^2.$$
+Assume $\sigma \in \ell^2$. Then $[S]_\infty$ is almost surely finite, so $S$ is almost surely Cauchy.
+Conversely, suppose $S$ has uniformly bounded increments and is almost surely Cauchy then $[S]_\infty$ has to be finite almost surely, which gives $\sigma \in \ell^2$.
+\end{proof}
+
+\begin{theorem}[law of large numbers for martingales]
+Let $X$ be an $L^2$ martingale. Then
+$$\lim_{n \to \infty} \frac{X_n}{[X]_n} = 0$$
+almost surely given $[X]_\infty = \infty$.
+\end{theorem}
+\begin{proof}
+Let
+$$A_n = \frac{1}{1 + [X]_n}.$$
+Then $0 \leq A_n \leq 1$, so $A$ is a bounded predictable process.
+Let $M = A \cdot X$ be a martingale transform.
+Then $M$ is an $L^2$ martingale.
+So
+\begin{align*}
+[M]_{n+1} - [M]_n &= E((M_{n+1} - M_n)^2|\mathcal F_n) = E(A_{n+1}^2(X_{n+1} - X_n)^2|\mathcal F_n) \\
+&= A_{n+1}^2 E((X_{n+1} - X_n)^2|\mathcal F_n)\\
+&= A_{n+1}^2 ([X]_{n+1} - [X]_n)\\
+&= \frac{[X]_{n+1} - [X]_n}{(1 + [X]_{n+1})^2}\\
+&= \frac{1}{1 + [X]_{n+1}} - \frac{1+ [X]_n}{(1 + [X]_{n+1})^2}
+\end{align*}
+but as $[X]_{n+1} \geq [X]_n$ we conclude
+$$[M]_{n+1} - [M]_n \leq \frac{[X]_{n+1} - [X]_n}{(1 + [X]_{n+1})(1 + [X]_n)} = \frac{1}{1 + [X]_n} - \frac{1}{1 + [X]_{n+1}}.$$
+Therefore
+$$[M]_{n+1} = \sum_{k=1}^{n+1} [M]_k - [M]_{k-1} = \frac{1}{1 + [X]_0} - \frac{1}{1 + [X]_{n+1}} \leq 1 - 0 = 1$$
+so $M$ is almost surely Cauchy. But
+$$M_n = \sum_{k=1}^n \frac{X_{k+1} - X_k}{1 + [X]_k}$$
+and $1 + [X]_k$ increases to $\infty$ given $[X]_\infty = \infty$.
+By Kronecker's lemma it follows that
+$$\lim_{n \to \infty} \frac{1}{1 + [X]_n} \sum_{k=1}^n (X_{k+1} - X_k) = 0.$$
+Therefore $X_n/(1 + [X]_n) \to 0$ so the same holds for $X_n/[X]_n$.
+\end{proof}
+
+\section{More convergence theorems}
+Now let us prove a useful theorem about the almost sure convergence of sums of random variables.
+
+\begin{lemma}
+Let $X$ be an independent random sequence which is almost surely uniformly bounded in $L^\infty$.
+Then $S = \sum_j X_j$ has $|S| < \infty$ iff $|\sum_n EX_n| < \infty$ and $|\sum_n \Var X_n| < \infty$.
+\end{lemma}
+\begin{proof}
+Suppose $\sum_n EX_n < \infty$ and $\sum_n \Var X_n < \infty$.
+Let $Y_n = X_n - EX_n$. Then $Y$ is an independent random sequence which is almost surely bounded in $L^\infty$ but $EY_n = 0$.
+Also $\Var Y_n = X_n$.
+So by what we proved, $\sum_n Y_n < \infty$.
+Thus the same holds for $S$, as we can just add the finite $\sum_n EX_n$ term in.
+
+Now suppose $S < \infty$.
+Let $Y$ be an independent random sequence which is also independent of $X$ such that $X_n$ and $Y_n$ have the same distribution.
+(Such a $Y$ exists but we might have to take an extension of the sample space beforehand.)
+By assumption $|\sum_n Y_n| < \infty$ so $|\sum_n X_n - Y_n| < \infty$.
+Therefore $|\sum_n \Var (X_n - Y_n)| < \infty$ but $\Var(X_n - Y_n) = 2 \Var X_n$ which gives what we want.
+It follows that $|\sum_n X_n - EX_n| < \infty$ so $|\sum_n EX_n| < \infty$.
+\end{proof}
+
+\begin{theorem}[Kolmogorov $3$-series theorem]
+Let $X$ be an independent random sequence. Given $c > 0$ let $X_n^{(c)} = X_n 1_{|X_n| \leq c}$.
+Then the following are equivalent:
+\begin{enumerate}
+\item $|\sum_n X_n| < \infty$.
+\item There is a $c > 0$ such that $\sum_n P(|X_n| > c) < \infty$, $|\sum_n E(X_n^{(c)})| < \infty$, and $\sum_n \Var(X_n^{(c)}) < \infty$.
+\item For every $c > 0$, $\sum_n P(|X_n| > c) < \infty$, $|\sum_n E(X_n^{(c)})| < \infty$, and $\sum_n \Var(X_n^{(c)}) < \infty$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Assume $|\sum_n X_n| < \infty$ and let $c > 0$. Then after finitely many $n$, almost surely $|X_n| \leq c$.
+Thus by the Borel-Cantelli lemma, $\sum_n P(|X_n| > c) < \infty$.
+Also $X_n \to 0$ so after passing to a subsequence we get $X = X^{(c)}$.
+Therefore by the previous lemma, $|\sum_n E(X_n^{(c)})| < \infty$, and $\sum_n \Var(X_n^{(c)}) < \infty$.
+
+Now suppose that there is a $c > 0$ such that $\sum_n P(|X_n| > c) < \infty$, $|\sum_n E(X_n^{(c)})| < \infty$, and $\sum_n \Var(X_n^{(c)}) < \infty$.
+By the lemma, $|\sum_n X_n^{(c)}| < \infty$.
+By the Borel-Cantelli lemma, after finitely many $n$ we have $X_n = X_n^{(c)}$ so we're done.
+\end{proof}
+
+Assume that $X$ is an iid sequence with $EX_n = 0$.
+If $S$ is their partial sum sequence then $S_n/n \to 0$ almost surely by the law of large numbers.
+But if $\Var X_i = \sigma^2$ then by the central limit theorem,
+$$\lim_{n \to \infty} \frac{S_n}{\sigma \sqrt n} = N(0, 1)$$
+in the weak topology of measures.
+We now prove a similar such result which is somewhere between the two, which shows that $S_n$ must oscillate exactly between the two envelopes $\pm \sqrt{2\sigma^2 n \log \log n}$.
+
+\begin{theorem}[law of the iterated logarithm]
+Let $X$ be an iid sequence, $EX_n = 0$, $\Var X_n = \sigma^2$, $S$ the sequence of partial sums. Then
+$$\limsup_{n \to \infty} \frac{S_n}{\sqrt{2\sigma^2 \log \log n}} = 1$$
+and
+$$\liminf_{n \to \infty} \frac{S_n}{\sqrt{2\sigma^2 \log \log n}} = -1$$
+almost surely.
+\end{theorem}
+The proof is too hard in general but we can easily do it if $X_n \sim N(0, 1)$.
+\begin{proof}
+Let us show
+$$1 \leq \limsup_{n \to \infty} \frac{S_n}{\sqrt{2n \log \log n}} \leq 1.$$
+First we show that if $M > 1$ then
+$$\limsup_{n \to \infty} \frac{S_n}{\sqrt{2n \log \log n}} \leq M.$$
+Set $\lambda_n = Mh(M^{n-1})$ where $h(n) = \sqrt{2n \log \log n}$.
+We compute the probability that $\max_{1 \leq k \leq M^n} S_k \geq \lambda_n$.
+This is
+$$P(\max_{1 \leq k \leq M^n} S_k \geq \lambda_n) = P(\max_{1 \leq k \leq M^n} e^{\theta S_k} \geq e^{\theta S_n}).$$
+Now $e^{\theta S}$ defines a submartingale with respect to the filtration obtained from $X$.
+By the first submartingale inequality,
+$$P(\max_{1 \leq k \leq M^n} e^{\theta S_k} \geq e^{\theta S_n}) \leq e^{-\lambda \lambda_n} E(e^{\theta S_{M^n}}) = e^{-\theta \lambda_n} e^{\theta^2 M^n/2}.$$
+Optimizing in $\theta$ we set $\theta^* = \lambda_n/M^n$.
+Thus
+$$P(\max_{1 \leq k \leq M^n} S_k \geq \lambda_n) \leq e^{-\lambda_n^2/(2M_n)}.$$
+Therefore
+$$\frac{\lambda_n^2}{M^n} = \frac{M^2 2M^{n-1} \log \log M^{n-1}}{M^n} = 2M \log \log M^{n-1}$$
+so
+$$P(\max_{1 \leq k \leq M^n} S_k \geq \lambda_n) \leq e^{-M \log \log M^{n-1}} = \frac{1}{(\log M^{n-1})^M}.$$
+Therefore
+$$P(\max_{1 \leq k \leq M^n} S_k \geq \lambda_n) \leq \frac{1}{(n - 1)^M (\log M)^M}.$$
+This sequence is summable so by the Borel-Cantelli lemma, almost surely there are only finitely many $n$ such that $\max_{1 \leq k \leq M^n} S_k \geq \lambda_n)$.
+Thus almost surely there is $N$ such that if $n \geq N$ then
+$$\max_{1 \leq k \leq M^n} S_k \leq \lambda_n = Mh(M^{n-1}).$$
+For every $m$ there is $n$ such that $M^{n-1} \leq m \leq M^n$.
+In particular
+$$S_m \leq \max_{1 \leq k \leq M^n} S_k \leq Mh(M^{n-1}) \leq Mh(m).$$
+Therefore $S_m \leq Mh(m)$.
+Therefore $\limsup_m S_m h(m) \leq M$.
+
+The converse is easy.
+\end{proof}
+
+\chapter{Applications of martingales}
+\section{The secretary problem}
+Suppose we have $N$ candidates for a secretary, indexed by $\{1, \dots, N\}$ where $1$ has the highest quality of all candidates, $2$ is the second-best candidate, et cetra.
+Assume the candidates come in a random order, or at least an independent order with respect to their ranking in quality.
+Every time we interview a candidate we can reject or accept the candidate.
+This decision is final and stops the process of interviewing candidates.
+We want to stop interviewing candidates in a way that maximizes the probability that the candidate we accepted has rank $1$, even though we only know how the candidate ranks with respect to the candidates we have already rejected.
+We will be able to solve this problem using dynamic programming and martingales.
+
+\section{The Robbins-Monroe algorithm}
+Before introducing dynamic programming, let us give a numerical application for solving the equation $h(\theta) = 0$ where $h$ is given.
+
+One way to solve $h(\theta) = 0$ is to use the Newton-Raphson method.
+Suppose we have some initial $\theta_0$ and that $h'$ is continuous.
+Then $h(\theta) \approx h(\theta_0) + (\theta - \theta_0)h'(\theta_0)$ and this approximation has a unique zero
+$$\theta_1 = \theta_0 - \frac{h(\theta_0)}{h'(\theta_0)}.$$
+Then we can run the same algorithm with $\theta_1$ replacing $\theta_0$ to get some $\theta_2$, and iterate to get a sequence of $\theta_n$.
+That is,
+$$\theta_{n+1} = \theta_n - \frac{h(\theta_n)}{h'(\theta_n)}.$$
+Then the $\theta_n$ form a Cauchy sequence, $\theta_n \to \theta^*$, with $h(\theta^*) = 0$, assuming that $|\theta - \theta^*| \ll 1$ and $h$ is analytic (say).
+
+Let assume now that $h$ was observed with a random measurement error.
+Moreover, let us drop the assumption that $\theta_0$ is close to any zero of $h$.
+The Robbins-Monroe algorithm then finds a zero of $h$.
+
+Let us write
+$$H(\theta, X) = h(\theta) + \varepsilon(\theta, X)$$
+for the observable function, where $h$ is the true function, $\varepsilon$ is a small function of $\theta$ and a random variable $X$ which represents noise.
+Now set
+$$\theta_{n+1} = \theta_n - \alpha_{n+1} H(\theta_n, X_{n+1})$$
+where $\alpha \geq 0$ is a given deterministic sequence, $\theta_0$ is a given deterministic real, and $X$ is an independent sequence.
+Let $\mathcal F_n = \sigma(X_1, \dots, X_n)$.
+Then $\theta_n$ is a function of $X_1, \dots, X_n$, so $\theta$ is $\mathcal F$-adapted.
+
+Assume that the conditional distribution of $X_{n+1}|\mathcal F_n$ only depends on $\theta_n$.
+Intuitively, this means that $X_{n+1}$ is the error created when we attempt to measure $h(\theta_n)$, and given $\mathcal F_n$ we only have dependence of $X_{n+1}$ on $\theta_n$.
+More precisely,
+$$E(f(X_{n+1})|\mathcal F_n) = \int_{-\infty}^\infty f(x) ~d\mu_{\theta_n}(x)$$
+where $\mu_{\theta_n}$ is a probability measure on $\RR$ which only depends on $\theta_n$.
+Assume that
+$$\sigma^2(\theta) = \int_{-\infty}^\infty |H(\theta, x)|^2 ~d\mu_\theta(x)$$
+satisfies the estimate
+$$\sigma^2(\theta) \lesssim 1 + |\theta|^2.$$
+If there is no error then this estimate implies $h(\theta)^2 \lesssim 1 + |\theta|^2$, thus $h$ grows linearly at infinity, so this is a really strong assumption.
+Finally assume
+$$h(\theta) = \int_{-\infty}^\infty H(\theta, x) ~d\mu_\theta(x);$$
+that is, the expected value of $H(\theta)$ is $h(\theta)$.
+In other words, $H$ is an \dfn{unbiased estimator} of $h$.
+
+Let us find $\alpha$ so that $\theta$ converges.
+We impose $\alpha \to 0$, but also $\sum_n \alpha_n = \infty$.
+Indeed, $\alpha$ does not go to $0$ then we will not be able to show that $\theta$ is a Cauchy sequence, but if $\sum_n \alpha_n < \infty$ and $H \in L^\infty$ then
+$$|\theta_n - \theta_0| \leq \sum_{k=0}^n \alpha_k |H(\theta_k, X_{k+1})| \leq \sum_{k=0}^n \alpha_k ||H||_{L^\infty}$$
+so that if there are no zeroes $\theta$ with $|\theta - \theta_0| \lesssim 1$, then this sequence does not converge.
+
+\begin{lemma}
+If $b,c \geq 0$ are deterministic sequences in $\ell^1$ and $Z,D$ are nonnegative adapted processes, with
+$$E(Z_{n+1}|\mathcal F_n) \leq (1 + b_n)Z_n + c_n - D_n$$
+and $Z_1 \in L^1$, then $Z_n \in L^1$, $D \in \ell^1$ almost surely, and $\lim_n Z_n < \infty$ almost surely.
+\end{lemma}
+\begin{proof}
+Exercise.
+\end{proof}
+
+\begin{theorem}[Robbins-Monroe]
+Let $h: \RR \to \RR$ be a measurable function.
+Assume there is $\theta^*$ such that for every $\varepsilon > 0$,
+$$\inf_{\varepsilon \leq |\theta - \theta^*| \leq \varepsilon^{-1}} (\theta - \theta^*)h(\theta) > 0.$$
+Let $(\alpha_n)$ be a sequence such that $\sum_n \alpha_n^2 < \infty$ but $\sum_n \alpha_n = \infty$.
+Then for every $\theta_0$, the sequence $(\theta_n)$ generated by the Robbins-Monroe algorithm satisfies $\theta_n \to \theta^*$ almost surely.
+\end{theorem}
+\begin{proof}
+Let
+$$T_n = \theta_n - \theta^*$$
+and $Z = T^2$. We want to show $Z_n \to 0$ almost surely.
+In fact $Z$ is $\mathcal F$-adapted and
+\begin{align*}
+Z_{n+1} &= (\theta_{n+1} - \theta^*)^2 = (\theta_n - \alpha_{n+1}H(\theta_n, X_{n+1}) - \theta^*)^2 \\
+&= (T_n - \alpha_{n+1} H(\theta_n, X_{n+1}))^2\\
+&= Z_n - 2\alpha_{n+1} T_n H(\theta_n, X_{n+1}) + \alpha_{n+1}^2 H(\theta_n, X_{n+1})^2.
+\end{align*}
+Then
+$$E(H(\theta_n, X_{n+1})|\mathcal F_n) = \int_{-\infty}^\infty H(\theta_n, x) ~d\mu_{\theta_n}(x) = h(\theta_n)$$
+and
+$$E(H(\theta, X_{n+1})^2|\mathcal F_n) = \int_{-\infty}^\infty H(\theta_n, x)^2 ~d\mu_{\theta_n}(x) ~\sigma^2(\theta_n)$$
+so
+$$E(Z_{n+1}|\mathcal F_n) = Z_n - 2\alpha_{n+1} T_n h(\theta_n) + \alpha_{n+1}^2 \sigma^2(\theta_n).$$
+By the growth condition we get
+\begin{align*}
+E(Z_{n+1}|\mathcal F_n) &\leq Z_n - 2\alpha_{n+1} T_n h(\theta_n) + C\alpha_{n+1}^2 (1 + |\theta_n|^2)\\
+&= Z_n - 2\alpha_{n+1} T_n h(\theta_n) + C\alpha_{n+1}^2(1 + (T_n + \theta^*)^2)\\
+&\leq Z_n - 2\alpha_{n+1} T_n h(\theta_n) + C\alpha_{n+1}^2(1 + 2Z_n + 2(\theta^*)^2)\\
+&= (1 + 2C\alpha_{n+1}^2) Z_n - 2\alpha_{n+1} T_n h(\theta_n) + C'\alpha_{n+1}^2
+\end{align*}
+for some $C'$.
+Setting $2C\alpha_{n+1}^2 = b_n$, $D_n = 2\alpha_{n+1}T_n h(\theta_n)$, and $c_n = C'\alpha_{n+1}^2$, we meet the hypotheses of the previous lemma and conclude that $Z = \lim_n Z_n$ exists and is finite almost surely, and $D \in \ell^1$ almost surely.
+It suffices to show $Z = 0$ almost surely.
+
+Let us condition on $Z > 0$. Then for some $\varepsilon > 0$ and all $n$ large enough,
+$$\varepsilon \leq |T_n| \leq |\theta_n - \theta^*| \leq \frac{1}{\varepsilon}.$$
+So by hypothesis,
+$$\liminf_{n \to \infty} T_n h(\theta_n) > 0.$$
+Thus
+$$\sum_n D_n = \sum_n \alpha_{n+1} = \infty$$
+so $D \notin \ell^1$, which almost never happens.
+\end{proof}
+
+\section{The branching process}
+Suppose that $X_n$ represents the number of members of a population at generation $n$.
+Each population member in generation $n$ has some children in generation $n + 1$.
+We can model this by setting $X_0 = 1$ for the progenitor and
+$$X_{n+1} = \sum_{k=1}^{X_n} Z_{n,k}$$
+where $Z_{n,k}$ is the number of offspring of the $k$th member of generation $n$.
+Let us assume that the $Z_{n,k}$ are iid with distribution
+$$P(Z_{n,k} = i) = p_i$$
+where $\sum_i p_i = 1$ and $0 < p_0 < 1$.
+Assume
+$$\mu = E(Z_{n,k}) = \sum_{i=0}^\infty ip_i.$$
+
+We are interested in the probability of extinction.
+More precisely, let $T$ be the first hitting time of $X = 0$, thus $T$ is the extinction time.
+We are interested in $P(T < \infty)$.
+
+Let $\mathcal F$ be the filtration that makes $X$ adapted.
+Then $T$ is a stopping time.
+
+Introduce the moment-generating function
+$$\phi_Y(s) = E(s^Y) = \sum_{j=0}^\infty P(Y = j)s^j$$
+whenever $Y$ is an integer-valued random variable and $s \in (0, 1]$.
+In particular $\phi_Y(0) = 0$ and
+$$\phi'_Y(0) = P(Y = 1) + 2P(Y = 2)s + 3P(Y = 3)s^2 + \cdots.$$
+Also $\phi_Y$ is increasing and convex, $\phi_Y \in [P(Y = 0), 1]$.
+
+In particular the $Z_{n,k}$ are iid so they have a common moment-generating function $\phi$.
+Then
+$$\phi(s) = E(s^{Z_{n,k}}) = \sum_{k=0}^\infty p_k s^k.$$
+Define also $\phi_n$, the moment-generating function of $X_n$, so that
+$$\phi_0(s) = s.$$
+Then
+\begin{align*}
+\phi_{n+1}(s) &= E(s^{X_{n+1}}) = E(E(s^{X_{n+1}}|X_n)) = E(E(s^{\sum_{i \leq X_n} Z_{n,i}}|X_n))\\
+&= E\prod_{i=1}^{X_n} E(s^{Z_{n,i}}) = E(\phi(s)^{X_n}) = \phi_n(\phi(s)).
+\end{align*}
+That is,
+$$\phi_n = \phi_0 \circ \phi^{\circ n}.$$
+But $\phi_0$ is the identity so
+$$\phi_n = \phi^{\circ n}.$$
+
+\begin{theorem}
+Let $\Pi = P(T < \infty)$ be the probability of extinction.
+Then $\Pi$ is the smallest solution $s$ of $s = \phi(s)$ on $[0, 1]$.
+In particular if $\mu > 1$ then $0 < \Pi < 1$ and $\Pi = 1$ if $\mu \leq 1$.
+\end{theorem}
+\begin{proof}
+We compute the limit of
+$$\Pi_n = P(T \leq n) = P(X_n = 0) = \phi_n(0) = \phi^{\circ n}(0).$$
+Then $\Pi_{n+1} = \phi(\Pi_n)$.
+Let $s^*$ be a solution of $s = \phi(s)$.
+Then $\phi(s^*) \geq p_0 = \Pi_1$ so $\phi^{\circ 2}(s^*) \geq \phi(p_0) = \phi(\Pi_1) = \Pi_2$.
+But $\phi(s^*) = s^*$ so we conclude $s^* \geq \Pi_n$ for every $n$ and hence $s^* \geq \Pi$.
+But $\Pi$ is a solution of $s = \phi(s)$ so $\Pi$ is the smallest solution.
+\end{proof}
+
+Now introduce the martingale
+$$M_n = \frac{X_n}{\mu^n}.$$
+Indeed,
+$$E(M_{n+1}|\mathcal F_n) = E\frac{\sum_{k=1}^{X_n} Z_{nk}}{\mu^{n+1}}|X_n = \frac{\mu X_n}{\mu^{n+1}} = M_n.$$
+Suppose $\Pi = 1$, then $M_\infty = 0$ almost surely, so $M$ is a nonnegative martingale which is not a Doob martingale (since if it was it would be $M_n = E(M|\mathcal F_n) = 0$).
+Otherwise $\mu > 1$ so $\Pi < 1$.
+
+\begin{lemma}
+If $\mu > 1$ and $Z_{n,k} \in L^2$.
+Then $M_n \to M_\infty$ almost surely and in $L^2$, $E(M_\infty) = 1$, and
+$$\Var M_\infty = \frac{\Var Z_{n,k}}{\mu(\mu - 1)}.$$
+\end{lemma}
+\begin{proof}
+It suffices to show that $M$ is uniformly bounded in $L^2$.
+In fact
+$$E(M_{n+1}^2) = E\frac{E(X_{n+1}^2)|\mathcal F_n)}{\mu^{2(n+1)}}.$$
+But
+\begin{align*}
+E(X_{n+1}^2)|\mathcal F_n) &= \Var(X_{n+1}|\mathcal F_n) + (E(X_{n+1}|\mathcal F_n))^2 \\
+&= X_n \sigma^2 + (\mu X_n)^2
+\end{align*}
+where $\sigma^2 = \Var Z_{n,k}$.
+Therefore
+$$E(M_{n+1}^2) = E\frac{X_n \sigma^2 + (\mu X_n)^2}{\mu^{2(n+1)}} = \frac{\sigma^2 E(X_n)}{\mu^{2(n+1)}} + E(M_n^2).$$
+Therefore
+$$E(M_{n+1}^2) = E(M_n^2) + \frac{\sigma^2}{\mu^{n+2}}.$$
+So
+$$E(M_{n+1}^2) = E(M_0^2) + \sum_{k=1}^{n+1} \frac{\sigma^2}{\mu^{k+1}}.$$
+The series is clearly summable so we get a uniform bound
+$$E(M_{n+1}^2) \leq 1 + \sum_{k=2}^\infty \frac{\sigma^2}{\mu^k} = 1 + \frac{\sigma^2}{\mu^2 - \mu}.$$
+Now we can take the limits of $EM_n$ and $E(M_n^2)$ to get the claim.
+\end{proof}
+
+In some cases, we can compute $M_\infty$ using the Laplace transform $g(\theta) = E(e^{-\theta M_\infty})$.
+By dominated convergence we get
+$$g(\theta) = \lim_{n \to \infty} E(e^{-\theta M_n}) = \lim_{n \to \infty} E((e^{-\theta/\mu_n})^{X_n}) = \lim_{n \to \infty} \phi^{\circ n}e^{-\theta/\mu^n}.$$
+
+\begin{theorem}[Laplace inversion formula]
+Suppose $\mu,\nu$ are Borel probability measures on $\RR$ supported on $[0, \infty)$.
+If for every $\theta > 0$,
+$$\int_{-\infty}^\infty e^{-\theta x} ~d\mu(x) = \int_{-\infty}^\infty e^{-\theta x} ~d\nu(x),$$
+then $\mu = \nu$.
+\end{theorem}
+\begin{proof}
+Let
+$$L(\theta) = \int_{-\infty}^\infty e^{-\theta x}~d\mu(x).$$
+Differentiating using dominated convergence,
+$$L^{(k)}(\theta) = \int_{-\infty}^\infty (-x)^k e^{-\theta x} ~d\mu(x) = (-1)^k \int_{-\infty}^\infty x^k e^{-\theta x}~d\mu(x).$$
+Then $(-1)^k L^{(k)}(\theta) \theta^k/k!$ is the integral of the probability that a Poisson variable with parameter $\theta x$ is $k$, integrated $d\mu(x)$.
+Summing over both sides and using dominated convergence we get
+$$\sum_{k=1}^n (-1)^k L^{(k)}(\theta) \theta^k/k! = \int_{\infty}^\infty P(X_{\theta x} \leq n) ~d\mu(x)$$
+where $X_y$ is a Poisson variable of parameter $y$.
+Take $n$ to be the floor of $\theta y$ where $y \in \RR$ is given.
+By Chebyshev's inequality
+$$P(|X_\lambda - \lambda| \geq \varepsilon \lambda) \leq \frac{\Var X_\lambda}{\lambda^2 \varepsilon} = \frac{1}{\lambda \varepsilon^2},$$
+and as $\lambda \to \infty$ this vanishes. Thus
+$$X_\lambda \sim \lambda$$
+as $\lambda \to \infty$.
+So taking $\theta \to \infty$ we get
+$$\lim_{\theta \to \infty} P(X_{\theta x} \leq n) = 1_{y > x},$$
+$\mu$-almost surely, as long as $\mu$ does not have mass at $y$.
+Therefore
+$$\lim_{\theta \to \infty} \sum_{k=1}^n (-1)^k L^{(k)}(\theta) = F_\mu(y)$$
+where $F_\mu$ is the cdf of $\mu$.
+Therefore $F_\mu = F_\nu$ for all but countably many points in $\RR$.
+So $\mu = \nu$.
+\end{proof}
+
+\begin{example}
+Suppose
+$$P(Z_{n,k} = i) = p(1 - p)^i$$
+so that $Z_{n,k}$ is a pseudo-geometric random variable.
+Then its moment-generating function is
+$$\phi(s) = E(s^{Z_{n,k}}) = \frac{p}{1 - qs}$$
+where $p + q = 1$.
+By induction,
+$$\phi^{\circ n}(s) = \frac{p\mu^n(1 - s) + qs - p}{q\mu^n(1 - s) + qs - p}.$$
+But $\mu = q/p$ and
+$$E(e^{-\theta M_\infty}) = \lim_{n \to \infty} \phi^{\circ n}(e^{-\theta/\mu^n})$$
+so we conclude
+$$E(e^{-\theta M_\infty}) = \frac{p\theta + q - p}{q\theta + q - p}.$$
+One can compute $\Pi = p/q$, and
+$$E(e^{-\theta M_\infty}) = \Pi + \int_0^\infty (1 - \Pi)^2 e^{-k\Pi x - \theta x} ~dx.$$
+Therefore $P(M_\infty = 0) = \Pi$.
+Meanwhile
+$$P(M_\infty \in dx) = (1 - \Pi)^2 e^{-(1 - \Pi)x} ~dx.$$
+So the distribution of $M_\infty$ is $\Pi \delta_0 + (1 - \Pi)\exp(1 - \Pi)$ where $\exp$ is the exponential distribution.
+\end{example}
+
+\section{Markov chains}
+\begin{definition}
+Let $X$ be a random sequence and $\mathcal F$ the natural filtration generated by $X$.
+We say $X$ is a \dfn{Markov chain} if for every Borel set $B \subseteq \RR$,
+$$P(X_{n+1} \in B|\mathcal F_n) = P(X_{n+1} \in B|X_n)$$
+almost surely.
+\end{definition}
+In other words the next time step is completely determined by the present, not the past.
+
+Let $X$ be a Markov chain.
+Suppose $X_0$ has the distribution $\nu_0$.
+The joint distribution of $(X_0, X_1)$ is
+$$P(X_0 \in B_0, X_1 \in B_1) = \int_{B_0} \int_{B_1} P(X_1 \in dx_1|X_0 \in dx_0) d\nu_0(x_0).$$
+Iterating we write
+$$P(X_0 \in B_0, X_1 \in B_1, X_2 \in B_2) = \iiint_{B_0 \times b_1 \times B_2} P_2(x_2, dx_1) P_1(x_1, dx_1) ~d\nu_0(x_0)$$
+where $P_j(x_j, dx_{j-1})$ is the ``transition kernel", an integral kernel.
+
+\begin{definition}
+A \dfn{transition kernel} is defined to be a sequence of maps
+$$P_n: \RR \times \mathcal B(\RR) \to [0,1]$$
+such that for any $x \in \RR$, $P_n(x)$ defines a Borel probability measure of $\RR$ and for every $B \in \mathcal B(\RR)$, $P_n(B): \RR \to [0, 1]$ is a Borel measurable function.
+\end{definition}
+
+Suppose that $X$ is a random sequence whose joint distribution is determined by integration against a transition kernel.
+Then $X$ is a Markov chain with
+$$P(X_{n+1} \in B|\mathcal F_n) = P_n(X_n, B).$$
+So in particular, a transition kernel defines a Markov chain and vice versa.
+
+\begin{definition}
+Let $P$ be a transition kernel.
+If $P_n$ is independent of $n$ then we say that the Markov chain induced by $P$ is \dfn{time-homogeneous}.
+\end{definition}
+
+For now we will assume all Markov chains are time-homogeneous.
+
+\begin{definition}
+Let $P$ be a time-homogeneous transition kernel.
+We say $f: \RR \to [0, \infty)$ is \dfn{harmonic} with respect to $P$ if
+$$\int_{-\infty}^\infty P(x, dy) = f(x)$$
+and \dfn{superharmonic} if
+$$\int_{-\infty}^\infty P(x, dy) \leq f(x).$$
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a time-homogeneous Markov chain with transition kernel $P$.
+Let $f$ be a $P$-(super)harmonic function. Then $f(X)$ is a (super)martingale.
+\end{lemma}
+\begin{proof}
+Assume $f$ is harmonic; then
+$$E(f(X_{n+1})|\mathcal F_n) = E(f(X_{n+1})|X_n) = \int_{-\infty}^\infty f(y) P(X_n, dy) = f(x)$$
+which is what we wanted.
+\end{proof}
+
+From now on we assume that the Markov chain is valued in a countable set $S$.
+Then we write
+$$P(X_{n+1} = y|X_n = x) = P_{xy}$$
+where $P_{xy}$ is the transition probability from $x$ to $y$.
+This defines a \dfn{transition matrix} $P$, namely
+$$P = (P_{xy})_{x,y \in S}.$$
+Then $f$ is harmonic iff
+$$f(x) = \sum_{y \in S} f(y)P_{xy}.$$
+
+\begin{example}
+Let $B \subseteq S$.
+Let $g(x)$ be the probability that $X_n \in B$ infinitely often given $X_0 = x$.
+Then $g$ is harmonic. In fact
+$$g(x) = \sum_{y \in S} P(\limsup_{n \to \infty} (X_n \in B)|X_1 = y, X_0 = x)P_{xy}$$
+but we don't care about $X_0 = x$ since $X$ is a Markov chain so
+$$g(x) = \sum_{y \in S} P(\limsup_{n \to \infty} (X_n \in B)|X_1 = y)P_{xy} = \sum_{y \in S} g(y)P_{xy}$$
+as desired.
+\end{example}
+
+\begin{example}
+Let $B \subseteq S$.
+Let $T_B$ be the first hitting time of $B$, that is, the first time that $X_n \in B$.
+Let
+$$\phi(x) = P(T_B < \infty|X_0 = x).$$
+Then $\phi$ is superharmonic and
+$$\phi(x) = \sum_{y \in S} \phi(y)P_{xy}$$
+if $x \notin B$, so that $\phi|B^c$ is harmonic.
+On the other hand, if $x \in B$, then $\phi(x) = 1$.
+To see this, note
+\begin{align*}\phi(x) &= P(\bigcup_n(X_n \in B)|X_0 = x) \\
+&= \sum_{y \in S} P(X_1 = y, \bigcup_n(X_n \in B)|X_0 = x)\\
+& \geq \sum_{y \in S} P(X_1 = y, \bigcup_{n \geq 1}(X_n \in B)|X_0 = x)\\
+& = \sum_{y \in S} P(\bigcup_{n \geq 1}(X_n \in B)|X_1 = y)P_{xy}\\
+&= \sum_{y \in S} \phi(y) P_{xy}.
+\end{align*}
+The inequality is an equality if $x \in B$.
+\end{example}
+
+\begin{definition}
+Let $X$ be a time-homogeneous Markov chain with values in a countable set $S$.
+We say $X$ is \dfn{irreducibly recurrent} if for every $x,y \in S$, $P(T_y < \infty|X_0 = x) = 1$, where $T_y$ is the first return time of $y$; that is, the first $n \geq 1$ such that $X_n = y$.
+\end{definition}
+
+\begin{theorem}
+A Markov chain is irreducibly recurrent iff every superharmonic function is constant.
+\end{theorem}
+\begin{proof}
+Let $X$ be irreducibly recurrent and $f$ a superharmonic function.
+Then $f(X)$ is a supermartingale.
+Assume $X_0 = x$. Then $T_y$ is a stopping time, so by optional stopping,
+$$E(f(X_{T_y})) \leq f(X_0) = f(x)$$
+so $f(y) = E(f(y)) \leq f(x)$.
+Since $x,y$ are arbitrary, $f(x) \geq f(y)$ implies $f$ constant.
+
+Conversely assume that every superharmonic function is constant.
+Let $y \in S$. Let $\phi(x) = P(T_y < \infty|X_0 = x)$.
+Then
+$$\phi(x) = \sum_{z \in S} P(X_1 = z, T_y < \infty|X_0 = x) = \sum_{z \in S} P(T_y < \infty|X_1 = z, X_0 = x)P_{xz}.$$
+But
+$$\sum_{z \neq y} P(T_y < \infty|x_1 = z)P_{xz} = \sum_{z \neq y} \phi(z)P_{xz}.$$
+Summing up,
+$$\phi(x) = \sum_{z \neq y}\phi(z) P_{xz} + P_{xy} \geq \sum_{z \in S} \phi(z)P_{xz}.$$
+Therefore $\phi$ is superharmonic, so constant.
+Therefore
+$$\phi(x) = \phi(x) \sum_{z \neq y} P_{xz} + P_{xy}$$
+which is only possible if $\phi(x) = 1$ or $P_{xy} = 0$.
+In the latter case, let $g(x) = 1_{x = y}$.
+Then $g$ is superharmonic since
+$$\sum_{z \in S} g(z) P_{xz} = g(y) P_{xy} = 0 \leq g(x).$$
+So $g$ is not a constant, a contradiction.
+Therefore $\phi(x) = 1$.
+\end{proof}
+
+\section{Markov chains in stochastic optimization}
+One form of stochastic optimization is called optimal stopping.
+
+\begin{example}
+Consider a random walk on $\{0, \dots, b\}$ with initial datum $x$, with transition probabilities $1/2$.
+Assume the random walk stops when we hit $0$ or $b$.
+Set
+$$S_n = x + \sum_{i=1}^n X_i$$
+where $X_i$ are iid with $P(X_i = \pm 1) = 1/2$. Let $\sigma$ be the first hitting time of $\{0, b\}$.
+Then $Y_n = S_{n \wedge \sigma}$ is the desired random walk.
+Let $h: \{0, \dots, b\} \to \RR$ is the payoff.
+Our goal is to find a stopping time $\tau$ which maximizes $h(Y_\tau)$.
+
+In the problem in the above example, let $v(x)$ be the ``value", defined by $v(x) = h(x)$ if we stop at $x$, and $.5(v(x+1) + v(x-1))$ if we do not stop.
+This suggests we can solve the problem with dynamic programming.
+Namely we will find a solution $v^*$ to the Bellman equation
+$$v(x) = \max(h(x), .5(v(x+1) + v(x-1)))$$
+with boundary data $v = h$
+and then run a verification algorithm to compute an optimal stopping time associated to $v^*$.
+
+Extending a possible solution $v$ by linearity to all of $[0, b]$ we obtain a concave, piecewise linear function.
+Therefore we expect that $v$ must have a local maximum at the singular points where it is not linear and hence $v(x) = h(x)$ there.
+Then such a function is unique, as it is the smallest concave function which dominates $h$; that is, the \dfn{least concave majorant} LCH$(h)$.
+\end{example}
+
+We need to verify that $v^* = \text{LCH}(h)$ from the previous example solves the Bellman eqation.
+Doing so will give us the optimal stopping time.
+\begin{lemma}
+One has
+$$v^*(x) = \max_\tau E(h(X_\tau)|X_0 = x).$$
+Moreover, let $B$ be the set of $x$ such that $h(x) = v^*(x)$ and let $\tau^*$ to be the first hitting time of $B$; then $\tau^*$ is the optimal stopping time.
+\end{lemma}
+\begin{proof}
+Let us first show that for every stopping time $\tau$,
+$$v^*(x) \geq E(h(X_\tau)|X_0 = x).$$
+Let $M_n = v^*(X_n)$.
+Then $M$ is a bounded supermartingale. Indeed,
+$$E(M_{n+1}|\mathcal F_n) = E(v^*(X_{n+1})|\mathcal F_n) = \frac{v^*(X_{n+1} + v^*(X_{n-1}))}{2} \leq v^*(X_n) = M_n.$$
+So if $\tau$ is a stopping time, then by optional stopping,
+$$E(v^*(X_\tau)) = E(M_\tau) \leq E(M_0) = v^*(x)$$
+given $X_0 = x$.
+
+Conversely we show that
+$$E(h(X_{\tau^*})|X_0 = x) \leq v^*(x).$$
+In fact,
+$$E(h(X_{\tau^*})) = v^*(x).$$
+We claim that the stopped supermartingale $M^{\tau^*}$ is actually a martingale.
+If this is true then by optional stopping
+$$E(M^{\tau^*}_n) = E(M_0) = v^*(x)$$
+so by dominated convergence
+$$E(M_{\tau^*}) = v^*(x).$$
+But
+$$E(M_{\tau^*} = E(v^*(X_{\tau^*})) = E(h(X_{\tau^*}))$$
+which shows that $\tau^*$ is best possible.
+
+To prove the claim we compute
+\begin{align*}E(M_{(n+1) \wedge \tau^*}|\mathcal F_n) &= E(M_{(n+1) \wedge \tau^*}1_{\tau^* \leq n} + M_{(n+1) \wedge \tau^*}1_{\tau^* > n}|\mathcal F_n)\\
+&= E\left(\sum_{k = 0}^n M_{(n+1) \wedge \tau^*} 1_{\tau^* = k} + M_{n+1} 1_{\tau^* > n}\bigg|\mathcal F_n\right)\\
+&= E\left(\sum_{k = 0}^n M_k 1_{\tau^* = k}\bigg|\mathcal F_n\right) + 1_{\tau^* > n} E(M_{n+1}|\mathcal F_n)\\
+&= \sum_{k = 0}^n M_k 1_{\tau^* = k} + 1_{\tau^* > n} E(M_{n+1}|\mathcal F_n).
+\end{align*}
+But
+$$1_{\tau^* > n} E(M_{n+1}|\mathcal F_n) = \frac{v^*(X_n + 1) + v^*(X_n - 1)}{2} = M_n.$$
+Therefore
+$$E(M_{(n+1) \wedge \tau^*}|\mathcal F_n) = \sum_{k=0}^n M_k 1_{\tau^* = k} + 1_{\tau^* > n}M_n = M_{n \wedge \tau^*}$$
+which shows the claim.
+\end{proof}
+
+In general to solve problems in dynamic programming, one first finds a suitable Bellman equation, finds a candidate solution $v^*$, and then verifies that $v^*$ is a solution, with the goal that the verification algorithm will also return a maximizer $\tau^*$.
+
+\begin{example}
+Recall the secretary problem.
+We are given $N$ candidate hirees, each of which will be interviewed one at a time.
+One can only accept or reject a candidate at the end of an interview and this decision is final.
+We must hire exactly one candidate.
+We want to maximize the probability of hiring the absolute best candidate, and during each interview we can determine the relative rank of the candidate to all previously rejected candidates.
+
+Assume that the candidates are enumerated $\{1, \dots, N\}$ where $1$ is the absolute best.
+An outcome is a possible order in which the candidates are interviewed, thus $\Omega = N!$ is the symmetric group on $N$ letters.
+Let $P$ be the uniform probability measure on $N!$.
+For every $1 \leq n \leq N$, let
+$$X_n(\omega) = 1 + \sum_{i=1}^{n-1} 1_{\omega_n > \omega_i}.$$
+Then $X_n$ is the relative ranking of the $n$th candidate to be interview among the first $n$ candidates to be interviewed.
+
+At time $n$, we know $X_1, \dots, X_n$ and this is all the information we have (since we can compute the relative ranks of any of the first $n$ candidates among the first $n$ candidates from $X_1, \dots, X_n$).
+So let $\mathcal F_n = \sigma(X_1, \dots, X_n)$ be the information we have at time $n$.
+The goal is to find a stopping time $\tau$ with respect to the filtration $\mathcal F$ which maximizes $P(Y_\tau = 1)$ where $Y_n$ is the absolute rank of the candidate interviewed at time $n$, thus
+$$Y_n(\omega) = \omega_n.$$
+Notice that $Y_n$ is not $\mathcal F_n$-measurable unless $n = N$.
+Thus $Y$ is not a martingale.
+Instead, define
+$$M_n = P(Y_n = 1|\mathcal F_n).$$
+If $X_n \neq 1$ then the $n$th candidate interviewed is not the best candidate among the first $n$ candidates interviewed, so $Y_n > 1$.
+Therefore
+$$M_n = \frac{n1_{X_n = 1}}{N}.$$
+This is a function of $X_n$, namely $M_n = f_n(X_n)$ where $f_n(x) = nx/N$.
+
+One can check
+$$M_\tau = P(Y_\tau = 1|\mathcal F_\tau).$$
+Thus
+$$P(Y_\tau = 1) = E(M_\tau) = E(f_\tau(X_\tau)) = \frac{E(\tau 1_{X_\tau = 1})}{N}.$$
+This is the quantity we want to maximize in $\tau$.
+
+We now observe that $X$ is an independent sequence.
+Indeed, $X_n$ is uniformly distributed among $\{1, \dots, n\}$ and $P(X_n = k|X_{n-\ell} = j)$ does not depend on $\ell$ or $j$.
+Given a stopping time $\tau$, define the time-$n$ value function
+$$v_n(x) = \sup_{n \leq \tau \leq N} E(f_\tau(X_\tau)|X_n = x).$$
+We want to compute $v_1(1)$, and we are given the boundary condition
+$$v_N(x) = 1_{x = 1}$$
+and the Bellman equation
+$$v_n(x) = \max(f_n(x), E(v_{n+1}(X_{n+1})|X_n = x) = \max(f_n(x), E(v_{n+1}(X_{n+1})))$$
+since $f_n(x)$ is the value of stopping, $E(v_{n+1}(X_{n+1})|X_n = x)$ is the value of continuation, and $X_{n+1}$ is independent of $X_n$.
+Thus, the Bellman system is
+$$\begin{cases}
+v_n(x) &= \max\left(\frac{n1_{X_n = 1}}{N}, E(v_{n+1}(X_{n+1}))\right)\\
+v_N(x) &= 1_{x=1}
+\end{cases}.$$
+
+To solve the Bellman equation, we observe that if $X_n \neq 1$ then $v_n(x) = E(v_{n+1}(X_{n+1}))$, and if $X_n = 1$ then since $X_{n+1}$ is distributed uniformly on $\{1, \dots, n+1\}$, we have
+$$v_n(x) = \begin{cases}
+\frac{1}{n+1} \sum_{k=1}^{n+1} v_{n+1}(k), &x_n \neq 1\\
+\max\left(\frac{n}{N}, \frac{1}{n+1} \sum_{k=1}^{n+1} v_{n+1}(k)\right), &x_n = 1
+\end{cases}.$$
+Set $a_n = (n+1)^{-1} \sum_{k \leq n+1} v_{n+1}(k)$.
+Expanding out the sum we get
+$$a_n = \frac{n}{n+1} a_{n+1} + \frac{1}{n+1} \max\left(\frac{n + 1}{N}, a_{n+1}\right).$$
+This gives a recursive formula for $a_n$ with boundary condition $a_N = 0$.
+Let $b_n = a_n/n$, so that
+$$b_n = b_{n+1} + \frac{1}{n}(N^{-1}, b_{n+1})$$
+with boundary condition $b_N = 0$. From this recursive formula we get $b_n > b_{n+1}$.
+Rewriting $v_n$, we get
+$$v_n(x_n) = \begin{cases}
+nb_n, &x_n \neq 1\\
+n\max(N^{-1}, b_n), &x_n = 1
+\end{cases}.$$
+This suggests that we stop at time $\tau$ exactly if $x_\tau = 1$ and $b_\tau > N^{-1}$.
+Since $b_n > b_{n+1}$ and $b_N = 0$, the recursive formula implies that there is $k^*$ such that
+$$b_{k^* + 1} < \frac{1}{N} \leq b_{k^*}.$$
+So if $n \geq k^* + 1$, $b_n = b_{n+1} + (nN)^{-1}$.
+In that case
+$$b_n = \frac{1}{N}\left(\frac{1}{N-1} + \cdots + \frac{1}{n}\right).$$
+Otherwise we get
+$$b_n = b_{n+1} + \frac{b_{n+1}}{n} = \frac{n+1}{n} b_{n+1}.$$
+Thus $k^*$ is least possible so that
+$$\frac{1}{N - 1} + \cdots + \frac{1}{k^*} > 1.$$
+
+If $N \gg 1$ then we get
+$$\frac{1}{N - 1} + \cdots + \frac{1}{k^*} \approx \int_{k^*}^N \frac{dx} \approx \log\frac{N}{k^*}$$
+which implies $k^* \approx N/e$.
+
+So the strategy is as follows, assume $N \gg 1$.
+Reject the first $N/e$ candidates.
+After that, accept the first relatively best candidates.
+One can then run a verification argument as in the previous example and conclude that the probability of success is $1/e - o(1)$ as $N \to \infty$.
+\end{example}
+
+Now let us give an example where the stopping time is given but we want optimal control.
+
+\begin{example}
+Consider a game wherein $S_n$ is your wealth after turn $n$, $Y_{n+1} \in [0, S_n]$ is your bet on turn $n+1$, and $X_n$ are iid random variables with $P(X_{n+1} = 1) = p$, $P(X_{n-1} - 1) = q$ where $p + q = 1$ and $1/2 < p < 1$.
+Assume
+$$S_{n+1} = S_n + Y_{n+1}X_{n+1}.$$
+Fix a utility function $U$, which takes in wealth $s$ and returns $U(s)$, and a terminal time $N$.
+We will assume that $U$ is increasing and concave. We want to maximize $E(U(S_N))$ ranging over betting strategies $Y$.
+
+Introduce the value function
+$$v_n(x) = \sup_Y E(U(S_N)|S_n = x).$$
+We want to compute $v_0$ using the Bellman equation
+$$v_n(x) = \sup_{0 \leq y \leq x} E(v_{n+1}(x + yX_{n+1})).$$
+Simplifying, since $X_{n+1}$ is supported on $\pm 1$,
+$$v_n(x) = \sup_{0 \leq y \leq x} v_{n+1}(x + y)p + v_{n+1}(x - y)q.$$
+The boundary datum is $v_N = U$.
+We can solve the Bellman equation recursively.
+
+For example suppose $U(x) = x^\alpha/\alpha$ where $0 < \alpha < 1$.
+Then
+$$v_{N-1}(x) = \sup_{0 \leq y \leq x} pV_N(X + y) + qV_N(x - y) = \sup_{0 \leq y \leq x} p\frac{(x + y)^\alpha}{\alpha} + q\frac{(x - y)^\alpha}{\alpha}.$$
+Thus if $\beta = \sup_{0 \leq t \leq 1} p(1 + t)^\alpha + q(1 - t)^\alpha$,
+$$v_{N-1}(x) = \frac{\beta}{\alpha}x^\alpha.$$
+Inducting on $N$, we conclude
+$$v_0(x) = \frac{\beta^N}{\alpha} x^\alpha.$$
+Moreover $\beta$ can be explicitly computed using calculus, to find a maximizer $t^*$.
+
+Let us check that the optimal betting strategy is to bet $t^*$ proportion of your wealth.
+To see this, let $Y$ be a betting strategy.
+Consider the process $M_n = v_n(S_n)$. Then $M$ is supermartingale, since
+$$E(M_{n+1}|\mathcal F_n) = E(v_{n+1}(S_n + X_{n+1}Y_{n+1})|\mathcal F_n) = pv_{n+1}(S_n + Y_{n+1}) + qv_{n+1(S_n - Y_{n+1})} \leq \sup_{0 \leq y \leq S_n} pv_{n+1}(S_n + y) + qv_{n+1}(S_n - y) = M_n.$$
+Therefore
+$$E(v_0(S_0)) \geq \sup_Y E(U(S_n)).$$
+But if $Y_{n+1}^* = t^* S_n$ then $M$ is a martingale, by the same computation.
+\end{example}
+
+We can generalize the above argument to infinite-time horizons by solving it for each time $N > 0$ and then taking the limit as $N \to \infty$.
+
+\chapter{Continuous-time martingales}
+We omit most of the details here, as they are technicalities.
+The book of Karatzas and Shreve contains the details.
+
+\section{The definitions}
+As usual fix $(X, \mathcal F, \PP)$ and a filtration of $\sigma$-algebras $\mathcal F_t$, this time indexed by positive reals.
+
+\begin{definition}
+A \dfn{stochastic process} consists of random variables $X_t$ for each $t \geq 0$.
+Given an outcome $\omega$ the \dfn{sample path} is the curve $t \mapsto X_t(\omega)$.
+\end{definition}
+
+Since there are uncountably many $t$, this is actually extremely annoying to work with because we might have to worry about uncountable intersection.
+
+\begin{definition}
+Let $\mathcal F_{t+}$ be the intersection of all $\sigma$-algebras $\mathcal F_s$, $s > t$.
+\end{definition}
+
+\begin{definition}
+The \dfn{usual condition} says that $\mathcal F_0$ contains all null events, and $\mathcal F$ is \dfn{right-continuous} in the sense that $\mathcal F_t = \mathcal F_{t+}$.
+\end{definition}
+
+\begin{definition}
+A stochastic process $X$ is \dfn{rcll} (right continuous with left limits) if the sample path of $X$ is right-continuous with all finite left-handed limits almost surely.
+\end{definition}
+
+\begin{definition}
+A stochastic process $X$ is \dfn{adapted} if $X_t$ is $\mathcal F_t$-measurable.
+\end{definition}
+
+We may view a stochastic process $X$ as a map
+$$X: [0, \infty) \times \Omega \to \RR.$$
+A priori an adapted process is not measurable!
+When we refer to the measurability of $X$ this is exactly what we mean.
+
+\begin{definition}
+A stochastic process $X$ is \dfn{progressively measurable} or \dfn{progressive} if for every $T > 0$, the time-restricted stochastic process $X|[0, T]$ is measurable.
+\end{definition}
+
+Progressivity measurability implies adaptedness and measurability.
+This is trivially true.
+Conversely, an adapted measurable process which is right-continuous is progressively measurable.
+
+\begin{definition}
+Let $X$ be a stochastic process. A \dfn{modification} of $X$ is a stochastic process of $Y$ such that for every $t \geq 0$, $X_t = Y_t$ almost surely.
+We say that $X,Y$ are \dfn{indistinguishable} if $X = Y$ almost surely on sample paths.
+\end{definition}
+
+\begin{theorem}[D\`ebut]
+Let $X$ be an adapted process and assume the usual condition.
+Let $\Gamma$ be a Borel set and $H$ the first hitting time of $\Gamma$.
+If $X$ is right-continuous and $\Gamma$ is open, or $X$ is continuous and $\Gamma$ is closed, or $X$ is progressive, then $H$ is a stopping time.
+\end{theorem}
+
+The proof of D\'ebut's theorem is famously difficult.
+
+\begin{definition}
+A \dfn{martingale} is a stochastic process $X$ such that for every $t \geq 0$, $X_t \in L^1$ and for every $0 \leq s \leq t$, $E(X_t|\mathcal F_s) = X_s$ almost surely.
+\end{definition}
+
+We can define submartingales and supermartingales similarly.
+
+\begin{definition}
+Let $X$ be a martingale. We say a random variable $X_\infty \in L^1$ is a \dfn{last element} of $X$ if $X_\infty$ is $\mathcal F_\infty$-measurable and for every $t \geq 0$, $E(X_\infty|\mathcal F_t) = X_t$ almost surely.
+\end{definition}
+
+\section{Meeting the technical criteria}
+If $X$ is a martingale, then $t \mapsto EX_t$ is constant, and hence meets the hypotheses of the below theorem:
+
+\begin{theorem}[Doob regularization theorem]
+Let $X$ be a submartingale.
+If the usual condition is true, then the following are equivalent:
+\begin{enumerate}
+\item There is a right-continuous modification of $X$.
+\item There is a rcll modification of $X$.
+\item The map $t \mapsto EX_t$ is right-continuous.
+\end{enumerate}
+Furthermore, the rcll modification of $X$ is a submartingale.
+\end{theorem}
+
+\begin{definition}
+Let $\mathcal N$ be the $\sigma$-algebra of null events.
+The \dfn{usual augmentation} is the filtration $\overline{\mathcal F}$ where $\overline{\mathcal F_t}$ is generated by $\mathcal F_{t+}$ and $\mathcal N$, and the entire $\sigma$-algebra is generated by the original entire $\sigma$-algebra and $\mathcal N$.
+\end{definition}
+
+After taking the usual augmentation, the usual condition holds.
+The trouble is that we need to look infinitesimally into the future.
+So the usual augmentation does not preserve the definition of a martingale.
+
+\section{Martingale theorems}
+\begin{theorem}[optional sampling]
+Let $X$ be a right-continuous submartingale and $T$ a stopping time.
+Then the stopped process $X^T$ is a right-continuous submartingale.
+\end{theorem}
+
+Now let $X$ be a submartingale, $S \leq T$ stopping times. If $X$ has a last element or $T$ is bounded, then $E(X_T|\mathcal F_S) \geq X_S$.
+
+Suppose $A$ is a predictable process, $A_0 = 0$. If $M$ is a martingale such that $(A \cdot M)_n \in L^1$, then in discrete time $E(A \cdot M)_n = 0$.
+Expanding out the definition of the martingale transform,
+$$(A \cdot M)_n = -A_1 M_0 - M_1(A_2 - A_1) - \cdots - M_{n-1}(A_n - A_{n-1}) + A_nM_n = A_n M_n - \sum_{j=0}^{n-1} (A_{j+1} - A_j)M_j.$$
+Thus
+$$E(A_n M_n) = \sum_{j=0}^{n-1} E(M_j(A_{j+1} - A_j)).$$
+In continuous time, we expect
+$$E(A_n M_n) = \int_0^n M_t ~dA_t.$$
+
+\begin{definition}
+$A = (A_t)_{t \geq 0}$ is an \dfn{increasing process} if $A_0 = 0$, $t \mapsto A_t$ is almost surely nondecreasing and right-continuous, and $A_t \in L^1$.
+\end{definition}
+
+\begin{definition}
+An increasing process $A$ is a \dfn{natural process} if for every bounded right-continuous martingale $M$,
+$$E(A_t M_t) = \int_0^t M_{s-} ~dA_s.$$
+\end{definition}
+
+\begin{definition}
+Let $X$ be an adapted, right-continous process.
+We say that $X$ is \dfn{Class DL} if for every $a > 0$, $(X_T)_{0 \leq T \leq a}$, ranging over all stopping times $T$, is uniformly $L^1$.
+We say that $X$ is \dfn{regular} if for every sequence of bounded increasing stopping times $T_n$ with $T_n \to T$, where $T$ is a bounded stopping time, then
+$$\lim_{n \to \infty} E(X_{T_n}) = E(X_T).$$
+\end{definition}
+
+\begin{theorem}[Doob-Meyer decomposition]
+Suppose that $X$ is a right-continuous submartingale and the usual condition is true.
+If $X$ is Class DL, then we can write $X = M + A$ where $M$ is a right-continuous martingale and $A$ is a natural process.
+In that case, $A$ is continuous iff $X$ is regular.
+\end{theorem}
+
+If $X$ is a nonnegative, right-continuous submartingale, then $X$ is of Class DL, so we can apply the Doob-Meyer decomposition.
+Furthermore if $X$ is a nonnegative continuous submartingale, then $X$ is regular, so the Doob-Meyer decomposition actually has $A$ continuous.
+To see why this is true, $X$ is continuous and $T_n \to T$ is an increasing sequence of stopping times converging to the bounded stopping time $T$, then
+$$\lim_{n \to \infty} E(X_{T_n}) = E(X_T)$$
+since one can show that the $X_{T_n}$ are uniformly $L^1$, and the continuity of $X$ then gives the claim.
+
+\section{Quadratic variation}
+\begin{definition}
+We say that a martingale $X$ is a \dfn{square-integrable martingale} if for almost every $t$, $X_t \in L^2$.
+\end{definition}
+
+If $X$ is a right-continuous square-integrable martingale, then $X^2$ is a right-continuous submartingale, so we can write
+$$X^2 = M = [X]$$
+where $[X]$ is the quadratic variation of $X$.
+If $X$ is continuous, then $X^2$ is regular, so $[X]$ is continuous.
+
+Why do we call $[X]$ the quadratic variation?
+
+\begin{theorem}
+Suppose $X$ is a continuous square-integrable martingale and $0 = t_0 < t_1 < \cdots < t_n = t$ is a partition of $[0, t]$.
+Then
+$$\lim_{\Delta \to 0} \sum_{k=1}^n |X_{t_k} - X_{t_{k-1}}|^2 = [X]_t$$
+where $\Delta = \max_k |t_{k-1} - t_k|$ is the mesh of the partition, and the limit is taken over all partitions.
+\end{theorem}
+\begin{proof}
+Let $\Delta x_k = t_k - t_{k-1}$ and let $\Delta [x]_k = [x]_{t_k} - [x]_{t_{k-1}}$.
+Let
+$$V = \sum_{k=1}^n (\Delta x_k)^2.$$
+We claim that $V - [X]_t \to 0$ in probability (as $\Delta \to 0$).
+
+We first claim that $V - [X]_t \to 0$ in $L^2$ given that $X$ and $[X]$ are uniformly $L^\infty$.
+This is a straightforward exercise.
+
+Fix $m \geq 0$. Let
+$$T_m = \inf \{t \geq 0: \max(|X_t|, [X]_t) \geq m \}.$$
+Then $T_m$ is a stopping time.
+If we let $X^{T_m}$ be the stopped process, then $X^{T_m}$ is a continuous, uniformly $L^\infty$, hence square-integrable martingale.
+Also $[X]^{T_m}$ is uniformly $L^\infty$.
+By the first claim,
+$$\sum_{k=1}^n (\Delta X^{T_m})_k^2 - (\Delta X^{T_m})_k \to 0$$
+in $L^2$.
+This implies
+$$E\left(\sum_{k=1}^n (X_{T_m \wedge t_k} - X_{T_m \wedge t_{k-1}})^2 - [X]_{T_m \wedge t} \right)^2 \to 0.$$
+So consider the event $A$ that $T_m \geq t$ and
+$$E\left(\sum_{k=1}^n (X_{t_k} - X_{t_{k-1}})^2 - [X]_t \right)^2 \geq \varepsilon.$$
+Then $P(A) \to 0$ as $\Delta \to 0$. Since this true for any $m$ we can take $m \to \infty$, so $P(T_m \geq t) \to 1$.
+Therefore we get the convergence in probability.
+\end{proof}
+
+\begin{definition}
+Let $X,Y$ be square-integrable martingales. The \dfn{cross-variation} is
+$$[X, Y] = \frac{[X + Y] - [X - Y]}{4}.$$
+\end{definition}
+
+Then $XY - [X, Y]$ is a martingale and
+$$\sum_{k=1}^n (X_{t_k} - X_{t_{k-1}})(Y_{t_k} - Y_{t_{k-1}}) \to [X, Y]_+$$
+as $\Delta \to 0$.
+
+\section{Local martingales}
+When talking about martingales, locality usually means locality in time.
+
+\begin{definition}
+A \dfn{local martingale} $X$ is an adapted process such that there are stopping times $0 \leq T_1 \leq T_2 \leq \cdots$ such that $\lim_n T_n = \infty$ almost surely, and for every $n$, the stopped process $X^{T_n}$ is a martingale.
+\end{definition}
+The optional stopping theorem implies that every martingale is a local martingale.
+However, a local martingale is not necessarily a martingale, even if it is uniformly $L^1$.
+However, the counterexample is extremely hard to construct.
+
+If $X$ is a local martingale then we can define the quadratic variation $[X]$; in particular cross-variation is well-defined.
+Now let $X, Y$ be continuous local martingales. Then the cross-variation $[X, Y]$ satisfies $XY - [X, Y]$ is a continuous local martingale.
+
+Let $X$ be a continuous local martingale and $X_0 = 0$.
+Let $T$ be a stopping time such that $[X]_T = 0$ almost surely.
+Then the stopped process $X^T$ is zero almost surely.
+
+\section{Constructing Brownian motion}
+Let $\Omega = \RR^{[0, \infty)}$, equipped with the product $\sigma$-algebra, which is generated by sets of the form $\{\omega \in \RR^{[0, \infty)}: (\omega(t_1), \dots, \omega(t_n)) \in B\}$ where $B$ is a Borel set in $\RR$ and $t_1, \dots, t_n \in \RR$.
+We then define $B_t(\omega) = \omega(t)$ be the projection to time $t$.
+If $B$ is to be a Brownian motion, then the distribution of $(B_{t_1}, \dots, B_{t_n})$ will be completely known.
+This is a finite-dimensional distribution, so by the Kolmogorov consistency theorem, we will be able to use this to construct Brownian motion by taking $n \to \infty$.
+
+So let
+$$\mu_{t_1, \dots, t_n}(\Gamma) = \int_\Gamma \prod_{j=1}^k p(t_j - t_{j-1}, x_{j-1}, x_j) ~dx_1 \cdots dx_k$$
+where $t_1, \dots, t_n \in \RR$,
+$$p(t, x, y) = \frac{1}{\sqrt{2\pi t}} \exp\left(-\frac{(x - y)^2}{2t}\right)$$
+is a transition kernel, and thus
+$$\mu_{t_1, \dots, t_n}(\Gamma) = P((B_{t_1}, \dots, B_{t_n}) \in \Gamma)$$
+if $B$ is going to be a standard Brownian motion.
+
+The distributions $\mu_{t_1, \dots, t_n}$ are consistent in the sense that
+$$\mu_t(\Gamma_1 \times \Gamma_2 \times \cdots \times \Gamma_n) = \mu_{\sigma(t)}(\Gamma_{\sigma(1)} \times \cdots \Gamma_{\sigma(n)})$$
+whenever $\sigma \in n!$ and
+$$\mu_{t,t^*}(\Gamma \times \RR) = \mu_t(\Gamma).$$
+This implies that there is a probability measure $P$ on $\Omega$ such that
+$$\mu_t(\Gamma) = P((\omega(t_1), \dots, \omega(t_n)) \in \Gamma)$$
+whenever $\Gamma$ is a Borel set in $\RR^n$ and $t \in \RR^n$.
+Moreover, the coordinate mapping process
+$$B_t(\omega) = \omega(t)$$
+is almost a standard Brownian motion:
+
+\begin{definition}
+A stochastic process $B$ is \dfn{almost a standard Brownian motion} if $B_0 = 0$ almost surely, the increments $B_{t_0}, B_{t_1} - B_{t_0}, \dots, B_{t_n} - B_{t_{n-1}}$ are independent, and $B_t - B_s$ is normally distributed of mean $0$ and variance $t - s$.
+It is a \dfn{standard Brownian motion} if $t \mapsto B_t$ is almost surely continuous.
+\end{definition}
+
+We want $P(B \in C[0, \infty)) = 1$ but $C[0, \infty)$ is not measurable.
+
+We omit lots of details because I was sick (with covid?) for a week.
+
+\begin{theorem}[strong Markov property]
+Let $B$ be a standard Brownian motion and $\sigma$ a finite stopping time. Set $W_t = B_{\sigma + t} - B_\sigma$.
+Then $W$ is a standard Brownian motion and is independent of $\mathcal F_\sigma$.
+\end{theorem}
+\begin{proof}
+For every $s, t > 0$, we want to show that $W_{s + t} - W_s$ is independent of $\mathcal F_\sigma$ and the history of $B$ up to $\sigma + s$.
+Let us compute the conditional Fourier transform $E(e^{i\theta(W_{t+s} - W_s)}|\mathcal F_{\sigma + s})$.
+In fact,
+\begin{align*}
+E(e^{i\theta(W_{t+s} - W_s)}|\mathcal F_{\sigma + s}) &= E(e^{i\theta(B_{\sigma + t + s} - B_{\sigma + s})}|\mathcal F_{\sigma + s})\\
+&= E(e^{i\theta(B_{\tau + t} - B_\tau)}|\mathcal F_\tau)
+\end{align*}
+where $\tau = \sigma + s$.
+Define $X_t = e^{i\theta B_t + \theta^2 t/2}$.
+Then $X$ is a martingale, so by optional stopping,
+$$E(e^{X_{\tau \wedge n + t}}|\mathcal F_{\tau \wedge n}) = X_{\tau \wedge n}$$
+thus
+$$E(e^{i\theta B_{\tau \wedge n + t + \theta^2(\tau \wedge n + t)/2} }|\mathcal F_{\tau \wedge n}) = e^{i\theta B_{\tau \wedge n} + \theta^2(\tau \wedge n)/2}$$
+which implies
+$$E(e^{i\theta(B_{\tau \wedge n + t - B_{\tau \wedge n} + \theta^2t/2})}|\mathcal F_{\tau \wedge n}) = 1$$
+so
+$$E(e^{i\theta(B_{\tau\wedge n + t} - B_{\tau \wedge n})}|\mathcal F_{\tau \wedge n}) = e^{-\theta^2 t/2}$$
+which is the characteristic function of $N(0, t)$.
+Moreover, $E(X|\mathcal F_\sigma) = E(Y|\mathcal F_{\sigma \wedge \tau})$ on $\sigma \leq \tau$ if $Y = X$ on $\sigma \leq \tau$.
+Using that result with the stopping times $\tau \leq n$, and $Y = e^{i\theta(B_{\tau + t} - B_\tau)}$, we get
+$$E(e^{i\theta(B_{\tau\wedge n + t} - B_{\tau \wedge n})}|\mathcal F_{\tau \wedge n}) = E(e^{i\theta(B_{\tau + t} - B_\tau)}|\mathcal F_\tau)$$
+and thus
+$$E(e^{i\theta(B_{\tau + t} - B_\tau)}|\mathcal F_\tau) = e^{-\theta^2 t/2}$$
+provided that $\tau \leq n$.
+But this is true for any $n$, and by assumption $\tau$ is finite.
+Taking $n \to \infty$ we conclude that in fact
+$$E(e^{i\theta(B_{\tau + t} - B_\tau)}|\mathcal F_\tau) = e^{-\theta^2 t/2}$$
+almost surely.
+Thus $B_{\tau + t} - B_\tau|\mathcal F_\tau \sim N(0, t)$ almost surely.
+\end{proof}
+
+Now the strong Markov property allows us to compute $\PP(T_b < t)$ where $T_b$ is the first hitting time $B = b$.
+
+\begin{definition}
+The \dfn{running maximum} $M$ is defined by
+$$M_t = \sup_{0 \leq s \leq t} B_s$$
+for $B$ a standard Brownian motion.
+\end{definition}
+
+Then $M$ is an increasing process. Let us compute the joint distribution of $(B, M)$, $\PP(B_t \leq a, B_t \geq b)$. Also
+\begin{align*}
+\PP(B_t \leq a, M_t \geq b) &= \PP(B_t \leq a, T_b \leq t)\\
+&= \PP(B_t \geq 2b - a) = \Phi(-\frac{2b-a}{\sqrt t})
+\end{align*}
+where $\Phi $ is the standard normal distribution.
+
+\section{Stochastic integration}
+Let $B$ be a Brownian motion. We want to define $\int_0^T X_t ~dB_t$ whenever $X$ is some process.
+The quadratic variation $[B]$ satisfies $[B]_t = t$, so $B$ does not have bounded variation.
+That is, we cannot interpret a stochastic integral as a Stieljes integral.
+Rather we need a new integration called the It\^o integral.
+
+Throughout this section we assume the usual condition.
+
+\begin{definition}
+A \dfn{simple process} is one of the form
+$$X_t = \sum_{j=0}^n \theta_j 1_{[t_j, t_{j+1})}(t)$$
+where $\theta_j$ are random variables.
+\end{definition}
+
+Thus a simple process equals a particular random variable on each interval in some partition.
+For a simple process, we define the \dfn{It\^o integral}
+$$\int_0^t X_s ~dB_s = \sum_{j=0}^{k-1} \theta_j (B_{t_{j+1}} - B_{t_j}) + \theta_k(B_t - B_{t_k})$$
+provided that $t \in [t_{k-1}, t_k)$.
+We also write
+$$I_t(X) = \int_0^t X_s ~dB_s.$$
+Note that $I(X)$ is the martingale transform of $X$ against a discretized Brownian motion, which is a random walk.
+
+\begin{theorem}
+Let $X$ be a simple process. Then $I(X)$ is a continuous $L^2$ martingale with continuous sample paths such that $I_0(X) = 0$ and
+$$[I(X)]_t = \int_0^t X_s^2 ~ds.$$
+Furthermore, $I$ is an \dfn{It\^o isometry} in the sense that
+$$E(I_t(X)^2) = E\int_0^t X_s^2 ~ds.$$
+\end{theorem}
+
+This is easy to prove. The fact that $I$ is an It\^o isometry actually follows from the formula for $[I(X)]$.
+
+To generalize the It\^o integral to more general stochastic integrands, let $\mathcal H$ be the space of adapted $L^2$ processes $X$ such that
+$$E\int_0^T X_t^2 ~dt < \infty.$$
+To do this, first let $X$ be a bounded continuous adapted process. Then let $X^{(n)}$ be the left-endpoint discretization of $X$ to a partition of $[0, T]$ with mesh $1/n$.
+Then by dominated convergence,
+$$\lim_{n \to \infty} E\int_0^T |X_t - X_t^{(n)}|^2 ~dt = 0.$$
+So we can define
+$$I(X) = \lim_{n \to \infty} I(X^{(n)})$$
+since $I$ is an It\^o isometry.
+If $X$ is just progressively measurable then
+$$X^{(n)}_t = n \int_{t - 1/n}^t X_s ~ds$$
+is clearly bounded and continuous. Since $X$ is \emph{progressively} measurable in fact $X^{(n)}$ is adapted, and again we can define $I(X) = \lim_n I(X^{(n)})$.
+
+In general, we need the fact that every bounded, adapted process has a progressively measurable modification.
+But this is extremely difficult to prove, so we omit its proof.
+If this is true, then we can replace the adapted process $X$ with a progressively measurable process $Y$, and argue that its approximation by a bounded continuous process $Y^{(n)}$ is a modification of $X^{(n)}$.
+
+Finally, if $X$ is just an adapted process we can use $X^{(n)}_t = X_t \wedge n \vee -n$ as an approximation to $X$ by a bounded adapted process.
+This completes the approximation that defines the It\^o integral in general.
+Indeed, the It\^o isometry implies that $I(X^{(n)})$ defines a Cauchy sequence in $L^2$ whenever $X^{(n)} \to X$ in $L^2$, so we can always define $I(X) = \lim_n I(X^{(n)})$ at every stage of the above argument.
+
+The construction of the It\^o integral gives us an antiderviative
+$$Y_t = \int_0^t X_s ~dB_s$$
+which we want to modify to have continuous sample paths.
+This can be done using Doob's maximal inequality but I'll omit the details.
+For this reason we always define $I_t(X)$ to be the continuous modification of a possible It\^o integral.
+
+Suppose $X, Y \in \mathcal H$ and $\tau$ is a stopping time with $P(X_t = Y_t) = 1$ on $t \leq \tau$.
+Then $I_t(X) = I_t(Y)$ on $t \leq \tau$.
+We define
+$$\int_0^\tau X_t ~dB_t = I_\tau(X).$$
+This is the same thing as $I_T(X 1_{\cdot \leq \tau})$.
+
+Now we generalize the stochastic integral to processes which are not $L^2$.
+Define $\mathcal P$ to be the space of measurable adapted processes with $\int_0^T X_t^2 ~dt < \infty$ almost surely.
+If $X$ is continuous for example, then $X \in \mathcal P$.
+To define the It\^o integral here, let $T_n$ be the first hitting time of $\int_0^t X_s^2 ~ds \geq n$ or $t = T$.
+Now define $X^{(n)}_t = X_t 1_{t \leq T_n}$.
+Then
+$$E\int_0^T X_t^{(n)} ~dt \leq n$$
+so we can define
+$$I^{(n)}_t(X) = I_t(X^{(n)}).$$
+Then we can set $I_t(X) = \lim_n I^{(n)}_t(X)$.
+
+\section{The It\^o formula}
+We now define a change of variables formula for stochastic integrals.
+
+\begin{example}
+Consider $\int_0^t B_s^2 ~dB_s$. Let
+$$X_t^{(n)} = \sum_{i=0}^{n-1} B_{t_i}^2 1_{t \in [t_i, t_{i+1})}.$$
+Then
+$$\int_0^t X_s^{(n)} ~dB_s = \sum_{i=0}^{n-1} B_{t_i}^2 \Delta B_{t_i}.$$
+We want to find the limit of $\int_0^t X_s^{(n)} ~dB_s$ as $n \to \infty$ in $L^2$.
+Now
+$$B_t^3 = B_t^3 - B_0^3 = \sum_{i=0}^{n-1} ((B_{k+1} + \Delta B_i)^3 - B_{t_i}^3)$$
+so
+$$I_n = \frac{1}{3}B_t^3 \sum_{i=0}^{n-1} B_i\Delta B_i^2 - \frac{1}{3} \sum_{i=0}^{n-1} \Delta B_i^3.$$
+In fact
+$$E\left(\sum_{i=0}^{n-1} \Delta B_i^3\right)^2 \leq n \sum_{i=0}^{n-1} E\Delta B_i^6 \lesssim n \sum_{i=0}^{n-1} \Delta t_i^3.$$
+This implies that $\sum_i \Delta B_i^3 \to 0$ in $L^2$.
+Also
+$$\sum_{i=0}^{n-1} = \sum_{i=0}^{n-1} B_i(\Delta B_i^2 - \Delta t_i) + \sum_{i=0}^{n-1} B_i \Delta t_i.$$
+But
+$$\lim_{n \to \infty} \sum_{i=0}^{n-1} B_i \Delta t_i = \int_0^t B_s ~ds$$
+in $L^2$, by dominated convergence. Now we show
+$$\lim_{n \to \infty} E\left(\sum_{i=0}^{n-1} B_i(\Delta B_i^2 - \Delta t_i)\right)^2 = 0.$$
+To see this,
+$$ E\left(\sum_{i=0}^{n-1} B_i(\Delta B_i^2 - \Delta t_i)\right)^2 = \sum_{i=0}^{n-1} E(B_i^2 (\Delta B_i^2 - \Delta t_i)^2) + E(c)$$
+where $c$ consists of crossterms. We get a lot of cancellation and thus $E(c) = 0$.
+Also $\Delta B_i^2 \sim \Delta t_i N(0, 1)^2$ so
+$$\sum_{i=0}^{n-1} E(B_i^2 (\Delta B_i^2 - \Delta t_i)^2) \lesssim t n \Delta t^2 = \frac{t}{n}$$
+which vanishes as $n \to \infty$. This gives
+$$\lim_{n \to \infty} I_n = \frac{B_t^3}{3} - \int_0^t B_s ~dB_s.$$
+The point is that the $\sum_i \Delta B_i^3$ terms are negligible but the terms $\sum_i B_i \Delta B_i^2$ we use $\Delta B_i^2 \approx \Delta t_i$.
+\end{example}
+
+\begin{theorem}[basic It\^o formula]
+Let $f \in C^2(\RR \to \RR)$.
+Let $T \geq 0$, and $B$ a standard Brownian motion. Then
+$$f(B_T) - f(B_0) = \int_0^T f'(B_t) ~dB_t + \frac{1}{2}\int_0^T f''(B_t) ~dt.$$
+\end{theorem}
+\begin{proof}
+Suppose $f \in C^3$ with $|f'''| \lesssim 1$. Then
+$$f(B_T) - f(0) = \sum_{i=0}^{n-1} f(B_{t_{i+1}}) - f(B_{t_i}) = \sum_{i=0}^{n-1} f'(B_{t_i})\Delta B_i + \frac{1}{2} f''(B_{t_i}) \Delta B_i^3 + \frac{1}{6} f^{(3)}(\eta_i) \Delta B_i^3$$
+where $\eta_i \in [B_{t_i}, B_{t_{i+1}}]$.
+The $f'(B_{t_i})$ term tends to $\int_0^T f''(B_s) ~dB_s$ in $L^2$; the $f''(B_{t_i})$ terms converges to $\int_0^T f''(B_s) ~dB_s/2$.
+The $f'''(\eta_i)$ term converges to $0$ in $L^2$ since $|f^{(3)}| \lesssim 1$.
+Here these convergences are identical to as in the original proof.
+
+Now suppose $f \in C^2$ with $|f'|,|f''| \lesssim 1$.
+Then we get
+$$f(B_T) - f(B_0) = \sum_{i=0}^{n-1} f'(B_{t_i}) \Delta B_i + \frac{1}{2} \sum_{i=0}^{n-1} f''(\eta_i) \Delta B_i^2.$$
+Then we get convergence in $L^2$ of $\sum_i f'(B_{t_i})\Delta B_i$.
+The second term is
+$$\lesssim \sum_{i=0}^{n-1} \Delta B_i^2 \max_j |f''(\eta_j) - f''(B_{t_j})| \to [B]_T \cdot 0$$
+where the convergence to $[B]_T = T$ is in probability and the convergence to $0$ is almost sure.
+Thus, the second term goes to $0$ in probability, but everything is Cauchy in $L^2$ so this forces convergence in $L^2$.
+
+Finally we approximate an arbitrary function in $C^2$ by functions which are bounded in third derivative plus functions which are bounded in first and second derivatives.
+\end{proof}
+
+This formula says
+$$(dB_t)^2 = dt.$$
+We can also express it as
+$$df(B_T) = f'(B_t) ~dB_t + \frac{1}{2} f''(B_t) ~dt.$$
+Note that we never defined differential forms of Brownian motion, so when we see something like this we need to integrate both sides.
+
+\begin{theorem}[It\^o formula]
+Let $f \in C^2(\RR \to \RR)$ and suppose
+$$X_t = X_0 + \int_0^t Y_s ~dB_s + \xi_t$$
+where $\xi$ is a process which is almost surely continuous and of bounded variation.
+Then
+$$f(X_T) - f(X_0) = \int_0^T f'(X_t) Y_t ~dB_t + \int_0^T f'(X_t) ~d\xi_t + \frac{1}{2} f''(X_t) Y_t^2 ~dt.$$
+Equivalently, in the sense of ``differential forms",
+$$df(X_t) = f'(X_t) ~dX_t + \frac{f''(X_t)}{2} ~(dX_t)^2$$
+where $dX_t = Y_t ~dB_t + d\xi_t$ and $(dX_t)^2 = Y_t^2 ~dt$.
+\end{theorem}
+
+Some other It\^o formulae are for higher-dimensional processes $X = (X^1, \dots, X^d)$, say
+$$dX_t^i = Y^i_t ~dB_t + d\xi_t^i$$
+where $\xi$ has bounded variation.
+Also we have a product rule
+$$d(XY) = X~dY + Y~dX + dXdY.$$
+
+
+
+
+
+
+\newpage
+\printindex
+\printbibliography
+
+\end{document}

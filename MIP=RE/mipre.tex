@@ -1,0 +1,165 @@
+% Created 2021-06-10 Thu 19:42
+% Intended LaTeX compiler: pdflatex
+\documentclass[reqno,12pt,letterpaper]{amsart}
+               \RequirePackage{amsthm,mathrsfs,url}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+               \RequirePackage[usenames,dvipsnames]{color}
+               \RequirePackage{amsxtra}
+               \usepackage{tikz-cd}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\DeclareMathOperator{\sgn}{sgn}
+               \setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+               \setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+               \setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+               \setlength{\marginparwidth}{1.0in}
+               \setlength{\abovedisplayskip}{0.2in}
+               \setlength{\belowdisplayskip}{0.2in}
+               \setlength{\parskip}{0.05in}
+               \renewcommand{\baselinestretch}{1.10}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\newcommand{\F}{\mathbb F}
+\author{Aidan Backus}
+\date{10 June, 2021}
+\title{The Riemann zeta function and the charged ergodic theorem}
+\hypersetup{
+ pdfauthor={Aidan Backus},
+ pdftitle={The Riemann zeta function and the charged ergodic theorem},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.2 (Org mode 9.4.6)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+
+\section{Preliminaries}
+\label{sec:org120d474}
+In a \href{https://arxiv.org/pdf/2106.04644.pdf}{recent paper}, Peter Burton of UT Austin announced a proof of the following theorem:
+
+\begin{theorem}
+There exists a constant \(h > 0\) such that every zero of the Riemann zeta function has real part \(< 1 - 2h\).
+\end{theorem}
+
+In fact, this follows from a result that Burton calls the \emph{charged mean ergodic theorem} concerning the representation theory of the free group \(\F\) on two generators, which itself is a consequence of the negation of the Connes' embedding conjecture (or, equivalently, the equality of the complexity classes \(\mathsf{RE}\) and \(\mathsf{MIP^*}\).
+
+This sounds a bit like crackpottery, and the bizarre acknowledgements section of Burton's paper, which alludes to ``numerous artificial neural networks'' that helped Burton write the paper, doesn't do him any favors. However, I was rather curious, as the proof that \(\mathsf{RE} = \mathsf{MIP^*}\) implies the charged mean ergodic theorem apparently only uses elementary facts about C*-algebras.
+
+Anyways, progress on the Riemann hypothesis would be a great 23rd birthday gift, so I hope this pans out. Below are my attempts to understand the proof that \(\mathsf{RE} = \mathsf{MIP^*}\) implies the charged mean ergodic theorem.
+
+\subsection{Representation theory}
+\label{sec:org6823e3f}
+
+Let \(\F\) be the free group on generators \(a,b\).
+We write \(\iota\) for the empty word.
+
+If \(w\) is a word we write \(|w|\) for its length and \(|w|_a\) for the number of times that \(a\) or \(a^{-1}\) appears in \(w\).
+We also write \(\delta_w(x) = 1\) if \(w = x\) and \(\delta_w(x) = 0\) otherwise.
+We write \(\chi_0\) for the character of \(\mathbb F\) defined by \(\chi_0(w) = (-1)^{|w|}\), and \(\chi_1\) for the character \(\chi_1(w) = (-1)^{|w|_a}\).
+
+\begin{definition}
+The \emph{fundamental mass distribution} on \(\F\) is the element
+$$\mu = \frac{1}{4} \sum_{|w| = 1} \delta_w$$
+of \(\ell^1(\F)\).
+
+The \emph{fundamental charge distribution} on \(\F\) is the element
+$$\lambda = \delta_\iota + \frac{1}{16} \sum_{|w| = 2} \chi_1(w) \delta_w$$
+of \(\ell^1(\F)\).
+\end{definition}
+
+\subsection{Connes' embedding conjecture}
+\label{sec:org8735eef}
+
+Let \(A, B\) be C*-algebras. Let us recall the notion of extremal tensor products of C*-algebras.
+Since \(A, B\) are rings, they have \emph{algebraic} tensor products \(A \otimes B\), taken in the category of complex algebras.
+However, this does not give them a C*-norm.
+Let \(A \otimes_{max} B\) be \(A \otimes B\) equipped with the largest possible norm such that \(A \otimes_{max} B\) is a C*-algebra.
+Similarly define \(A \otimes_{min} B\).
+
+If \(\Gamma\) is a countable discrete group, we have the C*-algebra \(C^*(\Gamma)\), the \emph{full group C*-algebra}, of \(\Gamma\), defined by the universal property that every unitary representation \(\rho: \Gamma \to B(H)\) of \(\Gamma\) extends uniquely to a representation \(\overline \rho: C^*(\Gamma) \to B(H)\).
+Equivalently it is the completion of \(\ell^1(\Gamma)\) with respect to the C*-norm
+$$||x|| = \sup_\rho ||\rho(x)||$$
+where \(\rho\) ranges over unitary representations.
+
+If \(\Delta\) is another discrete group, then we have canonical maps
+$$\ell^1(\Gamma \times \Delta) \to C^*(\Gamma) \otimes C^*(\Delta)$$
+arising from the above. So, if \(\phi \in \ell^1(\Gamma \times \Delta)\), we can define \(||\phi||_{min}\) and \(||\phi||_{max}\).
+
+\begin{theorem}[negation of Connes' embedding conjecture]
+There exists \(\phi \in \ell^1(\F^2)\) such that \(||\phi||_{max} > ||\phi||_{min}\).
+\end{theorem}
+
+We now set
+$$h = 1 - \frac{||\phi||_{min}}{||\phi||_{max}} > 0.$$
+Thus we are ready to state our main theorem.
+
+\begin{theorem}[charged mean ergodic theorem]
+For every unitary representation \(\rho\) of \(\F\), one has
+$$||\rho(\lambda)||^2 \leq 1 - h.$$
+\end{theorem}
+
+\section{Proof of the charged ergodic theorem}
+\label{sec:orgcd1e76f}
+
+\subsection{Properties of \(\phi\)}
+\label{sec:orgaf9d325}
+
+Let \(\Gamma = \F^2\).
+Suppose that \(||\phi||_{max} > ||\phi||_{min}\). By a rescaling we can assume \(||\phi||_{max} = 1\).
+By the C*-identity,
+$$||\phi^*\phi||_{max} = ||\phi||_{max}^2 = 1 > ||\phi||_{min}^2 = ||\phi^*\phi||_{min}$$
+so it is no loss to assume that \(\phi\) is positive.
+
+Since the space of functions of finite support on \(\Gamma\) is dense in \(\ell^1(\Gamma)\), we may also assume, after incurring an arbitrarily small loss, that \(\phi\) is supported on a set of pairs \((v, w)\) with \(\max(|v|, |w|) \leq r\).
+Let \(R\) be the number of words of length \(\leq r\); then \(\phi\) is supported on a set of cardinality \(\leq R^2\).
+Let \(M = ||\phi||_{\ell^1(\Gamma)}\).
+
+Since \(||\phi||_{max} = 1\), there is a representation \(\rho\) for which \(||\phi(\rho)|| = 1\), i.e. there are unit vectors \(\psi_n\) such that
+$$\lim_{n \to \infty} ||\psi_n - \rho(\phi)\psi_n|| = 0.$$
+
+We write \(\phi^k\) for the convolution power of \(\phi\).
+Since convolution increases the size of the support, there exists \(k\) such that \(\phi^k(v, w) = 1\) whenever \(|v| = |w| = 1\).
+Moreover, \(\rho(\phi^k) = \rho(\phi)^k\), since \(\rho\) is a representation of \(\ell^1(\Gamma)\).
+In particular, it follows that
+$$\lim_{n \to \infty} ||\psi_n - \rho(\phi^k)\psi_n|| = 0.$$
+So for every \(\varepsilon > 0\) we can find \(n\) so large that
+$$\max(||\psi_n - \rho(\phi^k)\psi_n||, ||\psi_n - \rho(\phi^{2k)}\psi_n||) \leq \frac{\varepsilon}{2M^{2k}R^{2k}}.$$
+It's a fact from high school trigonometry that this implies
+$$|\langle \rho(\phi^k)\psi_n, \psi_n\rangle| \geq \cos\left(\frac{\varepsilon}{2M^{2k}R^{2k}}\right).$$
+
+\subsection{The sign of \(\phi\)}
+\label{sec:org9cd1023}
+
+Let \(S = \{a, b, a^{-1}, b^{-1}\}\).
+Let us now prove the following lemma:
+
+\begin{lemma}
+There exists \(\alpha: S^2 \to \{-1, 1\}\) such that for every \((v, w) \in \Gamma\) and \((u, t) \in S^2\),
+$$\sgn \phi^k(uv, tw) = \alpha(u, t) \sgn \phi^k(v, w).$$
+\end{lemma}
+
+
+
+
+\subsection{Computation of \(\alpha\)}
+\label{sec:orgffd9c44}
+
+\subsection{Proof of the ergodic theorem}
+\label{sec:org2558108}
+\end{document}

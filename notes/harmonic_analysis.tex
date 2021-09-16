@@ -1,0 +1,787 @@
+
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Harmonic analysis notes}
+\author{Aidan Backus}
+\date{2021}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\Cau}{\mathbf{Cau}}
+\newcommand{\ISF}{\mathbf{ISF}}
+\newcommand{\Simp}{\mathbf{Simp}}
+\newcommand{\Sch}{\mathscr S}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\dom}{dom}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rad}{rad}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiomx}[theorem]{Axiom}
+\newtheorem{theoremxx}[theorem]{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definitionx}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{examplex}[theorem]{Example}
+\newtheorem{exercisex}{Exercise}[chapter]
+\newtheorem{problem}[theorem]{Problem}
+
+\newenvironment{axiom}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\axiomx}
+  {\popQED\endexamplex}
+
+\newenvironment{definition}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\definitionx}
+  {\popQED\endexamplex}
+
+\newenvironment{example}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\examplex}
+  {\popQED\endexamplex}
+
+  \newenvironment{exercise}
+    {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\exercisex}
+    {\popQED\endexamplex}
+
+  \newenvironment{theoremx}
+        {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\theoremxx}
+        {\popQED\endexamplex}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Muckenhoupt weights}
+This chapter is based on the Informal Analysis seminar at Brown as well as Chapter 5 of Stein's book on harmonic analysis.
+
+Throughout we work in $\RR^d$ and let $|\cdot|$ denote Lebesgue measure on $\RR^d$.
+
+Recall the definition of the maximal operator:
+$$Mf(x) = \sup_{r > 0} \dashint_{B(x, r)} f(y) ~dy$$
+whenever $f \geq 0$ is locally integrable and the dashed integral denotes a mean. Thus $Mf(x)$ dominates the means of $f$ taken on balls centered at $x$.
+Then one has:
+\begin{theorem}[Hardy-Littlewood maximal inequality]
+Let $1 < p \leq \infty$. Then $M$ satisfies the strongtype $(p, p)$ inequality; that is,
+$$||Mf||_{L^p} \lesssim_{p, d} ||f||_{L^p}.$$
+\end{theorem}
+\begin{proof}
+The strongtype $(\infty, \infty)$ inequality is trivial, so we may assume $p < \infty$.
+We first prove the weaktype $(1, 1)$ inequality
+\begin{equation}
+\label{weaktype 11 HL maximal}
+\lambda |\{Mf > \lambda\}| \lesssim_d ||f||_{L^1}
+\end{equation}
+uniformly in $\lambda > 0$. If $Mf(x) > \lambda$ then by definition there is a ball $B_x$ centered at $x$ such that
+$$\dashint_{B_x} |f(y)| ~dy > \lambda.$$
+After running the Vitali covering algorithm, one can find a countable set $\mathcal B$ of balls such that
+$$\{Mf > \lambda\} \subseteq \bigcup_{B \in \mathcal B} 5B.$$
+Therefore
+$$|\{Mf > \lambda\}| \leq 5^d \sum_{B \in \mathcal B} |B| \leq \frac{5^d}{\lambda} ||f||_{L^1}.$$
+This proves (\ref{weaktype 11 HL maximal}). The general claim follows from Marcinkiewicz interpolation when we note that $M$ is obviously bounded on $L^\infty$.
+\end{proof}
+
+This motivates the following definition.
+\begin{definition}
+Fix $1 < p < \infty$.
+A \dfn{Muckenhoupt measure} $\mu$ is a positive Borel measure such that
+$$||Mf||_{L^p(\mu)} \lesssim_p ||f||_{L^p(\mu)}.$$
+If $d\mu(x) = \omega(x) ~dx$, we call $\omega$ a \dfn{Muckenhoupt weight}.
+\end{definition}
+In fact, it will turn out that every Muckenhoupt measure is absolutely continuous, so by the Radon-Nikodym theorem, there is a canonical isomorphism between the spaces of Muckenhoupt weights and Muckenhoupt measures.
+It is immediately true that $1$ is a Muckenhoupt weight.
+
+\section{The space of weights}
+We now consider the space of $A_p$ weights. This section follows Chapter V of Stein.
+
+Throughout, fix $1 < p < \infty$ and let $p'$ denote the H\"older dual of $p$.
+
+\begin{definition}
+Let $\omega \in L^1_{loc}$ be nonnegative and nonzero. We define
+$$A_p(\omega) = \sup_B \dashint_B \omega(x) ~dx \left(\dashint_B \omega(x)^{-p'/p} ~dx\right)^{p/p'}$$
+where the supremum is taken over all balls $B$.
+We let $A_p$ be the space of $\omega$ for which $A_p(\omega) < \infty$.
+\end{definition}
+
+Notice that if $A_p(\omega) < \infty$ then $\omega > 0$ almost everywhere. Indeed, in that case
+$$\dashint_B \omega(x)^{-p'/p} ~dx < \infty$$
+which forces $\{\omega = 0\}$ to have measure zero. It also follows straight from the definitions that
+$$A_{p'}(\omega^{-p'/p})^{1/p'} = A_p(\omega)^{1/p}.$$
+
+\begin{lemma}
+If $p_1 \leq p_2$ then $A_{p_1} \subseteq A_{p_2}$.
+\end{lemma}
+\begin{proof}
+Let $q_i = p_i'/p_i$; then $q_2 \leq q_1$. So
+$$A_{p_2}(\omega) = \sup_B \dashint_B \omega \left(\dashint_B \omega^{-q_2}\right)^{q_2} \leq \sup_B \dashint_B \omega \left(\dashint_B \omega^{-q_1}\right)^{q_1} = A_{p_1}(\omega)$$
+which was desired.
+\end{proof}
+
+For this reason we define $A_\infty = \bigcup_p A_p$, setting
+\begin{equation}
+\label{Ainfty definition}
+A_\infty(\omega) = \inf_p A_p(\omega).
+\end{equation}
+
+\section{The reverse H\"older inequality}
+This section follows Chapter V of Stein.
+
+To prove the maximal inequality weighted by $A_p$ we first need:
+\begin{theoremx}[reverse H\"older inequality]
+For every $\omega \in A^\infty$ there is a $r > 1$ such that for all balls $B$,
+$$\left(\dashint_B \omega(x)^r ~dx\right)^{1/r} \lesssim \dashint_B \omega(x) ~dx$$
+where the constant depends on $\omega$ but not $B$.
+\end{theoremx}
+Before we prove the reverse H\"older inequality, we need a characterization of $A_\infty$.
+
+We view $\omega$ as a measure whenever $\omega$ is a weight, thus
+$$\omega(E) = \int_E \omega(x) ~dx$$
+whenever $\omega \in L^1_{loc}$ is nonnegative and $E$ is a Borel set.
+
+\begin{lemma}
+\label{Ap is averaging}
+$A_p(\omega)$ is the infimum of all constants $C > 0$ such that for every nonnegative $f \in L^1_{loc}$ and every ball $B$,
+$$\left(\dashint_B f(x) ~dx\right)^p \leq \frac{C}{\omega(B)} \int_B f^p ~d\omega.$$
+\end{lemma}
+\begin{proof}
+Suppose that $\omega \in A_p$ and $f, B$ are given. Then
+$$\dashint_B f(x) ~dx = \dashint_B f(x) \omega(x)^{1/p} \omega(x)^{-1/p} ~dx,$$
+so by H\"older's inequality,
+$$\left(\dashint_B f(x) ~dx\right)^p \leq |B|^{-p} \int_B f^p ~d\omega \left(\omega(x)^{-p'/p}~dx\right)^{p/p'}.$$
+On the other hand,
+$$\left(\int_B \omega(x)^{-p'/p}~dx\right)^{p/p'} \leq \frac{A_p(\omega)}{\omega(B)},$$
+so the claim follows with $C = A_p(\omega)$.
+
+Conversely, supppose that there is a finite choice of $C$, let $\varepsilon > 0$, and let
+$$f = (\omega + \varepsilon)^{-p'/p}.$$
+Now $p' - 1 = p'/p$ by definition of $p'$, so
+$$f \leq (\omega + \varepsilon)^{-p'}\omega.$$
+Since we can take $C$ finite, we then have
+$$\int_B f(x) ~dx \leq \int_B (\omega + \varepsilon)^{-p'} \omega \lesssim_\varepsilon \int_B \omega(x) ~dx < \infty$$
+since $\omega \in L^1_{loc}$. Now
+$$f^p\omega = (\omega + \varepsilon)^{-p'} \omega$$
+which gives the bound
+$$\dashint_B \omega(x) ~dx \left(\dashint_B (\omega + \varepsilon)^{-p'}\omega\right)^{p/p'} \leq C.$$
+This bound is uniform in $\varepsilon$, so taking $\varepsilon \to 0$ we get $A_p(\omega) \leq C$.
+\end{proof}
+
+Write $kB$ for the dilation of a ball $B$ by a factor of $k > 0$.
+
+\begin{definition}
+A \dfn{doubling measure} is a Radon measure $\mu$ such that
+$$\mu(2B) \lesssim \mu(B)$$
+uniformly in balls $B$.
+\end{definition}
+
+\begin{lemma}
+If $\omega \in A_p$, then $\omega$ is a doubling measure with doubling constant $A_p(\omega)2^{dp}$.
+\end{lemma}
+\begin{proof}
+Apply Lemma \ref{Ap is averaging} on the ball $2B$ with $f = 1_B$, thus
+$$\left(\dashint_{2B} 1_B(x) ~dx\right)^p \leq \frac{A_p(\omega)}{\omega(2B)} \int_{2B} 1_B ~d\omega.$$
+This simplifies to
+$$2^{dp} = \left(\frac{|B|}{|2B|}\right)^p \leq \frac{A_p(\omega)\omega(B)}{\omega(2B)}.$$
+Solving for $\omega(B)/\omega(2B)$ we get the claim.
+\end{proof}
+
+\begin{definition}
+Let $\omega$ be a weight such that for every $\alpha \in (0, 1)$ there is a $\beta \in (0, 1)$ such that for every ball $B$ and Borel set $F \subseteq B$ such that $|F| \geq \alpha|B|$,
+$$\omega(F) \geq \beta \omega(B).$$
+Then we say that $\omega$ is \dfn{fair}.
+\end{definition}
+
+The intuition is that $\omega$ does not favor any one region of a ball more than another.
+
+\begin{lemma}
+Suppose that $\omega \in A_\infty$. Then $\omega$ is fair.
+\end{lemma}
+\begin{proof}
+Suppose that $\omega \in A_p$. Then by Lemma \ref{Ap is averaging} with $f = 1_F$ we have
+$$\frac{|F|^p}{|B|^p} \leq A_p(\omega) \frac{\omega(F)}{\omega(B)}$$
+which gives the claim with $\beta = \alpha^p/A_p(\omega)$.
+\end{proof}
+
+\begin{lemma}
+If $\omega$ is a fair weight, then for every $1 < r \ll 2$,
+\begin{equation}
+\label{weakly fair weight}
+\left(\dashint_Q \omega(x)^r ~dx\right)^{1/r} \lesssim \dashint_Q \omega(x) ~dx
+\end{equation}
+uniformly in cubes $Q$.
+\end{lemma}
+\begin{proof}
+Let $Q_0 = Q$. After rescaling everything we may assume that $Q_0$ is a dyadic cube and
+$$\omega(Q_0) = |Q_0| = 1.$$
+In that case, we must obtain a uniform bound
+\begin{equation}
+\label{normalized weakly fair weight}
+\int_{Q_0} \omega(x)^r ~dx \lesssim 1
+\end{equation}
+to deduce (\ref{weakly fair weight}).
+Let $f = \omega 1_{Q_0}$.
+
+We need a dyadic version of the Hardy-Littlewood maximal operator. Namely, we set
+$$M^\Delta g(x) = \sup_{x \in Q} \dashint_Q g(y) ~dy$$
+whenever $g \in L^1_{loc}$ is nonnegative, and $Q$ ranges over all dyadic cubes.
+Note that by convention we take dyadic cubes as open, so the dyadic cubes of a given volume only tile almost all of $\RR^d$.
+
+Let
+$$E_k(N) = \{x \in Q_0: M^\Delta f(x) > 2^{Nk}\}.$$
+Then, if $Q$ is a dyadic cube in $E_{k-1}(N)$, then
+\begin{equation}
+\label{bounds on Ek}
+|E_k(N) \cap Q| \leq 2^{d - N} |Q|.
+\end{equation}
+To see this, let $R \subseteq Q$ be a maximal dyadic cube in $E_k(N)$. By the Calder\'on-Zygmund decomposition of $f$ (with $2^{Nk}$ viewed as the cutoff for ``$f$ large"), we have
+$$|R| \leq 2^{-Nk} \int_R f(x) ~dx$$
+so, summing over all such $R$,
+$$|E_k(N) \cap Q| = \sum_R |R| \leq 2^{-Nk} \int_Q f(x) ~dx.$$
+On the other hand, the Calder\'on-Zygmund decomposition of $f$ gives
+$$\int_Q f(x) ~dx \leq 2^{d + N(k - 1)}$$
+so (\ref{bounds on Ek}) holds.
+
+Since $\omega$ is a fair weight, there is a $\beta \in (0, 1)$ such that if $|F| \leq |Q|/2$, then $\omega(F) \leq \beta \omega(Q)$.
+By (\ref{bounds on Ek}), if $N$ is so large that $2^{d - N} \leq 1/2$, then
+$$\omega(E_k(N) \cap Q) \leq \beta \omega(Q).$$
+Taking the union over all dyadic cubes $Q$ in $E_{k-1}(N)$, we get
+$$\omega(E_k(N)) \leq \beta \omega(E_{k-1}(N)).$$
+But $\omega(E_1(N)) \leq \omega(Q_0) = 1$, so by induction,
+$$\omega(E_k(N)) \leq \beta^k.$$
+Since $\omega = f$ on $Q_0$ and $f \leq M^\Delta f$ we have $\omega^r \leq (M^\Delta f)^{r - 1}\omega$, which implies
+$$\int_{Q_0} \omega(x)^r ~dx \leq \int_{Q_0 \cap \{M^\Delta f \leq 1\}} (M^\Delta f)^{r - 1} ~d\omega + \sum_{k=0}^\infty \int_{E_k(N) \setminus E_{k-1}(N)} (M^\Delta f)^{r - 1} ~d\omega.$$
+Trivially,
+$$\int_{Q_0 \cap \{M^\Delta f \leq 1\}} (M^\Delta f)^{r - 1} ~d\omega \leq 1.$$
+By definition of $E_k(N)$,
+$$\int_{E_k(N) \setminus E_{k-1}(N)} (M^\Delta f)^{r - 1} ~d\omega \leq 2^{N(k+1)(r - 1)} \omega(E_k(N)) \leq 2^{N(k+1)(r - 1)} \beta^k.$$
+Thus we get a bound
+$$\int_{Q_0} \omega(x)^r ~dx \leq 1 + \sum_{k=0}^\infty 2^{N(k+1)(r-1)} \beta^k$$
+which does not depend on $Q_0$, at least as long as $1 < r \ll 2$.
+\end{proof}
+
+Now we are ready to prove the reverse H\"older inequality.
+Since $\omega$ is a doubling measure and for any ball $B$ we can find a cube $Q$ with $B \subseteq Q \subseteq 2B$, we may replace balls with cubes in the statement of the reverse H\"older inequality, thus for every cube $Q$, we must bound
+$$\left(\int_Q \omega(x)^r ~dx\right)^{1/r} \lesssim \dashint_Q \omega(x) ~dx$$
+uniformly in $Q$.
+This is just the content of (\ref{weakly fair weight}), which holds whenever $\omega$ is fair and $1 < r \ll 2$.
+
+\section{Characterization of Muckenhoupt weights}
+In this section we prove a characterization of Muckenhoupt weights.
+This follows Chapter V of Stein still.
+
+\begin{definition}
+A \dfn{radially decreasing convolution kernel} $\Phi$ is a nonnegative radial function which is radially decreasing and satisfies $\int_{\RR^d} \Phi = 1$.
+\end{definition}
+
+Now if $\Phi$ is a radially decreasing kernel we write $\Phi_\varepsilon(x) = \varepsilon^{-d} \Phi(x/\varepsilon)$.
+Thus $\Phi_\varepsilon$ is also a radially decreasing kernel, and as $\varepsilon \to 0$, $\Phi_\varepsilon$ approximates the convolution identity.
+
+\begin{theoremx}
+Let $\mu$ be a Radon measure and $1 < p < \infty$. Then the following are equivalent:
+\begin{enumerate}
+\item $\mu$ is a Muckenhoupt measure.
+\item The inequality
+\begin{equation}
+\label{Teps is unif bounded}
+||\Phi_\varepsilon * f||_{L^p(\mu)} \lesssim ||f||_{L^p(\mu)}
+\end{equation}
+is uniform in $\varepsilon > 0$, $\Phi$ a radially decreasing kernel, and $f \in L^1_{loc}$ nonnegative.
+\item $\mu$ is absolutely continuous, and its Radon-Nikodym derivative $\omega$ satisfies $A_p(\omega) < \infty$.
+\item $\mu$ is absolutely continuous and the inequality
+\begin{equation}
+\label{mean value Ap}
+\left(\dashint_B f(x)~dx\right)^p \lesssim \frac{1}{\mu(B)} \int_B f^p ~d\mu
+\end{equation}
+is uniform in $f \in L^1_{loc}$ nonnegative and $B$ a ball.
+\end{enumerate}
+\end{theoremx}
+
+We recall that we already showed that (3) and (4) are equivalent with implied constant $A_p(\omega)$.
+The equivalence of (1) and (3) is what we really want, since it shows that $A_p$ is canonically isomorphic to the space of Muckenhoupt measures.
+
+We first show that $\{p: A_p(\omega) < \infty\}$ is open.
+
+\begin{lemma}
+Suppose $A_p(\omega) < \infty$. Then there is a $q < p$ with $A_q(\omega) < \infty$.
+\end{lemma}
+\begin{proof}
+Let $\sigma = \omega^{-p'/p}$. Then $\sigma \in A_{p'}$, so $\sigma$ satisfies the reverse H\"older inequality
+$$\left(\dashint_B \sigma(x)^r ~dx\right)^{1/r} \lesssim \dashint_B \sigma(x) ~dx$$
+for some $1 < r \ll 2$. Then there is a $1 < q < p$ such that $rp'/p = q'/q$, and by definition of $\sigma$ it follows that $A_q(\omega) < \infty$.
+\end{proof}
+
+\begin{lemma}
+\label{Mf is rad dec}
+One has
+$$Mf(x) = \sup_\Phi |f| * \Phi(x)$$
+where the supremum ranges over all radially decreasing kernels.
+\end{lemma}
+\begin{proof}
+If $\Phi$ is a radially decreasing kernel, it is easy to check that $\Phi$ is a limit in $L^1$ of weighted averages of functions of the form $|B_r|^{-1}1_{B_r}$ where $B_r$ is the ball of radius $r > 0$ at $0$.
+Thus we may restrict the supremum to be over $\Phi = |B_r|^{-1}1_{B_r}$, thus the claim is
+$$Mf(x) = \sup_{r > 0} \frac{1}{|B_r|} |f| * 1_{B_r} = \sup_{r > 0} \frac{1}{|B_r|} \int_{\RR^d} f(y) 1_{B_r}(x - y) ~dy$$
+which is obvious.
+\end{proof}
+
+\begin{lemma}
+\label{muckenhoupt is abs cts}
+If (\ref{Teps is unif bounded}) holds uniformly in $\varepsilon$ for $\Phi = |B_1|^{-1} 1_{B_1}$, then $\mu$ is absolutely continuous.
+\end{lemma}
+\begin{proof}
+Let $K$ be a null compact set. We must show that $\mu(K) = 0$, so that $\mu = 0$.
+
+Let $U_n = \{x: d(x, K) < 1/n\}$ and $f_n = 1_{U_n \setminus K}$. Then $(f_n)$ is a decreasing sequence and $f_n \to 0$ everywhere.
+Since $\mu$ is a Radon measure, it is finite on compact sets, thus $f_n \in L^p(\mu)$. By dominated convergence, $||f_n||_{L^p(\mu)} \to 0$.
+So by (\ref{Teps is unif bounded}),
+$$\lim_{n \to \infty}||\Phi_\varepsilon * f_n||_{L^p(\mu)} = 0$$ uniformly in $\varepsilon$, and in particular
+\begin{equation}
+\label{fn is zero}
+\lim_{n \to \infty} ||\Phi_{1/n} * f_n||_{L^p(\mu)} = 0.
+\end{equation}
+
+On the other hand, if $x \in K$, then
+\begin{equation}
+\label{fn is nonzero}
+\Phi_{1/n} * f_n(x) = 1.
+\end{equation}
+Indeed,
+$$\Phi_{1/n} * f_n(x) = \frac{1}{|B_{1/n}|} \int_{\RR^d} f_n(y) g_n(x - y) ~dy$$
+where $g_n = 1_{B_{1/n}}$. Then
+$$\int_{\RR^d} f_n(y) g_n(x - y) ~dy = \int_{U_n \setminus K} g_n(x - y) ~dy = \int_{\RR^d \setminus K} g_n(x - y) ~dy$$
+by definition of $U_n$. Since $K$ is a null compact set, it follows that
+$$\int_{\RR^d} f_n(y) g_n(x - y) ~dy = |B_{1/n}|.$$
+Plugging this back in we get (\ref{fn is nonzero}).
+The only way to avoid a contradiction between (\ref{fn is zero}) and (\ref{fn is nonzero}) is if $\mu(K) = 0$.
+\end{proof}
+
+Let us prove that (1) implies (3). Suppose that $\mu$ is a Muckenhoupt measure. Applying Lemmata \ref{Mf is rad dec} and \ref{muckenhoupt is abs cts}, and the Radon-Nikodym theorem, we see that $\mu$ has a Radon-Nikodym derivative $\omega$.
+Let $f \in L^p(\mu)$ be nonnegative, thus
+$$||Mf||_{L^p(\mu)} \lesssim ||f||_{L^p(\mu)}.$$
+But
+$$\dashint_B f(y) ~dy \lesssim Mf(x)$$
+if $x \in B$, so
+$$\left(\dashint_B f(y) ~dy\right)^p \lesssim Mf(x)^p,$$
+we can integrate both sides in $\omega$ over $B$ to get
+$$\left(\dashint_B f(y) ~dy\right)^p \lesssim \frac{1}{\omega(B)} \int_B Mf^p ~d\omega.$$
+Since all integrals are taken over $B$ we may assume that $f$ is supported in $B$, whence
+$$\int_B Mf^p ~d\omega \lesssim \int_B f^p ~d\omega$$
+since $\omega$ is a Muckenhoupt weight. Therefore $A_p(\omega) < \infty$.
+
+Let us now prove that (2) implies (4). By Lemma \ref{muckenhoupt is abs cts}, $\mu$ is absolutely continuous, so by the Radon-Nikodym theorem it is weighted by some $\omega$.
+Let $f \geq 0$ and $B$ be given, and let $\delta = \rad B$. If $\Phi = 1_{B_1}$, $B_1$ the ball centered at $0$ of radius $1$, then
+$$2^{-d} \dashint_B f \leq \dashint_{B(x, 2\delta)} f = T_\varepsilon f(x)$$
+whenever $x \in B$. Taking $L^p$ norms of both sides and using (\ref{Teps is unif bounded}), we deduce (4).
+We can drop the assumption that $\Phi = 1_{B_1}$ by first rescaling $\Phi$ so $\Phi = 1_{B_r}$ for some $r > 0$ and then replacing a general $\Phi$ with $\alpha 1_{B_r} \leq \Phi$ for some $\alpha > 0$ and $r > 0$, which exists since $\Phi$ is radially decreasing.
+That proves (4) in the general case.
+
+Now we show that (4) implies (2). Again we first consider $\Phi = 1_{B_1}$. In this case it suffices to show that
+\begin{equation}
+\label{4 implies 2 goal}
+||\Phi * f||_{L^p(\omega)} \lesssim ||f||_{L^p(\omega)}
+\end{equation}
+where the implied constant is only allowed to depend on $A_p(\omega)$. Indeed, by dilation invariance, this will then prove the result for $\Phi_\varepsilon$ as well.
+As usual we may assume that $f$ is nonnegative. If $x \in B_1$, then $B(x, 1) \subset B_2$, so
+$$\Phi * f(x) \leq 2^d \dashint_{B_2} f.$$
+Therefore
+$$\int_{B_1} |\Phi * f|^p ~d\mu \leq 2^{dp} \left(\dashint_{B_2} f\right)^p \omega(B_1) \lesssim \int_{B_2} f^p ~d\mu$$
+by (4). In other words,
+$$\int_{\RR^d} |\Phi * f|^p 1_{B_1} ~d\mu \lesssim \int_{\RR^d} f^p 1_{B_2} ~d\mu.$$
+By translation invariance of convolution with $\Phi$ and $A_p(\omega)$, we get
+$$\int_{\RR^d} |\Phi * f(x)|^p 1_{B_1}(x - y) ~d\mu(x) \lesssim \int_{\RR^d} f(x)^p 1_{B_2}(x - y) ~d\mu(x)$$
+uniformly in $y \in \RR^d$. Integrating in $y$ and using Fubini's theorem, we get (\ref{4 implies 2 goal}).
+Using a limiting argument, we can drop the assumption that $\Phi = 1_{B_1}$ to get (2).
+
+\begin{lemma}
+\label{HL is weaktype in Ap}
+The Hardy-Littlewood maximal operator $M$ is weaktype $(L^p(\mu), L^p(\mu))$ iff $d\mu(x) = \omega(x) ~dx$ for some $\omega$ with $A_p(\omega) < \infty$.
+\end{lemma}
+\begin{proof}
+Suppose that $M$ is weaktype $(L^p(\mu), L^p(\mu))$, thus
+\begin{equation}
+\label{weaktype maximal operator}
+\mu\{Mf > \alpha\} \lesssim \frac{1}{\alpha^p} \int_{\RR^d} |f|^p ~d\mu
+\end{equation}
+uniformly in $\alpha > 0$. Since $M$ is bounded on $L^\infty(\mu)$, by Marcinkiewicz interpolation, it follows that if $q > p$ then $M$ is bounded on $L^q(\mu)$.
+In other words, (\ref{Teps is unif bounded}) holds with $p$ replaced by $q$, so by Lemma \ref{muckenhoupt is abs cts} and the Radon-Nikodym theorem we may write $d\mu(x) = \omega(x)~dx$.
+If $f$ is nonnegative and supported in a ball $B$, $x \in B$, then as usual we have
+$$\dashint_B f(y)~dy \leq 2^d Mf(x).$$
+Plugging $\alpha = 2^{-d-1}\dashint_B f$ into (\ref{weaktype maximal operator}), we get
+$$\left(\dashint_B f(y) ~dy\right)^p \omega(B) \lesssim 2^{(d+1)p} \int_B |f|^p ~d\mu$$
+which implies that $\omega$ satisfies (4). Since (4) implies (3), it follows that $A_p(\omega) < \infty$.
+
+Conversely, if $A_p(\omega) < \infty$, set
+$$M_\omega f(x) = \sup_{\delta > 0} \dashint_{B(x, \delta)} |f| ~d\omega,$$
+thus $M_\omega$ is the Hardy-Littlewood maximal operator induced by $\omega$.
+Since $\omega$ is a doubling measure, the proof that the Hardy-Littlewood maximal operator is weaktype $(L^1(\omega), L^1(\omega))$ goes through, but with possibly a worse constant than $5$ in the Vitali covering algorithm.
+That is,
+$$\omega\{M_\omega g > \alpha\} \lesssim \frac{1}{\alpha} \int_{\RR^d} g~d\omega$$
+uniformly in $\alpha > 0$. On the other hand, since (3) holds, so does (4), and thus
+$$(Mf)^p \lesssim M_\omega|f|^p.$$
+Plugging in $g = |f|^p$ and replacing $\alpha$ with $\alpha^p$ we deduce (\ref{weaktype maximal operator}).
+\end{proof}
+
+Let us finally show that (3) implies (1).
+Suppose that $A_p(\omega) < \infty$, and let $1 < q < p$ be such that $A_q(\omega) < \infty$.
+By Lemma \ref{HL is weaktype in Ap}, $M$ is weaktype $(L^q(\omega), L^q(\omega))$, and $M$ is clearly bounded on $L^\infty(\omega)$.
+Therefore $M$ is bounded on $L^p(\omega)$, which implies (1).
+
+\section{Sharp weighted bounds for sparse operators}
+This section is based on a talk by Tai Borges, itself based on a paper of Kabe Moen.
+The idea is to prove bounds for sparse operators in the context of $A_2$, and then conclude the same for Calder\'on-Zygmund operators.
+
+Let $T$ be a Calder\'on-Zygmund operator. We are interested in when
+$$||Tf||_{L^p(\omega)} \lesssim ||f||_{L^p(\omega)}$$
+where $\omega \in L^1_{loc}$ is a weight and $1 < p < \infty$. In fact we will show
+$$||T||_{L^p(\omega)} \lesssim_{p, T} [\omega]_p^{\max(1, p'/p)}.$$
+
+\begin{definition}
+A \dfn{sparse family}, for $\eta \in (0, 1)$, is a family $S$ of cubes such that for every $Q \in S$ there is $E_Q \subseteq Q$ such that $|E_Q| \geq \eta |Q|$ and $\{E_Q\}_Q$ is pairwise disjoint.
+The \dfn{associated sparse operator} is
+$$T^Sf(x) = \sum_{Q \in S} f_Q(x) 1_Q(x)$$
+where $f_Q$ is the mean of $f$ over $Q$.
+\end{definition}
+
+\begin{theoremx}[Lacey-Hyt\"onen-Rocal-Tapiola]
+Let $T$ be a Calder\'on-Zygmund operator. If $f \in L^1$ has compact support then there is a $(2\cdot 3^d)^{-1}$-sparse family $S$ such that
+$$|Tf| \lesssim_d (||T||_{L^2} + C_K + ||\gamma||_{Dini}) T^S|f|.$$
+\end{theoremx}
+
+Now if $\omega \in A_p$ then
+$$||Tf||_{L^p(\omega)} \lesssim_{T, d} ||T^S||_{L^p(\omega)} ||f||_{L^p(\omega)}$$
+by the theorem of Lacey et al. So it suffices to bound
+$$||T^S||_{L^p(\omega)} \lesssim_{d, \eta, p} [\omega]_p^{\max(1, p'/p)}$$
+where $S$ is $\eta$-sparse.
+
+\begin{definition}
+A \dfn{dyadic grid} in $\RR^d$ is a collection $D$ of cubes such that if $Q \in D$ then $|Q| = 2^{nk}$ for some $k \in \ZZ$, the cubes are disjoint or dyadically contained in each other, and $\{Q \in D: |Q| = 2^{nk}\}$ partitions $\RR^d$.
+\end{definition}
+
+The sparse family from Lacey et al.'s theorem is not necessarily dyadic, but the three lattice theorem shows that there are $3^d$ dyadic lattices $D_j$ and sparse families $S_j \subseteq D_j$ with $||T^S|| \lesssim \sum_j ||T^{S_j}||$.
+
+\begin{lemma}
+Let
+$$M_\omega^D f(x) = \sup_{x\in Q \in D} \dashint_Q |f|\omega$$
+be the weighted dyadic Hardy-Littlewood maximal operator. Then
+$$||M_\omega^Df||_{L^p(\omega)} \leq \frac{p}{p - 1} ||f||_{L^p(\omega)}.$$
+\end{lemma}
+\begin{proof}
+Let $F \subset D$ be a finite set. Consider the restricted operator $M_\omega^F$ where $M_\omega^Ff = 0$ away from $\bigcup F$.
+Let us show
+$$||M^F_\omega||_{L^p(\omega)} \leq \frac{p}{p - 1};$$
+by monotone convergence this suffices.
+Let us show that
+$$\omega\{M_\omega^Ff > \alpha\} \leq \frac{1}{\alpha} ||f||_{L^1(\omega)}.$$
+Let $\Omega_\alpha = \{M^F_\omega f > \alpha\}$; then $\Omega_\alpha$ is the union of maximal cubes $Q_j \in F$ with $\dashint_{Q_j} |f|\omega > \alpha$.
+Now
+$$\omega(\Omega_\alpha) \leq \sum_j \frac{1}{\alpha} \int_{Q_j} |f|\omega = \frac{1}{\alpha} \int_{\Omega_\alpha} |f|\omega$$
+so we can use the layer-cake decomposition (really, the Fubini-Tonelli theorem) to deduce the weaktype $(1, 1)$-bound.
+\end{proof}
+
+Let us prove the theorem in case $p = 2$ for simplicity though the argument transfers over in general.
+Thus we need to show
+$$||T^S||_{L^2(\omega)} \lesssim [\omega]_2.$$
+We have
+$$|T^Sf| = T^S|f|$$
+so by H\"older duality
+$$||T^Sf||_{L^2(\omega)} \leq \sup_{||g||_{L^2(\omega) = 1}} \int_{\RR^d} T^S|f||g|\omega.$$
+If $f,g \geq 0$ then
+$$\int_{\RR^d} T^Sfg\omega = \sum_{Q \in S} \int_Q f \dashint_Q g\omega \frac{\omega(Q)}{|Q|} = \sum_{Q \in S} \frac{1}{\omega^{-1}(Q)} \int_Q f\omega \omega^{-1} \dashint_Q g\omega
+ \frac{\omega(Q)}{Q} \frac{\omega^{-1}(Q)}{|Q|} |Q|.$$
+But $\omega(Q)/Q \leq [\omega]_2$ and $|Q| \leq |E_Q|/\eta$, so
+$$\int_{\RR^d} T^Sfg\omega \leq \frac{[\omega]_2}{\eta} \sum_{Q \in S} \int_{E_Q} M_{\omega^{-1}}^D f\omega M^D_\omega g.$$
+The genius idea is using $\omega^{-1}$ as a measure as well as $\omega$. This works because $[\omega]_2 = [\omega^{-1}]_2$.
+By H\"older's inequality,
+$$\int_{\RR^d} T^Sfg\omega \leq \frac{[\omega]_2}{\eta} ||M_{\omega^{-1}}^D(f\omega)||_{L^2(\omega^{-1})} ||M^D_\omega g||_{L^2(\omega)}.$$
+Thus we have
+$$\int_{\RR^d} T^Sfg\omega \leq 4\frac{[\omega]_2}{\eta} [\omega]_2 ||f||_{L^2(\omega)}.$$
+
+Now we prove the case of general $p$. We reduce to the case $p \geq 2$.
+If we know that it holds for $p \geq 2$ and we are given $p < 2$ then let $\sigma = \omega^{1-p'}$. Then $[\sigma]_{p'} = [\omega]_p$, and
+$$||T^S||_{L^p(\omega)} = ||T^S||_{L^{p'}(\sigma)} \leq \eta^{-p'/p} pp' [\sigma]_{p'} = pp'\eta^{-p'/p}[\omega]_p^{1/(p-1)}.$$
+Therefore
+$$||T^S||_{L^p(\omega)} \leq pp' \eta^{-\max(p/p',p'/p)} [\omega]_p^{\max(1, p'/p)}.$$
+So it suffices to check $p \geq 2$.
+
+Again we use H\"older duality:
+$$||T^S||_{L^p(\omega)} = ||T^S(\cdot ~\sigma)||_{L^p(\sigma) \to L^p(\omega)} =  \sup_{||f||_p = ||g||_{p'} = 1} \int_{\RR^d} T^S(f \sigma) g\omega.$$
+Bounding that integral using the definition of a sparse operator,
+\begin{align*}\int_{\RR^d} T^S(f \sigma) g\omega &= \sum_{Q \in S} (f\sigma)_Q \int_Q g\omega \\
+&\leq [\omega]_p \sum_{Q \in S} \frac{|Q|^p}{\omega(Q)\sigma(Q)^{p-1}} \int_Q g\omega \dashint_Q f\sigma\\
+&= [\omega]_p \sum_{Q \in S} A_\omega(g, Q) A_\sigma(f, Q) \frac{|Q|^{p-1}}{\sigma(Q)^{p-1}} \sigma(Q)
+\end{align*}
+where
+$$A_\kappa(h, Q) = \dashint_Q g~d\kappa$$
+is the mean of $g$ over $Q$ with respect to the measure $\kappa$.
+Thus
+$$\int_{\RR^d} T^S(f \sigma) g\omega \leq \frac{[\omega]_p}{\eta^{p-1}} \sum_{Q \in S} A_\omega(g, Q) A_\sigma(f, Q) |E_Q|^{p-1} \sigma(E_Q)^{2-p}.$$
+Since $p \geq 2$ we don't get any blowup here.
+We need to get rid of the $|E_Q|$, using H\"older's inequlity,
+$$|E_Q| = \int_{E_Q} \omega^{1/p} \omega^{-1/p} \leq \omega(E_Q)^{1p} \sigma(E_Q)^{1/p'},$$
+thus
+$$|E_Q|^{p-1} \sigma(E_Q)^{2-p} \leq \omega(E_Q)^{1/p'} \sigma(E_Q)^{1/p}.$$
+By H\"older's inequality again,
+$$\int_{\RR^d} T^S(f\sigma) g\omega \leq \frac{[\omega]_p}{\eta^{p-1}} (\sum_Q A_\omega(g, Q)^{p'} \omega(E_Q))^{1/p'} (\sum_Q A_\sigma(f, Q)^p \sigma(E_Q))^{1/p}$$
+and since the $E_Q$ are disjoint we can use the Hardy-Littlewood operator
+$$\int_{\RR^d} T^S(f\sigma) g\omega \leq \frac{[\omega]_p}{\eta^{p-1}} ||M^D_\omega g||_{L^{p'}(\omega)} ||M^D_\omega f||_{L^p(\sigma)} \leq \frac{[\omega]_p}{\eta^{p-1}} ||g||_{L^{p'}(\omega)} ||f||_{L^p(\sigma)}.$$
+This proves the theorem.
+
+\chapter{Bellman functions}
+\section{Reverse H\"older inequalities}
+In this section we use a Bellman function to prove a reverse H\"older inequality.
+This lecture follows a talk by Benoit Pausauder which in turn follows a paper by Nazarov, Treil, and Volberg.
+Bellman was a famous control theorist.
+
+We use $(f)_I$ to mean the average of $f$ over $I$.
+
+\begin{definition}
+A \dfn{dyadic $A_\infty$ weight} is a positive $\omega \in L^1_{loc}(I_0)$ such that for every dyadic $I \subset I_0$,
+$$(\omega)_I \lesssim \exp((\log \omega)_I).$$
+The optimal constant is denoted $[\omega]_\infty$.
+\end{definition}
+
+Using Jensen's inequality on $\mu = |I|^{-1} 1_I$, we get
+$$\exp((\log \omega)_I) \leq \frac{(\omega)_I}{|I|}$$
+which implies that $[\omega]_\infty > 1$.
+
+\begin{proposition}
+\label{dyadic holder}
+Let $\omega$ be a dyadic $A_\infty$ weight. Then there is $p > 1$ such that for every dyadic $I \subset I_0$,
+$$(\omega^p)_I \lesssim (\omega)_I^p.$$
+\end{proposition}
+Note that if this claim holds for some fixed $p$ then it holds for all $1 < q < p$ as well, by H\"older's inequality.
+
+We first show that if there is a function $B$ with certain properties, then Proposition \ref{dyadic holder} holds.
+
+\begin{lemma}
+For every $c > 1$, $K \geq 0$, there is a function $B$ defined on
+$$\Omega = \{(x, y) \in \RR^2: 1 \leq xe^{-y} \leq c\}$$
+satisfying $x^p \leq B(x, y) \leq Kx^p$ and for every $z_1,z_2 \in \Omega$ with $(z_1 + z_2)/2 \in \Omega$ then
+$$2B\left(\frac{z_1 + z_2}{2}\right) \geq B(z_1) + B(z_2).$$
+\end{lemma}
+In particular, if $B$ is smooth, then the Hessian of $B$ is negative-semidefinite; that is, $B$ is concave.
+We call $B$ the \dfn{Bellman function} associated to $\omega$.
+
+\begin{definition}
+A function is \dfn{dyadically measurable} if it is measurable with respect to the $\sigma$-algebra generated by dyadic intervals.
+\end{definition}
+For example, every function which is constant on sufficiently small dyadic intervals is dyadically measurable.
+The dyadically measurable functions are dense in $L^1_{loc}$, and by a density argument, in what follows we may assume that $\omega$ is dyadically measurable.
+
+Assume that $B$ as in the lemma exists. Fix $J \subset I$ and consider $z_J = x_J + iy_J$ with $x_J = (\omega)_J$ and $y_J \in (\log \omega)_J$.
+Then the dyadic $A_\infty$ condition implies $z_J \in \Omega$, where $c,K$ arise from the constants in the definition of $\omega$.
+Letting $J^\pm$ be the children of $J$,
+$$|J| (\omega)_J = \frac{|J|}{2}((\omega)_{J^-} + (\omega)_{J^+})$$
+and
+$$|J| (\log \omega)_J = \frac{|J|}{2}((\log \omega)_{J^-} + (\log \omega)^{J^+}).$$
+In particular, $2z_J = z_{J^-} + z_{J^+}$ and $z_J, z_{J^+}, z_{J^-} \in \Omega$.
+
+Then
+$$B(z_{J^-}) + B(z^{J^+}) \leq 2B(z_J) \lesssim x_J^p = (\omega)_J^p.$$
+Iterating this relation $n$ times we get
+$$\sum_{\substack{j \subset J\\2^n|j| = |J|}} (\omega_j)^p \lesssim 2^n (\omega)_J^p.$$
+Since $\omega$ is dyadically measurable, at sufficiently fine scales (thus $n \gg 1$), $\omega$ becomes constant, thus
+$$(\omega^p)_J \lesssim (\omega)_J^p.$$
+That completes the proof, assuming the lemma.
+
+It remains to prove the lemma. Let
+$$a = xe^{-y}.$$
+We want a function $B$ such that $\log (B(x+iy)/x^p)$ is bounded and nonnegative.
+We consider the ansatz
+$$B(x + iy) = x^p\varphi(xe^{-y}).$$
+Given $c$ we will choose $\varphi$ so that $\varphi$ is continuous on $[1, c]$ and the Hessian of $B$ is negative-semidefinite.
+Then we can take
+$$K = \sup_{a \in [1, c]} \varphi(a)$$
+which is finite by continuity.
+First we compute the Hessian, which is a mess but implies the conditions:
+\begin{enumerate}
+\item $a\varphi'(a) + a^2 \varphi''(a) \geq 0$
+\item
+$$(p(p-1)\varphi(a) a\varphi'(a) - (p^2 + 1)(a \varphi'(a))^2 + p(p-1)\varphi(a)a^2 \varphi''(a) - a^3 \varphi'(a) \varphi''(a))x^{2p-2} \geq 0.$$
+\end{enumerate}
+The second is the determinant of the Hessian. The first equation simplifies to
+$$\frac{d}{da}(a\varphi'(a)) \geq 0.$$
+For the second equation, we factor out the $x^p$ and notice that since the condition we're trying to prove gets worse as $p \to 1$, we can take $p$ to be a perturbation of $1$, thus we want
+$$0 \leq -2(a\varphi'(a))^2 - (a\varphi'(a))(a^2 \varphi''(a)) + O(p-1)$$
+which implied by $a\varphi'(a) \leq 0$, $(a\varphi')' \gg 1$.
+
+Once these conditions are met we observe that if $z_1, z_2 \in \Omega_c$ and $(z_1+z_2)/2 \in \Omega_c$, then $[z_1, z_2] \in \Omega_{c^2}$.
+Thus we can do the above construction for $c^2$ instead of $c$ to get a function which is locally concave in $\Omega_{c^2}$.
+Now we use the fact that if
+$$1 \leq (x-h)e^{k-y}, xe^{-y}, (x+h)e^{-yk} \leq c$$
+then
+$$1 \leq (x + \theta h)e^{-y} e^{\pm \theta k} \leq c$$
+when $\theta \in [0, 1]$.
+That implies that if $B$ is locally concave in $\Omega_{c^2}$ then $B$ is concave in $\Omega_c$ which was desired.
+
+\section{The Carleson embedding theorem}
+\begin{definition}
+A family of numbers $(\mu_I)$, $I$ ranging over dyadic intervals, has the \dfn{Carleson measure condition} if for every $I$,
+$$c_\mu(I) = |I|^{-1} \sum_{J \subset I} \mu_J \leq 1$$
+where $J$ ranges over dyadic subintervals of $I$.
+\end{definition}
+
+For example, if
+$$\mu_J = \langle h_J, a\rangle^2$$
+where $a$ is BMO (say, $a \in L^\infty$) and $\langle h_J, a\rangle$ is the projection of $a$ onto the Haar basis element corresponding to $J$, then $\mu$ has the Carleson measure condition.
+
+\begin{theoremx}
+If $\mu$ satisfies the Carleson measure condition then for every $f \in L^2$,
+$$\sum_I \mu_I |f_I|^2 \leq 4||f||_{L^2}^2$$
+where $I$ ranges over dyadic intervals and $f_I$ is the mean of $f$ over $I$.
+\end{theoremx}
+
+This theorem is surprising because we double-count intervals a lot.
+We will prove it by showing the existence of a suitable Bellman function.
+
+Fix $f \in L^2$.
+Let $\vec f = (f_I)$ and $\vec F = (f^2_I)$.
+We write $I = I^+ \cup I^-$ to decompose an interval into children.
+We have
+$$2f_I = f_{I_-} + f_{I_+}$$
+as usual, similarly for $F$.
+Moreover if $c$ is as in the Carleson measure condition, then
+$$c(I) = |I|^{-1}\mu_I + 2^{-1}(c(I^-) + c(I^+)).$$
+These are the recurrence relations we will need.
+
+We now consider some constraint inequalities. First $f^2_I \leq F_I$ by H\"older's inequality, and also $c(I) \leq 1$ by the Carleson measure condition.
+
+Define
+$$B(F_0, f_0, M) = \sup_{F,f,\mu} |I|^{-1} \sum_{J \subset I} \mu_J (f_J)^2$$
+be the Bellman function describing the worst case, where the supremum ranges over $F = f^2$, $F_I = F_0$, $f_I = f_0$, $c_\mu(I) = M \leq 1$, $\mu$ with the Carleson measure condition.
+We will also write $a = F_0$, $b = f_0$, $c = M$, since otherwise this notation is atrocious.
+
+Let
+$$\Omega = \{(a, b, c) \in \RR^3_+: b^2 \leq a, ~0 \leq c \leq 1\}.$$
+Suppose there is a function $B: \Omega \to \RR$ such that $0 \leq B(a, b, c) \lesssim a$, and for all $0 \leq \delta \leq c$,
+$$B(a, b, c) \geq \delta b^2 + 2^{-1}(B(a_+, b_+, c_+) + B(a_-, b_-, c_-))$$
+where $2a = a_+ + a_-$, $2b = b_+ + b_-$, and $2(c - \delta) = c_+ + c_-$.
+These conditions are given by the recurrence relations and the constraint inequalities.
+
+If such a function $B$ exists, then the theorem is true. In fact
+\begin{align*}
+cF_I &= (f^2)_I \geq B(F_I, f_I, M_I) \\
+&\geq |I|^{-1}\mu_I (f_I)^2 + 2^{-1}(B(F_{I_-}, f_{I_-}, M_{I_-}) + B(F_{I_+}, f_{I_+}, M_{I_+}))\\
+&\geq \sum_{|J| \geq 2^{-n}|I|} |I|^{-1} \mu_J(f_J)^2 + \sum_{|J| = 2^{-n}|I|} B(F_J, f_J, M_J)\frac{|J|}{|I|}\\
+&\geq |I|^{-1} \sum_J \mu_J (f_J)^2
+\end{align*}
+by an induction on scales.
+The point is that the constants at each stage are all the same, they're always $c|I|$.
+
+Now to show that such a $B$ exists.
+It is easy to show (just draw a picture) that $\Omega$ is convex.
+We want $B$ to have negative Hessian and $\partial_c B \geq b^2$.
+Given a function $b: \RR^3 \to \RR$ we define
+$$u(y, z) = \sup_x b(x, y, z) - cx$$
+and call $u$ the partial Legendre transform of $b$.
+The point is that we got rid of one variable but we have just as much information as before in the following sense.
+The intuition is that the supremum of concave functions may not be concave even though the infimum of concave functions is.
+However if we take the supremum in just one of many variables, we still get that a supremum of concaves is concave.
+
+\begin{lemma}
+$b$ is concave with $0 \leq b \leq cx$ and $\partial_z b \geq y^2$ iff $u$ is concave and $-cy^2 \leq u \leq 0$ and $\partial_z u \geq y^2$.
+\end{lemma}
+\begin{proof}
+First
+$$-cx \leq b - cx \leq u(y, z) \leq 0$$
+and taking the supremum in $x \leq y^2$,
+$$-cy^2 \leq u(y, z) \leq 0.$$
+For the concavity we use a lemma which says that if $\varphi$ is concave and $Z(x) = \sup_y \varphi(x, y)$ then $Z$ is concave.
+We then bound $\partial_z b$ similarly.
+\end{proof}
+
+So we just need to find a suitable $u$.
+If $u$ is concave and $-cy^2 \leq u \leq 0$, $\partial_z u \geq y^2$ then so does the rescaling $a^2 u_a(y, z) = u(ay, z)$ so we mod out by the homogeneity to get a one-variable problem, say finding a $\varphi$ with $u(y, z) = y^2 \varphi(z)$.
+We want $\varphi \leq 0$, $\varphi \in L^\infty$, $\varphi' \geq 1$, and $\varphi\varphi'' - 4(\varphi')^2 \geq 0$.
+In fact we can satisfy this with $\varphi(z) = -4/(1 + z)$.
+Then set
+$$b(x, y, z) = -4\frac{y^2}{1 + z^2} + 4x.$$
+This was desired.
+Also, since we need this by Bellman functions, we can use this proof to show that $4$ is the optimal constant.
+
+
+
+
+\newpage
+\printindex
+\printbibliography
+
+\end{document}

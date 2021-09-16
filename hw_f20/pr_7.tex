@@ -1,0 +1,410 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\newcommand{\Var}{\operatorname{Var}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability, HW 7} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+
+\begin{exer}
+Show that
+$$\mu(\{x\}) = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T e^{-itx} \hat \mu(t) ~dt.$$
+\end{exer}
+
+We first decompose $\mu$ into an atomic and a ``continuous" part.
+Here ``continuous" simply means that countable sets are null.
+Let $\delta$ denote the Dirac measure, thus $\delta(A) = 1$ if $0 \in A$ and $\delta(A) = 0$ otherwise.
+\begin{lemma}
+There is a continuous measure $\nu$, that we call the \emph{continuous part} of $\mu$, and a \emph{probability mass function} $p$ with countable support such that
+\begin{equation}
+\label{atomic decomposition}
+\mu(E) = \nu(E) + \sum_x p(x) \delta(E - x).
+\end{equation}
+\end{lemma}
+\begin{proof}
+We first show that $\mu$ has countably many atoms. If not, say $A$ is an uncountable set of atoms; then
+$$1 = \mu(\RR) \geq \sum_{x \in A} \mu(\{x\}) = \infty$$
+since the sum is over uncountably many positive reals.
+So let $p(x) = \mu(\{x\})$; then $p$ has countable support.
+
+Define $\nu$ by (\ref{atomic decomposition}).
+We claim that if $E$ is countable, then $\nu(E) = 0$.
+It suffices to check when $E = \{x\}$.
+If $x \in A$, then
+$$\nu(\{x\}) = \mu(\{x\}) - p(x) \delta(\{0\}) = p(x) - p(x) = 0.$$
+If $x \notin A$, then $p(x) = 0$ and $\mu(\{x\}) = 0$.
+\end{proof}
+
+\begin{lemma}
+If $\nu$ is a continuous measure then
+$$\lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T e^{-itx} \hat \nu(t) ~dt = 0.$$
+\end{lemma}
+\begin{proof}
+Let $\varepsilon, T > 0$ and $x \in \RR$.
+Since $\nu$ is a continuous Borel measure, there is an open interval $U$, depending on $\varepsilon$, containing $x$ such that $\nu(U) < \varepsilon$.
+Indeed, if not, then there is a sequence of intervals $U_n$ containing $x$ with $\bigcap_n U_n = \{x\}$ and $\nu(U_n) \geq \varepsilon$, implying that $\nu(\{x\}) \geq \varepsilon$, contradicting continuity. So
+$$\int_{-T}^T e^{-ix\xi} \int_{-\infty}^\infty e^{iy\xi} ~d\nu(y)~d\xi = \int_{-T}^T \int_{\RR \setminus U} e^{i\xi(y-x)}~d\nu(y)~d\xi + \int_{-T}^T \int_U e^{i\xi(y-x)} ~d\nu(y)~d\xi.$$
+Now
+$$\left|\int_{-T}^T \int_U e^{i\xi(y-x)} ~d\nu(y)~d\xi\right| \leq 2T \int_U |e^{i\xi(y-x)}| d\nu(y) = 2T\nu(U) < 2T\varepsilon,$$
+so that term does not contribute much. We bound the major contribution now.
+We first obtain the naive bound
+$$\int_{-T}^T \int_{\RR \setminus U} |e^{i\xi(y-x)}| ~d\nu(y)~d\xi = 2T \nu(\RR \setminus U) \leq 2T$$
+so that the integrand is in $L^1$ and we may use Fubini's theorem to see that
+\begin{align*}\int_{-T}^T \int_{\RR \setminus U} e^{i\xi(y-x)}~d\nu(y)~d\xi& = \int_{\RR \setminus U} \int_{-T}^T e^{i\xi(y - x)}~d\xi ~d\nu(y) \\
+&= \int_{\RR \setminus U} \frac{e^{iT(y-x)} - e^{-iT(y-x)}}{i(y-x)}~d\nu(y)\\
+&= 2\int_{\RR \setminus U} \frac{\sin (T(y-x))}{y - x}~d\nu(y).\end{align*}
+There exists $\delta > 0$, depending on $U$, such that $|y - x| \geq \delta$ if $y \notin U$.
+So one has
+$$\left|\int_{\RR \setminus U} \frac{\sin (T(y-x))}{y - x}~d\nu(y)\right| \leq \frac{1}{\delta} \int_{\RR \setminus U} |\sin(T(y-x))|~d\nu(y) \leq \frac{1}{\delta}$$
+since $\nu$ is a probability measure and $||\sin||_{L^\infty} = 1$.
+Putting it all togther, we obtain
+\begin{align*}
+\left|\frac{1}{2T} \int_{-T}^T e^{-itx} \hat \nu(t) ~dt\right| &= \left|\frac{1}{2T}\int_{-T}^T e^{-ix\xi} \int_{-\infty}^\infty e^{iy\xi} ~d\nu(y)~d\xi\right|\\
+& < \frac{1}{2T}(2T\varepsilon + \delta^{-1}) \leq \varepsilon + \frac{1}{2T\delta}.
+\end{align*}
+First choosing $\varepsilon$ (thus recovering a $\delta$) and then choosing $T$ so large that $2T\delta > \varepsilon^{-1}$, we thus bound
+$$\left|\frac{1}{2T} \int_{-T}^T e^{-itx} \hat \nu(t) ~dt\right| < 2\varepsilon$$
+which is what we wanted.
+\end{proof}
+
+From the previous two lemmata, we see that the continuous part of $\mu$ is negligible, and we just need to compute the Fourier transform of the probability mass function $p$.
+\begin{lemma}
+If $\nu = 0$, then
+$$\hat \mu(\xi) = \sum_x p(x) e^{ix\xi}.$$
+\end{lemma}
+\begin{proof}
+We first observe that
+$$\hat \delta(\xi) = \int_{-\infty}^\infty e^{ix\xi}~d\delta(x) = e^{i0\xi} = 1.$$
+Moreover, by (\ref{atomic decomposition}) and assumption,
+$$\hat \mu(\xi) = \int_{-\infty}^\infty \sum_x p(x) e^{i(y+x)\xi}~d\delta(y).$$
+One has
+$$\int_{-\infty}^\infty \sum_x |p(x) e^{i(y+x)\xi}|~d\delta(y) \leq \int_{-\infty}^\infty ~d\delta = 1$$
+so we may use Fubini's theorem to see that
+$$\hat \mu(\xi) = \sum_x p(x) \int_{-\infty}^\infty e^{i(y+x)\xi}~d\delta(y) = \sum_x p(x)e^{ix\xi} \hat \delta(\xi) = \sum_x p(x)e^{ix\xi}$$
+which was desired.
+\end{proof}
+
+Now we are ready to solve the problem. In fact,
+$$\int_{-T}^T \sum_y |p(y)| ~d\xi \leq 2T$$
+so we may use Fubini's theorem, and the fact that we may assume $\nu = 0$, to compute
+\begin{align*}
+\frac{1}{2T} \int_{-T}^T e^{-itx} \hat \mu(t)~dt &= \frac{1}{2T} \int_{-T}^T \sum_y p(y) e^{i\xi(y-x)} ~d\xi \\
+&= \sum_y \frac{p(y)}{2T} \int_{-T}^T e^{i\xi(y-x)}~d\xi \\
+&= p(x) + \sum_{y \neq x} p(y) \frac{\sin(T(y-x))}{T(y-x)}.
+\end{align*}
+One has $p(x) = \mu(\{x\})$, so it just remains to bound the error term. By Fatou's lemma,
+$$\limsup_{T \to \infty} \sum_{y \neq x} p(y) \left|\frac{\sin(T(y-x))}{T(y-x)}\right| \leq \sum_{y \neq x} p(y) \limsup_{T \to \infty} \left|\frac{\sin(T(y-x))}{T(y-x)}\right| = 0$$
+which completes the proof.
+
+\begin{exer}
+Show that
+$$\sum_x \mu(\{x\})^2 = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T |\hat \mu(t)|^2~dt.$$
+\end{exer}
+
+Let $p$ be the probability mass function of $\mu$, following Exercise 1. We first show that, as in Exercise 1, we can neglect the continuous part of $\mu$.
+Let $\Delta$ denote the diagonal of $\RR^2$.
+\begin{lemma}
+Let $\nu$ be a continuous Borel probability measure on $\RR$. Then for every $\varepsilon > 0$ there is a $\delta > 0$ such that if $U = \{x \in \RR^2: d(x, \Delta) < \delta\}$ then $\nu \otimes \nu(U) < \varepsilon$.
+\end{lemma}
+\begin{proof}
+Suppose not; then, by measure continuity, $\nu \otimes \nu(\Delta) \geq \varepsilon$.
+By Fubini's theorem,
+$$\varepsilon \leq \nu \otimes \nu(\Delta) = \iint_{\RR^2} 1_\Delta(x, y) ~d\nu(x)~d\nu(y) = \iint_{\RR^2} 1_{\{y\}}(x) ~d\nu(x) ~d\nu(y).$$
+Since $\nu$ is a probability measure, the integral mean value theorem furnishes a $y$ such that
+$$\varepsilon \leq \int_{-\infty}^\infty 1_{\{y\}} ~d\nu = \nu(\{y\}) = 0,$$
+a contradiction.
+\end{proof}
+
+\begin{lemma}
+Let $\nu$ be a continuous Borel probability measure on $\RR$. Then
+$$\lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T |\hat \nu(\xi)|^2~d\xi = 0.$$
+\end{lemma}
+\begin{proof}
+Let $\varepsilon, T > 0$, and let $\delta > 0$ and $U = \{x \in \RR^2: d(x, \Delta) < \delta\}$ be such that $\nu \otimes \nu(U) < \varepsilon$, which exists by the previous lemma.
+Then
+\begin{align*}
+\int_{-T}^T |\hat \nu(\xi)|^2 ~d\xi &= \int_{-T}^T \hat \nu(\xi) \overline{\hat \nu(\xi)}~d\xi \\
+&= \int_{-T}^T \int_{-\infty}^\infty e^{ix\xi} ~d\nu(x) \int_{-\infty}^\infty e^{-iy\xi} ~d\nu(y)~d\xi.
+\end{align*}
+One has
+$$\int_{-T}^T \int_{-\infty}^\infty\int_{-\infty}^\infty |e^{ix\xi} e^{-iy\xi}|  ~d\nu(x) ~d\nu(y)~d\xi = 2T < \infty,$$
+so by Fubini's theorem,
+$$\int_{-T}^T |\hat \nu(\xi)|^2 ~d\xi = \iiint_{U \times [-T, T]} e^{i\xi(x-y)}~d\xi ~d\nu(x) ~d\nu(y) + \iiint_{(\RR^2 \setminus U) \times [-T, T]} e^{i\xi(x-y)}~d\xi ~d\nu(x) ~d\nu(y).$$
+The contribution by $U$ is minor; in fact,
+\begin{align*}
+\left|\iiint_{U \times [-T, T]} e^{i\xi(x-y)}~d\xi ~d\nu(x) ~d\nu(y)\right| &\leq 2T (\nu \otimes \nu)(U) < 2T\varepsilon.
+\end{align*}
+Contribution away from $U$ is bounded; in fact,
+\begin{align*}
+\left|\iiint_{(\RR^2 \setminus U) \times [-T, T]} e^{i\xi(x-y)}~d\xi ~d\nu(x) ~d\nu(y)\right| &= \left|\iint_{\RR^2 \setminus U} \frac{\sin(T(x-y))}{T(x-y)}~d\nu(x)~d\nu(y)\right| \leq \frac{1}{\delta T}.
+\end{align*}
+Therefore
+$$\frac{1}{2T} \int_{-T}^T |\hat \nu(\xi)|^2~d\xi < \varepsilon + \frac{1}{2\delta T^2}.$$
+First choosing $\varepsilon$, then choosing $T$ so large that $2\delta T^2 < \varepsilon$, we see that
+$$\frac{1}{2T} \int_{-T}^T |\hat \nu(\xi)|^2~d\xi < 2\varepsilon$$
+which was the bound we wanted.
+\end{proof}
+
+Now we can solve the problem.
+One has
+$$|\hat \mu(\xi)|^2 = |\hat \nu(\xi)|^2 + \sum_x \hat \nu(\xi)p(x) e^{-ix\xi} + \sum_{x, y} p(x)p(y) e^{i\xi(x-y)}.$$
+By the lemma,
+$$\lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T |\hat \nu(\xi)|^2~d\xi = 0.$$
+The second term consists of inner products of almost-orthogonal vectors, in the sense that
+$$\left|\int_{-T}^T \hat \nu(\xi) p(x) e^{-ix\xi} ~d\xi\right| \lesssim \frac{p(x)}{T}$$
+uniformly in $x$, by a lemma to Exercise 1. So, for any $R > 0$,
+$$\left|\int_{-T}^T \hat \nu(\xi) \sum_{|x| \leq R} p(x) e^{-ix\xi} ~d\xi\right| \lesssim \frac{1}{T};$$
+the existence of this bound, which is uniform in $R$, implies
+$$\lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T \hat \nu(\xi) \sum_x p(x) e^{-ix\xi} ~d\xi = 0.$$
+Now we fix $y$ and bound the integral of $\sum_{x \neq y} p(x) p(y) e^{i\xi(x-y)}$, which is also a sum of almost-orthogonal vectors. In fact, by the Fourier inversion formula, for any Schwartz function $\psi$,
+$$\lim_{T \to \infty} \int_{-T}^T \widehat \psi(\xi) e^{i\xi(x-y)}~d\xi = 2\pi\psi(x - y)$$
+uniformly in $x,y$; so the same thing is true if $\psi$ is a tempered distribution, in particular when $\psi = \delta$ (in which case $\widehat \psi = 1$). But since $x - y \neq 0$, that implies that
+$$\lim_{T \to \infty} \int_{-T}^T e^{i\xi(x-y)}~d\xi = 0$$
+uniformly in $x, y$. Therefore the same remains true when we take a doubly convex combination, summing over $\sum_{x, y} p(x)p(y) e^{i\xi(x-y)}$.
+Thus
+$$\lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T |\hat \mu(\xi)|^2~d\xi = \lim_{T \to \infty} \frac{1}{2T} \int_{-T}^T \sum_x p(x)^2 ~d\xi = \sum_x p(x)^2$$
+which was desired.
+
+\begin{exer}
+Let $X,Y$ be iid, $EX = 0$, $\Var X = 1$. Show that if $X - Y$ and $X + Y$ are independent, then $X$ is standard normal.
+\end{exer}
+
+Let $\mu$ be the distribution of $X$.
+
+\begin{lemma}
+One has $\hat \mu(2\xi) = \hat \mu(\xi)^4$.
+\end{lemma}
+\begin{proof}
+Since $X - Y$ and $X + Y$ are independent and $X,Y$ are identically distributed, it follows that $X - Y - X = -Y$ and $X + Y - X = Y$ are identically distributed.
+Therefore $\hat \mu$ is real-valued.
+Therefore
+\begin{align*}
+\hat \mu(2\xi) &= E(e^{i\xi(2X)}) = E(e^{i\xi(X+Y+X-Y)})\\
+&= E(e^{i\xi(X+Y)}) E(e^{i\xi(X-Y)}) = E(e^{i\xi X}) E(e^{i\xi Y}) E(e^{i\xi X}) E(e^{-i\xi Y})\\
+&= \hat \mu(\xi)^4
+\end{align*}
+which was desired.
+\end{proof}
+By induction,
+$$\hat \mu(2^n\xi) = \hat \mu(\xi)^{(4^n)}.$$
+Therefore
+$$\hat \mu(0) = \lim_{n \to \infty} \hat \mu(2^{-n}) = \lim_{n \to \infty} \hat \mu(1)^{(4^{-n})} = \hat \mu(1)^0 = 1,$$
+since $\hat \mu$ is continuous.
+I think one can prove the claim from here by inducting to compute the Taylor coefficients of $\hat \mu$ but the details are beyond me.
+
+\begin{exer}
+Suppose that $X_\lambda$ is a Poisson random variable with rate $\lambda$.
+Show that $(X_\lambda - \lambda)/\sqrt \lambda \implies N(0, 1)$.
+\end{exer}
+
+We first compute the characteristic function of $X_\lambda$.
+\begin{lemma}
+Suppose that $X$ is a random variable with probability mass function $p_X$. Then the characteristic function $\hat \mu$ of $X$ is
+$$\hat \mu(\xi) = \sum_x e^{itx} p_X(x).$$
+\end{lemma}
+\begin{proof}
+Let $(\psi_n)_n$ be an approximation to the identity; that is, a sequence of normalized Gaussians of mean $0$ and variance $1/n$.
+Then, for any function $f$ which is continuous at $0$,
+\begin{equation}
+\label{Dirac sequence}
+\lim_{n \to \infty} \int_{-\infty}^\infty \psi_n(x) f(x)~dx = f(0).
+\end{equation}
+To see this, one can approximate $\psi_n$ by functions $\psi_{n,j}$ of compact support and use a standard diagonal argument to find a sequence of smooth functions of compact support $\psi_{n,n} \geq 0$ with $||\psi_{n,n}||_{L^1} = 1$, with $\lim_n \langle \psi_n, g\rangle = \lim_n \langle \psi_{n,n}, g\rangle$ for any continuous $g$ and $L^2$ inner product.
+Then integration against $\psi_{n,n}$ is a weighted average on the support of $\psi_{n,n}$, which shrinks down to $\{0\}$; the integral mean value theorem then implies that those weighted averages converge to $f(0)$.
+We omit the standard details.
+
+Let $\mu$ be the distribution of $X$. Then for any continuous bounded function $f$,
+$$\lim_{n \to \infty} \sum_x \int_{-\infty}^\infty p_X(x) \psi_n(y - x) f(y)~dy = \sum_x p_X(x) f(x) = \int_{-\infty}^\infty f~d\mu.$$
+We used (\ref{Dirac sequence}).
+We can commute the sum and the integral freely using Tonelli's theorem; the $\psi_n$ and $p_X$ are nonnegative, and $f$ can be split into its positive and negative parts.
+It follows that
+$$\hat \mu(\xi) = \int_{-\infty}^\infty e^{ix\xi}~d\mu(x) = \lim_{n \to \infty} \sum_x \int_{-\infty}^\infty p_X(x) \psi_n(y - x) e^{iy\xi}~dy.$$
+By (\ref{Dirac sequence}),
+$$\lim_{n \to \infty} \int_{-\infty}^\infty p_X(x) \psi_n(y - x) e^{iy\xi}~dy = p_X(x) e^{ix\xi}$$
+so one has a bound of the form
+$$\left|\int_{-\infty}^\infty p_X(x) \psi_n(y - x) e^{iy\xi}~dy\right| \lesssim p_X(x).$$
+Since $\mu$ is a probability measure, $||p_X||_{\ell^1} = 1$ and so one can use dominated convergence for counting measure to see that
+$$\lim_{n \to \infty} \sum_x \int_{-\infty}^\infty p_X(x) \psi_n(y - x) e^{iy\xi}~dy = \sum_x \lim_{n \to \infty} \int_{-\infty}^\infty p_X(x) \psi_n(y - x) e^{iy\xi}~dy.$$
+This and (\ref{Dirac sequence}) imply the claim.
+\end{proof}
+By definition,
+$$p_{X_\lambda}(n) = e^{-\lambda}\frac{\lambda^n}{n!}.$$
+So if $\mu_\lambda$ is the distribution of $X_\lambda$, one has
+$$\hat \mu_\lambda(\xi) = \sum_{n=0}^\infty e^{in\xi} p_X(n) = e^{-\lambda}\sum_{n=0}^\infty \frac{(\lambda \exp(i\xi))^n}{n!} = \exp(\lambda(e^{i\xi} - 1)).$$
+Now let $\varphi_\lambda$ be the distribution of $(X_\lambda - \lambda)/\sqrt \lambda$.
+Then
+\begin{align*}\hat \varphi_\lambda(\xi) &= E(e^{i\frac{\xi}{\sqrt \lambda}(X_\lambda - \lambda)}) = E(e^{i\frac{\xi}{\sqrt \lambda}X_\lambda}e^{-i\xi\sqrt \lambda})
+= e^{-i\xi\sqrt \lambda} \hat \mu_\lambda\left(\frac{\xi}{\sqrt \lambda}\right)\\
+&= \exp\left(\lambda e^{i\xi/\sqrt \lambda} - i\xi\sqrt \lambda - \lambda\right).
+\end{align*}
+Taking logarithms,
+\begin{align*}\log \hat \varphi_\lambda(\xi) &= \lambda e^{i\xi/\sqrt \lambda} - i\xi\sqrt \lambda - \lambda\\
+&= \lambda\left(1 + i\frac{\xi}{\sqrt \lambda} - \frac{\xi^2}{2\lambda} - O(\lambda^{-3/2})\right) - i\xi\sqrt \lambda - \lambda\\
+&= -\frac{\xi^2}{2} + O(\lambda^{-1/2}).
+\end{align*}
+Thus
+$$\lim_{\lambda \to \infty} \hat \varphi_\lambda(\xi) = e^{-\xi^2/2}$$
+which is exactly the characteristic function of a standard normal random variable.
+
+\begin{exer}
+Suppose that $(X_n)_n$ is a random sequence and $\theta \in \RR$ are such that
+$$\lim_{n \to \infty} \sqrt n(X_n - \theta) = N(0, 1)$$
+in distribution. Suppose that $f$ is continuously differentiable on $\RR$. Show that $\sqrt n(f(X_n) - f(\theta))$ converges in distribution, and compute its limit.
+\end{exer}
+
+Let $Y_n = \sqrt n(X_n - \theta)$ and let $\nu_n$ be the distribution of $Y_n$. Then
+$$\lim_{n \to \infty} \hat \nu_n(\xi) = e^{-\xi^2/2}$$
+by assumption. So if $\mu_n$ is the distribution of $X_n$, thus
+$$\hat \nu_n(\xi) = e^{i\xi \sqrt n \theta} \hat \mu_n(\xi \sqrt n),$$
+it follows that for every $\varepsilon > 0$, every $\xi$, and every $n$ large enough,
+$$\left|\hat \mu_n(\xi) - \exp\left(-\frac{\xi^2}{2n} - i\xi\theta\right)\right| < \varepsilon.$$
+Since $f$ is continuously differentiable, we can take its second Taylor polynomial at $0$,
+$$f(x) = a_0 + a_1x + O(x^2).$$
+Then if $Z_n = \sqrt n(f(X_n) - f(\theta))$ has distribution $\lambda_n$,
+\begin{align*}
+\hat \lambda_n(\xi) &= E(e^{i\xi \sqrt n(f(X_n) - f(\theta))}) = e^{-i\xi \sqrt n f(\theta)} E(e^{i\xi \sqrt n f(X_n)}) \\
+&= E\exp\left(-i\xi \sqrt n(a_0 + a_1\theta + O(\theta^2)) + i\xi \sqrt n(a_0 + a_1 X_n + O(X_n^2)) \right)\\
+&= E\exp\left(i\xi \sqrt na_1(X_n - \theta) + i\xi \sqrt n O((X_n - \theta)^2) \right).
+\end{align*}
+We may normalize $\theta = 0$, so that $\sqrt nX_n \implies N(0, 1)$; then
+$$\sqrt nX_n^2 = \frac{(\sqrt nX_n)^2}{\sqrt n} \implies 0.$$
+After taking Skorohod representations, then, we may assume that $\sqrt n(X_n^2 - \theta) \to 0$ almost surely.
+By bounded convergence, this implies that
+$$E\exp\left(i\xi \sqrt na_1(X_n - \theta) + i\xi \sqrt n O((X_n - \theta)^2) \right) \to N(0, a_1)$$
+which is exactly what we wanted to show.
+
+
+\end{document}

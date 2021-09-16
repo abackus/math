@@ -1,0 +1,856 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Meromorphic continuation of the NLS resolvent]{Meromorphic continuation of the NLS resolvent}
+\author{Aidan Backus}
+\date{May 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{zworski_paper.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+%\tableofcontents
+
+\section{Existence of maximal Riemann surfaces}
+
+If $F$ is a holomorphic map, we let $\nabla F$ denote the total holomorphic derivative of $F$.
+I'm pretty sure the following lemma is well-known but I couldn't find a good reference.
+\begin{definition}
+Let $X,Y$ be complex manifolds.
+A \dfn{holomorphic submersion} is a holomorphic map $F: X \to Y$ if $\nabla F$ is surjective on holomorphic tangent spaces.
+\end{definition}
+The criterion for being a holomorphic submersion says that
+$$\rank \nabla F = \dim Y$$
+where all dimensions are computed over $\CC$.
+\begin{lemma}
+Let $U \subseteq \CC^n$ be an open set, $Y$ a complex manifold of (complex) dimension $k$, $k \leq n$, $y \in Y$, and $F: U \to Y$ a holomorphic submersion.
+Then $F^{-1}(y)$ is a complex submanifold of $\CC^n$ of dimension $n - k$.
+\end{lemma}
+\begin{proof}
+Since $F$ is a submersion, there is a permutation $\sigma$ of $\{1, \dots, n\}$ such that the columns $\sigma(k+1), \dots, \sigma(n)$ of $\nabla F$ are linearly independent.
+Let $G: U \to Y \times \CC^{n - k}$ be the map
+$$G(z) = (z_{\sigma(1)}, \dots, z_{\sigma(k)}, F(z)).$$
+Then $\nabla G$ has full rank and maps between vector spaces of the same dimension, so $\nabla G$ is an isomorphism.
+So by the holomorphic inverse function theorem, $G$ is locally invertible, and $G^{-1}$ is holomorphic.
+
+Locally, let
+$$f(z)_j = G^{-1}(z, y)_{\sigma(n-j)},$$
+$j \in \{0, \dots, n - k + 1\}$, $z \in \CC^{n - k}$.
+Then $f$ is holomorphic and locally the graph of $f$ is $X = F^{-1}(y)$.
+That is, for any $x_0 \in X$ we can find a $U \ni x_0$ such that $X \cap U = \{(z, f(z)): z \in U'\}$ for some $U'$.
+But then the map $z \mapsto (z, f(z))$, $U \to U'$, is a holomorphic chart, and the transition maps are just the identity on $\CC^{n-k}$, so $X$ is a complex manifold of dimension $n - k$.
+\end{proof}
+Now if $f: U \to \CC^m$ is a holomorphic map and $F(z, f(z)) = 0$ for all $z$, we can define the \emph{Riemann surface} of $f$ to be the variety $X = F^{-1}(0)$. Then the map $\pi: X \to \CC^m$, $\pi(z, w) = w$, is an analytic continuation of $f$ after one chooses an embedding $U \to X$, at least as long as $F$ is a submersion.
+
+There's another definition of the Riemann surface of a holomorphic map, namely that of its maximal analytic continuation.
+Fix $f: U \to \CC^m$.
+Define a category $A(f)$, whose objects are commutative diagrams of holomorphic maps
+$$\begin{tikzcd}
+X \arrow[r,"\pi"] & \CC^m\\
+U \arrow[u,"\iota"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where $\iota$ is injective and $X$ is a connected Riemann surface.
+We call the above diagram, or equivalently the tuple, $(X, \pi, \iota)$, an analytic continuation of $f$.
+A morphism $\psi: (X_1, \pi_1, \iota_1) \to (X_2, \pi_2, \iota_2)$ in $A(f)$ is a commutative diagram of holomorphic maps
+$$\begin{tikzcd}
+X_2 \arrow[r,"\pi_2"] & \CC^m\\
+X_1 \arrow[u,"\psi"] \arrow[r,"\pi_1"] & \CC^m \arrow[u]\\
+U \arrow[u,"\iota_1"] \arrow[bend left=60,uu,"\iota_2"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where the map $\CC^m \to \CC^m$ is equality.
+Since the diagram
+$$\begin{tikzcd}
+X_1 \arrow[rr,"\psi"] && X_2\\
+&U \arrow[ul,"\iota_1"] \arrow[ur,"\iota_2"]
+\end{tikzcd}
+$$
+commutes it follows that $\psi$ is injective, i.e. $X_1$ is a submanifold of $X_2$.
+Clearly $(U, f, \id)$ is the initial object in $A(f)$. On the other hand, by Zorn's lemma, $A(f)$ has final objects.
+\begin{definition}
+The \dfn{maximal analytic continuation} of $f$ is the final object of $A(f)$.
+\end{definition}
+We will mainly be interested in the case that the maximal analytic continuation is defined on the variety $F = 0$, where $F(z, f(z)) = 0$.
+
+We will need three facts about Riemann surfaces that are covered in any introductory course in algebraic geometry, I think.
+\begin{lemma}
+% https://math.stackexchange.com/questions/2554046/extending-isomorphism-of-punctured-riemann-surfaces
+\label{compact Riemann surfaces}
+Let $X, Y$ be compact Riemann surfaces and $S \subset X$ a finite set. Then if $\iota: X \setminus S \to Y$ is an embedding, $\iota$ extends to an isomorphism $\overline \iota: X \to Y$.
+\end{lemma}
+
+\begin{lemma}[Vakil, Miracle 18.4.2]
+\label{genus formula}
+Let $X$ be the projective curve defined by $f = 0$, where $f: \PP^2 \to \CC$ is a homogeneous polynomial of degree $d$.
+Let
+$$2g = (d - 1)(d - 2).$$
+If $X$ is smooth, then $X$ is a compact Riemann surface of genus $g$.
+\end{lemma}
+
+\begin{lemma}[Vakil, Proposition 19.3.1]
+\label{curves of genus 0}
+Let $X$ be a projective curve of genus $0$. Then $X$ is isomorphic to $\PP^1$.
+\end{lemma}
+
+
+\section{Infinite-dimensional symplectic geometry}
+In this section we linearize the cubic NLS with small Dirac impurity
+$$i \frac{\partial u}{\partial t} + \frac{1}{2} \frac{\partial^2 u}{\partial x^2} + q\delta_0(x)u + u|u|^2 = 0$$
+where $0 < |q| \ll 1$. This was adapted from Holmer-Zworski.
+
+The definition of $\dbar$ makes sense even in infinite dimensions.
+Indeed if $B$ is a Banach space over $\CC$, then for any Banach basis $(z_\alpha = x_\alpha + iy_\alpha)_\alpha$, we have
+$$\frac{\partial f}{\dbar z} = \frac{1}{2} \sum_\alpha \frac{\partial f}{\partial x_\alpha} + i\frac{\partial f}{\partial y_\alpha}$$
+whenever the infinite series converges.
+Thus the notion of holomorphy makes sense in infinite dimensions.
+As a sanity check, any bounded linear functional
+$$z \mapsto \sum_\alpha c_\alpha z_\alpha$$
+is holomorphic.
+So the notion of complex manifold still makes sense in infinite dimensions.
+
+We recall some K\"ahler geometry, that still makes sense in this setting.
+\begin{definition}
+Let $X$ be a complex manifold. A \dfn{hermitian form} on $X$ is a smoothly varying inner product on each tangent space of $X$.
+If $h$ is a hermitian form on $X$ and $\Im h$ is closed, we say that $(X, h)$ is a \dfn{K\"ahler manifold}, with symplectic form $\Im h$ and Riemannian metric $\Re h$.
+\end{definition}
+Here these definitions make sense since $h(u, u)$ is always real for any tangent vector $u$, by definition of inner product.
+Note that in coordinates $z = x + iy$ we can write
+$$h(u, v) = \sum_\alpha x_\alpha(u) x_\alpha(v) + y_\alpha(u) y_\alpha(v) + i\sum_\alpha x_\alpha(v) y_\alpha(u) - x_\alpha(u) y_\alpha(v)$$
+whence the symplectic form
+$$\omega(u, v) = \sum_\alpha x_\alpha(v) y_\alpha(u) - x_\alpha(u) y_\alpha(v).$$
+So it really is locally a symplectic form!
+In particular it is exact -- the condition that it is closed ensures that $\omega$ is globally a symplectic form.
+If $X$ is a Hilbert space over $\CC$ for example, so $X$ is canonically identified with its tangent spaces, $X$ is K\"ahler, since $X$ has a global chart.
+
+So let $(X, h)$ be a Hilbert space over $\CC$, viewed as a K\"ahler manifold.
+Then we get a Riemannian metric $g$ and symplectic form $\omega$, which we can view as inner and symplectic products on $\mathcal H$ since we identify $\mathcal H$ with its tangent spaces. In particular $\omega$ induces an isomorphism $\mathcal H \to \mathcal H^*$.
+So as to not mix it up with the isomorphism induced by $h$ we write $\eta \mapsto \eta^\sharp$ for the isomorphism induced by $\omega$.
+
+Thus if $H: \mathcal H \to \RR$ is any smooth function, its differential $dH: \mathcal H \to \mathcal H^*$ induces a vector field
+$$dH^\sharp: \mathcal H \to \mathcal H.$$
+In particular, an integral curve $u$ of $dH^\sharp$ is tangent to $dH^\sharp$ and hence is $\omega$-orthogonal to $\ker dH$; since $\omega$ is a symplectic form that means that $\dot u \in \ker dH$; that is, $H$ is constant along integral curves of $dH^\sharp$.
+
+We now consider the special case $\mathcal H_\CC = H^1(\RR \to \CC)$. By Morrey's inequality we have
+$$H^1(\RR) \subseteq C^{0+1/2}(\RR);$$
+thus we may introduce the $q$-Hamiltonian
+$$H_q(u) = \frac{1}{4} \int_{-\infty}^\infty \left|\frac{\partial u}{\partial x}\right|^2 + |u(x)|^4 ~dx - q|u(0)|^2.$$
+Then one has
+$$\cdot u(x) = i\left(\frac{1}{2} \frac{\partial^2 u}{\partial x^2} + u(x)|u(x)|^2 + q\delta_0(x)u(x)\right)$$
+This reflects that solutions of the cubic NLS obey conservation of energy.
+One has also conservation of mass
+$$\frac{\partial}{\partial t} ||u||_{L^2}^2 = 2 \Re \int_{-\infty}^\infty iu(x) \left(\frac{\partial^2}{\partial x^2} + q\delta_0(x) + |u(x)|^2\right)\overline u(x) ~dx$$
+which follows because the operator $\frac{\partial^2}{\partial x^2} + q\delta_0(x) + |u(x)|^2$ is real, so that if $u$ is totally real or totally imaginary then the integrand is totally imaginary; this then extends to arbitrary $u$ by linearity.
+
+To see well-posedness we recall the bound
+$$||u(t)||_{H^1}^2 \lesssim H_q(u) + ||u(t)||_{L^2}^6 + ||u(t)||_{L^2}^2.$$
+This follows because the cubic NLS is subcritical (the quintic is critical).
+Since this is a uniform bound, we can show (see Holmer-Zworski \S2.2) that there is a $T > 0$ which only depends on the \emph{initial} data $u(0)$ such that if $u(t)$ exists then so does $u(s)$ for $t < s < T$.
+Indeed, if $\Phi$ is the nonlinear transformation $H^1 \to H^1$ whose fixed points are exactly solutions to the cubic NLS, then
+\begin{align*}
+||\Phi(u) - \Phi(v)||_{L^\infty([0, T] \to H^1)} &\lesssim T(||u||_{L^\infty([0, T] \to H^1)} - ||v||_{L^\infty([0, T] \to H^1)})^2 ||u - v||_{L^\infty([0, T] \to H^1)} \\
+&\lesssim T(H_q(u) + ||u(0)||_{L^2} + ||u(0)||_{L^2}^3 + H_q(v) + ||v(0)||_{L^2} + ||v(0)||_{L^2}^3),
+\end{align*}
+so we can apply Banach's fixed point theorem provided that
+$$T \lesssim (H_q(u) + ||u(0)||_{L^2} + ||u(0)||_{L^2}^3 + H_q(v) + ||v(0)||_{L^2} + ||v(0)||_{L^2}^3)^{-1}.$$
+Therefore we have global well-posedness in $H^1$.
+
+To define the linearization, we consider the modified Hamiltonian
+$$H(u, \lambda) = H_q(u) + \frac{\lambda^2}{4} ||u||_{L^2}^2$$
+with $\lambda^2/4$ a Lagrange multiplier. Let $F(\cdot, \lambda)$ be the linearization of the Hamiltonian flow of $H(\cdot, \lambda)$. Then the following are equivalent:
+\begin{enumerate}
+\item $u$ is a ground state of the cubic NLS with Dirac impurity.
+\item $H_q(u)$ is minimized subject to $||u||_{L^2}^2$ given.
+\item There is a unique $\lambda$ for which $u$ is a stationary point of $H(\cdot, \lambda)$ and $F(u, \lambda)$ is positive-definite.
+\end{enumerate}
+By a rescaling argument and the formula
+$$u_\lambda(x) = \lambda \sech(\lambda|x| + \tanh^{-1}(q/\lambda))$$
+for the ground state, we see that as long as we choose $\lambda > |q|$ (since $\atanh$ has a pole at $1$!) we can find a ground state with Lagrange multiplier $\lambda^2/4$.
+In this case Holmer-Zworski show that
+$$F(\lambda) = -i\begin{bmatrix}L_+ \\ & L_-\end{bmatrix}.$$
+where
+\begin{align*}
+2L_+ &= \lambda^2 - \partial^2 - 6v^2 - 2q\delta_0\\
+2L_- &= \lambda^2 - \partial^2 - 2v^2 - 2q\delta_0.
+\end{align*}
+Here this matrix is written in the basis $u = (\Re u, \Im u)$. Conjugating to the basis $u = (u, \overline u)$ we obtain the linearized matrix in the next section.
+The point is to consider the ground state as a steady state in the Hamiltonian flow of the modified Hamiltonian.
+
+\section{The maximal analytic continuation of a linearized free NLS}
+Let $D = -i\partial$ be the momentum observable.
+Then
+$$H_0 - z = \begin{bmatrix}
+D^2 + 1 - z\\
+&-D^2 - 1 -z
+\end{bmatrix}.$$
+The equation $H_0u = f$ is the linearized free NLS, proven in Holmer-Zworski using symplectic geometry.
+We are interested in the resolvent $R_0(z) = (H_0 - z)^{-1}$.
+
+Let $R$ be the resolvent of the classical Schrodinger operator,
+$$R(\lambda)(D - \lambda^2) = 1.$$
+Then
+$$R(x, y, \lambda) = \frac{i}{2\lambda} e^{i\lambda|x-y|}.$$
+Here we take $\lambda = \sqrt z$ where we are taking the branch of $\sqrt\cdot$ which forces $\Im \lambda \geq 0$; i.e.
+$$\sqrt{re^{i\theta}} = e^{i\theta/2}\sqrt r,\quad \theta \in (0, 2\pi)$$
+(so that $\theta/2 \in [0, \pi]$). This branch is discontinuous on $\RR_+$.
+
+We need to treat the two resolvents $D^2 + 1 - z$ and $-D^2 - 1 - z$ separately.
+For the first resolvent, $D^2 + 1 - z$, we are plugging in $\lambda^2 = z - 1$, and we need $\Im \lambda \geq 0$.
+Taking $\widetilde z = z - 1$, we see that we need $\widetilde z \notin \RR_+$, i.e. $z \notin [1, \infty)$.
+Similarly, for $-D^2 - 1 - z = -(D^2 + 1 + z)$, this is defined when $z \notin (-\infty, -1]$. Thus
+$$R_0(x, y, z)_{jj} = (-1)^{1-j}\frac{i}{2} \exp(i\sqrt{(-1)^{1-j}z -1}|x-y|)((-1)^{1-j}z -1)^{-1/2}$$
+and $R_0(x,y,z)_{jk} = 0$ if $j \neq k$.
+This is clearly holomorphic in $z$ for $z \notin S$ where
+$$S = (-\infty, -1], [1, \infty)$$
+is the spectrum of $H_0$.
+
+Now fix $(x, y)$; then we can view $R_0$ as a map $\CC \setminus S \to \CC^2$ by
+$$R_0(z)_j = (-1)^{1-j} \frac{i}{2} \exp(i\sqrt{(-1)^{1-j}z -1}|x-y|)((-1)^{1-j}z -1)^{-1/2}).$$
+The map $w \mapsto \exp(iw|x-y|)/w$ is clearly holomorphic on $\CC \setminus 0$ and has a simple pole at $0$.
+In particular no choice of branch is made for it; so to understand the Riemann surface of $R_0$ it suffices to consider the Riemann surface of the function $z \mapsto w$,
+$$w_j = \sqrt{(-1)^{1-j}z-1}.$$
+That is, $w_j^2 = (-1)^{1-j}z - 1$. Provided that $w$ satisfies that condition for $z$ given, one has
+\begin{equation}
+\label{definition of affine variety}
+w_1^2 + w_2^2 + 2 = 0.
+\end{equation}
+We define an affine variety $\Sigma$, defined by (\ref{definition of affine variety}); then $\Sigma$ is smooth since the Jacobian of (\ref{definition of affine variety}) is zero exactly at $w = 0$, which is not a $\CC$-point of $\Sigma$.
+We define the analytic continuation of $R_0$ to all of $\Sigma$ by
+\begin{equation}
+\label{free analytic continuation}
+R_0(x, y, w)_j = (-1)^{j-1} \frac{i}{2} \frac{\exp(iw_j|x-y|)}{w_j},\quad j \in \{1, 2\}.
+\end{equation}
+
+One can use the formula
+\begin{equation}
+\label{recovering the standard branch}
+2z = w_1^2 - w_2^2,
+\end{equation}
+to recover the standard branch from $\Sigma$.
+
+To determine the structure of $\Sigma$, it will be convenient to also consider the projective completion $\overline \Sigma$ of $\Sigma$; thus, $\overline \Sigma$ is the projective subvariety of $\PP^2$ defined by
+\begin{equation}
+\label{definition of projective variety}
+2w_0^2 + w_1^2 + w_2^2 = 0.
+\end{equation}
+Taking the Jacobian of (\ref{definition of projective variety}), we see that $\overline \Sigma$ is again a smooth variety.
+Let $\{A_0, A_1, A_2\}$ be the standard cover of $\PP^2$ by affine charts; thus, $A_j = \{w \in \PP^2: w_j \neq 0\}$ and we impose coordinates on $\PP^2$ by setting $w_j = 1$ on $A_j$.
+In particular, $\Sigma = A_0 \cap \overline \Sigma$.
+Moreover, if $w \in \overline \Sigma \setminus A_0$, then $w_1^2 + w_2^2 = 0$, so both $w_1,w_2$ are nonzero; thus $\overline \Sigma \setminus A_0$ consists of two points $w^\pm$, where $w^\pm_1 = \pm w^\pm_2$.
+Applying the genus formula (Lemma \ref{genus formula}) with $d = 2$ to (\ref{definition of projective variety}), and then using the classification of curves of genus $0$ (Lemma \ref{curves of genus 0}), we see that $\overline \Sigma$ is isomorphic to $\PP^1$.
+Therefore $\Sigma$ is isomorphic to $\PP^1 \setminus \{0, \infty\} = \CC \setminus 0$.
+
+We now construct embeddings of $\CC \setminus S$ into $\Sigma$.
+For this, we will call a pair of signs $(\sigma, \tau) \in (S^0)^2$ a \dfn{branch pair}.
+Given a branch pair $(\sigma, \tau)$, let
+$$\varphi_{(\sigma, \tau)}(z) = (\sqrt{z-1}_\sigma, \sqrt{-z-1}_\tau)$$
+where
+$$\sqrt{re^{i\theta}}_\pm = e^{i\theta/2}\sqrt r,\quad\theta \in (0, \pm 2\pi),$$
+so $\sqrt{re^{i\theta}}_\pm \in \CC_\pm$, where
+$$\CC_\pm = \{x + iy: \pm y > 0\}$$
+is the open half-line.
+Similarly we define the open quadrant
+$$\CC^2_{(\sigma, \lambda)} = \CC_\sigma \times \CC_\lambda.$$
+By definition of $S$, $\varphi_{(\sigma, \tau)}$ is holomorphic on $\CC \setminus S$.
+Moreover, as $\sqrt \cdot_\sigma$ and $\sqrt\cdot_\tau$ are injective, $\varphi_{(\sigma, \tau)}$ is injective on $\CC \setminus S$.
+
+Let $\kappa$ be a branch pair. By the above, $\varphi_\kappa$ is an embedding; let $U_\kappa$ be its image.
+Then $U_\kappa = \CC^2_\kappa \cap \Sigma$; to see this, we first note that the inclusion $U_\kappa \subseteq\CC^2_\kappa \cap \Sigma $ follows from the definition of $\varphi_\kappa$.
+Conversely, if $w \in \CC^2_\kappa \cap \Sigma$ and we define $z$ by (\ref{recovering the standard branch}), then we get $\varphi_\kappa(z) = w$.
+Let $\mathring \Sigma = \bigcup_\kappa U_\kappa$; then $\Sigma \setminus \mathring \Sigma$ consists of $w \in \Sigma$ such that $\Im w_1 = 0$ or $\Im w_2 = 0$, so $\mathring \Sigma$ is an open dense subset of $\Sigma$.
+
+We view $U_{(+,+)}$ as the physical sheet. All four sheets $U_\kappa$ are isomorphic to $\CC \setminus S$ in the obvious way, so they each have two cuts, a \emph{left cut} where $\tau$ changes sign, and a \emph{right cut} where $\sigma$ changes sign.
+The left cut is defined by $\Re z = 0, \Im z \leq -1$, and the right cut is defined by $\Re z = 0, \Im z \geq 1$.
+If one crosses the left cut of $U_{(\sigma, \tau)}$, they move to $U_{(\sigma, -\tau)}$ and if one crosses the right cut they move to $U_{(-\sigma, \tau)}$.
+Thus we have the following diagram, where a line between two sheets $V,W$ means that one can cross a cut in $V$ to get to $W$ (a symmetric relation).
+$$\begin{tikzcd}
+&U_{(+,+)} \arrow[dash,dl] \arrow[dash,dr]\\
+U_{(+, -)} \arrow[dash,dr] && U_{(-,+)} \arrow[dash,dl]\\
+&U_{(-,-)}
+\end{tikzcd}$$
+
+Let $p_\pm^1 = (0, \pm i\sqrt 2)$ and $p_\pm^2 = (\pm i\sqrt 2, 0)$.
+Then $p_\pm^j$ are the only poles of $R_0(x, y)$ in $\Sigma$, and they do not lie in $\mathring \Sigma$.
+
+\begin{lemma}
+The maximal analytic continuation of $R_0(x, y)$ is $(\Sigma \setminus \{p_\pm^j\}, R_0(x, y), \varphi)$, where $R_0(x, y)$ is defined by (\ref{free analytic continuation}).
+\end{lemma}
+\begin{proof}
+First, $(\Sigma \setminus \{p_\pm^j\}, R_0(x, y), \varphi)$ is actually an analytic continuation, since
+$$R_0(x, y, \varphi_{(+, +)}(z))_j = (-1)^{j - 1} \frac{i}{2} \frac{\exp(i\sqrt{(-1)^{j-1}z - 1}|x-y|)}{\sqrt{(-1)^{j-1}z - 1}}$$
+where the branch of the square root is $\sqrt\cdot = \sqrt\cdot_+$, just as in $\CC \setminus S$.
+Thus we must just show that it is final in $A(R_0(x, y))$.
+
+Let $(\Gamma, \pi, \iota)$ be an analytic continuation of $(\Sigma \setminus \{p_\pm^j\}, R_0(x, y), \varphi)$.
+Then $\iota$ is an embedding $\iota: \Sigma \to \Gamma$, and is an isomorphism onto its image.
+Identifying $\overline \Sigma$ with $\PP^1$ and applying a M\"obius transformation, we may assume that $\Sigma = \PP^1 \setminus \{0, \infty\}$.
+
+Suppose that $\iota$ is not surjective.
+Since $\Gamma$ is path-connected, there is a path $\gamma$ in $\Gamma$ from a point $\gamma(0)$ in the image of $\iota$, to $\gamma(1)$ which is not in the image of $\iota$.
+Since $\PP^1$ has no boundary, there must be a $t \in [0, 1]$ with $\gamma(t) = \iota(0)$ or $\gamma(t) = \iota(\infty)$.
+In particular, $R_0(x, y)$ has at most one essential singularity on $\PP^1$.
+
+We now show that $R_0(x, y)$ has two essential singularities, contradicting the previous claim -- in fact the points $w^\pm$ that we defined in the standard coordinates of $\PP^2$ as
+$$w^\pm = [0:1:\pm i]$$
+are essentially singular. To see this, we note that if we embed the affine plane $\CC^2$ in $\PP^2$, then $w^\pm_{(k)} = k(1, \pm i)$ converges to $w^\pm$.
+Now $R_0(x, y)$ extends to a meromorphic function on $\CC^2$ in the evident way, and so by continuity, one has
+$$R_0(x, y, w^\pm_{(k)})_1 = \frac{i}{2} \frac{\exp(ik|x-y|)}{k}$$
+which exhibits essentially singular behavior as $k \to \infty$.
+
+So $\iota$ is surjective, and therefore is an isomorphism in $A(R_0(x, y))$.
+Uniqueness of analytic continuation shows that $(\Sigma \setminus \{p_\pm^j\}, R_0(x, y), \varphi)$ is final.
+\end{proof}
+
+\section{Bounding the free resolvent}
+Let $\mathcal H^k = H^k \oplus H^k$ where $H^k$ is the Sobolev space $H^k = W^{2,k}$.
+We are interested in the $\mathcal H^0 \to \mathcal H^2$ norm of $R_0(z)$.
+
+\begin{lemma}
+\label{bounds on partial resolvent}
+Let $L > 0$ and let $\rho$ be a cutoff such that $\supp \rho \subseteq (-L, L)$.
+Let $\chi$ be a cutoff such that $\chi = 1$ on $\supp \rho$.
+Fix a sign $\sigma$.
+Let
+$$G_\pm(z) = \chi(x) \frac{\exp(i\sqrt{\pm z - 1}_\sigma|x-y|)}{\sqrt{\pm z - 1}_\sigma} \rho(y).$$
+Then for every $z$ such that $\pm z - 1$ is in the domain of $\sqrt\cdot_\sigma$, one has
+$$||G_\pm(z)||_{L^2 \to L^2} \lesssim L\frac{\exp(4|\Im \sqrt{\pm z - 1}_\sigma)}{|\sqrt{\pm z - 1}_\sigma}.$$
+\end{lemma}
+\begin{proof}
+By Schur's test,
+\begin{equation}
+\label{schur bound}
+||G_\pm(z)||_{L^2 \to L^2}^2 \leq \sup_{(x, y) \in \RR^2} ||G_\pm (\cdot, y, z)||_{L^1}\cdot||G_\pm (x, \cdot, z)||_{L^1}.
+\end{equation}
+Since
+\begin{align*}
+||G_\pm (\cdot, y, z)||_{L^1} &= \int_{-\infty}^\infty \chi(x) \frac{|\exp(i\sqrt{\pm z-1}|x-y|)|}{|\sqrt{\pm z-1}|}\rho(y)~dx\\
+&\leq \frac{\rho(y)}{|\sqrt{\pm z-1}|} \int_{-2L}^{2L} |\exp(i\sqrt{\pm z-1}|x-y|)~dx\\
+&\leq \frac{1}{|\sqrt{\pm z-1}|} \int_{-2L}^{2L} |\exp(4Li\sqrt{\pm z-1})\\
+&\lesssim \frac{L}{|\sqrt{\pm z-1}|} \exp(4 |\Im\sqrt{\pm z-1}|).
+\end{align*}
+The same bound is clearly valid on $||G_\pm(x, \cdot, z)||_{L^1}$ by symmetry. Taking the square root of (\ref{schur bound}),
+$$||G(z)||_{L^2 \to L^2} \lesssim \frac{L}{|\sqrt{z-1}|} \exp(4 |\Im\sqrt{z-1}|)$$
+follows and the proof is complete.
+\end{proof}
+
+\begin{lemma}
+\label{exponential bound on free resolvent}
+Let $L > 0$ and let $\rho$ be a cutoff such that $\supp \rho \subseteq (-L, L)$.
+Let $\chi$ be a cutoff such that $\chi = 1$ on $\supp \rho$.
+Then for every $w \in \Sigma$,
+$$||\chi R_0(x, y, w) \rho||_{\mathcal H^0(\RR) \to \mathcal H^2((-L, L))} \lesssim 1 + L\langle w_1^2 - w_2^2\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+In particular, $\rho R_0(x, y) \rho$ is a meromorphic family of compact operators on $\Sigma$ acting on $\mathcal H^0$, with poles exactly at $p_\pm^j$.
+\end{lemma}
+\begin{proof}
+If $\chi$ is a cutoff, $\chi = 1$ on $\supp \rho$, $u \in \mathcal H^2$, then by elliptic regularity,
+$$||\rho u||_{\mathcal H^2} \lesssim_\chi ||\chi u||_{\mathcal H^0} + ||\chi D^2 u||_{\mathcal H^0}.$$
+Taking $u = R_0(w)\rho f$ we see that
+$$||\rho R_0(w)\rho f||_{\mathcal H^2} \lesssim ||\chi R_0(w) \rho f||_{\mathcal H^0} + ||\chi D^2 R_0(w) \rho f||_{\mathcal H^0}.$$
+First assume $w \in \mathring \Sigma$, so that if we define $z$ by (\ref{recovering the standard branch}), one has
+$$R_0(w) = \diag(G_+(z), G_-(z)).$$
+By Lemma \ref{bounds on partial resolvent}, one has
+$$||\chi R_0(w) \rho f||_{\mathcal H^0} \lesssim L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}.$$
+Treating the second term,
+$$D^2R_0(w) = \diag(1, - 1) - \diag(1-z,1+z)R_0(w)$$
+so
+$$||\chi D^2 R_0(w) \rho f||_{\mathcal H^0} \leq ||\rho f||_{\mathcal H^0} + ||\chi R_0(w) \rho f||_{\mathcal H^0} + ||\chi z R_0(w) \rho f||_{\mathcal H^0}.$$
+The second term in this sum was already bounded and the first is trivially bounded by $||f||_{\mathcal H^0}$.
+The final term is
+$$\lesssim |z|L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}$$
+so we can bound
+$$||\chi R_0(w) \rho||_{\mathcal H^0 \to \mathcal H^2} \lesssim 1 + L\langle z\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+Plugging in (\ref{recovering the standard branch}) proves the first claim.
+The second claim follows by the Rellich-Kondrachov theorem.
+\end{proof}
+
+Now we treat the special case of the standard branch of $R_0$; here we identify $\CC_+$ with the upper-half plane of $\CC \setminus S$.
+
+\begin{lemma}
+\label{sharp bound on upper half free resolvent}
+For every $z \in \CC_+$ and $s \in [0, 2]$, let $2s' = s - 1$; then
+$$||R_0(z)||_{\mathcal H^0 \to \mathcal H^s} \lesssim \max_{0 \leq t_1,t_2 \leq s} \frac{|1-z|^{t_1'}}{\Im \sqrt{1 - z}_+} + \frac{|1+z|^{t_2'}}{\Im \sqrt{1+ z}_+}.$$
+In particular, $R_0$ is a holomorphic family of compact operators acting on $\mathcal H_0$ on $\CC_+$.
+\end{lemma}
+\begin{proof}
+We must bound $||R_0(z)_j||_{L^2 \to H^s}$, and by interpolation it suffices to check when $s \in \NN$. In that case,
+$$||R_0(z)_j||_{L^2 \to H^s} = \sum_{0 \leq t \leq s} ||D^tR_0(z)_j||_{L^2 \to L^2}.$$
+Letting $K(t, z)$ denote the integral kernel of $D^tR_0(z)_j$ and $\mathcal F$ the Fourier transform,
+$$K(t, x, y, z) = \int_{-\infty}^\infty \frac{\xi^t}{\pm(\xi^2 + 1)-z}e^{i\xi(x-y)}~d\xi = \mathcal F^{-1}\left(\xi \mapsto \frac{\xi^t}{\pm(\xi^2 +1)-z}\right)(x-y).$$
+Here we take $+$ in the $\pm$ if $j = 1$ and $-$ otherwise. We now consider the case $j = 1$; the other case is similar. Letting $w = 1 - z$, we have
+$$K(t, x, y, z) = \mathcal F^{-1}\left(\xi \mapsto \frac{\xi^t}{\xi^2 - w}\right)(x-y).$$
+
+When $t = 0$ we just recover the usual integral kernel of the resolvent,
+$$|K(0, x, y, z)| = \frac{e^{i|x-y|\sqrt w}}{\sqrt w}.$$
+Moreover,
+\begin{align*}
+  |K(t, x, y, z)| &= |\mathcal F^{-1}(\xi \mapsto \xi^t)(x-y) * K(0, x, y, w)|.\\
+  &= \left|\delta^{(t)}_0(x-y) * \frac{e^{i|x-y|\sqrt w}}{\sqrt w}\right|\\
+  &= \left|\partial_{x-y}^{(t)} \frac{e^{i|x-y|\sqrt w}}{\sqrt w}\right|\\
+  &= \left|\sqrt{w^{t-1}} \exp(i|x-y|\sqrt w)\right|
+\end{align*}
+where the square roots above satisfy $\Im \sqrt w > 0$ for any $w \notin [0, \infty)$, and in particular when $\Im z > 0$. Changing variables back,
+$$|K(t, x, y, z)| = \left|\sqrt{(1-z)^{t-1}} \exp(i|x-y|\sqrt{1-z})\right|.$$
+
+We now apply Schur's test. In fact,
+$$||K(t, z)||_{L^2 \to L^2}^2 \leq \sup_{(x, y) \in \RR^2} ||K(t, x, \cdot, z)||_{L^1} \cdot ||K(t, \cdot, y, z)||_{L^1} = ||K(t, 0, \cdot, z)||_{L^1}^2$$
+by symmetry. Provided that $t \leq 2$,
+\begin{align*}
+  ||K(t, 0, \cdot, z)||_{L^1} &\leq \sqrt{|1-z|^{t-1}} \left|\int_{-\infty}^\infty \exp(i|y|\sqrt{1-z}) ~dy\right|\\
+  &\leq 2\sqrt{|1-z|^{t-1}} \int_0^\infty \exp(-y\Im\sqrt{1-z})~dy\\
+  &= \frac{2\sqrt{|1-z|^{t-1}}}{\Im \sqrt{1-z}}.
+\end{align*}
+Letting $K'(t, z)$ denote the integral kernel of $D_jR_0(z)_2$ we find a similar estimate, and unifying them proves the first claim.
+Again, the second claim follows by the Rellich-Kondrachov theorem.
+\end{proof}
+
+\section{Meromorphic continuation of resolvents with compactly supported potential}
+In the previous section  we let $\Sigma$ be a certain nonsingular algebraic curve, and meromorphically continued the free resolvent to $\Sigma$.
+Now let $V$ be a compactly supported, matrix-valued potential, $\rho$ a (scalar-valued) cutoff such that $\rho V = V$, and
+$$P_V = \diag(D^2 + 1, -D^2 - 1) + V.$$
+We must show that the resolvent $R_V(z) = (P_V - z)^{-1}$ has Riemann surface $\Sigma$.
+Since $\rho$ is arbitrary it suffices to show this for $\rho R_V(z) \rho$.
+Let $L > 0$ be so large that $\rho(x) = 0$ whenenever $|x| > L$.
+
+Let $||V||$ denote the operator norm of $V$ as a multiplication operator on $\mathcal H^0$; we will assume $||V|| < \infty$.
+Let $K = VR_0$.
+
+We recall that if $z \in \Spec P_0$ then $-z - 1$ or $z + 1 \in \Spec D^2 = [0, \infty)$, so $z \in \RR$ with $|z| \geq 1$.
+In particular, spectral theory gives
+\begin{equation}
+\label{R0 bound at infinity}
+||R_0(z)|| \leq \frac{1}{d(z, \Spec P_0)} \leq \frac{1}{\Im z}
+\end{equation}
+whenever $\Im z > 0$.
+
+\begin{lemma}
+Let $V \in L^\infty(\RR \to \CC^{2 \times 2})$.
+If $\Im z > 1/||V||$, $z \in U^+_+$, then $R_V(z)$ exists and
+\begin{equation}
+\label{resolvent equation}
+R_V(z) = R_0(z)(1 + K(z))^{-1}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+By (\ref{R0 bound at infinity}), if $\Im z > 1/||V||$ then
+$$||R_0(z)V|| \leq ||R_0(z)||\cdot ||V|| \leq \frac{||V||}{\Im z} < 1.$$
+This implies that $VR_0(z)$ is a sufficiently small perturbation that $1 + VR_0(z)$ is invertible.
+
+One has
+\begin{align*}(H_V - z)R_0(z) &= \begin{bmatrix}D^2 + V + 1 - z\\& -D^2 + V - 1 - z\end{bmatrix}\begin{bmatrix}(D^2 + 1 - z)^{-1}\\&(-D^2-1-z)^{-1}\end{bmatrix}\\
+ &= \begin{bmatrix}1 + V(D^2 + 1 - z)^{-1}\\&1 + V(-D^2 - 1 - z)^{-1}\end{bmatrix}
+ \\& = 1 + VR_0(z).
+ \end{align*}
+Inverting both sides,
+$$(1 + VR_0(z))^{-1} = R_0(z)^{-1}R_V(z)$$
+or in other words the claimed formula.
+\end{proof}
+
+\begin{theorem}
+Let $V \in L^\infty(\RR \to \CC^{2 \times 2})$.
+The resolvent $R_V$ extends to a meromorphic family of operators
+$$R_V(z): \mathcal H^0 \to \mathcal H^2$$
+on $\CC_+$.
+\end{theorem}
+\begin{proof}
+If $\Im z > 0$, then $K(z)$ is compact on $\mathcal H^0$ by Lemma \ref{sharp bound on upper half free resolvent}. In particular, $1 + K(z)$ is Fredholm, and is invertible if $\Im z$ is large enough.
+Hence by analytic Fredholm theory, $1 + K(z)$ is a meromorphic family of operators in $z \in \CC_+$. This implies the claim.
+\end{proof}
+
+\begin{theorem}
+Let $V \in L^\infty_{comp}(\RR \to \CC^{2 \times 2})$.
+The resolvent $R_V$ extends to a meromorphic family of operators
+$$\rho R_V(w) \rho: \mathcal H^0 \to \mathcal H^2$$
+on $\Sigma$.
+\end{theorem}
+\begin{proof}
+For any cutoff $\chi$, $\chi K \chi$ is a meromorphic family of operators on $\Sigma$, which acts on $L^2$, with poles at $p_\pm^j$.
+Since $\rho V = V$,
+$$(1 + K(w)(1-\rho))^{-1} = 1 - K(w)(1 - w).$$
+Defining $z$ by (\ref{recovering the standard branch}), if $\Im z \gg 1$ then $1 + K(z)$ is invertible, so
+$$(1 + K(w))^{-1} = (1 + K(w)\rho)^{-1}(1 - K(w)(1 - \rho)).$$
+Substituting into $R_V(w)$ we see that
+$$R_V(w) = R_0(w)(1 + K(w)\rho)^{-1}(1 - K(w)(1 - \rho)).$$
+
+Since $V = V\chi$, Lemma \ref{exponential bound on free resolvent} implies that $K(w)\rho$ is compact, so $1 + K(w)\rho$ is a meromorphic family of Fredholm operators, and by analytic Fredholm theory, $z \mapsto (1 + K(w)\rho)^{-1}$ is a meromorphic family of operators on $\Sigma$.
+But that implies that $\rho R_V \rho$ extends to a meromorphic family of operators on $\Sigma$.
+\end{proof}
+
+\begin{definition}
+A point $z \in \Sigma$ is a \dfn{resonance} of $V$ if the meromorphic continuation of $R_V$ to $\Sigma$ admits a pole at $z$.
+\end{definition}
+
+\begin{corollary}
+There are only finitely many resonances of $V$ in $\CC_+ = (U_+^+)_+$. In fact, if $z \in \CC_+$ and $|z|$ is large enough, then $z$ is not a resonance.
+\end{corollary}
+\begin{proof}
+By Lemma \ref{sharp bound on upper half free resolvent} we have
+$$||K(z)||_{\mathcal H^0 \to \mathcal H^0} \lesssim \langle z \rangle^{-1/2},$$
+at least when $|z| \gtrsim 1$ and $\Im z > 0$.
+We already proved
+$$R_V(z) = R_0(z)(1 + K(z)\rho)^{-1}(1 - K(z)(1 - \rho))$$
+provided that $||K(z)||_{\mathcal H^0 \to \mathcal H^0} < 1$, and in particular when $z \gtrsim 1$. So there are no resonances $z$ such that $|z| \gtrsim 1$. The finiteness claim follows by compactness of $\{z \in \CC: |z| \leq 1, ~\Im z \geq 0\}$.
+\end{proof}
+
+\section{Meromorphic continuation of resolvent with exponentially decaying potential}
+Let us first try this when $q = 0$. In that case, the cubic NLS linearizes to
+$$H = j(D^2 + 1) + \sech^2 x \begin{bmatrix} 4 & 2 \\ -2 & -4\end{bmatrix}$$
+where $j = \diag(1, -1)$. We consider the more general problem of taking the resolvent $R_V(z)$ of $H = j(D^2 + 1) + V$ where $V$ is a matrix-valued potential which satisfies $||V(x)|| = O(e^{-\gamma x})$ in operator norm, $\gamma > 0$.
+
+Applying the polar decomposition, there is a unitary matrix $U$ and a unique positive-semidefinite matrix $|V|$ such that $V = U|V|$.
+In particular the square root $\sqrt{|V|}$ is well-defined, so we may set $\sqrt V = U\sqrt{|V|}$.
+We note that $\sqrt V$ depends on the choice of $U$ in general (but is unique if $V$ is invertible).
+However, this is not terribly important, as the important property of $\sqrt V$ is that
+\begin{equation}
+\label{square root formula}
+\sqrt V \sqrt{|V|} = U \sqrt{|V|}^2 = V.
+\end{equation}
+
+\begin{lemma}
+One has
+$$1 - \sqrt V R_V(z) \sqrt{|V|} = (1 + \sqrt V R_0(z) \sqrt{|V|})^{-1}$$
+if $\Im z \gg 1$.
+\end{lemma}
+\begin{proof}
+Applying the resolvent equation (\ref{resolvent equation}) and (\ref{square root formula}), we get
+$$\sqrt V R_0(z) \sqrt{|V|} - \sqrt V R_V(z) \sqrt{|V|} = \sqrt V R_V(z) V R_0(z) \sqrt{|V|}.$$
+We conclude that
+\begin{align*}
+(1 - \sqrt V R_V(z) \sqrt{|V|})(1 + \sqrt V R_0(z)\sqrt{|V|}) &= 1 + \sqrt V R_V(z) V R_0(z)\sqrt{|V|} - \sqrt V R_V(z) V R_0(z)\sqrt{|V|} \\
+&= 1,
+\end{align*}
+so by a Neumann series argument using (\ref{R0 bound at infinity}), if $\Im z$ is large enough depending on $||V||_{L^\infty}$, the claim holds.
+\end{proof}
+
+Anyways, by analytic Fredholm theory for meromorphic families of operators (Gohberg-Segal theory) it suffices to show that $1 + \sqrt V R_0(z) \sqrt{|V|}$ is a meromorphic family of Fredholm operators, since clearly it has an inverse when $\Im z$ is so large that $R_V(z)$ exists.
+In fact we will show that $\sqrt V R_0(z) \sqrt{|V|}$ is a meromorphic family of \emph{trace-class} operators.
+This implies $1 + \sqrt V R_0(z) \sqrt{|V|}$ is Fredholm, as desired.
+
+Throughout we always let $z$ range over the upper half plane and $w$ range over $\Sigma$, or a Riemann surface $\Sigma_\gamma$ to be defined.
+
+Let
+$$S_L(w) = 1_{-L, L} R_0(w) 1_{-L, L}.$$
+Here we use the fact that $1_{-L, L}$ is positive-definite and equal to its own square root.
+The integral kernel of $S_L(w)_\sigma$ is
+$$S_L(w, x, y)_\sigma = 1_{[-L, L]^2}(x, y) \frac{e^{iw_\sigma|x - y|}}{w_\sigma}.$$
+Proposition 7.3 and Corollary 7.5 in Froese gives
+\begin{equation}
+\label{SL bound in TC}
+||S_L(w)_\sigma||_1 \lesssim \begin{cases}
+\frac{1}{\Im w_\sigma}, & \Im w_\sigma > 0,\\
+\frac{1}{1 + 1/|w_\sigma|}, & \Im w_\sigma = 0,\\
+L\frac{e^{4|\Im w_\sigma|}}{|\Im w_\sigma|}, & \Im w_\sigma < 0.
+\end{cases}
+\end{equation}
+\begin{proposition}
+Suppose that $V(x) = O(e^{-\gamma |x|})$ in $L^\infty$ operator norm, $\gamma > 0$. Let
+$$\Sigma_\gamma = \{w \in \Sigma: \Im w_1, \Im w_2 > \frac{\gamma}{8}\};$$
+then there is a meromorphic continuation of $\sqrt V R_V \sqrt{|V|}$ to a meromorphic family of trace-class operators on $\Sigma_\gamma$.
+\end{proposition}
+\begin{proof}
+We first claim that
+\begin{equation}
+\label{convergence in trace}
+\lim_{L \to \infty} \sqrt V S_L(w) \sqrt{|V|} = \sqrt V R_0(w) \sqrt{|V|}
+\end{equation}
+in trace, at least provided $w \in \Sigma_\gamma$.
+Since $V(x) = O(e^{-\gamma|x|})$, there is a constant $C > 0$ such that
+\begin{equation}
+\label{bounds on sqrt V}
+||\sqrt{|V|}(x)||_\infty \leq C\exp\left(-\frac{\gamma |x|}{4}\right).
+\end{equation}
+Let us bound $Ce^{-\gamma|x|/2}$ by a step function $w$, by setting, for $|x| \in (k - 1, k]$, $w(x) = Ce^{-k\gamma/2}$.
+Then
+$$||\sqrt V|| \leq ||\sqrt{|V|}|| \leq ||w||$$
+in trace (since $||\sqrt V|| \leq ||U|| \cdot ||\sqrt{|V|}||$ where $||U||$ is in operator norm, hence $||U|| = 1$) so to prove (\ref{convergence in trace}) it suffices to check the case $\sqrt V = w$.
+In the proof of Froese's Lemma 7.6 he lets $\alpha_1 = e^{-\gamma/2}$ and $\alpha_k = e^{-k\gamma/2} - e^{-(k-1)\gamma/2}$ otherwise; then from (\ref{SL bound in TC}) and (\ref{bounds on sqrt V}),
+\begin{align*}||wS_Lw - wR_0w|| &\lesssim \sum_\sigma \sum_k \alpha_k \sum_{j > L} je^{-(\gamma-4 \Im w_\sigma)j} + \sum_\sigma \sum_{k > L} \alpha_k \sum_j je^{-(\gamma-4 \Im w_\sigma)j}\\
+&= Ce^{-\gamma/2}\sum_\sigma \sum_{j > L} je^{-(\gamma/2 -4 \Im w_\sigma)j} + Ce^{-L\gamma/2} \sum_\sigma \sum_j je^{-(\gamma/2 -4 \Im w_\sigma)j}
+\end{align*}
+which converges for fixed $L$ as long as for every $\sigma$, $\gamma > 8 \Im w_\sigma$. In particular we obtain the convergence in trace (\ref{convergence in trace}).
+Now the convergence in trace implies the proposition.
+\end{proof}
+the physical sheet lies in $\bigcap_\gamma \Sigma_\gamma$, and $\bigcup_\gamma \Sigma_\gamma = \Sigma$.
+
+
+
+
+
+
+
+
+
+
+\section{garbage}
+\begin{lemma}
+$\Sigma$ is a nonsingular algebraic curve.
+\end{lemma}
+\begin{proof}
+We can locally linearize $F$ as
+$$\nabla F(z, w_1, w_2) = \begin{bmatrix}-1 & 2w_1 & 0\\1 & 0 & 2w_2\end{bmatrix}.$$
+Then $\rank \nabla F(z, w_1, w_2) = 2$ as long as it is false that $w_1 = w_2 = 0$.
+However the set $Z = \{(z, w_1, w_2): w_1 = w_2 = 0\}$ does not meet $\Sigma$ since on $Z \cap \Sigma$, $-z = -1 = z$.
+Thus $F$ is a submersion $\CC \setminus Z \to \CC^2$.
+
+Since $\CC^3 \setminus Z$ is an open submanifold of $\CC^3$ and $F$ is a submersion, it follows that $\Sigma$ is a complex manifold of dimension $1$, defined to be the zero set of the polynomial $F$.
+Therefore $\Sigma$ is a nonsingular algebraic curve.
+\end{proof}
+\begin{lemma}
+The charts $U_\sigma^\tau$ are disjoint and cover the open dense subset
+$$\Sigma' = \{(z, w_1, w_2) \in \Sigma: z \notin S\}$$
+of $\Sigma$.
+\end{lemma}
+\begin{proof}
+Since $\Sigma'$ is a union of the open sets $U_\sigma^\tau$ it is open. Moreover if $(z, w_1, w_2) \in \Sigma \setminus \Sigma'$ then $z \in S$ and there is a $z' \in \CC \setminus S$ which approximates $z$ arbitrarily well. We can then choose square roots $w_1',w_2'$ of $z'$ which are close to $w_1,w_2$, and $(z', w_1', w_2') \in \Sigma'$. Therefore $\Sigma'$ is dense.
+
+Let $(z, w_1, w_2) \in \Sigma'$. We claim that $w_1 = \sqrt{z-1}_{\sgn \Im w_1}$ and $w_2 = \sqrt{-z-1}_{\sgn \Im w_2}$.
+In fact,
+$$w_1^2 = z - 1.$$
+Thus $w_1$ is a square root of $z - 1$, and $z - 1 \notin [0, \infty)$ implies that $\Im w_1 \neq 0$.
+Since $z - 1$ only has two square roots, one in each of $\CC_+$ and $\CC_-$, we can recover $w_1$ by the claimed formula.
+A similar argument works for $w_2$.
+In particular,
+$$(z, w_1, w_2) \in U_{\sgn \Im w_1}^{\sgn \Im w_2}.$$
+
+Finally, to see that the charts are disjoint, note that if $w_j \in \RR$ then $z \in S$, a contradiction. Thus
+$$U_\sigma^\tau = \{(z, w_1, w_2) \in S: \sgn \Im w_1 = \sigma,~\sgn \Im w_2 = \tau\}.$$
+In particular the $U_\sigma^\tau$ are disjoint.
+\end{proof}
+
+It will be convenient to consider the coordinate system
+\begin{align*}
+w_1 &= i\sqrt 2 \frac{1 - t^2}{1 + t^2}\\
+w_2 &= i\sqrt 8 \frac{t}{1 + t^2}
+\end{align*}
+which defines an isomorphism $\psi: \PP^1 \setminus \{\pm i\} \to \Sigma$, $\psi(t) = w$.
+Indeed, $\psi$ is just the usual algebraic parametrization of a conic, valid since $\overline \Sigma$ had genus $0$.
+In these coordinates, (\ref{free analytic continuation}) gives
+$$
+R_0(x, y, \psi(t))_1 = \frac{1}{\sqrt 2} \exp\left(-\sqrt 2\frac{1 - t^2}{1 + t^2}\right) \frac{1 + t^2}{t}
+$$
+which has a pole at $t = 0$ and essential singularities at $t = \pm 1$. Similarly,
+$$R_0(x, y, \psi(t))_2 = -\frac{1}{\sqrt 8} \exp\left(-\sqrt 8 \frac{1 - t^2}{1 + t^2}\right) \frac{1 + t^2}{1 - t^2}$$
+which has poles at $t = \pm 1$ and essential singularities at $t = \pm 1$.
+However, neither admits branching, so $R_0(x, y, \psi)$ is a meromorphic function on $\PP^1 \setminus \{\pm i\}$ and a holomorphic function on $\PP^1 \setminus \{0, \pm 1, \pm i\}$ which does not extend to a larger Riemann surface.
+Let $G$ be a Galois group, say of $Z \to X$. Then if $H$ is a normal subgroup of $G$, we can find a Galois cover $Y \to X$ such that $Z \to Y$ is a Galois cover of $Y$, $\Gal(Y \to X) = G/H$, and $\Gal(Z \to Y) = H$.
+Conversely, every Galois group is a quotient of $\pi_1(X)$ as we reasoned above.
+This is one form of the fundamental theorem of Galois theory.
+
+\begin{lemma}
+Let $X,Y$ be connected Riemann surfaces, $f: X \to \CC^m$ and $g: Y \to \CC^m$ holomorphic, and $\iota: X \to Y$ a holomorphic embedding.
+Then $(Y, g, \iota)$ is an analytic continuation of $f$ if and only if there is a holomorphic cover $\pi: Y \to X$ such that $\Gal(\pi)$ is a quotient of the monodromy group $\pi_1(X)/H$ of $f$ and $\iota$ is a section of $\pi$.
+\end{lemma}
+\begin{proof}
+This follows from the definitions once we declare that $\pi^{-1}(x)$ should consist of those elements $y \in Y$ such that there is a branch $j$ of $f$ (i.e. an embedding $j: X \to Y$ such that $g \circ j = f$) such that $j(x) = y$.
+Then clearly any such $j$ is a section of $\pi$ (in particular this is true for $\iota$) and $\pi_1(X)/H$ acts on $Y$ by permuting branches (i.e. by deck transformations).
+\end{proof}
+As a consequence the maximal such connected Riemann surface $Y$ must make the relevant diagrams commute that $Y$ be final in the category of analytic continuations.
+
+\begin{definition}
+A variety $X$ is said to be an \dfn{irreducible variety} if there is an irreducible polynomial $g$ such that $X$ is defined by $g = 0$.
+\end{definition}
+
+We now appeal to the Galois theory of covering spaces.
+\begin{definition}
+A \dfn{deck transformation} of a holomorphic cover $\pi: Y \to X$ is an isomorphism $\varphi: Y \to Y$ such that $\varphi$ permutes the fibers of $\pi$: $\pi \circ \varphi = \pi$.
+The group of deck transformations of $\pi$ is known as the \dfn{Galois group} $\Gal(\pi)$ of $\pi$.
+\end{definition}
+The fundamental group $\pi_1(X)$ acts on a cover $\pi: Y \to X$ by deck transformations, so we have a morphism of groups
+$$\pi_1(X) \to \Gal(\pi).$$
+That is, if $\gamma$ is a loop, we may lift $\gamma$ along $\pi$, say to a path $\widetilde \gamma$, which may not be a loop, and if $y \in Y$ we may choose the beginning point of $\widetilde \gamma$ to be $y$ (simply by taking the basepoint of $\pi_1(X)$ to be $\pi(y)$ -- so this only makes sense if $X$ is connected).
+Then the endpoint of $\widetilde \gamma$ is the image of $y$ under $\gamma$.
+
+For example, if $X = \CC/\Gamma$ is an elliptic curve (so $\Gamma$ is a lattice), then the projection map $\CC \to X$ is a holomorphic cover, and $\pi_1(X) \cong \ZZ^2$.
+To see how $\pi_1(X)$ acts on $\CC$, fix $z \in \CC$; then $z + \Gamma$ is a point on the elliptic curve $X$.
+If $\gamma \in \pi_1(X)$ is a loop based at $z + \Gamma$, $\gamma$ lifts to a path $\widetilde \gamma$ through $\CC$ which starts at $z$ and ends at some point $w$ such that $z - w \in \Gamma$. Thus $\gamma z = w$.
+Moreover $z - w$ did not depend on $z$, but only on $\gamma$, so $\gamma$ acts on $\CC$ by translation by $z - w$.
+In fact, the above construction gives an explicit isomorphism $\ZZ^2 \to \Gamma$.
+
+
+\begin{theorem}
+Let $U \subseteq \CC$ be an open set, $f: U \to \CC^m$ a holomorphic function, and $F: \CC^{1 + m} \to \CC^m$ a polynomial such that:
+\begin{enumerate}
+\item $F$ is a holomorphic submersion.
+\item The variety $X$ defined by $F = 0$ is irreducible.
+\item $F(x, f(x)) = 0$ for every $x \in U$.
+\end{enumerate}
+Let $\pi: X \to \CC^m$ be the natural projection and $\iota: U \to X$, $\iota(x) = (x, f(x))$. Then $(X, \iota, \pi)$ is the maximal analytic continuation of $f$.
+\end{theorem}
+\begin{lemma}
+A variety is irreducible iff it is connected.
+\end{lemma}
+\begin{proof}
+Something with Riemann-Roch and cohomology. See book 2 of Shafarevich.
+\end{proof}
+\begin{proof}[Proof of theorem]
+Since $F$ is a holomorphic submersion, $X$ is a complex manifold of dimension $1+m - m = 1$, hence a Riemann surface.
+Since $X$ is nonsingular, $\pi$ is holomorphic, and obviously $\pi$ is an analytic continuation of $f$.
+In particular $X \to Y$, $Y$ the domain of any choice of analytic continuation of $f$ to a discontinuous function inside $\CC$, is a holomorphic cover.
+Since $X$ is irreducible it is connected.
+
+Moreover, if $\pi_1(Y)/H$ is the monodromy group of $f$, then clearly $\pi_1(Y)/H$ acts freely on $X$; otherwise $\pi$ would have a nontrivial monodromy group. Therefore $X$ is the maximal holomorphic cover of $Y$.
+\end{proof}
+
+\subsection{Meromorphic continuation with H\"ormander estimates}
+
+As a warm up, we meromorphically continue the resolvent $R$ of $D_x^2 + \sech^2 x$ on $\RR$.
+We do this by taking a change of coordinates $y = \tanh x$, so that $dy = \sech^2 x~dx$ and $\sech^2 = 1 - y^2$, thus
+$$D_x^2 + \sech^2 x = (1 - y^2)^2D_y^2 + 1 - y^2.$$
+An outgoing solution for this potential satisfies
+$$u(x) \sim e^{i\lambda x\sgn x}$$
+at least when $|x| \gg 1$. Using
+$$2 \atanh y = \log\frac{1+y}{1-y}$$
+we see that
+$$u(y) \sim \left(\frac{1+y}{1-y}\right)^{\sgn y \frac{i\lambda}{2}}$$
+at least when $|y| \sim 1$. That is, if $u$ is a smooth outgoing solution, then there exists a smooth function $f$ such that $f'(\pm 1) = 0$ and
+$$u(y) = f(y)\left(\frac{1+y}{1-y}\right)^{\sgn y \frac{i\lambda}{2}}.$$
+
+Now $\sgn$ is not continuous at $0$ so this is extremely annoying to deal with. We restrict to the interval $y > 0$ by writing
+$$u = u_0 + u_1$$
+where $u_0$ is even, $u_1$ is odd (here $0,1 \in \ZZ/2$, which creates an obvious graded ring), thus $u_0'(0) = 0$ and $u_1(0) = 0$. We now assume that $u = u_0$ or $u = u_1$, thus
+$$u(y) = f(y)\left(\frac{1+y}{1-y}\right)^{\frac{i\lambda}{2}}.$$
+We now conjugate the operator $Q(\lambda) = (1 - y^2)^2D_y^2 + 1 - y^2 - \lambda^2$ to get a PDE $P(\lambda)f = 0$ for $f$.
+
+Suppose that $Q(\lambda)u = F$. Let
+$$P(\lambda) = \left(\frac{1+y}{1-y}\right)^{-\frac{i\lambda}{2}} Q(\lambda) \left(\frac{1+y}{1-y}\right)^{\frac{i\lambda}{2}}.$$
+Then
+$$P(\lambda)f(y) = \left(\frac{1+y}{1-y}\right)^{-\frac{i\lambda}{2}} Q(\lambda)u(y) = \left(\frac{1+y}{1-y}\right)^{-\frac{i\lambda}{2}}F(y).$$
+Thus we have an equation for $f$.
+Moreover,
+\begin{align*}
+P(\lambda) &= \left(\frac{1+y}{1-y}\right)^{-\frac{i\lambda}{2}}\left((1 - y^2)^2 D_y^2 + 1 - y^2 - \lambda^2\right)\left(\frac{1+y}{1-y}\right)^{\frac{i\lambda}{2}}\\
+&= (1 - y^2)^2 \left(\frac{1+y}{1-y}\right)^{-\frac{i\lambda}{2}} D_y^2 \left(\frac{1+y}{1-y}\right)^{\frac{i\lambda}{2}} + 1 - y^2 - \lambda^2\\
+&= (1 - y^2)^2 D_y^2 + 2\lambda(1 - y^2)D_y + \lambda^2 - 2iy\lambda + 1 - y^2 - \lambda^2\\
+&= (1 - y^2)^2 D_y^2 + 2\lambda(1 - y^2)D_y - 2\lambda iy + 1 - y^2.
+\end{align*}
+
+\begin{conjecture}
+Let $X_s(\lambda) = \{u \in H^{s+1}: P(\lambda)u \in H^s\}$. Then $P(\lambda)$ is a Fredholm operator $X_s(\lambda) \to H^s$.
+\end{conjecture}
+\begin{proof}[Proof idea]
+On compact subsets of
+$$\ell = \RR_+ \setminus \{1\}$$
+the operator $P(\lambda)$ is uniformly elliptic, thus
+$$||\chi u||_{H^{s+1}} \leq ||\chi u||_{H^{s+2}} \lesssim ||P(\lambda)u||_{H^s} + ||u||_{H^{-\infty}}$$
+if $\chi \in C^\infty_{comp}(\ell)$. To see this, note that on the support of $\chi$, $\pm p(\lambda, y, \eta) \sim \eta^2 + \lambda\eta \mp \lambda + 1$ depending on the sign of $\log y$, thus
+\begin{align*}||\chi u||_{H^{s+2}} &\lesssim ||P(\lambda)\chi u||_{H^s} + ||\chi u||_{H^s} \\
+&\lesssim ||P(\lambda)u||_{H^s} + ||u(P(\lambda) + 1)\chi||_{H^s} \lesssim ||P(\lambda) u||_{H^s} + ||u||_{H^{-\infty}}.
+\end{align*}
+
+We now appeal to H\"ormander's propagation estimates.
+\begin{lemma}
+Let $Q$ be a pseuodifferential operator of order $2$ whose principal symbol $q$ satisfies:
+\begin{enumerate}
+\item $q$ is real and homogeneous of degree $2$.
+\item If $q(y, \eta) = 0$ then $H_p$ and $y\partial_y$ are linearly independent at $(y, \eta)$.
+\end{enumerate}
+If $A,B$ are pseudodifferential operators of order $0$ such that $\WF(A)$ is forward controlled by $\Ell(B)$, then
+$$||Au||_{H^{s+1}} \lesssim ||Qu||_{H^s} + ||Bu||_{H^{s+1}} + ||u||_{H^{-\infty}}.$$
+\end{lemma}
+This doesn't quite work but something similar to it will, to prove good bounds on $P(\lambda)$ when $y$ is close to $1$.
+We should end up with an estimate like
+\begin{equation}
+\label{Xs bound on u}
+||u||_{X^s(\lambda)} \lesssim ||P(\lambda)u||_{H^s} + ||u||_{H^{s_0}}
+\end{equation}
+for some $s_0 > 0$ and all $s > s_0$.
+
+Now we claim $\ker P(\lambda)$ is finite-dimensional. In fact (\ref{Xs bound on u}) implies for every $u \in \ker P(\lambda)$
+$$||u||_{H^{s+1}} \lesssim ||u||_{H^{s_0}} \leq ||u||_{H^s},$$
+so that $\ker P(\lambda)$, endowed with the topology of $H^s$, embeds compactly in $H^{s+1}$ by the Rellich-Kondrachov theorem. Since $\ker P(\lambda)$ is closed it follows that the unit ball of $\ker P(\lambda)$ is compact, so $\dim \ker P(\lambda) < \infty$.
+
+We now show that $\dim \ker P^*(\lambda) < \infty$. Let $v \in H^{-s}$ be smooth, $P^*v = 0$.
+I think $P^*$ is uniformly elliptic and thus Fredholm on compact subsets of $\ell$, see this graph of its characteristic variety(?) https://www.desmos.com/calculator/ylpea2xcoe
+Therefore the only obstruction to $v$ being a finite-dimensional set are at $1$.
+\end{proof}
+
+
+\printbibliography
+
+
+\end{document}

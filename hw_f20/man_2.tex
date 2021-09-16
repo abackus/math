@@ -1,0 +1,300 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Smooth manifolds, HW 2} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[1a]
+Let $f$ be a function on $M$ which is locally bounded from above. Show that there is a $g \in C^\infty(M)$ with $f \leq g$ on $M$.
+\end{exer}
+
+By assumption, for every $x \in M$ there is an open set $U_x \ni x$ and a constant $c_x$ such that $f|U_x \leq c_x$.
+Then the $(U_x)_{x \in M}$ form an open cover $\mathcal U$ of $M$, which has a locally finite refinement $\mathcal V = (V_i)_{i \in I}$, since $M$ is paracompact.
+Given $i \in I$, we choose $x \in M$ such that $V_i \subseteq U_x$. Then $f|V_i = (f|U_x)|V_i \leq c_x$, so we set $d_i = c_x$.
+We then choose a smooth partition of unity $(\varphi_i)_{i \in I}$ which is subordinate to $\mathcal V$.
+So we can define
+$$g(x) = \sum_{i \in I} d_i \varphi_i(x).$$
+To see that $f \leq g$, let $j(x)$ be the index such that $x \in V_{j(x)}$ and $d_{j(x)}$ is least possible.
+Since $\mathcal V$ is locally finite, there are only finitely many possible choices of $d_{j(x)}$, and so $j(x)$ is well-defined since we can always take the least one.
+Then
+$$g(x) = d_{j(x)} \varphi_{j(x)}(x) + \sum_{\substack{i \in I\\i \neq j(x)}} d_i \varphi_i(x) \geq d_{j(x)} \left(\varphi_{j(x)}(x) + \sum_{\substack{i \in I\\i \neq j(x)}} \varphi_i(x)\right) = d_{j(x)} \geq f(x).$$
+
+\begin{exer}[1b]
+Let $f$ be an upper semicontinuous function and $h > f$ a lower semicontinuous function.
+Show there is a $g \in C^\infty(M)$ with $f < g < h$ on $M$.
+\end{exer}
+
+For every $t \in \RR$, the set $U_t = \{f < t < h\} = \{f < t\} \cap \{t < h\}$ is open by assumption.
+Since $f < h$, $\mathcal U = (U_t)_{t \in \RR}$ is an open cover of $M$.
+Since $M$ is paracompact, there is a locally finite refinement $\mathcal V = (V_i)_{i \in I}$ of $\mathcal U$, and so there are constants $c_i \in \RR$ such that $f < c_i < h$ on $V_i$; namely, if $V_i \subseteq U_t$, then we can take $c_i = t$.
+Then we can choose a smooth partition of unity $(\varphi_i)_{i \in I}$ subordinate to $\mathcal V$ and define
+$$g(x) = \sum_{i \in I} c_i \varphi_i(x).$$
+Now let $j_-(x)$ be the index which minimizes $c_{j_-(x)}$ and satisfies the constraint $x \in V_{j_-(x)}$; similarly we define $j_+(x)$ to be the index which maximizes $c_{j_+(x)}$ subject to the constraint $x \in V_{j_+(x)}$.
+Since $\mathcal V$ is locally finite, there are only finitely many choices of $c_{j_\pm(x)}$ and so a minimum and maximum must exist.
+Then
+\begin{align*}
+f(x) &< c_{j_-(x)} = c_{j_-(x)} \sum_{i \in I} c_{j_-(x)} \varphi_i(x) \\
+&\leq \sum_{i \in I} c_i \varphi_i(x) = g(x) \\
+&\leq \sum_{i \in I} c_{j_+(x)} \varphi_i(x) = c_{j_+(x)} < h(x).
+\end{align*}
+This proves $f < g < h$.
+
+\begin{exer}[1c]
+Let $E \subseteq M$, $f \in C(E)$, and $\delta: E \to (0, \infty)$ lower semicontinuous.
+Show that there is an open $W \supseteq E$ and a $g \in C^\infty(W)$ with $|f - g| < \delta$ on $E$.
+\end{exer}
+
+The below argument is a little tricky, but the key idea is to construct an open set $W$ such that $f$ admits an extension to $W$.
+Of course if $E$ is open then this is unnecessary, but otherwise it will be convenient to assume that $f$ blows up on $\partial W$, because this will force $W$ to be open.
+Then it is easy to modify the previous exercise to show that $g$ exists.
+
+Let us start with a generality. If $F \subseteq M$ and $h \in C(F)$, we say that $h$ is \emph{extensible} if there is a proper superset $F^\sharp$ of $F$ such that $h$ extends to a function $h^\sharp \in C(F^\sharp)$.
+
+\begin{lemma}
+Let $F \subseteq M$ and $h \in C(F)$. If $h$ is inextensible, then $F$ is open.
+\end{lemma}
+\begin{proof}
+We prove this by contrapositive.
+If $F$ is not open, then there is a point $x \in F \cap \partial F$.
+Thus for any open set $U \ni x$, there is a point $y \in U \setminus \overline F$.
+Choosing a sequence of such $U$ shrinking down to the empty set, we obtain a sequence $x_n \to x$ where the $x_n$ are isolated from $F$, and therefore define $h^\sharp(x_n) = h(x)$.
+Let $F^\sharp$ consist of $F$ and the image of the sequence $(x_n)_n$, and let $h^\sharp = h$ on $F$.
+We claim that $h^\sharp$ is a continuous extension of $h$ to $F^\sharp$, so that $h$ is extensible.
+
+Since $M$ is second countable, it is first countable and therefore sequential.
+So to show that $h^\sharp$ is continuous, it suffices to show that every sequence $(y_n)_n$ in $F^\sharp$, if $y_n \to y$ then $g^\sharp(y_n) \to g^\sharp(y)$.
+This is clear if $y_n \in F$ and $y \in F$, and on the other hand, if $y \notin F$, then $y = x_n$ for some $n$, so $y$ is an isolated point in the topology of $F^\sharp$ and the claim is trivial.
+Thus the only way anything could possibly go wrong is if a subsequence of $(y_n)_n$ is a subsequence of $(x_n)_n$.
+Passing to subsequences we actually can assume $y_n = x_n$.
+But then $y_n \to x$ and $h^\sharp(y_n) = h^\sharp(x)$, so the claim follows.
+\end{proof}
+
+We now use Zorn's lemma to assert the existence of an open set $W_1$ such that $f$ extends to a continuous function $f^\sharp$ on $W$.
+Let $\dom$ denote the map that sends a function to its domain.
+Let $(\mathcal F, \subseteq)$ be the partially ordered set whose elements are continuous functions $h$ such that $E \subseteq \dom g$ and $h|E = f$, where $h \subseteq h^\sharp$ iff $g^\sharp$ is an extension of $g$, thus $\dom h \subseteq \dom h^\sharp$ and $h^\sharp|\dom h = h$.
+Then $\mathcal F \ni f$ is nonempty, and if $h$ is maximal, then $h$ is inextensible and therefore $\dom h$ is open, by the lemma.
+Thus the following lemma completes the proof of the assertion.
+
+\begin{lemma}
+For every chain $\mathcal C$ in $\mathcal F$, there is an upper bound of $\mathcal C$.
+\end{lemma}
+\begin{proof}
+For every $x \in M$, if there exists a $h^\flat \in \mathcal C$ such that $x \in \dom h^\flat$, set $h(x) = h^\flat(x)$, and otherwise declare that $x \notin \dom h$.
+The choice of $h^\flat$ does not matter, because $h^\flat$ is an extension of the least function in $\mathcal C$ which admits $x$ in its domain.
+In particular, it follows that $h$ is an extension of any element of $\mathcal C$, so $h$ is an upper bound of $\mathcal C$.
+\end{proof}
+
+We now note that we can run the same argument above on $\delta$, with the word ``continuous" replaced with ``lower semicontinuous", to obtain an open set $W_2$ such that $\delta$ extends to a lower semicontinuous function $\delta^\sharp$ on $W_2$.
+Now let $W = W_1 \cap W_2$. Then $W$ contains $E$ and is open.
+Besides, $f^\sharp$ is lower semicontinuous on $W$ and $f^\sharp - \delta^\sharp$ is upper semicontinuous on $W$, and $W$ is a smooth manifold.
+So by the previous exercise, there is a smooth function $g$ with $f^\sharp - \delta^\sharp < g < f^\sharp$ on $W$.
+Restricting to $E$ we see the claim.
+
+\begin{exer}[1.4]
+Let $E \subseteq M$ be closed, $f \in C(E)$, and $\delta: E \to (0, \infty)$ lower semicontinuous. Show that there is a $g \in C^\infty(M)$ with $|f - g| < \delta$ on $E$.
+\end{exer}
+
+Since $M$ is locally euclidean and separation axioms are local, $M$ satisfies Axiom $T_4$ and therefore, since $E$ is closed, we can extend $f$ to a continuous function $f^\sharp$ on $M$.
+Moreover, $\delta$ extends to $\delta^\sharp$, a lower semicontinuous function on $M$, by setting $\delta^\sharp(x) = +\infty$ for any $x \notin E$; since $E$ is closed, if $x \notin E$, then there is an open neighborhood of $x$, namely $M \setminus E$, on which, for any $t \in \RR$, $\delta^\sharp(x) > t$; therefore $\delta^\sharp$ is lower semicontinuous.
+
+Now we can apply Exercise 1.2 to find a smooth function $g$ with $f - \delta < g < f$, as in the solution to Exercise 1.3.
+
+\begin{exer}[1.5]
+Let $M = \RR^n$, $E = \{x \in \RR^n: |x| < 1,~x_n \geq 0\}$. Show that in Exercise 1.3 we can take $W$ so that $\RR^n \setminus W = \{x \in \RR^n: |x| = 1,~x_n \geq 0\}$.
+\end{exer}
+
+This readily follows from Exercise 1.3 and a lemma from class:
+
+\begin{lemma}
+Let $g^\flat \in C^\infty(E)$. Then there is an open $W$ such that
+$$M \setminus W \subseteq \overline E \setminus E$$
+and an extension $g$ of $g^\flat$ to $W$.
+\end{lemma}
+
+Let $f \in C(E)$, $\delta: E \to (0, \infty)$ lower semicontinuous.
+After applying Exercise 1.3 we obtain an open set $W^\flat \supseteq E$ and $g^\flat \in C^\infty(W^\flat)$ such that $|f - g^\flat| < \delta$ on $E$.
+We now restrict $g^\flat$ to $E$, and apply the lemma from class with $F = E$ to obtain an extension $g$ of $g^\flat$ to an open set $W \subseteq \overline E \setminus E$.
+Now if $x \in \overline E$ then either $|x| = 1$ and $x_n \geq 0$, or $|x| \leq 1$ and $x_n = 0$.
+In the latter case $x \in E$. So $\overline E \setminus E$ is contained in $\{x \in \RR^n: |x| = 1, ~x_n \geq 0\}$, a closed set whose complement is contained in $W$.
+In general we can do no better since $f$ may blow up along $\partial E$.
+
+
+\begin{exer}[2.1]
+Let $T$ be a linear automorphism of $\RR^n$ and $1 \leq k \leq n - 1$. Show that $T$ induces a diffeomorphism $\tilde T: G_{k,n} \to G_{k,n}$.
+\end{exer}
+
+Let $V \in G_{k,n}$, and let $\tilde T(V)$ be the image of $V$ under $T$; then $\tilde T(V) \in G_{k,n}$.
+We must show that $\tilde T$ is a diffeomorphism. Actually, $\tilde T^{-1} = \widetilde{T^{-1}}$, and $T^{-1}$ is also a linear automorphism, so it suffices to show that $\tilde T$ is smooth; then it suffices to show that $\tilde T$ is smooth in a small neighborhood of $V$.
+
+We will use the canonical inner-product structure on $\RR^n$ (though any inner-product structure will do).
+Given a $(n-k)$-dimensional subspace $Q$ of $\RR^n$, let $U_Q$ be the set of $W \in G_{n,k}$ such that $U \cap W$ is trivial.
+Then $U_Q$ is a chart in the usual way (thus any $W \in U_Q$ is identified with the unique linear map $A: Q^\perp \to Q$ such that the graph of $A$ is $W$), and for any $W \in G_{k,n}$, $W$ is identified with $0$ in $U_{W^\perp}$.
+Moreover, $\tilde T(W)^\perp = \tilde T(W^\perp)$ whence $\tilde T$ sends $U_{W^\perp}$ to $U_{\tilde T(W)^\perp}$.
+
+If $W \in U_{V^\perp}$, then
+$$W = \{(\proj_Vw, \proj_{V^\perp}w) \in V \oplus V^\perp: w \in W\}$$
+so $W$ is identified with the linear map $\Gamma_{W,V} = \proj_{V^\perp} \circ (\proj_V|W)^{-1}$.
+Now if $x \in W$, then $\proj_V|W(x)$ is the closest point in $V$ to $W$ (under the given inner product), and the closest point to $\proj_V|W(x)$ in $V$ is $x$, but also $\proj_W|V(\proj_V|W(x))$, whence $(\proj_V|W)^{-1} = \proj_W|V$. In particular,
+$$\Gamma_{W,V} = \proj_{V^\perp} \circ \proj_W: V \to V^\perp.$$
+
+With all this setup, it now suffices to show that the map $\Gamma_{W,V} \mapsto \Gamma_{\tilde T(W),\tilde T(V)}$ is smooth, and working in the coordinate charts $U_{V^\perp}$ and $U_{\tilde T(V)^\perp}$ it then suffices to show that the map
+$$T_\natural(\proj_W) = \proj_{\tilde T(W)}$$
+is smooth. If $A: \RR^n \to \RR^k$ is a matrix whose columns span $W$ then $\proj_W = A(A^tA)^{-1}A^t$ and if $S = T|W$ then $SA: \RR^n \to \RR^k$ is a matrix whose columns span $\tilde T(W)$, so
+$$T_\natural(\proj_W) = SA((SA)^tSA)^{-1}(SA)^t$$
+which is a coordinatewise rational function of $\proj_W$, and hence smooth since $T_\natural(\proj_W)$ is finite for $W$ in a neighborhood of $V$, hence $T_\natural$ has no poles there.
+
+\begin{exer}[2.2]
+Let $J_{k,n}$ be the set of $A \in \RR^{n \times n}$ with $A^2 = A$, $A^t = A$, $\tr A = k$.
+Define $\sigma: J_{k,n} \to G_{k,n}$ so that $\sigma(A)$ is the span of the columns of $A$.
+Show that $\sigma$ is a homeomorphism and $\sigma^{-1}: G_{k,n} \to \RR^{n \times n}$ is smooth.
+\end{exer}
+
+The elements of $J_{k,n}$ are orthogonal projections onto subspaces of $\RR^n$ of dimension $k$.
+Following the hint, we define
+\begin{align*}
+\mu: K_{k,n} &\to J_{k,n}\\
+B &\mapsto B(B^tB)^{-1}B^t
+\end{align*}
+where $K_{k,n}$ consists of matrices in $\RR^{n \times k}$ of full rank.
+If $B$ is full rank, then so is $B^tB$, so $(B^tB)^{-1}$ exists.
+Moreover, $\mu(B)^t = \mu(B)$, $\mu(B)^2 = \mu(B)$, and $\mu(B)$ has the same rank as $B$, so $\mu$ is well-defined.
+It is a rational map with no poles in $K_{k,n}$, therefore a smooth map.
+Moreover, if $V \in G_{k,n}$, we let $\mu(V)$ be $\mu(B)$ where $B \in \RR^{n \times k}$ has columns that form a basis of $V$.
+The choice of basis does not matter, since then $\mu(V) = \proj_V$ regardless; however, the fact that $\mu$ is smooth as a map on $K_{k,n}$ implies that $\mu$ is smooth as a map on $G_{k,n}$, which is the quotient of $K_{k,n}$ by the equivalence relation ``has the same image".
+Moreover, $\sigma(\mu(V)) = \sigma(\proj_V) = V$ while $\mu(\sigma(\proj_V)) = \mu(V) = \proj_V$, so $\mu = \sigma^{-1}$.
+This implies that $\sigma^{-1}$ exists and is a smooth bijection.
+
+It now suffices to show that $\mu$ is open, in order that $\sigma$ be a homeomorphism.
+The open sets $U_Q$, $Q \in G_{n-k,n}$, form a basis for the topology of $G_{k,n}$ and so it suffices to show that
+$$\mu(U_Q) = \{\proj_V \in J_{k,n}: V \cap Q = 0\}$$
+is open. If $\kappa \in \RR^{n \times (n-k)}$ is a matrix whose columns form a basis for $Q$, then $V \cap Q = 0$ iff the block matrix
+$$\begin{bmatrix}
+\proj_V & \kappa
+\end{bmatrix} \in \RR^{n \times (2n-k)}$$
+has rank $n$, which happens if that matrix has full rank, which is an open condition (since one can simply check that the appropriate minors have nonzero determinant).
+Therefore $\mu$ is open.
+
+
+\end{document}

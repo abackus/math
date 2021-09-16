@@ -1,0 +1,613 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\Hess}{\operatorname{Hess}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\DeclareMathOperator{\rad}{rad}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+\DeclareMathOperator{\Diffeo}{Diffeo}
+
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Ad}{Ad}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\SO}{\operatorname{SO}}
+\newcommand{\iprod}{\mathbin{\lrcorner}}
+\DeclareMathOperator{\sinc}{sinc}
+
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\Mom}{Mom}
+\DeclareMathOperator{\PD}{PD}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{PDE, Final Exam} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[1a]
+Let $T$ be the energy-momentum tensor of the wave equation $\Box u = 0$, so
+$$T^{00} = \frac{1}{2}(|\partial_tu|^2 + |\nabla u|^2)$$
+is the energy density,
+$$T^{0j} = T_{j0} = -\partial_tu\partial_ju$$
+is the momentum density,
+$$T^{jj} = |\partial_ju|^2 + \frac{1}{2}(|\partial_tu|^2 - |\nabla u|^2)$$
+is the pressure, and
+$$T^{jk} = \partial_ju\partial_ku$$
+is the stress. Show that $T$ satisfies the conservation laws that each column of $T$ is free of spacetime divergence.
+\end{exer}
+
+I think that this has a one-line proof: $\Box$ is invariant under the action of Minkowski spacetime on itself by translation, so by Noether's theorem, the energy-momentum tensor of $\Box$ is divergence-free. However, it's been a while since I took relativity and I don't remember the details, so I'd better just use a direct proof.
+
+For the first conservation law, let $U$ be a smooth open submanifold of $\RR^d$, and let $t \geq 0$ be given.
+First suppose that the energy density $T^{00}(t)$ has compact support in $U$, so we can integrate by parts. Then
+\begin{align*}
+\frac{\partial}{\partial t} \int_U T^{00}(t, x) ~dx &= \int_U \frac{\partial T^{00}}{\partial t}(t, x)~dx\\
+&= \int_U \frac{\partial u}{\partial t} \frac{\partial^2 u}{\partial t^2}(t, x) + \left\langle \nabla u, \nabla \frac{\partial u}{\partial t}\right\rangle(t, x) ~dx\\
+&= \int_U \frac{\partial u}{\partial t}(t, x) \cdot \Box u(t, x) ~dx\\
+&= 0.
+\end{align*}
+We now drop the assumption that $T^{00}(t)$ has compact support and integrate by parts with a boundary term to compute
+$$
+\frac{\partial}{\partial t} \int_U T^{00}(t, x) ~dx = \int_{\partial U} \frac{\partial u}{\partial t} \langle \nabla u, \nu\rangle(t, x) ~dS(\nu)
+$$
+which is the momentum flux through $\partial U$.
+Using the divergence theorem (with divergence taken in space, not spacetime) we convert the flux into a density:
+$$\int_{\partial U} \frac{\partial u}{\partial t} \langle \nabla u, \nu\rangle(t, x) ~dS(\nu)
+= \int_U \frac{\partial u}{\partial t} \nabla \cdot u(t, x) ~dx.
+$$
+Since $U$ was arbitrary, we can shrink it to a point and see that
+$$\partial_t T^{00} - \partial_j T^{0j} = 0.$$
+
+I think the second conservation law follows from the first by some clever change of coordinates in Minkowski spacetime, but again I'll prove it directly.
+We again let $U,t$ be given. By a similar argument as above, $\Box u = 0$ implies
+$$\frac{\partial}{\partial t} \int_U T^{0j}(t, x) ~dx = -\int_{\partial U} \frac{\partial u}{\partial t} \frac{\partial u}{\partial x_j}(t, x) ~dS(x).$$
+We then integrate by parts the stress to see that
+\begin{align*}
+\frac{\partial}{\partial x_k} \int_U T^{kj}(t, x) ~dx &= \int_U \frac{\partial^2 u}{\partial x_k \partial x_j} \frac{\partial u}{\partial x_k} u(t, x) + \frac{\partial u}{\partial x_j}\frac{\partial^2 u}{\partial x_k^2}(t, x) ~dx\\
+&= \int_{\partial U} \frac{\partial u}{\partial x_j} \frac{\partial u}{\partial x_k}(t, x) ~dS(x) - \int_U \frac{\partial u}{\partial x_j} \frac{\partial^2 u}{\partial x_k}(t, x) - \int_U \frac{\partial u}{\partial x_j} \frac{\partial^2 u}{\partial x_k}(t, x) ~dx\\
+&= \int_{\partial U} \frac{\partial u}{\partial x_j} \frac{\partial u}{\partial x_k}(t, x) ~dS(x).
+\end{align*}
+Now assume that the pressure has compact support in $U$. Then
+\begin{align*}
+\frac{\partial}{\partial x_j} \int_U T^{jj}(t, x) ~dx &= \frac{\partial}{\partial x_j} \int_U \left(\frac{\partial u}{\partial x_j}(t, x)\right)^2 + \frac{1}{2}\left(\left(\frac{\partial u}{\partial t}(t, x)\right)^2 - |\nabla u(t, x)|^2\right)\\
+&= \int_U \frac{\partial u}{\partial x_j} \frac{\partial^2 u}{\partial x_j^2}(t, x) + \frac{\partial u}{\partial t} \frac{\partial^2 u}{\partial x_j \partial t}(t, x) - \sum_{i \neq j} \frac{\partial u}{\partial x_i} \frac{\partial^2 u}{\partial x_i \partial x_j}(t, x)\\
+&= \int_U \frac{\partial u}{\partial x_j^2} \frac{\partial u}{\partial x_j}(t, x) - \frac{\partial^2 u}{\partial t}(t, x) \frac{\partial u}{\partial x_j}(t, x) + \sum_{i \neq j} \frac{\partial u}{\partial x_i^2} \frac{\partial u}{\partial x_j}(t, x) ~dx\\
+&= \int_U \Box u(t, x) \frac{\partial u}{\partial x_j}(t, x) ~dx\\
+&= 0.
+\end{align*}
+For a general pressure term, it follows that
+\begin{align*}
+\frac{\partial}{\partial x_j} \int_U T^{jj}(t, x) ~dx &= \int_{\partial U} \frac{\partial u}{\partial x_j} \frac{\partial u}{\partial t}(t, x) - \sum_{k \neq j} \frac{\partial u}{\partial x_j} \frac{\partial u}{\partial x_k}(t, x) ~dS(x),
+\end{align*}
+so putting all the above terms together we see that
+$$\int_U \partial_t T^{0j} + \partial_k T^{kj} = 0,$$
+but $U$ was arbitrary so that gives the desired conservation law.
+
+\begin{exer}[1b]
+Let $\Mom$ denote the momentum
+$$\Mom_j = \int_{\RR^d} T^{0j}(t, x) ~dx$$
+and let $X$ denote the energy position
+$$X_j(t) = \int_{\RR^d} x_j T^{00}(t, x) ~dx.$$
+Show that if the initial data $u_0,u_1$ has compact support then $X$ satisfies the ballistic motion equation
+$$X(t) = X(0) + t\Mom(t).$$
+\end{exer}
+
+We first note that $\Mom$ does not depend on time. Indeed, this follows because $T^{0j}$ is conserved in an open set $U$ provided that $T^{0j}$ has compact support in $U$, as we proved above; here we take $U = \RR^d$.
+
+Now we integrate by parts using the first conservation law to prove
+\begin{align*}
+\frac{\partial X_j}{\partial t}(t) &= \int_{\RR^d} x_j \partial_t T^{00}(t, x) ~dx
+= \int_{\RR^d} x_j \partial_k T^{0k}(t, x) ~dx\\
+&= \int_{\RR^d} \delta_{jk} T^{0k}(t, x) ~dx
+= \int_{\RR^d} T^{0j}(t, x) ~dx = \Mom_j.
+\end{align*}
+This implies what we wanted to show.
+
+\begin{exer}[1c]
+Let
+$$m(t) = ||u(t)||_{L^2}^2$$
+and find an equation for $m''$. Deduce the equipartition of energy
+$$\lim_{T \to \infty} \frac{1}{T} \int_0^T ||\partial_t u(t)||_{L^2}^2 ~dt = \lim_{T \to \infty} \frac{1}{T} \int_0^T ||\nabla u(t)||_{L^2}^2 ~dt = \frac{E}{2}$$
+where
+$$E = \int_{\RR^d} ||\partial_t u(t)||_{L^2}^2 + ||\nabla u(t)||_{L^2}^2$$
+is the energy.
+\end{exer}
+
+We first show that $m''$ is constant, and in fact, $m'' = 2E$.
+To see this, we first note that $E$ is constant, for the same reason that $\Mom$ was (but with $T^{0j}$ replaced by $T^{00}$).
+Then we integrate by parts to see
+\begin{align*}
+m''(t) &= \int_{\RR^d} \frac{\partial^2}{\partial t^2} |u(t, x)|^2 ~dx \\
+&= 2\int_{\RR^d} \frac{\partial}{\partial t} \left(u(t, x) \frac{\partial u}{\partial t}(t, x) \right) ~dx\\
+&= 2||\partial_t u(t)||_{L^2}^2 + 2\int_{\RR^d} u(t, x) \frac{\partial^2 u}{\partial t^2}(t, x) ~dx \\
+&= 2||\partial_t u(t)||_{L^2}^2 + 2\int_{\RR^d} u(t, x) \Delta u(t, x) ~dx \\
+&= 2||\partial_t u(t)||_{L^2}^2 + 2||\nabla u(t)||_{L^2}^2 = 2E.
+\end{align*}
+Now to deduce equipartition of energy, we reverse some of the previous computation and use Fubini's theorem to compute
+\begin{align*}
+\int_0^T ||\nabla u(t)||_{L^2}^2 ~dt &= -\int_0^T \int_{\RR^d} u(t, x) \Delta u(t, x) ~dx ~dt \\
+&=  -\int_{\RR^d} \int_0^T u(t, x) \frac{\partial^2 u}{\partial t^2}(t, x) ~dt ~dx\\
+&= -\int_{\RR^d} u(T, x)\frac{\partial u}{\partial t}(T, x) - u(0, x)\frac{\partial u}{\partial t}(0, x) - \int_0^T \left(\frac{\partial u}{\partial t}\right)^2(t, x) ~dt ~dx\\
+&= \int_0^T ||\partial_t u(t)||_{L^2}^2 ~dt - \int_{\RR^d} u(T, x)\frac{\partial u}{\partial t}(T, x) - u(0, x)\frac{\partial u}{\partial t}(0, x) ~dx.
+\end{align*}
+Averaging both sides over all time we see
+\begin{equation}
+\label{almost equipartition}
+\lim_{T \to \infty} \frac{1}{T} \int_0^T ||\nabla u(t)||_{L^2}^2 ~dt
+= \lim_{T \to \infty} \frac{1}{T} \int_0^T ||\partial_tu(t)||_{L^2}^2 ~dt - \lim_{T \to \infty} \frac{1}{T} \int_{\RR^d} u(T, x) \frac{\partial u}{\partial t}(T,x) ~dx.
+\end{equation}
+It remains to bound $\langle u(T), \partial_t u(T)\rangle$.
+Since the initial data has compact support, finite speed of propagation implies that so does $u(T)\partial_t u(T)$.
+So by Plancherel's theorem,
+$$\langle u(T), \partial_t u(T)\rangle = \langle \hat u(T), \partial_t \hat u(T)\rangle$$
+where the hat means a spatial Fourier transform.
+
+As we proved on the homework while deducing Strichartz estimates, $\hat \Box$ is the ordinary differential operator
+$$\hat \Box(\xi) = \frac{\partial^2}{\partial t^2} + |\xi|^2.$$
+So if $\Box v = 0$ with initial data $v_0,v_1$, one has
+$$\hat v(t, \xi) = \hat v_0(\xi) \cos(t|\xi|) + \hat v_1 \sinc(t|\xi|).$$
+Moreover, $\partial_t u$ solves the wave equation with initial data $u_1,u_2$, where $u_2$ can be obtained by running the wave equation backwards from time $T = 1$ on $\partial_t^2 u = \Delta u$.
+So finite speed of propagation, run in reverse, shows that $u_2$ has compact support, so every $\hat u_i$ is Schwartz, and
+$$\langle \hat u(T), \partial_t \hat u(T)\rangle = \int_{\RR^d} (\hat u_0(\xi) \cos(T|\xi|) + \hat u_1(\xi) \sinc(T|\xi|))(\hat u_1(\xi) \cos(T|\xi|) + \hat u_2(\xi) \sinc(T|\xi|)) ~d\xi.$$
+Therefore
+$$|\langle \hat u(T), \partial_t \hat u(T)\rangle| \leq \langle |\hat u_0| + |\hat u_1|, |\hat u_1| + |\hat u_2|\rangle \leq (||\hat u_0||_{L^2} + ||\hat u_1||_{L^2})(||\hat u_1||_{L^2} + ||\hat u_2||_{L^2}).$$
+This bound is uniform in $T$ and finite since the $\hat u_i$ are Schwartz, so plugging into (\ref{almost equipartition}) we get
+$$
+\lim_{T \to \infty} \frac{1}{T} \int_0^T ||\nabla u(t)||_{L^2}^2 ~dt = \lim_{T \to \infty} \frac{1}{T} \int_0^T ||\partial_tu(t)||_{L^2}^2 ~dt$$
+which was desired.
+
+\begin{exer}[2a]
+Let $\lambda_i(\Omega)$ be the Dirichlet spectrum of $\Omega$. We will show that $\lambda_2(\Omega)/\lambda_1(\Omega)$ is minimized when $\Omega$ is a ball.
+Let $S_1$ be a ball such that $\lambda_1(S_1) = \lambda_1(\Omega)$, and suppose the radius of $S_1$ is $R_1$.
+Let $u_1$ be the (normalized positive) eigenfunction of $\lambda_1(\Omega)$. Show that if
+\begin{equation}
+\label{Condition 1}
+\int_\Omega Pu_1^2 = 0
+\end{equation}
+then
+$$\lambda_2(\Omega) - \lambda_1(\Omega) \leq \frac{\langle |\nabla P|^2, u_1^2\rangle}{\langle P^2, u_1^2\rangle}.$$
+\end{exer}
+
+The condition (\ref{Condition 1}) says that $Pu_1$ is orthogonal to $u_1$, so if $u_i$ denote the eigenfunctions of $\lambda_i(\Omega)$, there are $c_i$ with
+$$P(x) = \sum_{i=2}^\infty c_i \frac{u_i(x)}{u_1(x)}.$$
+Under these conditions one has
+$$\nabla P(x) = \sum_{i=2}^\infty c_i \frac{\nabla u_i(x)}{u_1(x)} - u_i(x) \frac{\nabla u_1(x)}{u_1(x)^2}.$$
+In the special case when $P = u_2/u_1$ one has
+$$\int_\Omega P^2 u_1^2 = \int_\Omega u_2^2 = 1,$$
+and
+\begin{align*}
+\int_\Omega |\nabla P|^2 u_1^2 &= \int_\Omega \left(\frac{|\nabla u_2|^2}{u_1^2} - 2 \frac{u_2}{u_1^3} \langle \nabla u_1, \nabla u_2\rangle + \frac{u_2^2}{u_1^4} |\nabla u_1|^2 \right) u_1^2\\
+&= \lambda_2(\Omega) + \int_\Omega \frac{u_2^2}{u_1^2} |\nabla u_1|^2 - 2\int_\Omega \frac{u_2}{u_1} \langle \nabla u_1, \nabla u_2\rangle\\
+&\geq \lambda_2(\Omega) - \int_\Omega |\nabla u_1|^2 = \lambda_2(\Omega) - \lambda_1(\Omega).
+\end{align*}
+On the other hand, the variational characterization of $u_2$ shows that $\langle |\nabla P|^2, u_1^2\rangle/\langle P^2, u_1^2\rangle$ is minimized by $P = u_2/u_1$, hence the claim.
+
+\begin{exer}[2b]
+What is the multiplicity of $\lambda_2(S_1)$?
+\end{exer}
+
+Let the dimension be denoted $d$.
+We claim that the multiplicity of $\lambda_2(S_1)$ is $d$.
+Stronger, we will show that the second eigenspace is generated by functions which are symmetric about their nodal sets, which will always be hyperplanes orthogonal to the coordinate axes to $\RR^d$.
+We will use this fact frequently in the later exercises.
+The fact that there are $d$ such hyperplanes immediately shows that the dimension is $d$.
+
+If $d = 1$ then we may assume that $S_1 = [-\pi, \pi]$, in which case the solution to the eigenvalue problem is
+$$u(x) = c_1 \cos(\sqrt \lambda x) + c_2 \sin(\sqrt \lambda x)$$
+and the Dirichlet and normalization criteria force $c_1 = 1$, $c_2 = 0$, so $\lambda_2(S_1)$ is simple.
+
+So now we assume that $d \geq 2$.
+We recall that the Dirichlet eigenfunctions of $S_1$ can be obtained by separation of variables, and in fact if $u_2$ is an eigenfunction for $\lambda_2(S_1)$, then in polar coordinates,
+$$u_2(r, \omega) = J(r) Y(\omega)$$
+where $J$ is a Bessel function of the first kind and $Y$ is a spherical harmonic.
+By the Courant nodal domain theorem, $u_2$ has exactly two nodal domains.
+Let $Z$ be the nodal set of $u_2$; then either $J|Z = 0$, in which case $Z$ is a sphere centered on the origin, or $Y|Z = 0$, in which case $Z$ is a hyperplane.
+
+First suppose that $Z$ is a sphere, so $Y$ has no zeroes.
+Let $L$ denote the Laplace-Beltrami operator on the sphere $\partial S_1$; then, by definition, $Y$ is an eigenfunction of $L$.
+Since $\partial S_1$ is a closed manifold, $Y$ trivially satisfies the Dirichlet condition.
+The proof of the easy part of Courant's nodal domain theorem goes through for connected closed manifolds; that is, if $Y$ is an unsigned Dirichlet eigenfunction then $Y$ is the first Dirichlet eigenfunction of $\partial S_1$.
+Indeed, the proof that the first eigenvalue is simple and unsigned goes through without a hitch; the key point is that $L^{-1}$ is a compact self-adjoint operator (since $\partial S_1$ is compact), so we can use spectral theory.
+The needed claim immediately follows.
+But $L1 = 0$, and $1$ trivially satisfies the Dirichlet condition, so $Y = 1$.
+
+Therefore $u_2(r, \omega) = J(r)$ is radial of Bessel profile.
+Let $x_1, \dots, x_d$ be the coordinate functions on $S_1$, with the center of $S_1$ the origin.
+Then $u_2$ is even in $x_1$, so $u_2' = \partial_1 u_2$ is odd in $x_1$ and is an eigenfunction of $\lambda_2(S_1)$.
+In particular $u_2'|\partial S_1(x) = 0$ iff $x_1 = 0$ since $Z$ does not meet $\partial S_1$, and we may assume that $u_2' \geq 0$ on the half-sphere $\{x \in \partial S_1: x_1 > 0\}$.
+
+If $u_2'$ changes sign on the half-ball $x_1 > 0$ then there is a open subset $V$ of $x_1 > 0$ on which $u_2' < 0$.
+Then $u_2'$ is an unsigned Dirichlet eigenfunction of $V$.
+Let $W$ be $V$ along with its reflection across the line $x_1 = 0$; then $u_2'$ is a signed Dirichlet eigenfunction of $V$, so by the Courant nodal domain theorem there is a $j \geq 2$ with $\lambda_j(W) = \lambda_2(S_1)$.
+But $W$ is a subset of $S_1$ of strictly lower measure, so by domain monotonicity $\lambda_j(W) > \lambda_2(S_1)$.
+Therefore $\lambda_2(S_1) > \lambda_2(S_1)$.
+
+Therefore $u_2' \geq 0$ on $x_1 > 0$. This implies that $u_2 \leq 0$ on $x_1 > 0$ since $u_2 = 0$ on the half-sphere that bounds $x_1 > 0$ from above.
+Therefore $u_2 \leq 0$ everywhere since $u_2$ is radial.
+So $u_2$ is an unsigned Dirichlet eigenfunction, so $u_2$ is the first eigenfunction, which is impossible.
+
+(Originally I had a horribly complicated, and probably incorrect proof of the above fact by properties of spherical harmonics.
+It was definitely the hardest part of this exam!
+Another incorrect proof, that I almost convinced myself worked but had backwards inequality at the key step of the argument, that involved transcendence degree over $\QQ$ of the field generated by Bessel zeroes came to me in a dream.)
+
+So in reality $Z$ is a hyperplane.
+We may take the hyperplane to be orthogonal to an axis, since any spherical harmonic can be written as a linear combination of those which vanish on points of the form $e_k = (0, \dots, 0, 1, 0, \dots, 0)$ (where $(e_k)_k = 1$).
+
+\begin{exer}[2c]
+If $|x| < R_1$, let $P_j(x) = u_2^j(x)/u_1(x)$ where $u_2^j$ is the $j$th eigenfunction of $\lambda_2(S_1)$ and $u_1$ the eigenfunction of $\lambda_1(S_1)$.
+If $|x| \geq R_1$, let
+$$P_j(x) = \lim_{\lambda \to R_1} P_j(\lambda x/|x|).$$
+Show that $P = P_j$ satisfies (\ref{Condition 1}) if we translate $\Omega$ suitably. Show that $P_ju_1 \in H_0^1$.
+\end{exer}
+
+To avoid confusion I will denote by $u_k^j(V)$ the $j$th eigenfunction of $\lambda_k(V)$.
+
+By our solution to Exercise 2b, there are $d$ values of $j$ for $P_j$.
+After a reordering, we use the proof of Exercise 2b take $u_2^j(S_1)$ to vanish on the hyperplane $H_j$ perpendicular to $e_j$, and $u_2^j(e_j) > 0$.
+Since there is a Bessel function $J$ and a spherical harmonic $Y$ such that
+$$u_2^j(r, \omega, S_1) = J(r) Y(\omega)$$
+and $Y$ is zero exactly on the great circles $H_j \cap \partial S_1$.
+This implies that $Y$ is a harmonic polynomial which is homogeneous of degree $1$, so
+$$Y(x) = x_j$$
+in Cartesian coordinates,
+a result that we will use frequently.
+
+The above discussion, along with the fact that $u_1(S_1)$ is nonnegative and radial, implies that there is a $g \geq 0$ such that
+$$P_j(x) = g(|x|) \frac{x_j}{|x|}$$
+as in the statement of 2d, at least if $0 < |x| \leq R_1$.
+We will actually be interested in the vector field $\vec P = (P_1, \dots, P_d)$, which is a rescaled version of the outwards-pointing vector field $\vec R(x) = x/|x|$.
+
+Let
+$$\vec F(v) = \int_\Omega \vec P(x - v) u_1(x, \Omega)^2 ~dx.$$
+We must show that the vector field $\vec F = (F_1, \dots, F_d)$ has a zero.
+Let $B$ be a ball centered at $0$ and let $\nu$ be the inward-facing normal of $B$.
+Then
+$$\langle \vec F, \nu\rangle(v) = \int_\Omega \langle \vec P, \nu\rangle(x - v) u_1(x, \Omega)^2 ~dx = \int_\Omega \langle \vec R, \nu\rangle (x - v) g(|x|) u_1(x, \Omega)^2 ~dx.$$
+As $\rad B \to \infty$, $|v| \to \infty$ so $x - v \sim -v$ for any $x \in \Omega$, since $\overline \Omega$ is compact.
+Thus if $\rad B$ is large enough depending on $\Omega$, for every $x \in \Omega$ we have $\langle \vec R, \nu\rangle(x - v) > 0$.
+That implies $\langle \vec F, \nu\rangle \geq 0$.
+
+We conclude that we can find $\rad B$ so large that $\vec F$ is inward-facing on $\partial B$.
+Let $\varphi: \RR^{1 + d} \to \RR$ be the action of $\RR$ on $\RR^d$ by transport along $F$.
+Then any trajectory of $\varphi$ that starts in $\overline B$ is trapped in $\overline B$, by hypothesis on $\rad B$.
+Now suppose that $\vec F$ has no zeroes; then $\varphi$ has no fixed points.
+Let $\mathcal U$ be the set of all sets $U_t = \{v \in \RR^d: t \notin T(v)\}$ such that $t > 0$.
+Then $U_t$ is open since if $v$ is not $t$-periodic then neither is any point in a neighborhood of $v$.
+Since $\varphi$ has no fixed points, $\mathcal U$ is an open cover of $\overline B$, so there is a finite set of ``retraction times" such that for every $v \in \RR^d$ there is a retraction time $t$ such that $\varphi(t, v) \neq v$.
+
+Now for every retraction time $t$ and $v \in U_t$ we may define $r_t(v)$ to be the unique point on the line through $v$ and $\varphi(t, v)$ which is $\in \partial B$ and maximally close to $v$, as in the proof of Brouwer's fixed point theorem.
+Then $r_t$ is continuous and $r_t|\partial B$ is the identity.
+Using a partition of unity over the retraction times, we obtain a retraction $\overline B \to \partial B$, which breaks the proof of Brouwer's fixed point theorem.
+Indeed, such a retraction induces an isomorphism between the de Rham complexes of $B$ and $\partial B$, even though $\partial B$ has a top form.
+
+Now we claim $P_ju_1(\Omega) \in H_0^1(\Omega)$.
+Indeed, $u_1(\Omega) \in H_0^1(\Omega)$ and $P_j$ is smooth away from a sphere of radius $R_1$, so $P_j$ is smooth almost everywhere.
+The only thing that could go wrong is that the denominator of $P_j$ could vanish, but $u_1$ only has simple zeroes on the sphere of radius $R_1$, where $u_2^j$ also has a zero.
+
+\begin{exer}[2d]
+Write $P_j = x_j g(r)/r$. Show that
+\begin{equation}
+\label{Condition 2}
+\lambda_2(\Omega) - \lambda_1(\Omega) \leq \frac{\int_\Omega Bu_1^2}{\int_\Omega g^2 u_1^2}
+\end{equation}
+with $B(r) = g'(r)^2 + (d - 1)g(r)^2/r^2$.
+\end{exer}
+
+By (\ref{Condition 1}) and Exercise 2a we have
+$$(\lambda_2(\Omega) - \lambda_1(\Omega)) \int_\Omega P_j^2 u_1^2 \leq \int_\Omega |\nabla P_j|^2 u_1^2.$$
+Summing both sides we get
+$$(\lambda_2(\Omega) - \lambda_1(\Omega)) \int_\Omega g^2 u_1^2 \leq \int_\Omega u_1^2 \sum_{i,j=1}^d \left(\frac{\partial P_j}{\partial x_i}\right)^2.$$
+Now it remains to show
+$$\sum_{i,j=1}^d \left(\frac{\partial P_j}{\partial x_i}\right)^2(r) \leq g'(r) + (d - 1)\frac{g(r)^2}{r^2}.$$
+Indeed,
+\begin{align*}
+\sum_{i,j=1}^d \left(\frac{\partial P_j}{\partial x_i}\right)^2(r) &= \sum_{i,j=1}^d \left(\delta_i^j \frac{g(r)}{r} + x_j \frac{\partial}{\partial x_i} \frac{g(r)}{r}\right)^2\\
+&= \sum_{i,j=1}^d \delta_i^j \frac{g(r)^2}{r^2} + 2\delta_i^j \frac{g(r)}{r} x_j \frac{\partial}{\partial x_i} \frac{g(r)}{r} + x_j^2 \left(\frac{\partial}{\partial x_i} \frac{g(r)}{r}\right)^2\\
+&= \sum_{i=1}^d \frac{g(r)^2}{r^2} - \frac{g(r)^2}{r^4} x_i^2 + \frac{g'(r)^2}{r^2} x_i^2 \\
+&= B(r).
+\end{align*}
+
+\begin{exer}[2e]
+Show that (\ref{Condition 2}) is still true if we replace all functions with their symmetric decreasing or increasing rearrangements.
+\end{exer}
+
+We will need that for every bounded measurable function $f$ on $\Omega$, $(f^*)^2 = (f^2)^*$.
+We first show this when $f$ is simple by induction.
+Let $|\cdot|$ denote Lebesgue measure.
+The base case is $M = \sup f$; here
+$$|\{(f^*)^2 = M^2\}| = |\{f^* = M\}| = |\{f = M\}| = |\{f^2 = M^2\}| = |\{(f^2)^* = M^2\}|$$
+so $\{(f^*)^2 = M^2\} = \{(f^2)^* = M^2\}$ (since both sets are a possibly-degenerate ball centered at $0$).
+Now suppose that $m \leq M$ is given and for every $m \leq y \leq M$, $\{(f^*)^2 = y^2\} = \{(f^2)^* = y^2\}$.
+Let $y < m$ be the largest value under $m$ that $f$ admits; if $y < m$ does not exist then the induction halts here, and there is nothing left to prove as $(f^*)^2 = (f^2)^*$ everywhere, so we win).
+Then as in the proof of the base case, $|\{(f^*)^2 = y^2\}| = |\{(f^2)^* = y^2\}|$ and by our inductive hypothesis, both $\{(f^*)^2 = y^2\}$ and $\{(f^2)^* = y^2\}$ are annuli centered at $0$ with inner radius equal to $\rad \{(f^*)^2 > y\}$, so $\{(f^*)^2 = y^2\} = \{(f^2)^* = y^2\}$.
+Now if $f_n \to f$ is a pointwise approximation of $f$ by simple functions then
+$$f^*(x) = \int_{-\inf f}^M 1_{\{f > y\}^*}(x) ~dt = \int_{-\inf f}^M \lim_{n \to \infty} 1_{\{f_n^* > y\}^*}(x) ~dt = f_n^*(x)$$
+by dominated convergence, since $f$ is bounded, so we're done.
+The same holds true for $f_*$, by the same argument applied to $-f$.
+
+Now $B$, $g$, and $u_1$ are continuous on the compact set $\Omega$, so we may apply the above result.
+By the Hardy-Littlewood inequality,
+$$\int_\Omega Bu_1^2 \leq \int_{\Omega^*} B^* (u_1^*)^2.$$
+By the increasing-decreasing version of the Hardy-Littlewood inequality,
+$$\int_\Omega g^2u_1^2 \leq \int_{\Omega^*} (g_*)^2 (u_1^*)^2.$$
+This implies that (\ref{Condition 2}) still holds.
+
+\begin{exer}[2f]
+Prove that $B$ is decreasing and $g$ is increasing and show that (\ref{Condition 2}) is true if one replaces $u_1$ by $u_1^*$.
+\end{exer}
+
+We check the monotonicity claims directly when $d = 1$.
+In that case we may assume $S_1 = [-1/2, 1/2]$, in which case
+$$z_k(r) = \cos((k-1)\pi r)$$
+so
+$$g(r) = \cos(\pi r).$$
+This function is indeed decreasing.
+Since $d = 1$, $B = (g')^2$ so
+$$B'(r) = -2\pi^2 \sin(\pi r)\cos(\pi r) \leq 0$$
+which was desired.
+
+Henceforth we assume $d \geq 2$.
+Let $x_1, \dots, x_d$ be the coordinates on $S_1$ and $r = |x|$.
+We want to show that $g' \geq 0$, $g'' \leq 0$, and $(g/r)' \leq 0$.
+We can normalize away the $R_1$, in which case the claims are trivial provided that $r > 1$.
+So we assume $0 < r < 1$ and $R_1 = 1$.
+
+We begin by obtaining an explicit formula for the eigenfunctions $z_1,z_2^j$ of $S_1$.
+Assume that $z$ is an eigenfunction of $S_1$; as in the proof of Exercise 2b, we may write $z(r, \omega) = J(r)Y(\omega)$ where $J$ is a Bessel function of the first kind and $Y$ is a spherical harmonic.
+Let $L$ be the Laplace-Beltrami operator on the unit sphere, and suppose that $(L + \gamma)Y = 0$.
+Suppose that $(\Delta + \lambda)z = 0$. Then
+$$J \in \ker Y \frac{\partial^2}{\partial r^2} + \frac{d - 1}{r} Y \frac{\partial}{\partial r} + \lambda Y - \frac{\gamma}{r^2} Y.$$
+Dividing by $Y$ we conclude that
+$$\left(\frac{\partial^2}{\partial r^2} + \frac{d - 1}{r} \frac{\partial}{\partial r} + \left(\lambda - \frac{\gamma}{r^2}\right) \right) J = 0.$$
+This equation can be solved by computer to conclude
+$$J(r) = c_1 r^{1-d/2} J_{\alpha(d, \gamma)}(r\sqrt \lambda) + c_2 r^{1-d/2} Y_{\alpha(d, \gamma)}(r \sqrt \lambda)$$
+where
+$$\alpha(d, \gamma) = \sqrt{\frac{(d-2)^2}{4} + \gamma},$$
+$J_\alpha$ denotes the Bessel function of kind $1$ and order $\alpha$, and $Y_\alpha$ denotes the Bessel function of kind $2$ and order $\alpha$.
+However, $Y_\alpha$ is not locally $L^2$, even though $z$ is an eigenfunction, so we can simplify to
+\begin{equation}
+\label{Bessel}
+J(r) = r^{1-d/2} J_{\alpha(d, \gamma)}(r\sqrt \lambda).
+\end{equation}
+In particular, for $z_1$, $\gamma = 0$ and $Y = 1$, so we have
+$$z_1(r) = r^{1-d/2} J_{d/2 - 1}(r\sqrt{\lambda_1(S_1)}).$$
+
+To handle $z_2^j$, we recall that in Cartesian coordinates, $Y(x_1, \dots, x_d) = x_j$, as proven in Exercise 2c.
+We want to compute $\gamma$, the eigenvalue corresponding to $Y$.
+To do this, we impose coordinates $(r, \theta, \omega)$ on $\RR^d$ in which $r$ is the radius, $x_j = r \cos \theta$, and $\omega$ lies on the great circle $r = 1, \theta = 0$.
+In these coordinates, $Y$ extends to a function $\overline Y(r, \theta, \omega) = r \cos \theta$.
+Using the relation
+$$\Delta = \frac{\partial^2}{\partial r^2} + \frac{d}{r} \frac{\partial}{\partial r} + \frac{1}{r^2} L$$
+we conclude
+$$0 = \Delta \overline Y(1, \theta, \omega) = d \cos \theta + L(\cos \theta) = dY + LY(\theta, \omega),$$
+so $\gamma = d$.
+Plugging in (\ref{Bessel}) we get
+$$z_2^j(x) = \frac{x_j}{|x|^{d/2 - 1}} J_{\alpha(d, d)}(r \sqrt{\lambda_2(S_1)}).$$
+We therefore obtain the formula
+$$P_j(x) = x_j \frac{J_{\alpha(d, d)}(r\sqrt{\lambda_2(S_1)})}{J_{d/2-1}(r\sqrt{\lambda_1(S_1)})}
+$$
+and so conclude
+\begin{equation}
+\label{G formula}
+g(r) = r\frac{J_{\alpha(d, d)}(r \sqrt{\lambda_2(S_1)})}{J_{d/2-1}(r\sqrt{\lambda_1(S_1)})}.
+\end{equation}
+In particular, $g$ has poles at the Bessel zeroes $j_{d/2-1,k}$, $k \in \NN$.
+But since $d \geq 2$,
+$$j_{d/2-1, k} \geq j_{0,1} \approx 2.405 > 1;$$
+therefore $g$ is analytic on $(0, 1)$.
+
+From (\ref{G formula}) and a computer computation we obtain
+$$J_{d/2 - 1}(r) g'(r) = J_{\alpha(d, d)}(r) + \frac{r}{2}\left(J_{\alpha(d, d) - 1}(r) - J_{\alpha(d, d) + 1}(r)\right) - \frac{r}{2J_{d/2 - 1}(r)} J_{\alpha(d, d)}(r) \left(J_{d/2-2}(r) - J_{d/2}(r)\right).$$
+So if $r$ is a critical point of $g$ then
+$$\frac{2}{r} J_{\alpha(d, d)}(r) + J_{\alpha(d, d) - 1}(r) + J_{\alpha(d, d) + 1}(r) = \frac{J_{\alpha(d, d)}(r)}{J_{d/2-1}(r)}\left(J_{d/2-2}(r) - J_{d/2}(r)\right).$$
+We used a computer to manually check that this equation has no solutions in $(0, 1)$ if $d$ is sufficiently small (say, $d \leq 10$).
+Unfortunately I'm not very knowledgable about numerical analysis so I don't know how to prove it rigorously, but I'm confident that checking up to $d = 10$ implies that the numerical error in the below computations does not affect the validity of the proof, since we always obtain room for error of order $\gtrsim 1$.
+(I also have no idea how to prove anything about Bessel functions except numerically, hence the necessity of this evil.)
+If $d \gtrsim 1$ then $\alpha(d, d) \sim d/2$, and so if $r$ is a critical point then $r$ is an approximate zero of the function
+$$h(r) = \frac{2}{r} J_{d/2}(r) + J_{d/2 - 1}(r) + J_{d/2 + 1}(r) - \frac{J_{d/2}(r)}{J_{d/2-1}(r)}\left(J_{d/2-2}(r) - J_{d/2}(r)\right).$$
+A computer can check that
+$$h(r) = 2J_{d/2}(r) \left(\frac{J_{d/2}(r)}{J_{(d-2)/2}(r)} + \frac{1}{r} + 1\right).$$
+Since $d \geq 2$,
+$$j_{d/2,k} \geq j_{1,1} \approx 3.832 \gg 1$$
+so $r$ is an approximate zero of
+$$\tilde h(r) = \frac{J_{d/2}(r)}{J_{(d-2)/2}(r)} + \frac{1}{r} + 1.$$
+This is impossible, since $J_{d/2}(r)/J_{(d-2)/2}(r) \geq 0$ provided that
+$$r < 1 \ll 2.405 \approx j_{0,1} \leq \min(j_{d/2,1}, j_{(d-2)/2,1}).$$
+Therefore $g'$ is unsigned. But $g(0) = 0$ and $g(1) > 0$ so this implies $g' > 0$.
+
+For $g/r$ we use a computer to compute
+$$\frac{1}{2} J_{d/2-1}^2 (g/r)' = J_{d/2}J_{\sqrt{d^2/4 + 1}} + J_{d/2 - 1} J_{\sqrt{d^2/4 + 1} - 1} - J_{d/2 - 1} J_{\sqrt{d^2/4 + 1} + 1} - J_{d/2-2}J_{\sqrt{d^2/4 + 1}}.$$
+Again we brute-force check when $d \leq 10$ and if $d \gtrsim 1$ note that $\sqrt{d^2/4+1} \approx d/2$, so at critical points we obtain approximate zeroes of
+$$h = J_{d/2}^2 + J_{d/2-1}^2 - J_{d/2-1} J_{d/2+1} - J_{d/2-2} J_{d/2}.$$
+We claim that for any $\beta \gtrsim 1$,
+$$J_\beta^2 < J_{\beta - 1} J_{\beta + 1}$$
+which gives $h < 0$. Indeed,
+$$J_\beta(r) = \frac{r^\beta}{2^\beta} \sum_{m=1}^\infty \frac{(-1)^m}{m!(m+\beta)!}\frac{r^{2m}}{4^m}$$
+where we abused notation to write $\delta! = \Gamma(1 + \delta)$. Since
+$$q^{\beta - 1}q^{\beta + 1} = q^\beta > q^{2\beta} = (q^\beta)^2$$
+for $q < 1$ (in particular, $q = r/2$) and
+$$\frac{(m+\beta+1)!(m+\beta-1)!}{((m+\beta)!)^2} = \frac{m+\beta+1}{m+\beta}$$
+which contributes much less than $q^\beta$ if $\beta \gtrsim 1$.
+In particular if $d \gtrsim 1$ we have $h \ll 0$, so $(g/r)' \leq 0$.
+
+A similar argument works for $g''$.
+One needs no new ideas to do this, only a lot of time.
+However, one has to work with a function that has $18$ terms, so we omit the details.
+
+Since $B$ is radially decreasing, one has $B(r) = B^*(r)$.
+A similar argument shows $g(r) = g_*(r)$.
+So (\ref{Condition 2}) holds even in this case by Exercise 2e.
+
+\begin{exer}[2g]
+Use the lemma:
+\begin{lemma}
+Let $z_1$ be the first eigenfunction of $S_1$ normalized to $\int_\Omega u_1^2 = \int_{S_1} z_1^2$.
+Then there is a $R_0$ such that for every $0 \leq r \leq R_0$, $u_1^*(r) \leq z_1(r)$, and $R_0 \leq r \leq R_1$, $u_1^*(r) \geq z_1(r)$.
+\end{lemma}
+Show that
+$$
+\lambda_2(\Omega) - \lambda_1(\Omega) \leq \frac{\int_{S_1} Bz_1^2}{\int_{S_1} g^2 z_1^2} = \lambda_2(S_1) - \lambda_1(S_1).
+$$
+Conclude the result.
+\end{exer}
+
+The Faber-Krahn inequality implies that
+$$\lambda_1(S_1) = \lambda_1(\Omega) \geq \lambda_1(\Omega^*)$$
+so $S_1 \subseteq \Omega^*$. Let $R_2$ denote the radius of $\Omega^*$; then $R_0 \leq R_1 \leq R_2$.
+The hypothesis on $z_1$, expressed in polar coordinates, is
+$$\int_0^{R_2} (z_1(r)^2 - (u_1^*)^2(r))r^{d-1} ~dr = 0.$$
+On the other hand, the free lemma says that
+$$\int_0^{R_0} B(r) (z_12 - (u_1^2)^*) r^{d-1} ~dr \geq B(R_0) \int_0^{R_0} (z_1^2 - (u_1^2)^*) r^{d-1} ~dr$$
+since $u_1^* \leq z_1$ (so the integral is positive) and similarly, but with the signs reversed,
+$$\int_{R_0}^{R_1} B(r) (z_1^2 - (u_1^2)^*) r^{d-1} ~dr \geq B(R_0) \int_{R_0}^{R_1} (z_1^2 - (u_1^2)^*) r^{d-1} ~dr.$$
+Finally,
+$$\int_{R_1}^{R_2} B(r) z_1(r)^2 r^{d-1} ~dr \geq B(R_0) \int_{R_1}^{R_2} z_1(r)^2 r^{d-1} ~dr$$
+by the sign hypothesis on $z_1$.
+Therefore
+$$\int_0^{R_2} B(r) (z_1(r)^2 - (u_1^*)(r)^2) r^{d-1} ~dr \geq B(R_0) \int_0^{R_2} (z_1(r)^2 - (u_1^*)(r)^2) r^{d-1} ~dr = 0$$
+which, back in Cartesian coordinates, implies
+$$\int_{\Omega^*} B(u_1^*)^2 \leq \int_{S_1} Bz_1^2.$$
+A similar argument for $g$, but with the signs swapped, implies that
+$$\int_{\Omega^*} B(u_1^*)^2 \geq \int_{S_1} Bz_1^2$$
+so, by Exercise 2f,
+\begin{equation}
+\label{we double win}
+\lambda_2(\Omega) - \lambda_1(\Omega) \leq \frac{\int_{\Omega^*} B(u_1^*)^2}{\int_{\Omega^*} g^2 (u_1^*)^2} \leq \frac{\int_{S_1} Bz_1^2}{\int_{S_1} g^2 z_1^2}
+\end{equation}.
+In the proof of Exercise 2a, we showed that the right-hand side of (\ref{we double win}) with $B^2 = |\nabla P|^2$, $g = P$, is equal to the difference $\lambda_2(S_1) - \lambda_1(S_1)$ provided that $P = z_2/z_1$.
+So we deduce
+$$\lambda_2(\Omega) - \lambda_1(\Omega) \leq \lambda_2(S_1) - \lambda_1(S_1).$$
+However, by definition of $S_1$, $\lambda_1(\Omega) = \lambda_1(S_1)$.
+So we can add and then divide $\lambda_1(S_1)$ from both sides to conclude
+$$\frac{\lambda_2(\Omega)}{\lambda_1(\Omega)} \leq \frac{\lambda_2(S_1)}{\lambda_1(S_1)}.$$
+
+
+\end{document}

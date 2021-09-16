@@ -1,0 +1,351 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability, HW 4} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Suppose that $X_n \to X$ in $\PP$.
+Show that if $X_n \geq 0$ then $EX \leq \liminf_n E(X_n)$.
+Show that if $|X_n| \leq Y \in L^1$ then $X_n \to X$ in $L^1$.
+\end{exer}
+
+We first prove generalized Fatou convergence.
+There is a subsequence $(X_{n_k})_k$ such that $(E(X_{n_k}))_k$ is Cauchy and
+$$\liminf_{n \to \infty} E(X_n) = \lim_{k \to \infty} E(X_{n_k}).$$
+Since $X_n \to X$ in $\PP$, there is a subsequence $(X_{n_{k_\ell}})_\ell$ which converges to $X$ almost surely.
+By classical Fatou convergence, since $X_n \geq 0$,
+$$EX \leq \liminf_{\ell \to \infty} E(X_{n_{k_\ell}}) = \lim_{\ell \to \infty} E(X_{n_{k_\ell}}) = \lim_{k \to \infty} E(X_{n_k}) = \liminf_{n \to \infty} E(X_n)$$
+which was to be shown.
+
+For generalized dominated convergence, there is a subsequence $(X_{n_k})_k$ such that $(E|X_{n_k} - X|)_k$ is Cauchy and
+$$\limsup_{n \to \infty} E|X_n - X| = \lim_{k \to \infty} E|X_{n_k} - X|.$$
+Then there is a subsequence $(X_{n_{k_\ell}})_\ell$ which converges to $X$ almost surely.
+So by classical dominated convergence, since $|X_n| \leq Y \in L^1$,
+$$0 = \lim_{\ell \to \infty} E|X_{n_{k_\ell}} - X| = \lim_{k \to \infty} E|X_{n_k} - X| = \limsup_{k \to \infty} E|X_{n_k} - X|.$$
+So if $(X_{m_k})_k$ is any subsequence of $(X_n)_n$ such that $(E|X_{m_k} - X|)_k$ is Cauchy,
+$$0 \leq E|X_{m_k} - X| \leq \limsup_{n \to \infty} E|X_n - X| = 0$$
+so that the inequalities collapse and
+$$0 = \lim_{n \to \infty} E|X_n - X|.$$
+
+\begin{exer}
+If $X_n \to X$ and $Y_n \to Y$ in $\PP$ then show that $X_n + Y_n \to X + Y$ and $X_n Y_n \to XY$ in $\PP$, and if $\phi$ is uniformly continuous then $\phi(X_n) \to \phi(X)$ in $\PP$.
+\end{exer}
+
+By assumption, for every $\varepsilon$, if $n$ is large enough, then the probability that either $|X_n - X| > \varepsilon$ or $|Y_n - Y| > \varepsilon$ is $< \varepsilon$.
+Then one has
+$$|X_n + Y_n - (X + Y)| \leq |X_n - X| + |Y_n - Y| \leq 2\varepsilon$$
+with probability $> 1 - \varepsilon$.
+So $X_n + Y_n \to X + Y$ in $\PP$.
+
+We now show $X_nY_n \to XY$ in $\PP$. Fix $\varepsilon > 0$.
+Since $X,Y$ are measurable, there is a constant $C > 0$ such that with probability $> 1 - \varepsilon$, $|X| \leq C$ and $|Y| \leq C$.
+Let $\delta > 0$ be a parameter to be determined; then if $n$ is large enough, with probability $> 1 - \varepsilon$, $|X_n - X| \leq \delta$ and $|Y_n - Y| \leq \delta$.
+So with probability $> (1 - \varepsilon)^2$,
+\begin{align*}
+|X_nY_n - XY| &= |(X_n - X + X)(Y_n - Y + Y) - XY| \\
+&= |(X_n - X)(Y_n - Y) + (X_n - X)Y + X(Y_n - Y) + XY - XY| \\
+&\leq |X_n - X||Y_n - Y| + |X_n - X|\cdot|Y| + |X|\cdot|Y_n - Y|\\
+&\leq \delta^2 + 2C\delta.
+\end{align*}
+Taking $\delta < \varepsilon/C$ we see that
+$$|X_nY_n - XY| < C^{-2}\varepsilon^2 + 2\varepsilon \lesssim \varepsilon.$$
+This implies convergence in probability.
+
+Finally we show $\phi(X_n) \to \phi(X)$ in $\PP$.
+Let $\varepsilon > 0$, let $\delta > 0$ be such that if $|x - y| < \delta$ then $|\phi(x) - \phi(y)| < \varepsilon$, and suppose that $n$ is so large that with probability $> 1 - \varepsilon$, $|X_n - X| < \delta$.
+Then $|\phi(X_n) - \phi(X)| < \varepsilon$ with probability $> 1 - \varepsilon$.
+
+\begin{exer}
+Show that the topology of convergence in $\PP$ is induced by the metric
+$$\rho(X, Y) = \int_\Omega \frac{|X - Y|}{1 + |X - Y|} ~d\PP.$$
+\end{exer}
+We first show that $\rho$ is a metric. The only nontrivial property here is the triangle inequality.
+In fact, for any $a, b\in \RR$,
+$$\frac{|a + b|}{1 + |a+b|} \leq \frac{|a|}{1 + |a|} + \frac{|b|}{1 + |b|}$$
+as can be checked by clearing denominators on both sides and simplifying.
+Therefore
+$$\rho(X, Z) = \int_\Omega \frac{|X - Y + Y - Z|}{1 + |x - Y + Y - Z|} ~d\PP \leq \int_\Omega \frac{|X - Y|}{1 + |X - Y|} + \frac{|Y - Z|}{1 + |Y - Z|}~d\PP = \rho(X, Y) + \rho(Y, Z)$$
+proving that $\rho$ is a metric.
+
+If $X_n \to X$ in $\PP$, then if $n$ is so large that $\PP(|X_n - X| > \varepsilon) < \varepsilon$,
+\begin{align*}
+\rho(X_n, X) &= \int_\Omega \frac{|X_n - X|}{1 + |X_n - X|}~d\PP\\ &= \int_{|X_n - X| > \varepsilon} \frac{|X_n - X|}{1 + |X_n - X|}~d\PP + \int_{|X_n - X| \leq \varepsilon} \frac{|X_n - X|}{1 + |X_n - X|}~d\PP \\
+&< \int_{|X_n - X| > \varepsilon} d\PP + \int_\Omega \frac{\varepsilon}{1 + \varepsilon}~d\PP \leq 2\varepsilon.
+\end{align*}
+
+Conversely, if convergence in $\PP$ fails then there is a $\varepsilon > 0$ such that for arbitrarily large $n$,
+$$\PP(|X_n - X| > \varepsilon) > \varepsilon.$$
+We recall that if $0 < x < 2$ then
+$$\log(1 + y) \leq \frac{y}{1 + y}.$$
+Without loss of generality we can assume that $|X_n - X| < 2$ almost surely, because otherwise we can modify $X_n$ to achieve this without affecting whether $X_n \to X$ in $\PP$ or in $\rho$.
+So we estimate
+\begin{align*}
+\int_\Omega \frac{|X_n - X|}{1 + |X_n - X|} ~d\PP &= \int_{|X_n - X| \leq \varepsilon} \frac{|X_n - X|}{1 + |X_n - X|} ~d\PP + \int_{|X_n - X| > \varepsilon} \frac{|X_n - X|}{1 + |X_n - X|} ~d\PP\\
+&\geq \int_{\varepsilon < |X_n - X| < 2} \log(1 + |X_n - X|)~d\PP \\
+&> \log(1 + \varepsilon) \PP(|X_n - X| > \varepsilon)\\
+& > \varepsilon \log(1 + \varepsilon) > \varepsilon.
+\end{align*}
+This precludes $\rho(X_n, X) \to 0$.
+
+\begin{exer}
+Show that
+$$E|X| \leq \sum_{n=0}^\infty \PP(|X| > n) \leq 1 + E|X|.$$
+\end{exer}
+
+Let
+$$a_n = \PP(n < |X| \leq n+1).$$
+Then
+$$\PP(|X| > n) = \sum_{m=n}^\infty a_m.$$
+So, in particular,
+\begin{align*}
+E|X| &= \int_\Omega |X|~d\PP = \sum_{n=0}^\infty (n+1)a_n\\
+&= a_0 + a_1 + a_1 + a_2 + a_2 + a_2 + a_3 + a_3 + a_3 + a_3 + \cdots \\
+&= (a_0 + a_1 + a_2 + \cdots) + (a_1 + a_2 + a_3 + \cdots) + (a_2 + a_3 + a_4 + \cdots) + \cdots\\
+&= \sum_{n=0}^\infty \PP(|X| > n).
+\end{align*}
+Here we used monotone convergene to break up the integral into an infinite sum of positive real numbers.
+On the other hand,
+\begin{align*}
+1 + E|X| &= \int_\Omega 1 + |X|~d\PP = \sum_{n=1}^\infty \int_{n-1< |X| \leq n} 1+|X|~d\PP\\
+&\geq \sum_{n=1}^\infty n\PP(n-1<|X| \leq n)\\
+&= \sum_{n=1}^\infty na_{n-1} =  \sum_{n=0}^\infty \PP(|X| > n)
+\end{align*}
+for reasons that we have already argued.
+
+\begin{exer}
+Let $(X_j)_j$ be a sequence of identically distributed random variables, and
+$$Y_n = \frac{1}{n} \max_{1 \leq j \leq n} |X_j|.$$
+Show that if $x \PP(|X_1| > x) \to 0$ then $Y_n \to 0$ in $\PP$, and the converse is true if the $X_j$ are independent.
+
+Show that if $X_1 \in L^1$ then $X_n/n \to 0$ almost surely.
+\end{exer}
+
+Let $\varepsilon > 0$. One has
+\begin{align*}\PP(Y_n > \varepsilon) &= \PP\left(\max_{j=1}^n |X_j| > n\varepsilon\right) = \PP\left(\bigvee_{j=1}^n |X_j| > n\varepsilon\right)\\
+&\leq \sum_{j=1}^n \PP(|X_j| > n\varepsilon) = n \PP(|X_1| > n\varepsilon),\end{align*}
+where the last equality follows since the $X_j$ are identically distributed.
+By assumption, if $\varepsilon$ is fixed, then
+$$\lim_{n \to \infty} n\varepsilon \PP(|X_1| > n\varepsilon) = 0$$
+and dividing both sides by $\varepsilon$ gives the result.
+
+Conversely, if the $X_j$ are independent, then
+$$\PP(Y_n > \varepsilon) = \PP\left(\bigvee_{j=1}^n |X_j| > n\varepsilon\right) = 1 - \PP\left(\bigwedge_{j=1}^n |X_j| \leq n\varepsilon\right) = 1 - (\PP(|X_1| \leq n\varepsilon))^n.$$
+So if $Y_n \to 0$ in $\PP$ and $n$ is large enough,
+$$1 - (\PP(|X_1| \leq n\varepsilon))^n < \varepsilon,$$
+that is,
+$$\PP(|X_1| \leq n\varepsilon) > (1 - \varepsilon)^{1/n}.$$
+Rewriting,
+$$n\varepsilon \PP(|X_1| > n\varepsilon) < n\varepsilon \left(1 - (1-\varepsilon)^{1/n}\right).$$
+But
+$$\lim_{y \to \infty} y(1 - a^{1/y}) = -\log a$$
+so
+$$n\varepsilon \left(1 - (1-\varepsilon)^{1/n}\right) \leq -2\varepsilon \log(1 - \varepsilon)$$
+provided $n$ is large enough and $\varepsilon < 1$ (so $-\log(1-\varepsilon) > 0$).
+Therefore
+$$\lim_{n \to \infty} n\varepsilon \PP(|X_1| > n\varepsilon) \leq -2\varepsilon \log(1 - \varepsilon),$$
+so for every $\varepsilon > 0$,
+$$\lim_{x \to \infty} x\PP(|X_1| > x) \leq -2\varepsilon \log(1 - \varepsilon).$$
+Here we simply took $x$ so large that $n = x/\varepsilon$ would be large enough.
+Since
+$$\lim_{\varepsilon \to 0} -2\varepsilon \log(1 - \varepsilon) = 0$$
+it follows that
+$$\lim_{x \to 0} x \PP(|X_1| > x) = 0.$$
+
+Now we check that
+$$\sum_{n=1}^\infty \PP(|X_n| > n\varepsilon) = \sum_{n=1}^\infty \PP(|X_1| > n\varepsilon) \leq 1 + E|X_1| < \infty$$
+so that $|X_n|/n \to 0$ by Borel-Cantelli.
+
+\begin{exer}
+Let $(X_j)_j$ be iid random variables. Show that $E|X_1| < \infty$ iff $\PP(|X_n| > n \text{ infinitely often}) = 0$.
+\end{exer}
+
+This is just a restatement of the Borel-Cantelli lemma.
+If $E|X_1| < \infty$, then by a previous exercise,
+$$\sum_{n=1}^\infty \PP(|X_n| > n) = \sum_{n=1}^\infty \PP(|X_1| > n) \leq 1 + E|X_1| < \infty$$
+since the $X_n$ are iid. The Borel-Cantelli lemma then gives the claim.
+Conversely, if $E|X_1| = \infty$ then
+$$\infty = \sum_{n=1}^\infty \PP(|X_1| > n) = \sum_{n=1}^\infty \PP(|X_n| > n)$$
+implying that
+$$\PP(|X_n| > n \text{ infinitely often}) = 1$$
+by Borel-Cantelli.
+
+\begin{exer}
+If $(X_j)_j$ is a uniformly integrable sequence of random variables, show that $(\overline X_j)_j$ is also uniformly integrable, where
+$$\overline X_n = \frac{1}{n} \sum_{j=1}^n X_j.$$
+\end{exer}
+
+One has
+$$||X_m||_{L^1} \lesssim 1$$
+uniformly, whence
+$$||\overline X_n||_{L^1} \leq \frac{1}{n} \sum_{m=1}^n ||X_m||_{L^1} \lesssim 1$$
+uniformly.
+
+For every $\varepsilon > 0$ there is a $\delta > 0$ such that whenever $\PP(A) < \delta$, for every $n$,
+$$\int_A |X_n|~d\PP < \varepsilon.$$
+It follows that
+$$\int_A |\overline X_n|~d\PP \leq \sum_{m=1}^n \frac{1}{n} \int_A |X_m|~d\PP < \sum_{m=1}^n \frac{\varepsilon}{n} = \varepsilon.$$
+
+\begin{exer}
+Let $(X_\alpha)_\alpha$ be a family of random variables. Show that if there is a $h: [0, \infty) \to [0, \infty)$ such that $h(x)/x$ is nondecreasing and $\lim_x h(x)/x = \infty$, with $Eh|X_\alpha|$ uniformly bounded, then $(X_\alpha)_\alpha$ is uniformly integrable.
+\end{exer}
+
+We reason by contradiction.
+If $(X_\alpha)_\alpha$ is not uniformly integrable then there is a $\varepsilon > 0$ so small that for every $M > 0$ there is an $\alpha$ such that
+$$E(X_{\alpha} 1_{|X_{\alpha}| \geq M}) \geq \varepsilon.$$
+By the Cauchy-Schwarz inequality,
+$$\PP(|X_\alpha| \geq M) \geq \frac{E(X_{\alpha} 1_{|X_{\alpha}| \geq M})}{||X_\alpha||_{L^1}} \geq \frac{\varepsilon}{||X_\alpha||_{L^1}}.$$
+Since $h(x)/x \to \infty$ and is nondecreasing, $h$ is eventually nondecreasing.
+Indeed, $h(x)/x \geq 1$ if $x$ is large enough, so say $h(x)/x = J$; then $h(y)/y \geq J$ and so
+$$h(x) = Jx \leq \frac{h(y)}{y}x \leq h(y)$$
+since $y/x > 1$.
+
+Therefore if $M$ is chosen large enough, then $h(x) \geq h(M)$ whenever $x \geq M$, and
+\begin{align*}
+Eh|X_{\alpha}| &\geq \int_{|X_{\alpha}| \geq M} h \circ |X_{\alpha}| ~d\PP \geq \int_{|X_\alpha| \geq M} h(M)~d\PP \geq \frac{\varepsilon}{||X_\alpha||_{L^1}} h(M).
+\end{align*}
+To bound $||X_\alpha||_{L^1}$, choose $M$ so large that if $x \geq M$ then $h(x)/x > 1$, and
+$$\sup_\beta Eh|X_\beta| \leq M.$$
+Then $|X_\alpha| \leq M + |X_\alpha| \leq M + h|X_\alpha|$ so
+$$||X_\alpha||_{L^1} = E|X_\alpha| \leq M + E|X_\alpha| \leq M + Eh|X_\alpha| \leq 2M.$$
+In particular, if $M$ is large enough, then
+$$Eh|X_\alpha| \geq \varepsilon \frac{h(M)}{2M},$$
+and since $h(M)/M$ increases without bound, this is a contradiction.
+
+
+
+
+\end{document}

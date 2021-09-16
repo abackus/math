@@ -1,0 +1,232 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{QFT notes}
+\author{Aidan Backus}
+\date{July 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\Riem}{Riem}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\DeclareMathOperator{\vol}{vol}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Poin}{\mathscr P}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+\newtheorem{notate}{Notation}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+% style=alphabetic
+\usepackage[backend=bibtex,maxcitenames=50,maxnames=50]{biblatex}
+%\addbibresource{topics.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+
+\maketitle
+
+%\tableofcontents
+
+\section{Introduction}
+Recall the foundations of quantum mechanics.
+We are given a separable Hilbert space $\Hilb$.
+States of the physical system are vectors $\psi$ modulo scalars $\lambda$, i.e. points in the projective space given by $\Hilb$.
+There is a distinguished densely-defined self-adjoint operator $H$ on $\Hilb$ called the \dfn{Hamiltonian}, which is a second-order differential operator.
+An eigenstate $\psi$ of $H$ of eigenvalue $E$ has energy $E$, and the energy of a more general state is ill-defined.
+The time-evolution of the system is given by the Schr\"odinger equation
+$$i\partial_t \psi = H\psi$$
+which clearly is not relativistic in general because the right-hand side is second-order in space, while the left-hand side is first-order in time.
+
+Let us consider the spectrum $S$ of $H$.
+If $S$ is unbounded from below then we can repeatedly apply annihilation operators to disperse energy from an eigenstate $\psi$.
+Thus it is possible for the universe to lose all its energy.
+Since this isn't possible we assume that $S$ is unbounded from below.
+Once that's done we might as well add a constant to $H$ to impose that $S \subseteq \RR^+$.
+This is the \dfn{positive-energy condition} and we will always assume it.
+
+Let $\Poin$ be the Poincar\'e group.
+Any relativistic theory must be invariant under $\Poin$.
+What does that mean for quantum mechanics?
+We want $\Poin$ to act on $\Hilb$ like a unitary representation, but we need to allow $\Poin$ to be twisted by the gauge freedom inherent in $\Hilb$.
+
+To be precise: Recall that the circle group $S^1$ acts on $\Hilb$ by scalars, namely
+$$\theta \mapsto (\psi \mapsto e^{i\theta}\psi).$$
+Moreover, while we can demand that $||\psi|| = 1$ to normalize away the gauge freedom given by the action of $\RR^*$ on $\Hilb$, there's no good way to normalize away the action of $S^1$.
+No physical experiment can distinguish between two wavefunctions in the same orbit of $S^1$!
+
+\begin{definition}
+Let $G$ be a Lie group.
+A smooth action $\varphi$ of $G$ on $\Hilb$ is a \dfn{projective unitary representation} of $G$ if $G$ acts by unitary operators and for every $g_1,g_2 \in G$ there exists $\omega \in S^1$ such that
+$$\varphi(g_1g_2) = \omega \varphi(g_1) \varphi(g_2).$$
+\end{definition}
+
+Unfortunately, projective unitary representations are really hard to construct.
+
+\begin{theorem}
+There are no faithful finite-dimensional projective unitary representations of $\Poin$.
+\end{theorem}
+
+So we need to consider $\Hilb$ infinite-dimensional only.
+
+As a starting point, let's consider representations $G$ of the subgroup of $\Poin$ given by time-translations.
+Since Schr\"odinger propagators are unitary, giving a representation gives a solution of a Schr\"odinger equation for some Hamiltonian $H$.
+
+\begin{definition}
+A \dfn{quantum field} is a separable projective unitary representation of $\Poin$ which obeys the positive-energy condition in the sense that, if we view the action of the time-translation subgroup of $\Poin$ as by Schr\"odinger propagators, we obtain a Hamiltonian $H$ such that $\Spec H \subseteq \RR^+$.
+\end{definition}
+
+Wigner gave a full classification of the irreducible projective unitary representations of $\Poin$.
+These representations are the simplest possible quantum systems, thus we define:
+
+\begin{definition}
+An \dfn{elementary particle} is a nontrivial irreducible quantum field.
+\end{definition}
+
+\section{Classical fields}
+In the low-energy, large-scale, noisy regime, we can approximate quantum fields by classical fields.
+
+Let $M$ be a Lorentz manifold, which will almost always be Minkowski spacetime.
+
+\begin{definition}
+A \dfn{classical field} is a $C^2$ section of a fiber bundle on $M$.
+\end{definition}
+
+For now let's assume that all fiber bundles are trivial.
+Gauge fields will NOT have this property however.
+
+\begin{definition}
+A \dfn{$\sigma$-model} is a classical field valued in $S^2$.
+\end{definition}
+
+We will mainly be interested in classical fields which evolve according to Lagrangian mechanics.
+Nobody knows why this is the physically correct thing to do but it is.
+We will always assume that the action of a family of scalar fields $(\phi_a)$ has the form
+$$S(\Omega) = \int_\Omega \mathcal L(x, \phi_a(x), \partial_\mu \phi_a(x)) ~dx$$
+where $\Omega$ ranges over Borel subsets of $M$.
+(More precisely, we define $\mathcal L$ to be a \emph{density} on $M$, and restrict to $\Omega$-compactly supported perturbations of $\mathcal L$ when applying variational calculus.)
+In relativistic situations we will demand that $\mathcal L$ is invariant under the action of $\Poin$, which in particular implies that the classical field will behave relativistically.
+
+\begin{example}
+If
+$$\mathcal L = \phi_{,\mu} \phi^{,\mu} - m^2 \phi^2$$
+then $\phi$ satisfies the Klein-Gordon equation
+$$(\Box + mu^2)\phi = 0$$
+which is the hyperbolic equation which governs a wavefunction of a relativistic quantum particle with no spin (equivalently scalar field) $\psi$.
+\end{example}
+
+
+
+
+
+
+
+
+\printbibliography
+
+
+\end{document}

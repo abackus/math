@@ -1,0 +1,3531 @@
+
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{PDE notes}
+\author{Aidan Backus}
+\date{2021}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\Cau}{\mathbf{Cau}}
+\newcommand{\ISF}{\mathbf{ISF}}
+\newcommand{\Simp}{\mathbf{Simp}}
+\newcommand{\Sch}{\mathscr S}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\dom}{dom}
+
+\DeclareMathOperator{\curl}{curl}
+\DeclareMathOperator{\osc}{osc}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiomx}[theorem]{Axiom}
+\newtheorem{theoremxx}[theorem]{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definitionx}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{examplex}[theorem]{Example}
+\newtheorem{exercisex}{Exercise}[chapter]
+\newtheorem{problem}[theorem]{Problem}
+
+\newenvironment{axiom}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\axiomx}
+  {\popQED\endexamplex}
+
+\newenvironment{definition}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\definitionx}
+  {\popQED\endexamplex}
+
+\newenvironment{example}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\examplex}
+  {\popQED\endexamplex}
+
+  \newenvironment{exercise}
+    {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\exercisex}
+    {\popQED\endexamplex}
+
+  \newenvironment{theoremx}
+        {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\theoremxx}
+        {\popQED\endexamplex}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{The Navier-Stokes equations}
+This chapter is based on lectures of Huy Quang Nguyen.
+
+\section{Derivation of the Navier-Stokes equations}
+Let us study the motion of inviscid fluids at a macroscopic level. Thus we are only interested in averaged behavior of the fluid molecules, regarding fluid as a continuum, and discarding the behavior of individual molecules.
+The continuum assumption implies that an infinitesimal volume element $dV$ is large enough to contain a large number of fluid molecules, and in particular is much larger than the distance between any two adjacent molecules.
+On the other hand, $dV$ must be much smaller than the volume of the domain $\Omega$.
+Here we assume $\Omega \subseteq \RR^d$, where $d \in \{2, 3\}$ is the spatial dimension.
+
+The \dfn{Eulerian quantities} of the fluid are the velocity field $u: \RR^{1 + d} \to T\RR^d = \RR^d$, the pressure field $p: \RR^{1 + d} \to \RR$, and the mass density field $\rho: \RR^{1 + d} \to \RR$. Thus the Eulerian quantities are macroscopic in nature.
+
+One also defines the microscopic \dfn{Lagrangian quantities}.
+To do this, one fixes an \dfn{initial configuration} of a particle $a$, and introduce the \dfn{particle trajectory} $X(t, a)$, which is the position of $a$ at time $t$.
+We typically identify $a$ with its initial position $X(0, a)$, so $X$ is a function $\RR^{1 + d} \to \RR^d$.
+The \dfn{path} of $X$ is the function $X(a): \RR \to \RR^d$. The \dfn{flow map} at time $t$ is the vector field $X(t): \RR^d \to \RR^d$.
+Thus under suitable assumptions, the flow maps $X$ induce a smooth action of $\RR$ on $\RR^d$ by time-translation.
+The \dfn{back-to-labels map} $A$ is the inverse of the flow map, thus
+$$A(t, X(t, a)) = a.$$
+By construction one has
+\begin{equation}
+\label{Lagrangian ODE}
+\frac{\partial X}{\partial t}(t, a) = u(t, X(t, a))
+\end{equation}
+with $X(0, a) = a$, so the Eulerian velocity field is tangent to the Lagrangian flow map.
+If $u$ is continuous in time and Lipschitz in space, then applying the Picard-Linde\"of theorem, we may find a unique solution $X$ to (\ref{Lagrangian ODE}).
+This is used to show that the Eulerian and Lagrangian formulations of fluid mechanics are equivalent (assuming enough regularity).
+
+In order to study fluid mechanics, we need a notion of derivative which makes sense when taken by an observer moving according to the flow map $X$.
+If $f: \RR^{1 + d} \to \RR^d$, the chain rule reads
+$$\frac{\partial}{\partial t} f(X(t, a), t) = \frac{\partial f}{\partial t}(t, X(t, a)) + \sum_{j=1}^d \partial_jf(t, X(t, a)) \frac{\partial X_j}{\partial t}(t, a).$$
+Plugging into (\ref{Lagrangian ODE}), we have
+\begin{align*}
+\frac{\partial}{\partial t} f(X(t, a), t) &= \frac{\partial f}{\partial t}(t, X(t, a)) + \sum_{j=1}^d u_j(t, X(t, a)) \partial_j f(t, X(t, a))\\
+& = \frac{\partial f}{\partial t}(t, X(t, a)) + (u \cdot \nabla)f(t, X(t, a))\\
+&=\left(\frac{\partial}{\partial t} + u\cdot\nabla\right)f(t, X(t, a)).
+\end{align*}
+This motivates the definition of the material derivative.
+\begin{definition}
+The \dfn{material derivative} or \dfn{convective derivative} of $f: \RR^{1 + d} \to \RR^d$ with respect to a velocity field $u: \RR^{1 + d} \to \RR^d$ is
+$$D_tf(t, x) = (\partial_t + u\cdot \nabla)f(t, x).$$
+The \dfn{convection term} of $D_tf$ is $(u \cdot \nabla)f$.
+\end{definition}
+We have proven that the derivative of $f$ along the flow map is $D_tf$.
+
+We now impose a new assumption on our fluid, namely incompressibility.
+Let $V$ be a small open set and let $V(t) = \{X(t, a): a \in V\}$ be its image under the flow map.
+If our fluid is not dilating then the Lebesgue measure $|\cdot|$ satisfies $|V(t)| = |V(0)|$.
+
+\begin{definition}
+An \dfn{incompressible fluid} is a fluid whose flow map $X$ satisfies $|V(t)| = |V(0)|$ for all small open sets $V$.
+\end{definition}
+
+In what follows we will need that if $f: \RR^d \to \RR$ is measurable then the change-of-variables formula for $x = X(a, t)$ gives
+$$\int_{V(t)} f(x) ~dx = \int_V f(X(t, a)) \det(\nabla X(t, a)) ~da$$
+where by definition
+$$(\nabla X(t, a))_{ij} = \frac{\partial X_i}{\partial a_j}(t, a).$$
+Let $J = \det(\nabla X)$.
+If $u \in C^1$ then
+\begin{equation}
+\label{Jacobian ODE}
+\frac{\partial J}{\partial t}(t, a) = J(t, a) (\nabla \cdot u)(t, X(t, a)).
+\end{equation}
+
+\begin{proposition}
+A fluid with velocity field $u$ is incompressible iff $\nabla \cdot u = 0$.
+\end{proposition}
+\begin{proof}
+Plugging in $f = 1$ we get
+$$|V(t)| = \int_V J(t, a) ~da$$
+so $u$ is incompressible iff $J = 1$. Thus it suffices to show that $J = 1$ iff $\nabla \cdot u = 0$.
+Solving (\ref{Jacobian ODE}) with the initial data $J(0, a) = 1$ we get
+$$J(t, a) = \exp((\nabla \cdot u)(t, X(t, a)))$$
+so $J(t, a) = 1$ iff $(\nabla \cdot u)(t, X(t, a)) = 0$.
+Since $X(t)$ is a bijection, this happens iff $\nabla \cdot u = 0$.
+\end{proof}
+
+\begin{proposition}[transport formula]
+Let $X$ be the flow map of a velocity field $u$.
+For every function $f \in C^1(\RR^{1+d} \to \RR)$ and open set $V$,
+$$\frac{\partial}{\partial t} \int_{V(t)} f(t, x) ~dx = \int_{V(t)} \frac{\partial f}{\partial t}(t, x) + \nabla \cdot(uf)(t, x) ~dx.$$
+\end{proposition}
+\begin{proof}
+Using (\ref{Jacobian ODE}),
+\begin{align*}
+\frac{\partial}{\partial t} \int_{V(t)} f(t, x) ~dx &= \frac{\partial}{\partial t} \int_V f(t, X(t, a)) J(t, a) ~da\\
+&= \int_V J(t, a) \frac{\partial}{\partial t}(f(t, X(t, a))) + f(t, X(t, a)) \frac{\partial J}{\partial t}(t, a) ~da\\
+&= \int_V J(t, a) \left(\frac{\partial f}{\partial t} + u \cdot \nabla f + f \nabla \cdot u)\right)(t, X(t, a)) ~da\\
+&= \int_V J(t, a) \left(\frac{\partial f}{\partial t} + \nabla \cdot(uf)\right)(t, X(t, a)) ~da\\
+&= \int_{V(t)} \frac{\partial f}{\partial t}(t, x) + \nabla \cdot(uf)(t, x) ~dx
+\end{align*}
+which was desired.
+\end{proof}
+
+\begin{corollary}
+If $u$ is an incompressible velocity field then
+$$\frac{\partial}{\partial t} \int_{V(t)} f(x) ~dx = \int_{V(t)} D_tf(t, x) ~dx.$$
+\end{corollary}
+\begin{proof}
+Plug $\nabla \cdot u = 0$ into the transport formula.
+\end{proof}
+
+We now impose conservation of mass.
+The mass of $V$ is
+$$m(t, V) = \int_V \rho(t, x) ~dx.$$
+Conservation of mass says that mass is neither created nor destroyed.
+Since $V(t)$ moves with the flow map, conservation of mass can be expressed as
+$$\frac{\partial}{\partial t} m(t, V(t)) = 0.$$
+In other words,
+$$\frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) ~dx = 0.$$
+By the transport formula, if $u$ is incompressible, then
+$$0 = \frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) ~dx = \int_{V(t)} \left(\frac{\partial \rho}{\partial t} + \nabla \cdot (u\rho)\right)(t, x) ~dx.$$
+Since $V$ is an arbitrarily small open set, we can take $V \to \{x\}$ and conclude
+$$\frac{\partial \rho}{\partial t} + \nabla \cdot (u\rho) = 0.$$
+By incompressibility of $u$, this equation to simplifies to
+\begin{equation}
+\label{conservation of mass}
+\frac{\partial \rho}{\partial t} + u \cdot \nabla \rho = 0.
+\end{equation}
+Therefore if the initial data of $\rho$ is constant in space, then $\rho$ is constant in spacetime.
+
+Finally we impose conservation of momentum.
+Let $S$ be a closed hypersurface in $\Omega$ and let $\vec n$ be the outer unit normal field to $S$.
+The force of stress exerted on $S$ per unit area at the point $x \in S$ is given by the pressure density $p(t, x) \vec n(x)$.
+So if $S = \partial V$, then the force of stress acting on $V$ is
+$$-\int_{\partial V} p(t, x) \vec n(x) ~dx = -\int_V \nabla p(t, x) ~dx$$
+by the divergence theorem. By Newton's second law, the integral of acceleration is given by
+$$\frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) u(t, x) ~dx = -\int_{V(t)} \nabla p(t, x) ~dx.$$
+Let $f$ be a component of $u$. By the transport formula,
+\begin{align*}\frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) f(t, x) ~dx &= \int_{V(t)} \partial_t(\rho f)(t, x) + \nabla \cdot(u\rho f)(t, x) ~dx\\
+&= \int_{V(t)} f\frac{\partial \rho}{\partial t} + f \nabla \cdot(u\rho) + \rho \frac{\partial f}{\partial t} + u\rho \cdot \nabla f ~dx\\
+&= \int_{V(t)} f\left(\frac{\partial \rho}{\partial t} + \nabla \cdot(u\rho)\right) + \rho D_t f ~dx\\
+&= \int_{V(t)} \rho(t, x) D_tf(t, x)~dx
+\end{align*}
+where we used mass conservation (\ref{conservation of mass}). Plugging into Newton's second law,
+$$\int_{V(t)} \rho(t, x) D_tu(t, x) ~dx = -\int_{V(t)} \nabla p(t, x) ~dx.$$
+Shrinking $V$ to a point, we get
+\begin{equation}
+\label{conservation of momentum}
+\rho D_tu = -\nabla p.
+\end{equation}
+To encorporate a force field $F$ (say, $F$ is the gravitational field), we instead have
+$$\frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) u(t, x) ~dx = \int_{V(t)} \rho(t, x)F(t, x) - \nabla p(t, x) ~dx$$
+and so (\ref{conservation of momentum}) becomes instead
+\begin{equation}
+\label{conservation of momentum with forcing}
+\rho D_tu = \rho F - \nabla p.
+\end{equation}
+
+Summarizing what we have derived so far: if $u$ is the velocity field of an ideal incompressible fluid not in an external force field, $p$ denotes the pressure, and $\rho$ denotes the mass density, then we have
+\begin{align*}
+\rho D_t u &= -\nabla p\\
+\nabla \cdot u &= 0\\
+\partial_t \rho + \nabla \cdot (u\rho) &= 0.
+\end{align*}
+This is a system of $2 + d$ equations for $2 + d$ unknowns (since $u$ is a vector field).
+If $\rho$ is constant, say $\rho = 1$, then this system simplifies to
+\begin{align*}
+D_t u &= -\nabla p\\
+\nabla \cdot u &= 0.
+\end{align*}
+This system is known as the \dfn{Euler equations}.
+
+Now we modify the Euler equations to account for friction, which occurs when two fluid layers slide over each other.
+This phenomenon is known as \dfn{viscosity}.
+In this situation, we have the momentum balance
+$$\frac{\partial}{\partial t} \int_{V(t)} \rho(t, x) u(t, x) ~dx = -\int_{\partial V(t)} \sigma(t, x) n(x) ~dS(x)$$
+where $n$ is the outward unit normal field of $\partial V(t)$ and $\sigma$ is a tensor field known as the \dfn{Cauchy stress tensor}, given by
+$$\sigma(t, x) = -p(t, x) + \sigma_{visc}(t, x)$$
+where $\sigma_{visc}$ is a quantity known as the \dfn{viscous stress tensor}.
+In a Newtonian fluid, we assume that $\sigma_{visc}$ is linear in $\nabla u$.
+If the fluid is also isotropic, thus the fluid properties are invariant under rotation, then there are constants $\lambda, \nu > 0$ such that
+$$\sigma_{visc} = \lambda \nabla \cdot u + \nu(\nabla u + \nabla u^t)$$
+but we know that $\nabla \cdot u = 0$ so $\lambda$ is irrelevant. Here $\nabla u^t$ makes sense because $\nabla u$ is a matrix field (since $u$ is a vector field).
+It follows that
+$$\rho D_t u = -\nabla p + \nu \nabla \cdot(\nabla u + \nabla u^t) = -\nabla p + \nu\Delta u$$
+since $\nabla \cdot u = 0$. Here $\nu$ is known as the \dfn{dynamic viscosity}.
+Summarizing, we arrive at the system
+\begin{align*}
+\rho D_t u &= -\nabla p + \nu \Delta u\\
+\nabla \cdot u &= 0\\
+\partial_t \rho + \nabla \cdot (u\rho) &= 0.
+\end{align*}
+Since we are mainly interested in the case $\rho = \rho_0$, where $\rho_0 > 0$ is a constant, we arrive at the system
+\begin{align*}
+D_t u &= -\frac{1}{\rho_0}\nabla p + \frac{\nu}{\rho_0}\Delta u\\
+\nabla \cdot u &= 0.
+\end{align*}
+This system is known as the \dfn{Navier-Stokes equations}, and $\nu/\rho_0$ is known as the \dfn{kinematic viscosity}.
+We will mainly normalize $\rho_0 = 1$, thus
+\begin{align*}
+D_t u &= -\nabla p + \nu\Delta u\\
+\nabla \cdot u &= 0.
+\end{align*}
+
+\section{Vorticity}
+If $u$ is a vector field on $\RR^2$, we will regard $u$ as a map $\RR^2 \to \RR^3$ by $u(x_1, x_2) = (u_1(x_1, x_2), u_2(x_1, x_2), 0)$.
+Therefore the curl of a vector field on $\RR^2$ makes sense, and is a scalar field.
+In this case, if
+$$D_tu + \nabla p = \nu \Delta u,$$
+then $\partial_3p = 0$, and $p$ can be regarded as a map $\RR^2 \to \RR^3$ or $\RR^2 \to \RR^2$.
+
+\begin{definition}
+Let $u$ be a velocity field. The \dfn{vorticity} of $u$ is
+$$\omega = \nabla \times u = \curl u$$
+where $\times$ denotes cross product.
+\end{definition}
+
+In two dimensions, we regard $\omega$ as a scalar field and have
+$$\omega = \partial_1 u_2 - \partial_2 u_1.$$
+Thus we write
+$$\omega = \nabla^\perp \cdot u$$
+where, since $\nabla = (\partial_1, \partial_2)$, $\nabla^\perp = (-\partial_2, \partial_1)$.
+The fact that the vorticity is a scalar field on $\RR^2$ justifies why there are so many differences between the behavior of the Navier-Stokes equations in two and three dimensions.
+
+In full generality, let $(t_0, x_0) \in \RR^{1 + 3}$, and suppose that $u \in C^1$. Then
+$$u(t_0, x) = u(t_0, x_0) + \nabla u(t_0, x_0) (x - x_0) + o(|x - x_0|).$$
+Let us write
+$$\nabla u(t_0, x_0) = \mathscr D_u + \Omega_u$$
+where $2\mathscr D_u = \nabla u + \nabla u^t$ is the symmetric part of the matrix $\nabla u$ and $\Omega_u$ is the antisymmetric part, thus
+$$u(t_0, x) = u(t_0, x_0) + \Omega_u(x - x_0) + \mathscr D_u(x - x_0) + o(|x - x_0|).$$
+In the degenerate case $u(t_0, x) = u(t_0, x_0)$ the Lagrangian equations
+\begin{align*}
+\partial_t X(t, a) &= u(t, X(t, a))\\
+X(0, a) &= a
+\end{align*}
+become
+\begin{align*}
+\partial_t X(t, a) &= u(t_0, x_0)\\
+X(0, a) &= a
+\end{align*}
+thus
+$$X(t, a) = a + u(x_0, t_0)(t - t_0).$$
+Thus $u(t_0, x_0)$ induces translation in $X$.
+
+Meanwhile, the antisymmetric part satisfies
+$$2\Omega_u h = \omega \times h$$
+for any vector field $h$. In particular in the degenerate case $u = \Omega_u$,
+$$2\partial_t X(t, a) = \omega(t_0, x_0) \times X(t, a).$$
+After a change of coordinates we may assume $\omega(t_0, x_0) = (0, 0, \overline \omega)$ for some $\overline \omega \in \RR$.
+Then
+$$\frac{1}{2}\omega \times X = (-\overline \omega X_2, \overline \omega X_1, 0)$$
+and thus
+\begin{align*}
+2\partial_t X_1(t, a) &= -\overline \omega X_2(t, a)\\
+2\partial_t X_2(t, a) &= \overline \omega X_1(t, a)\\
+\partial_t X_3(t, a) &= 0.
+\end{align*}
+Solving for $X$, we get $X_3(t, a) = a_3$, and with $X' = (X_1, X_2)$,
+$$2X'(t) = Q(\overline \omega t)a'$$
+where $a' = (a_1, a_2)$ and $Q(\theta)$ is the rotation operator by $\theta$.
+Thus $\Omega_u$ induces rotation in some plane, here the plane $x_3 = 0$ since we did a change of coordinates.
+
+As for the symmetric part, we can find an orthogonal matrix $Q$ with
+$$Q^t \mathscr D_u Q = \diag(\gamma)$$
+where $\gamma \in \RR^3$. Moreover the trace of $\mathscr D_u$ is $\nabla \cdot u = 0$, so $\gamma_1 + \gamma_2 + \gamma_3 = 0$.
+After a change of coordinates, then, we may assume
+$$\mathscr D_u = \diag(\gamma_1, \gamma_2, -\gamma_1 - \gamma_2).$$
+Therefore if $u = \mathscr D_u$,
+\begin{align*}
+X_1(t, a) &= ae^{\gamma_1t}\\
+X_2(t, a) &= ae^{\gamma_2t}\\
+X_3(t, a) &= ae^{-(\gamma_1 + \gamma_2)t}
+\end{align*}
+(assuming $x_0 = t_0 = 0$).
+After a change of coordinates again, we can assume $\gamma_1, \gamma_2 < 0$, then the fluid converges onto the axis $x_3 > 0$, $x_1 = x_2 = 0$.
+
+The key term is the antisymmetric part $\Omega_u$, since it induces rotation.
+Taking the curl of the Navier-Stokes equation
+$$\partial_t u + (u \cdot \nabla) u + \nabla p = \nu \Delta u$$
+and using $\nabla \times \nabla = 0$ and
+\begin{align*}
+(u \cdot \nabla) u &= \omega \times u + \frac{1}{2} \nabla(|u|^2)\\
+\curl(\omega \times u) &= \omega(\nabla \cdot u) - u(\nabla \cdot \omega) + (u \cdot \nabla)\omega - (\omega \cdot \nabla)u\\
+\nabla \cdot u &= 0\\
+\nabla \cdot \omega &= 0
+\end{align*}
+we get
+\begin{equation}
+\label{vorticity equation}
+\partial_t \omega + (u \cdot \nabla)\omega = (\omega \cdot \nabla)u + \nu \Delta \omega,
+\end{equation}
+the \dfn{vorticity equation}. In two dimensions, $(\omega \cdot \nabla)u = 0$ since $\omega = \nabla^\perp u$. Thus we get the simplified equation
+\begin{equation}
+\label{2D vorticity equation}
+\partial_t \omega + (u \cdot \nabla)\omega = \nu\Delta \omega.
+\end{equation}
+Here (\ref{vorticity equation}) is a system of $3$ equations and $6$ unknowns.
+We need to be able to recover $u$ from $\omega$ to fix this problem, which depends on the domain $\Omega$.
+
+So let us solve the \dfn{div-curl system}
+\begin{align*}
+\nabla \cdot u &= 0\\
+\curl u &= \omega.
+\end{align*}
+Taking the curl of both sides,
+$$\curl \omega = \curl \curl u = -\Delta u + \nabla(\nabla \cdot u) = -\Delta u.$$
+Thus $u$ solves the Laplace equation with forcing term $\curl \omega$.
+If $\Omega = \RR^3$ then $\Delta^{-1}$ exists and commutes with $\curl$, thus
+$$u = -\curl \Delta^{-1}\omega.$$
+\begin{definition}
+The \dfn{stream function} $\psi$ of a vorticity $\omega$ is $\psi = \Delta^{-1}\omega$.
+\end{definition}
+In that case, $u = -\curl \psi$.
+If $N_d$ is the Newtonian kernel of $\RR^d$,
+$$N_d(x) = \begin{cases}
+\frac{\log|x|}{2\pi}, &d=2,\\
+\frac{1}{4\pi|x|}, &d=3,
+\end{cases}$$
+then
+$$\psi(x) = \int_{\RR^3} N_3(x - y) \omega(y) ~dy$$
+since $\psi = \Delta^{-1}\omega$, thus
+$$u(x) = -\frac{1}{4\pi} \int_{\RR^3} \frac{1}{|x - y|} \curl \omega(y) ~dy.$$
+Integrating by parts and using the Levi-Civita symbol (thus $\epsilon_{ijk} = 1$ if $(i, j, k)$ is an even permutation of $3$, $-1$ if $(i, j, k)$ is an odd permutation of $3$, and $0$ if an index is repeated),
+\begin{align*}
+u(x) &= -\frac{1}{4\pi} \int_{\RR^3} \frac{1}{|x - y|} \epsilon_{ijk} \partial_i \omega_j(y) e_k ~dy\\
+&= \frac{1}{4\pi} \int_{\RR^3} \partial_{y_i}\left(\frac{1}{|x - y|}\right) \varepsilon_{ijk} \epsilon_{ijk} \omega_j(y) e_k ~dy\\
+&= \int_{\RR^3} K_3(x - y) \omega(y) ~dy
+\end{align*}
+where
+$$K_3(x)h = \frac{1}{4\pi} \frac{x \times h}{|x|^3}.$$
+This formula is known as the \dfn{Biot-Savart law}.
+
+Now consider the case $\Omega = \RR^2$. In this case, $\omega$ is a scalar field and the div-curl system reads
+\begin{align*}
+\nabla \cdot u &= 0,\\
+\nabla^\perp u &= \omega.
+\end{align*}
+Again we introduce the stream function $\psi$, which is again a scalar field, and satisfies $u = \nabla^\perp \psi$.
+We can then again derive a Biot-Savart law
+$$u(x) = \int_{\RR^2} K_2(x - y) \omega(y) ~dy$$
+where
+$$K_2(x) = \frac{1}{2\pi} \frac{x^\perp}{|x|^2}.$$
+
+In the above derivations we have assumed that $u$ decays at infinity.
+This was necessary to impose that $\Delta^{-1}$ exists, and since we will eventually want to require that $u$ lies in a suitable Sobolev space, this is not a big loss.
+
+Now let us derive a Biot-Savart law with $\Omega = \Torus^d$.
+Let us take the fundamental domain $\Torus^d = [-\pi, \pi]^d$ and impose
+$$\int_{\Torus^d} u(t, x)~dx = \int_{\Torus^d} p(t, x) ~dx = 0.$$
+If we integrate
+$$\partial_t u + u \cdot \nabla u + \nabla p = \nu \Delta u$$
+we get
+$$\partial_t \int_{\Torus^d} u(t, x) ~dx + \int_{\Torus^d} u \cdot \nabla u + \nabla p = \nu \int_{\Torus^d} \Delta u$$
+and it follows that
+$$\int_{\Torus^d} u(t, x) ~dx = \int_{\Torus^d} u(0, x) ~dx$$
+so once we assume that $u(0, x)$ has mean zero this remains true over all time.
+
+Finally let us consider the case when $\Omega$ is an open, simply connected subset of $\RR^d$ and $\partial \Omega$ is a smooth closed manifold.
+For ideal flows we will assume that no fluid leaves $\Omega$, the \dfn{nonpenetrating boundary condition}
+$$u(t, x) \cdot n(x) = 0$$
+where $n$ is the unit normal field of $\partial \Omega$, for the Euler equations.
+For the Navier-Stokes equations we instead assume the \dfn{no-slip boundary condition}, thus $u = 0$ on $\partial \Omega$.
+To derive a Biot-Savart law, let us solve the div-curl problem
+\begin{align*}
+\nabla \cdot u &= 0 \\
+\curl u &= \omega.
+\end{align*}
+Suppose $d = 2$. We define the stream function to solve the Laplace equation
+\begin{align*}
+\Delta \psi &= \omega\\
+\psi|\partial \Omega &= 0.
+\end{align*}
+We then set $u = \nabla^\perp \psi$. We claim $u$ is nonpenetrating.
+Since $\psi|\partial \Omega = 0$, $\partial \Omega$ is a level curve of $\psi$.
+Therefore $\nabla^\perp \psi \perp n$, as desired.
+
+Now suppose $d = 3$. Again we define the stream function to solve the Laplace equation, and let $u = -\curl \psi$.
+It is easy to check that $u$ is no-slip.
+
+We note that the pressure $p$ does not appear in the vorticity equation.
+However we are given
+$$\partial_t u + u\cdot u + \nabla p = \nu \Delta u;$$
+taking the divergence and using $\nabla \cdot u = 0$, $\nabla \cdot \nabla = \Delta$, we get
+$$\Delta p = -\nabla \cdot(u \cdot \nabla u).$$
+After choosing a gauge for $p$ (which is quite a tricky issue if $\partial \Omega$ is a closed manifold) this uniquely defines $p$ on $\partial \Omega$.
+
+\section{Vorticity in ideal fluids}
+Assume that $\nu = 0$, thus $u$ defines an ideal fluid. Then the vorticity equation says
+$$\partial_t \omega + u \cdot \nabla \omega = (\omega \cdot \nabla)u,$$
+but
+$$((\omega \cdot \nabla)u)_i = \omega_j \partial_j u_i = \partial_j u_i \omega_j.$$
+Thus we will write
+$$(\omega \cdot \nabla)u = \nabla u \omega$$
+where we view $\nabla u$ as a matrix acting on the vector $\omega$. In $\RR^2$, of course, we instead have
+$$\partial_t \omega + u \cdot \nabla \omega = 0.$$
+
+In the below formula, we think of $\partial_a X$ as a matrix field (since $a$ is a vector and $X$ is a vector field).
+\begin{proposition}[vorticity transport formula]
+Let $u$ be an ideal fluid. Then
+$$\omega(t, X(t, a)) = \partial_a X(t, a) \omega(0, a).$$
+\end{proposition}
+\begin{proof}
+We claim that both sides solve the same differential equation. Indeed,
+$$\omega(0, X(0, a)) = \omega(0, a) = \partial_a X(0, a) \omega(0, a)$$
+since $\partial_a X(0, a) = \partial_a a = 1$.
+Also
+$$\frac{\partial}{\partial t} \omega(t, X(t, a)) = \nabla u(t, X(t, a))\omega(t, X(t, a)) \omega(t, X(t, a))$$
+while
+$$\frac{\partial}{\partial t}(\partial_a X(t, a) \omega(0, a)) = \frac{\partial}{\partial t} \partial_a X(t, a) \omega(0, a)$$
+but the derivatives commute so
+$$\frac{\partial}{\partial t}(\partial_a X(t, a) \omega(0, a)) = \partial_au(t, X(t, a)) \omega(0, a) = \nabla u(t, X(t, a)) \omega(t, X(t, a)).$$
+So by uniqueness of solutions for ODE the claim holds.
+\end{proof}
+
+In two dimensions, then, vorticity is constant along stream lines.
+
+\begin{corollary}
+Let $u$ be a two-dimensional ideal fluid. Then
+$$\omega(t, X(t, a)) = \omega(0, a).$$
+\end{corollary}
+\begin{proof}
+From the vorticity transport formula,
+$$\omega(t, X(t, a)) = \partial_a X(t, a) \omega(0, a)$$
+but $\omega = (0, 0, \overline \omega)$ for the scalar field $\overline \omega = \nabla^\perp u$.
+Similarly
+$$\partial_a X = \begin{bmatrix}\partial_1 X_1 & \partial_2 X_1 & 0\\\partial_1 X_2 & \partial_2 X_2 & 0 \\ 0 & 0 & 1\end{bmatrix}$$
+so $\partial_a X(t, a) \omega(0, a) = \overline \omega(0, a)$.
+\end{proof}
+
+\begin{definition}
+Let $C$ be a closed curve in $\RR^d$, parametrized by a function $y$.
+We call $C$ a \dfn{vortex line} at time $t$ if $C$ is tangent to $\omega(t)$, thus
+$$\dot y(s) = \lambda(s) \omega(t, y(s))$$
+for all $y \in [0, 1]$ and some $\lambda: [0, 1] \to \RR$.
+\end{definition}
+
+Vortex lines move with ideal fluids.
+
+\begin{proposition}
+Let $C$ be a vortex line at time $0$. Let
+$$C(t) = X(t, C).$$
+Then $C(t)$ is a vortex line at time $C$.
+\end{proposition}
+\begin{proof}
+One has
+$$\frac{\partial}{\partial s} X(t, y(s)) = \partial_a X(t, y(s)) \cdot y(s) = \partial_a X(t, y(s)) \lambda(s) \omega(0, y(s))$$
+but by the vorticity transport formula,
+$$\partial_a X(t, y(s)) \omega(0, y(s)) = \omega(t, X(t, y(s)))$$
+so
+$$\frac{\partial}{\partial s} X(t, y(s)) =  \lambda(s)\omega(t, X(t, y(s)))$$
+gives a vortex line at time $t$.
+\end{proof}
+
+\begin{definition}
+The \dfn{velocity circulation} along a vortex line $C$ is the line integral
+$$\Gamma_C = \int_C u(t, x) ~dx.$$
+\end{definition}
+
+\begin{proposition}
+Let $u$ be a smooth velocity field (possibly not incompressible),
+$$\frac{\partial}{\partial t} \Gamma_{C(t)} = \int_{C(t)} D_tu(t, x) ~dx.$$
+\end{proposition}
+\begin{proof}
+Since $C$ is a closed curve, we can write $C = a(\Torus)$ where $a: \Torus \to \Omega$.
+Then $C(t) = X(t, a(\Torus))$ and
+$$\Gamma_{C(t)} = \int_{C(t)} u(t, x) ~dx = \int_\Torus u(t, X(t, a(s))) \partial_s X(t, a(s)) ~ds.$$
+Differentiating,
+$$\frac{\partial}{\partial t} \Gamma_{C(t)} = \int_\Torus D_t u(t, X(t, a(s))) \partial_s X(t, a(s)) + u(t, X(t, a(s)))\partial_s u(t, X(t, a(s)))~ds$$
+but
+$$2u(t, X(t, a(s)))\partial_s u(t, X(t, a(s))) = \partial_s |u(t, X(t, a(s)))|^2$$
+so we are integrating a derivative over the torus, so by the fundamental theorem it has average zero.
+Thus
+$$\frac{\partial}{\partial t} \Gamma_{C(t)} = \int_\Torus D_t u(t, X(t, a(s))) \partial_s X(t, a(s))~ds = \int_{C(t)} D_tu(t, x)~dx .$$
+This was desired.
+\end{proof}
+
+\begin{corollary}[Kelvin's theorem: conservation of circulation]
+Let $u$ be a smooth solution of the Euler equations and let $C$ be a vortex line. Then
+$$\Gamma_{C(t)} = \Gamma_C.$$
+\end{corollary}
+\begin{proof}
+One has
+$$\Gamma_{C(t)} = \frac{\partial}{\partial t}\Gamma_{C(t)} = \int_{C(t)} D_tu(t, x) ~dx = -\int_{C(t)} \nabla p = 0$$
+since we are integrating a gradient along the closed curve $C(t)$.
+\end{proof}
+
+Let $S$ be a compact surface and let $\partial S = C$, where $C$ is a vortex line.
+Let $S(t) = X(t, S)$.
+By the Stokes curl formula, the vorticity flux along $S$ is
+$$\int_S \omega \cdot n ~dS = \int_C u~ds$$
+so by conservation of circulation, we also have conservation of vorticity flux:
+\begin{corollary}[Helmholtz' theorem: conservation of vorticity flux]
+One has
+$$\int_{S(t)} \omega(t) \cdot n(t) ~dS = \int_S \omega(0) \cdot n ~dS.$$
+\end{corollary}
+
+\section{Conservation laws}
+Hereinafter ideal fluids are those that obey the Euler equations; otherwise we call them viscous.
+\begin{proposition}[ideal conservation laws]
+Let $u$ be a Schwartz solution of the Euler equations, $d = 3$.
+Then the following quantities are constant in time:
+\begin{enumerate}
+\item The \dfn{kinetic energy}
+$$\frac{1}{2} ||u(t)||_{L^2}^2.$$
+\item The \dfn{total velocity flux}
+$$\int_{\RR^3} u(t,x )~dx.$$
+\item The \dfn{total vorticity flux}
+$$\int_{\RR^3} \omega(t, x) ~dx.$$
+\item The \dfn{helicity}
+$$\int_{\RR^3} u(t, x) \cdot \omega(t, x) ~dx.$$
+\item The \dfn{fluid impulse}
+$$\int_{\RR^3} x \times u(t, x) ~dx.$$
+\item The \dfn{moment of fluid impulse}
+$$\int_{\RR^3} x \times (x \times u(t, x)) ~dx.$$
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Let us prove this for kinetic energy; the other proofs are similar. One has
+$$\frac{\partial}{\partial t} \frac{1}{2} ||u(t)||_{L^2}^2 = \int_{\RR^3} \partial_t u \cdot u.$$
+However, by the Euler equation, this is
+$$\frac{\partial}{\partial t} \frac{1}{2} ||u(t)||_{L^2}^2 = -\int_{\RR^3} ((u \cdot \nabla)u) \cdot u - \int_{\RR^3} \nabla p \cdot u.$$
+By Green's theorem and incompressibility,
+$$\int_{\RR^3} \nabla p \cdot u = \langle p, \nabla \cdot u\rangle = 0.$$
+Thus
+$$\frac{\partial}{\partial t} \frac{1}{2} ||u(t)||_{L^2}^2 = -\int_{\RR^3} ((u \cdot \nabla)u) \cdot u = \int_{\RR^3} \partial_j u_j |u_i|^2 = \langle \nabla \cdot u , |u_i|^2\rangle = 0.$$
+\end{proof}
+
+The \dfn{Onsager conjecture} says that we don't need $u$ to be Schwartz, but only that $u$ has the H\"older regularity $C^{1/3}$, at least to show that the kinetic energy is conserved.
+
+\begin{proposition}
+Let $u$ be a Schwartz solution of the Euler equations and $d = 2$. Then the following quantities are conserved:
+\begin{enumerate}
+\item The \dfn{total velocity flux} $\int_{\RR^2} u$.
+\item The \dfn{total vorticity flux} $\int_{\RR^2} \omega$
+\item The \dfn{kinetic energy} $||u||_{L^2}^2/2$.
+\item $||\omega(t)||_{L^p}$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Let us prove that the $L^p$ norm of $\omega(t)$ is conserved.
+We may assume $p \in (1, \infty)$ and otherwise use a limiting argument.
+
+One has
+$$\frac{\partial}{\partial t} ||\omega(t)||_{L^p}^p = p \int_{\RR^2} |\omega(t, x)|^{p-2} \omega(t,x ) \partial_t \omega(t, x)~dx.$$
+Using $d = 2$ to compute $\partial_t \omega$ we get
+$$\frac{\partial}{\partial t} ||\omega(t)||_{L^p}^p = -p \int_{\RR^2} |\omega(t, x)|^{p-2} \omega(t,x) u \cdot \nabla \omega(t,x )~dx = -\int_{\RR^2} u \cdot \nabla|\omega(t,x)|^p ~dx$$
+but integrating by parts again we get
+$$\frac{\partial}{\partial t} ||\omega(t)||_{L^p}^p = \int_{\RR^2} \nabla \cdot u |\omega|^p = 0$$
+which is what we wanted.
+\end{proof}
+
+\section{Explicit solutions in two dimensions}
+Let us first consider the case $d = 2$, and look for explicit steady solutions to the Euler equation
+$$\partial_t \omega + u \cdot \nabla \omega = 0$$
+written in vorticity form.
+If $(u, \omega)$ is a time-independent solution then
+$$u \cdot \omega = 0.$$
+Let us restrict to a region $\Omega$ and consider the stream function
+$$\begin{cases}
+\Delta \psi &= \omega\\
+\psi|\partial \Omega &= 0.
+\end{cases}$$
+Then $u = (-\partial_2 \psi, \partial_1\psi)$, so
+$$u \cdot \nabla \omega = \begin{pmatrix}\partial_1 \psi & \partial_2 \psi \\
+\partial_1 \Delta \psi & \partial_2 \Delta \psi
+\end{pmatrix}$$
+so we write $u \cdot \nabla \omega = J(\psi, \Delta \psi)$.
+Since $u \cdot \nabla \omega = 0$, the gradients $\nabla \psi$ and $\nabla(\Delta \psi)$ are linearly dependent.
+In particular, $\nabla^\perp \psi$ and $\nabla^\perp(\Delta \psi)$ are linearly dependent, so $\psi$ and $\Delta \psi$ have the same level sets.
+Therefore there is some diffeomorphism $F: \RR \to \RR$ such that
+\begin{equation}
+\label{functional equation}
+\Delta \psi = F \circ \psi.
+\end{equation}
+Conversely, if (\ref{functional equation}) holds, even if $F$ is not necessarily a diffeomorphism, then $J(\psi, \Delta \psi) = 0$, inducing a steady solution of the Euler equations.
+
+Thus we have reduced the problem of finding steady solutions to the Euler equations to:
+\begin{proposition}
+Let $d = 2$.
+A stream function $\psi: \Omega \to \RR$ defines a steady solution of the Euler equations if and only if there is a smooth function $F: \RR \to \RR$ such that the functional equation (\ref{functional equation}) holds.
+\end{proposition}
+
+For steady flows, the particle trajectory $X$ satisfies
+$$\partial_t X = \nabla^\perp \psi \circ X$$
+which is a Hamiltonian system with $\psi$ as the Hamiltonian; in particular $\psi$ is constant along the trajectories of $X$.
+
+\begin{definition}
+A \dfn{stagnation point} in a steady solution $u$ of the Euler equations in velocity form is a point $a$ at which $u(a) = 0$.
+\end{definition}
+
+Equivalently, $a$ is stagnant iff $\nabla \psi(a) = 0$, and that happens iff the trajectory of $X$ at $a$ is $X(t, a) = a$.0
+If $a$ is a local extremum of $\psi$ then close to $a$, the trajectories of $X$ form ellipses around $a$.
+If instead $a$ is a saddle point of $\psi$ then $a$ is a hyperbolic fixed point of $X$; that is, there are coordinates in which $a$ is a sink of one axis, a source of another axis, and elsewhere the trajectories form hyperbolas.
+
+\begin{example}
+Let us consider the \dfn{radial eddy solution}.
+Suppose that $\omega_0$ is a smooth radial vorticity and $d = 2$.
+Since $\Delta$ is rotationally symmetric, we will look for radial stream functions $\psi_0$.
+In polar coordinates, we get the ODE
+$$\psi_0''(r) + \frac{\psi_0'(r)}{r} = \omega_0(r)$$
+which can be rewritten as
+$$r \psi_0'(r) = \int_0^r s\omega_0(s) ~ds + C$$
+or equivalently,
+\begin{equation}
+\label{radial eddy stream ODE}
+\psi_0'(r) = \frac{1}{r} \int_0^r s\omega_0(s) ~ds + \frac{C}{r}.
+\end{equation}
+Since $\psi_0, \Delta \psi_0 = \omega_0$ are both radial, they have parallel gradients, so $J(\psi_0, \Delta \psi_0) = 0$.
+In particular, any radial vorticity defines a steady solution to the Euler equations with stream function (\ref{radial eddy stream ODE}), $C = 0$.
+(Here we take $C = 0$ so avoid a singularity at $r = 0$.)
+In that case,
+$$u(x) = \frac{x^\perp}{|x|^2} \int_0^{|x|} s\omega_0(s) ~ds$$
+which defines a rotation.
+If $\omega_0 \geq 0$ then $u$ rotates counterclockwise.
+\end{example}
+
+\begin{example}
+Now let us look for radial eddy solutions of the Navier-Stokes equations in vorticity form, thus
+$$\partial_t \omega^\nu + u \cdot \nabla \omega^\nu = \nu \Delta \omega^\nu$$
+with $\nu > 0$ and $d = 2$.
+We cannot get a steady solution due to the viscosity, but we will let $\omega_0$ be a radial vorticity and assume the initial condition $\omega^\nu(0) = \omega_0$.
+Since $\Delta$ is rotationally invariant, we look for radially symmetric solutions $\omega^\nu$.
+Then
+$$u^\nu \cdot \nabla \omega^\nu = J(\psi^\nu, \Delta \psi^\nu) = 0.$$
+Therefore the Navier-Stokes equations reduce to the heat equation
+$$\partial_t \omega^\nu = \nu \partial_r^2 \omega^\nu$$
+with $d = 1$, so that the heat equation has the explicit solution
+$$\omega^\nu(t, r) = \int_{-\infty}^\infty H(\nu t, r - s) \omega_0(s) ~ds$$
+where the heat kernel satisfies the normalization
+$$H(t, x) = \frac{1}{\sqrt{4\pi t}} \exp\left(-\frac{|x|^2}{4t}\right).$$
+Then $\omega^\nu$ is a solution.
+\end{example}
+
+Let us now consider the \dfn{inviscid limit problem}: if $\omega^\nu$ is a solution to the Navier-Stokes equations and $\omega$ is the solution to the Euler equations then does $\omega^\nu \to \omega$ as $\nu \to 0$?
+In general this is quite hard.
+
+Let us solve the inviscid limit problem for radial eddies. The question is, does $\omega^\nu$ converge to its initial data $\omega_0$ as $\nu \to 0$?
+This is easy to solve since this is the special case of the heat equation.
+
+\begin{lemma}
+Let $\omega_0$ be a radial eddy solution to the Euler equations and $\omega^\nu$ the induced solution to the Navier-Stokes equations.
+Then
+$$||\omega^\nu(t) - \omega_0||_{L^\infty} \lesssim ||\omega_0||_{W^{1,\infty}} \sqrt{\nu t}$$
+and
+$$||\omega^\nu(t) - \omega_0||_{L^2} \lesssim (||\omega_0||_{L^2} + ||\omega_0''||_{L^2}) \nu t$$
+(so in particular $||\omega^\nu(t) - \omega||_{L^2} \lesssim ||\omega_0||_{W^{2,\infty}} \nu t$).
+\end{lemma}
+\begin{proof}
+The analogous result is true for solutions of the heat equation.
+\end{proof}
+
+Let us now consider steady solutions on the torus $\Torus^2$. We normalize the Fourier transform of $f$ as
+$$\hat f(k) = \int_{\Torus^2} f(x) e^{-ik\cdot x} ~dx.$$
+We look for stream functions $\psi: \Torus^2 \to \RR$ with $\Delta \psi = F \circ \psi$.
+In particular this holds for $F(y) = \lambda y$ if $\psi$ is a $\lambda$-eigenfunction of $\Delta$.
+So eigenfunctions of $\Delta$ give rise to steady solutions of the Euler equations.
+The real eigenfunctions of $\Delta$ have basis.
+$$\psi(x) = a_k \cos kx + b_k \sin kx$$
+with $a_k, b_k \in \RR$, and $k$ ranges over $\ZZ^2$.
+Here $\lambda = -|k|^2$.
+
+That is, for every $\ell \in \ZZ^+$, we can define
+\begin{equation}
+\label{torus steady stream}
+\psi(x) = \sum_{|k|^2 = \ell} a_k \cos kx + b_k \sin kx
+\end{equation}
+and $u = \nabla^\perp \psi$ is a steady solution to the Euler equations on $\Torus^2$.
+
+\begin{example}
+Let $\ell = 2$. The solution
+$$\psi(x) = \sin x_1 \cos x_2$$
+has $6$ local extrema and $6$ saddle points.
+\end{example}
+
+\begin{example}
+Now we solve the Navier-Stokes equation
+$$\partial_t \omega^\nu + u^\nu \cdot \omega^\nu + \nu \Delta \omega^\nu$$
+on $\Torus^2$, with streamline $\psi_0$ defined by (\ref{torus steady stream}).
+Let us use the ansatz
+$$\omega^\nu(t, x) = a(t) \psi_0(x)$$
+where $a(0) = 1$.
+First
+$$u^\nu \cdot \nabla \omega^\nu = a(t)^2 u_0 \cdot \nabla \omega_0(x)$$
+where $u_0 = \nabla^\perp \psi_0$.
+But $u_0 \perp \nabla \omega_0$ so the Navier-Stokes equation reduces to the heat equation with
+$$\Delta \omega^\nu = a(t) \Delta \omega_0 = a(t) \Delta^2 \psi_0.$$
+But with $\psi_0$ a steady stream given by $\ell$,
+$$\Delta \omega^\nu = -\ell a(t) \Delta \psi_0 = \ell^2 a(t) \psi_0.$$
+Meanwhile
+$$\partial_t \omega^\nu = -\ell a'(t) \psi_0.$$
+Therefore the heat equation reduces to
+$$a'(t) = -\nu \ell a(t).$$
+With our initial data $a(0) = 1$, it follows that $a(t) = e^{-\nu \ell t}$ so
+$$\omega^\nu(t, x) = e^{-\nu \ell t} \omega_0(x).$$
+We get a bound
+$$|\omega^\nu(t, x) - \omega_0(x)| = |e^{-\nu \ell t} - 1|\cdot|\omega_0(x)| \leq \nu \ell t ||\omega_0||_{L^\infty}$$
+by the mean value theorem.
+Thus these solutions satisfy the inviscid limit condition
+$$||\omega^\nu(t) - \omega_0||_{L^\infty} \leq \nu \ell t ||\omega_0||_{L^\infty}$$
+in $L^\infty$, which in particular implies the same for $L^2$.
+\end{example}
+
+\section{Explicit solutions in three dimensions}
+Let us first treat the case ``$d = 2.5$".
+This means that $u(x)$ only depends on $\tilde x = (x_1, x_2)$ even though $x \in \RR^3$.
+
+\begin{theoremx}
+Let $\tilde \psi$ be a stream function of a steady solution to the Euler equations with $d = 2$.
+Then for any smooth function $W: \RR \to \RR$,
+$$u(x) = (-\partial_2 \tilde \psi(\tilde x), \partial_1 \psi(\tilde x), W(\tilde \psi(\tilde x)))$$
+is a steady solution of the Euler equations with $d = 3$.
+\end{theoremx}
+
+This theorem is an easy exercise once we recall that a steady solution to the Euler equations with $d = 3$ satisfies
+$$u \cdot \nabla \omega = \omega \cdot \nabla u.$$
+
+\begin{definition}
+A \dfn{Beltrami field} is a vector field $u$ such that there is a scalar field $\lambda$ such that $\curl u = \lambda u$.
+\end{definition}
+
+If $u$ is an incompressible velocity field such that
+$$\nabla \lambda \cdot u = 0$$
+then $u$ is Beltrami, and in fact solves the steady Euler equations with $d = 3$ and $\omega = \lambda u$.
+Indeed we must show
+$$u \cdot \nabla \omega = \omega \cdot \nabla u.$$
+But
+$$u \cdot \nabla \omega = u \cdot \nabla(\lambda u) = (u \cdot \nabla \lambda)u + \lambda u \cdot \nabla u = \omega \cdot \nabla u.$$
+The converse also holds.
+
+Assume $\psi: \RR^2 \to \RR$, $\Delta \psi = F(\psi)$, $W,F$ smooth functions. Then
+$$u(x) = (-\partial_2 \tilde \psi(\tilde x), \partial_1 \psi(\tilde x), W(\tilde \psi(\tilde x)))$$
+is a solution of the Euler equations on $\RR^3$ with vorticity
+$$\omega = (W'(\psi)\partial_2\psi, -W'(\psi) \partial_1\psi, W(\psi)).$$
+If $u$ is Beltrami, then $u \times \omega = 0$, and hence
+$$W'(\psi)W(\psi) = -F(\psi).$$
+
+\begin{example}
+Let
+$$\psi(\tilde x) = \sum_{|k|^2 = \ell} a_k \cos kx + b_k \sin kx$$
+be an eigenfunction of $\Delta$ on $\Torus^2$.
+Then $\Delta \psi = \ell\psi$. We then need to solve the equation
+$$W'(\psi)W(\psi) = \ell\psi$$
+to get a Beltrami flow $u$. We get
+$$(W(\psi)^2)' = 2\ell \psi$$
+and hence
+$$W(\psi)^2 = \ell \psi^2 + C.$$
+If $C = 0$ we get $W(\psi) = \psi \sqrt \ell$.
+We get a Beltrami flow with $d = 2.5$,
+$$u = (-\partial_2\psi, \partial_1\psi, \psi \sqrt \ell),$$
+on $\Torus^3$.
+\end{example}
+
+\chapter{Local well-posedness for Navier-Stokes}
+Given an initial vector field $u(0)$, we would like to find a solution $u: [0, T) \to C^\infty$ to the Euler or Navier-Stokes equations, where $T > 0$ is maximal possible, and ideally $T = \infty$.
+We would like to show that the solution is also unique.
+In case the maximal time, say $T_*$, is finite, we would like to quantify the singularity at $T = T_*$.
+
+Let $\nu \geq 0$, $d \geq 2$, and consider the initial-value problem for
+$$\partial_t u + u \cdot \nabla u + \nabla p = \nu \Delta u$$
+on $\RR^d$. Assume $u \in C^\infty([0, T) \to \Sch(\RR^d))$ where $\Sch(\RR^d)$ is the Schwartz space.
+We showed that the kinetic energy
+$$E(t) = \frac{1}{2} ||u(t)||_{L^2}^2$$
+satisfies
+$$E'(t) = -\nu ||\nabla u(t)||_{L^2}^2 \leq 0.$$
+Therefore the $L^2$ norm of $u$ is decreasing.
+
+The proof of local well-posedness will work as follows.
+We first show a closed a priori estimate in some function space $X$, and then show the existence of an approximate equation to the Euler equations which satisfies the same a priori estimates in $X$.
+Then if $u_\varepsilon$ is a solution to the $\varepsilon$-approximate equation, we can use compactness or similar to show that $u_\varepsilon \to u$ where $u$ is a solution to the Euler equations.
+Note however the convergence may be weaker than convergence in $X$, but for example, if $X = L^2$ and convergence is weak convergence in $L^2$, then $u \in L^2$.
+
+\section{Harmonic analysis review}
+In our case we will need the function space $X$ to be a Sobolev space.
+Let
+$$||u||_{k,\Sch} = \sup_{|\alpha| \leq k} (1 + |x|^k) |\partial^\alpha u(x)|_\infty$$
+be the $k$th Schwartz seminorm.
+Let $\Sch'$ denote the dual of Schwartz space, thus the space of tempered distributions on $\Sch$.
+We take the normalization
+$$\hat u(\xi) = \int_{\RR^d} u(x) e^{-ix\xi} ~dx$$
+of the Fourier transform, $u \in \Sch$.
+Thus
+$$u(x) = \frac{1}{2\pi} \int_{\RR^d} \hat u(\xi) e^{ix\xi} ~d\xi.$$
+We define the Sobolev space to be the space of tempered distributions $u$ such that $\hat u \in L^2_{loc}$ with
+$$||u||_{H^s}^2 = \int_{\RR^d} |\hat u(\xi)|^2 (1 + |\xi|^2)^s ~d\xi$$
+finite; thus for example the Dirac mass $\delta$ satisfies $\delta \in H^{-d/2-\varepsilon}$ and this is best possible, since $\hat \delta = 1$.
+Let
+$$(\xi)^s = (1 + |\xi|^2)^{s/2}$$
+denote the Japanese angle bracket.
+
+\begin{proposition}
+If $s > d/2$ then
+$$||u||_{L^\infty} \lesssim ||u||_{H^s},$$
+thus $H^s \subseteq L^\infty$.
+\end{proposition}
+\begin{proof}
+One has
+\begin{align*}|u(x)| &\lesssim \int_{\RR^d} |\hat u(\xi)| ~d\xi\\
+&= \int_{\RR^d} (1 + |\xi|^2){-s/2} (1 + |\xi|^2)^{s/2} |\hat u(\xi)| ~d\xi\\
+&\leq ||1||_{H^{-s}} ||\hat u||_{H^s}
+\end{align*}
+by H\"older's inequality.
+\end{proof}
+
+\begin{theorem}
+One has
+$$||fg||_{H^m} \lesssim ||f||_{L^\infty} ||g||_{H^m} + ||f||_{H^m} ||g||_{L^\infty}$$
+and hence if $m > d/2$ then
+$$||fg||_{H^m} \lesssim ||f||_{H^m} ||g||_{H^m}$$
+and so $H^m$ is an algebra.
+
+Moreover, if $|\alpha| = m$ then
+$$||\partial^\alpha(fg) - f\partial^\alpha g||_{L^2} \lesssim ||\nabla f||_{L^\infty} ||g||_{H^{m-1}} + ||\nabla f||_{H^{m-1}} ||g||_{L^\infty}.$$
+\end{theorem}
+\begin{proof}
+By H\"older's inequality,
+$$||\partial^\alpha(fg)||_{L^2} \lesssim_\alpha \sum_{0 \leq \beta \leq \alpha} ||\partial^\beta f \partial^{\alpha - \beta} g|||_{L^2}
+\leq \sum_{0 \leq \beta \leq \alpha} ||\partial^\beta f||_{L^{2|\alpha|/|\beta|}} ||\partial^{\alpha - \beta} g||_{L^{2|\alpha|/(|\alpha| - |\beta|)}}.$$
+The Gagliardo-Nirenberg inequality
+$$||\nabla^i u||_{L^{2r/i}} \lesssim ||u||_{L^\infty}^{1-i/r} ||\nabla^r u||_{L^2}^{i/r},$$
+valid when $0 < i < r$, implies with $|\alpha| = r$, $|\beta| = i$,
+\begin{align*}
+||\partial^\alpha(fg)||_{L^2}
+&\lesssim_\alpha ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty} \\
+&\qquad+ \sum_{0 < \beta < \alpha} ||\partial^\beta f||_{L^{2|\alpha|/|\beta|}} ||\partial^{\alpha - \beta} g||_{L^{2|\alpha|/(|\alpha| - |\beta|)}}\\
+&=  ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty} \\
+&\qquad+
+\sum_{0 < \beta < \alpha} ||f||_{L^\infty}^{1-1/|\beta||\alpha|} ||\partial^\beta f||_{L^2}^{|\beta|/|\alpha|} ||g||_{L^\infty}^{1-(|\alpha| - |\beta|)/|\alpha|} ||\partial^\alpha g||_{L^2}^{(|\alpha| - |\beta|)/|\alpha|}.
+\end{align*}
+Since $1 - 1/|\beta||\alpha| = (|\alpha - |\beta|)/|\alpha|$ and similarly for $|\beta|/|\alpha|$, we simplify to
+\begin{align*}
+||\partial^\alpha(fg)||_{L^2}
+&\lesssim_\alpha ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty}\\
+&\qquad+ \sum_{0 < \beta < \alpha} (||f||_{L^\infty} ||\partial^\alpha g||_{L^2})^{1-|\beta|/|\alpha|} (||g||_{L^\infty} ||\partial^\alpha f||_{L^2})^{|\beta|/|\alpha|}\\
+&\leq ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty}\\
+&\qquad+\sum_{0 < \beta < \alpha} ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty}\\
+&\leq ||f||_{L^\infty} ||\partial^\alpha g||_{L^2} + ||\partial^\alpha f||_{L^2} ||g||_{L^\infty}.
+\end{align*}
+This completes the proof of the product estimate.
+
+For the commutator estimate,
+$$||\partial^\alpha(fg) - f\partial^\alpha g||_{L^2} \lesssim_\alpha \sum_{0 < \beta \leq \alpha} ||\partial^\beta f \partial^{\alpha - \beta}g||_{L^2}$$
+by the product rule. Without loss of generality let us assume $\beta_1 \geq 1$ and then set $\beta' = \beta - (1, 0, \dots, 0)$, $0 < \beta \leq |\alpha|$.
+Thus $\alpha_1 \geq 1$, so set $\alpha' = \alpha - (1, 0, \dots, 0)$.
+Then
+$$\partial^\beta f \partial^{\alpha - \beta}g = \partial^{\beta'}\partial_1f \partial^{\alpha' - \beta'}g.$$
+Then by the proof of the product estimate,
+\begin{align*}
+||\partial^{\beta'}\partial_1f \partial^{\alpha' - \beta'}g||_{L^2} &\lesssim ||\partial_1f||_{L^\infty} ||g||_{H^{m-1}} + ||\partial_1f||_{H^{m-1}} ||g||_{L^\infty}\\
+&\lesssim ||\nabla f||_{L^\infty} ||g||_{H^{m-1}} + ||f||_{H^m} ||g||_{L^\infty}.
+\end{align*}
+This gives the proof of the commutator estimate.
+\end{proof}
+
+If $s \in \RR$, let $\Lambda^s$ be the Fourier multiplier
+$$\widehat{\Lambda^sf}(\xi) = (1 + |\xi|^2)^{s/2} \hat f(\xi).$$
+Then $\Lambda^s$ is an isometry $H^s \to L^2$.
+
+\begin{definition}
+The \dfn{Leray projector} is the Fourier multiplier $\PP$ defined by
+$$\widehat{(\PP u)^j}(\xi) = \widehat{u^j}(\xi) - \frac{1}{|\xi|^2} \sum_{k=1}^d \xi_j\xi_k \widehat{u^k}(\xi)$$
+whenever $u$ is a tempered vector field on $\RR^d$.
+\end{definition}
+
+\begin{theorem}[Kato-Ponce estimates]
+Let $s > 0$, $1 < p < \infty$. Then
+$$||fg||_{H^s} \lesssim_s ||f||_{L^\infty} ||g||_{H^s} + ||f||_{H^s} ||g||_{L^\infty}.$$
+Moreover, if $[\Lambda^s, f]g = \Lambda^s(fg) - f\Lambda^sg$, then
+$$||[\Lambda^s, f]g||_{L^p} \lesssim ||\nabla f||_{L^\infty} ||\Lambda^{s-1}g||_{L^p} + ||\Lambda^sf||_{L^p} ||g||_{L^\infty}.$$
+\end{theorem}
+\begin{proof}
+Hard.
+\end{proof}
+
+\begin{theorem}[Leray estimates]
+If $u$ is a vector field, $\nabla \cdot(\PP u) = 0$.
+Moreover if $s \geq 0$ and $u \in H^s$ then there is a tempered scalar field $\varphi$ such that
+$$u = \PP u + \nabla \varphi,$$
+and $\PP u \perp \nabla \varphi$ in $H^r$ whenever $0 \leq r \leq s$.
+In particular, $\PP$ is the orthogonal projection from $H^s$ onto the subspace of divergence-free vector fields in $H^s$.
+\end{theorem}
+\begin{proof}
+One can directly compute $\widehat{\nabla \cdot(\PP u)} = 0$.
+We then set
+$$\hat \varphi(\xi) = \frac{1}{i|\xi|^2} \sum_k \xi_k \widehat{u^k}(\xi)$$
+It's easy to check that $\PP$ is bounded on $H^s$; one can then use integration by parts on
+$$(\Lambda^s \PP u, \Lambda^s \nabla \varphi)_{L^2} = (\nabla \cdot(\PP\Lambda^su), \Lambda^s\varphi)_{L^2} = 0.$$
+This easily gives the claim.
+\end{proof}
+
+\section{Local well-posedness for Euler in Sobolev spaces}
+The modern notion of well-posedness for Cauchy problems was introduced by Hadamard in 1902.
+A Cauchy problem is well-posed if there is a unique solution, and the solution must depend continuously on the initial data.
+
+We will prove continuous dependence on initial data later on.
+Recall that if $s > 1 + d/2$ then $H^s(\RR^d) \subset W^{1, \infty}(\RR^d)$, and in that case the flow map is uniquely determined since every element of $W^{1,\infty}$ is Lipschitz.
+
+\begin{theorem}
+Let $d \geq 2$, $s > 1+d/2$. Consider the Euler system
+\begin{equation}
+\label{Euler well posed}
+\begin{cases}
+(\partial_t + u \cdot \nabla)u + \nabla p = 0\\
+\nabla \cdot u = 0 \\
+u(0) = u_0.
+\end{cases}
+\end{equation}
+For every $u_0 \in H^s(\RR^d)$ with $\nabla \cdot u_0 = 0$, there is a
+$$T \gtrsim_s \frac{1}{||u_0||_{H^s(\RR^d)}}$$
+and unique $u \in C([0, T] \to H^s(\RR^d))$.
+\end{theorem}
+
+We start by proving a priori estimates in $H^s$.
+The Leray projection
+\begin{equation}
+\label{Leray Euler well posed}
+0 = \PP((\partial_t + u \cdot \nabla)u + \nabla p) = \partial_t u + \PP(u \cdot \nabla u)
+\end{equation}
+eliminates the pressure from the Euler system.
+
+\begin{lemma}
+Let $u$ be a Schwartz solution to (\ref{Euler well posed}) with
+$$u \in C([0, T] \to H^{s+1+d/2})$$
+and $s > 1 + d/2$.
+Then
+$$\partial_t ||u(t)||_{H^s}^2 \lesssim_s ||\nabla u(t)||_{L^\infty} ||u(t)||_{H^s}.$$
+\end{lemma}
+\begin{proof}
+By (\ref{Leray Euler well posed}) because $\PP$ is self-adjoint (since $\PP$ has real symbol),
+$$\frac{1}{2}\partial_t ||u(t)||_{L^2}^2 = (\partial_t u, u)_{L^2} = -(\PP(u \cdot \nabla u), u)_{L^2} = -(u \cdot \nabla u, u)_{L^2}$$
+which gives
+$$\partial_t ||u(t)||_{L^2}^2 = -\int_{\RR^d} u \cdot \nabla |u|^2 = \int_{\RR^d}|u|^2 \nabla \cdot u = 0.$$
+This estimate is good in $L^2$ and can easily be adapted to $H^s$ by replacing $u$ with $\Lambda^su$.
+
+Apply $\Lambda^s$ to (\ref{Leray Euler well posed}) to get
+$$0 = \partial_t \Lambda^s u + \Lambda^s \PP(u \cdot \nabla u) = \partial_t \Lambda^s u + u \cdot \nabla \Lambda^s u + \Lambda^s \PP(u \cdot \nabla u) - u \cdot \nabla \Lambda^s u.$$
+Then
+\begin{align*}
+\frac{1}{2} \partial_t ||\Lambda^s u||_{L^2}^2 &= (\partial_t \Lambda^s u, \Lambda^s u)_{L^2}\\
+&= -(u\cdot \nabla \Lambda^s u, \Lambda^s u)_{L^2} - (\Lambda^s \PP(u \cdot \nabla u), \Lambda^s u)_{L^2} + (u \cdot \nabla \Lambda^s u, \Lambda^s u)_{L^2}.
+\end{align*}
+Then
+$$(u\cdot \nabla \Lambda^s u, \Lambda^s u)_{L^2} = \frac{1}{2}\int_{\RR^d} u \cdot \nabla |\Lambda^s u|^2 = -\frac{1}{2}\int_{\RR^d} (\nabla \cdot u) |\Lambda^s u|^2 = 0.$$
+This was justified because $u \in H^{s+1+d/2}$ implies $\nabla \Lambda^s u \in H^{d/2}$.
+So by the Sobolev embedding theorem says $\Lambda^s u \in L^\infty$ so $\Lambda^s u \nabla \Lambda^s u \in L^2$.
+Therefore
+\begin{align*}\frac{1}{2} \partial_t ||\Lambda^s u||_{L^2}^2 &= - (\Lambda^s \PP(u \cdot \nabla u), \Lambda^s u)_{L^2} + (u \cdot \nabla \Lambda^s u, \Lambda^s u)_{L^2}\\
+&= -(\Lambda^s(u \cdot \nabla u), \PP \Lambda^s u) + (u \cdot \nabla \Lambda^s u, \Lambda^s u)\\
+&= -(\Lambda^s(u \cdot \nabla u), \Lambda^s u) + (u \cdot \nabla \Lambda^s u, \Lambda^s u)\\
+&= -(\Lambda^s(u \cdot \nabla u) - u \cdot \nabla \Lambda^s u, \Lambda^s u)\\
+&= -([\Lambda^s, u] \cdot \nabla u, \Lambda^s u).
+\end{align*}
+By the Kato-Ponce commutator estimate,
+$$||[\Lambda^s, u] \cdot \nabla u||_{L^2} \lesssim ||\nabla u||_{L^\infty} ||\Lambda^{s-1} \nabla u||_{L^2} + ||\Lambda^s u||_{L^\infty} ||\nabla u||_{L^\infty} \lesssim ||\nabla u||_{L^\infty} ||u||_{H^s}.$$
+We deduce
+$$\frac{1}{2} \partial_t ||\Lambda^s u||_{L^2}^2 \lesssim ||\nabla u||_{L^\infty} ||u||_{H^s}^2$$
+which was desired.
+\end{proof}
+
+The significance of this estimate is that since $s > 1 + d/2$,
+$$||\nabla u|_{L^\infty} \lesssim ||u||_{H^s}$$
+and thus
+$$\partial_t ||u(t)||_{H^s}^2 \lesssim ||u(t)||_{H^s}^3.$$
+It's tempting to rewrite this as
+$$\partial_t ||u(t)||_{H^s} \lesssim ||u(t)||_{H^s}^2$$
+but this argument is invalid because a priori $u(t)$ could be zero.
+Instead, we set $f(t) = ||u(t)||_{H^s}^2$ so
+$$f' \lesssim f^{3/2}.$$
+Solving the differential inequality we get
+$$f^{-1/2} \geq f^{-1/2}(0) - Ct$$
+for some $C$ which only depends on $s,d$.
+If $f^{-1/2}(0) \geq Ct$
+(that is,
+$$t \lesssim \frac{1}{||u_0||_{H^s}})$$
+then
+$$\sqrt{f(t)} \leq \frac{1}{||u_0||_{H^s} - Ct}.$$
+This gives us control on the norm of the solution based on the initial data.
+
+Let us now approximate the Euler equation
+$$\partial_t u + \PP(u \cdot \nabla u) = 0$$
+by mollifying the frequency space.
+Let $\chi$ be a smooth function of compact support on $\RR^d$ such that $\chi(\xi) = 1$ if $|\xi| < 1/2$.
+Introduce the mollifier
+$$J_\varepsilon = \chi(\varepsilon D)$$
+where $D$ is meant in the sense of pseudodifferential operators, so that if $f$ is tempered,
+$$\widehat{J_\varepsilon f}(\xi) = \chi(\varepsilon \xi) \hat f(\xi).$$
+
+Recall that $T_n \to T$ in the strong operator topology provided that for every $f$, $T_nf \to Tf$.
+
+\begin{lemma}
+Let $\varepsilon > 0$ be small enough, $r \geq 0$, $1 \leq p \leq \infty$.
+Then
+$$||J_\varepsilon||_{L^2 \to H^r} \lesssim_r \frac{1}{\varepsilon^r}.$$
+Moreover, $J_\varepsilon$ converges in the strong $H^r$ topology to the identity.
+Similarly, $||J_\varepsilon||_{L^p \to L^p} \lesssim_p 1$ and $J_\varepsilon$ converges in the strong $L^p$ topology to the identity.
+\end{lemma}
+\begin{proof}
+An easy exercise with pseudodifferential operators.
+\end{proof}
+
+Consider the approximate Euler system
+$$\begin{cases}
+\partial_t u^\varepsilon + \PP J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla(J_\varepsilon u^\varepsilon)) = 0\\
+\nabla \cdot u^\varepsilon = 0\\
+u^\varepsilon(0) = J_\varepsilon u_0
+\end{cases}$$
+with the compatibility condition $\nabla \cdot u_0 = 0$.
+For any $s \in \RR$ we let $H^s_\sigma$ be the space of $u \in H^s$ with $\cdot \nabla u = 0$.
+Then $H^s_\sigma$ is a closed subspace of $H^s$ and $\PP$ is the orthogonal projection $H^s \to H^s_\sigma$.
+We let $L^2_\sigma = H^0_\sigma$.
+
+Recall the Picard-Lindel\"of theorem on Banach spaces.
+\begin{theorem}[Picard-Lindel\"of]
+Let $X$ be a Banach space, $O \subseteq X$ open.
+Suppose that $F: O \to X$ is a locally Lipschitz map in the sense that for every $a \in O$ there is a $L_a > 0$ and $U_a \ni a$ such that
+$$||F(b_1) - F(b_2)|| \leq L_a ||b_1 - b_2||$$
+whenever $b_1, b_2 \in U_a$. Then for every $f_0 \in O$, there is a $T > 0$ such that the ODE
+$$f'(t) = F(f(t))$$
+with initial data $f(0) = f_0$ has a unique solution $f \in C^1((-T, T) \to O)$.
+Let $T^*$ be the maximal possible $T$. Then either $T^* = \infty$, or $f(t) \to \partial O$ as $t \to T^*$.
+\end{theorem}
+\begin{proof}
+Use Picard iteration, which works since Cauchy sequences in $X$ converge.
+\end{proof}
+
+\begin{lemma}
+Let $u_0 \in L^2_\sigma(\RR^d)$.
+Then for every $\varepsilon > 0$ small enough, $r \geq 0$, and $T > 0$, the approximate Euler system has a unique global solution
+$$u^\varepsilon \in C([0, T] \to H^r_\sigma(\RR^d)).$$
+\end{lemma}
+\begin{proof}
+Let use the Picard-Lindel\"of theorem with $O = X = H^r_\sigma(\RR^d)$ and
+$$F(v) = -\PP J_\varepsilon(J_\varepsilon v \cdot \nabla J_\varepsilon v).$$
+
+We need to show that $F$ sends $X$ to itself. If $v \in H^r_\sigma$, then
+\begin{align*}
+||F(v)||_{H^r} &\lesssim ||J_\varepsilon(J_\varepsilon v \cdot \nabla J_\varepsilon v)||_{H^r}\\
+&\lesssim ||J_\varepsilon v \cdot \nabla J_\varepsilon v||_{H^r}\\
+&\lesssim ||J_\varepsilon v||_{L^\infty} ||\nabla J_\varepsilon v||_{H^r} + ||\nabla J_\varepsilon v||_{L^\infty} ||J_\varepsilon v||_{H^r}.
+\end{align*}
+By Sobolev embedding, then,
+\begin{align*}
+||F(v)||_{H^r} &\lesssim ||J_\varepsilon v||_{H^{d/2 + 2}} + ||J_\varepsilon v||_{H^{r+1}} + ||J_\varepsilon v||_{H^r} ||J_\varepsilon v||_{H^{d/2 + 2}}\\
+&\lesssim \frac{||v||_{L^2} ||v||_{H^r}}{\varepsilon^{d/2+2}}  + \frac{||v||_{H^r} ||v||_{L^r}}{\varepsilon^{d/2+2}}\\
+&\lesssim \frac{||v||_{H^r}^2}{\varepsilon^{d/2+2}} < \infty.
+\end{align*}
+In particular, $F$ is locally Lipschitz, so we may use the Picard-Lindel\"of theorem.
+Let $T^*$ be the maximal time of existence.
+If $T^* < \infty$ then, since $\partial O = \{\infty\}$,
+$$\limsup_{t \to T^*} ||u^\varepsilon(t)||_{H^r} = \infty.$$
+But we showed that $\partial_t u^\varepsilon \in H^\infty(\RR^d)$ where $H^\infty = \bigcap_\mu H^\mu$.
+Thus
+\begin{align*}
+\frac{1}{2} \frac{d}{dt} ||u^\varepsilon(t)||_{L^2}^2 &= (\partial_t u^\varepsilon, u^\varepsilon) = -(\PP J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon), u^\varepsilon)\\
+&= -(J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon), u^\varepsilon)\\
+&= -(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon, J_\varepsilon u^\varepsilon)
+\end{align*}
+since $J_\varepsilon$ is self-adjoint (since it is a pseudodifferential operator of real symbol). But
+$$(u \cdot \nabla v) \cdot v = u \cdot \nabla |v|^2/2$$
+so
+\begin{align*}
+\frac{1}{2} \frac{d}{dt} ||u^\varepsilon(t)||_{L^2}^2 = - \frac{1}{2}\int_{\RR^d} J_\varepsilon u^\varepsilon \cdot \nabla |J_\varepsilon u^\varepsilon|^2 = 0
+\end{align*}
+where we integrated by parts to get a term with $\nabla \cdot (J_\varepsilon u^\varepsilon) = 0$, using $[J_\varepsilon, \nabla \cdot] = 0$.
+Thus
+$$||u^\varepsilon(t)||_{L^2} \lesssim ||u_0||_{L^2}$$
+whenever $t < T^*$.
+Therefore the solution cannot escape $L^2$.
+But
+\begin{align*}
+\frac{1}{2} \frac{d}{dt} ||u^\varepsilon(t)||_{H^r}^2 &= (\partial_t u^\varepsilon, u^\varepsilon)_r \\
+&= (F(u^\varepsilon), u^\varepsilon)_r \leq ||F(u^\varepsilon)||_{H^r} ||u^\varepsilon||_{H^r}\\
+&\lesssim \frac{||u^\varepsilon||_{L^2} ||u^\varepsilon||_{H^r}^2}{\varepsilon^{d/2+2}}\\
+&\lesssim_\varepsilon ||u^\varepsilon(t)||_{L^2} ||u^\varepsilon(t)||_{H^r}^2\\
+&\lesssim ||u_0||_{L^2} ||u^\varepsilon(t)||_{H^r}^2
+\end{align*}
+which implies
+\begin{align*}
+||u^\varepsilon(t)||_{H^r}^2 &\leq ||u^\varepsilon(0)||_{H^r}^2 e^{tC_\varepsilon ||u_0||_{L^2}}\\
+&\lesssim \frac{||u_0||_{L^2}^2}{\varepsilon} e^{tC_\varepsilon ||u_0||_{L^2}}
+\end{align*}
+provided $t < T^*$.
+If
+$$||u^\varepsilon(t)||_{H^r}^2 \to \infty$$
+as $t \to T^*$ then so does $e^{Ct}$, so $T^* = \infty$.
+\end{proof}
+
+\begin{lemma}
+Let $u_0 \in H^s(\RR^d)$, $s > d/2 + 1$. Then the unique global solution $u^\varepsilon$ of the approximate Euler system with initial data $u_0$ satisfies
+$$\partial_t ||u^\varepsilon(t)||_{H^r} \lesssim ||\nabla u^\varepsilon||_{L^\infty} ||u^\varepsilon(t)||_{H^r}^2.$$
+\end{lemma}
+\begin{proof}
+The proof is the same as the proof that the Euler system satisfies this bound.
+\end{proof}
+
+\begin{corollary}
+There is a $C_0$ depending on $s$ (but not on $\varepsilon$) such that if
+$$||u_0||_{H^s} < \frac{1}{C_0T}$$
+then for every $t \in [0, T]$,
+$$||u^\varepsilon(t)||_{H^s} \leq \frac{||u_0||_{H^s}}{1 - C_0T ||u_0||_{H^s}}.$$
+\end{corollary}
+\begin{proof}
+Same as that for the Euler system.
+\end{proof}
+
+Let
+$$T_0 = \frac{1}{2C_0||u_0||_{H^s}}.$$
+Then for every $\varepsilon > 0$ and $t \leq T_0$,
+$$||u^\varepsilon(t)||_{H^s} \leq 2||u_0||_{H^s}.$$
+We are going to show that $u^\varepsilon$ converges to a solution to the Euler system in $L^2$, and then use interpolation to show that $u \in H^s$.
+
+To do this, we show that $u^\varepsilon$ is a Cauchy sequence in $C([0, T_0], L^2_\sigma(\RR^d))$.
+\begin{lemma}
+For every $\varepsilon, \varepsilon' > 0$,
+$$||u^\varepsilon - u^{\varepsilon'}||_{L^\infty([0, T_0] \to L^2_\sigma)} \lesssim_{||u_0||_{H^s},s} \max(\varepsilon, \varepsilon').$$
+\end{lemma}
+\begin{proof}
+One has
+\begin{align*}
+\frac{1}{2} \partial_t ||u^\varepsilon(t) - u^{\varepsilon'}(t)||_{L^2}^2 &= -(\PP J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon) - \PP J_{\varepsilon'} u^{\varepsilon'} \cdot \nabla J_{\varepsilon'} u^{\varepsilon'}, u_\varepsilon - u_{\varepsilon'})\\
+& \qquad -(J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon) - J_{\varepsilon'} u^{\varepsilon'} \cdot \nabla J_{\varepsilon'} u^{\varepsilon'}, \PP(u^\varepsilon - u^{\varepsilon'})).
+\end{align*}
+OK I can't write out this mess but the point is that you can break this up into five terms and the last one is
+\begin{align*}R_5 &= (J_{\varepsilon'}(J_{\varepsilon'}u^{\varepsilon'} \cdot \nabla J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'})), u^\varepsilon - u^{\varepsilon'})\\
+&= (J_{\varepsilon'}u^{\varepsilon'} \cdot \nabla J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'}), J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'}))\\
+&= \frac{1}{2}\int_{\RR^d} J_{\varepsilon'} u^{\varepsilon'} \cdot \nabla |J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'})^2 \\
+&= 0
+\end{align*}
+by integration by parts.
+Let us now estimate
+\begin{align*}
+|R_1| &= |((J_\varepsilon - J_{\varepsilon'})(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^{\varepsilon}), u^\varepsilon - u^{\varepsilon'})|\\
+&\leq ||(J_\varepsilon - J_{\varepsilon'})(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^{\varepsilon})||_{L^2} ||u^\varepsilon - u^{\varepsilon'}||_{L^2}.
+\end{align*}
+But
+$$||J_\varepsilon - J_{\varepsilon'}||_{H^1 \to L^2} \lesssim \max(\varepsilon, \varepsilon').$$
+Therefore
+\begin{align*}
+||(J_\varepsilon - J_{\varepsilon'})(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^{\varepsilon})||_{L^2} &\lesssim \max(\varepsilon, \varepsilon') ||J_\varepsilon u^\varepsilon \cdot \nabla u^\varepsilon||_{H^1}\\
+&\lesssim \max(\varepsilon, \varepsilon') (||J_\varepsilon u^\varepsilon||_{L^\infty} ||\nabla u^\varepsilon||_{H^1} + ||J_\varepsilon u^\varepsilon||_{H^1} ||\nabla u^\varepsilon||_{L^\infty})\\
+&\lesssim \max(\varepsilon, \varepsilon') ||u^\varepsilon||_{H^{s-1}} ||u^\varepsilon||_{H^2} + ||u^\varepsilon||_{H^1} ||u^\varepsilon||_{H^s}\\
+&\lesssim \max(\varepsilon, \varepsilon') ||u^\varepsilon||_{H^s}^2.
+\end{align*}
+Here we used $s > 1 + d/2 \geq 2$.
+We have similar bounds on $R_2, R_4$ by a similar argument.
+Finally we bound
+\begin{align*}
+|R_3| &= (J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'})\cdot \nabla u^\varepsilon,u^\varepsilon - u^{\varepsilon'}) \\
+&\leq ||J_{\varepsilon'}(u^\varepsilon - u^{\varepsilon'})\cdot \nabla u^\varepsilon||_{L^2} ||u^\varepsilon - u^{\varepsilon'}||_{L^2}\\
+&\lesssim ||J_\varepsilon(u^\varepsilon - u^{\varepsilon'})||_{L^2} ||\nabla u^\varepsilon||_{L^\infty} ||u^\varepsilon - u^{\varepsilon'}||_{L^2}\\
+&\lesssim ||u^\varepsilon - u^{\varepsilon'}||_{L^2}^2 ||u^\varepsilon||_{H^s}.
+\end{align*}
+On $[0, T_0]$,
+$$||u^\varepsilon||_{L^\infty_tH^s_x} \leq 2||u_0||_{H^s}.$$
+Therefore
+\begin{align*}
+\partial_t ||u^\varepsilon - u^{\varepsilon'}||_{L^2}^2 &\lesssim \max(\varepsilon, \varepsilon') ||u^\varepsilon||_{H^s}^2 ||u^\varepsilon - u^{\varepsilon'}||_{L^2} + ||u^\varepsilon||_{H^s} ||u^\varepsilon - u^{\varepsilon'}||_{L^2}^2\\
+&\lesssim \max(\varepsilon, \varepsilon')||u^\varepsilon - u^{\varepsilon'}||_{L^2} + ||u^\varepsilon - u^{\varepsilon'}||_{L^2}^2
+\end{align*}
+where the implied constant depends on $||u_0||_{H^s}$.
+By Gr\"onwall's inequality,
+$$f(t) \leq (f(0) + Ct\max(\varepsilon, \varepsilon')^2)e^{Ct}$$
+where $f(t) = ||u^\varepsilon - u^{\varepsilon'}||_{L^\infty([0, T_0] \to L^2_\sigma)}^2$.
+But
+$$f(0) = ||u^\varepsilon(0) - u^{\varepsilon'}(0)||_{L^2}^2 = ||J_\varepsilon u_0 - J_{\varepsilon'} u_0||_{L^2}^2 \lesssim (\varepsilon, \varepsilon') ||u_0||_{H^1}^2.$$
+Now take square roots.
+\end{proof}
+
+Now set $u_n = u^{\varepsilon_n}$ where $\varepsilon_n \to 0$. Then
+$$||(u_m)_m||_{\ell^\infty_n L^\infty_t H^s_x} \leq 2 ||u_0||_{H^s} \lesssim 1.$$
+Since the dual of $L^1$ is $L^\infty$, the Banach-Alaoglu theorem implies that there is $u \in L^\infty_t H^s_x$ such that $u_n \to u$ in weakstar $L^\infty_t H^s_x$, possibly after passing to a subsequence.
+By the $L^2$ estimates that we just proved, it follows that $u_n \to u$ in (strong) $C_t L^2_x$.
+We want to interpolate to get strong convergence in $C_t H^{s - \varepsilon}_x$.
+
+\begin{lemma}
+Let $s_1 < s_0 < s_2$.
+Then for every $f \in H^{s_2}$,
+$$||f||_{H^{s_0}} \leq ||f||_{H^{s_1}}^{\frac{s_2 - s_0}{s_2 - s_1}} \cdot ||f||_{H^{s_2}}^{\frac{s_0 - s_1}{s_2 - s_1}}.$$
+\end{lemma}
+\begin{proof}
+Exercise.
+\end{proof}
+
+Applying the lemma with $f = u_k(t) - u_\ell(t)$ we obtain for every $0 < r < s$,
+\begin{align*}
+||u_k(t) - u_\ell(t)||_{H^r} &\leq ||u_k(t) - u_\ell(t)||_{L^2}^{1-r/s} ||u_k(t) - u_\ell(t)||_{H^s}^{r/s}\\
+&\leq ||u_k(t) - u_\ell(t)||_{L^s}^{1-r/s} (4||u_0||_{H^s})^{r/s}.
+\end{align*}
+This implies, using the strong $C_t L^2_x$ convergence, shows that $(u_n)$ is Cauchy in $C_t H^r_x$.
+Hence $u_n \to u$ strongly in $C_t H^r_x$.
+
+\begin{lemma}
+If $u$ is the limit just obtained then $u$ solves the Euler system, $u(0) = u_0$, $\nabla \cdot u = 0$, and
+$$\partial_t u + \PP(u \cdot \nabla u) = 0.$$
+\end{lemma}
+\begin{proof}
+Easy exercise, use the fact that $u^\varepsilon$ solves the approximate Euler system in a weak norm and converges strongly to $u$.
+\end{proof}
+
+The solution that we have constructed is
+$$u \in L^\infty([0, T_0] \to H^s) \cap C([0, T_0] \to H^r).$$
+We need to replace that $r$ with an $s$.
+
+Let $X$ be a Hilbert space and $I$ a time interval. Then $C_w(I \to X)$ denotes the space of continuous functions $I \to X$, where $X$ is given the weak topology.
+That is, for every $\varphi \in X^*$ and $u \in C_w(I \to X)$, the map
+$$t \mapsto (\varphi, u(t))$$
+is continuous $I \to \CC$.
+
+\begin{lemma}
+One has $u \in C_w([0, T_0] \to H^s)$.
+\end{lemma}
+\begin{proof}
+For every $r < s$, $u_n \to u$ in $C([0, T_0] \to H^r)$.
+Therefore for every $\varphi \in H^{-r} = (H^r)^*$,
+$$(\varphi, u_n(t))_{L^2} \to (\varphi, u(t))_{L^2}$$
+uniformly in $t$.
+Now suppose $\varphi \in H^{-s}$.
+Since $H^{-r}$ is dense in $H^{-s}$, for every $\eta > 0$ there is $\tilde \varphi \in H^{-r}$ such that
+$$||\varphi - \tilde \varphi||_{H^{-s}} < \eta.$$
+So
+$$(\varphi, u_n(t)) - (\varphi, u(t)) = (\tilde \varphi, u_n(t)) - (\tilde \varphi, u(t)) + (\varphi - \tilde \varphi, u_n(t)) - (\varphi - \tilde \varphi, u(t)).$$
+Also
+$$||(\varphi - \tilde \varphi, u_n(t)) - (\varphi - \tilde \varphi, u(t))|| \leq 4\eta ||u_0||_{H^s}.$$
+Since $-r > -s$, the duality pairing $(\tilde \varphi, u_n(t)) - (\tilde \varphi, u(t))$, ostensibly a pairing between $H^s$ and $H^{-s}$, is also a pairing between $H^r$ and $H^{-r}$.
+Therefore the convergence in $H^r$ shows that it converges to $0$ uniformly in $t$.
+Therefore
+$$t \mapsto (\varphi, u(t))$$
+is continuous.
+\end{proof}
+
+Now we turn the weak convergence into strong convergence:
+
+\begin{lemma}
+One has $u \in C([0, T_0], H^s)$.
+\end{lemma}
+\begin{proof}
+Suppose $t_n \to t_0 \in [0, T_0]$. It suffices to show that
+$$||u(t_n)||_{H^s} \to ||u(t_0)||_{H^s}$$
+since we already know $u(t_n) \to u(t_0)$ in weak $H^s$, by the previous lemma.
+Indeed,
+$$||u(t_n) - u(t_0)||_{H^s}^2 = ||u(t_n)||_{H^s}^2 - 2(u(t_n), u(t_0))_{H^s} + ||u(t_0)||_{H^s}^2.$$
+If we have
+$$||u(t_n)||_{H^s} \to ||u(t_0)||_{H^s}$$
+then
+$$||u(t_n) - u(t_0)||_{H^s}^2 \to 2||u(t_0)||_{H^s}^2 - 2||u(t_0)||_{H^s}^2 = 0.$$
+
+We now show
+$$||u(t_n)||_{H^s} \to ||u(0)||_{H^s}$$
+assuming $t_n \to 0$.
+Then since $u \in C_w([0, T_0] \to H^s)$, $u(t_n) \to u(0)$ in weak $H^s$ and hence
+$$||u(0)||_{H^s} \leq \liminf_{n \to \infty} ||u(t_n)||_{H^s}.$$
+Recall that if $T \leq T_0$ then
+$$\sup_{t \in [0, T]} ||u_{n_k}(t)||_{H^s} \leq \frac{||u_0||_{H^s}}{1 - CT||u_0||_{H^s}}$$
+where $u_{n_k}$ is a subsequence of the mollified solution $u^\varepsilon$, and hence converges in weakstar $H^s$ to $u$.
+Therefore
+$$\sup_{t \in [0, T]} ||u(t)||_{H^s} \leq \frac{||u_0||_{H^s}}{1 - CT||u_0||_{H^s}}$$
+Taking $T = t_n$ and $n \to \infty$ we conclude
+$$\limsup_{n \to \infty} ||u(t_n)||_{H^s} \leq ||u_0||_{H^s}$$
+and hence
+$$\lim_{n \to \infty} ||u(t_n)||_{H^s} = ||u_0||_{H^s}$$
+(since for example $u(0) = u_0$).
+Therefore $u$ is right-continuous at $0$.
+
+Now take $t_0 > 0$.
+View $u(t_0)$ to be the initial data of the Euler system with initial time $t_0$, and let $\overline u$ be the induced solution on $[t_0, t_0 + T']$ where $T'$ is less than the blowup time of the initial data $u(t_0)$.
+The above argument shows that $\overline u$ is right-continuous at $t_0$.
+By uniqueness for the Euler system, $u = \overline u$ on $[t_0, t_0 + T']$ if $t_0 + T' \leq T_0$.
+Therefore $u$ is right-continuous at $t_0$.
+
+Finally we prove left-continuity at $t_0$.
+In fact $\tilde u(x, t) = u(x, 2t_0 - t)$ solves
+$$\partial_t \tilde u - \PP(\tilde u \cdot \nabla \tilde u) = 0.$$
+The energy estimates of the Euler system do not care whether we have $\PP$ or $-\PP$ (since we have conservation of energy), so we can use right-continuity of $\tilde u$ to get left-continuity of $u$.
+\end{proof}
+
+This completes the proof of the local well-posedness of the Euler system.
+
+\begin{theorem}
+Let $u_0 \in H^s_\sigma(\RR^d)$ satisfy $s > 1 + d/2$ and $d \geq 2$.
+Then there is a unique $u \in C([0, T] \to H^s(\RR^d)) \cap L^2([0, T] \to H^{s+1}(\RR^d))$
+to the Navier-Stokes system
+$$\partial_t u + \PP(u \cdot \Delta u) = \nu \Delta u$$
+assuming that the viscosity $\nu > 0$.
+Moreover,
+$$T \gtrsim_s ||u_0||_{H^s}^{-1}$$
+uniformly in $\nu$.
+\end{theorem}
+
+We omit the details of the proof since they are very similar to the Euler local well-posedness.
+In fact,
+$$\frac{1}{2} \partial_t ||u(t)||_{H^s}^2 = -(\PP(u \cdot \nabla u), u)_{H^s} + \nu (\Delta u, u)_{H^s}.$$
+The Euler estimates already take care of the term $-(\PP(u \cdot \nabla u), u)_{H^s}$.
+The viscosity term integrates by parts to
+$$\nu (\Delta u, u)_{H^s} = -\nu ||\nabla u||_{H^s}^2 \leq 0.$$
+Therefore the Euler energy estimates still apply to the Navier-Stokes system.
+This gives the uniform bound
+$$T \gtrsim_s ||u_0||_{H^s}^{-1}$$
+on the blowup time $T$, which in turn gives
+$$||u||_{L^\infty([0, T] \to H^s)} \leq \frac{||u_0||_{H^s}}{1 - CT||u_0||_{H^s}}$$
+where $C$ depends on $s$ but not $\nu$.
+Integrating the Navier-Stokes energy estimates in time, we get
+$$\frac{1}{2} ||u(t)||_{H^s} + \nu \int_0^t ||\nabla u(s)||_{H^s}^2 ~ds \leq \frac{1}{2} ||u_0||_{H^s} + C \int_0^t ||\nabla u(s)||_{L^\infty} ||u(s)||_{H^s}^2 ~ds.$$
+Since $||u(t)||_{H^s} \geq 0$ and $s > 1 + d/2$ we can use Sobolev embedding theory to get
+$$\nu \int_0^t ||\nabla u(s)||_{H^s}^2 ~ds \leq \frac{1}{2} ||u_0||_{H^s} + Ct||u||_{L^\infty([0, t] \to H^s)}^3.$$
+By energy estimates we get a bound on $||\nabla u||_{L^2_tH^s_x}$ which is allowed to depend on $s$ and the viscosity $\nu$, but at least is finite.
+
+\section{Global well-posedness}
+Of course we can't prove global well-posedness in general because this is a Millennium Problem.
+But we can give criteria under which the solutions cannot blow up in the short term.
+
+\begin{proposition}
+Let $T > 0$, possibly larger than the blowup time given by the local well-posedness construction above.
+Let $u \in C([0, T] \to H^s)$ be a solution of the Euler system with $s > 1 + d/2$ and $d \geq 2$.
+Then
+$$||u||_{L^\infty([0, T] \to H^s(\RR^d))} \leq ||u(0)||_{H^s} \exp\left(C \int_0^T ||\nabla u(s)||_{L^\infty} ~ds\right)$$
+where $C$ only depends on $s$.
+\end{proposition}
+\begin{proof}
+Use Gr\"onwall's inequality.
+\end{proof}
+
+\begin{corollary}
+Let $u \in C([0, T) \to H^s)$ be a solution of the Euler system with $s > 1 + d/2$, $d \geq 2$, and $T < \infty$.
+Then there is a $\delta > 0$ such that $u$ can be extended to a solution in $C([0, T + \delta] \to H^s)$ iff
+$$\int_0^T ||\nabla u(t)||_{L^\infty(\RR^d)} ~dt < \infty.$$
+\end{corollary}
+\begin{proof}
+If $u$ can be extended, then
+$$\int_0^T ||\nabla u(t)||_{L^\infty} ~dt \lesssim T ||u||_{C([0, T] \to H^s)} < \infty$$
+by Sobolev embedding.
+Conversely, if
+$$\int_0^T ||\nabla u(t)||_{L^\infty(\RR^d)} ~dt < \infty$$
+and $T' < T$ then we have
+$$||u||_{L^\infty([0, T'] \to H^s)} \lesssim_T ||u(0)||_{H^s} < \infty.$$
+Therefore $M = ||u||_{L^\infty([0, T) \to H^s} < \infty$ as well since $T'$ is arbitrary.
+Then for any data we can find a unique solution for time $\gtrsim 1/M$.
+Taking $u(T - 1/2CM)$ as an initial datum of size $\leq M$, we get a solution up to time $T + 1/2CM > T$.
+\end{proof}
+
+Recall that if $d = 3$ then
+$$u = -\nabla \times \Delta^{-1} \omega$$
+where $\omega$ is the vorticity; then
+$$\nabla u = - \nabla\nabla \times \Delta^{-1}\omega.$$
+The operator $-\nabla\nabla \times \Delta^{-1}$ is a pseudodifferential operator of order $0$ so it is bounded on $L^p$ if $1 < p < \infty$, by Calder\'on-Zygmund theory.
+Therefore
+$$||\nabla u||_{L^p} \lesssim_p ||\omega||_{L^p}.$$
+Unfortunately we cannot take $p \to \infty$ uniformly, and instead we get
+$$||\nabla u||_{L^\infty} \lesssim ||\omega||_{BMO}.$$
+Therefore it is not obvious that $||\omega||_{L^\infty}$ controls the blowup time of $u$.
+Miraculously, however, it is.
+
+\begin{theorem}[Beale-Kato-Majda criterion]
+Let $u_0 \in H^s_\sigma(\RR^d)$ where $2 \leq d \leq 3$ and $s > 1 + d/2$.
+Assume that $u \in C([0, T) \to H^s)$ is a solution of the Euler system with initial datum $u_0$.
+Then $u$ can be continued to time $T + \delta$, for some $\delta > 0$, iff the vorticity $\omega = \nabla \times u$ satisfies $\omega \in L^1([0, T] \to L^\infty)$.
+\end{theorem}
+
+We will prove the Beale-Kato-Majda criterion shortly.
+
+Thus the vorticity is the quantity we have to control if we want global well-posedness.
+This is exactly what we need in $L^2$:
+
+\begin{corollary}
+If $d = 2$ then the Euler system is well-posed for all time.
+\end{corollary}
+\begin{proof}
+If $d = 2$ then for every $t \geq 0$,
+$$||\omega(t)||_{L^\infty} = ||\omega(0)||_{L^\infty}$$
+as long as $u$ exists to time $t$ and $\omega$ is Schwartz.
+Approximation arguments allow us to remove the assumption on $\omega$.
+Assume that $u$ blows up at time $T^*$.
+If $T^* < \infty$ then
+$$T^* ||\omega(0)||_{L^\infty} = \int_0^{T^*} ||\omega(t)||_{L^\infty} ~dt = \infty$$
+by the Beale-Kato-Majda criterion, and solving for $T^*$ we get $T^* = \infty$.
+\end{proof}
+
+Coming up with something similar in $d = 3$ would not quite solve the Millennium Problem since it would just work for the Euler system, not Navier-Stokes, but it would come very close.
+
+Let us begin the proof of the Beale-Kato-Majda criterion.
+
+Let
+$$J = \begin{bmatrix}0 & -1\\1 & 0\end{bmatrix}, \qquad \sigma(z) = \begin{bmatrix}2z_1z_2 & z_2^2 - z_1^2 \\ z_1^2 - z_2^2 & -2z_1z_2\end{bmatrix}.$$
+We need to differentiate the Biot-Savart law
+$$u(x) = \int_{\RR^2} K_2(x - y) \omega(y) ~dy$$
+where $K_2(z) = z^\perp/2\pi|z|^2$. But we cannot deduce
+$$\nabla u(x) = \int_{\RR^2} \partial_x K_2(x - y) \omega(y) ~dy$$
+at least in the sense of the Lebesgue integral. In fact $\partial_x K_2(x - y) \sim |x - y|^{-2}$, so we cannot commute the derivative with the integral.
+
+\begin{lemma}
+Let $K \in L^1_{loc}(\RR^d)$ and $d \geq 2$ satisfy $K(\lambda x) = \lambda^{1-d} K(x)$.
+Then the derivative of $K$ satisfies for every test function $\varphi$,
+$$(\partial_j K, \varphi) = \lim_{\varepsilon \to 0} \int_{|x| > \varepsilon} \partial_j K(x) \varphi(x) ~dx - c_j\varphi(0)$$
+where
+$$c_j = \int_{|x| = 1} K(x) x_j ~dS(x).$$
+Moreover, all limits involved exist, so $\partial_j K$ is a distribution.
+\end{lemma}
+\begin{proof}
+By definition
+$$(\partial_j K, \varphi) = -(K, \partial_j\varphi).$$
+Since $K \in L^1_{loc}$,
+$$-(K, \partial_j\varphi) = -\int_{\RR^d} K(x) \partial_j \varphi(x) ~dx$$
+so by dominated convergence, this is
+$$-(K, \partial_j\varphi) = \lim_{\varepsilon \to 0} \int_{|x| > \varepsilon} K(x) \partial_j \varphi(x) ~dx.$$
+Integrating by parts,
+$$ \int_{|x| > \varepsilon} K(x) \partial_j \varphi(x) ~dx = -\int_{|x| > \varepsilon} \partial_j K(x) \varphi(x) ~dx + \int_{|x| = \varepsilon} K(x) \varphi(x) \frac{x_j}{|x|} ~dx.$$
+But, if $x = \varepsilon z$,
+$$\lim_{\varepsilon \to 0} \int_{|x| = \varepsilon} K(x) \varphi(x) \frac{x_j}{|x|} ~dx = \lim_{\varepsilon \to 0} \int_{|z| = 1} \varepsilon^{1 - d} K(z) \varphi(\varepsilon z) z_j \varepsilon^{d - 1} ~dz$$
+using the homogeneity.
+This is
+\begin{align*}
+\lim_{\varepsilon \to 0} \int_{|x| = \varepsilon} K(x) \varphi(x) \frac{x_j}{|x|} ~dx &= \lim_{\varepsilon \to 0} \int_{|z| = 1} K(z) \varphi(\varepsilon z) z_j ~dz\\
+&= \int_{|z| = 1}  K(z) \varphi(0) z_j ~dz = \varphi(0) c_j
+\end{align*}
+by dominated convergence.
+\end{proof}
+
+\begin{lemma}
+If $d = 2$ and $\omega$ is Schwartz then
+$$\nabla u(x) = \frac{\omega(x)J}{2} + \frac{1}{2\pi} \int_{\RR^2} \frac{1}{|x - y|^2}\sigma\left(\frac{x - y}{|x -y|}\right) \omega(y) ~dy$$
+where the integral is in the sense of a Cauchy principal value.
+\end{lemma}
+\begin{proof}
+Taking the distributional derivative of the Biot-Savart law
+$$u(x) = \int_{\RR^2} K_2(x - y) \omega(y) ~dy$$
+with respect to a test function $\varphi$,
+$$(\partial_1 u, \varphi) = -(u, \partial_1 \varphi).$$
+By assumption on $\omega$, $u \in L^1_{loc}$ so this is
+\begin{align*}
+-(u, \partial_1 \varphi) &= -\int_{\RR^d} u(x) \partial_1 \varphi(x) ~dx\\
+&= -\iint_{\RR^{d + d}} K_2(x - y) \omega(y) ~dy \partial_1 \varphi(x) ~dx \\
+&= - \iint_{\RR^{d + d}} K_2(x - y) \omega(y) \partial_1 \varphi(x) ~dx ~dy\\
+&= -\iint_{\RR^{d + d}} K_2(x) \partial_1 \varphi(x + y) ~dx \omega(y) ~dy\\
+&= -\int_{\RR^d} K_2(x) \int_{\RR^d} \partial_1 \varphi(x + y) \omega(y) ~dy ~dx.
+\end{align*}
+We used Fubini's theorem.
+Integrating by parts,
+$$\int_{\RR^d} \partial_1 \varphi(x + y) \omega(y) ~dy = -\int_{\RR^d} \varphi(x + y) \partial_1 \omega(y) ~dy.$$
+Therefore
+\begin{align*}
+-(u, \partial_1 \varphi) &= \iint_{\RR^{d + d}} K_2(x) \varphi(x + y) ~dx \partial_1 \omega(y) ~dy\\
+&= \iint_{\RR^{d + d}} K_2(x - y) \varphi(x) ~dx \partial_1 \omega(y) ~dy\\
+&= (\int_{\RR^d} K_2(\cdot - y) \partial_1 \omega(y) ~dy, \varphi)
+\end{align*}
+which makes sense since $K_2 \in L^1_{loc}$ and $\omega$ is Schwartz.
+Thus we can drop $\varphi$ and deduce
+$$\partial_1 u(x) = \int_{\RR^d} K_2(x - y) \partial_1 \omega(y) ~dy.$$
+Since $K_2$ is odd,
+\begin{align*}
+\partial_1 u(x) &= -\int_{\RR^2} K_2(y - x) \partial_1 \omega(y) ~dy\\
+&= -\int_{\RR^2} K_2(y) \partial_1 \omega(y + x) ~dy\\
+&= -(K_2, \partial_1 \omega(x + \cdot)).
+\end{align*}
+By the previous lemma,
+$$\partial_1 u(x) = \int_{\RR^2} \partial_1 K(y) \omega(y + x) ~dy - c_1\omega(x)$$
+where
+$$c_1 = \int_{|x| = 1} K_2(z) z_1 ~dz.$$
+Now the proof is just a computation.
+\end{proof}
+
+\begin{lemma}
+For every $h \in \RR^3$,
+$$\nabla u(x)h = \frac{1}{3} \omega(x) \times h - \frac{1}{4\pi} \int_{\RR^3} \frac{\omega(y) \times h + 3(\frac{x - y}{|x -y|} \times \omega(y))\frac{x - y}{|x - y|}h}{|x - y|^3} ~dy.$$
+\end{lemma}
+\begin{proof}
+Similar to the above.
+\end{proof}
+
+Now we show that singular integral operators are bounded into $L^\infty$ modulo logarithmic terms.
+\begin{definition}
+A \dfn{convolution-type Calder\'on-Zygmund operator} is an operator $T$ defined by
+$$Tf(x) = \int_{\RR^d} \frac{f(x - y)}{|y|^d} \Omega(y/|y|) ~dy$$
+where the integral is a principal value and $\Omega$ is a smooth function on $S^{d-1}$ such that $\int_{S^{d-1}} \Omega = 0$.
+\end{definition}
+
+\begin{theorem}
+Let $f \in L^2 \cap L^\infty \cap C^\alpha$ where $0 < \alpha < 1$ is a H\"older exponent.
+Let $T$ be the convolution-type Calder\'on-Zygmund operator induced by some $\Omega$. Then
+$$||Tf||_{L^\infty} \lesssim_{\alpha, d, \Omega} ||f||_{L^2} + ||f||_{L^\infty}(1 + \log^+ \frac{[f]_\alpha}{||f||_{L^\infty}})$$
+where $[f]_\alpha$ is the H\"older seminorm of $f$.
+\end{theorem}
+\begin{proof}
+Let $\phi$ be a cutoff to $\{x: |x| \leq 1\}$.
+Let $r \in (0, 1]$.
+Write
+\begin{align*}Tf(x) &= \int_{\RR^d} \phi(|y|/r) \frac{f(x - y)}{|y|^d} \Omega(y/|y|) ~dy \\
+&\qquad+ \int_{\RR^d} (1 - \phi(|y|/r))\frac{f(x - y)}{|y|^d} \Omega(y/|y|) \phi(|y|) ~dy\\
+&\qquad + \int_{\RR^d}  (1 - \phi(|y|/r))\frac{f(x - y)}{|y|^d} \Omega(y/|y|) (1 - \phi(|y|)) ~dy
+\\
+&= (Tf)_{in}(x) + (Tf)_{med}(x) + (Tf)_{out}(x).
+\end{align*}
+For $(Tf)_{in}$ (thus $|y| \lesssim 1$), we let $\varepsilon > 0$ and note that
+\begin{align*}\int_{|y| \geq \varepsilon} \phi(|y|/r) \frac{1}{|y|^d} \Omega(y/|y|) ~dy
+&= \int_\varepsilon^r \rho^{-d} \int_{S^{d-1}} \Omega(z) \phi(\rho/r) \rho^{d - 1} ~dz ~d\rho\\
+&= \int_\varepsilon^r \rho(\rho/r) \rho^{-1} \int_{S^{d-1}} \Omega(z) ~dz ~d\rho \\
+&= 0
+\end{align*}
+so
+$$(Tf)_{in} = \int_{\RR^d} |y|^{-d} \Omega(y/|y|) \phi(|y|/r)(f(x - y) - f(x)) ~dy$$
+implies
+\begin{align*}
+||(Tf)_{in}||_{L^\infty} &\leq \int_{|y| < r} y^{-d} ||\Omega||_{L^\infty} [f]_\alpha |y|^\alpha ~dy\\
+&\lesssim_d ||\Omega||_{L^\infty} [f]_\alpha r^\alpha.
+\end{align*}
+
+For $(Tf)_{med}$, we bound
+\begin{align*}
+||Tf_{med}||_{L^\infty} &\leq \int_{r < |y| < 2} |y|^{-d} ||\Omega||_{L^\infty} |f(\cdot - y)| ~dy \\
+&\leq ||\Omega||_{L^\infty} ||f||_{L^\infty} \int_{r < |y| < 2} \frac{dy}{|y|^d} \\
+&\lesssim_d ||\Omega||_{L^\infty} ||f||_{L^\infty} \log(2/r).
+\end{align*}
+
+For $(Tf)_{out}$ we use the $L^2$ assumption on $f$ to get
+\begin{align*}
+||(Tf)_{out}||_{L^\infty} &\leq \int_{|y| > 1} |y|^{-d} ||\Omega||_{L^\infty} |f(x - y)| ~dy\\
+&\leq ||\Omega||_{L^\infty} ||f||_{L^2} \left(\int_{|y| > 1} \frac{dy}{|y|^{2d}}\right)^{1/2}
+\end{align*}
+by the Cauchy-Schwarz inequality. Thus
+$$||(Tf)_{out}||_{L^\infty} \lesssim_d ||\Omega||_{L^\infty} ||f||_{L^2}.$$
+Summing up,
+$$||Tf||_{L^\infty} \lesssim_d ||\Omega||_{L^\infty} ([f]_\alpha r^\alpha + ||f||_{L^\infty} \log(2/r) + ||f||_{L^2}).$$
+Let
+$$r^\alpha = \min(1, \frac{||f||_{L^\infty}}{[f]_\alpha}).$$
+This gives the bound we want.
+\end{proof}
+
+\begin{corollary}
+If $\alpha \in (0, 1)$ and $d \in \{2, 3\}$,
+$$||\nabla u||_{L^\infty} \lesssim_d ||\omega||_{L^2} + ||\omega||_{L^\infty}(1 + \log^+ \frac{[\omega]_\alpha}{||\omega||_{L^\infty}}).$$
+\end{corollary}
+\begin{proof}
+The differentiated Biot-Savart operator $\omega \mapsto \nabla u$ is a convolution-type Calder\'on-Zygmund operator.
+\end{proof}
+
+\begin{proof}[Proof of Beale-Kato-Majda criterion]
+If $u$ can be continued past $T$ to a solution in $C([0, T + \delta) \to H^s)$ then
+\begin{align*}
+\int_0^T ||\omega(t)||_{L^\infty} ~dt &\lesssim \int_0^T ||\omega(t)||_{H^{s-1}} ~dt\\
+& = \int_0^T ||u(t)||_{H^s} ~dt \leq ||u||_{C([0, T] \to H^s)} < \infty.
+\end{align*}
+Conversely, suppose $C_T = ||\omega||_{L^1([0, T) \to L^\infty)} < \infty$.
+By local well-posedness, $u$ can be continued past $T$ provided that
+$$u \in L^\infty([0, T) \to H^s).$$
+
+If $t < T$ then
+$$||u(t)||_{H^s} \leq ||u_0||_{H^s} \exp \int_0^t ||\nabla u(r)||_{L^\infty} ~dr.$$
+Since $s > 1 + d/2$, if $\alpha < s - 1 - d/2$ then $\omega \in C^\alpha$ (since $\omega \in H^{s-1}$).
+Therefore the Calder\'on-Zygmund estimates give
+$$||\nabla u(t)||_{L^\infty} \lesssim ||\omega(t)||_{L^2} + ||\omega(t)||_{L^\infty}(1 + \log^+ \frac{||u||_{H^s}}{\omega(t)||_{L^\infty}}).$$
+To bound $||\omega(t)||_{L^2}$ we use the vorticity equation
+$$\partial_t \omega + u \cdot \nabla \omega = \omega \cdot \nabla u$$
+to prove
+$$.5 \partial_t ||\omega(t)||_{L^2}^2 = -(u \cdot \nabla \omega, \omega)_{L^2} + (\omega \cdot \nabla u, \omega)_{L^2}.$$
+Using the divergence-free condition, $(u \cdot \nabla \omega, \omega)_{L^2} = 0$.
+Also by Gr\"onwall's lemma,
+$$||\omega(t)||_{L^2}^2 \leq ||\omega(0)||_{L^2}^2 \exp \int_0^t ||\omega(r)||_{L^\infty} ~dr = M^2$$
+is finite, so
+\begin{align*}
+||\nabla u(t)||_{L^\infty} &\lesssim M + ||\omega(t)||_{L^\infty}(1 + \log^+ \frac{||u(t)||_{H^s}}{||\omega||_{L^\infty}})\\
+&\lesssim M + (1 + ||\omega(t)||_{L^\infty})(1 + \log^+ ||u(t)||_{H^s})\\
+&\lesssim M + (1 + ||\omega(t)||_{L^\infty}) \log(||u||_{H^s} + e).
+\end{align*}
+We conclude
+$$||u(t)||_{H^s} \leq ||u_0||_{H^s} \exp(CM + C(1 + ||\omega||_{L^\infty})\log (||u(t)||_{H^s} + e))$$
+so that
+$$||u(t)||_{H^s} + e \leq (||u_0||_{H^s} + e)\exp(CM + C(1 + ||\omega||_{L^\infty})\log(||u(t)||_{H^s} + e)).$$
+Taking the logarithm of both sides,
+$$Z(t) = \log(||u(t)||_{H^s} + e)$$
+satisfies
+$$Z(t) \leq Z(0) + CM + C(1 + ||\omega(t)||_{L^\infty})Z(t).$$
+By Gr\"onwall's lemma,
+\begin{align*}Z(t) &\leq (Z(0) + CMt)\exp \int_0^t C(1 + ||\omega(r)||_{L^\infty}) ~dr\\
+&\leq (Z(0) + CMt) \exp(Ct + ||\omega||_{L^1([0, T] \to L^\infty)}).
+\end{align*}
+Therefore
+$$||u||_{L^\infty([0, T] \to H^s)} < \exp( (\log(||u_0||_{H^s} + e) + CMt) \exp(Ct + ||\omega||_{L^1([0, T] \to L^\infty)})) < \infty$$
+which was desired.
+\end{proof}
+
+If $d = 2$, then if $Z$ is as in the preceding proof,
+$$Z(t) \lesssim e^{C_0t}$$
+where $C_0$ only depends on $||u_0||_{H^s}$.
+Taking the exponential of both sides we conclude that $||u(t)||_{H^s}$ is doubly exponential in $t$:
+$$||u(t)||_{H^s} \lesssim \exp \exp(C_0t)$$
+where again $C_0$ and the implied constants only depend on $||u_0||_{H^s}$.
+It is an open problem whether this bound is sharp in the sense that there is initial data $u_0$ satisfying $d = 2$ and
+$$||u(t)||_{H^s} \sim \exp \exp(C_0 t).$$
+The same bound holds for bounded open submanifolds of $\RR^2$.
+In fact Kiselev and Sverak showed that the doubly-exponential growth is sharp on a disk, but the doubly-exponential growth happens at the boundary, so this argument does not transfer to $\RR^2$.
+
+\begin{theorem}
+The Beale-Kato-Majda criterion also holds for the Navier-Stokes equation.
+In particular, if $d = 2$ then the Navier-Stokes equation is globally well-posed.
+\end{theorem}
+\begin{proof}
+The proof of the Beale-Kato-Majda criterion only used energy estimates on the Euler equation, which are also valid for the Navier-Stokes equations.
+\end{proof}
+
+Later we shall show that we can get much sharper bounds on the Navier-Stokes equation, using the viscosity term to get decay in energy.
+
+\chapter{Steady Navier-Stokes equations}
+This chapter is based on lectures of Huy Quang Nguyen.
+We consider steady states of the Navier-Stokes system, thus
+$$-\nu \Delta u = u \cdot \Delta u + \nabla p = f$$
+where $u$ is a divergence-free vector field on $\Omega \subseteq \RR^d$ such that
+$$u|\partial \Omega = u_*$$
+where $u_*$ is given, and $\partial \Omega$ is a closed Lipschitz manifold.
+
+\section{Notation}
+Let $1 < p < \infty$. We let $W^{1,p}_\sigma(\Omega)$ be the completion of the space $C_{c,\sigma}^\infty(\overline \Omega)$ of compactly supported, divergence-free vector fields on the compact manifold with boundary $\overline \Omega$ with respect to the Sobolev norm
+$$||u||_{W^{1,p}(\Omega)} = ||u||_{L^p(\Omega)} + ||\nabla u||_{L^p(\Omega)}.$$
+We let $W^{1,p}_{0,\sigma}(\Omega)$ be the completion of $C_{c,\sigma}^\infty(\Omega)$, the space of vector fields which are compactly supported in $\Omega$ (rather than $\overline \Omega$).
+We let
+$$V = W^{1,2}_{0,\sigma}(\Omega)$$
+and let $V'$ be the dual space to $V$.
+Then there is a Riesz representation isomorphism $V \to V'$.
+Let $\langle \cdot, \cdot \rangle$ denote the pairing of $V'$ and $V$.
+
+We fix $u_* \in L^p(\partial \Omega)$.
+
+\begin{theorem}
+There exists a unique bounded linear trace
+$$\tr: W^{1,p}(\Omega) \to L^p(\partial \Omega)$$
+which extends the classical trace; thus if $u$ is smooth then $\tr u = u|\partial \Omega$.
+\end{theorem}
+\begin{proof}
+The proof is the same as in Evans' book; he incorrectly assumes that $\partial \Omega$ is $C^1$ but only uses Lipschitz.
+\end{proof}
+Henceforth we abuse notation and write $u|\partial \Omega$ to mean $\tr u$.
+
+The Navier-Stokes operator is a second-order nonlinear operator due to the viscosity term.
+Therefore the Navier-Stokes system only makes pointwise for functions in $W^{2,p}$.
+Let us now define weak solutions of the Navier-Stokes system.
+
+\begin{lemma}
+Let $u$ be a smooth solution of the Navier-Stokes system. Then for every $\varphi \in C^\infty_{c,\sigma}(\Omega)$,
+$$\int_\Omega -\nu\nabla u \nabla \varphi + (u \cdot \nabla u)\cdot \varphi = \int_\Omega f \cdot \varphi.$$
+\end{lemma}
+\begin{proof}
+By assumption,
+$$\int_\Omega -\nu\varphi\cdot\Delta u + (u\cdot\nabla u)\cdot\varphi + \nabla p \cdot \varphi = \int_\Omega f \cdot \varphi.$$
+Integrating by parts,
+$$\int_\Omega - \nu\varphi \cdot \Delta u = \int_\Omega \nu \nabla u \nabla \varphi$$
+and
+$$\int_\Omega f \cdot \varphi = -\int_\Omega p \nabla \cdot \varphi = 0$$
+since $\varphi$ is divergence-free.
+Thus
+$$\int_\Omega -\nu\nabla u \nabla \varphi + (u \cdot \nabla u)\cdot \varphi = \int_\Omega f \cdot \varphi.$$
+\end{proof}
+
+\begin{definition}
+Let $f \in V'$ and $u_* \in L^2(\partial \Omega)$.
+A \dfn{weak solution to the steady-state Navier-Stokes system} is a vector field $u \in W^{1,2}_\sigma(\Omega)$ such that for every $\varphi \in C^\infty_{c,\sigma}(\Omega)$,
+$$\int_\Omega -\nu\nabla u \nabla \varphi + (u \cdot \nabla u)\cdot \varphi = \langle f, \varphi\rangle$$
+and $u|\partial \Omega = u_*$.
+\end{definition}
+
+\section{Small-large uniqueness}
+\begin{lemma}
+Let $u,w \in W^{1,2}_0(\Omega)$ and $v \in W^{1,2}(\Omega)$.
+Then
+$$\left|\int_\Omega (u \cdot \nabla v) \cdot w\right| \leq ||u||_{L^4} ||\nabla v||_{L^2} ||w||_{L^4} \lesssim_\Omega ||\nabla u||_{L^2} ||\nabla v||_{L^2} ||\nabla w||_{L^2}.$$
+Moreover if $u$ is divergence-free then
+$$\int_\Omega v \cdot \nabla u = 0.$$
+\end{lemma}
+\begin{proof}
+We prove the first claim by H\"older duality and the Sobolev estimate
+$$||u||_{L^p} \lesssim_\Omega ||u||_{W^{1,p}} \lesssim ||\nabla u||_{L^p}$$
+where the estimate $ ||u||_{W^{1,p}} \lesssim ||\nabla u||_{L^p}$ follows from the Poincar\'e inequality since $u$ is trace-free.
+This is valid whenever
+$$1 \leq p \leq \frac{2d}{d - 2}$$
+and either $d \neq 2$ or $p \neq \infty$.
+
+The second claim holds if $u \in C^\infty_c(\Omega)$ since then
+$$\int_\Omega (v \cdot \nabla u)u = \frac{1}{2} \int_\Omega v \cdot \nabla |u|^2 = -\frac{1}{2} \int_\Omega (\nabla \cdot v) |u|^2 = 0.$$
+If $u \in W^{1,2}_0(\Omega)$ then let $(u_n) \in C^\infty_c(\Omega)$ satisfy $u_n \to u$. By the first part,
+\begin{align*}
+\left|\int_\Omega (v \cdot \nabla u_n) \cdot u_n - \int_\Omega (v \cdot \nabla u) \cdot u\right|
+&\leq \left|\int_\Omega (v \cdot \nabla(u_n - u)) \cdot u_n\right| + \left|\int_\Omega (v \cdot \nabla u) \cdot (u_n - u)\right|\\
+&\lesssim ||\nabla v||_{L^2} ||\nabla(u_n - u)||_{L^2} ||\nabla u_n||_{L^2} + ||\nabla v||_{L^2} ||\nabla u||_{L^2} ||\nabla(u_n - u)||_{L^2}
+\end{align*}
+which goes to $0$.
+\end{proof}
+
+\begin{theorem}[small-large uniqueness]
+Let $u,v$ be two weak solutions of the steady Navier-Stokes system.
+Let $C_1$ be the constant in the previous lemma. If
+$$C_1 ||\nabla v||_{L^2} < 1$$
+then $u = v$.
+\end{theorem}
+\begin{proof}
+Let $w = u - v$; then $w$ is trace-free. From the definition of weak solution, for every $\varphi \in C^\infty_{c,\sigma}(\Omega)$,
+\begin{align*}
+0 &= \nu(\nabla w, \nabla \varphi) + (u \cdot \nabla u, \varphi) - (v \cdot \nabla v, \varphi)\\
+&= \nu(\nabla w, \nabla \varphi) + (w \cdot \nabla w, \varphi) + (w \cdot \nabla v, \varphi) + (v \cdot \nabla w, \varphi).
+\end{align*}
+By the lemma, if $\varphi_n \to w$ in $W^{1,2}_0(\Omega)$, and $n \to \infty$, we conclude
+$$0 = \nu(\nabla w, \nabla w) + (w \cdot \nabla w, w) + (w \cdot \nabla v, w) + (v \cdot \nabla w, w)$$
+with $(w \cdot \nabla w, w) = (v \cdot \nabla w, w) = 0$. That is,
+$$0 = \nu||\nabla w||_{L^2}^2 + (w \cdot \nabla v, w).$$
+Using the lemma again,
+$$0 \leq \nu ||\nabla w||_{L^2}^2 \leq C_1 ||\nabla w||_{L^2}^2 ||\nabla v||_{L^2}.$$
+Thus
+$$||\nabla w||_{L^2}^2(C_1||\nabla v||_{L^2} - C_1) \geq 0$$
+but $C_1||\nabla v||_{L^2} - C_1 < 0$ by assumption. That means $\nabla w = 0$.
+Since $w$ is gradient-free and trace-free, $w = 0$.
+\end{proof}
+
+In general solutions may not be unique however.
+
+\section{Existence of solutions}
+Let us first treat the case of zero-boundary solutions using the Galerkin method.
+
+\begin{lemma}
+Let $B_R = B(0, R)$ be a ball in $\RR^m$, $m \geq 1$, and $P$ a continuous vector field on $\overline B_R$ such that for every $x \in \partial B_R$,
+$$P(x) \cdot x > 0.$$
+Then there is $x_0 \in B_R$ with $P(x_0) = 0$.
+\end{lemma}
+\begin{proof}
+This is a consequence of Brouwer's fixed point theorem.
+If this fails to be true, then by the boundary hypothesis, for every $x \in \overline B_R$, $P(x) \neq 0$
+Let
+$$\Pi(x) = -R\frac{P(x)}{|P(x)|}.$$
+Then $\Pi$ is continuous since $P \neq 0$ and $\Pi$ sends $\overline B_R$ to itself.
+So $\Pi$ has a fixed point. But
+$$P(x_0) \cdot x_0 = P(x_0) \Pi(x_0) = -R|P(x_0)| < 0$$
+contradicting the boundary hypothesis.
+\end{proof}
+
+Let us recall the Galerkin method.
+We search for approximate solutions in high-dimensional spaces, and pass to the limit in the infinite-dimensional Hilbert space where the exact solution lives.
+
+\begin{theorem}
+If $u_* = 0$ and $f \in V'$ then there is a weak solution $u \in V$ of the steady-state Navier-Stokes system such that
+$$||\nabla u||_{L^2(\partial \Omega)} \leq \frac{||f||_{V'}}{\nu}.$$
+\end{theorem}
+\begin{proof}
+Since $V$ is a separable Hilbert space, there is a countable orthonormal basis of $V$ consisting of $\psi_k \in C^\infty_{c,\sigma}(\Omega)$.
+Let us find an approximate solution $u_m$ in the span of $\psi_1, \dots, \psi_m$.
+We solve
+\begin{equation}
+\label{Galerkin NS}
+\nu(\nabla u_m, \nabla \psi_k) + (u_m \cdot \nabla u_m, \psi_k) = \langle f, \psi_k\rangle.
+\end{equation}
+If $u_m$ is a solution, there is $\alpha \in \RR^m$ such that
+$$u_m = \sum_{k=1}^m \alpha_k \psi_k.$$
+Let $P: \RR^m \to \RR^m$ satisfy
+$$(P\alpha)_k = \nu(\nabla v, \nabla \psi_k) + (v \cdot \nabla v, \psi_k) - \langle f,\psi_k\rangle$$
+where $v = \sum_k \alpha_k \psi_k$.
+
+Clearly $P$ is a continuous vector field, and
+\begin{align*}
+P(\alpha) \cdot \alpha &= \sum_{k=1}^m (P(\alpha))_k \alpha_k\\
+&= \sum_{k=1}^\infty \nu(\nabla v, \nabla \alpha_k \psi_k) + (v \cdot \nabla v, \alpha_k \psi_k) - \langle f, \alpha_k \psi_k\rangle\\
+&= \nu(\nabla v, \nabla v) + (v \cdot \nabla v, v) - \langle f,v\rangle\\
+&\geq \nu||\nabla v||_{L^2}^2 + 0 - ||f||_{V'} ||\nabla v||_{L^2}\\
+&= ||\nabla v||_{L^2}(\nu ||\nabla v||_{L^2} - ||f||_{V'})\\
+&\gtrsim ||\nabla v||_{L^2}(\nu ||v||_{L^2} - ||f||_{V'})
+\end{align*}
+by Poincar\'e's inequality. Since $||v||_{L^2} = ||\alpha||_{\ell^2}$, if $||\alpha||_{\ell^2} = M \gg 1$ then $P(\alpha) \cdot \alpha > 0$.
+So by the lemma there is $\alpha^*$ such that $||\alpha^*||_{\ell^2} \leq M$ and $P\alpha^* = 0$.
+Therefore $\alpha^*$ defines $u_m = \sum_{k \leq m} \alpha_k^*\psi_k$ which is a solution of the approximate equation (\ref{Galerkin NS}).
+
+Since $P(\alpha^*) = 0$, $P(\alpha^*) \cdot \alpha^* = 0$.
+Therefore
+$$\nu ||\nabla u_m||_{L^2}^2 = \langle f, u_m\rangle \leq ||f||_{V'} ||u_m||_V$$
+but $||u_m||_V = ||\nabla u_m||_{L^2}$ so
+$$\nu ||\nabla u_m||_{L^2} \leq ||f||_{V'}.$$
+Thus there is a subsequence of $u_m$ which converges weakly in $V = W^{1,2}_{0,\sigma}(\Omega)$ to $u \in V$.
+But since $\Omega$ is bounded, the embedding $W^{1,2} \to L^2$ is compact, so passing to a subsequence again we can get strong convergence.
+Then
+$$\nu(\nabla u, \nabla \psi_k) + (u \cdot \nabla u, \psi_k) = \langle f, \psi_k\rangle$$
+but the $\psi_k$ form a basis so for every $\psi$,
+$$\nu(\nabla u, \nabla \psi), (u \dot \nabla u, \psi) = \langle f, \psi\rangle.$$
+Therefore $u$ is a weak solution.
+
+By the weak convergence, we can pass to a subsequence of $u_m$ which attains the limit inferior and get
+$$||\nabla u||_{L^2(\Omega)} \leq \liminf_{m \to \infty} ||\nabla u_m||_{L^2} \leq \nu^{-1} ||f||_{V'}$$
+as desired.
+\end{proof}
+
+One could also prove the above result using Leray-Schauder fixed point theory.
+
+\chapter{Weak solutions of the Navier-Stokes equations}
+We now repeat the above theory but allow for time-dependence.
+
+\section{Notation}
+Let $\Omega$ be $\RR^d$ or a bounded open set with Lipschitz boundary and $f: \Omega \times [0, T]$ a force.
+If $\Omega \neq \RR^d$ we add the no-slip boundary data $u|\partial \Omega = 0$.
+We fix an initial data $u(0) = u_0$.
+Let us show that there is a weak solution $u$ to the Navier-Stokes system
+$$\partial_t u + u\cdot \nabla u + \nabla p = f$$
+with the given data.
+
+Recall that if $u$ is smooth, we have a kinetic energy balance
+$$\frac{1}{2} \int_\Omega |u(x, t)|^2 ~dx + \nu \int_0^t \int_\Omega |\nabla u(x, s)|^2 ~dx ~ds = \frac{1}{2} \int_\Omega |u_0(x)|^2 ~dx + \int_0^t \int_\Omega f(x, s) \cdot u(x, s) ~dx ~ds.$$
+
+Let $V$ be the closure of $C^\infty_{c,\sigma}(\RR^d)$ in the seminormed space with seminorm $||u||_V = ||\nabla u||_{L^2}$.
+This is the seminorm of the homogeneous Sobolev space $\dot H^1$.
+Thus we sometimes write $V = \dot H^1_{c,\sigma}$.
+
+\begin{definition}
+Assume $f \in L^2([0, T] \to V')$.
+We say
+$$u \in L^\infty([0, T] \to L^2(\Omega)) \cap L^2([0, T] \cap V) \cap C_w([0, T] \to L^2(\Omega))$$
+is a \dfn{weak solution to the Navier-Stokes system} if $u(t) \to u_0$ in the weak topology of $L^2(\Omega)$ as $t \to 0$ and for every $\varphi \in C^\infty_{c,\sigma}(\Omega)$
+$$\int_0^T \int_\Omega (u \cdot \nabla u) \cdot \varphi - u \cdot \partial_t \varphi + \nu \nabla u \nabla \varphi = \int_0^T \langle f(t), \varphi(t)\rangle ~dt$$
+and for every $\varphi \in C^\infty_c(\Omega)$,
+$$\int_\Omega u(x, t) \cdot \nabla\varphi(x) ~dx = 0.$$
+If $u$ is a weak solution to the Navier-Stokes system and for every $t \in [0, T]$,
+$$\frac{1}{2} \int_\Omega |u(x, t)|^2 ~dx + 2\nu \int_0^t \int_\Omega |\nabla u(x, s)|^2 ~dx ~ds \leq \frac{1}{2} \int_\Omega |u_0(x)|^2 ~dx + \int_0^t \langle f(t), u(t)\rangle ~dt,$$
+we say that $u$ is a \dfn{Leray-Hopf solution to the Navier-Stokes system}.
+\end{definition}
+
+\section{Existence of Leray-Hopf solutions}
+We now show that the Navier-Stokes system has a solution provided that the initial data has finite kinetic energy.
+However, if $d = 3$ we will not be able to show that it is unique, as this is a major open problem.
+
+This was proven by Leray when $\Omega = \RR^d$, and then Hopf proved it for bounded $\Omega$ using the Galerkin method.
+Leray did not use the Galerkin method, but rather used asymptotics for the heat equation.
+We will give Hopf's proof.
+
+\begin{lemma}[Aubin-Lions-Simon]
+Suppose $X_0 \to X_1 \to X_2$ are embeddings of Banach spaces.
+Assume $X_1 \to X_2$ is bounded and $X_0 \to X_1$ is compact.
+If $p, r \in [1, \infty]$, let $E_{p,r}$ be the space of $f \in L^p([0, T] \to X_0)$ such that $\partial_t f \in L^r([0, T] \to X_2)$.
+
+If $p < \infty$ then the embedding $E_{p,r} \to L^p([0, T] \to X_1)$ is compact.
+
+If $r > 1$ then the embedding $E_{\infty, r} \to C([0, T] \to X_1)$ is compact.
+\end{lemma}
+
+Aubin and Lions proved this lemma under the assumption that the $X_j$ were reflexive.
+Simon showed this hypothesis was unnecessary.
+We omit the proof.
+
+\begin{lemma}
+For every $u \in \dot H^1_{0,\sigma}(\Omega)$ and $v, w \in H^1(\Omega)$,
+$$\int_\Omega (u \cdot \nabla v) \cdot w = -\int_\Omega (u \cdot \nabla w) \cdot \nabla v$$
+and
+$$\left|\int_\Omega (u \cdot \nabla w) \cdot v\right| \lesssim_d ||\nabla w||_{L^2} ||u||_{L^2}^{1-d/4} ||u||_{H^1}^{d/4} ||v||_{L^2}^{1 - d/4} ||v||^{d/4}_{H^1}.$$
+\end{lemma}
+\begin{proof}
+First integrate by parts.
+Now to get the estimate, we first bound
+$$\left|\int_\Omega (u \cdot \nabla w) \cdot v\right| \leq ||\nabla w||_{L^2} ||u||_{L^4} ||v||_{L^4}.$$
+Now use Gagliardo-Nirenberg interpolation
+$$||u||_{L^4} \lesssim_d ||u||_{L^2}^{1-d/4}||u||_{H^1}^{d/4}$$
+to get the claim.
+\end{proof}
+
+For the ease of presentation we will assume that $\Omega$ is bounded.
+The argument can be extended to the case $\Omega = \RR^d$ without too much work but in that case, $\dot H^1$ is not a subspace of $L^2$, and one needs to do some not very interesting work to overcome this issue, involving interpreting $\dot H^1$ as a quotient modulo constant functions so it becomes a Hausdorff space.
+
+\begin{lemma}
+Let $X$ be a dense subspace of $L^2(\Omega)$.
+If $v \in L^\infty([0, T] \to L^2)$ and $\partial_t v \in L^1([0, T] \to X')$ then there is
+$$\tilde v \in C_w([0, T] \to L^2) \cap C([0, T] \to X')$$
+such that $v = \tilde v$ for almost all time.
+\end{lemma}
+We omit the proof, as this result is standard.
+Henceforth we identify $v$ with $\tilde v$ since they are almost surely equal.
+
+\begin{theorem}[Leray 1934, Hopf 1951]
+For every $u_0 \in L^2_\sigma(\Omega)$ and $f \in L^2([0, T] \to V')$, and $0 < T < \infty$, there is a Leray-Hopf solution $u$ to the Navier-Stokes system with $u(0) = u_0$ and forcing $f$.
+Moreover, $\partial_t u \in L^{4/d}([0, T] \to V')$.
+\end{theorem}
+\begin{proof}
+Let $\psi_k \in C^\infty_{c,\sigma}(\Omega)$ be a basis of $V$ which is orthonormal in $L^2$.
+We will find approximate solutions $u_m(t) = \sum_{j=1}^m g_m^j(t) \psi_j$ which satisfy
+$$u_m(0) = \sum_{j=1}^m (u_0, \psi_j)\psi_j$$
+and $u_m$ solves the approximate Navier-Stokes system
+\begin{equation}
+\label{Galerkin NS ODE}
+\int_\Omega \partial_t u_m \cdot \psi_k + \nu \nabla u_m \nabla \psi_k + (u_m \cdot \nabla u_m) \cdot \psi_k = \langle f(t), \psi_k\rangle
+\end{equation}
+whenever $t \in [0, T]$ and $1 \leq k \leq m$.
+
+The system (\ref{Galerkin NS ODE}) is an ordinary differential system for $g_m$.
+Indeed, it can be expressed as
+$$(g^k_m)' + \nu \sum_{j=1}^m g_m^j \int_\Omega \nabla \psi_m \nabla \psi_k(x) ~dx + \sum_{j,\ell=1}^m g_m^j g_m^\ell \int_\Omega (\psi_j \cdot \nabla \psi_\ell) \cdot \psi_k(x) ~dx = \langle f, \psi_k\rangle$$
+which is of the form
+$$g_m' + N(g) = F$$
+where $N$ is a quadratic nonlinearity and $F \in L^2$ (since $f \in L^2$).
+The initial data is
+$$g_m(0) = (u_0, \psi).$$
+Since $N$ is locally Lipschitz, by t  he Cauchy-Lipschitz theorem, there is a unique maximal solution $g_m \in C([0, T_*))$ where $T_* \leq T$.
+We now control the blowup time $T_*$.
+
+If $T_* < T$, then
+$$\sup_{t < T_*} ||g_m(t)||_{\ell^2} = \infty$$
+since otherwise we could continue $g_m$ over $T_*$ by the Cauchy-Lipschitz theorem.
+But if we multiply (\ref{Galerkin NS ODE}) by $g_m^k$ and sum over $k$,
+we get
+$$\int_\Omega \partial_t u_m \cdot u_m + (u_m \cdot \nabla u_m) \cdot u_m + \nu \nabla u_m \nabla u_m = \langle f, u_m\rangle.$$
+Therefore
+$$\frac{\partial_t}{2} \int_\Omega |u_m(x, t)|^2 ~dx + \nu \int_\Omega |\nabla u_m(x, t)|^2 ~dx = \langle f, u_m\rangle.$$
+So
+\begin{align*}
+\frac{1}{2} ||u_m(t)||_{L^2}^2 + \nu\int_0^t ||\nabla u_m||_{L^2}^2 &\leq \frac{1}{2} ||u_m(0)||_{L^2}^2 = \int_0^t ||f||_{V'} ||u_m||_V\\
+&\leq \frac{1}{2} ||u_m(0)||_{L^2}^2 + \frac{\nu}{2} \int_0^t ||u_m||_V^2 + \frac{1}{2\nu} \int_0^t ||f||_{V'}^2
+\end{align*}
+by Young's inequality.
+Consequently,
+$$||u_m(t)||_{L^2}^2 + \nu\int_0^t ||\nabla u_m||_{L^2}^2 \leq ||u_0||_{L^2}^2 + \nu^{-1} \int_0^t ||f||_{V'}^2$$
+so it follows that $||g_m||_{\ell^2} \lesssim 1$.
+This is a contradiction.
+
+So $T_* = T$ and
+$$||u_m||_{L^\infty([0, T] \to L^2)} + ||\nabla u_m||_{L^2([0, T] \to L^2)} \lesssim 1$$
+uniformly in $m$.
+Therefore there is a $u \in L^2([0, T] \to L^2_\sigma) \cap L^2([0, T] \to V)$ such that $u_m \to u$ in the weakstar topology of $L^\infty([0, T] \to L^2)$ and $u_m \to L^2([0, T] \to \dot H^1)$.
+(Note that weak convergence with codomain $V$ is weaker than weak convergence with codomain $\dot H^1$).
+
+Now we show that $u$ is a weak solution. Let $\theta \in C^\infty_c((0, T))$ and let $\varphi_k(x, t) = \psi_k(x) \theta(t)$.
+Then $\varphi_k$ is a spacetime test function.
+Integrating the approximate equation against $\varphi_k$ we get
+$$\int_0^T \int_\Omega \partial_t u_m \cdot \varphi_k + (u_m \cdot \nabla u_m) \cdot \varphi_k + \nu \nabla u_m \nabla \varphi_k = \int_0^T \langle f(t), \varphi_k(t) ~dt.$$
+The right-hand side does not depend on $m$.
+Integrating by parts in $t$ with $k$ fixed and taking the limit as $m \to \infty$,
+$$\int_0^T \int_\Omega \partial_t u_m \cdot \varphi_k = -\int_0^T \int_\Omega u_m \cdot \partial_t \varphi_k \to -\int_0^T \int_\Omega u \cdot \partial_t \varphi_k$$
+owing to the weak convergence of $u_m$ in $L^2([0, T] \to L^2)$.
+The same argument works for $\nabla u_m$.
+
+Finally we show
+$$\lim_{m \to \infty} \int_0^T \int_\Omega (u_m \cdot \nabla u_m) \cdot \varphi_k = \int_0^T \int_\Omega (u \cdot \nabla u) \cdot \varphi_k.$$
+We know $\nabla u_m \to \nabla u$ weakly, but in order to conclude $u_m \cdot \nabla u_m \to u \cdot \nabla u$ we need $u_m \to u$ strongly.
+This is a problem because we only have compactness of $u_m$ via the Rellich-Kondrachov theorem in space, not time.
+Instead we show $u_m \to u$ strongly in $L^2([0, T] \to L^2(\Omega_k))$ where $\Omega_k$ is the support of $\psi_k$.
+This follows from the Aubin-Lions-Simon lemma with $X_0 = \dot H^1_0(\Omega_k)$ and $X_1 = L^2(\Omega_k)$, as we now show.
+
+The embedding $X_0 \to X_1$ is compact by the Rellich-Kondrachov theorem.
+To compute $X_2$ we bound $\partial_t u_m$.
+Since $u_m$ is an approximate solution,
+$$\int_0^T \langle \partial_t u_m + u_m \cdot \nabla u_m, \nu \Delta u_m - f, \varphi_k\rangle = 0.$$
+Since the span of the $\varphi_k$ is all of $L^2([0, T] \to V)$,
+$$\partial_t u_m + u_m \cdot \nabla u_m = \nu \Delta u_m + f$$
+in the space $L^2([0, T] \to V')$.
+Since $u_m \in L^2([0, T] \to V)$, $\Delta u_m \in L^2([0, T] \to V')$.
+If $\varphi \in L^{4/(4-d)}([0, T] \to V)$ then
+$$\left|\int_0^T \int_\Omega (u_m \cdot \nabla u_m) \cdot \varphi\right| \lesssim \int_0^T ||\nabla u||_{L^2}^{2-d/2} ||u_m||_{H^1}^{d/2}.$$
+Now $(4-d)/4+1/\infty+d/4=1$ so we get a bound
+$$ \int_0^T ||\nabla u||_{L^2}^{2-d/2} ||u_m||_{H^1}^{d/2} \lesssim ||\nabla \varphi||_{L^{4/4-d}([0, T] \to L^2)} ||u_m||_{L^\infty([0, T] \to L^2)^{2-d/2}} ||u_m||_{L^2([0, T] \to H^1)} \lesssim ||\varphi||_{L^{4/(4-d)([0, T] \to V)}}.$$
+Since $4/(4-d) < 2$, we get
+$$||u_m \cdot \nabla u_m||_{L^{4/d}([0, T] \to V')} \lesssim 1$$
+so
+$$||\partial_t u_m||_{L^{4/d}([0, T] \to V')} \lesssim 1$$
+uniformly in $m$.
+Thus we take $X_2 = V'$ with $r = 4/d$ and $p = 2$.
+
+By the Aubin-Lions-Simon lemma, after passing to a subsequence $u_m \to u$ in the strong topology of $L^2([0, T] \to L^2(\Omega_k))$.
+Summarizing, for every $k$,
+$$\int_0^T \int_\Omega -u \cdot \partial_t \varphi_k + (u \cdot \nabla u) \cdot \varphi_k + \nu \nabla u \nabla \varphi_k = \int_0^T \langle f, \varphi_k\rangle.$$
+Since the $\varphi_k$ are dense by the Stone-Weierstrass theorem, we conclude that $u$ is a weak solution of the Navier-Stokes equation.
+
+To check the initial conditions we will assume that $\Omega$ is bounded.
+Then $\partial \Omega$ is a Lipschitz manifold and $V = H^1_{0,\sigma}(\Omega)$.
+
+We know that
+$$u \in L^\infty([0, T] \to L^2) \cap L^2([0, T] \cap V) \cap \dot W^{1,4/d}([0, T] \to V').$$
+Now we prove $u \in C_w([0, T] \to L^2_\sigma)$.
+We apply the third lemma with $X = V$ to get
+$$u \in C_w([0, T] \to L^2) \subseteq C_w([0, T] \to L^2_\sigma).$$
+
+Now we need to show that $u(t)$ converges weakly to $u_0$ as $t \to 0$.
+First since $||u_m||_{L^\infty([0, T] \to L^2)} \lesssim 1$ and $||\partial_t u_m||_{L^{4/d}([0, T] \to L^2)} \lesssim 1$, the Aubin-Lions-Simon lemma with $X_0 = L^2$, $X_1 = X_2 = V'$ applies.
+Indeed, $V \to L^2$ is a compact embedding, so its adjoint $L^2 \to V'$ is also a compact embedding.
+Therefore $u_m \to u$ strongly in $C([0, T] \to V')$.
+Therefore $u_m(0) \to u(0)$ in $V'$.
+But
+$$u_m(0) = \sum_{j=1}^m (u_0, \psi_j)\psi_j \to u_0$$
+in $L^2$ so $u(0) = u_0$ since $L^2$ is Hausdorff.
+
+Next we check that $u$ is a Leray-Hopf solution, thus $u$ satisfies the energy estimate
+$$\frac{1}{2} ||u(t)||_{L^2}^2 + \nu\int_0^t ||\nabla u(s)||_{L^2}^2 ~ds \leq \frac{1}{2} ||u_0||_{L^2}^2 + \int_0^t \langle f(s), u(s)\rangle ~ds.$$
+Recall that
+$$\frac{1}{2} ||u_m(t)||_{L^2}^2 + \nu\int_0^t ||\nabla u_m(s)||_{L^2}^2 ~ds = \frac{1}{2} ||u_m(0)||_{L^2}^2 + \int_0^t \langle f(s), u_m(s)\rangle ~ds.$$
+Taking the limit as $m \to \infty$ we conclude
+$$\lim_{m \to \infty} ||u_m(0)||_{L^2}^2 = ||u_0||_{L^2}^2.$$
+Using the weak convergence of $u_m$ in $L^2([0, T] \to L^2)$ and $V$ respectively, we compute the dissipation
+$$\lim_{m \to \infty} \int_0^t \langle f(s), u_m(s)\rangle ~ds = \int_0^t \langle f(s), u(s)\rangle ~ds$$
+and forcing
+$$\liminf_{m \to \infty} \int_0^t \int_\Omega |\nabla u_m(x, s)|^2 ~dx ~ds \geq \int_0^t \int_\Omega |\nabla u(x, s)|^2 ~dx ~ds$$
+where we used Fatou's lemma.
+So it remains to show
+\begin{equation}
+\label{energy liminf}
+||u(t)||_{L^2}^2 \leq \liminf_{m \to \infty} ||u_m(t)||_{L^2}^2.
+\end{equation}
+Unfortunately this does NOT follow from the weakstar convergence in $L^\infty([0, T] \to L^2)$, since we would need to take a limit of a Dirac sequence in $L^1$ to get this time-pointwise bound, but there is no reason that limit would converge.
+
+To prove (\ref{energy liminf}), let $\alpha \in C^\infty_c([0, T])$. Multiplying the approximate energy estimtate by $\alpha(t)^2$ and integrating in $t$ we get
+$$\int_0^T \alpha(t)^2 ||u_m(t)||_{L^2}^2 ~dt + \nu \int_0^T \int_0^t ||\nabla u_m(s)||_{L^2}^2 ~ds ~dt = ||u_m(0)||_{L^2}^2 \int_0^T \alpha(t)^2 ~dt + \int_0^T \alpha(t)^2 \int_0^t \langle f(s), u_m(s)\rangle ~ds~dt.$$
+By Fatou's lemma and the weak convergence,
+\begin{align*}
+\liminf_{m \to \infty} \int_0^T \alpha(t)^2 \int_0^t \int_\Omega |\nabla u_m(x, s)|^2 ~dx ~ds~dt &\geq \int_0^T \alpha(t)^2 \liminf_{m \to \infty}\int_0^t \int_\Omega |\nabla u_m(x, s)|^2 ~dx ~ds~dt\\
+&\geq \int_0^T \alpha(t)^2 \int_0^t \int_\Omega |\nabla(x, s)|^2 ~dx ~ds ~dt.
+\end{align*}
+Since $u_m \to u$ in $L^2$,
+$$\lim_{m \to \infty} ||u_m(0)||_{L^2}^2 \int_0^T \alpha(t)^2 ~dt = ||u_0||_{L^2}^2 \int_0^T \alpha(t)^2 ~dt$$
+By dominated convergence,
+$$\lim_{m \to \infty} \int_0^T \alpha(t)^2 \int_0^t \langle f(s), u_m(s)\rangle ~ds ~dt = \int_0^T \alpha(t)^2 \int_0^t \langle f(s), u(s)\rangle ~ds ~dt.$$
+Moreover,
+$$\int_0^T \alpha(t)^2 ||u(t)||_{L^2}^2 = ||\alpha u||_{L^2([0, T] \to L^2)} \leq \liminf_{m \to \infty} \int_0^T \alpha(t)^2 ||u_m(t)||_{L^2}^2 ~dt.$$
+Therefore
+$$\int_0^T \alpha(t)^2 ||u(t)||_{L^2}^2 ~dt + \nu\int_0^T \int_0^t ||\nabla u(s)||_{L^2} ~ds ~dt \leq ||u_0||_{L^2}^2 \int_0^T \alpha(t)^2 ~dt + \int_0^T \int_0^t \langle f(s), u(s)\rangle ~ds ~dt.$$
+
+Now we choose a suitable $\alpha$. Let $t_0 \in (0, t)$. Let $\theta \in C^\infty_c((0, 1))$ satisfy
+$$\int_0^\infty \theta(t)^2 ~dt = 1.$$
+Let
+$$\alpha_\delta(t) = \delta^{-1/2} \theta\left(\frac{t - t_0}{\delta}\right).$$
+If $\delta$ is small enough depending on $t_0$ and $T$, then $\alpha_\delta \in C^\infty_c((0, T))$ and
+$$\int_0^T \alpha_\delta(t)^2 ~dt = 1.$$
+So $\alpha_\delta^2$ is an approximation to the Dirac measure at $t_0$ in the sense that if $g \in L^1_{loc}(\RR)$ and $t_0$ is a Lebesgue point of $g$, then
+$$\lim_{\delta \to 0} \int_0^T \alpha_\delta(t)^2 g(t) ~dt = g(t_0).$$
+Applying to
+$$g(t) = \int_0^t \langle f(s), u(s)\rangle ~ds$$
+and
+$$g(t) = \int_0^t \int_\Omega |\nabla u(x, s)|^2 ~dx ~ds$$
+we get
+$$\lim_{\delta \to 0} \int_0^T \int_0^t \langle f(s), u(s)\rangle ~ds ~dt = \int_0^{t_0} \langle f(s), u(s)\rangle ~ds$$
+and
+$$\lim_{\delta \to 0} \int_0^T \int_0^t ||\nabla u(s)||_{L^2}^2 ~ds ~dt = \int_0^{t_0} \langle ||\nabla u(s)||_{L^2}^2 ~ds.$$
+We get (\ref{energy liminf}) whenever $t_0$ is a Lebesgue point of the remaining term, which happens almost surely if a point of $[0, T]$ is drawn at random.
+Now suppose that $t_0$ is not a Lebesgue point and let $t_n \to t_0$.
+Then since $u \in C_w([0, T] \to L^2_\sigma)$ we get
+$$||u(t_0)||_{L^2} \leq \liminf_{n \to \infty} ||u(t_n)||_{L^2}$$
+which proves (\ref{energy liminf}) for general $t_0 \in (0, T)$.
+Now taking the limit as $t_n \to 0$ and $t_n \to T$ we eliminate the last two cases.
+\end{proof}
+
+\begin{proposition}
+If $f \in L^2([0, T] \to V)$ and $u$ is a weak solution on $[0, T]$ then $\partial_t u \in L^{4/d}([0, T] \to V')$.
+\end{proposition}
+\begin{proof}
+One can check
+$$\left|\int_0^T \int_\Omega -u\partial_t \varphi\right| = \left|\int_0^T \int_\Omega -(u \cdot \nabla u) \cdot \varphi + \nu \nabla u \nabla \varphi - \langle f, \varphi\rangle\right| \lesssim ||\varphi||_{L^{4/(4-d);V}}.$$
+Therefore for every test function $\varphi$,
+$$\langle \partial_t u, \varphi\rangle \lesssim ||\varphi||_{L^{4/(4-d);V}}$$
+and since the space of test functions is dense in $L^{4/(4-d)};V$ we can extend $\partial_t u \in L^{4/d}V'$.
+\end{proof}
+
+\section{Properties of Leray-Hopf solutions, $d = 2$}
+Assume $d = 2$ and let $u$ be a Leray-Hopf solution.
+Notice $4/d = 2$.
+
+\begin{lemma}
+Let $X \subseteq L^2$ be a dense subspace.
+If $v \in L^2([0, T] \to X)$ and $\partial_t v \in L^2([0, T] \to X')$ then there is $\tilde v \in C([0, T] \to L^2)$ such that $v = \tilde v$ almost everywhere.
+\end{lemma}
+We again omit the proof.
+
+\begin{theorem}
+One has $u \in C([0, T] \to L^2_\sigma)$.
+\end{theorem}
+\begin{proof}
+Since $4/d = 2$ then $u \in L^2([0, T] \to V)$ and $\partial_t u \in L^2([0, T] \to V')$, we can apply the previous lemma.
+\end{proof}
+
+\begin{lemma}[Lions-Magenes]
+Let $X \subseteq L^2$ be a dense subspace.
+Let $p, q \in [1, \infty]$, $p',q'$ the H\"older duals to $p,q$ respectively, and
+$$E_{p,q'} = \langle f \in L^p([0, T] \to X): \partial_t f \in L^{q'}([0, T] \to X')\}.$$
+Assume $v \in E_{p,q'}$ and $w \in E_{p',q}$.
+Then $t \mapsto (v(t), w(t))_{L^2}$ is a continuous map $[0, T] \to \CC$ and satisfies the fundamental theorem of calculus in the sense that
+$$(v(t_2), w(t_2))_{L^2} - (v(t_1), w(t_1))_{L^2} = \int_{t_1}^t \langle \partial_t v(t), w(t)\rangle + \langle v(t), \partial_t w(t)\rangle ~dt.$$
+\end{lemma}
+We again omit the proof.
+
+\begin{theorem}
+We have a strong energy EQUALITY: For every $t_0, t_1 \in [0, T]$,
+$$\frac{1}{2} ||u(t_1)||_{L^2}^2 + \nu\int_{t_0}^{t_1} ||\nabla u(s)||_{L^2}^2 ~ds = \frac{1}{2} ||u(t_0)||_{L^2}^2 + \int_{t_0}^{t_1} \langle f(s), u(s)\rangle ~ds.$$
+\end{theorem}
+\begin{proof}
+Since $\partial_t u \in L^2([0, T] \to V')$ (which happens since $d = 2$) the weak equation is
+$$-\int_0^T \langle \partial_t u, \varphi\rangle + \nu(\nabla u, \nabla \varphi) + \langle u \cdot \nabla u, \varphi\rangle = \int_0^T \langle f(t), \varphi(t)\rangle ~dt.$$
+This holds if $\varphi \in C^\infty_{c,\sigma}(\Omega \times (0, T))$, but makes sense even if $\varphi \in L^2(\Omega \times (0, T))$ and by density extends to that case.
+Thus we may take $\varphi = u1_{[t_0, t_1]}$.
+Therefore
+$$\int_{t_0}^{t_1} -\langle \partial_t u, u\rangle + \nu ||\nabla u||_{L^2}^2 + \langle u \cdot \nabla u, u\rangle = \int_{t_0}^{t_1} \langle f, u\rangle.$$
+But
+$$\langle u \cdot \nabla u, u\rangle = \int_\Omega (u \cdot \nabla u) \cdot u = 0$$
+since we have enough regularity to integrate by parts.
+The theorem now follows from the fact that
+$$\int_{t_0}^{t_1} \langle \partial_t u, u\rangle = \frac{(u(t_1), u(t_1)) - (u(t_0), u(t_0))}{2}$$
+which is a consequence of the Lions-Magenes lemma with $v = w = u$.
+\end{proof}
+
+Assume $u \in V$ and $v, w \in H^1_0(\Omega)$.
+Then we can define a cubic form
+$$b(u, v, w) = \int_\Omega (u \dot \nabla v) \cdot w.$$
+We already showed that $b(u, v, w) = -b(u, w, v)$ and
+$$|b(u, v, w)| = |b(u, w, v)| \lesssim ||\nabla w||_{L^2} ||u||_{L^2}^{d/4} ||\nabla u||_{L^2}^{1-d/4} ||v||_{L^2} ||\nabla v||_{L^2}.$$
+Therefore $u \cdot \nabla v \in H^{-1}$, since that space is the dual of $H^1_0$, and in fact $H^{-1} \subseteq V'$.
+The duality pairing here is
+$$\langle u \cdot \nabla v, w\rangle = b(u, v, w).$$
+Thus the preceding estimates are given by
+$$||u \cdot \nabla v||_{V'} \leq ||u \cdot \nabla v||_{H^{-1}} \leq ||u||_{L^2}^{d/4} ||\nabla u||_{L^2}^{1-d/4} ||v||_{L^2}^{d/4} ||\nabla v||_{L^2}^{1-d/4}.$$
+
+\begin{theorem}
+Let $d = 2$.
+Then the Leray-Hopf weak solution $u \in \dot H^1([0, T] \to V')$ is unique.
+\end{theorem}
+\begin{proof}
+The proof of the Leray-Hopf solution says that
+$$\int_0^T \langle \partial_t u, \varphi\rangle + \langle u \dot \nabla u, \varphi\rangle + \nu(\nabla u, \nabla \varphi) = \int_0^T \langle f, \varphi\rangle$$
+whenever $f \in L^2([0, T] \to V)$.
+This makes sense because $\partial_t \in L^2([0, T] \to V')$ by hypothesis.
+
+Let $u_1, u_2$ be Leray-Hopf solutions with the same initial data. Then $w = u_1 - u_2$ satisfies $w(0) = 0$ and
+$$\int_0^T \langle \partial_t w, \varphi\rangle + \langle w \cdot \nabla u, \varphi\rangle + \langle v \cdot \nabla w, \varphi\rangle + \nu(\nabla w, \nabla \varphi) = 0$$
+so if $t \in (0, T]$ and $\varphi = w1_{(0, t)}$,
+$$\int_0^T \langle \partial_t w, w\rangle + b(w, u, w) + b(v, w, w) + \nu||\nabla w||_{L^2}^2 = 0$$
+but $b$ is antisymmetric in the final variables, so $b(v, w, w) = 0$.
+Thus
+\begin{align*}
+\frac{1}{2}||w(t)||_{L^2}^2 - \frac{1}{2} ||w(0)||_{L^2}^2 + \nu\int_0^t ||\nabla w||_{L^2}^2 &= -\int_0^t b(w, u, w)\\
+&\lesssim \int_0^t ||\nabla u||_{L^2} ||w||_{L^2} ||\nabla w||_{L^2}.
+\end{align*}
+Taking Cauchy's inequality,
+$$\int_0^t ||\nabla u||_{L^2} ||w||_{L^2} ||\nabla w||_{L^2} \leq \frac{\nu}{2} \int_0^t ||\nabla w||_{L^2}^2 + \frac{1}{\nu} \int_0^t ||w||_{L^2}^2 ||\nabla u||_{L^2}^2.$$
+By the Cauchy-Schwarz inequality,
+$$\frac{1}{2}||w(t)||_{L^2}^2 + \frac{\nu}{2} \int_0^t ||\nabla w||_{L^2}^2 \leq \frac{1}{2} ||w(0)||_{L^2}^2 + \frac{C}{\nu} \int_0^t ||\nabla u||_{L^2}^2 ||w||_{L^2}^2.$$
+We can discard the second left-hand term and get
+$$\frac{1}{2}||w(t)||_{L^2}^2 \leq \frac{1}{2} ||w(0)||_{L^2}^2 + \frac{C}{\nu} \int_0^t ||\nabla u||_{L^2}^2 ||w||_{L^2}^2.$$
+So by Gr\"onwall's inequality,
+$$||w(t)||_{L^2}^2 \leq ||w(0)||_{L^2}^2 \exp\left(\frac{C}{\nu} \int_0^t ||\nabla u(s)||_{L^2}^2 ~ds\right) = 0$$
+since $w(0) = 0$.
+\end{proof}
+
+\section{Weak solutions with $d = 3$}
+The trouble with the case $d = 3$ is that we get $\varphi \in L^4([0, T] \to V)$ which is too weak.
+
+Here is a heuristic argument for why the Navier-Stokes equation
+$$\partial_t u + u \cdot \nabla u + \nabla p = \nu \Delta u$$
+is badly behaved with $\Omega = \RR^3$.
+If $u$ is a solution with pressure $p$, then for every $\lambda > 0$,
+$$u_\lambda(x, t) = \lambda u(\lambda x, \lambda t)$$
+is also a solution with pressure
+$$p_\lambda(x, t) = \lambda^2 p(\lambda x, \lambda^2 t).$$
+For that scaling, $L^\infty([0, T] \to L^d)$, $L^\infty([0, T] \to \dot H^{d/2 - 1})$, $L^2([0, T] \to \dot H^{d/2})$, and $L^4([0, T] \to \dot H^{(d-1)/2})$ are scaling-invariant seminorms.
+
+In particular, if $d = 2$ then $L^\infty([0, T] \to L^2)$ is scaling-invariant.
+The uniform $L^2$ bound from the energy inequality gives control of the $L^2$ norm for all time, so in $d = 2$ the Navier-Stokes equations are critical for $L^\infty([0, T] \to L^2)$.
+But this is not true for any of the scaling-invariant seminorms if $d = 3$, so the Navier-Stokes are supercritical in all such seminorms.
+This is why Leray-Hopf uniqueness is open if $d = 3$.
+
+\begin{theorem}[Buckmaster-Vicol 2018]
+There is small $\beta > 0$ such that for any smooth $\rho: [0, T] \to [0, \infty)$ there is a weak solution $u \in C([0, T] \to H^\beta(\Torus^3))$ such that for every $t \in [0, T]$,
+$$\frac{1}{2} ||u(t)||_{L^2} = \rho(t).$$
+\end{theorem}
+
+This gives nonuniqueness on $\Torus^3$, but it is not Leray-Hopf uniqueness.
+Indeed, let $\rho = 0$ on $[0, T/3]$ and $\rho \gtrsim 1$ on $[T/2, T]$.
+Then there is a weak solution $u$ with $u(0) = 0$ and
+$$\frac{1}{2} ||u(t)||_{L^2} = \rho(t)$$
+so having zero initial data does not imply that energy is eventually conserved.
+However such a solution exhibits ``spontaneous creation of energy" and so is nonphysical.
+
+Let $\Omega$ be a bounded Lipschitz connected open set in $\RR^d$, $2 \leq d \leq 3$.
+(The important hypothesis is ``connected!")
+Let $\psi \in V$ and $\theta \in C^\infty_c((0, T))$ be test functions and $f \in L^2([0, T] \to V')$ be a forcing term.
+Let $\varphi(x, t) = \psi(x) \theta(t)$, so
+$$\int_0^T \theta(t) \left(\langle \partial_t u, \psi\rangle + b(u, u, \psi) + \nu(\nabla u, \nabla \psi) - \langle f,\psi\rangle\right) = 0.$$
+Since $\theta$ is arbitrary,
+$$\langle \partial_t u + u \cdot \nabla u - \nu \Delta u - f, \psi\rangle = 0$$
+Integrating in time,
+$$(u(t), \psi) - (u(0), \psi) + \left\langle \int_0^t u \cdot \nabla u - \nu \Delta u - f, \psi\right\rangle = 0$$
+for almost every $t \in [0, T]$.
+Thus if
+$$G(t) = u(t) - u(0) + \int_0^t u \cdot \nabla u - \nu \Delta u - f$$
+then $\langle G(t), \psi\rangle = 0$ for almost every $t$.
+
+Assume $f \in L^2([0, T] \to H^{-1})$. Then we can replace the pairing $\langle G(t), \psi\rangle = 0$ in $(V', V)$ with the same pairing in $(H^{-1}, H^1_0)$.
+Using weak continuity of $u$ we can then show $G(t) \in H^{-1}$ for every $t$.
+Using de Rham cohomology it follows that there is a unique $\Pi(t) \in L^2_0(\Omega)$ with zero mean such that $G(t) = -\nabla \Pi(t)$.
+We claim that $\Pi \in C_w([0, T] \to L^2)$.
+Indeed, if $g \in L^2(\Omega)$, the below lemma implies there is $h \in H^1_0(\Omega)^d$ such that
+$$\nabla \cdot h = g - \int_\Omega g.$$
+Since $\Pi$ has zero mean,
+$$(\Pi(t), g) = (\Pi(t), \nabla \cdot h) = -\langle \nabla \Pi(t), h\rangle_{H^{-1},H^1_0}.$$
+Since $(\Pi(t), g)$ is continuous in $t$, we conclude $\Pi \in C_w([0, T] \to L^2)$ and hence $\Pi \in L^\infty([0, T] \to L^2)$.
+Now let
+$$p = \partial_t \Pi \in W^{-1,\infty}([0, T] \to L^2_0)$$
+where $W^{-1, \infty}$ is the dual of $W^{1,1}_0$. Thus $G = -\nabla \Pi$ and hence
+$$u(t) - u(0) = \int_0^t (u \cdot \nabla u - \nu \Delta u - f) + \nabla \Pi = 0$$
+in $H^{-1}$.
+Testin that equation against $\partial_t\varphi$ where $\varphi \in C^\infty_c((0, T) \times \Omega)$, we can integrate by parts, to get
+$$\langle \partial_t u + u \cdot \nabla u - \nu \Delta u - f + \nabla \partial_t \Pi, \varphi\rangle = 0$$
+where the dual pairing is between the test space and distributions on spacetime.
+But $\partial_t \Pi = p$, so in the distribution space,
+$$\partial_t u + u \cdot \nabla u + \nabla p = \nu \Delta u + f.$$
+Summarizing:
+
+\begin{proposition}
+Let $f \in L^2([0, T] \to H^{-1})$ and $\Omega$ bounded, Lipschitz, connected open set in $\RR^d$.
+Then the Leray-Hopf weak solution with forcing $f$ satisfies the Navier-Stokes equation in the sense of distributions, with the pressure $p \in W^{-1,\infty}([0, T] \to L^2_0)$.
+\end{proposition}
+
+We used the following lemma:
+
+\begin{lemma}
+There is a bounded linear operator $\Pi: L^2_0(\Omega) \to H^1_0(\Omega)^d$ such that for every $q \in L^2_0(\Omega)$, $v = \Pi q$ satisfies $\nabla \cdot v = q$.
+\end{lemma}
+
+We omit the proof, which is in the book of Boyer and Fabrie.
+
+\chapter{Fixed-point iteration and Navier-Stokes}
+When $d = 3$, $L^\infty_t,L^3_x,L^\infty_t\dot H^{1/2}$ are scaling-invariant for Navier-Stokes.
+So we will use fixed-point iteration to construct Navier-Stokes solutions in these spaces.
+Still following lectures of Huy Quang Nguyen, who is in turn following the book on ``Fourier analysis and nonlinear PDE" by Bahouri, Chemin, and Danchia.
+
+\section{Notation}
+As usual we let $\dot H^s$ be the space of tempered distributions $f$ such that $\hat f \in L^1_{loc}$ and
+$$||f||_{\dot H^s}^2 = \int_{\RR^d} |\hat f(\xi)|^2 |\xi|^{2s} ~d\xi$$
+is finite.
+
+\begin{theorem}
+If $s \in (0, d/2)$, then the space $\Sch_0(\RR^d)$ of Schwartz functions whose Fourier transform vanishes near $0$ is dense in $\dot H^s(\RR^d)$.
+Moreover, $\dot H^s(\RR^d)$ is a Hilbert space iff $s < d/2$, and if $|s| < d/2$ then $(\dot H^s)' = \dot H^{-s}$.
+Finally if $s \in (0, d/2)$ then
+$$\dot H^s(\RR^d) \subseteq L^{\frac{2d}{d - 2s}}(\RR^d).$$
+\end{theorem}
+
+If $f_0$ is a tempered distribution, let $e^{\nu t\Delta} f_0$ be the solution of the heat equation with initial data $f_0$ at time $t$ with diffusivity $\nu > 0$.
+Thus $e^{\nu t \Delta}$ is the heat propagator.
+
+Write $(v \otimes w)_{ij} = v_iw_j$ for vector fields $v,w$.
+In particular
+$$(\nabla \cdot (v \otimes w))_i = \sum_{j=1}^d \partial_j (v_i w_j).$$
+
+Let us write $L^p_TX$ to mean $L^p([0, T] \to X)$.
+
+\section{Fixed-point iteration methods}
+Consider the unforced Navier-Stokes equation
+$$\partial_t u + \PP(u \cdot \nabla u) = \nu \Delta u$$
+where $u$ is divergence-free. Our goal is to treat this equation as a nonlinear perturbation of the heat equation.
+
+If $v, w$ are vector fields on $\RR^d$, define the symmetric bilinear map
+$$Q(v, w) = -\frac{1}{2}\PP(\nabla \cdot (v \otimes w) + \nabla \cdot(w \otimes v)).$$
+If $v,w$ are divergence-free then in particular
+$$Q(v, w) = -\frac{1}{2} \PP(w \cdot \nabla v + v \cdot \nabla w).$$
+So if $\nabla \cdot u = 0$ then $Q(u, u) = -\PP(u \cdot \nabla u)$.
+The point of defining $Q$ more general was so that we could see that it is symmetric.
+
+Let $B(u, u) = g$ define the unique solution of the inhomogeneous heat equation
+$$\partial_t g = \nu \Delta g + Q(u, u)$$
+with $g(0) = 0$.
+Then if $u$ is a solution of the unforced Navier-Stokes equation,
+$$u(t) = e^{\nu t \Delta} u_0 + B(u, u).$$
+Also if $u$ is a fixed point of $e^{\nu t \Delta} u + B(u ,u)$ and $\nabla \cdot u_0 = 0$, then $\nabla \cdot u = 0$.
+Indeed, $\nabla \cdot B(u, u) = 0$.
+
+Using Duhamel's formula for the heat propagator,
+$$B(u(t), u(t)) = \int_0^t e^{\nu(t - t')\Delta}Q(u(t'), u(t')) ~dt'.$$
+That is, the fixed-point equation is
+$$u(t) = e^{\nu t\Delta} u_0 + \int_0^t e^{\nu(t - t')\Delta}Q(u(t'), u(t')) ~dt'.$$
+To find fixed points we appeal to the following Picard-type theorem:
+
+\begin{proposition}
+Let $E$ be a Banach space, $\mathscr B: E \otimes E \to E$ a bounded linear map, and
+$$0 < \alpha < \frac{1}{4||\mathscr B||}.$$
+Then for every $x_0 \in B_E(0, \alpha)$, there is a unique fixed point
+$$x_* = x_0 + \mathscr B(x_*, x_*)$$
+such that $x_* \in B_E(0, 2\alpha)$.
+\end{proposition}
+\begin{proof}
+Consider the Picard iteration
+$$x_{n+1} = x_0 + \mathscr B(x_n, x_n).$$
+Then $x$ is a Cauchy sequence.
+\end{proof}
+
+Thus we must find a Banach space $E$ which satisfies the above hypothesis with $\mathscr B = B$.
+
+\section{$\dot H^{1/2}$}
+We first apply this to $E = \dot H^{1/2}(\RR^3)$.
+
+We can prove local well-posedness and stability for any data, and global well-posedness for data which is small depending on the viscosity.
+
+\begin{lemma}
+There is $C > 0$ such that
+$$||Q(a, b)||_{\dot H^{-1/2}} \lesssim ||a||_{\dot H^1} ||b||_{\dot H^1}.$$
+\end{lemma}
+\begin{proof}
+We get
+\begin{align*}
+||Q(a, b)||_{\dot H^{-1/2}} &\lesssim ||\nabla \cdot (a \otimes b)||_{H^{-1/2}} + ||\nabla \cdot(b \otimes a)||_{H^{-1/2}}\\
+&\lesssim \sup_{i,j} ||a_i \nabla b_j||_{\dot H^{-1/2}} + ||b_j \nabla a_i||_{\dot H^{-1/2}}.
+\end{align*}
+Furthermore we have an embedding $\dot H^{1/2} \to L^3$ which dualizes to an embedding $L^{3/2} \to \dot H^{-1/2}$.
+So
+\begin{align*}
+||Q(a, b)||_{\dot H^{-1/2}} &\lesssim \sup_{i,j} ||a_i \nabla b_j||_{L^{3/2}} + ||b_i \nabla a_j||_{L^{3/2}}\\
+&\lesssim ||a||_{L^6} ||\nabla u||_{L^2} + ||b||_{L^6} ||\nabla a||_{L^2}\\
+&\lesssim ||a||_{\dot H^1} ||b||_{\dot H^1}
+\end{align*}
+since there is an embedding $\dot H^1 \to L^6$.
+\end{proof}
+
+\begin{lemma}
+Let $v_0 \in \dot H^s$ and $h \in L^2_T \dot H^{s-1}$. Let $v$ satisfy
+$$\partial_t v = \nu \Delta v + h$$
+with $v(0) = v_0$. Then
+$$v \in C([0, T] \to \dot H^s) \cap L^p_T \dot H^{s + 2/p}$$
+if $p \in [2, \infty]$. In fact,
+$$||v(t)||_{\dot H^s}^2 + 2\nu \int_0^t ||\nabla v(t')||_{\dot H^s}^2 ~dt' = ||v_0||_{\dot H^s}^2 + \int_0^t \langle h(t'), v(t')\rangle_s ~dt'$$
+where
+$$\langle a, b\rangle_s = \int_{\RR^d} |\xi|^{2s} \hat a(\xi) \overline{\hat b(\xi)} ~d\xi.$$
+Moreover,
+$$||v||_{L^p_T \dot H^{s+2/p}} \leq \nu^{-1/p} \left(||v_0||_{\dot H^s} + \nu^{-1/2} ||h||_{L^2_T \dot H^{s-1}}\right)$$
+and
+$$\int_{\RR^d} |\xi|^{2s} \sup_{0 \leq t' \leq t} |\hat v(\xi, t')|^2 ~d\xi \leq \left(||v_0||_{\dot H^s} + (2\nu)^{-1/2} ||h||_{L^2_T \dot H^{s-1}} \right).$$
+\end{lemma}
+\begin{proof}
+We sketch the argument.
+Here $v$ is given by the Duhamel formula for the heat propagator, thus
+$$v(t) = e^{\nu t\Delta} v_0 + \int_0^t e^{\nu(t - t')\Delta} h(t') ~dt'$$
+so that
+$$\hat v(\xi, t) = e^{-\nu t|\xi|^2} + \int_0^t e^{\nu(t - t')|\xi|} * \hat h(\xi, t') ~dt'$$
+which implies the estimates that appear in the lemma.
+\end{proof}
+
+\begin{theorem}
+Let $u_0 \in \dot H^{1/2}_\sigma(\RR^3)$. Then there is $T > 0$ such that the Navier-Stokes equation has a unique solution $u \in L^4([0, T] \to \dot H^1)$. Furthermore,
+$$u \in C([0, T] \to \dot H^{1/2}) \cap L^2([0, T] \to \dot H^{3/2}).$$
+If $T_{u_0}$ is the blowup time of $u_0$, then:
+\begin{enumerate}
+\item There is a constant $c > 0$ which does not depend on $u_0$ such that if $||u_0||_{\dot H^{1/2}} \leq c\nu$, then $T_{u_0} = \infty$.
+\item If $T_{u_0} < \infty$ then
+$$\int_0^{T_{u_0}} ||u(t)||_{\dot H^1}^4 ~dt = \infty.$$
+\end{enumerate}
+Furthermore there is $C > 0$ such that if $u,v$ are solutions with initial data $u_0, v_0$, then
+$$||u(t) - v(t)||_{\dot H^{1/2}}^2 + \nu \int_0^t ||u(s) - v(s)||_{\dot H^{3/2}}^2 ~ds \leq ||u_0 - v_0||_{\dot H^{1/2}}^2 \exp \left(\frac{C}{\nu^3} \int_0^t ||u(s)||_{\dot H^1}^4 + ||v(s)||_{\dot H^1}^4 ~ds\right).$$
+\end{theorem}
+\begin{proof}
+Let us show that $E = L^4_T\dot H^1$ satisfies the constraints of the Picard-type theorem.
+The second lemma above implies that for every $T > 0$,
+$$||B(u, v)||_{L^4_T \dot H^1} \lesssim ||u||_{L^4_T \dot H^1} ||v||_{L^4_T \dot H^1}.$$
+Indeed,
+$$||v||_{L^p_T \dot H^{s+2/p}} \leq \nu^{-1/p} \left(||v_0||_{\dot H^s} + \nu^{-1/2} ||h||_{L^2_T \dot H^{s-1}}\right)$$
+so we plug in $v_0 = 0$, $h = Q(u, v)$, to get
+$$||B(u, v)||_{L^4_T \dot H^1} \lesssim ||Q(u, v)||_{L^2 \dot H^{-1/2}} \lesssim ||u||_{L^4 \dot H^1} ||v||_{L^4 \dot H^1}.$$
+Let $C_0 > 0$ be the implied constant here.
+This satisfies the constraints if
+$$||e^{\nu t \Delta} u_0||_{L^4_T \dot H^1} \leq \frac{1}{4C_0}.$$
+I missed the rest of this proof.
+\end{proof}
+
+I missed a day of class due to illness (covid?) so some lemmata are missing here.
+
+\section{$L^3(\RR^3)$}
+\begin{theorem}
+Let $u_0 \in L^3_\sigma(\RR^3)$. Then there is $T > 0$ such that the Navier-Stokes equations have a unique solution $u([0, T] \to L^3)$.
+Moreover, there is $c > 0$ which does not depend on $u_0$ such that if $||u_0||_{L^3} \leq c\nu$ then $T = +\infty$.
+\end{theorem}
+This proof cannot be obtained by a fixed-point argument in $L^\infty;L^3$.
+Indeed, the quadratic form $B$ does not send $L^\infty;L^3$ to itself.
+Instead, we will use ``Kato's space", which is modified to account for the heat flow.
+
+\begin{definition}
+Let $p \in [3, \infty]$ and $T \in (0, \infty)$. Then \dfn{Kato's space} $K_p(T)$ has the norm
+$$||u||_{K_p(T)} = \sup_{t \in (0, T]} (\nu t)^{(1 - 3/p)/2}||u(t)||_{L^p}$$
+and is a subspace of $C((0, T] \to L^p)$.
+
+Let $p \in [1, 3)$ and $T \in (0, \infty)$. Then $K_p(T)$ has the norm
+$$||u||_{K_p(T)} = \sup_{t \in [0, T]} (\nu t)^{(1 - 3/p)/2}||u(t)||_{L^p}$$
+and is a subspace of $C([0, T] \to L^p)$.
+
+We define the same space for $T = \infty$ by taking the supremum over $(0, \infty)$ or $[0, \infty)$.
+\end{definition}
+
+Notice that in the case $p < 3$ we measure time all the way up to $0$ but in the case $p \geq 3$ we discard time zero.
+
+Let $u_0 \in L^3(\RR^3)$ and $p \geq 3$.
+As
+$$e^{\nu t \Delta} u_0(x) = (3\pi \nu t)^{-3/2} e^{-|x|^2/4\nu t} * u_0(x)$$
+Young's inequality gives
+$$||e^{\nu t \Delta} u_0||_{L^p} \leq (4 \pi \nu t)^{-3/2} ||e^{-|\cdot|^2/4\nu t}||_{L^r} ||u_0||_{L^3}$$
+where $1 + 1/p = 1/r + 1/3$. Then
+$$||e^{\nu t \Delta} u_0||_{L^p} \lesssim (\nu t)^{(1- 3/p)/2}||u_0||_{L^3}.$$
+That is,
+$$||e^{\nu t \Delta} u_0||_{L^p} \lesssim ||u_0||_{L^3}.$$
+Then for every $\varepsilon > 0$, there is $\phi \in L^p$ such that $||u_0 - \phi||_{L^3} < \varepsilon$; then if $T \in (0, \infty)$,
+\begin{align*}
+||e^{\nu t \Delta} u_0||_{K_p(T)} &\leq ||e^{\nu t \Delta}(u_0 - \phi)||_{K_p(T)} + ||e^{\nu t \Delta} \phi||_{K_p(T)}\\
+&\lesssim ||u_0 - \phi||_{L^3} + (\nu T)^{(1 - 3/p)/2} ||\phi||_{L^p}\\
+&\lesssim \varepsilon + (\nu T)^{(1-3/p)/2} ||\phi||_{L^p}
+\end{align*}
+which implies that
+$$\lim_{T \to 0} ||e^{\nu t \Delta} u_0||_{K_p(T)} = 0$$
+whenever $u_0 \in L^3$ and $p > 3$.
+
+To prove the main theorem of this section we need a new theorem, which is a subcritical well-posedness theorem (while $L^3$ is critical):
+
+\begin{theorem}
+For every $p > 3$ and every tempered $u_0$, $\nabla \cdot u_0 = 0$, and $T > 0$ such that
+$$||e^{\nu t \Delta} u_0||_{K_p(T)} \lesssim_p \nu,$$
+there is a unique solution of the Navier-Stokes system in $B(0, 2||e^{\nu t\Delta}u_0||_{K_p(T)}) \subseteq K_p(T)$.
+\end{theorem}
+
+To prove this theorem we also need a lemma.
+
+\begin{lemma}
+Suppose
+$$\frac{1}{r} \leq \frac{1}{p} + \frac{1}{q} \leq 1$$
+and
+$$0 < \frac{1}{p} + \frac{1}{q} < \frac{1}{3} + \frac{1}{r}.$$
+Then for every $T > 0$,
+$$||B(u, v)||_{K_r(T)} \lesssim \nu^{-1} ||u||_{K_p(T)} ||v||_{K_q(T)}.$$
+\end{lemma}
+
+The subcritical well-posedness theorem follows by applying this lemma with
+$$3 < p = q = r < \infty.$$
+That will allow us to carry out a Picard iteration.
+To prove this bound on the bilinear form we will prove a bound on solutions of the heat equation:
+
+\begin{lemma}
+Let $\ell \in \{1, 2, 3\}$ and $g: \RR^3 \times [0, \infty) \to \RR^3$ satisfy
+$$\partial_t g - \nu \Delta g = \PP \partial_\ell h$$
+where $h: \RR^3 \times [0, \infty) \to \RR^3$ and $g(0) = 0$. Then there is an integral kernel $\Gamma_{j,k} \in C((0, \infty) \to \bigcap_{1 < s < \infty} L^s)$ such that
+$$g^j(x, t) = \sum_{k=1}^3 \int_0^t \int_{\RR^3} \Gamma_{j,k}(t - t', y) h^k(x - y, t') ~dy ~dt'$$
+and
+$$|\Gamma_{j,k}(x, t)| \lesssim (\sqrt{\nu t} + |x|)^{-4}.$$
+\end{lemma}
+
+This heat equation bound is Lemma 5.30 in Bahouri's book and is based on an explicit computation.
+
+\begin{proof}[Proof of bilinear form bounds]
+It follows from the hypotheses that
+$$\frac{1}{r} \leq \frac{1}{p} + \frac{1}{q} \leq 1$$
+so there is $s \in [1, \infty]$ such that
+$$1 + \frac{1}{r} = \frac{1}{s} + \frac{1}{p} + \frac{1}{q}.$$
+Let
+$$\frac{1}{m} = \frac{1}{p} + \frac{1}{q},$$
+so $m \in [1, \infty)$.
+By Young's inequality and H\"older's inequality applied to the heat equation bounds,
+\begin{align*}||B(u, v)(t)||_{L^r} &\lesssim \int_0^t ||(\sqrt{\nu (t - t')} + |\cdot|)^{-4}||_{L^s} ||u \otimes v||_{L^m}(t') ~dt'\\
+&\leq \int_0^t \frac{||u(t')||_{L^p} ||v(t')||_{L^q}}{(\nu(t - t'))^{2 - 3/2s}}~dt'\\
+&\leq \int_0^t \frac{1}{\sqrt{\nu(t - t')}^{4-3/(1 + 1/r - 1/p - 1/q)}} \frac{1}{\sqrt{\nu t}^{2-3(1/p+1/q)}} ||u||_{K_p(t)}(t') ||v||_{K_q(t)}(t') ~dt'\\
+&\lesssim \frac{||u||_{K_p(T)} ||v||_{K_p(T)}}{\nu\sqrt{\nu t}^{1-1/r}}.
+\end{align*}
+\end{proof}
+
+\begin{proof}[Proof of well-posedness in $L^3$]
+Applying the well-posedness in Kato space, we get a solution in $K_6(T)$, assuming
+$$||e^{\nu t \Delta} u_0||_{K_6(T)} \lesssim \nu.$$
+We need to find criteria for that to hold. In fact
+$$||e^{\nu t \Delta} u_0||_{K_6(T)} \lesssim ||u_0||_{L^3}$$
+so what we need is $||u_0||_{L^3} \lesssim \nu$, in which case we get a global solution in $K_6(T_0)$ for any $T_0 > 0$.
+On the other hand, if $||u_0||_{L^3}$ is large then we can take $T$ small enough that $||e^{\nu t \Delta} u_0||_{K_6(T)} \ll 1$, in which case we get a local solution in $K_6(T_0)$ for every $T_0 > 0$ small enough.
+
+So now it suffices to show that the solution in $K_6(T_0)$ is actually in $C([0, T] \to L^3)$, and that this solution is unique.
+Recall that $u(t) = e^{\nu t \Delta} u_0 + B(u, u)$ and $e^{\nu t \Delta} u_0 \in C([0, T] \to L^3)$. Set $w = B(u, u)$.
+Applying the lemma with $p = q = 6$ and $r = 3$ we get $w \in K_3(T)$ since $u \in K_6(T)$.
+To get the continuity of $w$ at $T = 0$, we use
+$$w(0) = u(0) - u_0 = 0$$
+but since $w \in K_3(T)$,
+$$||w||_{L^\infty([0, t] \to L^3)} \lesssim \frac{||u||_{K_6(t)}^2}{\nu}.$$
+The solution that we obtained belongs to the ball $B(0, 2||e^{\nu t \Delta} u_0||_{K_6(t)})$ whence
+$$||w||_{L^\infty([0, t] \to L^3)} \lesssim \frac{||e^{\nu (t - t') \Delta} u_0||_{K_6(t)}}{\nu}.$$
+Taking the limit $t \to 0^+$ we get convergence to $0$.
+
+For the uniqueness, suppose $u_1, u_2$ have initial data $u_0$ and are in $C([0, T] \to L^3)$.
+Let $u_{12} = u_1 - u_2$ and $w_j = B(u_j, u_j)$. Then $u_{12} = w_2 - w_1 = w_{12}$ by uniqueness for the heat equation.
+Also
+$$\partial_t u_{12} = \nu \Delta u_{12} + Q(u_2, u_2) - Q(u_1, u_1)$$
+thus
+$$\partial_t u_{12} = \nu \Delta u_{12} + f$$
+where
+$$f = Q(e^{\nu t \Delta} u_0, u_{12}) + Q(u_{12}, e^{\nu t \Delta} u_0) + Q(w_2, w_{12}) + Q(u_{12}, w_1).$$
+We have an inhomogeneous heat equation for $u_{12}$ with zero initial data and forcing $f$.
+Thus $w_j \in K_2(T)$ where we used the lemma with $r = 2$, $p = q = 3$.
+Also $K_2(T) \subseteq C([0, T] \to L^2)$.
+Also
+$$||Q(a, b)||_{\dot H^{-3/2}} \lesssim \sup_{1 \leq k, j \leq 3} ||a_k b_j||_{\dot H^{-1/2}} \lesssim \sup_{1 \leq k, j \leq 3} ||a_k b_j||_{L^{3/2}} \lesssim ||a||_{L^3} ||b||_{L^3}$$
+using the adjoint of the Sobolev embedding $\dot H^{1/2} \to L^3$, hence $f \in L^\infty([0, T] \to H^{-3/2})$.
+Thus heat equation estimates and interpolation gives
+$$u_{12} \in C([0, T] \to \dot H^{-1/2}) \cap L^2([0, T] \to \dot H^{1/2})$$
+but we also have the estimate
+$$M(t) \leq 2 \int_0^t \langle f(t'), u_{12}(t')\rangle_{\dot H^{-1/2}} ~dt'.$$
+Since $C_c(\RR^3)$ is dense in $L^3(\RR^3)$, we can decompose the initial data into a part $u_0^a$ which is small in $L^3$ and a part $u_0^b$ which is in $L^6$, thus
+$$||u_0^a||_{L^3} \leq c\nu$$
+where $c > 0$ is a small constant.
+Set
+$$g(t) = f(t) - Q(e^{\nu t\Delta} u_0^b, u_{12}) - Q(u_{12}, e^{\nu t\Delta} u_0^b).$$
+Using the bilinear estimate for $Q$,
+\begin{align*}
+||g(t)||_{\dot H^{-3/2}} &\lesssim ||e^{\nu \Delta t} u_0^a||_{L^3} + ||w_1||_{L^3} + ||w_2||_{L^3}\\
+&\lesssim (||u_0^a||_{L^3} + ||w_1||_{L^3} + ||w_2||_{L^3}) ||u_{12}||_{L^3}.
+\end{align*}
+Now choosing $c$ small, $t \leq t_0$ where $t_0$ is small and using the embedding $\dot H^{-1/2} \to L^3$, we get
+$$||g(t)||_{\dot H^{-3/2}} \leq \frac{\nu}{4}||u_{12}(t)||_{\dot H^{-1/2}}.$$
+On the other hand,
+$$||Q(a, b)||_{\dot H^{-3/2}} \lesssim \sup_{1 \leq k,\ell \leq 3} ||a_k b_\ell||_{L^{3/2}} \leq ||a||_{L^6} ||b||_{L^2}$$
+since $1/2 + 1/6 = 2/3$.
+That is,
+$$||Q(e^{\nu t \Delta} u_0^b, u_{12})||_{\dot H^{-3/2}} \lesssim ||e^{\nu t\Delta}u_0^b||_{L^6} ||u_{12}||_{L^2} \leq ||u_0^b||_{L^6} ||u_{12}||_{L^2}.$$
+Combining this with the estimate on $g$ we get an estimate on $f$, namely
+\begin{align*}
+||f||_{\dot H^{-3/2}} &\leq \frac{\nu}{4}||u_{12}||_{\dot H^{1/2}} + C||u_0^b||_{L^6} ||u_{12}||_{L^2}\\
+&\leq \frac{\nu}{4} ||u_{12}(t)||_{\dot H^{1/2}} + C||u_0^b||_{L^6} ||u_{12}||_{\dot H^{-1/2}}^{1/2} ||u_{12}||_{\dot H^{1/2}}^{1/2}
+\end{align*}
+assuming that $t \leq t_0 \ll 1$. Therefore
+$$||u_{12}(t)||_{\dot H^{-1/2}}^2 + 2\nu \int_0^t ||u_{12}(t')||_{\dot H^{1/2}}^2 ~dt' \leq 2\int_0^t \frac{\nu}{4} ||u_{12}(t')||_{\dot H^{1/2}}^2 ~dt + C||u_0^b||_{L^6}||u_{12}(t')||_{\dot H^{-1/2}}^{1/2} ||u_{12}(t')||_{\dot H^{1/2}}^{3/2} ~dt.$$
+Gr\"onwall's inequality now gives $u_{12} = 0$ on $[0, t_0]$.
+Let $t_1 > 0$ be the maximal time such that $u_{12} = 0$ on $[0, t_1)$.
+By continuity we get $u_{12}(t_1) = 0$, and then by repeating the argument we see that the set on which $u_{12} = 0$ must be open, but we just showed that it is closed.
+\end{proof}
+
+Now suppose that $u_0 \in L^p$ with $p > 3$.
+In the homework we show that if the blowup time $T_{u_0} > 0$ for initial data $u_0$ in $K_6(T)$, then
+$$||u(t)||_{L^p(\RR^3)} \gtrsim \frac{1}{(T_{u_0} - t)^{(1 - 3/p)/2}}$$
+provided $t < T_{u_0}$.
+The trouble is that $1-3/p \to 0$ as $p \to 3$ so this doesn't tell us anything about blowup time in $L^3$. In fact, a recent theorem of Escauraiaza, Seregin, and Sverak, implies
+$$\limsup_{t \to T_{u_0}} ||u(t)||_{L^3} = \infty.$$
+But this is difficult to prove.
+
+How far can the fixed-point method take us?
+The maximal such space is called $BMO^{-1}$, as proved by Koch and Tataru.
+Here $BMO^{-1}$ is the space of functions
+$$f = \sum_{j=1}^N \partial_j f^j$$
+where $f^j \in BMO$.
+If $||u_0||_{BMO^{-1}} \ll 1$ then we get a global solution.
+But a local solution is not known to exist for large data in $BMO^{-1}$.
+
+\chapter{Weak Euler solutions with $L^\infty$ vorticity and $d = 2$}
+Let $d = 2$.
+We have proven that for smooth initial data for the Euler equations we get global smooth solutions.
+However, in reality we may experience vortex patches, where the vorticity is cut off discontinuously to an open set $\Omega$, or vortex sheets, where the vorticity is concentrated in a lower-dimensional curve.
+These were studied by Yudovich in the 1960s.
+Still following Huy Nguyen's lectures.
+
+The simplest case is the vortex patch
+$$\omega = \alpha 1_\Omega$$
+where $\alpha$ is a constant. In this case, Yudovich showed that vortex patches are initial data for weak solutions in $L^p(\RR^2)$ for every $p$.
+
+Recall the vorticity formulation
+$$\partial_t \omega + u \cdot \nabla \omega = 0$$
+where
+$$u = \nabla^\perp \Delta^{-1} \omega$$
+where the convolution kernel $K$ of $\nabla^\perp \Delta^{-1}$ is
+$$K(x) = \frac{1}{2\pi} \frac{x^\perp}{|x|^2}.$$
+Suppose $\omega_0 \in L^1 \cap L^\infty$.
+
+\section{Potential-theoretic estimates}
+For $\omega \in L^1 \cap L^\infty$, we write
+$$||\omega||_{L^1 \cap L^\infty} = ||\omega||_{L^1} + ||\omega||_{L^\infty}.$$
+Set $u = K * \omega$.
+
+\begin{lemma}
+For every $\omega \in L^1 \cap L^\infty$,
+$$||u||_{L^\infty} \lesssim ||\omega||_{L^1 \cap L^\infty}.$$
+\end{lemma}
+\begin{proof}
+One has $|K(x)| \leq 1/|x|$. Split up
+$$u(x) = \int_{|x - y| \leq 1} K(x - y)\omega(y) ~dy + \int_{|x - y| \geq 1} K(x - y) \omega(y) ~dy = I_1 + I_2.$$
+By Young's inequality,
+$$||I_1||_{L^\infty} \leq ||K||_{L^1(B(0, 1))} ||\omega||_{L^\infty} \lesssim ||\omega||_{L^\infty}.$$
+Also
+$$||I_2||_{L^\infty} \leq ||K||_{L^\infty(B(0, 1))} ||\omega||_{L^1} \lesssim ||\omega||_{L^1}$$
+as desired.
+\end{proof}
+In fact if
+$$1 < p < 2 < q < \infty,$$
+then
+$$||u||_{L^\infty} \lesssim ||\omega||_{L^p \cap L^q}$$
+using the same proof.
+Note that
+$$\nabla u = \nabla \nabla^\perp \Delta^{-1} \omega$$
+and $\nabla \nabla^\perp \Delta^{-1}$ is a singular integral and hence unbounded on $L^\infty$.
+Therefore it does not follow from $\omega \in L^\infty$ that $u$ is Lipschitz.
+But we get the following estimate, which is Lipschitz modulo logarithmic singularities:
+
+\begin{lemma}
+For every $\omega \in L^1 \cap L^\infty$ and $x, x' \in \RR^2$,
+$$|u(x) - u(x')| \lesssim ||\omega||_{L^1 \cap L^\infty} \varphi(|x - x'|)$$
+where
+$\varphi(r) = r(1 - \log r)$ if $r < 1$ and otherwise $\varphi(r) = 1$.
+\end{lemma}
+\begin{proof}
+If $r = |x - x'| \geq 1$ then by the previous lemma,
+$$|u(x) - u(x')| \leq 2||u||_{L^\infty} \lesssim ||\omega||_{L^1 \cap L^\infty} = ||\omega||_{L^1 \cap L^\infty} \varphi(r)$$
+as desired. Otherwise
+$$u(x) - u(x') = \left[\int_{B(x, 2r)} + \int_{B(x, 2r)^c}\right] (K(x - y) - K(x' - y)) \omega(y) ~dy = I_1 + I_2.$$
+For $I_1$, use the fact that $K$ is homogeneous of degree $-1$ so
+\begin{align*}
+|I_1| &\leq \int_{|x - y| \leq 2r} \left(\frac{1}{|x - y|} + \frac{1}{|x' - y|}\right) |\omega(y)| ~dy\\
+&\leq \int_{|y - x| \leq 2r} \frac{|\omega(y)|}{|x - y|} ~dy + \int_{|x' - y| \leq 3r} \frac{|\omega(y)|}{|x' - y|} ~dy\\
+&\lesssim ||\omega||_{L^\infty} \left(\int_0^{2r} dr + \int_0^{3r} ~dr\right)\\
+&\lesssim r||\omega||_{L^\infty}.
+\end{align*}
+For $I_2$, we get a logarithmic singularity; namely, by the mean-value theorem, there is $x'' \in [x, x']$ such that
+\begin{align*}
+|K(x - y) - K(x' - y)| &\leq |x - x'| |\nabla K(x'' - y)| \lesssim \frac{r}{|x'' - y|^2}.
+\end{align*}
+If $y \notin B(x, 2r)$ then
+$$|x - y| \leq |x - x''| + |x'' - y| \lesssim |x'' - y|$$
+which implies
+$$|K(x - y) - K(x' - y)| \lesssim \frac{r}{|x - y|^2}$$
+and so
+\begin{align*}
+|I_2| &\lesssim \int_{B(x, 2r)^c} r\frac{|\omega(y)|}{|x - y|^2} ~dy\\
+&\lesssim \int_{B(x, 2) \setminus B(x, 2r)} r\frac{|\omega(y)|}{|x - y|^2} ~dy + \int_{B(x, 2)^c} r|\omega(y)| ~dy\\
+&= r||\omega||_{L^\infty} \int_{2r}^2 \frac{dr}{r} + r||\omega||_{L^1}\\
+&= r||\omega||_{L^\infty}(\log 2 - \log(2r)) + r||\omega||_{L^1}.
+\end{align*}
+Combining this with the bound on $I_1$ we get
+$$|u(x) - u(x')| \lesssim r||\omega||_{L^1 \cap L^\infty}(2 + \log 2 - \log(2r))$$
+which gives the bound.
+\end{proof}
+
+\begin{definition}
+A function $u$ is \dfn{log-Lipschitz} if
+$$|u(x) - u(x')| \lesssim \varphi(|x - x'|)$$
+where $\varphi(r) = r(1 - \log r)$ if $r < 1$ and otherwise $\varphi(r) = 1$.
+We write
+$$||u||_{LL} = \sup_{x \neq x'} \frac{|u(x) - u(x')|}{\varphi(x - x')}$$
+for the \dfn{log-Lipschitz seminorm}.
+\end{definition}
+
+We have just shown that if the vorticity is in every $L^p$ space then the velocity is log-Lipschitz.
+We will now show that every log-Lipschitz velocity generates a unique trajectory, generalizing the Picard-Linde\"of theorem.
+
+\begin{lemma}[Osgood's lemma]
+Let $\mu: [0, a] \to [0, \infty)$ be an \dfn{Osgood continuity modulus} in the sense that $\mu$ is nondecreasing, $\mu(0) = 0$, $\mu(r) > 0$, and for every $r \in (0, a]$ such that
+$$\int_0^a \frac{dr}{\mu(r)} = \infty.$$
+Let $c \geq 0$, $f: [t_0, T] \to [0, a]$ continuous, $\gamma \in L^1([t_0, T])$, and
+$$f(t) \leq c + \int_{t_0}^t \gamma(t')\mu(f(t')) ~dt'.$$
+Let $t \in [t_0, T]$.
+Then if $c > 0$ and
+$$M(x) = \int_x^a \frac{dr}{\mu(r)},$$
+then
+$$-M(f(t)) + M(c) \leq \int_{t_0}^t \gamma(t') ~dt'$$
+and if $c = 0$, then $f(t) = 0$.
+\end{lemma}
+We omit the proof.
+
+\begin{theorem}[log-Picard iteration]
+Let $b \in L^\infty([0, T] \to LL \cap L^\infty)$ and $T > 0$.
+Then for every $x_0 \in \RR^d$,
+$$\dot x(t) = b(x(t), t)$$
+has a solution with initial data $x(0) = x_0$ which is unique in $W^{1, \infty}([0, T]) \subseteq C([0, T])$.
+\end{theorem}
+\begin{proof}
+Define $x_0(t) = x_0$ and
+$$x_{n+1}(t) = x_0 + \int_0^t b(x_n(s), s) ~ds.$$
+Then $(x_n)$ is bounded in $C([0, T])$.
+Indeed, this follows because $b \in L^\infty([0, T] \times \RR^d)$.
+Now set
+$$\rho_{k,n}(t) = \sup_{t' \in [0, t]} |x_{k+n}(t') - x_k(t')|.$$
+Then
+$$|\rho_{k+1,n}(t)| \leq \int_0^t \varphi(\rho_{k, n}(t')) ~dt'$$
+so $\rho_k = \sup_n \rho_{k,n}$ satisfies
+$$\rho_{k+1}(t) \leq \int_0^t \varphi(\rho_k(t')) ~dt'$$
+by monotone convergence (since $\varphi$ is nondecreasing).
+Then
+$$\tilde \rho(t) = \limsup_{k \to \infty} \rho_k(t) = \int_0^t \varphi(\tilde \rho(t')) ~dt'.$$
+By Osgood's lemma (case $c = 0$), $\tilde \rho = 0$, so $(x_n)$ is a Cauchy sequence, say $x = \lim_n x_n$.
+Then $x$ is a solution, and by Osgood's lemma again is unique.
+\end{proof}
+
+Now we show a form of H\"older continuity, which deterioriates as $T \to \infty$.
+
+\begin{proposition}
+Let $b \in L^\infty(\RR^d \times [0, T]) \cap L^\infty([0, T] \to LL)$ and denote by $X_t(x_0)$ the flow map for
+$$\dot x(t) = b(x(t), t)$$
+with $x(0) = x_0$.
+Let
+$$L = \sup_{t \in [0, T]} ||b(t)||_{LL}.$$
+If $|x - y| < e^{1 - \exp(LT)}$, then for every $t \in [0, T]$,
+$$|X_t(x) - X_t(y)| \leq |x - y|^{\exp(-LT)} e^{1 - \exp(-LT)}$$
+and
+$$|X_t(x) - X_t(y)| \geq |x - y|^{\exp(LT)} e^{1 - \exp(LT)}.$$
+\end{proposition}
+\begin{proof}
+Let
+$$0 < |x - y| < e^{1 - \exp(LT)}.$$
+Because $X_t^{-1} = X_t$, $X_t$ is injective so $X_t(x) \neq X_t(y)$.
+Thus $F(t) = |X_t(x) - X_t(y)| > 0$.
+Then
+\begin{align*}
+|(F^2)'(t)| &= 2F(t) |X_t'(x) - X_t'(y)|
+&\leq 2F(t) \int_0^t \varphi(F(t')) ||b(t')||_{LL} ~dt'\\
+&\leq 2L F(t)\int_0^t \varphi(F(t')) ~dt'.
+\end{align*}
+But $|F(0)| = |x - y| < 1$.
+Define $T_*$ so $F < 1$ on $[0, T_*)$ and $F(T_*) = 1$.
+On $[0, T_*)$,
+$$|F'(t)| \leq LF(t)(1 - \log F(t))$$
+and hence
+$$|\partial \log F(t)| \leq L(1 - \log F(t)).$$
+That is,
+$$F(0)^{\exp(LT)}e^{1 - \exp(LT)} \leq F(t) \leq F(0)^{\exp(-LT)} e^{1 - \exp(-LT)}.$$
+Thus $F(T_*) \leq F(0) e^{\exp(-LT_*)} e^{1 - \exp(-LT_*)}$.
+So $T_* = T$ provided that $F(0) e^{\exp(-LT_*)} e^{1 - \exp(-LT_*)} < 1$, or equivalently,
+$$F(0) < \exp(-1 \exp(-LT_*))$$
+which is given.
+\end{proof}
+
+\begin{proposition}
+Let $b$ be as above with $\nabla \cdot b = 0$. Then $X$ is a measure-preserving action.
+\end{proposition}
+\begin{proof}
+Pushforward by $X$ preserves the integral of any function in $C_c^\infty(\RR^d)$.
+\end{proof}
+
+\section{Existence and uniqueness}
+
+\begin{theorem}[Yudovich]
+Let $\omega$ be a smooth Euler vorticity in $\RR^2$ with initial data $\omega_0$.
+Let $X$ be the flow map associated to $u$. If $u \in L^\infty([0, T] \to W^{1, \infty}(\RR^2))$ then $X$ is Lipschitz and invertible.
+\end{theorem}
+\begin{proof}
+One has
+$$\partial_t \omega(X_t(x), t) = 0$$
+so $\omega$ is invariant along trajectories of $X$.
+Thus $\omega(x, t) = \omega_0(X_t^{-1}(x))$.
+This makes $X_t^{-1}$ well-defined as long as $\omega \in L^\infty([0, T] \to L^1 \cap L^\infty)$.
+\end{proof}
+
+\begin{theorem}[Yudovich 1963]
+Let $\omega_0 \in L^1 \cap L^\infty$. Then there are unique $\omega,u,X$ such that $\omega \in L^\infty([0, T] \to L^1 \cap L^\infty)$, for every $T > 0$, $X$ is invertible and measure-preserving, $X$ is the flow map for the velocity field $u$, $u$ satisfies the Biot-Savart law for $\omega$, $\omega$ solves the Euler equation with inital data $\omega_0$, and
+$$\omega(x, t) = \omega_0(X_t^{-1}(x)).$$
+\end{theorem}
+\begin{proof}
+We first construct approximate solutions. Set $\omega^0(x, t) = \omega_0(x)$ and given $(\omega^n, u^n, X^n)$, set $u^n(t) = K * \omega^{n-1}(t)$, and
+$$\dot X_t^n(x) = u^n(X_t^n(x), t)$$
+with initial data $\dot X_0^n(t) = x$, and $\omega^n(x, t) = \omega_0((X_t^n)^{-1}(x))$.
+Thus we are solving the system of infinitely many linear pseudodifferential equations
+\begin{align*}
+\partial_t \omega^n + u^n \cdot \nabla \omega^n &= 0\\
+u^n &= K * \omega^{n - 1}.
+\end{align*}
+If $X^n$ is volume-preserving, then $||\omega^n(t)||_{L^p} = ||\omega_0||_{L^p}$.
+Thus the previous lemmata yield
+$$||u^n(t)||_{L^\infty} \lesssim ||\omega^n(t)||_{L^1 \cap L^\infty} \lesssim ||\omega||_{L^1 \cap L^\infty}$$
+uniformly in $n,t$, and also
+$$||u^n(t)||_{LL} \lesssim ||\omega_0||_{L^1 \cap L^\infty}$$
+uniformly for similar reasons.
+Let $R, T > 0$. The H\"older continuity proposition shows that there is some $\alpha$ which only depends on $T,R$, and $||\omega_0||_{L^1 \cap L^\infty}$ such that
+$$||X^n_t||_{C^\alpha(\overline B_R \times [0, T])} \lesssim_{R, T} \lesssim 1.$$
+According to Ascoli's compactness theorem, after passing to a subsequence, there is $X \in C(\overline B_R \times [0, T])$ with $X_n \to X$.
+From $X$ we can reconstruct $\omega$ according to
+$$\omega(x, t) = \omega_0(X_{-t}(x))$$
+and thus $u$ by $u = K * \omega$.
+We must check that $(\omega, u, X)$ is an Euler solution; in fact it suffices to check
+$$\dot X_t(x) = u(X_t(x), t).$$
+That is, we must show
+$$X_t(x) = x + \int_0^t u(X_s(x), s) ~ds.$$
+By construction,
+$$X_t^n(x) = x + \int_0^t u^n(X_s^n(x), s) ~ds$$
+and $X^n \to X$ locally uniformly, so we just need to get a suitably strong velocity convergence.
+In fact this follows from dominated convergence, as the convergence of $X^n$ implies
+$$\lim_{n \to \infty} ||u^n(t) - u(t)||_{L^\infty} = 0$$
+as necessary.
+To see this, by the proposition, $u^n(t) \in LL$. Then
+$$|u^n(x, t) - u(x, t)| \leq \int_{|y - x| \leq \delta} |K(x - y)||\omega^n(y, t) - \omega(y, t)| ~dy + \int_{|y - x| > \delta} \bullet = I_1 + I_2.$$
+Clearly
+$$|I_1| \leq 2||\omega_0||_{L^\infty} \int_{|z| \leq \delta} \frac{dz}{|z|} \lesssim \delta ||\omega_0||_{L^\infty}.$$
+Also
+$$|I_2| \leq \int_{|x - y| \geq \delta} (|\omega^n(y, t)| + |\omega(y, t)|)\frac{dy}{|x - y|} \lesssim \frac{||\omega^n(t)||_{L^1} + ||\omega(t)||_{L^1})}{\delta}.$$
+That is,
+$$|u^n(x, t) - u(x, t)| \lesssim \delta ||\omega||_{L^\infty} + \frac{||\omega^n(t) - \omega(t)||_{L^1}}{\delta}.$$
+As $\omega^n \to \omega$ in $L^1$ (since $\omega^n$ is defined in terms of $X^n$, and passing to suitable subsequences we can upgrade the convergence of $X^n$ from $L^\infty_{loc}$ to $L^\infty$).
+Thus we get along a subsequence,
+$$\limsup_{n \to \infty} |u^n(x, t) - u(x, t)| \lesssim \delta ||\omega_0||_{L^\infty}.$$
+As the left-hand side does not depend on $\delta$, we conclude $u^n \to u$ in $L^\infty$ which gives the velocity convergence.
+
+Now we prove uniqueness.
+For simplicity we assume $\omega_0 \in L^\infty$ has compact support.
+Let $(\omega^j, u^j, X^j)$ be two solutions with initial vorticity $\omega_0$.
+Assume that $X^1 = X^2$, then because vorticity and velocity can be recovered from $X$, we have uniqueness.
+So, it suffices to show $X^1 = X^2$.
+Let $F = X^1 - X^2$.
+Then
+\begin{align*}
+F(x, t) &\leq \int_0^t |u^1(X^1_s(x), s) - u^2(X^s_(x), s)| ~ds\\
+&\leq \int_0^t |u^1(X^1_s(x), s) - u^1(X^s_(x), s)| ~ds + \int_0^t |u^1(X^2_s(x), s) - u^2(X^2_s(x), s)| ~ds\\
+&= I_1 + I_2.
+\end{align*}
+Since
+$$||u_1||_{LL} \lesssim ||\omega_0||_{L^1 \cap L^\infty}$$
+we get
+$$|I_1| \lesssim ||\omega_0||_{L^1 \cap L^\infty} \int_0^t \varphi(F(x, s)) ~ds.$$
+Since $u^j = K * \omega^j$ we get
+\begin{align*}
+|I_2| &\leq \int_0^t \left|\int_{\RR^2} K(X^1_s(x) - y) \omega^1(y, s) - K(X^2_s(x) - y) \omega^2(y, s) ~dy\right| ~ds\\
+&= \int_0^t \left|\int_{\RR^2} K(X^2_s(x) - y) \omega_0(X^1_{-s})(y)) - K(X^2_s(x) - y) \omega_0(X^2_{-s}(y)) ~dy\right| ~ds.
+\end{align*}
+Suppose that $\omega_0$ is zero outside $B_{R_0}(0)$. Then there is $R_T$ such that $\supp \omega(t) \subseteq B_{R_T}(0)$ if $t \leq T$.
+In particular $|X^j_t(x)| \leq M(T)$ for some $M(T) > 0$ and every $x \in \supp \omega_0$.
+Also the $X^j$ are measure-preserving, so
+\begin{align*}
+|I_2| &\leq \int_0^t \left|\int_{\RR^2} K(X^2_s(x) - X^1_s(y))\omega_0(y) - K(X^2_s(x) - K^2_s(y))\omega_0(y) ~dy\right| ~ds\\
+&\leq \int_0^t \int_{\RR^2} |K(X^2_s(x) - K^1_s(y)) - K(X^2_s(x) - X^2_s(y))| |\omega_0(y)| ~dy ~ds.
+\end{align*}
+Then, if $R = R(T)$,
+\begin{align*}
+\int_{B_R(0)} |I_2(x, t)| ~dx &\leq \int_0^t \iint_{B_{R_0}(0)^2} |K(X^2_s(x) - X^1_s(y)) - K(X^2_s(x) - X^2_s(y))| ~dx ~dy ~ds\\
+&\leq \int_0^t \int_{B_R(0)} |\omega_0(y)| \int_{X_s^2(B_R(0))} |K(x - X^1_s(y)) - K(x - X^2_s(y))| ~dx ~dy ~ds.
+\end{align*}
+Since $X_s^2(B_R(0))$ is bounded,
+$$\int_{X_s^2(B_R(0))} |K(x - a) - K(x - b)| ~dx \lesssim \varphi(|a - b|)$$
+whenever $a,b \in \RR^2$.
+Plugging this in we get
+$$\int_{B_R(0)} |I_2(x, t)| ~dx \lesssim \int_0^t \int_{B_{R_0}(0)} |\omega_0(y)| \varphi(F(y, s)) ~dy ~ds.$$
+Combining these we get
+$$\int_{B_R(0)} |F(x, t)| ~dx \lesssim ||\omega_0||_{L^1 \cap L^\infty} \int_0^t \int_{B_R(0)} \varphi(F(y, s)) ~dy ~ds.$$
+Dividing both sides by the volume of $B_R(0)$ and using Jensen's inequality for the concave function $\varphi$,
+$$\int_{B_R(0)} \varphi(f(x)) ~\frac{dx}{|B_R(0)|} \leq \varphi\left(\int_{B_R(0)} f(x) ~\frac{dx}{|B_R(0)|}\right).$$
+Now let
+$$\eta(t) = \int_{B_R(0)} |F(x, t)| ~\frac{dx}{|B_R(0)|}$$
+so that
+$$\eta(t) \lesssim ||\omega_0||_{L^1 \cap L^\infty} \int_0^t \varphi(\eta(s)) ~ds.$$
+So by Osgood's lemma, $\eta = 0$.
+Therefore $F = 0$.
+\end{proof}
+
+\section{Vortex patches with constant vorticity}
+
+Consider the initial vorticity distribution $\omega_0(x) = a1_{\Omega_0}(x)$ where $\Omega_0$ is bounded, simply connected, open set and $\partial \Omega_0$ is mooth.
+By Yudovich theory, there is a unique global solution $(\omega, u, X)$.
+Furthermore,
+$$\omega(x, t) = \omega_0(X_{-t}(x)).$$
+Let $\Omega(t) = X_t(\Omega_0)$; then
+$$\omega_0(x) = a1_{\Omega(t)}(x).$$
+Thus the vorticity distribution is completely determined by $\partial \Omega(t)$.
+
+Let us parametrize $\partial \Omega_0 = \{z_0(\alpha) \in \RR^2: \alpha \in [0, 2\pi)\}$ and $\partial \Omega(t) = \{z(\alpha, t): \alpha \in [0, 2\pi)\}$ where
+$$z(\alpha, t) = X_t(z_0(\alpha)).$$
+Since $d = 2$ the stream function $\psi$ satisfies
+$$\Delta \psi(x, t) = a1_{\Omega(t)}(x)$$
+which implies
+$$\psi(x, t) = \frac{a}{2\pi} \int_{\Omega(t)} \log|x-y| ~dy.$$
+Furthermore, $u = \nabla^\perp \psi$, so by the Green formula
+$$\int_\Omega f\partial_ig = \int_{\partial \Omega} fg n_i \cdot dS - \int_\Omega \partial_ifg,$$
+we get
+$$u(x, t) = -\frac{a}{2\pi} \int_0^{2\pi} \log|x - z(\beta, t)| \partial_\beta z(\beta, t) ~d\beta.$$
+Since $\dot z(\alpha, t) = u(z(\alpha, t), t)$, it follows that
+$$\dot z(\alpha, t) = -\frac{a}{2\pi} \int_0^{2\pi} \log|z(\alpha, t) - z(\beta, t)| \partial_\beta z(\beta, t) ~d\beta.$$
+This is known as the \dfn{contour dynamics equation}.
+
+\begin{theorem}
+Let $z_0 \in C^{1 + \gamma}(S^1)$, $\gamma \in (0, 1)$, satisfy the \dfn{arc-chord condition}
+$$|z_0|_* = \inf_{\alpha_1 \neq \alpha_2} \frac{|z_0(\alpha_1) - z_0(\alpha_2)|}{|\alpha_1 - \alpha_2|} > 0.$$
+Then there is $T > 0$ depending only on $||z_0||_{C^{1 + \gamma}}$ and $|z_0|_*$ such that the contour dynamics equation has a unique solution
+$$z \in C([0, T] \to C^{1 + \gamma}(S^1))$$
+which satisfies the arc-chord condition $|z(t)|_* > 0$.
+
+Furthermore, let $z \in C([0, T] \to C^{1 + \gamma}(S^1))$ be a solution to the contour dynamics equation.
+If $z_0 \in C^\eta(S^1)$, $\eta > 2$, then $z \in C([0, T] \to C^\eta(S^1))$.
+\end{theorem}
+\begin{proof}
+Omitted due to lack of time; see Majda and Bertozzi.
+\end{proof}
+
+The concern is that $\partial \Omega$ becomes singular in finite time, either in the sense that $\partial \Omega$ self-intersects or loses its H\"older regularity.
+However, as Chemin proved in 1993 using paradifferential calculus, this is impossible.
+In fact, there is a proof which only uses harmonic analysis, by Constantin and Bertozzi in 1993.
+
+Assume that the initial patch $\Omega_0 = \{x \in \RR^2: \varphi_0(x) > 0\}$ with $\partial \Omega_0 = \{x \in \RR^2: \varphi_0(x) = 0\}$.
+Let $\varphi(x, t) > 0$ on $\Omega(t)$ with $\varphi(x, t) = 0$ on $\partial \Omega(t)$.
+
+\begin{theorem}
+Suppose that $\varphi_0 \in C^{1 + \gamma}(\RR^2)$ and
+$$\inf_{\varphi_0(x) = 0} |\nabla \varphi_0(x)| \geq m > 0.$$
+Then there is $C > 0$ which only depends on $||\varphi_0||_{C^{1 + \gamma}},m$ such that
+$$||\nabla u(t)||_{L^\infty} \leq ||\nabla u(0)||_{L^\infty} e^{Ct},$$
+also
+$$||\nabla \varphi(t)||_{C^\gamma} \leq ||\nabla \varphi(0)||_{C^\gamma} \exp((C_0 + \gamma) e^{\gamma t}),$$
+and
+$$||\nabla \varphi(t)||_{L^\infty} \leq ||\nabla \varphi(0)||_{L^\infty} e^{Ct}.$$
+Finally,
+$$\inf_{\varphi(x, t) = 0} |\nabla \varphi(x, t)| \geq \inf_{\varphi_0(x) = 0} |\nabla \varphi_0(x)| e^{-Ct}$$
+where $C_0$ is a \emph{universal} constant.
+If in addition $\varphi_0 \in C^\eta(\RR^2)$ where $\eta > 2$, then $\varphi(t) \in C^\eta$ for every $t \geq 0$.
+\end{theorem}
+
+\chapter{Navier-Stokes stability}
+Consider the dynamical system
+$$\dot x(t) = F(x(t))$$
+with initial data $x(0) = x_0$.
+A point $x_* \in \RR^d$ is stationary if $F(x_*) = 0$.
+
+\begin{definition}
+A \dfn{stable point} $x_*$ is a stationary point if for every $\varepsilon > 0$ there is $\delta > 0$ such that if $|x_0 - x_*| < \delta$, then
+$$\sup_{t \geq 0} |x(t) - x_*| < \varepsilon.$$
+If $x_*$ is a stable point such that
+$$\lim_{t \to \infty} x(t) = x_*$$
+then $x_*$ is an \dfn{asymptotically stable point}.
+\end{definition}
+
+We can extend these notions to PDE, but will need to make a choice of norm.
+
+\section{Euler equations with $d = 2$}
+Suppose that $(u, \omega)$ is a stationary Euler solution with $d = 2$. Then
+$$u \cdot \nabla \omega = 0.$$
+In other words, if $\psi$ is the stream function, there is $F$ such that
+$$F \circ \psi = \Delta \psi.$$
+
+\begin{example}
+$\omega_* = 0$ is stationary and stable in $L^\infty(\Omega)$ if $\Omega$ is bounded.
+Indeed, by Yudovich theory, if $\omega_0 \in L^\infty(\Omega)$, there is $\omega \in L^\infty([0, \infty) \to L^\infty)$ such that $||\omega(t)||_{L^\infty} = ||\omega_0||$.
+However, $\omega_*$ is not stable in $L^p$, since the solution may fail to exist with initial data in $L^p$.]
+This is in spite of the fact that $L^p$ norm is conserved (since $L^p$ is not locally compact).
+\end{example}
+
+\begin{theorem}[Arnold stability condition]
+Let $\Omega$ be a bounded connected set in $\RR^2$ such that $\partial \Omega$ has smooth components $\Gamma_0, \dots, \Gamma_n$.
+Let $(\omega^*, u^*)$ be a stationary Euler solution in $\Omega$.
+Suppose that there are $0 < c_1 < c_2$ such that
+$$c_1 < -\frac{u^*}{\nabla^\perp \omega^*} < c_2.$$
+Then $u^*$ is stable in $H^1(\Omega)$.
+\end{theorem}
+
+The condition makes sense here since $u^* \cdot \nabla^\perp \omega^*$, so that the vectors are collinear and we can divide them.
+Also $u \in H^1(\Omega)$ iff $\omega \in L^2(\Omega)$.
+One direction of this is obvious; conversely if $\omega \in L^2$ then $\psi \in H^2$ by elliptic regularity, so $u \in H^1$.
+
+\begin{example}
+Consider a shear flow in a periodic channel $\Omega = [0, L] \times [-A, A]$, with periodic boundary condition in $[0, L]$ and no-penetration boundary condition in $[-A, A]$.
+Here the shear flow condition means
+$$u^*(x) = (u_1^*(x_2), 0).$$
+Then $u^*$ is stationary. The no-penetration boundary condition means $u_2(x_1, \pm A) = 0$.
+Since $u^*$ is shear, $\omega^*(x) = -\partial_2 u_1^*(x_2)$, thus $\nabla^\perp \omega^*(x) = (\partial_2^2 u_1^*(x_2), 0)$, thus the Arnold stability condition is
+$$c_1 < -\frac{u_1^*(x_2)}{\partial_2^2 u_1^*(x_2)} < c_2.$$
+By adding a constant we can make $u_1^*$ strictly negative, since $\Omega$ is compact.
+Thus the Arnold stability condition simply requires that $\partial_2^2 u_1^*(x_2)$ be strictly positive.
+Thus if the shear flow has no inflection points -- that is, the \dfn{Rayleigh condition} -- then the shear flow is stable in $H^1(\Omega)$.
+\end{example}
+
+
+
+\chapter{Variational calculus and gradient flows}
+Following lectures of Francesco Maggi.
+
+Let $\Omega$ be an open set in $\RR^n$ and $u \in C^1(\overline \Omega)$. We want to infimize $\mathcal F(u)$ where $u$ is subject to a Dirichlet constraint and
+$$\mathcal F(u) = \int_\Omega f(\nabla u(x)) ~dx$$
+is some action. We will refer to $f$ as the \dfn{integrand} and $\mathcal F$ as the \dfn{energy}.
+
+\begin{definition}
+If $f(z) = |z|^2/2$ we call $\mathcal F$ the \dfn{Dirichlet energy}, and if $f(z) = \sqrt{1 + |z|^2}$ then $\mathcal F$ is the \dfn{area functional}.
+\end{definition}
+
+If $\mathcal F$ is the area functional then $\mathcal F$ is the measure of the graph of $u$ over $\Omega$.
+
+Other than Dirichlet constraints we can apply an \dfn{integral constraint}, namely
+$$\int_\Omega g(u(x)) ~dx = M$$
+where $g,M$ are given.
+
+\begin{definition}
+A \dfn{gradient flow} is the flow of an ODE
+$$X'(t) = -\nabla F(X(t))$$
+with Cauchy data, $X: [0, \infty) \to \RR^n$.
+\end{definition}
+
+The point is that the flowout is given by a gradient.
+Since $-\nabla F$ points in the direction of steepest descent of $F$, the stationary points of $X$ are the critical points of $X$.
+A local maximum is unstable while a local minimum is stable (this is why we use the negative sign condition).
+Thus local maxima are unphysical.
+
+Let $\mathcal F$ be some action, and consider the gradient flow
+$$\frac{\partial u}{\partial t} = -\nabla F(u(x, t)).$$
+Here $-\nabla \mathcal F$ must be defined on some kind of infinite-dimensional manifold, which needs to be made precise.
+Since we are mainly interested in critical points of $-\nabla \mathcal F$ this is a sign that we need to use variational calculus to study it!
+It turns out that the heat equation
+$$\partial_t u = \Delta u$$
+is a gradient flow.
+The function $u$ flows to a steady state $\Delta u = 0$ which minimizes the Dirichlet energy.
+This suggests that we can find minimizers of $\mathcal F$ by flowing along the gradient flow $-\nabla F$.
+
+\section{Necessary conditions of minimality}
+Let $P$ be a problem in the variational calculus with energy $\mathcal F$, domain $\Omega$, and Dirichlet data $u_0$.
+
+\begin{definition}
+The set
+$$\mathcal A = \{u \in C^1(\overline \Omega): u|\partial \Omega = u_0\}$$
+is called the \dfn{competition class} of $P$.
+\end{definition}
+
+Let us study what properties minimizers have.
+
+The idea here is to consider $\varphi \in C^\infty_c(\Omega)$.
+(If we were using an integral rather than Dirichlet competition class we would need a different $\varphi$.)
+Then $u + t\varphi \in \mathcal A$ whenever $t \in \RR$ and we can take the derivative
+$$\delta^k \mathcal F_u(\varphi) = \frac{d^k}{dt^k}\bigg|_{t = 0}\mathcal F(u + t\varphi).$$
+
+\begin{definition}
+The $k$th \dfn{variation} is $\delta^k \mathcal F_u$.
+\end{definition}
+
+Then $\delta \mathcal F_u(\varphi) = 0$ since $u$ is a critical point, and $\delta^2 \mathcal F_u(\varphi) \geq 0$ since $u$ is a minimizer.
+
+Let us get a Taylor formula for the variations.
+Suppose
+$$\mathcal F(u + t\varphi) = \int_\Omega f(\nabla u(x) + t\nabla \varphi(x)) ~dx,$$
+then
+$$f(z + tw) = f(z) + t\langle \nabla f(z), w\rangle + \frac{t^2}{2} \langle w, \nabla^2 f(z)w\rangle + O(t^3)$$
+so plugging in $z = \nabla u(x)$, $w = \nabla \varphi(x)$,
+$$\mathcal F(u + t\varphi) \approx \mathcal F(u) + t\int_\Omega \langle \nabla f(\nabla u(x)), \nabla \varphi(x)\rangle ~dx + \frac{t^2}{2} \int_\Omega \langle \nabla \varphi(x), \nabla^2 f(\nabla u(x))\nabla \varphi(x)\rangle ~dx.$$
+Thus, using dominated convergence, if everything is nice we get
+$$\delta \mathcal F_u(\varphi) = \int_\Omega \nabla f(\nabla u(x)) \cdot \nabla \varphi(x) ~dx$$
+and
+$$\delta^2 \mathcal F_u(\varphi) = \int_\Omega \nabla \varphi(x) \cdot \nabla^2 f(\nabla u(x))\nabla \varphi(x) ~dx.$$
+Notice the first variation is linear in $\varphi$ and the second is quadratic in $\varphi$.
+
+If $f$ is convex (e.g. $\mathcal F$ is the Dirichlet energy or the area functional) then $\nabla^2 f(z) \geq 0$.
+Thus the condition $\delta^2 \mathcal F_u \geq 0$ is trivial if $f$ is convex.
+So, for the Dirichlet problem with a convex integrand, the condition on the second variation is trivially satisfied.
+
+Now we need a fact which was shocking to mathematicians two centuries ago, but now is essentially a triviality.
+
+\begin{theorem}[fundamental lemma of the calculus of variations]
+For every $u \in L^1_{loc}(\Omega)$ such that for every $\varphi \in C^\infty_c(\Omega)$, $\int_\Omega u\varphi = 0$, $u = 0$ almost everywhere.
+\end{theorem}
+
+We will also use the divergence theorem
+$$\int_\Omega \nabla \cdot X = \int_{\partial \Omega} X \cdot \nu_\Omega$$
+a lot. I just put the fundamental lemma in a separate display so that I could say ``(fundamental lemma of the calculus of variations)".
+
+To apply these two theorems, say
+$$0 = \int_\Omega \nabla f(\nabla u(x)) \cdot \nabla \varphi(x) = \int_\Omega X \cdot \nabla \varphi$$
+where $X = \nabla f \circ \nabla u$.
+Since
+$$\nabla \cdot (\varphi X) = X \cdot \nabla \varphi + \varphi \nabla \cdot X$$
+we get
+$$0 = \int_\Omega \nabla \cdot (\varphi X) - \int_\Omega \varphi \nabla \cdot X = \int_{\partial \Omega} \varphi X \cdot \nu_\Omega - \int_\Omega \varphi \nabla \cdot X.$$
+But $\varphi = 0$ near $\partial \Omega$ so we get
+$$\int_\Omega \varphi \nabla \cdot X = 0.$$
+Since $\varphi$ was arbitrary, the fundamental lemma gives $\nabla \cdot X = 0$ almost everywhere, but $X \in C^1$ so this just means that $X$ is divergence-free.
+We conclude:
+
+\begin{theorem}[Euler-Lagrange]
+If $u$ is a minimizer of an energy with integrand $f$ and everything is smooth then
+$$\nabla \cdot (\nabla f(\nabla u(x))) = 0.$$
+\end{theorem}
+
+\begin{example}
+Consider the problem of minimizing the area functional of $u$ subject to $u = 0$ on $\partial \Omega$ and $\int_\Omega |u(x)| ~dx = M$, thus the volume under the graph of $|u|$ is equal to $M$.
+This is a problem of isoperimetric type, which may not have a solution.
+Indeed if $M \geq |B_R|/2$ and $\Omega = B_R$ then there is no solution, since the fact that $\Omega$ is an $n$-ball implies that the graph of $u$ is an $n$-sphere by the isoperimetric inequality, and we have an upper bound on $M$, which must be the volume of an $n+1$-ball.
+\end{example}
+
+\begin{example}
+Consider the problem of minimizing the Dirichlet energy of $u$ subject to $|u|^2/2 = M$ and $u|\partial \Omega = 0$.
+Suppose $\varphi$ satisfies for every $t$
+$$\int_\Omega g(u + t\varphi) = M.$$
+Then a Taylor series computation suggests that we want $\int_\Omega g'(u(x))\varphi(x) ~dx = 0$.
+
+Let $\varphi \in C^\infty(\overline \Omega)$ satisfy $\int_\Omega g'(u(x)) \varphi(x) ~dx = 0$.
+Let $\zeta \in C^\infty(\Omega)$ satisfy $g'(u(x)) \zeta(x) ~dx = 1$.
+Then
+$$u + t\varphi + s\zeta \in C^\infty(\Omega)$$
+is a ``double-parametrized variation".
+According to the implicit function theorem, there is $\varepsilon > 0$ and $s(t)$ defined if $|t| < \varepsilon$ such that if we set
+$$u_t = u + t\varphi + s(t)\zeta$$
+then
+$\int_\Omega g(u_t) = M$ and $s(0) = 0$.
+We get
+\begin{align*}
+\frac{d}{dt} g(u_t) &= g'(u_t)(\varphi + s'(t)\zeta)\\
+\frac{d^2}{dt^2} g(u_t) &= g''(u_t)(\varphi + s'(t)\zeta)^2 + g'(u_t)(s''(t)\zeta).
+\end{align*}
+Plugging in $t = 0$ we get $s'(0) = 0$ and $s''(0) = -\int_\Omega g''(u(x))\varphi(x)^2 ~dx$.
+
+Now let $\psi \in C^\infty(\overline \Omega)$ and
+$$\varphi = \psi - \frac{\int_\Omega g'(u)\psi}{\int_\Omega g'(u)^2}g'(u).$$
+Then $\varphi$ is a projection to $g'(u)$ so $\int_\Omega g'(u)\varphi = 0$.
+Let $\zeta = g'(u)/\int_\Omega g'(u)^2$, then $\int_\Omega g'(u)\zeta = 1$.
+
+If $u$ is a local minimum then $\mathcal F(u_t) = 0$. Since $s$ has a double zero at $0$ we can discard it when we take the integral form of the Euler-Lagrange equations, namely we get
+$$\int_\Omega \nabla f(\nabla u(x)) \cdot \nabla \varphi(x) ~dx = 0.$$
+However, at the second variation we get an additional term, namely
+$$\int_\Omega \nabla \varphi(x) \cdot (\nabla^2 f(\nabla u(x))\nabla\varphi(x)) + s''(0)\nabla f(\nabla u(x)) \cdot \nabla(\zeta(x)) ~dx \geq 0.$$
+We get a Lagrange multiplier
+$$\lambda(u) = \frac{\int_\Omega g''(u)(\nabla u \cdot \nabla f(\nabla u))}{\int_\Omega g'(u)^2}$$
+which satisfies
+$$0 = \int_\Omega \nabla f(\nabla u) \nabla \psi - \lambda(u)\int_Omega g'(u)\psi.$$
+Calling $X = \nabla f(\nabla u)$ and using Stokes' theorem,
+$$\int_\Omega X \cdot \nabla \psi = \int_{\partial \Omega} \psi(X \cdot \nu_\Omega) - \int_\Omega \psi \nabla \cdot X.$$
+Then
+$$0 = \int_{\partial \Omega} \psi \nu_\Omega \cdot \nabla f(\nabla u) + \int_\Omega \psi \cdot 0$$
+using the Lagrange multiplier.
+Since $\psi$ was arbitrary we get the Neumann problem
+\begin{align*}
+\lambda g'(u) + \nabla \cdot(\nabla f(\nabla u)) &= 0\\
+\nu_\Omega \cdot \nabla f(\nabla u) &= 0.
+\end{align*}
+Simplifying we get
+\begin{align*}
+-\Delta u &= \lambda u\\
+\nabla u \cdot \nu_\Omega &= 0.
+\end{align*}
+Thus the minimizers are the Neumann eigenvectors of the Laplacian!
+\end{example}
+
+\begin{example}
+By a similar argument, if $f$ is the area functional, then we get a Neumann condition
+$$\frac{\nabla u \cdot \nu_\Omega}{\sqrt{1 + |\nabla u|^2}} = 0.$$
+Here the denominator is always positive so we can replace it with the classical Neumann condition $\nabla u \cdot \nu_\Omega = 0$, but this is not typically the case.
+\end{example}
+
+\section{Existence of minimizers}
+At this point we have developed lots of useful properties of minimizers, but do not yet know that minimizers exist.
+
+Consider the problem of minimizing $\mathcal F(u)$ subject to $u \in C^1(\overline \Omega)$, $u|\partial \Omega = u_0$, and $\int_\Omega g(u) = M$. The competition class is denoted $\mathcal A$.
+This problem can be formulated classically, without the Lebesgue integral or the Sobolev trace theorem, so we avoid a lot of stupid technicalities.
+The \dfn{direct method} is a technique to find a minimizer, without referring to the Euler-Lagrange equations.
+
+The direct method has the following steps:
+\begin{enumerate}
+\item Show $\mathcal A$ is nonempty and $\inf_{\mathcal A} \mathcal F > -\infty$. Therefore there exists a minimizing sequence $(u_j)$.
+\item Use a compactness argument to pass to a subsequence of $(u_j)$ which converges to some $u$ in a suitably weak function space $X$.
+\item Show that $\mathcal F$ is lower semicontinuous in $X$, so that
+$$\mathcal F\left(\lim_{j \to \infty} v_j\right) \leq \liminf_{j \to \infty} \mathcal F(v_j).$$
+\item Show that $u \in \mathcal A$.
+\end{enumerate}
+If these steps hold then we conclude
+$$\inf_{\mathcal A} \mathcal F \leq \mathcal F(u) \leq \liminf_{j \to \infty} \mathcal F(u_j) = \inf_{\mathcal A} \mathcal F.$$
+Therefore $u$ is a minimizer of $\mathcal F$ subject to $\mathcal A$.
+
+\begin{example}
+Let
+$$\mathcal F(u) = \int_0^1 u^2 + ((u')^2 - 1)^2.$$
+We minimize $\mathcal F(u)$ subject to $u(0) = u(1) = 0$.
+Notice that $\mathcal F(0) = 1$ but if $\mathcal F(u) = 0$ then $u = 0$, contradiction.
+So $\inf \mathcal F \geq 0$. In fact $\inf \mathcal F = 0$, using functions $u_j$ with $u_j' = 1$ on $[0, 1/j]$, $u_j' = -1$ on $[1/j, 2/j]$, $u_j' = 1$ on $[2/j, 3/j]$, etc.
+These functions give a minimizing sequence which does not converge.
+\end{example}
+
+\begin{example}
+Let us minimize the Dirichlet energy of $u \in C^1(\RR^n)$ subject to $||u||_{L^q(\RR^n)} = 1$, where $1 \leq q < \infty$.
+If $\mathcal F(u) = 0$ then $u$ is a constant so $||u||_{L^q} \neq 1$.
+Assume $n \leq 2$ or $q \neq 2n/(n-2)$.
+The rescaling $u_\lambda(x) = \lambda^{n/q} u(\lambda x)$ preserves $||u||_{L^q}$.
+But
+$$\int_{\RR^n} |\nabla u_\lambda|^2 = \lambda^{2n/q + 2} \int_{\RR^n} |\nabla u(\lambda x)|^2 ~dx = \lambda^{2(n/q + 1) - n} \int_{\RR^n} |\nabla u|^2.$$
+By taking $\lambda$ to a boundary point of $[0, \infty]$ we can send the energy to $0$.
+But at $\lambda = 0$ or $\lambda = \infty$ we destroy $||u||_{L^q}$ so we get a minimizing sequence that does not converge.
+\end{example}
+
+Now for the rest of the section, suppose we want to minimize the Dirichlet energy subject to $u|\partial \Omega = u_0|\partial \Omega$ and $u_0 \in C^1(\overline \Omega)$.
+Let $(u_j)$ be a minimizing sequence, which necessarily satisfies
+$$\sup_j \int_\Omega |\nabla u_j|^2 < \infty.$$
+By the Banach-Alaoglu theorem, $(\nabla u_j)$ converges weakly.
+This does NOT imply that $(u_j)$ converges weakly a priori, but we have fixed the boundary data $u_0$.
+Since we have a bound on the Dirichlet energy (which bounds the oscillation of $u$) we expect a bound on $||u_j||_{L^2}$.
+Indeed, we can use the Sobolev trace theorem to fix this.
+
+\begin{theorem}[Sobolev trace theorem]
+If $\Omega$ is bounded and $\partial \Omega$ is a smooth manifold then
+$$\int_\Omega |u|^2 \lesssim_{\diam \Omega, n} \int_{\partial \Omega} |\partial u|^2 + \int_\Omega |\nabla u|^2.$$
+\end{theorem}
+\begin{proof}
+Let $x_0 \in \RR^n$, then
+\begin{align*}
+n\int_\Omega u^2 &= \int_\Omega u(x)^2 \nabla \cdot(x - x_0) ~dx \\
+&= \int_\Omega \nabla \cdot((x - x_0)u^2(x)) ~dx - 2\int_\Omega u(x) \nabla u(x) \cdot (x - x_0) ~dx\\
+&\leq \int_{\partial \Omega} u(x)^2 (x - x_0) \cdot \nu_\Omega + 2\int_\Omega |u(x)||\nabla u(x)||x - x_0| ~dx\\
+&\leq 2 \diam \Omega \left(\int_{\partial \Omega} u^2 + 2\int_\Omega |u||\nabla u|\right)\\
+&\leq 2 \diam \Omega \int_{\partial \Omega} u^2 + 2\diam \Omega \left(\varepsilon \int_\Omega u^2 + \frac{1}{\varepsilon} \int_\Omega |\nabla u|^2\right).
+\end{align*}
+Therefore
+$$(n - 2\varepsilon\diam \Omega) \int_\Omega u^2 \leq 2 \diam \Omega \left(\int_{\partial \Omega} u^2 + \frac{1}{\varepsilon} \int_\Omega |\nabla u|^2\right)$$
+so if we take $\varepsilon = n/(4 \diam \Omega)$ we win.
+\end{proof}
+
+The above proof is motivated by finding the constant which makes the units all match up.
+Any good proof in analysis has this property.
+
+By the trace inequality, $\{u_j\}$ is bounded in $L^2$, so by the Banach-Alaoglu theorem, $u_j \to u$ in the weak topology of $H^1$.
+It remains to show
+$$||\nabla u||_{L^2}^2 \leq \liminf_{j \to \infty} ||\nabla u_j||_{L^2}^2.$$
+Let $T \in L^2(\Omega \to \RR^n)$; then
+$$\int_\Omega (\nabla u) \cdot T = \lim_{j \to \infty} \int_\Omega (\nabla u_j) \cdot T \leq \lim_{j \to \infty} ||\nabla u_j||_{L^2} ||T||_{L^2}.$$
+Now pick $T = \nabla u/||\nabla u||_{L^2}$. Then we get
+$$||\nabla u||_{L^2} \leq \lim_{j \to \infty} ||\nabla u_j||_{L^2}.$$
+Summing up, the direct method gives us a minimizer but no control on its regularity except $H^1$.
+
+\begin{theorem}[Serrin 1961]
+If $(u_j)$ is a sequence in $L^1_{loc}$ which converges to $u \in L^1_{loc}$, and $\nabla u_j,\nabla u \in L^1$, then for every convex function $f$,
+$$\int_\Omega f(\nabla u(x)) ~dx \leq \liminf_{j \to \infty} \int_\Omega f(\nabla u_j(x)) ~dx.$$
+\end{theorem}
+
+
+
+\section{Hilbert's 19th problem}
+Hilbert's 19th problem asks us to show that solutions of ``well-behaved" variational PDE always have analytic solutions.
+This is a generalization of the fact that solutions of the Laplace equation are always analytic.
+
+\begin{definition}
+$C^\omega$ is the space of functions that are locally representatable by power series.
+\end{definition}
+
+It's not just the Laplace equation that has solutions in $C^\omega$. The steady states of the mean-curvature flow are also $C^\omega$, for example; these are minimizers of the area functional.
+So, in particular, soap films are $C^\omega$.
+
+Hilbert observed that equations with $C^\omega$ solutions tended to be Euler-Lagrange equations for the energy
+$$E = \int_\Omega F(\nabla u(x)) ~dx$$
+where $F$ has extremely high regularity:
+
+\begin{definition}
+We say that $F$ has \dfn{extremely high regularity} if $F \in C^\omega$ is convex and $\det(\nabla^2F) > 0$ .
+\end{definition}
+
+\begin{example}
+If $F(x) = |x|^2$ then we get the Laplace equation, if $F(x) = \sqrt{1 + |x|^2}$ we get the minimal-surface equation.
+Both of these examples have extremely high regularity.
+The Euler-Lagrange equations can be written as
+$$\nabla \cdot (\nabla F(\nabla u(x))) = \sum_{i,j} \partial_i \partial_j F(\nabla u(x)) \cdot \partial_i \partial_j u(x) = 0.$$
+\end{example}
+
+\begin{conjecture}[Hilbert's 19th problem]
+If $F$ has extremely high regularity and $u$ solves the Euler-Lagrange equations induced by $F$ with Dirichlet data then $u \in C^\omega$.
+\end{conjecture}
+
+Here we do NOT assume that the Dirichlet data is $C^\omega$!
+Hilbert did not define what he meant by a solution of the Euler-Lagrange equations, so we need to define that.
+
+Hilbert didn't know what a weak solution is, so Bernstein made some assumptions to guarantee that the solution had enough regularity to be a strong solution.
+
+\begin{theorem}[Bernstein 1904]
+If $n = 2$ and we have the a priori regularity $u \in C^3$, then $u \in C^\omega$.
+\end{theorem}
+
+\begin{definition}
+A \dfn{weak solution of the Euler-Lagrange equations} is a Lipschitz function $u$ such that
+$$\int_\Omega \nabla F(\nabla u(x)) \cdot \nabla \psi(x) ~dx = 0$$
+whenever $\psi \in C^\infty_c$.
+\end{definition}
+
+Here $\nabla F(\nabla u(x))$ is well-defined by Rademacher's theorem.
+If $u$ is Lipschitz, then $u$ is a weak solution iff $u$ is a minimizer of the energy
+$$J = \int_\Omega F(\nabla u(x)) ~dx$$
+in the class of Lipschitz functions subject to some Dirichlet constraint.
+
+\begin{theorem}[Leray-Hopf, 1930s]
+If we have the a priori regularity $u \in C^{1 + \alpha}$, $\alpha > 0$, then $u \in C^\omega$.
+\end{theorem}
+\begin{proof}[Proof that $u \in C^\infty$]
+Let us write the Euler-Lagrange equations in nondivergence form
+$$F_{ij}(\nabla u(x)) u_{ij}(x) = 0$$
+where $g_{ij} = \partial_i\partial_jg$ and we use Einstein notation.
+Suppose that $u \in C^{1+\alpha}$, so $F_{ij} \circ \nabla u \in C^\alpha$.
+Thus $\nabla^2 u$ solves an elliptic equation with coefficients in $C^\alpha$.
+By the interior Schauder estimates, $\nabla^2 u \in C^\alpha$.
+That implies that $F_{ij} \circ \nabla u \in C^{1 + \alpha}$, so $u \in C^{3 + \alpha}$.
+Iterating, we get $u \in C^\infty$.
+\end{proof}
+
+To extend $u \in C^\omega$, we can either make careful inductive estimate on the higher derivatives of $u$ (the approach of Bernstein) or show that smooth solutions of the Euler-Lagrange equations extend to \emph{holomorphic} solutions of a complex-analytic analogue of the variational calculus (the approach of Hopf and Leray).
+We omit the details.
+
+The trouble is that, a priori, we may not have solutions in $C^{1 + \alpha}$, and Leray and Hopf did not know how to prove that.
+We need to solve the Dirichlet problem for the equations
+$$\nabla \cdot (\nabla F(\nabla u(x))) = 0$$
+subject to the constraint $u \in C^{1 + \alpha}$, but by the 1930s one could only show that if the Dirichlet data was $C^2$ then $u$ was Lipschitz, i.e. $u \in C^L$.
+Thus we just need an estimate on $||\nabla u||_{C^\alpha}$.
+
+Our goal in this chapter is the following:
+\begin{theorem}
+Suppose that $u \in C^\infty(B_1)$ is a solution to the Euler-Lagrange equations.
+Then there exists $\alpha$ such that
+$$||\nabla u||_{C^\alpha(B_{1/2})} \lesssim 1$$
+where $\alpha$ and the implied constant are allowed to depend on $n$, $||\nabla u||_{L^\infty}$, and $F$.
+\end{theorem}
+One can then replace $1/2$ with $1-\varepsilon$ and deduce $u \in C^{1 + \alpha}_{loc}$.
+
+More precisely, if $a_{ij}(x)$ is a matrix with eigenvalues in the interval $[\lambda^{-1}, \lambda]$,
+$$\partial_i (a_{ij}(x) \partial_j v(x)) = 0$$
+then we have
+$$||v||_{C^\alpha(B_{1/2})} \lesssim_{n, \lambda} ||v||_{L^\infty(B_1)}.$$
+Then we set $v = \partial_k u$.
+This estimate was obtained by Morrey if $n = 2$ using complex analysis in the 1930s.
+Twenty years de Giorgi and Nash proved this independently.
+This is considered the solution of the 19th problem.
+We will discuss Morrey's proof.
+
+\section{Morrey's interior estimate}
+Let $u \in C^\infty(B_1)$, $B_1 \subset \RR^2$.
+Suppose that $u$ solves the Euler-Lagrange equations in divergence form,
+$$\nabla \cdot \nabla F(\nabla u(x)) = 0.$$
+We will see that $u$ is analytic provided that the following theorem holds.
+
+\begin{theorem}[Morrey]
+Suppose that $v \in W^{1,p}(B_1)$, $1 < p < \infty$, and
+\begin{equation}
+\label{Linear Morrey}
+\partial_i(a_{ij}\partial_jv) = 0
+\end{equation}
+in $B_1 \subset \RR^2$ where $a$ is a symmetric matrix-valued function with eigenvalues in $[\lambda, \lambda^{-1}]$ where $\lambda > 0$.
+Then
+$$||v||_{C^\alpha(B_{1/2})} \lesssim_\lambda ||v||_{L^\infty(B_1)}.$$
+\end{theorem}
+
+Since (\ref{Linear Morrey}) is an elliptic equation we start by mimicking the theory of the Laplace equation.
+
+\begin{lemma}[variational characterization]
+Solutions $v$ of (\ref{Linear Morrey}) minimize the quadratic form
+$$E(v) = \int_{B_1} a_{ij}(x)v_i(x)v_j(x) ~dx.$$
+\end{lemma}
+\begin{proof}
+Let $\psi$ be a test function. Then
+$$E(v + \psi) = E(v) + E(\psi) + 2\int_{B_1} a_{ij}(x)v_j(x)\psi_i(x) ~dx.$$
+We have $E(\psi) \geq 0$. Meanwhile,
+$$2\int_{B_1} a_{ij}(x)v_j(x)\psi_i(x) ~dx = -\int_{B_1} \partial_i(a_{ij}v_j)\psi = 0$$
+by (\ref{Linear Morrey}).
+Thus we conclude $E(v + \psi) \geq E(v)$.
+\end{proof}
+
+\begin{lemma}[maximum principle]
+Solutions $v$ of (\ref{Linear Morrey}) satisfy
+$$\sup_\Omega v = \sup_{\partial \Omega} v$$
+whenever $\Omega \subseteq B_1$.
+\end{lemma}
+\begin{proof}
+If not, $v$ attains a maximum in $\Omega$, say at $x$.
+Then we can find $\varepsilon$ so that
+$$\sup_\Omega v - \varepsilon > \sup_{\partial \Omega} v.$$
+Replacing $v$ by $\min(v, \sup_\Omega v - \varepsilon)$, on $v > \sup_\Omega v - \varepsilon$ there is no energy.
+Thus this competitor to $v$ has smaller energy.
+\end{proof}
+
+Suppose that $v$ is a subsolution in the sense that
+$$\partial_i(a_{ij}v_j) \geq 0.$$
+Then $E(v + \psi) \geq E(v)$ provided that $\psi \leq 0$.
+The proof is the same.
+In particular, one has a one-sided maximum principle (one can't replace $v$ with $-v$ to get a minimum principle).
+
+\begin{theorem}[Courant-Lebesgue lemma]
+If $w: B_1 \to \RR$, $n = 2$, and $w$ satisfies the oscillating maximum principle in the sense that
+$$\osc_{\partial B_s} w = \sup_{\partial B_s} w - \inf_{\partial B_s} w$$
+is nondecreasing in $s$, then for every $0 < r < 1/2$,
+$$\left(\osc_{\partial B_r} w\right)^2 \leq \frac{\pi}{\log(2/r)} \int_{B_{1/2}} |\nabla w|^2.$$
+\end{theorem}
+\begin{proof}
+We have
+$$\osc_{\partial B_s} w \leq \int_\gamma |\nabla w|$$
+where $\gamma$ is some half-circle of radius $s$. By Cauchy-Schwarz, we get
+$$\int_\gamma |\nabla w| \leq (\pi s)^{1/2} \sqrt{\int_{\partial B_s} |\nabla w|^2}.$$
+Squaring both sides and dividing by $s$, we get
+$$\frac{1}{s} \left(\osc_{\partial B_s} w \right)^2 \leq \pi \int_{\partial B_s} |\nabla w|^2.$$
+Integrating in $s \in [r, 1/2]$, we get
+$$\left(\osc_{\partial B_r} w\right)^2 \log(2/r) \leq \pi \int_{B_{1/2}} |\nabla w|^2.$$
+\end{proof}
+
+The Courant-Lebesgue lemma is false if $n \geq 3$.
+This is because we have an ``almost Sobolev embedding" $W^{1,2} \to C^0$ if $n = 2$, but this is actually false.
+However, the Courant-Lebesgue lemma says that for functions in $W^{1,2}$ which satisfy the maximum principle then we actually get a map to $C^0$.
+
+\begin{theorem}[Caccoppoli inequality]
+If $v$ solves (\ref{Linear Morrey}) then for every $\psi \in C^1_0(B_1)$,
+$$\int_{B_1} |\nabla v|^2 \psi^2 \leq \frac{4}{\lambda^4} \int_{B_1} v^2 |\nabla \psi|^2.$$
+\end{theorem}
+\begin{proof}
+Since $v$ is a critical point of $E$,
+$$\lim_{\varepsilon \to 0} \frac{E(v) - E(v - \varepsilon v\psi^2)}{\varepsilon} = 0.$$
+Also
+$$\lim_{\varepsilon \to 0}  \frac{E(v) - E(v - \varepsilon v\psi^2)}{\varepsilon} = \int_{B_1} a_{ij} v_i\partial_j(v\psi^2),$$
+so that is equal to $0$.
+Thus
+$$\lambda \int_{B_1} |\nabla v|^2 \psi^2 \leq \int_{B_1} a_{ij} v_i v_j \psi^2 = -2\int_{B_1} a_{ij}v_i\psi_j v\psi|.$$
+By Cauchy-Schwarz,
+$$-2\int_{B_1} a_{ij}v_i\psi_j v\psi| \leq \frac{2}{\lambda} \int_{B_1} |\nabla v||\psi||v\nabla \psi \leq \frac{2}{\lambda} \sqrt{\int_{B_1} |\nabla v|^2 \psi^2} \sqrt{\int_{B_1} v^2 |\nabla \psi|^2}.$$
+So
+$$\sqrt{\int_{B_1} |\nabla v|^2 \psi^2} \leq \frac{2}{\lambda^2} \sqrt{\int_{B_1} v^2 |\nabla \psi|^2}.$$
+\end{proof}
+This inequality is sort of a backwards Poincar\'e inequality.
+It can be modified to hold for subsolutions.
+
+\begin{proof}[Proof of Morrey's interior estimate]
+If $v$ solves (\ref{Linear Morrey}) then there is $\delta > 0$ such that
+\begin{equation}
+\label{iterable morrey}
+\osc_{B_{\delta r}} v \leq \frac{1}{2} \osc_{B_r} v
+\end{equation}
+provided that $r \leq 1$.
+Iterating with $r = 1$ as initial datum,
+$$\osc_{B_{\delta^k}} v \leq 2^{-k} \osc_{B_1} v$$
+so we set $\delta^\alpha = 1/2$ so that we get
+$$\osc_{B_{\delta^k}} v \leq \delta^{k\alpha} \osc_{B_1} v.$$
+
+To prove (\ref{iterable morrey}), we rescale so $r = 1$ and $\osc_{B_1} v = 1$.
+This can be accomplished by replacing $v$ with $x \mapsto v(rx)/\osc_{B_r} v$, following (\ref{Linear Morrey}).
+Then we rescale by constants so $||v||_{L^\infty} \leq \osc_{B_1} \leq 1$.
+Then
+$$\left(\osc_{B_\delta} v\right)^2 = \left(\osc_{\partial B_\delta} v\right)^2$$
+by the maximum principle, and by the Courant-Lebesgue lemma,
+$$\left(\osc_{\partial B_\delta} v\right)^2 \leq \frac{\pi}{\log(1/2\delta)} \int_{B_{1/2}} |\nabla v|^2$$
+and by the Caccoppoli inequality with $\psi$ a cutoff to $B_{1/2}$,
+$$\frac{\pi}{\log(1/2\delta)} \int_{B_{1/2}} |\nabla v|^2 \lesssim_\lambda \frac{1}{\log(1/2\delta)} \int_{B_1} v^2$$
+using our estimate on $||v||_{L^\infty}$. If $\delta$ is small enough this is $<1/2$.
+\end{proof}
+
+The idea is that if $n = 2$, a function that satisfies the maximum principle cannot oscillate a lot on small scales without having a lot of energy, so we get a H\"older estimate.
+
+
+
+
+
+\newpage
+\printindex
+\printbibliography
+
+\end{document}

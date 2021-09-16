@@ -1,0 +1,202 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Fluid dynamics, HW 3} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Suppose that $u^\varepsilon$ is the unique solution to
+$$\partial_t u^\varepsilon + \PP J_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon) = 0$$
+with initial data $J_\varepsilon u_0$.
+Suppose that a subsequence $u_n$ of the $u^\varepsilon$ converges to $u \in L^\infty([0, T_0] \to H^r(\RR^d))$ whenever $r < s$.
+Show that
+\begin{equation}
+\label{Euler}
+\partial_t u + \PP(u \cdot \nabla u) = 0.
+\end{equation}
+\end{exer}
+
+Let $\mathcal D'(\RR^d \to X)$ be the space of distributions on $\RR^d$, valued in a Banach space $X$.
+This space will be convenient for us to work in, because a priori we only have $u \in C([0, T_0] \to H^s(\RR^d))$ and so it will be difficult to justify that $\partial_t u$ exists in a sufficiently strong sense without already knowing that $u$ solves the Euler equations.
+
+We claim that
+\begin{equation}
+\label{limiting Euler}
+\lim_{n \to \infty} \partial_t u_n + \PP J_n(J_n u_n \cdot \nabla J_n u_n) = \partial_t u + \PP(u \cdot \nabla u)
+\end{equation}
+in the topology of $\mathcal D'([0, T_0] \to L^2(\RR^d))$.
+If that is true, then since the left-hand side of (\ref{limiting Euler}) is almost surely $0$ in time and the right-hand side is continuous in time, (\ref{Euler}) follows.
+
+First, since $u \in C([0, T_0] \to H^s(\RR^d))$, in particular $u \in \mathcal D'(\RR^d \to L^2(\RR^d))$, the space of distributions, so $\partial_t u \in \mathcal D'(\RR^d)$.
+We claim that $\partial_t u_n \to \partial_t u$ in the topology of $\mathcal D'(\RR^d \to L^2(\RR^d))$.
+If not then after passing to a subsequence we may assume that there is a test function $v$ and an $\eta > 0$ such that for every $n$,
+$$\int_{\RR^d} \partial_t (u - u_n)v > \eta,$$
+where the integral is meant in the sense of pairing of distributions. Integrating by parts, we find a test function $w = -\partial_tv$ such that
+$$\int_{\RR^d} (u - u_n)w > \eta,$$
+and hence conclude that $u - u_n$ misses a neighborhood of $0$ in $\mathcal D'(\RR^d \to L^2(\RR^d))$, but convergence in $L^\infty$ implies convergence in $\mathcal D'$, a contradiction.
+
+Since $\PP$ is bounded on $H^s$, in particular it is continuous in the strong operator topology of $H^s$.
+Moreover, $J_\varepsilon \to 1$ in the strong operator topology of $H^s$.
+Therefore for almost every fixed time $t$,
+$$\lim_{n \to \infty} \PP J_n(J_n u_n(t) \cdot \nabla J_n u_n(t)) = \PP\left(u(t) \cdot \lim_{n \to \infty} \nabla J_n u_n(t)\right)$$
+in the topology of $C([0, T] \to H^s(\RR^d))$.
+Now $\nabla$ is continuous as a map $H^s \to L^2$ since $s > 1 + d/2 \geq 1$, and thus we may commute $\nabla$ with the limit at the price of dropping to a weaker topology.
+Thus for almost every fixed time $t$,
+$$\lim_{n \to \infty} \PP J_n(J_n u_n(t) \cdot \nabla J_n u_n(t)) = \PP\left(u(t) \cdot \nabla u(t)\right)$$
+in the topology of $C([0, T] \to L^2(\RR^d))$.
+Since uniform convergence implies convergence in $\mathcal D'$ we deduce (\ref{limiting Euler}) as desired.
+
+\begin{exer}
+Let $u_{0j} \in H^s(\RR^d)$ be divergence-free vector fields. Assume $u_j$ is the solution to (\ref{Euler}) with initial data $u_{0j}$.
+Show that
+$$||u_1 - u_2||_{L^\infty([0, T] \to L^2(\RR^d))} \leq ||u_{01} - u_{02}||_{L^2(\RR^d)} \exp \int_0^T ||\nabla u_1(t)||_{L^\infty(\RR^d)} ~dt.$$
+\end{exer}
+
+Let $\tilde u = u_1 - u_2$.
+Subtracting (\ref{Euler}) from itself and using the identity
+$$u_1 \cdot \nabla \tilde u + \tilde u \cdot \nabla u_2 = u_1 \cdot \nabla u_1 + u_2 \cdot \nabla u_2$$
+we deduce
+$$\partial_t \tilde u + \PP(u_1 \cdot \nabla \tilde u + \tilde u \cdot \nabla u_2) = 0.$$
+Let $(\cdot, \cdot)$ denote the $L^2$ inner product, so that
+$$(\partial_t \tilde u, \tilde u) + (\PP(u_1 \cdot \nabla \tilde u), \tilde u) + (\PP(\tilde u \cdot \nabla u_2), \tilde u) = 0.$$
+Since $\PP$ is an orthogonal projection, it is self-adjoint, and since $\tilde u$ is divergence-free, we conclude
+$$(\partial_t \tilde u, \tilde u) + (u_1 \cdot \nabla \tilde u, \tilde u) + (\tilde u \cdot \nabla u_2, \tilde u) = 0.$$
+We compute, since $u_1$ is divergence-free and so commutes with $\nabla \cdot$,
+$$(u_1 \cdot \nabla \tilde u, \tilde u) = \int_{\RR^d} (u_1 \cdot \nabla \tilde u)\tilde u
+= \frac{1}{2} \int_{\RR^d} u_1 \cdot \nabla \cdot (\tilde u^2) = \frac{1}{2} \int_{\RR^d} \nabla \cdot(u_1 \cdot \tilde u^2).$$
+By the divergence theorem, it follows that
+$$(\partial_t \tilde u, \tilde u) + (\tilde u \cdot \nabla u_2, \tilde u) = 0.$$
+Rewriting and using the Cauchy-Schwarz inequality,
+$$\partial_t ||\tilde u(t)||_{L^2}^2 = -2(-\tilde u(t) \cdot \nabla u_2(t), \tilde u(t)) \leq 2||\nabla u_2(t)||_{L^\infty} ||\tilde u(t)||_{L^2}^2.$$
+But
+$$\frac{\partial_t ||\tilde u(t)||_{L^2}^2}{||\tilde u(t)||_{L^2}} = 2\partial_t ||\tilde u(t)||_{L^2}$$
+so this implies the inequality
+$$\partial_t ||\tilde u(t)||_{L^2} \leq ||\nabla u_2(t)||_{L^\infty} ||\tilde u(t)||_{L^2}.$$
+Integrating,
+$$||\tilde u(t)||_{L^2} \leq \int_0^t ||\nabla u_2(s)||_{L^2} ||\tilde u(s)||_{L^2} ~ds.$$
+By Gr\"onwall's inequality,
+$$||\tilde u||_{L^\infty([0, T]) \to L^2(\RR^d)} \leq ||\tilde u_0||_{L^2} \exp \int_0^T ||\nabla u_2(t)||_{L^2} ~dt.$$
+By symmetry,
+$$||\tilde u||_{L^\infty([0, T]) \to L^2(\RR^d)} \leq ||\tilde u_0||_{L^2} \exp \int_0^T ||\nabla u_1(t)||_{L^2} ~dt.$$
+This was the bound we wanted.
+
+
+\end{document}

@@ -1,0 +1,1375 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Topics exam]{Topics exam}
+\author{Aidan Backus}
+\date{May 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\DeclareMathOperator{\vol}{vol}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+\newtheorem{notate}{Notation}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{topics.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\begin{abstract}
+Topics exam, Fall 2021.
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\section{Currents and homological integration}
+This section follows \cite{urs2005GMT} and \cite{simon1983GMT}.
+
+Let $\Lambda_m\RR^n$ denote the space of $m$-vectors and $\Lambda^m\RR^n$ denote the space of $m$-covectors.
+If $\tau \in \Lambda_m \RR^n$, $\tau = \bigwedge_i v_i$, we write
+$$|\tau|^2 = \det(\langle v_i, v_j\rangle)_{ij}.$$
+If view $\tau$ as a volume form on an $m$-dimensional submanifold of $\RR^n$, then $|\tau|$ is the Radon-Nikodym derivative of $\tau$ with respect to Lebesgue measure.
+
+\begin{definition}
+The \dfn{comass} $||\omega||$ of an $m$-covector $\omega$ is
+$$||\omega|| = \sup_{|\tau| \leq 1} \langle \tau, \omega\rangle$$
+where $\tau$ ranges over simple $m$-vectors. The \dfn{mass} $||\tau||$ of an $m$-vector $\tau$ is the operator norm of $\tau$ with respect to comass.
+\end{definition}
+
+Henceforth if $\omega$ is a differential form, we describe the $L^p$ norms of $\omega$ with respect to its comass. That is,
+$||\omega||_{L^p}^p = \int_{\RR^n} \left(\sup_{|\tau| \leq 1} \langle \tau, \omega(x)\rangle\right)^p ~dx$$
+where the supremum ranges over simple $m$-vectors, and similarly,
+$$||\omega||_{L^\infty} = \sup_{\substack{x \in \RR^n\\|\tau| \leq 1}} \langle \tau, \omega(x)\rangle.$$
+
+Let $\mathcal D^m\RR^n$ be the space of compactly supported, smooth $m$-forms on $\RR^n$, equipped with the topology for which a sequence $\omega_i$ converges iff there is a compact set $K$ such that $\omega_i$ is eventually supported in $K$, and every derivative of the components of $\omega_i$ converges in $L^\infty(K)$.
+
+\begin{definition}
+A $m$-\dfn{current} is a continuous linear functional on $\mathcal D^m\RR^n$.
+The space of $m$-currents equipped with the topology of weak convergence is denoted $\mathcal D_m\RR^n$.
+\end{definition}
+
+Just as we define the derivative of a distribution to make integration by parts valid, we define the boundary (or derivative) of a current to make Stokes' theorem true.
+I will abuse notation by writing $\int_T \varphi$ to mean the duality pairing of a current $T$ with a compactly supported form $\varphi$.
+
+\begin{definition}
+Let $T \in \mathcal D_m\RR^n$. The \dfn{boundary} of $T$ is the $m-1$-current
+$$\int_{\partial T} \varphi = \int_T d\varphi.$$
+\end{definition}
+
+It follows that $\partial^2 = 0$, $\supp \partial T \subseteq \supp T$, and if $T_i \to T$ weakly then $\partial T_i \to \partial T$.
+In particular, currents form a chain complex.
+
+\begin{definition}
+A \dfn{cycle} is a current $T$ with $\partial T = 0$.
+A \dfn{boundary} is a current $\partial T$ for some current $T$.
+\end{definition}
+
+\begin{definition}
+The \dfn{total variation} of a current $T$ is the Borel measure defined on open sets $U$ by
+$$||T||(U) = \sup_{\supp \omega \Subset U} \frac{1}{||\omega||_{L^\infty}} \int_T \omega.$$
+The \dfn{mass} of $T$ is $M(T) = ||T||(\RR^n)$.
+The space $\MM_m\RR^n$ is the space of currents of finite mass.
+\end{definition}
+
+This definition is exactly analogous to the definition of a Radon measure from a continuous linear functional on \emph{continuous} functions of compact support, and the proof is the same.
+
+By Fatou's lemma, we have for every open set $U$ and convergent sequence of currents $(T_i)$,
+$$\left|\left|\lim_{i \to \infty} T_i\right|\right|(U) \leq \liminf_{i \to \infty} ||T_i||(U).$$
+Therefore the space $\MM_m\RR^n$ is a Banach space, since the limit of a sequence of currents of finite mass also has finite mass.
+By the dominated convergence theorem, it follows that for every form $\omega$,
+$$\left|\int_T \omega \right| \leq ||\omega||_{L^\infty} M(T).$$
+
+\subsection{Currents as Radon measures}
+In the calculus of distributions, $\delta'$ is not a measure, even though $\delta$ is.
+We generalize this idea to currents, determining which currents can be viewed as measures.
+
+\begin{definition}
+Let $\mu$ be a Radon measure on $\RR^n$ and $\tau$ a smooth $m$-vector field in $L^1_{loc}$.
+The current $[\mu, \tau]$ is defined by
+$$\int_{[\mu, \tau]} \omega = \int_{\RR^n} \langle \tau(x), \omega(x)\rangle ~d\mu(x).$$
+Conversely, if $T$ is a current which admits $\mu, \tau$ with $T = [\mu, \tau]$, we say that $T$ is a \dfn{representable current}.
+\end{definition}
+
+\begin{lemma}
+\label{Riesz Markov Hilbert}
+Let $X$ be a locally compact Hausdorff space, $H$ a finite-dimensional Hilbert space, and $L: C_c(X \to H) \to \RR$ a linear map which is locally finite in the sense that for every compact set $K$,
+$$\sup_{\substack{\supp f \subseteq K\\|f| \leq 1}} Lf < \infty.$$
+Then there is a Radon measure $\mu$ on $X$ and a $\tau \in L^\infty(X \to H)$ such that $|\tau| = 1$ and
+$$Lf = \int_X \langle \tau(x), f(x)\rangle ~d\mu(x)$$
+for every $f \in C_c(X \to H)$.
+\end{lemma}
+\begin{proof}
+Let
+$$\lambda f = \sup_{|\omega| \leq f} L\omega$$
+whenever $f \in C_c(X \to [0, \infty))$.
+Then $\lambda$ is a positive linear functional, so there exists $\mu$ such that
+$$\lambda f = \int_X f~d\mu.$$
+(The proof that $\lambda$ is a positive linear functional is identical to a step in the proof of the Riesz representation theorem in Rudin \cite{rudin1987real}.)
+Now set $L_jf = L(fe_j)$ where $e_1, \dots, e_n$ form an orthonormal basis for $H$.
+Then $L_j$ is an element of the dual of $L^1(\mu)$, so $L_j$ can be represented by $\tau_j \in L^\infty$.
+Then set $\tau = \sum_j \tau_j e_j$.
+\end{proof}
+
+\begin{theorem}[Riesz-Markov representation theorem]
+An $m$-current $T$ is representable iff $T \in \MM_{m,loc}\RR^n$.
+If $T$ is representable, then in particular it is representable using the measure $||T||$.
+\end{theorem}
+\begin{proof}
+Suppose that $T = [\mu, \tau]$ is representable. Then for every compact set $K$, we can find a bounded open set $U$ containing $K$ with $\mu(U) \leq 2\mu(K)$, and
+$||T||(U) = \sup_{\supp \omega \Subset U} \int_{\RR^n} \langle \tau(x), \omega(x) ~d\mu(x) < \infty$
+since $\tau \in L^1(U) \subseteq L^1_{loc}$ and $\mu(U) \leq 2\mu(K) < \infty$.
+Therefore $||T||$ is locally finite.
+The converse follows from Lemma \ref{Riesz Markov Hilbert}.
+\end{proof}
+
+\begin{definition}
+Let $T = [||T||, \tau]$ be a representable current.
+The tensor field $\tau$ is called the \dfn{orientation} of $T$.
+\end{definition}
+
+Now let $j: X \to \RR^n$ be an embedding of an oriented $m$-manifold.
+Then $j$ defines a representable $m$-current $[X]$ by
+$$\int_{[X]} \omega = \int_X j^*\omega.$$
+The measure $||[X]||$ is the restriction of Hausdorff $m$-measure to $j(X)$, and $\tau$ is the pushforward of the orientation of $X$.
+Furthermore, $[\partial X] = \partial[X]$ by Stokes' theorem.
+
+In the special case of (oriented) $0$-manifolds and $1$-manifolds -- that is, points and curves -- we set $[a]$ to be the $0$-current
+$$\int_{[a]} f = f(a)$$
+and $[\gamma]$ to be the $1$-current
+$$\int_{[\gamma]} f = \int_\gamma f(x) ~dx.$$
+In particular we write $[a, b] = [[a, b]]$ and hence $\partial[a,b] = [b] - [a]$ by the fundamental theorem of calculus.
+
+To discuss compactness, we put a second topology on $\MM_{m,loc}(\RR^n)$.
+Namely, if $U \subseteq \RR^n$ is an open ball (say, with rational center and radius), we define a seminorm on $\MM_{m,loc}\RR^n$ by
+$$||T||_U = ||T||(U).$$
+Then $\MM_{m,loc}\RR^n$ is a Fr\'echet space, by Fatou's lemma.
+In particular, a set in $\MM_{m,loc}\RR^n$ is bounded if it is bounded in every seminorm.
+By the Banach-Alaoglu theorem for Fr\'echet spaces, we obtain a weak compactness result:
+
+\begin{theorem}[Banach-Alaoglu]
+A set of representable currents is weakly compact iff it is weakly closed and bounded.
+\end{theorem}
+
+\subsection{Differentiation of Lipschitz maps}
+Previously we have only defined currents which represent integration on smooth manifolds.
+Now we will do the same for integration on sets of very low regularity.
+We will need to define the tangent bundle of such a set, so that we can talk about orientations thereof.
+So let us begin by defining some very weak notions of differentiation.
+
+Let $\Lip f$ denote the Lipschitz seminorm
+$$\sup_{x \neq y} \frac{d(f(x), f(y))}{d(x, y)}$$
+of a function $f: X \to Y$, where $X,Y$ are metric spaces.
+
+\begin{theorem}[McShane-Whitney]
+If $J$ is a set, $A \subseteq X$ metric spaces, and $f: A \to \ell^\infty(J)$ is a function, then there is an extension $\overline f: X \to \ell^\infty(J)$ with
+$$\Lip \overline f = \Lip f.$$
+\end{theorem}
+\begin{proof}
+By the axiom of choice, we may assume that $J$ is an ordinal $\kappa$.
+We use transfinite induction on $\kappa$.
+
+If $\kappa = 1$, set
+$$\overline f(x) = \inf_{a \in A} f(a) + d(a, x) \Lip f.$$
+Then the local Lipschitz seminorm of $\overline f$ on $X \setminus A$ is clearly $\Lip f$, so $\Lip \overline f = \Lip f$.
+
+If the result holds for $\kappa$, write $\kappa + 1 = \kappa \cup \{\kappa\}$, and let $f_1$ be the extension on $\ell^\infty(\kappa)$.
+Let $f_2$ be the extension on $\{\kappa\}$ we get from the $\kappa = 1$ case.
+Then set $\overline f = (f_1, f_2)$. Then
+$$\Lip \overline f = \max(\Lip f_1, \Lip f_2) = \Lip f.$$
+
+Now take limits at limit stages.
+\end{proof}
+
+\begin{corollary}
+If $A \subseteq X$ are metric spaces and $f: A \to \RR^d$ is a function, then there is an extension $\overline f: X \to \RR^d$ with
+$$\Lip \overline f \leq \sqrt d \Lip f.$$
+\end{corollary}
+\begin{proof}
+View $\RR^d = \ell^\infty(\{1, \dots, d\})$ and apply the previous lemma. We pick up an error factor of $\sqrt d$ going from $\ell^\infty$ to $\ell^2$.
+\end{proof}
+
+Recall that the Sobolev space $W^{1,p}(U)$ is the completion of the space of $u \in C^\infty(U)$ such that
+$$||u||_{W^{1, p}} = ||u||_{L^p} + ||\nabla u||_{L^p} < \infty.$$
+Let us now show that locally Lipschitz functions are differentiable almost everywhere.
+We follow Evans \cite{evans2010partial}.
+
+\begin{lemma}
+Let $U$ be an open precompact set.
+Then $\Lip U \subseteq W^{1, \infty}(U)$.
+\end{lemma}
+\begin{proof}
+Let $u \in C^\infty(U)$.
+Define the partial Newton quotient
+$$\partial_i^h u(x) = \frac{u(x + he_i) - u(x)}{h}.$$
+Then one has
+$$||\partial_i^{-h}u||_{L^2} \lesssim_U ||\partial_i^{-h} u||_{L^\infty} \leq \Lip u$$
+since $U$ is precompact. So by the Banach-Alaoglu theorem, after passing to a subsequence we can find $v_i \in L^\infty(U) \subseteq L^2(U)$ such that $||v_i||_{L^\infty} \leq \Lip u$ and
+$$\lim_{h \to \infty} \partial_i^{-h}u = v_i$$
+in weak $L^2(U)$. Furthermore, $L^2(U) \subseteq L^2_{loc}(\RR^n)$ and for every $\psi \in \mathcal D^0(U)$,
+$$\int_{\RR^n} u\partial_i \psi = \lim_{h \to 0} \int_{\RR^n} u\partial_i^h \psi = -\lim_{h \to 0} \int_{\RR^n} \partial_i^{-h}u \psi$$
+by a discrete analogue of integration by parts. Thus the weak convergence in $L^2_{loc}(\RR^n)$ gives
+$$\int_{\RR^n} u\partial_i \psi = -\int_{\RR^n} v_i\psi$$
+so $||\partial_i u||_{L^\infty} \leq \Lip u$.
+Also $||u||_{L^\infty} \lesssim_U \Lip u$ since $U$ is precompact, so
+$$||u||_{W^{1, \infty}} \lesssim_U \Lip u.$$
+Taking completions, we see the claim.
+\end{proof}
+
+\begin{lemma}
+Let $U \subseteq \RR^n$ be an open precompact set.
+Let $p \in (n, \infty)$ and $u \in W^{1,p}(U)$.
+Then $u$ is differentiable almost everywhere in $U$.
+\end{lemma}
+\begin{proof}
+Let $v$ be a differentiable function.
+Let $[v]_\gamma$ be the $\gamma$-H\"older seminorm of $v$, where $\gamma = 1 - n/p$.
+By Morrey's inequality,
+$$[v]_\gamma \lesssim_{p, n} ||\nabla v||_{L^p(U)}.$$
+This remains true even if $U$ is cut off to a ball containing $x,y \in U$, so
+$$\frac{|v(y) - v(x)|}{|x - y|^\gamma} \lesssim_{p, n} \left(\dashint_{B(x, 2|x - y|)} |\nabla v(z)|^p ~dz\right)^{1/p}.$$
+
+We are given that $\nabla u \in L^p(U)$ and hence, by the Lebesgue differentiation theorem, almost every $x \in U$ is a $p$-Lebesgue point in the sense that
+$$\lim_{r \to 0} \dashint_{B(x, r)} |\nabla u(x) - \nabla u(y)|^p ~dy = 0.$$
+Let $x$ be a $p$-Lebesgue point and let
+$$v(y) = u(y) - u(x) - \nabla u(x) \cdot (x - y).$$
+Then by Taylor's theorem, $v$ is differentiable, so if $r = |x - y|$,
+$$|v(y)| \lesssim_{p, n} r^\gamma \left(\int_{B(x, 2r)}|\nabla u(x) - \nabla u(z)|^p ~dz\right)^{1/p} \leq \left(\dashint_{B(x, 2r)} |\nabla u(x) - \nabla u(z)|^p ~dz\right)^{1/p}.$$
+Thus $|v(y)| = o(|x - y|)$ which implies that $u$ is differentiable at $x$.
+\end{proof}
+
+\begin{theorem}[Rademacher]
+Every locally Lipschitz function is differentiable almost everywhere.
+\end{theorem}
+\begin{proof}
+By cutting off the locally Lipschitz function $u$ to a small precompact set $U$, we can assume $\Lip u < \infty$.
+Then $u \in W^{1, \infty}(U) \subseteq W^{1, n + 1}(U)$, so $u$ is differentiable almost everywhere.
+\end{proof}
+
+If a function $f: \RR^m \to \RR^n$ is locally Lipschitz, then in particular its derivative is defined as a map of tangent spaces almost everywhere.
+Thus we may say that $f$ is an immersion if its derivative is injective, and a submersion if its derivative is surjective.
+
+By a parallelogram norm we will mean a norm induced by an inner product.
+Indeed, a norm is a parallelogram norm iff it satisfies the parallelogram identity.
+Lang refers to such norms as euclidean norms.
+We will show that if $f$ is an immersion at $x$, then there is a parallelogram norm $||\cdot||$ such that for ``most" points $y$ near $x$, $|f(y) - f(x)| \sim ||y - x||$ and the implied factor is small.
+This would be not possible if $f$ was not an immersion -- otherwise, for example, $f$ could vanish to infinite order, in which case we would have $0 \sim ||y - x|| > 0$, which is nonsense.
+
+A parallelogram norm $||\cdot||$ is the same data as a symmetric $m \times m$ matrix $g$, namely
+$$||v||^2 = v \cdot gv.$$
+
+\begin{theorem}[Borel partition]
+Suppose $f: \RR^m \to \RR^n$ is Lipschitz, and $B$ is the set of points at which $f$ is an immersion.
+Then for every $\lambda > 1$ there is a countable Borel partition $(B_i)_i$ of $B$ and a sequence of parallelogram norms $||\cdot||_i$ on $\RR^m$ such that for every $x,y \in B_i$ and $v \in \RR^m$,
+$$\lambda^{-1} ||v||_i \leq |\nabla f(x) \cdot v| \rangle \lambda ||v||_i$$
+and
+$$\lambda^{-1} ||y - x||_i \leq |f(y) - f(x)| \leq \lambda ||y - x||_i.$$
+\end{theorem}
+\begin{proof}
+The space of parallelogram matrices is separable, so there are countably many parallelogram norms $||\cdot||_j$ such that for every parallelogram norm $||\cdot||$ and $\epsilon > 0$ there is $j \in \NN$ such that for every $v \in \RR^m$,
+$$(1 - \epsilon) ||v||_j \leq ||v|| \leq (1 + \epsilon) ||v||_j.$$
+Choose $\delta > 0$ so small that
+$$\frac{1}{\lambda} + \delta < 1 < \lambda - \delta.$$
+Let $B_{jk}$ be the set of all $x \in B$ such that for every $v \in \RR^m$,
+$$(\lambda^{-1} + \delta)||v||_j \leq |\nabla f(x) \cdot v| \leq (\lambda - \delta) ||v||_j$$
+and if $|v| < 1/k$ then
+$$|f(x + v) - f(x) - \nabla f(x) \cdot v| \leq \delta ||v||_j.$$
+
+Fix $x \in B$. We claim that there are $j,k$ such that $x \in B_{jk}$.
+Since $f$ is an immersion at $x$, $A = \nabla f(x)$ satisfies that $A^*A$ is an isomorphism. That is,
+$$|Av|^2 = Av \cdot Av = v \cdot A^*A v,$$
+so $v \mapsto |Av|$ is a parallelogram norm.
+Thus we can find $j$ such that $x \in \bigcup_k B_{jk}$.
+Then, since $A$ has finite operator norm and conorm, we can find $c_j > 0$ such that $|v| \leq c_j ||v||_j$.
+By Taylor's theorem, we can find $k$ such that
+$$|f(x + v) - f(x) - \nabla f(x) \cdot v| \leq \frac{\delta}{c_j} |v|$$
+if $|v| < 1/k$, which implies $x \in B_{jk}$.
+
+If we shrink $B_{jk}$ so that $\diam B_{jk} < 1/k$ then
+$$|f(x + v) - f(x)| \leq |\nabla f(x) \cdot v| + \delta ||v||_j \leq \lambda ||v||_j$$
+and similarly for $\lambda^{-1}$, whenever $x, x + v \in B_{jk}$.
+Now after shrinking and reindexing the $B_{jk}$ we get our result.
+\end{proof}
+
+Let $\mathcal H^m$ denote Hausdorff measure of dimension $m$.
+
+\begin{definition}
+Let $f: \RR^m \to \RR^n$ be a locally Lipschitz map, $x \in \RR^m$, and let $L: \RR^m \to \RR^n$ be the derivative of $f$ at $x$.
+Define the \dfn{Jacobian determinant},
+$$\Jac f(x) = \sqrt{\det(L^*L)}.$$
+\end{definition}
+
+The idea here is that $L$ isn't going to be a square matrix in general but $\sqrt{L^*L}$ is.
+In fact $\sqrt{\det(L^*L)}$ is the product of the singular values of $L$, which seems like a reasonable generalization of the determinant to nonsquare matrices.
+
+\begin{theorem}[area formula]
+Let $f: \RR^m \to \RR^n$ be a Lipschitz map, $m \leq n$.
+For every $u \in L^1(\RR^m)$,
+$$\int_{\RR^m} u(x) \Jac f(x) ~dx = \int_{\RR^n} \sum_{f(x) = y} u(x) ~d\mathcal H^m(y).$$
+\end{theorem}
+\begin{proof}
+By dominated convergence, it suffices to check when $u = 1_A$ where $A$ is a Borel set of finite measure.
+Moreover, since $\Jac f$ is defined almost everywhere, it is no loss to assume that $\Jac f$ is defined on $A$.
+By splitting up $A$ we can break into the cases that $f$ is an immersion on $A$, and $\Jac f = 0$ on $A$.
+
+If $f$ is an immersion on $A$, let $\lambda > 1$.
+By the Borel partition theorem and the fact that $f$ is locally injective (since $f$ is an immersion), there is a Borel partition $(A_i)_i$ of $A$ equipped with parallelogram norms $||\cdot||_i$ such that $f|A_i$ is injective, and (after integrating the inequalities in the Borel partition theorem in $\mathcal H^m$),
+$$\lambda^{-m} \mathcal H^m_{||\cdot||_i}(A_i) \leq \mathcal H^m(f(A_i)) \leq \lambda^m \mathcal H^m_{||\cdot||_i}(A_i),$$
+and for every $x \in A_i,v \in \RR^m$,
+$$\lambda^{-1} ||v||_i \leq |\nabla f(x) \cdot v| \leq \lambda ||v||_i.$$
+Taking $L \mapsto \sqrt{\det(L^*L)}$ of this inequality we get
+$$\mathcal H^m(f(A_i)) \leq \lambda^m \mathcal H^m_{||\cdot||_i}(A_i) = \lambda^m \sqrt{\det(g_i^*g_i)} \mathcal H^m(A_i) \leq \lambda^{2m} \int_{A_i} \Jac f(x) ~dx$$
+where $g_i$ is the symmetric matrix associated to $||\cdot||_i$.
+Summing over $i$ using the fact $f|A_i$ is injective,
+$$\int_{\RR^n} \card(f^{-1}(y) \cap A) ~d\mathcal H^m(y) \leq \lambda^{2m} \int_A \Jac f(x) ~dx.$$
+One can similarly bound
+$$\int_{\RR^n} \card(f^{-1}(y) \cap A) ~d\mathcal H^m(y) \geq \lambda^{-2m} \int_A \Jac f(x) ~dx.$$
+Taking $\lambda \to 1$ we conclude the claim.
+
+If $\Jac f = 0$ on $A$, let $\epsilon > 0$ and let $F: \RR^m \to \RR^{n + m}$ satisfy
+$$F(x) = (f(x), \epsilon x).$$
+Then
+$$\Jac F(x) \leq \epsilon(\Lip f + \epsilon)^{m - 1}$$
+and $F$ is an immersion, so
+$$\mathcal H^m(f(A)) \leq \mathcal H^m(F(A)) = \int_A \Jac F(x) ~dx \lesssim \epsilon(\Lip f + \epsilon)^{m - 1}.$$
+As $\epsilon > 0$ was arbitrary we conclude that $\mathcal H^m(f(A)) = 0$.
+\end{proof}
+
+I think the area formula is easies to visualize when $f$ is the extension of a $k$-sheeted Lipschitz covering space $f: F \to E$ where $E \subseteq \RR^n$ is a Borel set of Hausdorff dimension $m$, $u = 1_F$, and if $x \notin F$ then $f(x) \notin E$. Then the area formula reads
+$$\int_F \Jac f(x) ~dx = \int_{\RR^n} \sum_{i=1}^k 1_F(x_i(y)) ~d\mathcal H^m(y)$$
+where $x_1, \dots, x_k$ are the fibers of the covering space $f$.
+But $x_i(y) \in F$ iff $y \in E$, thus
+$$\int_{\RR^n} \sum_{i=1}^k 1_F(x_i(y)) ~d\mathcal H^m(y) = k\int_{\RR^n} 1_E ~d\mathcal H^m = k\mathcal H^m(E)$$
+and thus
+$$\int_F \Jac f(x) ~dx = k\mathcal H^m(E).$$
+In particular if $\Jac f = 1$ then this just says that copying a set $k$ times creates a set with $k$ times the area.
+
+\subsection{The approximate tangent bundle}
+Let us now define a very weak notion of regularity which is still enough to give a set a tangent bundle.
+
+\begin{lemma}
+\label{Lipschitz is nearly C1}
+For every $f \in \Lip(U)$ and $\epsilon > 0$, there is $g \in C^1(U)$ such that $|\{f \neq g\}| < \epsilon$.
+\end{lemma}
+\begin{proof}
+By the McShane-Whitney theorem it is no loss to assume $U = \RR^n$.
+By Rademacher's theorem, $\nabla f$ is a Borel function which is finite almost everywhere.
+By Lusin's theorem, there is a closed set $B \subseteq \RR^m$ such that $|B^c| < \epsilon$ and $\nabla f|B$ is continuous.
+Now let
+$$r_\delta(x) = \sup_{0 < |y - x| < \delta} \frac{|f(y) - f(x) - \nabla f(x) \cdot (y - x)}{|y - x|}.$$
+Then since $\nabla f|B$ is continuous, Taylor's theorem implies that $r_\delta \to 0$ pointwise on $B$.
+In particular, by Egorov's theorem, after shrinking $B$ by a set of measure $< \epsilon$, we may assume that $r_\delta \to 0$ in $L^\infty_{loc}(B)$.
+Thus we may set $g = f|B$.
+Since $B$ is closed and $r_\delta$ is bounded on $B$, $g$ extends to all of $\RR^n$ by the $C^1$ Urysohn lemma.
+\end{proof}
+
+\begin{definition}
+A set $E \subseteq \RR^d$ is $m$-\dfn{rectifiable} if there are Lipschitz maps $f_i: \RR^m \to \RR^d$, such that
+$$\mathcal H^m\left(E \setminus \bigcup_i f_i(\RR^m)\right) = 0.$$
+\end{definition}
+
+This definition looks hard to test in general, but we can give a Rademacher-like characterization: a set is $m$-rectifiable if it can be written as the union of differentiable manifolds.
+
+\begin{theorem}
+\label{Rademacher}
+A set $E \subseteq \RR^d$ is $m$-rectifiable iff there are $m$-dimensional continuously differentiable submanifolds $M_k \subseteq \RR^d$ such that
+$$\mathcal H^m\left(E \setminus \bigcup_k M_k\right) = 0.$$
+\end{theorem}
+\begin{proof}
+If this property holds, then $E$ is $m$-rectifiable since we can write $M_k$ locally as the differentiable (and hence Lipschitz) image of $\RR^m$ for each $k$.
+
+Conversely, assume that $E$ is $m$-rectifiable. By Lemma \ref{Lipschitz is nearly C1}, it is no loss to assume that the maps $f_i: \RR^m \to \RR^d$ which rectify $E$ are $C^1$.
+Let $U_i$ be the set on which $f_i$ is an immersion.
+By the area formula, $\mathcal H^m(f_i(\RR^m \setminus U_i)) = 0$. So $\mathcal H^m(E \setminus \bigcup_i f_i(U_i)) = 0$ since the $f_i$ are Lipschitz and so push forward null sets to null sets.
+Since $f_i(U_i)$ is immersed, it is locally diffeomorphic to $U_i$.
+As the rank of $f_i$ is lower semicontinuous, $U_i$ is an open submanifold of $\RR^m$.
+Therefore $U_i$ is locally a submanifold of $\RR^n$.
+\end{proof}
+
+We now introduce the notion of a tangent bundle to a rectifiable set. We first need the notion of a measurable vector bundle.
+
+Let $\mu$ be a measure on a measurable space $E$, $F$ a measurable space, and $p: F \to E$ a $\mu$-measurable map.
+If for $\mu$-almost every $x \in E$, the fiber $F_x = p^{-1}(x)$ has the structure of a vector space of dimension $k$, and $E \times \RR^k$ is locally measurably isomorphic to $F$, then we call $p$ a $\mu$-measurable vector bundle over $E$.
+
+Let
+$$T_{x,r}(y) = \frac{y - x}{r}.$$
+Then $T_{x,r}$ maps $x + B_r$ to $B_1$, so $T_{x,r}(E)$ can be viewed as ``zooming in on $x \in E$" if $r$ is small.
+
+\begin{definition}
+Let $E \subseteq \RR^n$ be a Borel set of Hausdorff dimension $m$, and $x \in \RR^n$.
+We call a $m$-dimensional vector space $\Tan(E, x) \subseteq \RR^n$ the \dfn{approximate tangent space} of $E$ at $x$ if
+\begin{equation}
+\label{approx tangent space}
+\lim_{r \to 0} \mathcal H^m|T_{x,r}(E) = \mathcal H^m|\Tan(E, x)
+\end{equation}
+in the weak topology of Radon measures.
+If $\Tan(E, x)$ is well-defined for $\mathcal H^m$-almost every $x \in E$, we define the \dfn{approximate tangent bundle} $\Tan E$ to be the $\mathcal H^m$-measurable vector bundle on $E$ induced by the approximate tangent spaces.
+\end{definition}
+
+To see why this generalizes the classical notion of tangent bundle, assume that $E$ is a smooth manifold of dimension $m$.
+Then if $r > 0$ is small, $T_{x,r}(E)$ moves $E$ so that $x = 0$ and blows up $E$ so much so that $E$ looks like a $m$-dimensional hyperplane near $x$.
+Moreover, we only care about behavior near $x$, since the weak topology of Radon measures only tests against functions with compact support.
+Thus we have (\ref{approx tangent space}). By Theorem \ref{Rademacher}, $\mathcal H^m$-almost every point of a rectifiable set $E$ has an approximate tangent space, so in particular $E$ has an approximate tangent bundle.
+
+Now let us generalize the notion of orientation to rectifiable sets.
+This is just a straightforward generalization of the notion of orientation form of a smooth manifold.
+
+\begin{definition}
+Let $E$ be a $m$-rectifiable set.
+An \dfn{orientation} of $E$ is a Borel function $\tau: E \to \Lambda_m \RR^n$ where for $\mathcal H^m$-almost every $x \in E$, $|\tau| = 1$, and
+$$\tau(x) = \bigwedge_j e_j(x)$$
+where $(e_j(x))_j$ spans $\Tan(E, x)$.
+If $E = (E, \tau)$ is an oriented $m$-rectifiable set, then we define an integration of differential forms
+$$\int_E \omega = \int_E \langle \tau(x), \omega(x)\rangle ~d\mathcal H^m(x).$$
+\end{definition}
+
+We view orientations of $E$ as sections of the top tensor bundle $(\Tan E)^{\wedge m}$.
+
+\subsection{Homological integration theory}
+Since currents form a chain complex, we should expect them to push forward, rather than pull back.
+
+\begin{definition}
+Let $T \in \mathcal D_m\RR^n$, and let $f: \RR^n \to \RR^p$ be a smooth map such that $f|\supp T$ is proper.
+For every $\omega \in \mathcal D^m\RR^n$, let $\zeta$ be a cutoff to a neighborhood of the compact set $\supp T \cap \supp f^*\omega$, and define the \dfn{pushforward current} $f_*T$ by
+$$\int_{f_*T} \omega = \int_T \zeta f^*\omega.$$
+\end{definition}
+
+Since $\zeta$ is a cutoff, this definition is independent of $\zeta$.
+One has $\partial f_* = f_* \partial$, and $\supp f_* T \subseteq f(\supp T)$, as well as $(g \circ f)_* = g_* f_*$.
+
+If $T = [||T||, \tau]$ is a representable current which can be pushed forward along $f$, then
+$$\int_{f_*T} \omega = \int_{\RR^n} \langle (df_x)_* \tau(x), f^*\omega(x) \rangle ~d||T||(x)$$
+and so $f_*T = [f_*||T||, f_* \tau]$ is a representable current.
+
+Now suppose that $T$ is a current. We define
+$$[a] \times T = i(a)_*T$$
+where $i(a)(x) = (a, x)$. Since $i(a)_*$ commutes with $\partial$ we get $\partial([a] \times T) = [a] \times \partial T$.
+Now if $(t, x)$ are coordinates on $\RR^{1 + n}$, we write $\omega = dt \wedge \omega' + \overline \omega$ where $dt \wedge \omega'$ contains all terms with $dt$, and define
+$$\int_{[a, b] \times T} \omega = \int_a^b ([t] \times T)(\omega') ~dt.$$
+It follows that
+$$\partial([a, b] \times T) = [b] \times T - [a] \times T - [a, b] \times \partial T$$
+(the Leibniz formula) and
+$$||[a, b] \times T|| = ||[a, b]|| \times ||T||.$$
+
+\begin{theorem}[homotopy formula]
+Let $f,g \in C^\infty(\RR^n \to \RR^p)$, and let $h: f \to g$ be a smooth homotopy.
+Let $T$ be an $m$-current such that $h|([0, 1] \times \supp T)$ is proper. Then
+$$(g_* - f_*)T = \partial h_*([0, 1] \times T) + h_*([0, 1] \times \partial T).$$
+\end{theorem}
+\begin{proof}
+One has
+\begin{align*}
+\partial h_*([0, 1] \times T) &= h_*\partial([0, 1] \times T)\\
+&= h_*([1] \times T - [0] \times T [0, 1] \times \partial T)\\
+&= g_*T - f_*T - h_*([0, 1] \times \partial T)
+\end{align*}
+as desired.
+\end{proof}
+
+Suppose that $\mu$ is a distribution and a Radon measure. Then $\mu'$ is not a Radon measure.
+On the other hand, the boundary of a \emph{current} may still be a Radon measure.
+This is a useful enough property that we give it a horrible name.
+\begin{definition}
+Let $T$ be an $m$-current. Set
+$$N(T) = M(T) + M(\partial T).$$
+If $N(T) < \infty$, we call $T$ a \dfn{normal current}.
+The space $N_m\RR^n$ is the space of normal currents.
+\end{definition}
+
+The point of normal currents is that we can push them forward along \emph{Lipschitz} maps.
+
+\begin{lemma}
+\label{affine homotopy mass}
+Let $h: f \to g$ be an affine homotopy. Suppose that $h|\supp T$ is a proper map. Then
+$$M(h_*[0, 1] \times T) \leq ||f - g||_{L^\infty(\supp T)} \sup_{x \in \supp T} (|df_x| + |dg_x|)^n M(T).$$
+\end{lemma}
+\begin{proof}
+Let $\tau$ be the orientation of $T$; then
+\begin{align*}
+\int_{h_*([0, 1] \times T)} \omega &= \int_0^1 \int_U \langle \omega|h(t, x), (dh_{(t, x)})_*(e_1 \wedge \tau(x)) ~d||T||(x) ~dt\\
+&= \int_0^1 \int_U \langle \omega|h(t, x), (g(x) - f(x)) \wedge (tdg_x + (1 - t)df_x)_* \tau(x)\rangle ~d||T||(x) ~dt
+\end{align*}
+and as $|\tau| = 1$ the claim follows.
+\end{proof}
+
+\begin{lemma}
+Let $T$ be a locally normal current on $U$, $f: U \to V$ a Lipschitz map with $f|\supp T$ proper.
+Set $f_\sigma = f * \eta_\sigma$ where $\eta$ is a standard mollifier. Then if we define a current $f_*T$ by
+$$\int_{f_* T} \omega = \lim_{\sigma \to 0} \int_{(f_\sigma)_* T} \omega,$$
+then $f_*T$ is a well-defined locally normal current and $\supp f_*T \subseteq f(\supp T)$.
+In particular, if $T$ is a normal current, then so is $f_*T$.
+\end{lemma}
+\begin{proof}
+By the homotopy formula,
+$$(f_\sigma)_*T - (f_\tau)_* T = h_*([0, 1] \times T)d + h_*([0, 1] \times \partial T)$$
+where $h: f_\sigma \to f_\tau$ is an affine homotopy. So by Lemma \ref{affine homotopy mass},
+$$||(f_\sigma)_*T - (f_\tau)_*T|| \lesssim ||f_\sigma - f_\tau||_{L^\infty(f^{-1}(\supp \omega) \cap \supp T)} [f]^n$$
+where $[f]$ is the Lipschitz seminorm of $f$.
+So $(f_\sigma)_\sigma$ is a Cauchy net and the claim follows.
+\end{proof}
+
+Since normal currents push forward along Lipschitz maps, we can define a homology theory.
+Namely, for every rectifiable set $X$, we let $N_m(X)$ be the space of $m$-currents with support in $X$.
+Then $N(X)$ is a chain complex.
+
+\begin{definition}
+Let $X$ be a rectifiable set. The homology at $m$ of $N(X)$, denoted $H_m(X)$, is the $m$th \dfn{de Rham homology} of $X$.
+\end{definition}
+I'm not sure this is standard terminology but it's dual to de Rham cohomology with compact support so I'm not sure what else to call it.
+
+If $A \subseteq X$ is closed, we define $N_m(X, A) = N_m(X)/N_m(A)$, so we get relative homology groups $H_m(X, A)$.
+We get a commutative diagram
+$$\begin{tikzcd}
+U \cap V \arrow[r,"i_U"] \arrow[d,"i_V"] & U \arrow[d,"j_U"] \\
+V \arrow[r,"j_V"] & X
+\end{tikzcd}$$
+of inclusion maps, whenever $\{U, V\}$ is an open cover of $X$.
+Then the sequence
+$$0 \to N_m(\overline U \cap \overline V) \to N_m(\overline U) \oplus N_m(\overline V) \to N_m(X) \to 0$$
+defined by $(i_U)_* \oplus (i_V)_*$ and $(j_U)_* - (j_V)_*$ is short exact.
+The only thing nontrivial about this statement is the surjectivity of $(j_U)_* - (j_V)_*$; indeed, if $T \in N_m(X)$ then we can cut off $T$ to $U,V$, and this gives the claim.
+So, by the zigzag lemma, the Mayer-Vietoris sequence in relative homology is long exact, which gives the exactness and excision axioms.
+On the other hand, by the homotopy formula, we can check the homotopy axiom; the dimension and additivity axioms are obvious.
+In summary:
+
+\begin{theorem}
+Let $X$ be a rectifiable set.
+The homology of the chain complex of normal currents on $X$ is an Eilenberg-Steenrod homology theory on $X$.
+\end{theorem}
+
+\subsection{Integral currents}
+Recall that if $X$ is an oriented $m$-submanifold of $\RR^n$ then we obtain a representable $m$-current
+$$\int_{[X]} \omega = \int_X \omega.$$
+Let us now generalize this in two directions.
+First, we will only assume that $X$ is rectifiable, and second, we will allow parts of $X$ to be integrated over multiple times.
+
+\begin{definition}
+A current $T \in \mathcal D_m$ is \dfn{locally integer rectifiable} if we can write
+$$\int_T \omega = \int_E \theta\omega$$
+where $E$ is an oriented $m$-rectifiable set, and the \dfn{multiplicity} $\theta$ is integer-valued.
+In this case we write
+$$T = [E, \theta]$$
+and $T \in \mathcal I_{m,loc}(\RR^n)$.
+If in addition $T$ has finite mass we write $T \in \mathcal I_m(\RR^n)$ and call $T$ an \dfn{integer rectifiable current}.
+\end{definition}
+
+The idea is that a locally integer rectifiable current is a sum of locally finitely many oriented rectifiable sets.
+
+Thus the mass of the locally integer rectifiable current $T = [E, \theta]$ is
+$$||T||(U) = ||\theta||_{L^1(U \cap E, \mathcal H^m)}.$$
+We want an analogoue of normal currents in this setting.
+
+\begin{definition}
+A \dfn{locally integral current} $T$ is a locally integer rectifiable current such that $\partial T$ is locally integer rectifiable.
+An \dfn{integral current} is a locally integral current $T$ such that $T$ and $\partial T$ are integer rectifiable.
+We let $\II_{m,loc}$ be the space of locally integral currents and $\II_m$ be the space of integral currents.
+\end{definition}
+
+The key fact about integral currents is that the space of integral currents on a compact set is locally compact:
+
+\begin{theorem}
+Let $T_i \in \II_m(K)$ satisfy $N(T_i) \lesssim 1$, where $K$ is a compact set.
+Then there is a subsequence which weakly converges to an element of $\II_m(K)$.
+\end{theorem}
+\begin{proof}
+Omitted; see the exposition of White \cite{white1989new}.
+\end{proof}
+
+\begin{definition}
+Let $R$ be a compactly supported integral $m-1$-cycle. The \dfn{Plateau problem} with boundary data $R$ is the problem of finding a compactly supported integral $m$-current $T$ such that $\partial T = R$ which minimizes $M(T)$ among compactly supported integral $m$-currents with boundary $R$.
+\end{definition}
+
+One obvious obstruction to solving the Plateau problem is homological -- namely, there could be a cycle $R$ which is not a boundary, in which case the Plateau problem with boundary data $R$ clearly has no solution.
+
+\begin{definition}
+Let $M$ be a differentiable submanifold with boundary of $\RR^n$.
+The \dfn{integral de Rham homology} $H_\bullet(M; \ZZ)$ of $M$ is the homology of the chain complex of integral currents on $M$.
+\end{definition}
+
+Then $H_\bullet(\cdot; \ZZ)$ is a homology theory over $\ZZ$.
+I think it's kind of badly behaved for nonorientable rectifiable sets though so I'm not sure if it's an Eilenberg-Steenrod theory.
+
+Let us show that for compact manifolds, the \emph{only} restriction to solving the Plateau problem is homological.
+
+\begin{theorem}
+Let $M$ be a compact differentiable submanifold with boundary of $\RR^n$.
+Suppose that $R$ is an integral $m - 1$-boundary on $M$, $m \geq 1$.
+Then the Plateau problem on $M$ with boundary data $R$ has a solution.
+\end{theorem}
+\begin{proof}
+Let $\mathcal T$ be the set of integral $m$-currents $T$ such that $\partial T = R$; then $\mathcal T$ is nonempty since $R$ is a boundary.
+Let $(T_i)$ be a sequence in $\mathcal T$ such that
+$$\lim_{i \to \infty} M(T_i) = \inf_{T \in \mathcal T} M(T).$$
+Then
+$$\sup_i N(T_i) = \sup_i M(T_i) + M(R) < \infty.$$
+Since $M$ is compact, the compactness theorem implies that a subsequence converges weakly to some integral current $T$.
+Then $\partial T = R$ and $M(T) = \inf_{T' \in \mathcal T} M(T')$.
+\end{proof}
+
+\begin{lemma}
+One has $H_m(\RR^n; \ZZ) = 0$ if $m \geq 0$.
+\end{lemma}
+\begin{proof}
+Let $R$ be an integral $m$-cycle. Let $h(t, x) = tx$ and let $T = h_\sharp([0, 1] \times R)$.
+Then $h$ is a homotopy between $0$ and the identity, so, since $R$ is a cycle,
+$$\partial T = R - 0_\sharp R = R.$$
+Furthermore, we can write $R = [E, \theta]$ where $E$ is an oriented rectifiable set of dimension $m$ and $\theta$ is integer-valued.
+Then, if $\tau$ is the orientation of $E$,
+\begin{align*}
+\int_T \omega &= \int_{h_\sharp([0, 1] \times R)} \omega = \int_0^1 \int_R h^*\omega \theta \\
+&= \int_0^1 \int_E \langle \tau(h(x, t)), \omega(x)\rangle \theta(x) ~d\mathcal H^m(x) ~dt.
+\end{align*}
+Thus $T = [[0, 1] \times E, \theta]$, where we extend $\theta$ to $[0, 1] \times E$ by $\theta(t, x) = \theta(x)$.
+\end{proof}
+
+\begin{corollary}
+Let $R$ be a compactly supported integral $m-1$-cycle on $\RR^n$, $0 \leq m \leq n$.
+Then the Plateau problem on $\RR^n$ with boundary data $R$ has a solution.
+\end{corollary}
+\begin{proof}
+Since $\RR^n$ has no integral de Rham homology, $R$ is a boundary.
+Let $K$ be a compact convex set which contains the support of $R$ and let $p: \RR^n \to K$ retract to the nearest point.
+Then $\Lip p = 1$, so $M(p_\sharp T) \leq M(T)$ for every $T$.
+If $\partial T = R$ then $\partial(p_\sharp T) = p_\sharp \partial T = p_\sharp R = R$.
+So we may replace $\RR^n$ with the compact manifold with boundary $K$.
+\end{proof}
+
+\begin{theorem}
+Let $M$ be a compact differentiable submanifold of $\RR^n$.
+Then every integral de Rham homology class $[T] \in H_m(M; \ZZ)$ has a representative $T$ which minimizes $M(T)$ among cycles in $[T]$.
+\end{theorem}
+\begin{proof}
+Let $(T_i)$ be a minimizing sequence in $[T]$.
+Then $N(T_i) = M(T_i)$ since the $T_i$ are cycles, and since $M$ is compact it follows that there is $T$ such that after taking subsequences, $\lim_i T_i = T$ weakly.
+So $M(T)$ is minimal.
+\end{proof}
+
+\section{Functions of least gradient}
+\subsection{Vector bundle-valued Radon measures}
+Let $M$ be a manifold and let $U \subseteq M$ be an open set.
+Let $E$ be a finite-dimensional normed vector bundle (briefly, a \dfn{normed bundle}) on $M$, with dual $E'$.
+We will write $(u, v)$ for the pairing of $u \in E'$ and $v \in E$.
+
+We will abuse notation and, for every finite-dimensional normed vector space $E$, identify $E$ with the trivial bundle $M \times E$.
+
+We will write $A \Subset B$ to mean that $B$ is locally compact and $\overline A$ is a proper compact subset of $B$.
+
+We write $\mathcal D(U, E)$ for the space of smooth sections of $E$ with compact support in $U$ (briefly, \dfn{test sections}).
+The topological dual space
+$$\mathcal D'(U, E) = \mathcal D(U, E')'$$
+is known as the space of \dfn{generalized sections} of $E$; it consists of linear functionals $u$ such that for every $E'$-trivial $V \Subset U$ and every $r \in \NN$ large enough depending on $u$, the restriction of $u$ to $C^r_c(U, E')$ is bounded in the topology of $C^r_c(U, E')$.
+A sequence $(u_n)$ in $\mathcal D'(U, E)$ converges in the \dfn{weak topology of distributions} to $u \in \mathcal D'(U, E)$ if for every $v \in \mathcal D(U, E')$,
+$$\lim_{n \to \infty} \langle u_n, v\rangle = \langle u, v\rangle.$$
+We will call test sections of the tangent bundle \dfn{test fields} and generalized sections of the cotangent bundle \dfn{generalized $1$-forms}. We will identify continuous $1$-forms $\omega$ with generalized $1$-forms by
+\begin{equation}
+\label{continuous fields are generalized}
+\langle \omega, X\rangle = \int_M (\omega, X) ~dV.
+\end{equation}
+
+By \dfn{Radon measure}, we will always mean $E$-valued Radon measure.
+What this means is that $u \in \mathcal D'(M, E)$ is an $E$-valued Radon measure iff for every $U \Subset M$ and $v \in \mathcal D(U, E)$,
+\begin{equation}
+\label{total variation bound}
+\langle u, v\rangle \lesssim_U ||v||_{L^\infty}.
+\end{equation}
+If $u$ is a Radon measure on $M$, we write $|u|_{TV}$ to mean the total variation measure of $u$; thus, $|u|_{TV}(U)$ is the best constant that can appear in (\ref{total variation bound}).
+If $u$ is a Radon measure, then we can extend the action of $u$ by density to the space $C_c(M, E')$ of all continuous sections of $E'$ of compact support.
+In case $E'$ is trivial, this agrees with the classical definition of $E$-valued Radon measure, by the Riesz-Markov theorem.
+
+Let $\mathcal R(M, E)$ be the space of $E$-valued Radon measures on $M$, equipped with the \dfn{weak topology of measures}.
+In this topology, a sequence of Radon measures $(u_n)$ converges to $u$ iff for every $v \in C_c(M, E')$,
+$$\lim_{n \to \infty} \langle u_n, v\rangle = \langle u, v\rangle.$$
+If the span of a countable set $\mathcal V$ is dense in $C_c(M, E')$, then the seminorms $u \mapsto \langle u, v\rangle$, $v \in \mathcal V$, determine the weak topology of measures.
+Thus $\mathcal R(M, E)$ is a Fr\'echet space.
+
+Given a Radon measure $u$ and an open set $U$, we can define $u1_U$ by
+$$\langle u1_U, v\rangle = \sup_{\chi \in \mathcal D(U, [0, 1])} \langle u, \chi v\rangle.$$
+Then $u1_U$ is a Radon measure.
+This agrees with the classical definition of cutting off a Radon measure to an open set by the monotone convergence theorem.
+
+Given a measure space $\Omega$, a function $u: \Omega \to \mathcal R(M, E)$ is measurable iff for every $v \in \mathcal D(M, E')$, $\omega \mapsto \langle u(\omega), v\rangle$ is measurable, by Pettis' theorem.
+In that case we can define the Bochner-Lebesgue integral, and by Bochner's theorem it satisfies
+$$\left\langle\int_\Omega u(\omega) ~d\omega, v\right\rangle = \int_\Omega \langle u(\omega), v\rangle ~d\omega.$$
+
+\subsection{Functions of bounded variation}
+Let $(M, g)$ be an oriented Riemannian manifold and $U \subseteq M$ open.
+Let $dV$ be the volume element on $M$, let $dA$ be the area element induced by $dV$ on any Lipschitz hypersurface in $M$, and let $\mathcal L_X\eta$ denote the Lie derivative of a tensor field $\eta$ along a vector field $X$.
+
+If $u \in C^1(M)$ and $\partial U$ is Lipschitz, one has the integration by parts formula
+\begin{equation}
+\label{Riemannian IBP}
+\int_U (du, X) ~dV + \int_U u ~\mathcal L_XdV = \int_{\partial U} ug(X, \nu) ~dA
+\end{equation}
+where $X$ is a test field, $\nu$ is the outwards normal field on $\partial U$, $\mathcal L_X$ is the Lie derivative along $X$.
+One also has the divergence theorem
+\begin{equation}
+\label{divergence theorem}
+\mathcal L_XdV = \Div X ~dV.
+\end{equation}
+
+If in fact $U = M$, then the right-hand side of (\ref{Riemannian IBP}) vanishes, so that one can define the \dfn{generalized derivative} $du \in \mathcal D'(M, T'M)$ of a generalized function $u \in \mathcal D'(M)$ by
+\begin{equation}
+\label{distributional derivative dfn}
+\langle du, X\rangle = -\int_U u ~\mathcal L_XdV
+\end{equation}
+for every test field $X \in \mathcal D(M, TM)$. By (\ref{Riemannian IBP}, \ref{continuous fields are generalized}), this generalizes the notion of gradient.
+
+If $u_n \to u$ in the weak topology of distributions, then the same holds for $du_n$.
+This implies that if the $u_n$ are continuous functions and $u_n \to u$ locally uniformly, then $du_n$ converges in the weak topology of distributions.
+
+\begin{definition}
+Let $E$ be a normed bundle on $M$.
+A generalized section $u \in \mathcal D'(M, E)$ defined on $U$ has \dfn{locally bounded variation} if $du$ is a $T'M \otimes E$-valued Radon measure on $U$.
+The section $u$ has \dfn{bounded variation} if the seminorm $||u||_{BV} = |du|_{TV}(M)$ is finite.
+
+The presheaf of sections of $E$ with locally bounded variation (resp. bounded variation, bounded variation and compact support) is denoted $BV_l(\cdot, E)$ (resp. $BV(\cdot, E)$, $BV_c(\cdot, E)$).
+\end{definition}
+
+Given $u_n \in BV_l$, one has
+\begin{equation}
+\label{RieszMarkovDistr}
+|du|_{TV} \leq \limsup_{n \to \infty} |du_n|_{TV}
+\end{equation}
+whenever $u_n \to u$ in the weak topology of distributions.
+
+\begin{theorem}[integration by parts + trace theorem]\label{Miranda IBP}
+Suppose that $\partial U$ is a Lipschitz hypersurface.
+Then for every $u \in BV_l(U)$ such that $|du|_{TV}(U) < \infty$ there is a function $v \in L^1(\partial U)$ such that for every test field $X \in \mathcal D(M, TM)$,
+\begin{equation}
+\label{Miranda IBP formula}
+\langle 1_Udu, X\rangle + \int_U u ~\mathcal L_XdV = \int_{\partial U} vg(X, \nu) ~dA.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Let $\varphi$ be a smooth flow on $M$ such that for every $x \in \partial U$ and $t \in [0, 1]$, $\varphi_t(x) \in U$.
+Let $N_t$ be the set obtained by flowing $\partial U$ along $\varphi$ for time $t$.
+Then, as long as $\varphi$ is chosen to flow slowly enough (so as to avoid self-intersections), $N_t$ is a Lipschitz hypersurface for every $t \in [0, 1]$.
+Moreover, $N_t$ partitions $U$ into a closed outer region $\{\varphi_s(x): x \in \partial U, s \in [0, t]\}$ and an open inner region $U_t$.
+
+There exist smooth functions $u_n$ on $U$ such that $u_n \to u$ locally uniformly.
+Applying (\ref{Riemannian IBP}) to $u_n$ on $U_t$ and using the locally uniform convergence, we have
+\begin{equation}
+\label{interior Miranda IBP}
+\langle 1_{U_t}du, X\rangle + \int_{U_t} u ~\mathcal L_XdV = \int_{N_t} g(uX, \nu) ~dA.
+\end{equation}
+By continuity from below, the left-hand side of (\ref{interior Miranda IBP}) converges to the left-hand side of (\ref{Miranda IBP formula}) as $t \to 0$.
+
+If we set $v_t(x) = u(\varphi_t(x))$, then $v_t(x)$ is defined for $x \in \partial U$ and $t \in [0, 1]$.
+Moreover, for every $0 < t_1 < t_2$,
+\begin{equation}
+\label{mean-value inequality}
+\int_{\partial U} |v_{t_1} - v_{t_2}| ~dA \leq |du|_{TV}(U_{t_2} \setminus \overline{U_{t_1}}).
+\end{equation}
+Indeed, (\ref{mean-value inequality}) holds if $u$ is smooth by the mean-value theorem, and for the general case we can find $u_n$ smooth such that $u_n \to u$ in $L^2_l$.
+Expanding out both sides of (\ref{mean-value inequality}) using the divergence theorem (\ref{divergence theorem}),
+\begin{equation}
+\label{approx mean-value inequality}
+\int_{\partial U} |u_n(\varphi_{t_1}(x)) - u_n(\varphi_{t_2}(x))| ~dA(x) \leq -\inf_{||X||_{L^\infty} \leq 1} \int_M u_n\cdot \Div X~dV
+\end{equation}
+where $X$ ranges over test fields on $U_{t_2} \setminus \overline{U_{t_1}}$.
+Both sides of (\ref{approx mean-value inequality}) are preserved as $n \to \infty$, due to the convergence in $L^2_l$.
+Therefore (\ref{mean-value inequality}) holds.
+
+Since $|du|_{TV}(U) < \infty$, measure continuity and (\ref{mean-value inequality}) implies that
+$$\lim_{t_1, t_2 \to 0} \int_{\partial U} |v_{t_1} - v_{t_2}| ~dA = 0.$$
+Thus $(v_t)$ is a Cauchy net in $L^1(\partial U)$ as $t \to 0$, say $v_t \to v$.
+As $g(X, \nu) \in L^\infty$ and $(L^1)^* = L^\infty$, $g(v_tX, \nu) \to g(vX, \nu)$ in $L^1(\partial U)$.
+Therefore the right-hand side of (\ref{interior Miranda IBP}) satisfies
+$$\lim_{t \to 0} \int_{N_t} g(uX, \nu) ~dA = \lim_{t \to 0} \int_{\partial U} g(v_tX, \nu) ~dA \int_U g(vX, \nu) ~dA$$
+which completes the proof.
+\end{proof}
+
+\begin{definition}
+If $u,v,U$ are as in Theorem \ref{Miranda IBP}, and $N = \partial U$, then $v$ is called the \dfn{trace} of $u$ along $N$.
+\end{definition}
+
+\begin{corollary}[gluing $BV$ functions along a hypersurface]\label{gluing}
+Let $N$ be a Lipschitz hypersurface which separates $M$ into $U_1,U_2$.
+If $u_j \in BV(U_j)$ and $u \in L^1_l(M)$ is the function such that $u|U_j = u_j$, then $u \in BV(M)$.
+Moreover, if $v_j$ is the trace of $u_j$ along $N$, then
+\begin{equation}
+\label{glued BV norm}
+|du|_{TV}(N) = ||v_1 - v_2||_{L^1(N)}.
+\end{equation}
+\end{corollary}
+\begin{proof}
+For every test field $X$, Theorem \ref{Miranda IBP} gives
+$$\langle du_1, X\rangle + \langle du_2, X\rangle + \int_M u~\mathcal L_XdV = \int_N (v_1 - v_2) g(\nu, X) ~dA,$$
+where $\nu$ is the unit normal field on $N$ pointing towards $U_1$.
+Therefore
+$$|du|_{TV}(M) \leq |du_1|_{TV}(U_1) + |du_2|_{TV}(U_2) + ||v_1 - v_2||_{L^1(N)} < \infty.$$
+Moreover, if we take $(X_n)$ to be an approximation to $\nu$, then $X = X_n$ is a maximizing sequence for $g(\nu, X)$ subject to $||X_n||_{L^\infty} \leq 1$.
+Moreover, $\langle du_j, X_n\rangle \to 0$ as $n \to \infty$, since the measure of $\supp X_n$ shrinks down to $0$, and
+$$\langle du_j, X_1\rangle \leq ||u_j||_{BV(U_j)} < \infty$$
+(so we may apply measure continuity). Therefore, taking $n \to \infty$ we conclude (\ref{glued BV norm}).
+\end{proof}
+
+%Let us now extend the above results to maps between manifolds.
+%Thus let $N$ be another Riemannian manifold.
+%The definition of a distribution, even a vector-valued distribution, is local; therefore one can consider the space $\mathcal D'(M \to N)$ of distributions on $M$ valued in $N$.
+
+%If $u: M \to N$ is a smooth map, then its derivative $du$ is a section of the normed bundle
+%$$\Hom(T'M, u^*(TN)) = T'M \otimes u^*(TN).$$
+%In particular, pairing $du$ with a test field $X$ gives a section $(du, X)$ of the pullback bundle $u^*(TN)$.
+%Since the definition of differentiation is local, we can define the generalized derivative of $u \in \mathcal D'(M \to N)$ to be the generalized section $du$ of $T'M \otimes u^*(TN)$ such that for every test field in a trivial chart, the integration by parts formula (\ref{distributional derivative dfn}) holds.
+
+\subsection{Coarea formulae}
+Throughout this section we consider the superlevel sets $E_y = \{u \geq y\}$ of a function $u \in BV_l(M)$.
+
+We first observe that for every $X \in \mathcal D(M, TM)$,
+$$\langle d1_{E_y}, X\rangle = -\int_{E_y} \mathcal L_XdV$$
+is measurable in $y$, since $E_y$ is monotone in $y$.
+So by Pettis' theorem, $d1_{E_y}$ is measurable in $y$ with respect to the weak topology of measures.
+
+\begin{proposition}[coarea formula for measures]\label{Coarea1}
+If $u \in BV_l(M)$ and $E_y = \{u \geq y\}$, then
+$$du = \int_{-\infty}^\infty d1_{E_y} ~dy.$$
+\end{proposition}
+\begin{proof}
+Fix a test field $X \in \mathcal D(M, TM)$.
+Breaking up $u$ into positive and negative parts, and exploiting the identity
+$$\int_{-\infty}^\infty d1_{E_y} ~dy = \int_{-\infty}^0 d1_{E_y} ~dy + \int_0^\infty d1_{E_y} ~dy,$$
+it is no loss to assume that $u \geq 0$.
+
+We must show
+\begin{equation}
+\label{gradient is integral of fibers}
+\langle du, X\rangle = \int_{-\infty}^\infty \langle d1_{E_y}, X\rangle ~dy.
+\end{equation}
+Since $u \geq 0$,
+\begin{align*}
+\langle du, X\rangle &= -\int_M u~\mathcal L_XdV = -\int_M \int_0^{u(x)} dy ~\mathcal L_XdV\\
+&= -\int_0^\infty \int_{E_y} ~\mathcal L_XdV ~dy = \int_0^\infty \langle d1_{E_y}, X\rangle ~dy.
+\end{align*}
+by Fubini's theorem.
+If $y < 0$ then $1_{E_y} = 1$ so $d1_{E_y} = 0$, so we conclude (\ref{gradient is integral of fibers}).
+\end{proof}
+
+Throughout the rest of this section we will be interested in the trivial line bundle $L = M \times \RR$.
+Let $\eta = dV \wedge dy$ be the natural volume form on $L$, let $h$ be the natural metric, and let $p: L \to M$ be the natural projection.
+
+If $W$ is a vector field on $L$, we will write $W_1$ for the projection of $W$ onto $M$ and $W_2$ for its projection onto $\RR$.
+Then Cartan's magic formula implies that if $W_2$ is constant, then
+\begin{equation}
+\label{Lie derivative computation}
+\mathcal L_W\eta = \mathcal L_WdV \wedge dy.
+\end{equation}
+
+\begin{proposition}[coarea formula for $BV_l$ functions]\label{Coarea2}
+If $u \in BV_l(M)$ and $E_y = \{u \geq y\}$ then
+$$|du|_{TV} = \int_{-\infty}^\infty |d1_{E_y}|_{TV} ~dy.$$
+\end{proposition}
+\begin{proof}
+By Proposition \ref{Coarea1} and the triangle inequality, one has
+$$|du|_{TV} \leq \int_{-\infty}^\infty |d1_{E_y}|_{TV} ~dy.$$
+So we just need to prove the converse.
+
+Let $U \Subset M$.
+Suppose that
+\begin{quote}
+For every $y \in \RR$, $X = X^{(n)}_y$ is a maximizing sequence for $\langle d1_{E_y}, X\rangle$ subject to $\supp X \subset U$ and $||X||_{L^\infty} \leq 1$.
+\end{quote}
+Since $d 1_{E_y}$ is measurable in $y$ with respect to the weak topology of measures, for every $n$, $X^{(n)}_y(x)$ can be chosen to be measurable in $(x, y)$; indeed, we can take $X^{(n)}_y$ to be a smooth approximation to the Radon measure $d 1_{E_y}/|d 1_{E_y}|_{TV}$ in the weak topology of distributions, which is a product of the measurable functions $y \mapsto d 1_{E_y}$ and $y \mapsto |d 1_{E_y}|_{TV}^{-1}$.
+
+By an approximation argument, we can find test fields $W^{(n)}$ on $L$ such that $W^{(n)}_2 = 0$ and
+\begin{quote}
+For every $y \in \RR$, $X = W^{(n)}_1(\cdot, y)$ is a maximizing sequence for $\langle d 1_{E_y}, X\rangle$ subject to $\supp X \subset U$ and $||X||_{L^\infty} \leq 1$.
+\end{quote}
+Let us now suppress the $n$ and write $W(y) = W^{(n)}(\cdot, y)$.
+
+Suppose that
+\begin{equation}
+\label{coarea converse}
+\int_{-\infty}^\infty \langle d 1_{E_y}, W(y)\rangle ~dy \leq |d u|_{TV}(U)
+\end{equation}
+holds.
+Then, since $W$ has compact support, the integrand $\langle d 1_{E_y}, W(y)\rangle$ is uniformly bounded in $y$.
+Therefore, by Fatou's lemma,
+\begin{align*}
+\int_{-\infty}^\infty |d 1_{E_y}| ~dy &= \int_{-\infty}^\infty \lim_{n \to \infty} \langle d 1_{E_y}, W(y)\rangle ~dy \leq \liminf_{n \to \infty} \int_{-\infty}^\infty \langle d 1_{E_y}, W(y)\rangle ~dy \\
+&\leq |d u|_{TV}(U),
+\end{align*}
+which completes the proof.
+
+It remains to prove (\ref{coarea converse}).
+Let
+$$E = \{(x, y) \in L: x \in E_y\}$$
+be the undergraph of $u$.
+By Fubini's theorem and (\ref{Lie derivative computation}),
+\begin{align*}
+\int_{-\infty}^\infty \langle d 1_{E_y}, W(y)\rangle ~dy &= -\int_{-\infty}^\infty \int_{E_y} \mathcal L_WdV ~dy = -\iint_E ~\mathcal L_W\eta = \langle d 1_E, W\rangle.
+\end{align*}
+
+Let $(u_m)$ be a mollification of $u$, so that $u_m \to u$ in the weak topology of distributions.
+Then if $\chi$ is a cutoff, $\langle u_m, \chi\rangle \to \langle u, \chi\rangle$; taking a sequence of $\chi$ which increase to the indicator function of a compact set $K$, we conclude that $u_m \to u$ in $L^1(K)$, and hence $u_m \to u$ in $L^1_l$.
+
+Let $E^{(m)}$ be the undergraph of $u_m$, and $E^{(m)}_y = \{u_m \geq y\}$.
+Then for every test function $v$,
+\begin{align*}
+\langle 1_{E^{(m)}} - 1_E, v\rangle &= \int_{E^{(m)} \Delta E} v ~dV \leq |(E^{(m)} \Delta E) \cap (\supp v \times \RR)| \cdot ||v||_{L^\infty}\\
+&\leq ||v||_{L^\infty} \int_{\supp v} |u_m - u| ~dV \to 0
+\end{align*}
+so $1_{E^{(m)}} \to 1_E$ in the weak topology of distributions.
+Therefore
+$$\lim_{m \to \infty} \langle d 1_E^{(m)}, W\rangle = \langle d 1_E, W\rangle.$$
+
+Since $u_m$ is smooth, its graph $F_m = \partial E^{(m)}$ is a smooth manifold.
+Let $\nu_m$ be the upwards unit normal field of $F_m$ and let $dV_m$ be the volume form on $F_m$ induced by $\eta$.
+Then
+$$\langle d 1_{E^{(m)}}, W\rangle = -\iint_{E^{(m)}} \mathcal L_W\eta = -\int_{F_m} h(\nu_n, W) ~dV_m.$$
+Let $q_m = p|F_m$ and $Y_m$ be the vector field $(Y_m)_1 = -d u_m$, $(Y_m)_2 = 1$.
+Since $F_m$ is a graph, $q_m: F_m \to M$ is a diffeomorphism, $(q_m)_*\nu_m = Y_m/|Y_m|$, and $(q_m)_*dV_m = |Y_m|~dV$. Therefore
+$$\int_{F_m} h(\nu_n, W) ~dV_m = \int_M h(Y_m, W) ~dV = \int_M g(d u_m, W_1) ~dV = \langle d u_m, W_1\rangle.$$
+Thus
+$$|\langle d 1_E, W\rangle| = \lim_{m \to \infty} |\langle d u_m, W_1\rangle| \leq |d u|_{TV}(U),$$
+which completes the proof of (\ref{coarea converse}).
+\end{proof}
+
+Let us see how Proposition \ref{Coarea2} implies the classical coarea formula
+\begin{equation}
+\label{CoareaClassic}
+\int_M f |du| ~dV = \int_{-\infty}^\infty \int_{\{u = y\}} f ~dA ~dy
+\end{equation}
+for locally Lipschitz functions $u: M \to \RR$.
+Note that (\ref{CoareaClassic}) makes no sense if $u$ is merely a continuous function of locally bounded variation, as the Devil's staircase is a counterexample.
+
+\begin{lemma}\label{Rademacher manifold}
+If $\partial U$ is a Lipschitz hypersurface then $|d1_U|_{TV} = |d1_{\overline U}|_{TV}$ is the surface measure on $\partial U$ induced by $dV$.
+\end{lemma}
+\begin{proof}
+Given a test field $X$,
+$$\langle d1_U, X\rangle = -\int_U \mathcal L_XdV = -\int_{\partial U} g(X, \nu) ~dA.$$
+Thus if $V$ is open in $\partial U$,
+$$|d1_U|_{TV}(V) = \sup_{||X||_{L^\infty} \leq 1} \int_V g(X, \nu) ~dA = \int_V |\nu|_g^2 ~|dA| = \int_V ~|dA|$$
+as desired.
+Moreover, as $\partial U$ is locally the Lipschitz image of a hyperplane, $\partial U$ is null, so $1_U = 1_{\overline U}$ almost everywhere and hence in the sense of generalized sections.
+\end{proof}
+
+\begin{theorem}[coarea formula]
+If $u: M \to \RR$ is a locally Lipschitz function and $f \in L^1_l(M)$ then (\ref{CoareaClassic}) holds.
+\end{theorem}
+\begin{proof}
+By Rademacher's theorem, $du \in L^\infty_l(M, T'M)$, and $|du|$ is the Radon-Nikod\'ym derivative of $|du|_{TV}$.
+In particular, $f|du| \in L^1_l$.
+Moreover, the set $\{du = 0\}$ is null and so does not affect the left-hand side of (\ref{CoareaClassic}); after discarding this null set, $\{u = y\}$ becomes a Lipschitz hypersurface.
+Therefore Lemma \ref{Rademacher manifold} and Proposition \ref{Coarea2} immediately imply (\ref{CoareaClassic}).
+\end{proof}
+
+\begin{corollary}[integration in polar coordinates]\label{polar coords}
+If $f \in L^1_l(B(x, R))$ then
+\begin{equation}\label{polar coords formula}
+\int_{B(x, R)} f ~dV = \int_0^R \int_{\partial B(x, r)} f ~dA ~dr.
+\end{equation}
+\end{corollary}
+\begin{proof}
+Let $u(y) = d(x, y)$. Then the right-hand side of (\ref{polar coords formula}) is exactly the right-hand side of the classical coarea formula (\ref{CoareaClassic}).
+Moreover, $du|\partial B(x, r)$ is the unit conormal $1$-form to $\partial B(x, r)$, so $|du| = 1$.
+\end{proof}
+
+I think that, in particular, one can deduce coarea formulae for BV or Lipschitz maps between Riemannian manifolds from the above.
+But I haven't tried to do so.
+
+\subsection{Functions of least gradient}
+\begin{definition}
+Let $u \in BV_l(M)$. We say that $u$ has \dfn{least gradient} if for every $v \in BV_c(M)$ and $U \supseteq \supp v$,
+$$|d u|_{TV}(U) \leq |d u + d v|_{TV}(U).$$
+\end{definition}
+
+\begin{lemma}\label{least gradient splitting}
+If $u$ has least gradient and $u_1 = \max(u - \lambda_0, 0)$, $u_2 = \min(u, \lambda_0)$, then $u_1,u_2$ have least gradient.
+\end{lemma}
+\begin{proof}
+Let $\varphi_\lambda$ be the indicator function of $\{u \geq \lambda\}$, and similarly $\varphi_\lambda^{(j)}$ the indicator function of $\{u_j \geq \lambda\}$.
+By construction, $u_1,u_2 \in BV_l$.
+Moreover, viewing $d \varphi_\bullet^{(j)}$ as a function
+$$d \varphi_\bullet^{(j)}: \RR \to \mathcal R(M, TM)$$
+we see that $\supp d \varphi_\bullet^{(1)} \subseteq (-\infty, 0]$ and $\supp d \varphi_\bullet^{(2)} \subseteq [\lambda_0, \infty)$.
+Therefore $d \varphi_{\bullet + \lambda_0}^{(1)}$ and $d \varphi_\bullet^{(2)}$ have disjoint supports, and so
+$$d \varphi_{\bullet + \lambda_0}^{(1)} + d \varphi_\bullet^{(2)} = d \varphi_\bullet$$
+almost everywhere.
+So
+\begin{align*}
+|d u|_{TV}
+&=\int_{-\infty}^\infty |d \varphi_\lambda|_{TV} ~d\lambda\\
+&= \int_{-\infty}^\infty |d \varphi_{\lambda+\lambda_0}^{(1)}|_{TV} + |d \varphi_\lambda^{(2)}|_{TV} ~d\lambda \\
+&= \int_{-\infty}^\infty |d \varphi_\lambda^{(1)}|_{TV} ~d\lambda + \int_{-\infty}^\infty |d \varphi_\lambda^{(2)}|_{TV} ~d\lambda\\
+&= |d u_1|_{TV} + |d u_2|_{TV}
+\end{align*}
+by the coarea formula. Since $u$ has least gradient, for every $v \in BV_c$ and $U \subseteq \supp v$,
+\begin{align*}|d u_1|_{TV}(U) + |d u_2|_{TV}(U) &= |d u|_{TV}(U) \leq |d(u+v)|_{TV}(U) \\
+&\leq |d(u_j + v)|_{TV}(U) + |d u_{j'}|_{TV}(U)
+\end{align*}
+whenever $(j,j')$ is a permutation of $(1,2)$.
+Subtracting $|d u_{j'}|_{TV}(V)$ from both sides we conclude that if $j \in \{1, 2\}$,
+$$|d u_j|_{TV}(U) \leq |d(u_j + v)|_{TV}(U)$$
+so that $u_j$ has least gradient.
+\end{proof}
+
+Let us now show that the space of functions of least gradient is closed \cite[Teorema 3]{Miranda67}.
+
+\begin{definition}
+Let $(u_n)$ be a sequence in $BV_l(M)$. We say that a Lipschitz hypersurface $N$ is \dfn{good} for $(u_n)$ if:
+\begin{enumerate}
+\item \label{cond1Mir} $\sup_n |du_n|_{TV}(N) = 0$.
+\item \label{cond2Mir} $\limsup_n ||u_n||_{L^1(N)} < \infty$.
+\item \label{cond3Mir} If $u_n \to u$ in $L^1_l(M)$ and $u \in BV_l(M)$, then $|du|_{TV}(N) = 0$.
+\item \label{cond4Mir} If $u_n \to u$ in $L^1_l(M)$ and $u \in BV_l(M)$, then $u_n \to u$ in $L^1(N)$.
+\end{enumerate}
+By Condition $k$ we mean the $k$th bullet in the above list.
+\end{definition}
+
+\begin{lemma}\label{probabilistic method}
+Let $(u_n)$ be a sequence in $BV_l(M)$ which converges in $L^1_l(U)$. Then for every $x \in M$ and $R > 0$ such that $B(x, R) \Subset M$, there exists $r \in (0, R]$ such that $\partial B(x, r)$ is good.
+\end{lemma}
+\begin{proof}
+Let $I = [\varepsilon, R]$ for some (unimportant) $\varepsilon \in (0, R)$.
+Let $r$ be drawn from $I$ uniformly at random.
+We will show that almost surely, $B(x, r)$ is a good hypersurface.
+
+We first show that Conditions \ref{cond1Mir} and \ref{cond3Mir} hold almost surely.
+Let $A_n = \{|du_n|_{TV}(N) > 0\}$ and let $A_\infty = \{|du|_{TV}(N) > 0\}$.
+Then for every $n \in \NN \cup \{\infty\}$, writing $u_\infty = u$,
+$$\sum_{s \in A_n} |du_n|_{TV}(\partial B(x, s)) \leq |du_n|_{TV}(B(x, R)) < \infty$$
+since $|du_n|_{TV}$ is a Radon measure and $B(x, R) \Subset M$.
+Since each of the summands is nonzero by definition of $A_n$, it follows that $A_n$ is countable, and in particular null.
+
+We now show that Condition \ref{cond2Mir} holds almost surely.
+This follows from an integration in polar coordinates, Corollary \ref{polar coords}. In fact,
+$$E \limsup_{n \to \infty} ||u_n||_{L^1(\partial B(x, r))} = |I|^{-1} \limsup_{n \to \infty} ||u_n||_{L^1(B(x, R))} < \infty,$$
+since $(u_n)$ is bounded in $L^1_l$ and $B(x, R) \Subset M$.
+Therefore
+$$\limsup_n ||u_n||_{L^1(\partial B(x, r))} < \infty$$
+almost surely.
+
+Finally we show that Condition \ref{cond4Mir} holds almost surely.
+By another integration in polar coordinates,
+\begin{align*}\limsup_{n \to \infty} E ||u_n - u||_{L^1(\partial B(x, r))} &\leq E \limsup_{n \to \infty} ||u_n - u||_{L^1(\partial B(x, r))}\\
+&= \lim_{n \to \infty} \frac{||u_n - u||_{L^1(B(x, R))}}{|I|} = 0,
+\end{align*}
+since $B(x, R) \Subset M$.
+So $||u_n - u||_{L^1(\partial B(x, r))} \to 0$ almost surely.
+\end{proof}
+
+\begin{theorem}[Miranda's convergence theorem]\label{Miranda convergence}
+The space of functions of least gradient is closed in $L^1_l(M)$.
+\end{theorem}
+\begin{proof}
+Let $(u_n)$ be a sequence of functions of least gradient, and suppose $u_n \to u$ in $L^1_l(M)$.
+In particular, $(u_n)$ is bounded in $L^1_l$.
+
+Fix $U \Subset M$. Let us find $U \subseteq V \Subset M$ such that $\partial V$ is a good hypersurface.
+To find such a $V$, we first choose $U \Subset W \Subset M$, and for every $x \in \partial U$, let $R_x \in (0, d(x, \partial W))$.
+Then, by Lemma \ref{probabilistic method}, for every $x \in \partial U$, there exists $r_x \in (0, R_x)$ such that $\partial B(x, r_x)$ is a good hypersurface.
+Let $\mathcal U$ be the open cover of $\overline U$ given by the balls $B(x, r_x)$, as well as $U$ itself.
+Since $\overline U$ is compact, there exists a finite subcover $\mathcal U_0$ of $\mathcal U$.
+Let $V$ be the union of the sets in $\mathcal U_0$.
+Then $\partial V$ is a union of finitely many good spheres $\partial B(x, r_x)$, and therefore is good.
+
+Let $v_n = (1 - 1_V)u_n$.
+By the gluing Corollary \ref{gluing}, the fact that $u_n$ has least gradient, and Condition \ref{cond1Mir},
+$$|du_n|_{TV}(U) \leq |du_n|_{TV}(\overline V) \leq |dv_n|_{TV}(\overline V) = ||u_n||_{L^1(\partial V)}.$$
+Thus, by (\ref{RieszMarkovDistr}) and Condition \ref{cond2Mir},
+$$|du|_{TV}(U) \leq \limsup_{n \to \infty} |du_n|_{TV}(U) \leq \limsup_{n \to \infty} ||u_n||_{L^1(\partial V)} < \infty.$$
+Therefore $u \in BV_l(M)$.
+
+Since we have just shown $u \in BV_l(M)$, it remains to show that if $v \in BV_c(U)$, then
+$$|du|_{TV}(U) \leq |dv|_{TV}(U).$$
+Again using the gluing corollary, if we set
+$$v_n(x) = \begin{cases}
+v(x), &x \in V\\
+u_n(x), &x \notin V
+\end{cases}$$
+(where we use the support property of $v$ to extend $v$ by $0$ to all of $M$), then, by Condition \ref{cond3Mir},
+$$|dv_n|_{TV}(\overline V) = |dv|_{TV}(V) + \int_{\partial V} |u - u_n| ~dA.$$
+Since $u_n$ has least gradient, Condition \ref{cond1Mir} implies
+$$|du_n|_{TV}(V) = |du_n|_{TV}(\overline V) \leq |dv_n|_{TV}(\overline V) = |dv|_{TV}(V) + \int_{\partial V} |u - u_n| ~dA.$$
+By Condition \ref{cond4Mir} and (\ref{RieszMarkovDistr}), it follows that
+$$|du|_{TV}(U) \leq |du|_{TV}(V) \leq |dv|_{TV}(V) = |dv|_{TV}(U)$$
+as desired.
+\end{proof}
+
+\begin{definition}
+A \dfn{Caccioppoli set} is a Borel set $E \subseteq M$ such that $1_E \in BV_l(M)$.
+\end{definition}
+
+For example, if $E$ is $[0, 1/2] \cup [3/4, 7/8] \cup [15/16, 31/32] \cup \cdots$ then $|1_E'|_{TV}$ consists of Dirac masses at $1 - 2^{-j}$ for each $j$, and so is not Radon near $1$, so $E$ is not Caccioppoli.
+The idea is that $|d 1_E|_{TV}$ is a positive Radon measure on the boundary of $E$, which serves as a sort of ``perimeter measure" for $E$.
+
+\begin{definition}
+Let $E$ be a Caccioppoli set. We say that $\partial E$ has \dfn{least area}, or $E$ has \dfn{least perimeter}, if $1_E$ has least gradient.
+\end{definition}
+
+Let us give a sufficient condition for a set to have least perimeter \cite[Theorem 1]{BOMBIERI1969}.
+
+\begin{theorem}
+For every function $u$ of least gradient, every superlevel set of $u$ has least perimeter.
+\end{theorem}
+\begin{proof}
+Let $\varphi_\lambda$ be the indicator function of $\{u \geq \lambda\}$ and let
+$$\varphi_{\lambda,\varepsilon} = \min\left(1, \frac{\max(u - \lambda, 0)}{\varepsilon}\right).$$
+Then, since $\max(u - \lambda, 0)$ has least gradient, so does $\min(\max(u - \lambda, 0), \varepsilon)$, and so does $\varphi_{\lambda_\varepsilon}$; here we have repeatedly applied Lemma \ref{least gradient splitting}.
+
+First suppose that $\{u = \lambda\}$ is null. One has
+$$\varphi_{\lambda,\varepsilon} = \begin{cases}
+0, &u \leq \lambda\\
+\frac{u - \lambda}{\varepsilon}, &\lambda < u \leq \lambda + \varepsilon\\
+1, & u > \lambda + \varepsilon,
+\end{cases}$$
+and in particular $\varphi_{\lambda,\varepsilon}$ maps to $[0, 1]$. Thus for every $V \Subset U$,
+$$\int_V |\varphi_{\lambda,\varepsilon} - \varphi_\lambda| = \int_{V \cap \{\lambda \leq u < \lambda + \varepsilon\}} \left|\frac{u - \lambda}{\varepsilon} - 1\right| \leq |V \cap \{\lambda \leq u < \lambda + \varepsilon\}|.$$
+Since $|V| < \infty$ and $|\{u = \lambda\}| = 0$, the right-hand side goes to $0$; since $V$ was arbitrary, $\varphi_{\lambda,\varepsilon} \to \varphi_\lambda$ in $L^1_l$.
+So by Miranda's convergence theorem, Theorem \ref{Miranda convergence}, $\varphi_\lambda$ has least gradient (in particular, $\{u \geq \lambda\}$ is Caccioppoli).
+
+Now consider the case of general $\lambda$.
+There are only countably many $\lambda'$ with $|\{u = \lambda'\}| > 0$, so we can find a sequence of $\lambda_m < \lambda$ which increase to $\lambda$ such that $\{u = \lambda_m\}$ is null.
+Thus, by the previous case, $\varphi_{\lambda_m}$ has least gradient.
+For every $V \Subset U$,
+$$\int_V |\varphi_{\lambda_m} - \varphi_\lambda| = |\{\lambda_m \leq u < \lambda\}|$$
+which goes to $0$ as $m \to \infty$. Therefore by Miranda's convergence theorem, $\varphi_\lambda$ has least gradient.
+\end{proof}
+
+
+
+
+\section{Garbage}
+
+Suppose that $u$ is a smooth function of least gradient on $U$ which is almost everywhere nonstationary in the sense that $|\nabla u|$ is nonzero almost everywhere.
+Then, by definition, $u$ minimizes the action
+$$I(u) = \int_U |\nabla u|$$
+subject to a Dirichlet condition and so solves the Euler-Lagrange equation
+\begin{equation}
+\label{strong Euler-Lagrange}
+\nabla \cdot \frac{\nabla u}{|\nabla u|} = 0.
+\end{equation}
+Conversely, $|x|$ is convex in $x$, so if $u$ is a smooth solution to (\ref{strong Euler-Lagrange}), then $u$ has least gradient.
+We now show that the integral form of (\ref{strong Euler-Lagrange}) characterizes locally Sobolev minimizers of $I$ \cite[Lemma 1]{BOMBIERI1969}.
+
+\begin{theorem}
+Let $u \in W^{1,1}_l(U)$ be almost everywhere nonstationary, and let $N \subseteq U$ be a closed set such that $\mathcal H^{d-1}(N) = 0$.
+If, for every $\varphi \in C^1_c(U \setminus N)$,
+\begin{equation}
+\label{weak Euler-Lagrange}
+\int_{U \setminus N} |\nabla u(x)|^{-1} \langle \nabla u(x), \nabla \varphi(x)\rangle ~dx = 0,
+\end{equation}
+then $u$ has least gradient.
+\end{theorem}
+\begin{proof}
+We will prove that for every $v \in BV_c(U)$ with support $K$,
+\begin{equation}
+\label{condition for least gradient}
+\int_K |\nabla u| \leq \int_K |\nabla u + \nabla v|.
+\end{equation}
+First suppose that $N$ is empty and $v \in C_c$. Integrating (\ref{weak Euler-Lagrange}) by parts we arrive at (\ref{strong Euler-Lagrange}).
+Therefore $u$ is a minimizer of $I$, so (\ref{condition for least gradient}) holds.
+
+Now suppose that $v \in C^1_c(U)$; it follows from the hypothesis on $N$ that $\mathcal H^{n-1}(N \cap K) = 0$.
+Since $N$ is closed, $N \cap K$ is compact, so for every $\varepsilon > 0$ there is an open cover $\mathcal B$ of $N \cap K$ by finitely many balls such that
+$$\sum_{B \in \mathcal B} (\rad B)^{d - 1} < \varepsilon.$$
+Given $B \in \mathcal B$, let $\alpha_B$ be the linear extrapolation of the function which is $1$ on $U \setminus 2B$ and $0$ on $B$.
+Let $\alpha$ be a mollification of $\min_B \alpha_B$. Then $\alpha v = 0$ on a neighborhood of $N$ and $\alpha v \in C^1_c$. Thus, by the previous case,
+$$\int_K |\nabla u| \leq \int_K |\nabla(u + \alpha v)| \leq \int_K |\nabla (u + v)| + (1-\alpha)|\nabla v| + |v||\nabla \alpha|.$$
+We bound
+$$\int_K (1-\alpha)|\nabla v| \leq ||v||_{C^1} \int_K (1 - \alpha) \leq ||v||_{C^1} \sum_{B \in \mathcal B} |2B|.$$
+Since $|2B| \lesssim (\rad B)^d$ and $\sum_B (\rad B)^{d - 1} < \varepsilon$, this sum is $\ll \varepsilon$.
+Similarly, we have
+$$\int_K |v||\nabla \alpha| \leq ||v||_{C^1} \sum_{m=1}^M \int_{2B_m \setminus 2B_1 \cup \cdots \cup 2B_{m - 1}} |\nabla \alpha| \lesssim \sum_{B \in \mathcal B} (\rad B)^{d - 1} < \varepsilon.$$
+Thus
+$$\int_K |\nabla u| \leq \int_K \lim_{\varepsilon \to 0} |\nabla (u + \alpha v)| \leq \int_K |\nabla (u + v)|$$
+which implies (\ref{condition for least gradient}).
+
+In the general case, $v \in BV_l(U)$, so $\nabla v$ has a Radon-Nikod\'ym-Lebesgue decomposition
+$$\nabla v = w_1 + w_2$$
+where $w_1$ is absolutely continuous and $w_2$ is zero almost everywhere.
+Since $u$ is locally Sobolev, we may assume that $\nabla u = 0$ on $\supp w_2$, thus
+$$\int_K |\nabla(f + g)| = \int_K |\nabla u + w_1| + \int_K |w_2|.$$
+Let $\psi_\varepsilon$ be a standard mollifier, $K_\varepsilon = \{x \in A: d(x, K) < \varepsilon\}$; then
+$$\int_{K_\varepsilon} |\nabla f| \leq \int_{K_\varepsilon} |\nabla (f + g * \psi_\varepsilon)| \leq \int_{K_\varepsilon} |\nabla u + w_1 * \psi_\varepsilon| + \int_A |w_2 * \psi_\varepsilon|.$$
+Taking $\varepsilon \to 0$, we get $w_1 * \psi_\varepsilon \to w_1$ and $w_2 * \psi_\varepsilon \to w_2$ in the weak topology of distributions, thus
+$$\int_K |\nabla f| \leq \int_K |\nabla u + w_1| + \int_K |w_2|$$
+which was to be shown.
+\end{proof}
+NOTE: I don't think we actually need this!
+
+
+\subsection{The coarea formula}
+We now prove a coarea formula due to Miranda \cite[Teorema 1.6]{Miranda66}.
+
+The following lemma is also due to Miranda \cite[Proposizione 1.9]{Miranda64}.
+\begin{lemma}\label{Miranda coarea baby}
+Let $u \in BV_l(M)$ and $E = \{(x, y) \in M \times \RR: y \leq u(x)\}$.
+Then for every $U \Subset M$,
+$$|\nabla u|_{TV}(U) = |\nabla_x 1_E|_{TV}(U \times \RR).$$
+\end{lemma}
+\begin{proof}
+The triangle inequality applied to Corollary implies
+$$|\nabla u|_{TV}(U) \leq \int_{-\infty}^\infty |\nabla 1_{E_y}|_{TV}(U).$$
+\end{proof}
+
+We will also need a variant of Fubini's theorem due to Miranda \cite[Teorema 3.3]{Miranda64}.
+The point is that $\nabla_x 1_E$ is just a Radon measure, rather than an honest function, so we cannot just directly apply Fubini's theorem.
+\begin{lemma}[Fubini-Miranda theorem]\label{Fubini Miranda}
+Let $f \in BV_l(U)$ and $E = \{(x, \lambda) \in U \times \RR: \lambda \leq f(x)\}$.
+Let $E_\lambda = \{x \in U: (x, \lambda) \in E\}$.
+Then for every $V \Subset U$,
+$$|\nabla_x 1_E|_{TV}(V \times \RR) = \int_{-\infty}^\infty |\nabla 1_{E_\lambda}|_{TV}(V) ~d\lambda.$$
+\end{lemma}
+TODO Get the statement of this right (probably the integral in $d\lambda$ is an honest integral). Proof. Obviously this works without using Lebesgue measure.
+
+\begin{theorem}[Miranda's coarea formula]\label{Miranda coarea}
+Suppose that $f \in BV_l(U)$, let $E_\lambda = \{f \geq \lambda\}$ denote the superlevel sets of $f$, and let $\varphi_\lambda$ be the indicator function of $E_\lambda$.
+Then for almost every $\lambda$, $\varphi_\lambda \in BV_l(U)$, and for every $V \Subset U$,
+$$|\nabla f|_{TV}(V) = \int_{-\infty}^\infty |\nabla \varphi_\lambda|_{TV}(V) ~d\lambda.$$
+\end{theorem}
+\begin{proof}
+This is just an immediate concatenation of Lemmata \ref{Miranda coarea baby} and \ref{Fubini Miranda}.
+\end{proof}
+
+
+A useful corollary of Theorem \ref{Miranda IBP} is a relationship between the total variation and the $L^1$ norm:
+\begin{corollary}\label{IBP TV}
+Let $U \Subset M$, $u \in BV_l(M)$, and suppose that $\partial U$ is a Lipschitz hypersurface such that $|\nabla u|_{TV}(\partial U) = 0$.
+Let $\tilde u = (1 - 1_U)u$. Then
+$$|\nabla \tilde u|_{TV}(U) = ||u||_{L^1(\partial U)}.$$
+\end{corollary}
+\begin{proof}
+Let $U_\varepsilon = \{x \in U: d(x, U) < \varepsilon\}$.
+By Theorem \ref{Miranda IBP},
+\begin{equation}
+\label{Miranda IBP cor app}
+\langle \nabla \tilde u, X\rangle_{U_\varepsilon} + \int_{U_\varepsilon} \tilde u~\mathcal L_XdV = \int_{\partial U_\varepsilon} g(\tilde u X, \nu) ~dA.
+\end{equation}
+We treat each of the terms in (\ref{Miranda IBP cor app}) in turn.
+
+Letting $X$ range over test fields on $M$,
+$$\sup_{||X||_{L^\infty} \leq 1} \langle \nabla \tilde u, X\rangle_{U_\varepsilon} = |\nabla \tilde u|_{TV}(U_\varepsilon).$$
+However, $\bigcap_{\varepsilon > 0} U_\varepsilon = \overline U$, so
+$$\lim_{\varepsilon \to 0}\sup_{||X||_{L^\infty} \leq 1} \langle \nabla \tilde u, X\rangle_{U_\varepsilon} = |\nabla \tilde u|_{TV}(\overline U).$$
+
+For every test field $X$ on $M$,
+$$\left|\int_{U_\varepsilon} \tilde u \mathcal L_XdV\right| \leq ||\nabla X||_{L^\infty} \int_{U_\varepsilon \setminus U} |u| ~dV$$
+which vanishes as $\varepsilon \to 0$, since $\bigcap_\varepsilon U_\varepsilon \setminus U = \partial U$, which is null.
+
+Letting $X$ range over test fields on $M$ and $\sigma$ range over measurable signs
+$$\sigma: \partial U_\varepsilon \to \{-1, 1\},$$
+we have
+\begin{align*}
+\int_{\partial U_\varepsilon} |u| ~dA &= \sup_\sigma \int_{\partial U_\varepsilon} \sigma u |\nu|_g^2 ~dA = \sup_{||X||_{L^\infty} \leq 1} \int_{\partial U_\varepsilon} g(uX, \nu) ~dA\\
+&= \sup_{||X||_{L^\infty} \leq 1} \int_{\partial U_\varepsilon} g(uX, \nu) ~dA = \sup_{||X||_{L^\infty} \leq 1} \int_{\partial U_\varepsilon} g(\tilde uX, \nu) ~dA.
+\end{align*}
+To see this, we choose $\sigma = \sgn u$ to maximize in $\sigma$, choose a sequence of $X_n$ which converge to $\sigma$ pointwise, and apply the dominated convergence theorem.
+We then apply the fact that $u = \tilde u$ on $\partial U_\varepsilon$, a set which does not meet $U$.
+
+Plugging the previous three paragraphs into (\ref{Miranda IBP cor app}) and taking $\varepsilon \to 0$, we conclude the claim.
+\end{proof}
+
+
+\printbibliography
+
+
+\end{document}

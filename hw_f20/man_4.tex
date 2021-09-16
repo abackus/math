@@ -1,0 +1,274 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Smooth manifolds, HW 3} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[Lee 5.1]
+Show that
+$$\Phi(x, y, s, t) = (x^2 + y, x^2 + y^2 + s^2 + t^2 + y)$$
+has $(0, 1)$ as a regular value whose level set is diffeomorphic to $S^2$.
+\end{exer}
+
+The Jacobian is
+$$d\Phi(x, y, s, t) = \begin{bmatrix} 2x & 1 & 0 & 0 \\ 2y & 2y + 1 & 2s & 2t \end{bmatrix}$$
+and the preimage $K$ of $(0, 1)$ satisfies the equations
+\begin{align*}
+x^2 + y &= 0 \\
+x^2 + y^2 + s^2 + t^2 + y &= 1.
+\end{align*}
+Now if $(x, y, s, t) \in K$, and $x = 0$, then $y = 0$ as well, so
+$$d\Phi(0, 0, s, t) = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 1 & 2s & 2t \end{bmatrix}$$
+and $(s, t)$ is nonzero, so $(1, 1)$ is either linearly independent of $(0, 2s)$ or $(0, 2t)$.
+Either way $ d\Phi(0, 0, s, t) $ has rank $2$.
+If $x \neq 0$, then also $y \neq 0$, and the Jacobian takes the form
+$$d\Phi(x, y, s, t) = \begin{bmatrix} 2x & 1 & 0 \\ 2y & 2y + 1 & * \end{bmatrix};$$
+since $x,y$ are nonzero, $(2x, 2x)$ is not in the span of $(2y, 2y+1)$, and so those columns are linearly independent.
+Again $d\Phi(x, y, s, t)$ has rank $2$. So $\Phi$ admits $(0, 1)$ as a regular value.
+
+Let
+$$\sigma(x, y, s, t) = (x, s, t).$$
+Then $\sigma|K$ is injective since $y = -x^2$ is determined by $x$, and clearly smooth since it is a projection.
+Since $y^2 + s^2 + t^2 = 1$ we have $x^4 + s^2 + t^2 = 1$.
+The inverse of $\sigma$ is also easily seen to be smooth.
+Thus $\sigma$ gives a diffeomorphism from $K$ to the manifold $L$ defined by $x^4 + y^2 + z^2 = 1$ in $\RR^3$.
+We must give a diffeomorphism $\kappa: L \to S^2$. Writing $L$ in polar coordinates $r\Theta$, where $r > 0$ and $\Theta \in S^2$, the map $\kappa(r\Theta)= \Theta$ is clearly a smooth bijection, and the map $\kappa^{-1}(x, y, z) = \sqrt{x^4 + y^2 + z^2}$ that is its inverse is also smooth.
+
+\begin{exer}[Lee 5.32]
+Show that if $S$ is an immersed submanifold, the smooth structure on $S$ is unique.
+\end{exer}
+
+Let $i: S \to M$ be an injective immersion.
+We must show that we can recover the smooth structure on $S$ from $i$.
+Let $\mathcal A$ be the set of all commutative diagrams
+$$\begin{tikzcd}
+&S \arrow[dr,"i"] \\
+U \arrow[ur] \arrow[rr,"\varphi"] && M
+\end{tikzcd}$$
+where the map $U \to S$ is a smooth chart, $U \subseteq \RR^d$ is an open set, and we identify $\varphi$ with the diagram in question.
+Then $\varphi$ is an injective immersion of $U$ in $M$ which factors through $i$, since it is the composite of two immersions.
+Conversely, if $\varphi$ is an injective immersion which factors through $i$ whose domain $U$ is an open subset of $\RR^d$, then $\varphi^{-1} \circ i$ is a chart from $\varphi(U) \subseteq S$ to $U$, and so $\varphi \in \mathcal A$.
+
+So $\mathcal A$ is the smooth structure of $S$, in the sense that if $\varphi$ is a diagram in $\mathcal A$, then $\varphi^{-1} \circ i$ is a chart, and $\mathcal A$ is the maximal atlas containing all such charts.
+Meanwhile, if one tried to construct another smooth structure $\mathcal B$ on $S$, say by letting $\psi: U \to S$ be a chart and setting $\psi \in \mathcal B$, then $i \circ \psi$ would be an injective immersion $U \to M$ which factors through $i$. Therefore $i \circ \psi \in \mathcal A$.
+So $\mathcal B \subseteq \mathcal A$, and by maximality $\mathcal B = \mathcal A$.
+
+\begin{exer}[Lee 6.4]
+Let $M$ be a manifold, $B \subseteq M$ closed, and $\delta: M \to (0, \infty)$ continuous.
+Given $f: M \to \RR^k$ continuous, show that there is a $\tilde f: M \to \RR^k$ which is smooth on $M \setminus B$ such that $f|B = \tilde f|B$ and $|f - f'| < \delta$.
+Show also that if $N$ is a manifold and $F: M \to N$ is continuous, then $F$ is homotopic relative to $B$ to a map that is smooth on $M \setminus B$.
+\end{exer}
+
+\begin{theorem}
+If $f: M \to \RR^k$ is a continuous map, then there is a $\tilde f: M \to \RR^k$ which is smooth on $M \setminus B$ such that $f|B = \tilde f|B$ and $|f - f'| < \delta$.
+\end{theorem}
+\begin{proof}
+Multiplying by a suitable Urysohn function, we may replace $\delta$ with a continuous function with support on $\overline{M \setminus B}$ which is $\leq \delta$, and hence assume $\delta = 0$ on $B$.
+
+Since $M \setminus B$ is an open submanifold of $M$, let $\mathcal U$ be a smooth atlas of $M \setminus B$ of open sets.
+Let $U \in \mathcal U$.
+
+We now smooth $f$ on $U$, supposing that $k = 1$. Without loss of generality, assume that $U$ is (related by a chart to a) bounded subset of $\RR^n$.
+Recall that the standard mollifier on $\RR^n$ is defined by the relations
+$$\eta(x) = C \exp(1/(|x|^2-1))$$
+on $|x| < 1$, $\eta(x) = 0$ otherwise, and $\int_{\RR^n} \eta(x)~dx = 1$.
+Then we set $\eta_\varepsilon(x) = \varepsilon^{-n} \eta(x/\varepsilon)$.
+The support of $\eta_\varepsilon$ is contained in $B(0, \varepsilon)$ and $\eta_\varepsilon$ is smooth.
+We then set the mollification $f_\varepsilon$ of $f$ to be
+$$f_\varepsilon(x) = \int_{B(0, \varepsilon)} \eta_\varepsilon(y) f(x - y)~dy.$$
+Since $f_\varepsilon$ is a convolution with a smooth function, $f_\varepsilon$ is smooth.
+If $x \in U$ then
+$$|f_\varepsilon(x) - f(x)| \leq \varepsilon^{-n} \int_{B(x, \varepsilon)} \eta\left(\frac{x-y}{\varepsilon}\right) |f(y) - f(x)|~dy \lesssim \dashint_{B(x, \varepsilon)} |f(y) - f(x)|~dx$$
+where $\dashint$ denotes an average, the implied constant only depends on $n$, not $x$ or $\varepsilon$, and $\varepsilon$ is assumed so small that $B(x, \varepsilon) \subseteq U \subseteq \RR^n$.
+
+But if $K \subset U$ is compact, then the limit
+$$0 = \lim_{\varepsilon \to 0} \dashint_{B(x, \varepsilon)} |f(y) - f(x)|~dx$$
+holds uniformly for $x \in K$. Moreover, since $\delta$ is continuous, there is an $\eta_K > 0$ such that $\delta|K > \eta_K$.
+So we may choose $\varepsilon$ so small that
+$$|f_\varepsilon(x) - f(x)| < \eta_K$$
+whenever $x \in K$.
+
+In particular, the above holds for $K = \overline{U_i} = \{x \in U: d(x, \partial U) \in [1/i, 1/(i+2)]\}$, which is compact if it is nonempty since $U$ is precompact, as well as $K = \overline{U_0} = \{x \in U: d(x, \partial U) \geq 3/4\}$.
+Then the interiors $U_i$ of the $\overline U_i$ form an open cover of $U$, and so
+$$\{U_i: i \in \NN, ~U \in \mathcal U\}$$
+forms an open cover of $M \setminus B$. Let $\{\chi_{U_i}\}_{U,i}$ be a subordinate partition of unity.
+Let $f_{U_i} = f_\varepsilon$ on $U$, where $\varepsilon$ was chosen to satisfy the condition in the previous paragraph on $\eta_K$ with $K = \overline{U_i}$.
+Then $|f_{U_i} - f| < \delta$ on $\overline{U_i}$ and $\chi_{U_i} f_{U_i}$ has support in $U_i$. So let $\tilde f = \sum_{U,i} \chi_{U_i} f_{U_i}$.
+Then $|\tilde f - f| < \delta$ on $M \setminus B$ and $\tilde f$ is smooth on $M \setminus B$.
+In particular, $|\tilde f(x) - f(x)| \to 0$ as $x \to \partial B$.
+That implies that $\tilde f - f$ extends by $0$ to a continuous function on $M$.
+So setting $\tilde f = f$ on $B$ gives a continuous function.
+
+The above argument presupposed that $k = 1$; we can remove this assumption by running the same argument in each component of $f$, with $\delta$ replaced by $\delta/k$.
+\end{proof}
+
+\begin{theorem}
+Let $N$ be a manifold. If $F: M \to N$ is a continuous map, then $F$ is homotopic relative to $B$ to a map that is smooth on $M \setminus B$.
+\end{theorem}
+\begin{proof}
+By the Whitney embedding theorem, we can find an embedding $N \to \RR^k$, and assume that $N \subseteq \RR^k$.
+Let $U$ be a tubular neighborhood of $N$ of radius $\delta$, and let $\tilde F$ be as in the previous problem.
+Then $\tilde F$ maps $M$ into $U$, and $\tilde F|B = F|B$ maps $B$ into $N$.
+By retracting $U$ into $N$ we can smoothly homotopy $\tilde F$ to a map $G: M \to N$, such that $G = F$ on $B$.
+\end{proof}
+
+\begin{exer}[Exer 6.5]
+Let $M \subseteq \RR^n$ be a submanifold. Show that $M$ has a tubular neighborhood $U$ with natural retraction $r: U \to M$ such that for every $y \in U$, $r(y)$ is the closest point in $M$ to $y$.
+\end{exer}
+
+Let $V$ be an arbitrary tubular neighborhood of $M$ in $\RR^n$. Let $\delta(x)$ be the radius of $V$ around $x \in M$; then $\delta$ is continuous.
+
+\begin{lemma}
+Let $y \in V$ and suppose that the closest point to $y$ in $M$ is $x$. Then $y - x$ is a normal vector to $x$.
+\end{lemma}
+\begin{proof}
+Let $\gamma$ be a curve from $x$. Then $\gamma'(0)$ is a tangent vector to $x$.
+Since $y$ is a closest point,
+$$0 = |x - y|^2 = 2\langle y - x, \gamma'(0)\rangle.$$
+Therefore $y - x$ is orthogonal to $\gamma'(0)$.
+Since any tangent vector can be written as the derivative of a curve, this is as desired.
+\end{proof}
+
+Now fix $x \in M$ and consider the ball $B(x, \delta(x)) \subseteq V$. Let $D(q, r) = B(q, r) \cap M$.
+Since $V$ is tubular, if $z \in B(x, \delta(x))$ then $r(z) \in D(x, \delta(x))$.
+
+Now if we take $y \in B(x, \delta(x)/2)$, and $z$ is a closest point in $M$ to $y$, it follows that $z \in D(x, \delta(x))$, by the triangle inequality.
+So by the lemma, there is a normal vector $v$ to $z$ such that $z + v = y$.
+Thus if there are two such closest points $z_1,z_2$, with normal vectors $v_1,v_2$, then one has $z_1 + v_1 = z_2 + v_2$.
+But the map $E$ relating the normal bundle to $V$ is injective since $\delta$ is sufficiently small; therefore $z_1 = z_2$.
+Therefore $z$ is the unique point in $M$ such that $y$ is in the normal space to $z$; so $r(z) = y$.
+
+\end{document}

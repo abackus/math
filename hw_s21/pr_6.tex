@@ -1,0 +1,337 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\DeclareMathOperator{\Cov}{Cov}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability II, HW 5} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $X$ be a local martingale, $X_0 = 0$, and $T$ a stopping time such that $\langle X\rangle_T = 0$ almost surely.
+Show that $X^T = 0$ almost surely.
+\end{exer}
+
+We first need two facts about local martingales.
+
+\begin{lemma}
+\label{stopping time of quadratic variation}
+Let $Y$ be a local $L^2$ martingale. Then for every stopping time $\tau$, $\langle Y^\tau \rangle = \langle Y \rangle^\tau$.
+\end{lemma}
+\begin{proof}
+Let $\tau_j$ be witnesses that $Y$ is a local martingale.
+By optional stopping,
+$$Y^2_{t \wedge \tau \wedge \tau_j} - \langle Y\rangle_{t \wedge \tau \wedge \tau_j} = (Y^{\tau \wedge \tau_j}_t)^2 - \langle Y\rangle_t^{\tau \wedge \tau_j}$$
+is a martingale. By uniqueness of quadratic variation we conclude that $\langle Y\rangle^{\tau \wedge \tau_j} = \langle Y^{\tau \wedge \tau_j}\rangle$.
+The quadratic variation is increasing, so we can use monotone converge to take the limit as $j \to \infty$ and eliminate the dependence on $\tau_j$.
+\end{proof}
+
+\begin{lemma}
+\label{local quadratic variation}
+$X^2 - \langle X\rangle$ is a local martingale with the same witnesses as $X$.
+\end{lemma}
+\begin{proof}
+Suppose that $\tau_j$ are witnesses that $X$ is a local martingale.
+Then $X^{\tau_j}$ is a martingale, so $(X^{\tau_j})^2 - \langle X^{\tau_j}\rangle$ is a martingale.
+By Lemma \ref{stopping time of quadratic variation},
+$$(X^{\tau_j})^2 - \langle X^{\tau_j} \rangle = (X^2 - \langle X\rangle)^{\tau_j}$$
+so $(X^2 - \langle X\rangle)^{\tau_j}$ is a martingale.
+\end{proof}
+
+Let $t$ be a rational number.
+By monotone convergence and Lemma \ref{stopping time of quadratic variation},
+$$\lim_{t \to \infty} \langle X^T \rangle_t = \langle X \rangle_T = 0$$
+but $\langle X^T\rangle$ is an increasing process, so $0 \leq \langle X^T\rangle \leq 0$ and thus $\langle X^T \rangle = 0$.
+Therefore Lemmata \ref{stopping time of quadratic variation} and \ref{local quadratic variation} imply that $(X^T)^2$ is a local martingale, with the same witnesses as $X$.
+So let $\tau_j$ be witnesses that $X$ is a local martingale; then
+$$\Var X_{t \wedge \tau_j}^T = E(X_{t \wedge \tau_j \wedge T}^2) - (EX_{t \wedge \tau_j \wedge T})^2 = E(X_0^2) - (EX_0)^2 = 0 - 0 = 0.$$
+Taking the limit as $j \to \infty$ using Fatou's lemma, we conclude that $\Var X_t^T = 0$.
+
+So it is almost surely true that for every rational $t$, $X_t^T = 0$.
+But by Doob regularization, we may assume that every sample path of $X$ is rcll, so for every $t \geq 0$ we can find rational numbers $t_n$ that decrease to $t$, and that satisfy
+$$X_t^T = \lim_{t_n \to t} X_{t_n}^T = 0.$$
+Therefore $X^T = 0$.
+
+\begin{exer}
+Let $B$ be a standard Brownian motion, $\mu > 0$, $b < 0$, and
+$$X_t = B_t + \mu t.$$
+Show that the probability that $X$ ever reaches $b$ is $e^{2\mu b}$.
+\end{exer}
+
+Define
+$$M_t = \exp(2\mu B_t - 2\mu^2 t).$$
+Then
+\begin{align*}
+E(M_t|\mathcal F_s) &= E\exp(2\mu B_s - 2\mu^2 s) E\exp(2\mu B_{t - s} - 2\mu^2 (t - s))\\
+&= M_s E(e^{2\mu B_{t-s}})  e^{-2\mu^2(t - s)} = M_s.
+\end{align*}
+Here we used the fact that $B_{t - s} \sim N(0, (t-s)^2)$ and so we may apply the formula
+$$E(e^{\theta B_{t - s}}) = e^{\theta^2 (t - s)^2/2}$$
+for the moment-generating function of $N(0, (t - s)^2)$, with $\theta = 2\mu$.
+Therefore $M$ is a martingale.
+Furthermore, $M_t = e^{-2\mu b}$ iff $B_t = -\mu t + b$, which happens iff $X_t = b$.
+Therefore the first hitting time $\tau$ of $X_t = b$ is also the first hitting time of $M_t = e^{-2\mu b}$, and we are interested in $\PP(\tau < \infty)$.
+Then for every $t \geq 0$,
+$$0 \leq M_{\tau \wedge t} \leq e^{-2\mu b},$$
+so by optional stopping, $M_\tau$ is well-defined and $EM_\tau = EM_0 = 1$.
+On the other hand, since $B_t = o(t)$ almost surely, we in particular have
+$$\lim_{t \to \infty} B_t - \mu t = -\infty$$
+almost surely, hence
+$$\lim_{t \to \infty} M_t = \exp\left(2\mu \lim_{t \to \infty} B_t - \mu t\right) = 0$$
+almost surely. So
+$$EM_\tau = \begin{cases}
+0, &\tau = \infty\\
+e^{-2\mu b}, &\tau < \infty
+\end{cases},$$
+but since $EM_\tau = 1$, it then must be the case that
+$$\PP(\tau < \infty) = e^{2\mu b},$$
+which is what we wanted to show.
+
+
+
+\begin{exer}
+Let $B$ be a standard Brownian motion, $\Pi = (t_0, \dots, t_n)$ a partition of $[0, T]$, $\epsilon \in [0, 1]$, and consider
+$$S_\epsilon(\Pi) = \sum_{i=0}^{n-1} ((1 - \epsilon)B_{t_i} + \epsilon B_{t_{i+1}})(B_{t_{i+1}} - B_{t_i}).$$
+Show that
+$$\lim_{||\Pi|| \to 0} S_\epsilon(\Pi) = \frac{B_T^2}{2} + (\epsilon - 0.5)T$$
+in $L^2$.
+\end{exer}
+
+Given $\Pi$ and $\epsilon$, let $Q_i = ((1 - \epsilon)B_{t_i} + \epsilon B_{t_{i+1}})$ and let $\Delta B_{t_i} = B_{t_{i+1}} - B_{t_i}$.
+Untelescoping the sum, we compute
+\begin{align*}
+S_\epsilon(\Pi) - \frac{B_T^2}{2} &= -\frac{B_T^2}{2} + \sum_{i < n} Q_i \Delta B_{t_i}\\
+&= \sum_{i < n} \frac{B_{t_i}^2}{2} + B_{t_{i+1}}Q_i - \frac{B_{t_{i+1}}^2}{2} - Q_i B_{t_i}\\
+&= \sum_{i < n} B_{t_{i+1}} B_{t_i} - \frac{B_{t_{i+1}}}{2} - \frac{B_{t_i}}{2} + Q_i^2 \\
+&\qquad \qquad- 2Q_iB_{t_i} + B_{t_i} + B_{t_{i+1}}Q_i - B_{t_{i+1}}B_{t_i} - Q_i^2 + B_{t_i}Q_i\\
+&= -\sum_{i < n} (B_{t_{i+1}} - B_{t_i})^2 + \sum_{i < n} (Q_i - B_{t_i})^2 + \sum_{i < n} (B_{t_{i+1}} - Q_i)(Q_i - B_{t_i}).
+\end{align*}
+
+We must now show that
+$$\lim_{||\Pi|| \to 0} -\frac{1}{2}\sum_{i < n} (\Delta B_{t_i})^2 + \sum_{i < n} (Q_i - B_{t_i})^2 + \sum_{i < n} (B_{t_{i+1}} - Q_i)(Q_i - B_{t_i}) = (\epsilon - 0.5)T$$
+in $L^2$.
+Let $\Delta t_i = t_{i+1} - t_i$.
+
+Treating the first term,
+\begin{align*}
+\left(-T + \sum_{i < n} (\Delta B_{t_i})^2 \right)^2 &= \left(\sum_{i < n} (\Delta B_{t_i})^2 - \Delta t_i\right)^2\\
+&= \sum_{i,j < n} \left((\Delta B_{t_i})^2 - \Delta t_i \right)\left((\Delta B_{t_j})^2 - \Delta t_j \right).
+\end{align*}
+For now, assume $i \neq j$. Then the factors $\Delta B_{t_i}^2 - \Delta t_i$ are independent, and since $\Delta B_{t_i} \sim N(0, \Delta t_i)$, $E\Delta B_{t_i}^2 = \Delta t_i$, so that
+\begin{align*}
+E\left((\Delta B_{t_i})^2 - \Delta t_i \right)\left((\Delta B_{t_j})^2 - \Delta t_j \right) &= E\left((\Delta B_{t_i})^2 - \Delta t_i \right)E\left((\Delta B_{t_j})^2 - \Delta t_j \right) = 0.
+\end{align*}
+Thus
+\begin{align*}
+E\left(-T + \sum_{i < n} (\Delta B_{t_i})^2 \right)^2 &= \sum_{i < n} E(\Delta B_{t_i}^2 - \Delta t_i)^2 \\
+&= \sum_{i < n} E((\eta_i - 1)^2 \Delta t_i^2)
+\end{align*}
+where
+$$\eta_i = \frac{\Delta B_{t_i}}{\sqrt{\Delta t_i}} \sim N(0, 1).$$
+Thus we have a bound
+\begin{align*}
+E\left(-T + \sum_{i < n} (\Delta B_{t_i})^2 \right)^2 &\lesssim \sum_{i < n} \Delta t_i^2 \leq T||\Pi||
+\end{align*}
+which implies
+$$\lim_{||\Pi|| \to 0} -\frac{1}{2}\sum_{i < n} (\Delta B_{t_i})^2 = -\frac{T}{2}$$
+in $L^2$.
+
+As for the second term, we have
+\begin{align*}
+\sum_{i < n} (Q_i - B_{t_i})^2 &= \sum_{i < n} (\varepsilon B_{t_{i+1}} + (1 - \varepsilon) B_{t_i} - B_{t_i})^2 = \varepsilon^2 \sum_{i < n} \Delta B_{t_i}^2
+\end{align*}
+which, by the bounds on the first term, implies
+$$\lim_{||\Pi|| \to 0} \sum_{i < n} (\Delta B_{t_i})^2 = \varepsilon T$$
+in $L^2$.
+
+It remains to bound the third term. Set $t_i^* = \epsilon t_{i+1} + (1 - \epsilon) t_i$, and $\alpha_i = Q_i - B_{t_i^*}$.
+Then
+\begin{align*}
+(B_{t_{i+1}} - Q_i)(Q_i - B_{t_i}) &= \sum_{i < n} (B_{t_{i+1}} - B_{t_i^*} + \alpha_i)(B_{t_i^*} - B_t - \alpha_i)\\
+&= \sum_{i < n} (B_{t_{i+1}} - B_{t_i^*})(B_{t_i^*} - B_{t_i}) + \alpha_i(2B_{t_i^*} - B_{t_{i+1}} - B_{t_i} - \alpha_i).
+\end{align*}
+Taking the second moment and using the independence whenever $i \neq j$,
+\begin{align*}
+E\left(\sum_{i < n} (B_{t_{i+1}} - Q_i)(Q_i - B_{t_i})\right)^2 &= E\left(\sum_{i, j < n} (B_{t_{i+1}} - Q_i)(Q_i - B_{t_i})(B_{t_{j+1}} - Q_j)(Q_j - B_{t_j})\right)\\
+&= \sum_{i < n} E((B_{t_{i+1}} - Q_i)(Q_i - B_{t_i}))^2.
+\end{align*}
+Since $B_{t_{i+1}} - B_{t_i^*}$ and $B_{t_i^*} - B_{t_i}$ are independent,
+\begin{align*}
+E((B_{t_{i+1}} - Q_i)(Q_i - B_{t_i}))^2 &= E(\alpha_i^2(2B_{t_i^*} - B_{t_{i+1}} - B_{t_i} - \alpha_i)^2)\\
+&= E(\alpha_i^2(B_{t_i^*} - B_{t_i})^2) - E(\alpha_i^2(B_{t_{i+1}}- B_{t_i^*})^2) - E \alpha_i^4.
+\end{align*}
+Now we compute
+\begin{align*}
+\Var \alpha_i &= \Var(\epsilon \Delta B_{t_i} + (B_{t_i} - B_{t_i}^*))\\
+&= \epsilon^2 \Var \Delta B_{t_i} - \epsilon \Cov(\Delta B_{t_i}, B_{t_i}^* - B_{t_i}) + \Var(B_{t_i}^* - B_{t_i})\\
+&\leq \epsilon^2 \Delta t_i^2 - \epsilon \Delta t_i(t_i^* - t_i) + \Delta t_i^2 \lesssim ||\Pi||^2
+\end{align*}
+by the Cauchy-Schwarz inequality. Therefore, by the Cauchy-Schwarz inequality again,
+\begin{align*}
+E(\alpha_i^2(B_{t_i^*} - B_{t_i})^2) &\leq \Var \alpha_i^2 \Var(B_{t_i^*} - B_{t_i}) \\
+&\lesssim ||\Pi||^2 (t_i^* - t_i)^2 \leq ||\Pi||^4.
+\end{align*}
+We continue our Cauchy-Schwarz fiesta by bounding
+$$E(\alpha_i^2(B_{t_{i+1}}- B_{t_i^*})^2) \lesssim ||\Pi||^4$$
+using a similar argument, and use the Cauchy-Schwarz inequality for one last time to bound the fourth moment
+$$E\alpha_i^4 \lesssim ||\Pi||^4.$$
+Summing up,
+$$E\left(\sum_{i < n} (B_{t_{i+1}} - Q_i)(Q_i - B_{t_i})\right)^2 \lesssim |\card \Pi|^2 ||\Pi||^4 \leq T^2 ||\Pi||^2,$$
+which gives the desired convergence in $L^2$ as $||\Pi|| \to 0$.
+This completes the proof.
+
+
+\begin{exer}
+Let $X,Y$ be random variables and $\mathcal G$ a sub-$\sigma$-algebra. If $X$ is independent of $\mathcal G$ and $Y$ is $\mathcal G$-measurable, show that for every Borel set $D$,
+$$P((X, Y) \in D|\mathcal G) = P((X, Y) \in D|Y)$$
+almost surely.
+
+Let $B$ be a standard Brownian motion. Show that for every $s, t \geq 0$ and Borel set $\Gamma$,
+$$P(B_{t+s} \in \Gamma|\mathcal F_t) = P(B_{t+s} \in \Gamma|B_t),$$
+thus $B$ is a Markov process.
+\end{exer}
+
+The first claim can be checked when $D = A \times B$ is a Borel rectangles, since such rectangles form a $\pi$-system.
+In fact,
+\begin{align*}
+\PP((X, Y) \in D|\mathcal G) &= \PP(X \in A \cap Y \in B|\mathcal G) = \PP(X \in A)\PP(Y \in B|\mathcal G)\\
+&= \PP(X \in A)1_{Y \in B} = \PP(X \in A)\PP(Y \in B|Y)\\
+&= \PP(X \in A \cap Y \in B|Y) = \PP((X, Y) \in D|Y)
+\end{align*}
+as desired. Here we used that $X$ is independent of $\mathcal G$ and so is independent of $Y$.
+
+For the second claim, let $D$ be a Borel set in $\RR^2$. Then
+$$\PP((B_t, B_{t+s} - B_t) \in D|\mathcal F_t) = \PP((B_t, B_{t+s} - B_t) \in D|B_t)$$
+by the first claim, since $B_{t+s} - B_t$ is independent of $\mathcal F_t$.
+Now let $A$ be a Borel set in $\RR$; then $B_{t + s} \in \Gamma$ given that $B_t \in A$ iff $B_s - B_t \in \Gamma - A$.
+So let $D = A \times (\Gamma - A)$; then we have
+\begin{align*}
+\PP(B_{t+s} \in \Gamma|\mathcal F_t; B_t \in A) &= \PP((B_t, B_{t+s} - B_t) \in D|\mathcal F_t; B_t \in A) \\
+&= \PP((B_t, B_{t+s} - B_t) \in D|B_t; B_t \in A) \\
+&= \PP(B_{t+s} - B_t \in \Gamma - A|B_t; B_t \in A) \\
+&= \PP(B_{t+s} \in \Gamma|B_t; B_t \in A).
+\end{align*}
+Since $A$ was arbitrary we conclude that
+$$\PP(B_{t+s} \in \Gamma|\mathcal F_t) = \PP(B_{t+s} \in \Gamma|B_t \in A).$$
+
+\end{document}

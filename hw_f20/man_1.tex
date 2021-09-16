@@ -1,0 +1,288 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Smooth manifolds, HW 1} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[1.6]
+Let $M$ be a nonempty topological manifold of dimension $\geq 1$.
+Show that if $M$ has a smooth structure, then $M$ has uncountably many.
+\end{exer}
+
+Following the hint, let
+\begin{align*}
+F_s: \overline{\DD^d} &\to \overline{\DD^d}\\
+x &\mapsto |x|^{s-1}x.
+\end{align*}
+\begin{lemma}
+For every $s \in (0, 1)$, $F_s$ is a homeomorphism of $\DD^d$ with itself, but is not differentiable at $0$.
+\end{lemma}
+\begin{proof}
+Certainly $F_s$ is continuous. If $F_s(x) = F_s(y)$ then
+$$\frac{|x|^{s-1}}{|y|^{s-1}}x = y,$$
+so $y$ is a scalar multiple of $x$; but $F_s$ is injective on each line through $0$, and hence $y = x$.
+We will shortly check that $F_s$ is surjective, and since $\overline{\DD^d}$ is compact, that implies that $F_s$ is a homeomorphism of $\overline{\DD^d}$ to itself.
+
+If $|x| = 1$, then $F_s(x) = x$, so if $F_s$ fails to be surjective, then $F_s$ is a retract of $\overline{\DD^d}$ onto a compact subset $K$ of $\overline{\DD^d}$ which contains $\partial \DD^d$ but not some $x \in \overline{\DD^d}$.
+A loop whose image is $\partial \DD^d$ is not homotopic to a point in $K$ since any such homotopy must include $x$ in its image, yet we assumed that $x \notin K$.
+So $\pi_1(K)$ is nontrivial, yet there is a retract $\overline{\DD^d} \to K$, a contradiction.
+
+Since $F_s$ preserves $\partial \DD^d$ and is a bijection, in particular it preserves $\DD^d$.
+Therefore $F_s$ is a homeomorphism of $\DD^d$ to itself.
+
+But $F_s$ is not a diffeomorphism, or even differentiable.
+If it were differentiable, then it would still be differentiable when restricted to the line through $0$ and the first basis vector $e_1$, yet its directional derivative along that line is
+$$\nabla F_s \cdot e_1(x) = \sigma \frac{d}{dx} |x|^s = \tau s|x|^{s-1}$$
+where $\sigma,\tau$ are appropriately chosen signs; since $0^{s-1}$ makes no sense $F_s$ canot possibly be differentiable at the origin.
+\end{proof}
+
+Let $\mathcal A$ be a smooth atlas of $M$, and choose a chart $(W, \varphi) \in \mathcal A$.
+Then $\varphi(W)$ is a nonempty open subset of $\RR^d$, so contains a compact ball $\tilde K$.
+Let $K = \varphi^{-1}(\tilde K)$ and let $U$ be the interior of $K$; then $U$ is nonempty since $\varphi(U)$ is an open ball.
+Then $\mathcal A$ determines an open cover $\{V: (V, \psi) \in \mathcal A\}$ of $K$, so there are finitely many charts $(V_1, \psi_1), \dots, (V_n, \psi_n)$ such that $\{V_1, \dots, V_n\}$ is an open cover of $K$.
+
+For every $x \in K$, we say that $x$ is \emph{efficiently covered} by $\{V_1, \dots, V_n\}$ if there is a unique $i$ such that $x \in V_i$.
+Let us prove two facts about efficiently covered points.
+\begin{lemma}
+The property ``is efficiently covered" is an open property.
+Moreover, it is no loss of generality to assume that there exists $x_1 \in V_1$ which is efficiently covered by $\{V_1, \dots, V_n\}$.
+\end{lemma}
+\begin{proof}
+If $x_i \in V_i$ is efficiently covered, then $W_i = V_i \setminus \bigcup_{j\neq i} \overline V_j$ is nonempty and open, and is exactly the set of elements of $V_i$ which are efficiently covered.
+The union of the $W_i$ is open and is the set of elements of $K$ which are efficiently covered.
+
+If, for every $x \in K$, $x$ is inefficiently covered, pick an $x_1 \in K$ and let
+$$V_{n+1} = \bigcap_{j:x_1 \in V_j} V_j$$
+(so that $V_{n+1}$ is nonempty because, in particular, $x_1 \in V_{n+1}$).
+Since all sets involved are open, and there are only finitely many (so that they cannot come arbitrarily close to $x_1$ in any metric) we can find a smaller open set, $Y \subseteq V_{n+1}$, such that $x_1 \in Y$ and $\bigcup_k \partial V_k$ does not meet $\overline Y$.
+It follows that $\{V_1 \setminus \overline Y, \dots, V_n \setminus Y, V_{n+1}\}$ is an open cover of $K$ which efficiently covers $x_1$.
+Taking the obvious restrictions, we can find suitable charts $V_i \setminus \overline Y \to \RR^d$ and $V_{n+1} \to \RR^d$ which are smoothly compatible with $\mathcal A$.
+So we can add $V_i \setminus \overline Y$ and $V_{n+1}$ to $\mathcal A$ and replace the cover $\{V_1, \dots, V_n\}$ with $\{V_1 \setminus \overline Y, \dots, V_n \setminus Y, V_{n+1}\}$.
+The claim now follows by reordering the $V_i$ so that $x_1 \in V_1$.
+\end{proof}
+
+Let $x_1 \in V_1$ be efficiently covered, per the lemma.
+Since $\psi_1(V_1)$ is an open subset of $\RR^d$, $\psi_1(x_1)$ is contained in an open ball $\tilde B$; let $B = \psi_1^{-1}(\tilde B)$.
+Since $x_1$ is efficiently covered and ``is efficiently covered" is an open property, we can take the radius of $\tilde B$ to be so small that if $B \cap V_i$ is nonempty, then $i = 1$.
+
+After an affine change of coordinates on $\RR^d$, we can assume that $\psi_1$ maps $x_1$ to $0$, $B$ to the unit ball, and $V_1$ to an open set containing the unit ball.
+Let $\chi$ be a smooth function $\RR^d \to [0, 1]$ be a smooth function such that $\{\chi = 1\}$ is the ball of radius $1/4$ around $0$, and $\{\chi > 0\}$ is the ball of radius $1/2$ around $0$.
+Then let
+$$\tilde G_s(x) = \chi F_s(x) + (1 - \chi)x.$$
+In polar coordinates,
+$$\tilde G_s(r, \Theta) = (\chi r^s + (1-\chi)r, \Theta).$$
+It follows that $\tilde G_s$ is a homeomorphism of $X = \psi_1(V_1)$ to itself such that $\tilde G_s|\psi_i(V_i \cap V_j)$ is smooth whenever $j \neq i$.
+
+Let $G_s$ be the identity on $M \setminus \overline B$ and on $V_1$, be defined so that the diagram
+$$\begin{tikzcd}
+V_1 \arrow[r,"G_s"] \arrow[d,"\psi_1"] & V_1 \arrow[d,"\psi_1"]\\
+X \arrow[r,"\tilde G_s"] & X
+\end{tikzcd}$$
+commutes. Since $\tilde G_s$ is the identity on $\psi_1(V_1 \setminus B)$, $G_s$ is well-defined, and is a homeomorphism from $M$ to itself.
+
+Now we are ready to define uncountably many smooth structures on $M$.
+Let
+$$\mathcal A_s = \{(G_s(A), \alpha \circ G_s^{-1}): (A, \alpha) \in \mathcal A\}.$$
+Since $G_s$ is a homeomorphism, $G_s(A)$ is open and $\alpha \circ G_s^{-1}$ is a homeomorphism, so $\mathcal A_s$ is an atlas.
+To see that it is smooth, let $\alpha, \beta$ be (homeomorphisms for) charts in $\mathcal A$; then
+$$(\beta \circ G_s^{-1}) \circ (\alpha \circ G_s^{-1})^{-1} = \beta \circ \alpha^{-1}$$
+and $\beta \circ \alpha^{-1}$ is a diffeomorphism since $\mathcal A$ is a smooth atlas, so $\alpha \circ G_s^{-1}$ and $\beta \circ G_s^{-1}$ are smoothly compatible.
+Therefore $\mathcal A_s$ determines a smooth structure $\mathcal S_s$ on $M$.
+
+It suffices, by Cantor's diagonal argument, to show that $s \mapsto \mathcal S_s$ is injective.
+This will follow from the following lemma.
+
+\begin{lemma}
+If $G_t^{-1} \circ G_s$ is smooth, then $s = t$.
+\end{lemma}
+\begin{proof}
+By assumption, $G_t^{-1} \circ G_s|B$ is smooth; since the above diagram commutes and $\psi_1$ is a diffeomorphism, the same is true of $\tilde G_t^{-1} \circ \tilde G_s$.
+
+Suppose that $s < t$.
+In polar coordinates,
+$$\tilde G_t^{-1}(\tilde G_s(r, \Theta)) = (\chi r^{s/t} + (1-\chi) r, \Theta) = \tilde G_{s/t}(r, \Theta).$$
+But $\tilde G_{s/t}|\{\chi = 1\} = F_{s/t}|\{\chi = 1\}$ is not differentiable at $0$ by the first lemma; indeed, $\chi(0) = 1$.
+That is a contradiction.
+\end{proof}
+
+Suppose that $\mathcal S_s = \mathcal S_t$, and let $\alpha$ be a chart in $\mathcal A$.
+Since $\mathcal S_s = \mathcal S_t$, $\alpha \circ G_s^{-1}$ and $\alpha \circ G_t^{-1}$ are smoothly compatible, thus
+$$(\alpha \circ G_t^{-1}) \circ (\alpha \circ G_s^{-1})^{-1} = \alpha \circ G_t^{-1} \circ G_s \circ \alpha^{-1}$$
+is smooth. But $\alpha$ is a diffeomorphism, so $G_t^{-1} \circ G_s$ is smooth. By the lemma, then, $s = t$, which proves the claim.
+
+\begin{exer}[1.9]
+Show that $\PP_\CC^n$ can be given the structure of a compact smooth manifold of dimension $2n$.
+\end{exer}
+
+Let $\pi: \CC^{n+1} \setminus \{0\} \to \PP_\CC^n$ be the natural projection.
+Since $\pi$ is a projection under the action of a group, namely $\CC^*$, $\pi$ is an open map.
+Since $\pi$ is continuous, and remains surjective even when restricted to the (compact) closed unit ball of $\CC^{n+1}$, it immediately follows that $\PP_\CC^n$ is compact and second-countable.
+
+\begin{lemma}
+$\PP_\CC^n$ is Hausdorff.
+\end{lemma}
+\begin{proof}
+Let $z = \pi(z_1, \dots, z_{n+1})$ and similarly for $w$.
+We must show that $z,w$ are separated by open sets.
+If there exists a chart $U_j$ such that $z, w \in U_j$, then $z,w$ are separated by open sets.
+So suppose otherwise; that is, if $z_j \neq 0$ then $w_j = 0$.
+After reordering the basis vectors of $\CC^{n+1}$ we can then assume that there is a $k$ such that $z_{k+1} = z_{k+2} = \cdots = z_{n+1} = 0$ and $w_1 = w_2 = \cdots = w_k = 0$.
+If $B$ is a sufficiently small ball in $\CC^{n+1}$ around $(z_1, \dots, z_k, 0, \dots, 0)$, then $\overline B$ does not meet the hyperplane $z_{k+1} = z_{k+2} = \cdots = z_{n+1} = 0$.
+Thus no representative of $w$ in $\CC^{n+1}$ is in $\overline B$, so $\pi(\overline B) = \overline{\pi(B)}$ does not contain $w$.
+Thus $\pi(B)$ contains $z$ but not $w$, while the complement of $\overline{\pi(B)}$ contains $w$ but not $z$.
+Therefore $z, w$ are separated by open sets.
+\end{proof}
+
+Now let $U_j = \{\pi(z_1, \dots, z_{n+1}) \in \PP_\CC^n: z_j \neq 0\}$.
+The defining property of $U_j$ is invariant under scaling, so $U_j$ is well-defined.
+We turn $U_j$ into a chart by defining
+\begin{align*}
+\varphi_j: U_j &\to \CC^n\\
+\pi(z_1, \dots, z_{n+1}) &\mapsto \left(\frac{z_1}{z_j}, \dots, \frac{z_{j-1}}{z_j}, \frac{z_{j+1}}{z_j}, \dots, \frac{z_{n+1}}{z_j}\right).
+\end{align*}
+Since the value of $\varphi_j \circ \pi$ is invariant under rescaling, $\varphi_j$ is well-defined.
+
+\begin{lemma}
+The $\varphi_j$ are compatible smooth charts.
+\end{lemma}
+\begin{proof}
+Stronger, we claim that the $\varphi_j$ are compatible \emph{holomorphic} charts in $n$ complex dimensions, which immediately implies smoothness in $2n$ real dimensions.
+
+We first check that $\varphi_j$ is continuous. By the universal property of $\pi$, if
+$$V_j = \{(z_1, \dots, z_{n+1}) \in \CC^{n+1}: z_j \neq 0\},$$
+then $\varphi_j$ is continuous iff
+$$\varphi \circ \pi: V_j \to \CC^n$$
+is. But that is clear, since $\varphi \circ \pi$ is just projection onto the coordinates that are not equal to $j$, followed by division by the nonzero number $z_j$.
+
+We now check that the change-of-coordinates maps are holomorphic. Indeed,
+$$\varphi_j(\varphi_k^{-1}(z_1, \dots, z_n)) = \varphi_j(\pi(z_1, \dots, 1, \dots, z_n))$$
+where the $1$ is in the $k$th entry of the vector. But that means that
+$$\varphi_j(\varphi_k^{-1}(z_1, \dots, z_n)) = \left(\frac{z_1}{z_j}, \dots, \frac{1}{z_j}, \dots, \frac{z_n}{z_j}\right).$$
+But $z_j$ is a nonzero coordinate function on the domain $\varphi_k(U_j \cap U_k)$ of $\varphi_j \circ \varphi_k^{-1}$, so division by $z_j$ is holomorphic.
+\end{proof}
+
+We conclude that the $\varphi_j$ generate a smooth structure on $\PP_\CC^n$.
+
+
+
+
+\end{document}

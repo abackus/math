@@ -1,0 +1,569 @@
+\documentclass[12pt]{article}
+\usepackage[pdftex,pagebackref,letterpaper=true,colorlinks=true,pdfpagemode=none,urlcolor=blue,linkcolor=blue,citecolor=blue,pdfstartview=FitH]{hyperref}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{color}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\newcommand{\EE}{\mathbb E}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\Hess}{\operatorname{Hess}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\Out}{Out}
+
+\DeclareMathOperator{\Diffeo}{Diffeo}
+
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\SO}{\operatorname{SO}}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{5px}
+
+\input{macrosblog}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+Before we begin, I want to fuss around with model theory again.
+Recall that if $z$ is a nonstandard complex number, then $z^{(\infty)}$ denotes the standard part of $z$, if it exists.
+We previously defined what it meant for a nonstandard random variable to be infinitesimal in distribution.
+One can define something similar for any metrizable space with a notion of $0$, where $f$ is infinitesimal provided that $d(f, 0)$ is.
+For example, a nonstandard random variable $\eta$ is infinitesimal in $L^1_{loc}$ if for every compact set $K$ that $\eta$ can take values in, $||\eta||_{L^1(K)}$ is infinitesimal, since $L^1_{loc}$ is metrizable with
+$$d(0, \eta) = \sum_{m=1}^\infty 2^{-m} \frac{||\eta||_{L^1(K_m)}}{1 + ||\eta||_{L^1(K_m)}}$$
+whenever $(K_m)$ is a compact exhaustion.
+If $f$ is nonstandard, $|f - f^{(\infty)}|$ is infinitesimal in some metrizable space, and $f^{(\infty)}$ is standard, then we call $f^{(\infty)}$ the standard part of $f$ in $\mathcal T$; then the standard part is unique since metrizable spaces are Hausdorff.
+
+If the metrizable space is compact, the case that we will mainly be interested in, then the standard part exists.
+This is a point that we will use again and again. Passing to the cheap perspective, this says that if $K$ is a compact metric space and $(f^{(n)})$ is a sequence in $K$, then there is a $f^{(\infty)}$ which is approximates $f^{(n)}$ infinitely often, but that's just the Bolzano-Weierstrass theorem.
+Last time used Prokohov's theorem to show that if $\xi$ is a nonstandard tight random variable, then $\xi$ has a standard part $\xi^{(\infty)}$ in distribution.
+
+We now restate and prove Proposition 9 from the previous post.
+
+\begin{theorem}[distribution of random zeroes]
+Let $n$ be a nonstandard natural, $f$ a monic polynomial of degree $n$ with all zeroes in $\overline{D(0, 1)}$, and let $a \in [0, 1]$ be a zero of $f$.
+Suppose that $f'$ has no zeroes in $\overline{D(a, 1)}$.
+Let $\lambda$ be a random zero of $f$ and $\zeta$ a random zero of $f'$. Then:
+\begin{enumerate}
+\item If $a^{(\infty)} = 0$ (\emph{case zero}), then $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ are identically distributed and almost surely lie in the curve
+$$C = \{e^{i\theta}: 2\theta \in [\pi, 3\pi]\}.$$
+In particular, $d(\lambda, C) = o(1)$ in probability.
+Moreover, for every compact set $K \subseteq \overline{D(0, 1)} \setminus C$,
+$$\mathbf P(\lambda \in K) = O\left(a + \frac{\log n}{n^{1/3}}\right).$$
+\item If $a^{(\infty)} = 1$ (\emph{case one}), then $\lambda^{(\infty)}$ is uniformly distributed on the unit circle $\partial D(0, 1)$ and $\zeta^{(\infty)}$ is almost surely zero. Moreover,
+$$\mathbf E \log \frac{1}{|\lambda|}, \mathbf E\log |\zeta - a| = O(n^{-1}).$$
+\end{enumerate}
+\end{theorem}
+
+
+\section{Moment-generating functions and balayage}
+We first show that $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ have equal moment-generating functions in a suitable sense.
+
+To do this, we first show that they have the same logarithmic potential.
+Let $\eta$ be a random variable such that $|\eta| = O(1)$ almost surely (that is, $\eta$ is almost surely bounded).
+Then the logarithmic potential
+$$U_\eta(z) = \mathbf E \log \frac{1}{|z - \eta|}$$
+is defined almost everywhere as we discussed last time, and is harmonic outside of the essential range of $\eta$.
+
+\begin{lemma}
+Let $\eta$ be a nonstandard, almost surely bounded, random complex number.
+Then the standard part of $U_\eta$ is $U_{\eta^{(\infty)}}$ according to the topology of $L^1_{loc}$ under Lebesgue measure.
+\end{lemma}
+\begin{proof}
+We pass to the cheap perspective.
+If we instead have a random sequence of $\eta_j$ and $\eta_j \to \eta$ in distribution, then $U_{\eta_j} \to U_\eta$ in $L^1_{loc}$, since up to a small error in $L^1_{loc}$ we can replace $\log$ with a test function $g$; one then has
+$$\lim_{j \to \infty} \iint_{K \times \CC} g\left(\frac{1}{|z - w|}\right) ~d\mu_j(w) ~dz = \iint_{K \times \CC} g\left(\frac{1}{|z - w|}\right) ~d\mu(w) ~dz$$
+where $\mu_j \to \mu$ in the weak topology of measures, $\mu_j$ is the distribution of $\eta_j$, $\mu$ is the distribution of $\eta$, and $K$ is a compact set equipped with Lebesgue measure.
+\end{proof}
+
+\begin{lemma}
+For every $1 < |z| \leq 3/2$, we have
+$$U_\lambda(z) - U_\zeta(z) = O\left(\frac{1}{n} \log \frac{1}{|z| - 1}\right).$$
+In particular, $U_{\lambda^{(\infty)}}(z) = U_{\zeta^{(\infty)}}(z)$.
+\end{lemma}
+\begin{proof}
+By definition, $\lambda \in D(0, 1)$, so $z - \lambda \in D(z, 1)$.
+Now $D(z, 1)$ is a disc with diameter $T([|z| - 1, |z| + 1])$ where $T$ is a rotation around the origin.
+Taking reciprocals preserves discs and preserves $T$, so $(z - \lambda)^{-1}$ sits inside a disc $W$ with a diameter $T[(|z|+1)^{-1}, (|z|-1)^{-1}]$.
+Then $W$ is convex, so the expected value of $(z - \lambda)^{-1}$ is also $\in W$.
+Therefore the Stieltjes transform
+$$s_\lambda(z) = \mathbf E \frac{1}{z - \lambda}$$
+satisfies $s_\lambda(z) \in W$.
+In particular,
+$$\log |s_\lambda(z)| \in \left[\log \frac{1}{|z| + 1}, \log \frac{1}{|z| - 1}\right].$$
+But we showed that
+$$U_\lambda(z) - \frac{n - 1}{n} U_\zeta(z) = \frac{1}{n} \log |s_\lambda(z)|$$
+almost everywhere last time.
+This implies that for almost every $z$,
+$$-\frac{\log(|z| + 1)}{n} \leq U_\lambda(z) - \frac{n - 1}{n}U_\zeta(z) \leq -\frac{\log(|z| - 1)}{n}$$
+but all terms here are continuous so we can promote this to a statement that holds for every $z$.
+In particular,
+$$U_\lambda(z) - \frac{n - 1}{n} U_\zeta(z) = O\left(\frac{1}{n} \log \frac{1}{|z|-1}\right)$$
+hence
+$$U_\lambda(z) - U_\zeta(z) = O\left(\frac{1}{n} U_\zeta(z) + \frac{1}{n} \log \frac{1}{|z|-1}\right).$$
+Since $|\zeta| < 1$ while $1 < |z| < 3/2$, $|z - \zeta|$ is bounded from above and below by a constant times $|z| - 1$. Therefore the same holds of its logarithm $U_\zeta(z)$, which is bounded from above and below by a constant times $-\log(|z| - 1)$. This implies the first claim.
+
+To derive the second claim from the first, we use the previous lemma, which implies that we must show that
+$$\log \frac{1}{|z| - 1} = O(n)$$
+in $L^1_{loc}$. But this follows since $-\log|\cdot|$ is integrable in two dimensions.
+\end{proof}
+
+\begin{lemma}
+Let $\eta$ be an almost surely bounded random variable. Then
+$$U_\eta(Re^{i\theta}) = -\log R + \frac{1}{2} \sum_{m \neq 0} \frac{e^{im\theta}}{|m| R^{|m|}} \mathbf E\eta^{|m|}.$$
+\end{lemma}
+\begin{proof}
+One has the Taylor series
+$$\log \frac{1}{|Re^{i\theta} - w|} = -\log R + \frac{1}{2} \sum_{m \neq 0} \frac{e^{im\theta} w^{|m|}}{|m| R^{|m|}}.$$
+Indeed, by rescaling and using $\log(ab) = \log a + \log b$, we may assume $R = 1$.
+The summands expand as
+$$\text{Re }\frac{e^{im\theta} w^{|m|}}{|m| R^{|m|}} = \frac{w^{|m|} \cos |m|\theta}{|m|}$$
+and the imaginary parts all cancel by symmetry about $0$. Using the symmetry about $0$ again we get
+$$-\log R + \frac{1}{2} \sum_{m \neq 0} \frac{e^{im\theta} w^{|m|}}{|m| R^{|m|}} = \sum_{m=1}^\infty \frac{w^{|m|} \cos |m|\theta}{|m|}.$$
+This equals the left-hand side as long as $|w| < R$.
+Taking expectations and commuting the expectation with the sum using Fubini's theorem (since $\eta$ is almost surely bounded), we see the claim.
+\end{proof}
+
+\begin{lemma}
+For all $m \geq 1$, one has
+$$\mathbf E\lambda^m - \mathbf E\zeta^m = O\left(\frac{m \log m}{n}\right).$$
+In particular, $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ have identical moments.
+\end{lemma}
+\begin{proof}
+If we take $1 < R \leq 3/2$ then we conclude that
+$$\sum_{m \neq 0} \frac{e^{im\theta}}{|m| R^{|m|}} \mathbf E\lambda^{|m|} - \sum_{m \neq 0} \frac{e^{im\theta}}{|m| R^{|m|}} \mathbf E\zeta^{|m|} = O\left(\frac{1}{n} \log \frac{1}{R - 1}\right).$$
+The left-hand side is a Fourier series, and by uniqueness of Fourier series it holds that for every $m$,
+$$\frac{e^{im\theta}}{|m| R^{|m|}} \mathbf E(\lambda^{|m|} - \zeta^{|m|}) = O\left(\frac{1}{n} \log \frac{1}{R - 1}\right).$$
+This gives a bound on the difference of moments
+$$\mathbf E\lambda^m - \mathbf E\zeta^m = O\left(\frac{m R^m}{n} \log \frac{1}{R - 1}\right)$$
+which is only possible if the moments of $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ are identical.
+The left-hand side doesn't depend on $R$, but if $m \geq 2$, $R = 1 + 1/m$, then $R^m \leq 2$ and $-\log(R - 1) = \log m$ so the claim holds.
+On the other hand, if $m = 1$ then this claim still holds, since we showed last time that
+$$\mathbf E\lambda = \mathbf E\zeta$$
+and obviously $1 \log 1 = 0$.
+\end{proof}
+
+Here I was puzzled for a bit. Surely if two random variables have the same moment-generating function then they are identically distributed!
+But, while we can define the moment-generating function of a random variable as a formal power series $F$, it is not true that $F$ has to have a positive radius of convergence, in which case the inverse Laplace transform of $F$ is ill-defined.
+Worse, the circle is not simply connected, and in case one, we have to look at a uniform distribution on the circle, whose moments therefore aren't going to points on the circle, so the moment-generating function doesn't tell us much.
+
+\section{Balayage}
+We recall the definition of the Poisson kernel $P$:
+$$P(Re^{i\theta}, re^{i\alpha}) = \sum_{m = -\infty}^\infty \frac{r^{|m|}}{R^{|m|}} e^{im(\theta - \alpha)}$$
+whenever $0 < r < R$ is a radius.
+Convolving the Poisson kernel against a continuous function $g$ on $\partial B(0, R)$ solves the Dirichlet problem of $B(0, R)$ with boundary data $g$.
+
+\begin{definition}
+Let $\eta \in D(0, R)$ be a random variable. The \emph{balayage} of $\eta$ is
+$$\text{Bal}(\eta)(Re^{i\theta}) = \mathbf EP(Re^{i\theta}, \eta).$$
+\end{definition}
+
+Balayage is a puzzling notion. First, the name refers to a hair-care technique, which is kind of unhelpful.
+According to Tao, we're supposed to interpret balayage as follows.
+
+If $w_0 \in B(0, R)$ is an initial datum for Brownian motion $w$, then $P(Re^{i\theta}, w_0)$ is the probability density of the first location $Re^{i\theta}$ where $w$ passes through $\partial B(0, R)$.
+Tao asserts this without proof, but conveniently, this was a problem in my PDE class last semester.
+The idea is to approximate $\mathbf R^2$ by the lattice $L_\varepsilon = \varepsilon \mathbf Z^2$, which we view as a graph where each vertex has degree $4$, with one edge to each of the vertices directly above, below, left, and right of it.
+Then the Laplacian on $\mathbf R^2$ is approximated by the graph Laplacian on $L_\varepsilon$, and Brownian motion is approximated by the discrete-time stochastic process wherein a particle starts at the vertex that best approximates $w_0$ and at each stage has a $1/4$ chance of moving to each of the vertices adjacent to its current position.
+
+So suppose that $w_0$ and $Re^{i\theta}$ are actually vertices of $L_\varepsilon$.
+The probability density $P_\varepsilon(Re^{i\theta}, w_0)$ is harmonic in $w_0$ with respect to the graph Laplacian since it is the mean of $P_\varepsilon(Re^{i\theta}, w)$ as $w$ ranges over the adjacent vertices to $w_0$; therefore it remains harmonic as we take $\varepsilon \to 0$.
+The boundary conditions follow similarly.
+
+Now $\eta$ if is a random initial datum for Brownian motion which starts in $D(0, R)$, the balayage of $\eta$ is again a probability density on $\partial B(0, R)$ that records where one expects the Brownian motion to escape, but this time the initial datum is also random.
+
+I guess the point is that balayage serves as a substitute for the moment-generating function in the event that the latter is just a formal power series.
+We want to be able to use analytic techniques on the moment-generating function, but we can't, so we just use balayage instead.
+
+Let $\psi$ be the balayage of $\eta$. Since $\eta$ is bounded, we can use Fubini's theorem to commute the expectation with the sum and see that
+$$\psi(Re^{i\theta}) = \sum_{m-\infty}^\infty R^{-|m|} e^{im\theta} \mathbf E(r^{|m|} e^{-im\alpha}) = 1 + 2\sum_{m=1}^\infty R^{-|m|} \cos m\theta \mathbf E(r^{|m|} \cos m\alpha)$$
+provided that $\eta = re^{i\alpha}$.
+It will be convenient to rewrite this in the form
+$$\psi(Re^{i\theta}) = 1 + 2\text{Re} \sum_{m=1}^\infty R^{-m}e^{im\theta} \mathbf E\eta^m$$
+so $\psi$ is uniquely determined by the moment-generating function of $\eta$. In particular, $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ have identical balayage, and one has a bound
+$$\text{Bal}(\lambda)(Re^{i\theta}) - \text{Bal}(\zeta)(Re^{i\theta}) = O\left(\frac{1}{n}\sum_{m=1}^\infty \frac{m \log m}{R^m}\right).$$
+We claim that
+$$\sum_{m=1}^\infty \frac{m \log m}{R^m} = O\left(-\frac{\log(R-1)}{(R - 1)^2}\right)$$
+which implies the bound
+$$\text{Bal}(\lambda)(Re^{i\theta}) - \text{Bal}(\zeta)(Re^{i\theta}) = O\left(\frac{1}{n}\frac{\log\frac{1}{R-1}}{(R - 1)^2}\right).$$
+To see this, we discard the $m = 1$ term since $1 \log 1 = 0$, which implies that
+$$\sum_{m=1}^\infty \frac{m \log m}{R^m} = \sum_{M=1}^\infty \sum_{m=2^M}^{2^{M+1} - 1} \frac{m \log m}{R^m}.$$
+Up to a constant factor we may assume that the logarithms are base $2$ in which case we get a bound
+$$\sum_{m=1}^\infty \frac{m \log m}{R^m} \leq C\sum_{M=1}^\infty \frac{M2^M}{R^{2^M}}.$$
+The constant is absolute since $R \in (1, 3/2]$.
+
+By the integral test, we get a bound
+$$\sum_{M=1-\log(R-1)}^\infty \frac{M2^M}{R^{2^M}} \leq C\int_{-\log(R-1)}^\infty \frac{x2^x}{R^{2^x}} ~dx \leq C\int_{-\log(R-1)}^\infty \frac{2^{x^{(1+\varepsilon)}}}{R^{2^x}} ~dx.$$
+Using the bound
+$$\int_{1/(R-1)}^\infty \frac{dy}{R^y} \leq CR^{-1/(R-1)} \leq C2^{-1/(R-1)}$$
+for any $N$ and the change of variable $y = 2^x$ (thus $dy = 2^x \log 2 ~dx$), we get a bound
+$$\sum_{M=1-\log(R-1)}^\infty \frac{M2^M}{R^{2^M}} \leq C \int_{-\log(R-1)} \frac{dy}{R^y} \leq C2^{-1/(R-1)}$$
+since the $\varepsilon$ error in the exponent can't affect the exponential decay of the integral in $1/(R-1)$. Since we certainly have
+$$2^{-1/(R-1)} \leq C\frac{-\log(R-1)}{(R-1)^2}$$
+this is a suitable tail bound.
+
+To complete the proof of the claim we need to bound the main term.
+To this end we bound
+$$\sum_{M=1}^{-\log(R-1)} \frac{M2^M}{R^{2^M}} \leq \log\frac{1}{R-1} \sup_{x > 0} \frac{x2^x}{R^{2^x}} = \log\frac{1}{R-1} 2 \uparrow \sup_y \frac{y \log y}{R^y}.$$
+Here $\alpha \uparrow \beta = \alpha^\beta$ denotes exponentiation.
+Now if $R - 1$ is small enough (say $R - 1 < 3/4$), this supremum will be attained when $x > 1$, thus $y \log y \leq 2y$. Therefore
+$$\sum_{M=1}^{-\log(R-1)} \frac{M2^M}{R^{2^M}} \leq \left(2\uparrow \sup_{y > 0} \frac{y}{R^y}\right)^2 \log\frac{1}{R-1} .$$
+Luckily $yR^{-y}$ is easy to differentiate: its critical point is $1/y = \log R$. This gives
+$$\sup_{y > 0} \frac{y}{R^y} \leq \log \frac{1}{R - 1}$$
+so
+$$\left(2\uparrow \sup_{y > 0} \frac{y}{R^y}\right)^2 \leq \frac{1}{(R-1)^2}$$
+which was the bound we needed, and proves the claim.
+Maybe there's an easier way to do this, because Tao says the claim is a trivial consequence of dyadic decomposition.
+
+Let's interpret the bound that we just proved.
+Well, if the balayage of $\eta$ is supposed to describe the point on the circle $\partial B(0, R)$ at which a Brownian motion with random initial datum $\eta$ escapes, a bound on a difference of two balyages should describe how the trajectories diverge after escaping.
+In this case, the divergence is infinitesimal, but at different speeds depending on $R$.
+As $R \to 1$, our infinitesimal divergence gains a positive standard part, while if $R$ stays close to $3/2$, the divergence remains infinitesimal.
+This makes sense, since if we take a bigger circle we forget more and more about the fact that $\zeta,\lambda$ are not the same random variable, since Brownian motion has more time to ``forget more stuff" as it just wanders around aimlessly.
+So in the regime where $R$ is close to $3/2$, it is reasonable to take standard parts and pass to $\zeta^{(\infty)}$ and $\lambda^{(\infty)}$, while in the regime where $R$ is close to $1$ this costs us dearly.
+
+\section{Case zero}
+Suppose that $a$ is infinitesimal.
+
+We showed last time that $\zeta \in \overline{D(0, 1)} \setminus \overline{D(a, 1)}$, so $d(\zeta, C) = O(a)$ is infinitesimal.
+Therefore $\zeta^{(\infty)} \in C$ almost surely.
+
+I think there's a typo here, because Tao lets $K$ range over $D(0, 1) \setminus C$ and considers points $e^{i\theta} \in D(0, 1) \setminus C$, which don't exist since $|e^{i\theta}| = 1$ while every point in $D(0, 1)$ has $|\cdot| < 1$.
+I think this can be fixed by taking closures, which is what I do in the next lemma.
+
+Tao proves a ``qualitative" claim and then says that by repeating the argument and looking out for constants you can get a ``quantitative" version which is what he actually needs.
+I'm just going to prove the quantitative argument straight-up.
+The idea is that if $K$ is a compact set which misses $C$ and $\lambda \in K$ then a Brownian motion with initial datum $\lambda$ will probably escape through an arc $J$ which is close to $K$, but $J$ is not close to $C$ so a Brownian motion which starts at $\zeta$ will probably not escape through $J$.
+Therefore $\lambda,\zeta$ have very different balayage, even though the difference in their balayage was already shown to be infinitesimal.
+
+I guess this shows the true power of balayage: even though the moment-generating function is ``just" a formal power series, we know that the essential supports of $\lambda,\zeta$ must ``look like each other" up to rescaling in radius.
+This still holds in case one, where one of them is a circle and the other is the center of the circle.
+Either way, you get the same balayage, since whether you start at some point on a circle or you start in the center of the circle, if you're a Brownian motion you will exhibit the same long-term behavior.
+
+In the following lemmata, let $K \subset \overline{D(0, 1)} \setminus C$ be a compact set.
+The set $\{\theta \in (-\pi/2, \pi/2): e^{i\theta} \in K\}$ is compact since it is the preimage of a compact set, so contained a compact interval $I_K \subseteq (-\pi/2, \pi/2)$.
+
+\begin{lemma}
+One has
+$$\inf_{w \in K} \int_{I_K} P(Re^{i\theta}, w) ~d\theta > 0.$$
+\end{lemma}
+\begin{proof}
+Since $K$ is compact the minimum is attained. Let $w$ be the minimum. Since $P$ is a real-valued harmonic function in $w$, thus
+$$\Delta \int_{I_K} P(Re^{i\theta}, w) ~d\theta = \int_{I_K} \Delta P(Re^{i\theta}, w) ~d\theta = 0,$$
+the maximum principle implies that the worst case is when $K$ meets $\partial D(0, R)$ and $w \in \partial D(0, R)$, say $w = Re^{i\alpha}$.
+Then
+$$P(Re^{i\theta}, w) = \sum_{m=-\infty}^\infty e^{im(\theta - \alpha)}.$$
+Of course this is just a formal power series and doesn't make much sense. But if instead $w = re^{i\alpha}$ where $r/R$ is very small depending on a given $\varepsilon > 0$, then, after discarding quadratic terms in $r/R$,
+$$P(Re^{i\theta}, w) \leq \frac{1 + \varepsilon}{1 - 2(r/R)\cos(\theta - \alpha)}.$$
+This follows since in general
+$$P(Re^{i\theta}, w) = \frac{1 - (r/R)^2}{1 - 2(r/R) \cos(\theta - \alpha) + (r/R)^2}.$$
+Now
+$$\int_{I_K^c} \frac{d\theta}{1 - 2(r/R)\cos(\theta - \alpha)} < \pi$$
+since the integrand is maximized when $\cos(\theta - \alpha) = 0$, in which case the integrand evaluates to the measure of $I_K^c$, which is $< \pi$ since $I_K^c = (-\pi/2, \pi/2) \setminus I_K$ and $I_K$ has positive measure.
+Therefore
+$$\int_{I_K^c} P(Re^{i\theta}, w) ~d\theta < \frac{3\pi}{2}.$$
+On the other hand, for any $w$ one has
+$$\int_{-\pi/2}^{\pi/2} P(Re^{i\theta}, w) ~d\theta = 2\pi,$$
+so this implies gives a lower bound on the integral over $I_K$.
+\end{proof}
+
+\begin{lemma}
+If $1 < R \leq 3/2$ then
+$$\mathbf P(\lambda \in K) \leq C_K\left(a + R - 1 + \frac{\log \frac{1}{R - 1}}{n(R-1)^2} \right).$$
+\end{lemma}
+\begin{proof}
+Let $w = \lambda$ in the previous lemma, conditioning on the event $\lambda \in K$, to see that
+$$\int_{I_K} P(Re^{i\theta}, \lambda) ~d\theta \geq \delta_K$$
+where $\delta_K > 0$.
+Taking expectations and dividing by the probability that $\lambda \in K$, we can use Fubini's theorem to deduce
+$$\mathbf P(\lambda \in K) \leq C_K \int_{I_K} \text{Bal}(\lambda)(Re^{i\theta}) ~d\theta$$
+where $C_K\delta_K = 1$.
+Applying the bound on $|\text{Bal}(\lambda) - \text{Bal}(\zeta)|$ from the section on balayage, we deduce
+$$\mathbf P(\lambda \in K) \leq C_K \int_{I_K} \text{Bal}(\zeta)(Re^{i\theta}) ~d\theta + C_K\frac{\log\frac{1}{R-1}}{n(R-1)^2}.$$
+We already showed that $d(\zeta, C) = O(a)$.
+So in order to show
+$$\int_{I_K} \text{Bal}(\zeta)(Re^{i\theta}) ~d\theta \leq C_K(a + R - 1),$$
+which was the bound that we wanted,
+it suffices to show that for every $re^{i\alpha}$ such that $d(re^{i\alpha}, C) = O(a)$,
+$$\int_{I_K} P(Re^{i\theta}, re^{i\alpha}) ~d\theta \leq C_K(a + R - 1).$$
+Tao says that ``one can show" this claim, but I wasn't able to do it.
+I think the point is that under those cirumstances one has $r = R - O(a)$ and $\cos \alpha \ll a$ even as $\cos \theta \gg 0$, so we have some control on $\cos(\theta - \alpha)$. In fact I was able to compute
+$$\int_{I_K} P(Re^{i\theta}, re^{i\alpha}) ~d\theta = -\sum_m (r/R)^{|m|}\frac{e^{-im(\alpha + \delta) + e^{-im(\alpha - \delta)}}}{m}$$
+which suggests that this is the right direction, but the bounds I got never seemed to go anywhere.
+Someone bug me in the comments if there's an easy way to do this that I somehow missed.
+\end{proof}
+
+Now we take $R = 1 + n^{-1/3}$ to complete the proof.
+
+\section{Case one}
+Suppose that $1 - a$ is infinitesimal.
+Let $\mu$ be the expected value of $\lambda$ (hence also of $\zeta$).
+Let $0 < \delta \leq 1/2$ be a standard real.
+
+We first need to go on an excursion to a paper of D\'egot, who proves the following theorem:
+\begin{lemma}
+One has
+$$|f'(a)| \geq cn |f(\delta)|.$$
+Moreover,
+$$|f(\delta)| \leq (1 + \delta^2 - 2\delta \text{Re }\mu)^{n/2}.$$
+\end{lemma}
+I will omit the proof since it takes some complex analysis I'm pretty unfamiliar with. It seems to need Grace's theorem, which I guess is a variant of one of the many theorems in complex analysis that says that the polynomial image of a disk is kind of like a disk.
+It also uses some theorem called the Walsh contraction principle that involves polynomials on the projective plane.
+Curious.
+
+In what follows we will say that an event $E$ is \emph{standard-possible} if the probability that $E$ happens has positive standard part.
+
+\begin{lemma}
+For every $\varepsilon > 0$, $\mathbf P(\text{Re }\zeta \leq \varepsilon)$ is standard-possible.
+Besides, $|f'(a)| > n$.
+\end{lemma}
+\begin{proof}
+Since $|\zeta - a| > 1$ almost surely and
+$$U_\zeta(a) = -\frac{\log n}{n - 1} - \frac{1}{n - 1} \log |f'(a)|$$
+but
+$$U_\zeta(a) = -\mathbf E \log |\zeta - a| < 0,$$
+we have
+$$|f'(a)| > n.$$
+Combining this with the lemma we see that the standard part of $|f(\delta)|$ is $> 0$, so
+$$1^{1/n} \leq O(\sqrt{1 + \delta^2 + \delta\text{Re }\mu}).$$
+On the other hand,
+$$1 - O(n^{-1}) \leq 1^{1/n}$$
+and since $n$ is nonstandard, $1/n$ is infinitesimal, so the constant in $O(\sqrt{1 + \delta^2 + \text{Re }\mu})$ gets eaten. In particular,
+$$1 - O(n^{-1}) \leq \sqrt{1 + \delta^2 + \delta\text{Re }\mu}$$
+which implies that
+$$1 + o(1) \leq 1 + \delta^2 + \delta\text{Re }\mu$$
+and hence
+$$\text{Re }\mu \leq \frac{\delta}{2} + o(1).$$
+Since this is true for arbitrary standard $\delta$, underspill implies that there is an infinitesimal $\kappa$ such that
+$$\text{Re }\mu \leq \kappa.$$
+But $|\text{Re }\zeta| \leq 1$ almost surely, and we just showed
+$$\mathbf E\text{Re }\zeta \leq \kappa.$$
+So the claim holds.
+\end{proof}
+
+We now allow $\delta$ to take the value $0$, thus $0 \leq \delta \leq 1/2$.
+\begin{lemma}
+One has
+$$|f(0)| \sim |f(\delta)| \sim 1$$
+and
+$$|f'(a)| \sim n.$$
+Moreover, $|f(z)| \sim 1$ if $|z - 1/2| < 1/100$, so $f$ has no zeroes $z$ in that disk.
+\end{lemma}
+\begin{proof}
+Since
+$$\mathbf E \log\frac{1}{|z - \zeta|} = -\frac{\log n}{n - 1} - \frac{1}{n - 1} \log |f'(z)|$$
+one has
+$$\log |f'(a)| - \log |f'(\delta)| = (n-1)\mathbf E \frac{|a - \zeta|}{|\delta - \zeta|}.$$
+Now $|a - \zeta| \geq 1$ and $|\zeta| \leq 1$.
+
+Here I drew two unit circles in $\mathbf C$, one entered at the origin and one at $1$ (since $|a - 1|$ is infinitesimal); $\zeta$ is (up to infinitesimal error) in the first circle and out of the second.
+The rightmost points of intersection between the two circles are on a vertical line which by the Pythagorean theorem is to the left of the vertical line $x = a/2$, which in turn is to the left of the perpendicular bisector $x = (a+\delta)/2$ $[\delta, a]$.
+Thus $|a - \zeta| \geq |\delta - \zeta|$, and if $|\delta - \zeta| = |a - \zeta|$ then the real part of $\zeta$ is $(a+\delta)/2$.
+In particular, if the standard real part of $\zeta$ is $< 1/2$ then $|a - \zeta| > |\delta - \zeta|$, so $\log |a - \zeta|/|\delta - \zeta|$ has positive standard part.
+
+By the previous lemma, it is standard-possible that the standard real part of $\zeta$ is $\leq 1/4 < 1/2$, so the standard real part of $\zeta$ is standard-possibly positive and $\mathbf E \log|a-\zeta|/|\delta - \zeta|$ is almost surely nonnegative.
+Plugging into the above we deduce the existence of a standard absolute constant $c > 0$ such that
+$$\log |f'(a)| - \log |f'(\delta)| \geq cn.$$
+In particular,
+$$f'(\delta) \leq |f'(\delta)| \leq e^{-cn} |f'(a)|.$$
+Keeping in mind that $|f'(a)| > n$ is nonstandard, this doesn't necessarily mean that $f'(\delta)$ has nonpositive standard part, but it does give a pretty tight bound.
+Taking a first-order Taylor approximation we get
+$$f(0) = f(\delta) + O(e^{-cn|f'(a)|}).$$
+But one has
+$$|f'(a)| \geq cn |f(\delta)|$$
+from the D\'egot lemma.
+Clearly this term dominates $e^{-cn}|f'(a)|$ so we have
+$$|f(0)| \geq \frac{c}{n} |f'(a)|.$$
+Since one has a lower bound $|f'(a)| > n$ this implies $|f(0)|$ is controlled from below by an absolute constant.
+
+We also claim $|f(0)| \leq 1$. In fact, we showed last time that
+$$-U_\lambda(0) = \frac{1}{n} \log |f(0)|;$$
+we want to show that $\log |f(0)| \leq 0$, so it suffices to show that $U_\lambda(0) \geq 0$, or in other words that
+$$\mathbf E \log |\lambda| \leq 0.$$
+Since $|\lambda| \leq 1$ by assumption on $f$, this is trivial.
+We deduce that
+$$|f(0)| \sim |f(\delta)| \sim 1$$
+and hence
+$$|f'(a)| \sim n.$$
+
+Now Tao claims that the proof that $|f(z)| \sim 1$ is similar, if $|z - 1/2| < 1/100$.
+Since $\delta = 1/2$ was a valid choice of $\delta$ we have $|f(1/2)| \sim 1$.
+Since $|z - 1/2| < 1/100$, if $\text{Re }\zeta \leq 1/4$ then $|a - \zeta|/|z - \zeta| \geq c > 1$ where $c$ is an absolute constant.
+Applying the fact that $\text{Re }\zeta \leq 1/4$ is standard-possible and $\mathbf E \log|a-\zeta|/|z - \zeta|$ is almost surely nonnegative we get
+$$f'(z) \leq e^{-cn} |f'(a)|$$
+so we indeed have the claim.
+\end{proof}
+
+We now prove the desired bound
+$$\mathbf E \log \frac{1}{|\lambda|} \leq O(n^{-1}).$$
+Actually,
+$$\mathbf E \log \frac{1}{|\lambda|} = \frac{1}{n} \log \frac{1}{|f(0)|}$$
+as we proved last time, so the bound $|f(0)| \sim 1$ guarantees the claim.4
+
+In particular
+$$\mathbf E \log \frac{1}{|\lambda^{(\infty)}|} = 0$$
+by Fatou's lemma. So $|\lambda^{(\infty)}| = 1$ almost surely.
+Therefore $U_{\lambda^{(\infty)}}$ is harmonic on $D(0, 1)$, and we already showed that $|f(z)| \sim 1$ if $|z - 1/2|$ was small enough, thus
+$$U_\lambda(z) = O(n^{-1})$$
+if $|z - 1/2|$ was small enough.
+That implies $U_{\lambda^{(\infty)}} = 0$ on an open set and hence everywhere.
+Since
+$$U_\eta(Re^{i\theta}) = \frac{1}{2} \sum_{m \neq 0} \frac{e^{im\theta}}{|m|} \mathbf E\eta^{|m|}$$
+we can plug in $\eta = \lambda^{(\infty)}$ and conclude that all moments of $\lambda^{(\infty)}$ except the zeroth moment are zero.
+So $\lambda^{(\infty)}$ is uniformly distributed on the unit circle.
+
+By overspill, I think one can intuit that if $f$ is a random polynomial of high degree which has a zero close to $1$, all zeroes in $D(0, 1)$, and no critical point close to $a$, then $f$ sort of looks like
+$$z \mapsto \prod_{k=0}^{n-1} z - \omega^k$$
+where $\omega$ is a primitive root of unity of the same degree as $f$.
+Therefore $f$ looks like a cyclotomic polynomial, and therefore should have lots of zeroes close to the unit sphere, in particular close to $1$, a contradiction.
+This isn't rigorous but gives some hint as to why this case might be bad.
+
+Now one has
+$$\mathbf E \log |\zeta - a| = \frac{1}{n} \log \frac{|f'(a)|}{n} = O(n^{-1})$$
+and in particular by Fatou's lemma
+$$\mathbf E \log |\zeta^{(\infty)} - 1| = 0.$$
+But it was almost surely true that $\zeta^{(\infty)} \notin D(1, 1)$, thus that $\log |\zeta^{(\infty)} - 1| \geq 0$.
+So this enforces $\zeta^{(\infty)} \in \partial D(1, 1)$ almost surely.
+In particular, almost surely,
+$$\zeta^{(\infty)} \in \partial D(1, 1) \cap \overline{D(0, 1)} = \gamma.$$
+Since $\gamma$ is a contractible curve, its complement is connected.
+We recall that $U_{\lambda^{(\infty)}} = U_{\zeta^{(\infty)}}$ near infinity, and since we already know the distribution of $\lambda^{(\infty)}$, we can use it to compute $U_{\zeta^{(\infty)}}$ near infinity.
+Tao says the computation of $U_{\zeta^{(\infty)}}$ is a straightforward application of the Newtonian shell theorem; he's not wrong but I figured I should write out the details.
+
+For $\eta = \lambda^{(\infty)}$ one has
+$$U_\eta(z) = \mathbf E \log \frac{1}{|z - \eta|} = \frac{1}{2\pi} \int_{\partial D(0, 1)} \log \frac{1}{|z - w|} ~d|w|$$
+where the $d|w|$ denotes that this is a line integral in $\RR^2$ rather than in $\CC$.
+Translating we get
+$$U_\eta(z) =- \frac{1}{2\pi} \int_{\partial D(z, 1)} \log |w| ~d|w|$$
+which is the integral of the fundamental solution of the Laplace equation over $\partial D(z, 1)$.
+If $|z| > 1$ (reasonable since $z$ is close to infinity), this implies the integrand is harmonic, so by the mean-value formula one has
+$$U_\eta(z) = -\log |z|$$
+and so this holds for both $\eta = \lambda^{(\infty)}$ and $\eta = \zeta^{(\infty)}$ near infinity.
+But then $\zeta^{(\infty)}$ is harmonic away from $\gamma$, so that implies that
+$$U_{\zeta^{(\infty)}} = \log \frac{1}{|z|}.$$
+Since the distribution $\nu$ of $\zeta^{(\infty)}$ is the Laplacian of $U_{\zeta^{(\infty)}}$ one has
+$$\nu = \Delta \log \frac{1}{|z|} = \delta_0.$$
+Therefore $\zeta^{(\infty)} = 0$ almost surely.
+In particular, $\zeta$ is infinitesimal almost surely. This completes the proof in case one.
+
+By the way, I now wonder if when one first learns PDE it would be instructive to think of the fundamental solution of the Laplace equation and the mean-value formulae as essentially a consequence of the classical laws of gravity.
+Of course the arrow of causation actually points the other way, but we are humans living in a physical world and so have a pretty intuitive understanding of what gravity does, while stuff like convolution kernels seem quite abstract.
+
+Next time we'll prove a contradiction for case zero, and maybe start on the proof for case one.
+The proof for case one looks really goddamn long, so I'll probably skip or blackbox some of it, maybe some of the earlier lemmata, in the interest of my own time.  
+
+
+
+
+% When Tao uses Fourier uniqueness for the moment-generating function of the circular distribution look at https://en.wikipedia.org/wiki/Circular_uniform_distribution to see why it's unique.
+
+
+
+
+
+
+\end{document}

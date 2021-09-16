@@ -1,0 +1,564 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hess}{\operatorname{Hess}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\Map}{Map}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{corollary}[lemma]{Corollary}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Algebraic Topology, HW 2} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+I talked about most of these problems with Megan Chang-Lee, Steven Creech, Matthew Emerson and Nate Gillman.
+In addition, I consulted the books of Hatcher, Bredon, and Dugundji, as well as Terry Tao's notes on Galois theory.
+
+\begin{exer}
+Show that if $v - e + f = 2$, then there is a CW-structure on $S^2$ with $v$ vertices, $e$ edges, and $f$ faces.
+\end{exer}
+
+We prove this by induction on $e = v + f - 2$. When $e = 0$ then, because any CW-structure on a surface must have $f \geq 1$, and if there are two faces then their common boundary is an edge (so $f \leq 1$ if $e = 0$), we see that $v = f = 1$, which is only possible if $S^2$ is realized as the one-point compactification of a face; that is, $S^2$ consists of a face with its boundary glued together into a vertex.
+
+Now suppose that any solution of $v - e + f = 2$ can be realized when $e = e_0$.
+Then one can realize $(v + 1) - (e_0 + 1) + f = 2$ by splitting an edge into two edges and putting a vertex in their intersection.
+One can realize $v - (e_0 + 1) + (f + 1) = 2$ by splitting a face into two faces and putting an edge along their intersection.
+
+\begin{exer}
+Describe all connected covering spaces of $\PP^n$.
+\end{exer}
+
+We first consider when $n = 1$. Then $\PP^1 = S^1$ has fundamental group $\ZZ$, which is abelian and hence has all subgroups normal.
+Let $n\ZZ$ be a normal subgroup of $\ZZ$; then $n\ZZ$ determines a covering space of $S^1$, given by the self-map $z \mapsto z^n$ of $S^1$.
+
+Now suppose that $n \geq 2$. Then $\PP^n = S^n/(\ZZ/2)$, since $\pi_1(\PP^n) = \ZZ/2$, and $S^n$ is simply connected.
+So the only covering space is the double cover $S^n \to \PP^n$, except for the trivial cover $\PP^n \to \PP^n$.
+
+\begin{exer}
+Describe all connected covering spaces of the Klein bottle.
+\end{exer}
+
+Consider the flat Klein bottle $[0, 1]^2/R$ where $R$ is an equivalence relation that glues the vertical edges in an orientation-preserving way and the horizontal edges in an orientation-reversing way.
+Then gluing two flat bottles along two horizontal edges of opposite orientation gives a torus.
+This map gives a double cover $S^1 \times S^1 \to K$, where $K$ is the Klein bottle.
+Gluing an infinite strip of Klein bottles along vertical edges we get a cover by the M\"obius band with deck transformation group $\ZZ$.
+
+Covering spaces of the torus are easy to classify: each of the factors $S^1$ can be covered by $S^1$ winding around itself some number of times, or by $\RR$. So all covering spaces are given by $S^1 \times S^1$, $S^1 \times \RR$, $\RR \times S^1$, or $\RR^2$, where the maps down from $S^1$ are of the form $z \mapsto z^n$ and the maps down from $\RR$ are the universal covering maps for $S^1$.
+Since the torus is a double cover of $K$, each of these covering maps induces two covering maps of $K$.
+
+Covering spaces of the M\"obius band $M$ induce one covering space of $K$ for each element of $\ZZ$.
+Since $M$ is ``$S^1 \times \RR$ with $\ZZ/2$-torsion", we get a trivial cover $\RR \to \RR$ for the second factor, and covers $S^1 \to S^1$, $z \mapsto z^n$ for the second factor.
+
+It seems like there could be other covering spaces obtained by some trickery with fundamental polygons but I sure don't see how.
+The trouble is that even conjugacy classes of $\pi_1(K)$ seem totally intractable to compute.
+Clearly $\pi_1(K) = \langle a, b: aba^{-1} = b^{-1}\rangle$, which is a semidirect product of $\ZZ$ with itself according to the $\ZZ/2$-action $1 \mapsto -1$.
+However, we then run into the following technical issue:
+\begin{lemma}
+I don't have the faintest idea how to recover conjugacy classes of a (nonabelian) semidirect product.
+\end{lemma}
+\begin{proof}
+I'm an analyst.
+\end{proof}
+
+\begin{exer}
+Find all connected, $3$-sheeted covering spaces of the figure eight.
+Consider the consequences for its fundamental group.
+\end{exer}
+
+A connected, $3$-sheeted covering space of the figure eight $X$ is given by a graph which is homotopy equivalent to one with $3$ vertices, that all have degree $4$.
+Indeed, the figure eight is a graph with $1$ vertex of degree $4$.
+So now we classify such graphs.
+
+\begin{lemma}
+If $G \to X$ is a $3$-sheeted connected covering space of $X$, then $G$ is a graph, and up to graph isomorphism, $G$ is one of:
+\begin{enumerate}
+\item The graph $H_{58,3}$ depicted in diagram (3) on page 58 of Hatcher.
+\item A triangle equipped with one loop at each vertex.
+\item A triangle equipped with a loop at one vertex, and two additional edges between its other two vertices.
+\item The graph $H_{58,5}$ depicted in diagram (5) on page 58 of Hatcher.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Let the vertices of $G$ be denoted $a,b,c$.
+Since $G$ is connected, after reordering we can find edges $ a \to b$ and $ b \to c$.
+Let $\alpha,\beta$ freely generate $\pi_1(X)$.
+
+We first claim that either there is an edge $a \to c$, or $G$ is the graph with two edges $a \to b$ and $b \to c$, and loops at $a, c$; thus $G$ is isomorphic to $H_{58,3}$.
+Suppose that there are no edges $a \to c$.
+For parity reasons, there must then be a second edge $a \to b$.
+If there is a third edge $a \to b$, then because there was already an edge $b \to c$, there cannot be a fourth edge $a \to b$, but nor can there be a loop based at $a$, so one has a contradiction.
+Therefore the last edge out of $b$ must be spent on an edge $b \to c$.
+There are two more edges out of $a,c$ to spend, so by assumption there must be loops at $a,c$.
+Therefore $G$ is isomorphic to $H_{58,3}$.
+As discussed in Hatcher, $H_{58,3}$ is a cover of $X$.
+
+So if $G$ is not isomorphic to $H_{58,3}$, then $G$ contains a copy of the triangle $K_3$.
+Let $\alpha$ lift to the loop that runs around the triangle.
+All vertices in $K_3$ have degree $4$, so there are still $2$ degrees left to ``spend".
+It is possible that every vertex has a loop on it, in which $G$ covers $X$: let $\beta$ lift to the loops based at each vertex.
+
+Suppose that $G$ also has a vertex which does not have a loop on it, say $a$.
+Suppose also that there is another vertex, say $b$, such that there are three edges $a \to b$.
+In that case the degrees of $a,b$ are all spent, and $c$ must have a loop on it.
+Then $G$ covers $X$: let $\beta$ lift to the cycle $a \to b \to a$ which does not include any edge of  $K_3$.
+
+Otherwise, there are two edges $a \to b$ and two edges $a \to c$.
+In that case the degree of $a$ is all spent, and only one of the degree of $b,c$ is left.
+So there must be an edge $b \to c$. Clearly this graph is isomorphic to $H_{58,5}$.
+\end{proof}
+
+\begin{theorem}
+Let $G \to X$ be a covering space of $X$. Then $G$ is, up to isomorphism of covering spaces, one of the following seven covering spaces:
+\begin{enumerate}
+\item The graph $H_{58,3}$, with basepoint taken to be a vertex with a loop.
+\item The graph $H_{58,3}$, with basepoint taken to be the vertex without a loop.
+\item A triangle equipped with one loop at each vertex, one of which we take as a basepoint.
+\item A triangle equipped with a loop at one vertex, which we take as a basepoint, and two additional edges between its other two vertices.
+\item A triangle equipped with a loop at one vertex, and two additional edges between its other two vertices, one of which we take as a basepoint.
+\item The graph $H_{58,5}$, with basepoint taken to be a vertex, and any two edges between two vertices oriented in the same direction.
+\item The graph $H_{58,5}$, with basepoint taken to be a vertex, and any two edges between two vertices oriented in opposite directions.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We have already shown that up to graph isomorphism, these are the only covering spaces, and each of the listed covering spaces is indeed a valid covering space.
+So we just need to show that on those graphs, these are the only possible covering spaces, and each description determines exactly one covering space up to isomorphism.
+Let $a,b$ be the generators of $\pi_1(X)$.
+
+First consider $H_{58,3}$. Either the basepoint $x$ has a loop or not.
+If so, then up to a relabeling we can take that loop to be $a$; then the other edges from $x$ must be $b$, which passes through the loopless vertex $y$. Then the other two edges passing through $y$ must be $a$, and the other loop must be $b$.
+Otherwise, the basepoint does not have a loop, so two of the edges out of $x$, corresponding to $a$, must pass through a looped vertex $y$; the other two edges must correspond to $b$. So the loop at $y$ must correspond to $b$ and the other loop must correspond to $a$.
+
+Now if $G$ is a triangle with all vertices looped, $G$ is sufficiently symmetric that it does not matter which vertex we take as $x$.
+If the loop at $x$ is $a$, then the $K_3$ must be $b$, and the other loops must also be $a$.
+
+If $G$ is a triangle which only has one vertex looped, suppose that $x$ is looped, with loop $a$.
+Then the $K_3$ must be $b$, and the two leftover edges must be $a$.
+If $x$ is not looped, then let the $K_3$ be $b$; then the loop and the two leftover edges must be $a$.
+The orientation of the leftover edges does not matter; one is always oriented opposite to $K_3$ and the other is oriented identically to $K_3$.
+
+Finally consider $H_{58,5}$. It is sufficiently symmetric that the choice $x$ does not matter.
+Choose a $K_3$ in $H_{58,5}$, and let $a$ correspond to that $K_3$.
+Then $b$ corresponds to the other $K_3$.
+Either $a,b$ have the same orientation, or reversed orientations; either uniquely determines a covering space.
+\end{proof}
+
+\begin{lemma}
+If $G \to X$ is a covering space, then $G$ is homotopy equivalent to the $4$-petaled rose $(S^1)^{\vee 4}$.
+\end{lemma}
+\begin{proof}
+Let $G$ be a graph which admits a covering space $G \to X$.
+Any such graph $G$ is homotopy equivalent to a $4$-petaled rose.
+Indeed, if $T$ is a spanning tree of $G$ and the vertices of $G$ are $a,b,c$, then after reordering we can assume that $T$ contains edges $e: a \to b$ and $f: b \to c$.
+We claim that $T$ is in fact a maximal spanning tree.
+Indeed, if $d$ is an edge which does not appear in $T$ and $d$ is not a loop, then either $d$ is an edge $a \to b$, $b \to c$, or $a \to c$.
+The former two are unacceptable because $T$ already contains edges $a \to b$ and $b \to c$. The latter is unacceptable because then $T$ contains a copy of the triangle $K_3$.
+
+After retracting $e,f$ to points, we obtain a graph $G'$ with one vertex; thus $G'$ is a rose.
+Each of the edges except $e,f$ becomes a loop in $G'$.
+By the handshaking lemma, $G$ has $6$ edges; we retracted two to points, so $G'$ is a $4$-petaled rose which is a retract of $G$.
+Moreover, $G$ and $G'$ are homotopy equivalent.
+\end{proof}
+
+\begin{theorem}
+Every index-$3$ subgroup of $\ZZ^{*2}$ is free on four generators.
+\end{theorem}
+\begin{proof}
+Let $G \to X$ be a covering space.
+By the previous lemma and the Seifert-van Kampen theorem, $\pi_1(G) \cong \ZZ^{*4}$.
+On the other hand, $\pi_1(X) \cong \ZZ^{*2}$.
+If $H$ is a subgroup of $\ZZ^{*2}$ of index $3$, then $H$ is the fundamental group of a $3$-sheeted cover, hence $H \cong \pi_1(G) \cong \ZZ^{*4}$.
+\end{proof}
+
+\begin{exer}
+Suppose that $G$ is a topological group, and let $p: \widetilde G \to G$ be its universal cover.
+Show that there is a unique group structure on $\widetilde G$ such that $p$ is a morphism of groups.
+\end{exer}
+
+Let $m,i$ be the group operations of $G$. Let $\tilde e$ be an element of $p^{-1}(e) \subseteq \widetilde G$.
+Then the map $m \circ (p \times p)$ has a unique lift $\tilde m: \widetilde G \times \widetilde G \to \widetilde G$ making the diagram
+$$\begin{tikzcd}
+\widetilde G \times \widetilde G \arrow[r, "\tilde m"] \arrow[d,"p \times p"] & \widetilde G \arrow[d,"p"]\\
+G \times G \arrow[r,"m"] & G
+\end{tikzcd}$$
+commute such that $\tilde m(\tilde e, \tilde e) = \tilde e$.
+Similarly, one can find a lift $\tilde i: \widetilde G \to \widetilde G$ of $i \circ p$ such that $\tilde i(\tilde e) = \tilde e$.
+Then clearly $p$ is a morphism of groups, if $\tilde G$ is a group.
+The map $f(x) = \tilde m(\tilde e, x)$ is a lift of $p$, but the identity map of $\tilde G$ is a lift of $p$, so $f$ is the identity.
+Similarly $x \mapsto \tilde m(x, \tilde e)$ is the identity.
+A similar argument, lifting different versions of the map $(x, y, z) \mapsto p(x)p(y)p(z)$, shows that $\tilde m$ is associative, which was to be shown.
+Since the universal covering group obviously is initial in the category of covering groups, it is unique by general abstract nonsense.
+
+\begin{exer}
+Say that a covering space is abelian if it is a normal cover whose Galois group is abelian.
+
+Let $X$ be a path-connected, locally path-connected, semilocally simply connected space.
+Show that $X$ has a unique universal abelian covering space.
+
+Compute the universal abelian covering space of $S^1 \vee S^1$ and $S^1 \vee S^1 \vee S^1$.
+\end{exer}
+
+We recall the following form of the Galois correspondence. By $\Gal(A/B)$ we mean the group of deck transformations of a covering space $B \to A$.
+
+\begin{lemma}[fundamental theorem of Galois theory]
+Suppose that $M \to N$ and $N \to L$ are covering spaces, and $\Gal(M/N)$ is a normal subgroup of $\Gal(M/L)$.
+Then $\Gal(N/L) = \Gal(M/L)/\Gal(M/N)$.
+\end{lemma}
+
+Here we take $L = X$, $M \to L$ the universal cover of $X$, and $N \to L$ the covering space corresponding to the commutator of $\pi_1(X) = \Gal(M/L)$, which is always normal.
+Then $\Gal(N/L)$ is the abelianization of $\pi_1(X)$.
+By the universal property of the abelianization (it is initial among abelian quotients of $\pi_1(X)$) and the universal property of the universal cover (it is initial among connected covering spaces over $X$), it follows that $N \to L$ is initial among abelian connected covering spaces over $X$, so satisfies the universal property of the universal abelian covering space.
+Moreover, since its definition is by a universal property, this implies that $N \to L$ is unique.
+
+It will be convenient to dispense of both universal abelian covers at the same time:
+\begin{theorem}
+Let $(S^1)^{\vee n}$ be the $n$-petaled rose, and let $A_n \to (S^1)^{\vee n}$ be its universal abelian cover.
+Then $A_n$ is the Cayley graph of $\ZZ^n$.
+\end{theorem}
+\begin{proof}
+By the Seifert-van Kampen theorem, $F_n = \pi((S^1)^{\vee n})$ is free on $a_1, \dots, a_n$, where $a_i$ is a loop around the $i$th petal.
+In particular, the universal cover of $(S^1)^{\vee n}$ is the Cayley graph $C_n$ of $F_n$.
+We have already shown that we can obtain $A_n$ by taking a quotient of $C_n$ by the deck action of the commutator of $F_n$.
+The vertices of $C_n$ are exactly the reduced words in $a_1, \dots, a_n$, and the vertices of $A_n$ will therefore consist of reduced words of the form $a_1^{k_1} \cdots a_n^{k_n}$.
+The map
+$$a_1^{k_1} \cdots a_n^{k_n} \mapsto (k_1, \dots, k_n)$$
+is a bijection between the vertices of $A_n$ and $\ZZ^n$.
+
+Now let $(k_1, \dots, k_n)$ be a vertex in $A_n$.
+If $j \in \{1, \dots, n\}$, then there are edges
+$$(k_1, \dots, k_n) \to (k_1, \dots, k_{j-1}, k_j \pm 1, k_{j+1}, \dots, k_n)$$
+obtained by taking the projection of the edge $a_1^{k_1} \cdots a_n^{k_n} \to a_1^{k_1} \cdots a_n^{k_n} a_j$ in $C_n$.
+In fact there are $2n$ such edges.
+On the other hand, $A_n$ is a covering graph of $(S^1)^{\vee n}$, so every vertex of $A_n$ has degree $2n$, and thus there can be no other edges.
+\end{proof}
+
+
+
+\begin{exer}
+Say that $i: A \to X$ has the homotopy extension property with respect to $Y$ if for every map $f: X \to Y$ and homotopy $H: A \times I \to Y$ with $H(\cdot, 0) = f \circ i$, there is an extended homotopy $\tilde H: X \times I \to Y$ with $\tilde H(\cdot, 0) = f$ and $\tilde H(i(a), t) = H(a, t)$.
+Say that $i$ is a cofibration if for every $Y$, $i$ has the homotopy extension property with respect to $Y$.
+
+Suppose that
+$$\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,"i"] & B \arrow[d,"j"]\\
+X \arrow[r,"g"] & Y
+\end{tikzcd}$$
+is a pushout diagram. Show that if $i$ is a cofibration, then so is $j$.
+
+Suppose that $i: A \to X$ is a closed inclusion. Show that $i$ is a cofibration iff the mapping cylinder $M_i$ is a strong deformation retract of $X \times I$.
+
+Let $i: A \to X$ be a cofibration. Show that $i$ is injective, and if $X$ is Hausdorff, then $i(A)$ is closed.
+
+Suppose that
+$$\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,"i"] & B \arrow[d,"j"]\\
+X \arrow[r,"g"] & Y
+\end{tikzcd}$$
+is a pushout diagram. Show that if $i$ is a cofibration, then $Y$ is homotopy equivalent to the homotopy pushout $M_{i,f}$, the double mapping cylinder of $(i, f)$.
+\end{exer}
+
+\begin{theorem}
+If $f: A \to B$, $i: A \to X$, $g: X \to Y$, and $j: B \to Y$ are given, and $Y$ is the pushout of the above maps, and $i$ is a cofibration, then $j$ is a cofibration.
+\end{theorem}
+\begin{proof}
+Let $Z$ be a topological space. We must show that $j$ has the $Z$-homotopy extension property.
+Let $\Map(I, Z) \to Z$ be the evaluation map $\alpha \mapsto \alpha(0)$, let $h: Y \to Z$ be a map, and suppose we are given a homotopy $H: B \to \Map(I, Z)$ making the diagram
+$$\begin{tikzcd}
+B \arrow[r,"H"] \arrow[d,"j"] & \Map(I, Z) \arrow[d] \\
+Y \arrow[r,"h"] & Z
+\end{tikzcd}$$
+commute. We must find a homotopy $\tilde H: Y \to \Map(I, Z)$ which commutes with all the maps in the above homotopy diagram.
+Combining the homotopy diagram and the pushout diagram we obtain a diagram
+$$\begin{tikzcd}
+& A \arrow[d, "i"] \arrow[rr,"f"] && B \arrow[d,"j"] \arrow[dr,"H"] \\
+\Map(I, Z) \arrow[drr] & X \arrow[rr,"g"] && Y \arrow[dl,"h"] & \Map(I, Z) \arrow[dll]\\
+&&Z
+\end{tikzcd}$$
+where the two copies of $\Map(I, Z)$ have an identity arrow connecting them (not shown because it would be too hard to draw in tikz).
+We fill in the above diagram to get a diagram
+$$\begin{tikzcd}
+& A \arrow[d, "i"] \arrow[rr,"f"] \arrow[dl,color=orange] && B \arrow[d,"j"] \arrow[dr,"H"] \\
+\Map(I, Z) \arrow[drr] & X \arrow[rr,"g"] \arrow[dr,color=orange] \arrow[l,color=blue] && Y \arrow[dl,"h"] \arrow[r,color=red] & \Map(I, Z) \arrow[dll]\\
+&&Z
+\end{tikzcd}$$
+where first the orange arrows were added by composition, then the fact that $i$ is a cofibration gave us the blue arrow, and finally the red arrow was added using the universal property of the pushout.
+The red arrow is a witness to the fact that $j$ has the $Z$-HEP.
+\end{proof}
+
+We now prove a long sequence of implications, which together will imply the following theorem, which comprised two parts of the exercise.
+The reason for doing it in this awkward way is that we needed some of the facts from part ``c" to prove part ``b", and we needed to be careful that our argument not be circular.
+
+\begin{theorem}
+Let $i: A \to X$ be a map. If $i$ is a cofibration, then $i$ is an embedding. In fact, if $X$ is Hausdorff, then $i$ is a closed embedding.
+
+Moreover, if $i$ is a closed embedding, then $i$ is a cofibration if and only if the mapping cylinder $M_i$ is a strong deformation retract of $X \times I$.
+\end{theorem}
+
+\begin{lemma}
+If $i$ is a cofibration, then there is a surjective map $r: X \times I \to M_i$ which makes the diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd]\\
+& X \times I \arrow[dr,"r"]\\
+X \arrow[ur] \arrow[rr] && M_i
+\end{tikzcd}$$
+commute.
+\end{lemma}
+\begin{proof}
+By assumption, $i$ has the $M_i$-HEP. In particular, we can fill in the diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd]\\
+& X \times I \\
+X \arrow[ur] \arrow[rr] && M_i
+\end{tikzcd}$$
+with an arrow
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd]\\
+& X \times I \arrow[dr,"r",color=red]\\
+X \arrow[ur] \arrow[rr] && M_i
+\end{tikzcd}.$$
+Let $(x, t) \in M_i$. If $t = 0$ then, since the bottom triangle commutes, $r(x, 0) = (x, 0)$.
+Otherwise, if $t > 0$, then, since the right triangle commutes and $(x, t)$ lifts to an element of $A \times I$, $r(x, t) = (x, t)$.
+\end{proof}
+
+\begin{lemma}
+If $i$ is a cofibration, then $i$ is an embedding.
+\end{lemma}
+\begin{proof}
+We now show that $i$ is an embedding. Let $r: X \times I \to M_i$ be the surjective map from the previous result.
+Then $r \circ (i, 1)$ maps $A$ onto the top of $M_i$.
+But the top of $M_i$ is homeomorphic to $A$ in a natural way, by the universal property of $M_i$, and can be identified with $A$.
+Therefore $r \circ (i, 1)$ is the identity on $A$, so, identifying $i$ with $(i, 1)$, $r$ is a left inverse of $i$.
+So $i$ must be an embedding.
+\end{proof}
+
+\begin{lemma}
+If $i$ is a cofibration, then $r$ is a retraction.
+\end{lemma}
+\begin{proof}
+We showed that $r$ is surjective and $i$ is an embedding. Therefore $r$ is a surjective map from $X \times I$ to a subspace of $X \times I$.
+Since $r$ was defined to make the diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd]\\
+& X \times I \arrow[dr,"r"]\\
+X \arrow[ur] \arrow[rr] && M_i
+\end{tikzcd}$$
+commute, and the arrows $X \to M_i$ and $A \times I \to M_i$ are inclusions, commutativity of the bottom and right triangles imply that $r$ fixes $M_i$.
+So $r$ is a retraction.
+\end{proof}
+
+\begin{lemma}
+If $i$ is a cofibration and $X$ is Hausdorff, then $i$ is a closed embedding.
+\end{lemma}
+\begin{proof}
+Since $M_i$ is a retract of the Hausdorff space $X \times I$, $M_i$ is closed in $X \times I$.
+In particular,
+$$U = \{(x, t) \in X \times (0, 1]: x \notin A\}$$
+is open, so $V = (X \setminus A) \times \{1\}$ is open.
+Therefore $V$ is open when viewed as a subset of $X$. So $A$ is closed.
+\end{proof}
+
+\begin{lemma}
+If $i$ a cofibration and a closed embedding, then $M_i$ is a strong deformation retract of $X \times I$.
+\end{lemma}
+\begin{proof}
+Consider the homotopy
+$$H(x, s, t) = (p_X(r(x, st)), (1 - t)s + tp_I(r(x, s))).$$
+Then $H(x, s, 0) = (p_X(r(x, 0)), s) = (x, s)$ since $p_X \circ r$ is the identity (since the diagram that defined $r$ commuted).
+Also $H(x, s, 1) = (p_X(r, s), p_I(r(x, s))) = r(x, s)$.
+So $H$ is a homotopy from the identity to $r$, and hence a deformation retraction.
+It is strong since if $x \in A$ then $p_X(r(x, st)) = x$ and $(1 - t)s + tp_I(r(x, s)) = (1 - t + t)s = s$.
+\end{proof}
+
+\begin{lemma}
+If $M_i$ is a strong deformation retract of $X \times I$, then $i$ is a cofibration.
+\end{lemma}
+\begin{proof}
+Let $r: X \times I \to M_i$ be the induced retraction.
+Let $Y$ be a topological space; we must show that $i$ has the $Y$-HEP.
+Consider the homotopy extension diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd,"H"]\\
+& X \times I \\
+X \arrow[ur] \arrow[rr,"f"] && Y
+\end{tikzcd}.$$
+Deleting the middle we obtain a diagram
+$$\begin{tikzcd}
+A \arrow[r] \arrow[d,"i"] & A \times I \arrow[d,"H"]\\
+X \arrow[r,"f"] & Y
+\end{tikzcd}$$
+and by the universal property of the pushout $M_i$, we obtain a map $\alpha: M_i \to Y$.
+Then the diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd] \arrow[dddr,"H"]\\
+& X \times I \arrow[dr,"r"] \\
+X \arrow[ur] \arrow[rr] \arrow[drrr,"f"] && M_i \arrow[dr,"\alpha"]\\
+&&& Y
+\end{tikzcd}$$
+commutes. Therefore $\tilde H = \alpha \circ r$ gives an arrow that we can insert into our original diagram
+$$\begin{tikzcd}
+A \arrow[rr] \arrow[dd,"i"] && A \times I \arrow[dl] \arrow[dd,"H"]\\
+& X \times I \arrow[dr,"\tilde H",color=red] \\
+X \arrow[ur] \arrow[rr,"f"] && Y
+\end{tikzcd}$$
+to complete the proof.
+\end{proof}
+
+\begin{corollary}
+If $i$ is a cofibration and
+$$\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,"i"] & B \arrow[d,"j"]\\
+X \arrow[r,"g"] & Y
+\end{tikzcd}$$
+is a pushout diagram, then $Y$ is homotopy equivalent to the homotopy pushout $M_{i,f}$.
+\end{corollary}
+\begin{proof}
+First, $M_{i,f}$ is given by the pushout
+$$\begin{tikzcd}
+A \arrow[r,"i \times \{1\}"] \arrow[d,"f"] & M_i \arrow[d] \\
+B \arrow[r] & M_{i,f}
+\end{tikzcd}$$
+which attaches $B$ to the top of the mapping cylinder $M_i$.
+
+Let $Z$ be defined by the pushout diagram
+$$\begin{tikzcd}
+A \arrow[r,"f \times \{1\}"] \arrow[d,"i"] & B \arrow[d,"j"]\\
+X \times I \arrow[r,"g"] & Z
+\end{tikzcd}.$$
+Then $Z$ is clearly homotopy equivalent to $Y$.
+Since $i$ is a cofibration, $M_i$ is a strong deformation retract of $X \times I$; say by $H: 1 \sim r$.
+Let $X \times I/f$ denote $X \times I$ modulo the equivalence relation $(a, 1) \sim (a', 1)$ whenever $f(a) = f(a')$ and $a \in A$.
+Then $H(t)$ drops to a suitable map $H/f: X \times I/f \to M_i/f$, and $H/f: 1 \sim r/f$ is a strong deformation retraction.
+Gluing $B$ to the top of $M_i/f$ to obtain $M_{i,f}$ using the first pushout diagram in this proof, we can extend $H/f$ to a strong deformation retraction of $Z$ onto $M_{i,f}$.
+
+Therefore $Z$ and $M_{i,f}$ are homotopy equivalent, and $Z$ is clearly homotopy equivalent to $Y$, so we're done.
+\end{proof}
+
+
+
+\end{document}

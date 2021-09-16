@@ -1,0 +1,279 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability II, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Show that there is $c > 0$ such that for every submartingale or supermartingale $X$, $\lambda > 0$, and $n \geq 0$,
+\begin{equation}
+\label{maximal inequality}
+P(\sup_{0 \leq k \leq n} |X_k| \geq \lambda) \leq \frac{c}{\lambda}(E|X_0| + E|X_n|).
+\end{equation}
+\end{exer}
+
+If $X$ is a supermartingale, then $-X$ is a submartingale.
+Since only $|X|$ appears in the maximal inequality (\ref{maximal inequality}), it is no loss to replace $X$ with $-X$.
+Therefore we may assume that $X$ is a submartingale.
+
+One has
+$$P(\sup_{0 \leq k \leq n} |X_k| \geq \lambda) \leq P(\sup_{0 \leq k \leq n} X_k \geq \lambda) + P(\sup_{0 \leq k \leq n} X_k \leq -\lambda),$$
+and by the first submartingale inequality,
+$$P(\sup_{0 \leq k \leq n} X_k \geq \lambda) \leq \frac{E|X_n|}{\lambda}.$$
+On the other hand, if $Y$ is the reversed process
+$$Y_k = \begin{cases}
+X_{n - k}, &k \leq n\\
+X_0, &n,
+\end{cases}$$
+then $Y$ is a supermartingale, so $-Y$ is a submartingale and
+$$P(\sup_{0 \leq k \leq n} X_k \leq -\lambda) \leq P(\sup_{0 \leq k \leq n} -Y_k \geq \lambda) \leq \frac{E|Y_n|}{\lambda} = \frac{E|X_0|}{\lambda}$$
+by the first submartingale inequality.
+This was desired as (\ref{maximal inequality}) follows with $c = 1$.
+
+\begin{exer}
+Let $X$ be an independent random sequence with $EX_n = 0$.
+Show that if there is $1 \leq p \leq 2$ such that $\sum_n E(|X_n|^p) < \infty$ then $\sum_n X_n$ is almost surely finite.
+\end{exer}
+
+First,
+$$\sum_{n=1}^\infty P(|X_n| \geq 1) \leq \sum_{n=1}^\infty E(|X_n|^p) < \infty$$
+by Chebyshev's inequality.
+
+Second, we claim that $\sum_n EX_n^{(1)} < \infty$, where $X_n^{(1)} = X_n 1_{|X_n| \leq 1}$.
+Indeed,
+$$0 = \sum_{n=1}^\infty EX_n = \sum_{n=1}^\infty EX_n^{(1)} + \sum_{n=1}^\infty E(1_{|X_n| \geq 1} X_n).$$
+Thus
+\begin{align*}
+\sum_{n=1}^\infty EX_n^{(1)} &= -\sum_{n=1}^\infty E(1_{|X_n| \geq 1} X_n) \leq \sum_{n=1}^\infty E(1_{|X_n| \geq 1} |X_n|) \\
+&\leq \sum_{n=1}^\infty E(1_{|X_n| \geq 1} |X_n|^p) \leq \sum_{n=1}^\infty E(|X_n|^p) < \infty.
+\end{align*}
+The complementary bound $-\infty < \sum_n EX_n^{(1)}$ is similar.
+
+Third,
+$$\sum_{n=1}^\infty \Var X_n^{(1)} \leq \sum_{n=1}^\infty E(|X_n^{(1)}|^p) < \infty.$$
+Now we can use Kolmogorov's $3$-series theorem to conclude $\sum_n E(|X_n|^p) < \infty$.
+
+\begin{exer}
+Consider an $L^2$ martingale $X$ with $X_0 = 0$.
+Let $f \geq 0$ be nondecreasing and assume
+$$\int_0^\infty \frac{dy}{(1 + f(y))^2} < \infty.$$
+Show that
+$$\lim_{n \to \infty} \frac{X_n}{f(\langle X\rangle_n)} = 0$$
+almost surely given $\langle X\rangle_\infty = \infty$.
+\end{exer}
+
+Let $A_n = (1 + f\langle X\rangle_n)^{-1}$. Then $A$ is a bounded predictable process, so $M = A \bullet X$ is an $L^2$ martingale.
+Arguing identically to the proof of the martingale law of large numbers,
+$$\langle M\rangle_{n+1} - \langle M\rangle_n \leq A_n - A_{n+1}.$$
+Telescoping the sum,
+$$\langle M\rangle_{n+1} \leq A_0 - A_{n+1} \leq 1$$
+(since $A_0 = 1$ by definition of quadratic variation, and $A_{n+1} \leq 1$).
+Thus $\langle M\rangle$ increases to a final state $\langle M\rangle_\infty \leq 1$ and hence $M$ almost surely has a finite final state $M_\infty \in \RR$.
+By Kronecker's lemma, after conditioning on $\langle X\rangle_\infty$,
+$$\lim_{n \to \infty} \frac{X_n}{1 + f(\langle X\rangle_n)} = 0$$
+almost surely, which implies the same for $X_n/f(\langle X\rangle_n)$.
+
+\begin{exer}
+Let $f: [0, 1] \to \RR$ be a Lipschitz function. Show that $f$ is absolutely continuous.
+\end{exer}
+
+Consider the limit of Doob martingales
+$$X_n = \lim_{h \to 0} \frac{1}{h} E(f(x+h) - f(x)|\mathcal F_n)$$
+where $\mathcal F$ is the filtration generated by dyadic intervals, $x$ is a point in $[0, 1]$ drawn uniformly at random with respect to Lebesgue measure, and the limit is well-defined possibly after passing to a subsequence of $h$s.
+More precisely, $\mathcal F_n$ is generated by all intervals of the form $[k/2^n, (k+1)/2^n]$, where $0 \leq k \leq 2^n - 1$ is an integer.
+
+\begin{lemma}
+The stochastic process $X$ is a uniformly $L^\infty$ Doob martingale with respect to $\mathcal F$.
+\end{lemma}
+\begin{proof}
+We first check that $X$ is uniformly $L^\infty$.
+To see this, we see that the bound
+$$\frac{1}{h} E(|f(x + h) - f(x)||\mathcal F_n) \lesssim \frac{1}{h} E(h|\mathcal F_n) \leq 1$$
+is uniform in $h$ and $n$ since $f$ is Lipschitz.
+We conclude that there is a limit along a subsequence of $h$ which satisfies $|X_n| \lesssim 1$ uniformly in $n$.
+(After using the Bolzano-Weierstrass theorem to justify this for a particular value of $x$, we diagonalize in $h$, as in the proof of the Arzela-Ascoli theorem, to enforce that the same subsequence works for every possible value of $x$.
+Since this is a standard real analysis argument we omit the details.)
+
+Since $X$ is uniformly $L^\infty$, $X_n$ is almost surely finite and $X$ is uniformly $L^1$, since
+$$E(|X_n|1_A) \lesssim E(1_A) = P(A)$$
+uniformly in $n$, and $P(A)$ vanishes as $A \to \emptyset$.
+
+Moreover, since $X$ is uniformly $L^\infty$, we may use dominated convergence to compute
+\begin{align*}
+E(X_{n+1}|\mathcal F_n) &= E\left(\lim_{h \to 0} \frac{1}{h} E(f(x + h) - f(x)|\mathcal F_{n+1})\bigg|\mathcal F_n\right)\\
+&= \lim_{h \to 0} \frac{1}{h} E(E(f(x + h) - f(x)|\mathcal F_{n+1})|\mathcal F_n)\\
+&= \lim_{h \to 0} \frac{1}{h} E(f(x + h) - f(x)|\mathcal F_n) = X_n.
+\end{align*}
+Therefore $X$ is a uniformly integrable martingale, which implies the claim.
+\end{proof}
+
+Since $(X, \mathcal F)$ is a Doob martingale, there exists $g \in L^1([0, 1])$ such that
+$$X_n = E(g(x)|\mathcal F_n).$$
+It remains to check that
+\begin{equation}
+\label{absolute continuity}
+f(\beta) - f(\alpha) = \int_\alpha^\beta g(y) ~dy.
+\end{equation}
+
+\begin{lemma}
+To prove (\ref{absolute continuity}), it is no loss of generality to assume that $[\alpha, \beta]$ is a dyadic interval.
+\end{lemma}
+\begin{proof}
+Recall that finite unions of dyadic intervals form a $\pi$-system of generators of $\mathcal F_\infty$.
+On the other hand, if $(\alpha, \beta)$ is an open interval, then there are dyadic rationals $\alpha < \alpha_j < \beta_j < \beta$ such that $\alpha_j$ decreases to $\alpha$ and $\beta_j$ increases to $\beta$.
+This is because the dyadic rationals are dense in $[0, 1]$.
+Therefore $(\alpha, \beta)$ can be written as the increasing union of the dyadic intervals $(\alpha_j, \beta_j)$ and hence $\mathcal F_\infty$ is the Borel $\sigma$-algebra of $[0, 1]$.
+
+Since $f$ is continuous, $f(\alpha_j) \to f(\alpha)$ and similarly for $f(\beta)$.
+Therefore, if (\ref{absolute continuity}) is true for every dyadic interval $[\alpha_j, \beta_j]$, then
+$$f(\beta) - f(\alpha) = \lim_{j \to \infty} f(\beta_j) - f(\alpha_j) = \lim_{j \to \infty} \int_{\alpha_j}^{\beta_j} g(y) ~dy = \int_\alpha^\beta g(y) ~dy$$
+by dominated convergence, which implies (\ref{absolute continuity}) in general.
+\end{proof}
+
+If $I = [\alpha, \beta]$ is a dyadic interval, then there is $N$ so large that $I \in \mathcal F_N$.
+Since $X$ is uniformly $L^\infty$, we can use dominated convergence to justify
+\begin{align*}
+\int_\alpha^\beta g(y) ~dy &= E(1_I g(x)) = E(1_I E(g(x)|\mathcal F_N)) = E(1_I X_N)\\
+&= E\left(1_I \lim_{h \to 0} \frac{1}{h} E(f(x+h) - f(x)|\mathcal F_N)\right)\\
+&= \lim_{h \to 0} \frac{1}{h} E(1_I E(f(x+h) - f(x)|\mathcal F_N))\\
+&= \lim_{h \to 0} \frac{1}{h} \int_\alpha^\beta f(y + h) - f(y) ~dy.
+\end{align*}
+Now recall that the limit is being taken along a subsequence of $h$s, but in fact we can start with any sequence of $h$s tending to $0$ and extract a subsequence along which $X_n$ is defined.
+In particular, we can take $h_m = 2^{-m}$ and obtain a subsequence along which $X_n$ is defined, so we can assume that $h$ is dyadic.
+Since $\alpha, \beta$ are dyadic, if $h$ is taken dyadic and small enough, $h$ gives a partition
+$$\alpha < \alpha + h < \alpha + 2h < \cdots < \beta - h < \beta$$
+of $[\alpha, \beta]$ into $M \geq 0$ intervals of length $h$.
+Then
+\begin{align*}
+\int_\alpha^\beta f(y + h) - f(y) ~dy &= \sum_{m=0}^{M - 1} \int_{\alpha + mh}^{\alpha + (m+1)h} f(y + h) - f(y) ~dy\\
+&= \sum_{m=0}^{M-1} \left(\int_{\alpha + (m+1)h}^{\alpha + (m+2)h} - \int_{\alpha + mh}^{\alpha + (m+1)h}\right) f(y) ~dy\\
+&= \left(\int_{\beta - h}^\beta - \int_\alpha^{\alpha + h}\right) f(y) ~dy.
+\end{align*}
+As $f$ is continuous, one has
+$$\lim_{h \to 0} \frac{1}{h} \left(\int_{\beta - h}^\beta - \int_\alpha^{\alpha + h}\right) f(y) ~dy = f(\beta) - f(\alpha),$$
+which completes the proof of (\ref{absolute continuity}).
+
+
+\end{document}

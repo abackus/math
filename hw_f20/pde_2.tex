@@ -1,0 +1,467 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{PDE, HW 2} \hfill \textbf{Aidan Backus} \\
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}[2.12a]
+Show that the heat equation is invariant under the scaling $u(x, t) \mapsto u(\lambda x, \lambda^2 t)$.
+\end{exer}
+
+Let $v(x, t) = u(\lambda x, \lambda^2 t)$. Then
+$$v_t(x, t) = \partial_t u(\lambda x, \lambda^2 t) = \lambda^2 u_t(\lambda x, \lambda^2 t) = \lambda^2 (\Delta u)(\lambda x, \lambda^2 t) = \Delta v(x, t).$$
+
+\begin{exer}[2.12b]
+Show that if $u$ solves the heat equation then $v(x, t) = x \cdot \nabla u(x, t) + 2t u_t(x, t)$ solves the heat equation.
+\end{exer}
+
+Let $u^\lambda(x, t) = u(\lambda x, \lambda^2 t)$. Then
+$$\partial_\lambda u^\lambda (x, t) = x \cdot \nabla u(\lambda x, \lambda^2 t) + 2t \lambda u_t(\lambda x, \lambda^2 t).$$
+Then by Exercise 2.12a, $u^\lambda$ and hence $\partial_\lambda u^\lambda$ solve the heat equation.
+Setting $\lambda = 1$ we see that
+$$\partial_\lambda u^\lambda |_{\lambda = 1} = v$$
+also solves the heat equation.
+
+\begin{exer}[2.18]
+Suppose that $u$ solves the wave equation with initial data $u = 0$, $u_t = h$.
+Show that $v = u_t$ solves the wave equation with initial data $v = h$, $v_t = 0$.
+\end{exer}
+
+Commuting mixed partials we immediately see that $v$ solves the wave equation with initial data $v = h$.
+Moreover, we have initial data
+$$v_t = u_{tt} = \Delta u = 0$$
+since $u = 0$.
+
+\begin{exer}[2.19a]
+Show that the general solution of $u_{xy} = 0$ is
+$$u(x, y) = F(x) + G(y).$$
+\end{exer}
+
+We are given
+$$\frac{\partial^2 u}{\partial x\partial y} (x, y) = 0.$$
+Taking the antiderivative in $y$ alone we see that
+$$\frac{\partial u}{\partial x} (x, y) = F(x)$$
+for some function $F$. Taking the antiderivative in $x$ alone now,
+$$u(x, y) = F(x) + G(y)$$
+for some function $G$.
+
+\begin{exer}[2.19b]
+Suppose that $\xi = x + t$, $\eta = x - t$. Show that $u_{tt} = u_{xx}$ iff $u_{\xi\eta} = 0$.
+\end{exer}
+
+One has
+$$u_\xi = \xi \cdot \nabla u = u_x + u_t,$$
+so
+$$u_{\xi\eta} = \nabla u_x \cdot \eta + \nabla u_t \cdot \eta = u_{xx} - u_{xt} + u_{tx} - u_{tt} = u_{xx} - u_{tt}.$$
+
+\begin{exer}[2.19c]
+Rederive d'Alembert's formula.
+\end{exer}
+
+We must show that if $u$ solves the wave equation with initial data $u = g$, $u_t = h$, then
+$$2u(x, t) = g(x + t) + g(x - t) + \int_{x - t}^{x + t} h(y) ~dy.$$
+We are given
+$$u(x, t) = F(x + t) + G(x - t),$$
+where $F(x) + G(x) = g(x)$ and $F'(x) - G'(x) = h(x)$. Therefore
+$$F(x) - G(x) = \int_0^x h(y)~dy.$$
+So
+$$2F(x) = g(x) + \int_0^x h(y)~dy$$
+and
+$$2G(x) = g(x) + \int_x^0 h(y)~dy.$$
+Plugging into $2u$,
+$$2u(x, t) = g(x + t) + \int_0^{x+t}h(y)~dy + g(x - t) + \int_{x - t}^0 h(y)~dy$$
+which was desired.
+
+\begin{exer}[2.19d]
+When are solutions to the wave equation right-moving or left-moving?
+\end{exer}
+
+The wave equation is right-moving provided that $F = 0$, i.e. for every $x$,
+$$g(x) + \int_0^x h(y)~dy= 0.$$
+Similarly the equation is left-moving provided that $G = 0$, thus
+$$g(x) + \int_x^0 h(y)~dy = 0.$$
+
+\begin{exer}[2.21a]
+Assume that $\mathbf E, \mathbf B$ solve Maxwell's equations. Show that $\mathbf E,\mathbf B$ solve the wave equation.
+\end{exer}
+
+Recall that if $\mathbf A$ is a vector field on a Riemannian $3$-manifold then
+$$\nabla \times (\nabla \times \mathbf A) = \nabla(\nabla \cdot \mathbf A) - \Delta \mathbf A$$
+as can be proven by manipulating differential forms.
+Therefore
+$$\mathbf E_{tt} = \partial_t(\nabla \times \mathbf B) = \nabla \times \mathbf B_t = -\nabla \times(\nabla \times \mathbf E) = -\nabla(\nabla \cdot \mathbf E) + \Delta \mathbf E = \Delta \mathbf E.$$
+Replacing $\mathbf B$ with $-\mathbf E$ and vice versa, we see the same result for $\mathbf B$.
+
+\begin{exer}[2.21b]
+Assume that
+$$\mathbf u_{tt} = \mu\Delta \mathbf u + (\lambda + \mu)\nabla(\nabla \cdot \mathbf u).$$
+Show that $w = \nabla \cdot \mathbf u$ and $\mathbf w = \nabla \times \mathbf u$ solve wave equations of different speeds of propagation.
+\end{exer}
+
+One has
+\begin{align*}
+w_{tt} &= \nabla \cdot \mathbf u_{tt} = \nabla \cdot(\mu \Delta \mathbf u + (\lambda + \mu)\nabla(\nabla \cdot \mathbf u) )\\
+&= \mu\Delta w + (\lambda + \mu)\Delta w = (\lambda + 2\mu)\Delta w.
+\end{align*}
+Recall that $f$ is a scalar field then
+$$\nabla \times \nabla f = 0$$
+so
+\begin{align*}
+\mathbf w_{tt} &= \nabla \times \mathbf u_{tt} = \nabla \times (\mu\Delta \mathbf u + (\lambda + \mu)\nabla(\nabla \cdot \mathbf u))\\
+&= \mu \Delta \mathbf w + (\nabla \times \nabla)(\nabla \cdot \mathbf u) = \mu \Delta \mathbf w.
+\end{align*}
+
+\begin{exer}[Extra 1a]
+Let $\Omega$ be the closed lower half-plane. Given $\xi \in \CC^2$, find a solution of the heat equation of the form
+$$u(x, y, t) = e^{i\xi_1x}e^{i\xi_2y}e^{i\lambda t}.$$
+For which $\xi$ is $u$ bounded in $\Omega$? For which does the solution decay as $y \to -\infty$, or as $t \to +\infty$?
+Find all harmonic solutions and observe that they only depend on $z = x + iy$ if $\Re \xi_1 < 0$ and $\overline z $ if $\Re \xi_1 > 0$.
+\end{exer}
+
+Suppose that $\Delta u = \partial_t u$. Now
+$$\frac{\partial u}{\partial t} (x, y, t) = i\lambda u(x, y, t)$$
+while
+$$\frac{\partial^2 u}{\partial x^2} (x, y, t) = -\xi_1^2 u(x, y, t)$$
+so that
+$$\Delta u(x, y, t) = -(\xi_1^2 + \xi_2^2) u(x, y, t).$$
+That means that
+$$\xi_1^2 + \xi_2^2 + i\lambda = 0$$
+determines $\lambda$, thus
+$$\lambda = i(\xi_1^2 + \xi_2^2).$$
+
+Now $u$ is bounded in $\Omega$ iff $\Re i\xi_2 \leq 0$ and $\Re i\xi_1 = 0$, thus $\Im \xi_1 \geq 0$ and $\Im \xi_2 = 0$.
+Moreover $u$ decays at $y = -\infty$ iff $\Re i\xi_2 < 0$, thus $\Im \xi_2 > 0$; $u$ decays at $t = +\infty$ iff $\Re i\lambda < 0$, thus $\Re(\xi_1^2 + \xi_2^2) > 0$.
+
+Suppose that $u$ is harmonic. Then $\partial_t u = 0$, since $u$ is a steady state of the heat equation.
+So $i\lambda = 0$, which implies that
+$$\xi_1^2 + \xi_2^2 = 0.$$
+Conversely, any such $\xi$ on that variety gives a harmonic $u$.
+
+Suppose that $u$ is harmonic. Then $\lambda = 0$, so the Cauchy-Riemann derivative
+$$\frac{\partial u}{\partial \overline z}(x, y, t) = \left(\frac{\partial}{\partial x} + i\frac{\partial}{\partial y}\right)u(x, y, t) = \frac{1}{2}(i\xi_1 - \xi_2)e^{i(\xi_1x + \xi_2y)}$$
+vanishes exactly if $i\xi_1 = \xi_2$.
+If $\Re \xi_1 < 0$, then we can choose a branch of the square root such that $\xi_1^2 + \xi_2^2 = 0$ implies $i\xi_1 = \xi_2$.
+Similarly, if $\Re \xi_2 > 0$, then we can choose a branch of the square root $i\xi_1 = -\xi_2$, and the conjugate of the Cauchy-Riemann derivative
+$$\frac{\partial u}{\partial z}(x, y, t) = \left(\frac{\partial}{\partial x} - i\frac{\partial}{\partial y}\right)u(x, y, t) = \frac{1}{2}(i\xi_1 + \xi_2)e^{i(\xi_1x + \xi_2y)}$$
+vanishes.
+So if $u$ is harmonic and $\xi_1$ is not imaginary, then $u$ is either holomorphic or antiholomorphic, depending on the sign of $u$.
+
+\begin{exer}[Extra 1b]
+Solve the Dirichlet problem for the heat equation, $u(x, 0, t) = g(x, t)$, $u(x, -\infty, 0) = 0$, on $\Omega$, provided $g$ is smooth enough and periodic in time of period $T$.
+If $g$ is real, give an explicitly real formula for $u$.
+\end{exer}
+
+Using the Fourier transform in $\RR \times (\RR/T\ZZ)$, we obtain Fourier coefficients $\hat g_k$ such that
+\begin{equation}
+\label{fourier inversion formula}
+g(x, t) = \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^\infty \int_{-\infty}^\infty \hat g_k(\xi) e^{i\xi x} e^{2\pi i kt/T}~d\xi.
+\end{equation}
+We first treat the case that the Fourier transform of $g$ is a Dirac mass (i.e. $g$ is a plane wave).
+
+\begin{lemma}
+Suppose that $\hat g_\ell(\xi) = \sqrt{2\pi}\delta(\xi - \eta)$, where $\delta$ is the Dirac mass, and $\hat g_k = 0$ if $\ell \neq k$.
+Then
+$$u(x, y, t) = e^{i\eta x} e^{-y\sqrt{\eta^2 + 2\pi i\ell/T}} e^{2\pi i\ell t/T}.$$
+\end{lemma}
+\begin{proof}
+One has
+$$g(x, t) = e^{i\eta x}e^{2\pi i\ell t/T}.$$
+Then
+$$e^{i\xi_1x}e^{i\lambda t} = e^{i\eta x} e^{2\pi i\ell t/T}$$
+so that $\eta = \xi_1$ and $\lambda = 2\pi \ell/T$.
+In particular,
+$$\xi_2^2 = -\eta^2 - 2\pi i\frac{\ell}{T}.$$
+In order to get good decay in $y$, we require that $\Im \xi_2 > 0$; there is a unique branch of the square root $\sqrt\cdot$ which satisfies this property as long as $-\eta^2 - 2\pi i\ell/T$ is positive and real.
+But that would imply that $\eta$ is imaginary, which is nonsense.
+\end{proof}
+
+Now we treat the general case. Suppose that $g$ satisfies (\ref{fourier inversion formula}).
+Then
+$$u(x, y, t) = \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^\infty \int_{-\infty}^\infty \hat g_k(\xi) e^{i\xi x} e^{-y\sqrt{\xi^2 + 2\pi ik/T}} e^{2\pi ik t/T}~d\xi.$$
+Here $\sqrt\cdot$ is the unique branch of the square root which maps $\CC \setminus (-\infty, 0]$ into the right half-plane.
+Provided that $g$ has enough regularity, this follows from the lemma.
+
+Now if $g$, in addition to having good regularity properties, is real, then $u$ must be real as well.
+Let $g = g^0 + g^1$ be the decomposition of $g$ into its even and odd parts.
+Then $\hat g_k = \hat g_k^0 + \hat g_k^1$, and $\hat g_k^0$ is even and imaginary, $\hat g_k^1$ is odd and real.
+Let $\alpha + i\beta = \sqrt{\xi^2 + 2\pi ik/T}$.
+Then
+$$u(x, y, t) = \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^\infty \int_{-\infty}^\infty e^{-\alpha y} (\hat g_k^0(\xi) + \hat g_k^1(\xi))
+ \left(\cos\left(\xi x + \beta y + 2\pi\frac{kt}{T}\right) +i \sin\left(\xi x + \beta y + 2\pi\frac{kt}{T}\right)\right) ~d\xi.$$
+Since the decomposition $L^2 = L^2_0 \oplus L^2_1$ into even and odd parts is an orthogonal decomposition ($L^2_0 \perp L^2_1$), lots of terms cancel out, and
+$$u(x, y, t) = \frac{1}{\sqrt{2\pi}} \sum_{k=-\infty}^\infty \int_{-\infty}^\infty
+e^{-\alpha y} \hat g_k^0(\xi) \cos\left(\xi x + \beta y + 2\pi\frac{kt}{T}\right) - ie^{-\alpha y} \hat g_k^1(\xi) \sin\left(\xi x + \beta y + 2\pi\frac{kt}{T}\right) ~d\xi.$$
+Since $\hat g_k^1$ is imaginary and $\alpha,\beta$ are real functions of $k,\xi$, this decomposition implies that $u$ is real.
+
+\begin{exer}[Extra 2a]
+Find the Green function of the first octant using Couloumb's law.
+\end{exer}
+
+Let $U$ be the first octant. We must find a harmonic error term $\varphi_x(y)$ such that
+$$\varphi_x(y) = \frac{1}{4\pi|x - y|}$$
+on $\partial U$. To this end we let $X_i$ denote the $i$th axis, and $R_i$ reflection across $X_i$.
+Then we let $R_\alpha = \prod_k R_{\alpha_k}$ for a multiindex $\alpha$.
+
+Consider the charge density
+$$\rho_x(y) = \sum_{i=1}^3 \delta(R_ix - y) - \sum_{1 \leq i < j \leq 3} \delta(R_{ij}x - y) + \delta(R_{123}x - y).$$
+Here $\delta$ is a Dirac mass, so $\rho_x$ consists of point charges at $R_ix$, $R_{ij}x$, and $R_{123}x$, where $i < j$.
+Let $\varphi_x$ denote the electric potential given $\rho_x$, thus by Couloumb's law,
+$$\varphi_x(y) = \sum_{i=1}^3 \Phi(R_ix - y) - \sum_{1 \leq i < j \leq 3} \Phi(R_{ij}x - y) + \Phi(R_{123}x - y).$$
+Clearly $\varphi_x$ is harmonic on $U$.
+
+We must now compute $\varphi_x|\partial U$. Since $R_\alpha$ is a product of reflections, $R_\alpha(R_\alpha x - y) = x - R_\alpha y$.
+Moreover, $R_\alpha$ preserves norms. Therefore $\Phi(R_\alpha x - y) = \Phi(x - R_\alpha y)$, so $\varphi_x(y) = \varphi_y(x)$.
+Therefore we must show that if $x \in \partial U$ then for every $y \in \RR^3$, $\varphi_y(x) = \Phi(x - y)$.
+
+Since $x \in \partial U$, there is an $i$ such that $x \in X_i$.
+Then $R_ix = x$, $R_{ij}x = R_jx$, and $R_{ijk}x = R_{jk}x$.
+So, if $\ell,m$ are the indices $\in \{1, 2, 3\}$ not equal to $i$, then
+\begin{align*}
+\Phi(x - y) - \varphi_x(y) &= \Phi(x - y) - \varphi_y(x)\\
+&= \Phi(x - y) - \Phi(R_ix - y) + \sum_{\substack{1\leq j \leq 3\\ i \neq j}} \Phi(R_jx - y) - \\
+&\qquad\sum_{1 \leq j < k \leq 3} \Phi(R_{jk}x - y) + \Phi(R_{i\ell m}x - y)\\
+&= \Phi(R_\ell x - y) + \Phi(R_m x - y) - \Phi(R_\ell x - y) - \Phi(R_m x - y) -
+\\&\qquad \Phi(R_{\ell m} x - y) + \Phi(R_{\ell m}x - y)\\
+&= 0
+\end{align*}
+which was desired.
+
+\begin{exer}[Extra 2b]
+Let $g \in C^2_c(\RR_+^2)$, $\RR^2_+$ the first quadrant. Extend $g$ to a doubly odd function $G$ on $\RR^2$. Solve $\Delta U = G$, with $U \to 0$ at $\infty$.
+\end{exer}
+
+Set
+$$U = \Phi * G.$$
+Then clearly $\Delta U = G$.
+Moreover, since $G$ is doubly odd with compact support, $\int_{\RR^2} G = 0$, so
+$$U(x) = \frac{1}{2\pi} \log |x| \int_{\RR^2} G(y)~dy - \frac{1}{2\pi} \int_{\RR^2} \log|x - y| G(y)~dy.$$
+Since $g$ has compact support, so does $G$, say $\supp G \subset B(0, R)$.
+Now
+$$\lim_{x \to \infty} \log\left|\frac{|x|}{|x-y|}\right| = 0$$
+and since $|y| \leq R$, this estimate is uniform, thus for every $\varepsilon > 0$ there is a $M> 0$ such that if $|x| > M$ then for every $y \in \supp G$, $\left|\log\left||x|/|x-y|\right|\right| < \varepsilon$. Therefore if $|x| > M$,
+\begin{align*}
+|U(x)| &\leq \frac{1}{2\pi} \int_{\RR^2} \left|\log|x| - \log|x-y|\right| |G(y)| ~dy\\
+&\leq \frac{1}{2\pi} \int_{\RR^2} \log\left|\frac{|x|}{|x-y|}\right| |G(y)| ~dy\\
+&< \frac{\varepsilon}{2\pi} ||G||_{L^1(\RR^2)}.
+\end{align*}
+
+\begin{exer}[Extra 2c]
+Compute $U(0, x_2)$ and $U(x_1, 0)$.
+\end{exer}
+
+We claim $U(0, x_2) = U(x_1, 0) = 0$, and by a symmetry argument it suffices to show that $U(0, x_2) = 0$.
+Let $R$ be the reflection across the vertical axis; then $G(x) + G(Rx) = 0$ since $G$ is doubly odd.
+Suppose that $x_1 = 0$. Then
+$$\log |x - y| = \frac{1}{2} \log\left(|y_1|^2 + |x_2 - y_2|^2\right).$$
+So
+\begin{align*}
+U(0, x_2) &= -\frac{1}{2\pi} \int_{\RR^2} \log|x-y| G(y)~dy
+\\&= -\frac{1}{4\pi} \int_{\RR^2} \log\left(|y_1|^2 + |x_2 - y_2|^2\right) G(y)~dy
+\\&= -\frac{1}{4\pi} \int_{x_1 > 0} \log\left(|y_1|^2 + |x_2 - y_2|^2\right) (G(y) + G(Ry)) ~dy = 0.
+\end{align*}
+
+\begin{exer}[Extra 2d]
+Solve $\Delta u = g$ on $\RR^2_+$, $u = 0$ on $\partial \RR^2_+$, $u \to 0$ at $\infty$.
+\end{exer}
+
+By the above, if $U = \Phi * G$ then $U = \Phi * G$ restricts to a function $u$ with the desired properties.
+Here $G$ is the doubly odd extension of $g$, as before.
+
+\begin{exer}[Extra 2e]
+Compute the Green function of $\RR^2_+$. What is its behavior near $0$?
+\end{exer}
+
+We use Couloumb's law again.
+Let $R_1,R_2,R_{12}$ be reflections as in Extra 2a.
+Consider the charge density
+$$\sigma_x(y) = \delta(R_1 x - y) + \delta(R_2 x - y) - \delta(R_{12} x - y).$$
+Then by Couloumb's law in two dimensions,
+$$\varphi_x(y) = \Phi(R_1 x - y) + \Phi(R_2 x - y) - \Phi(R_{12} x - y).$$
+By a similar argument to Extra 2a, we see that $\varphi_x(y) = \Phi(x - y)$ if $x \in \partial \RR^2_+$ and $y \in \RR^2$, and also that $\varphi_x$ is harmonic.
+So $G(x, y) = \Phi(x - y) - \varphi_x(y)$ is the Green function.
+As $(x, y) \to 0$ in $\RR^4$, $G(x, y) \to 0$, so $G(x, y)$ extends by continuity to $G(0, 0) = 0$.
+
+\begin{exer}[Extra 2f]
+Solve the Neumann problem $\Delta u = g$, $\partial_\nu u = 0$ on $\partial \RR^2_+$, and $|u(x)| \lesssim \log|x|$.
+\end{exer}
+
+Following Evans' derivation of the definition of the Green function, we suppose that $x \in \RR_+^2$ and choose $\varepsilon > 0$ sufficiently small, and set $U_\varepsilon = \RR^2_+ \setminus B(x, \varepsilon)$. Then
+$$\int_{U_\varepsilon} u(y)\Delta \Phi(x - y) - \Phi(y - x)\Delta u(y)~dy = \int_{\partial U_\varepsilon} u(y) \frac{\partial \Phi}{\partial y}(y - x) - \Phi(y - x) \frac{\partial u}{\partial \nu}(y)~dS(y).$$
+But $\Phi$ is harmonic on $U_\varepsilon$, so the $\Delta \Phi$ term drops out. Moreover,
+$$\left|\int_{\partial B(x, \varepsilon)} \Phi(y - x) \frac{\partial u}{\partial \nu}(y)~dS(y)\right| \lesssim \varepsilon$$
+and
+$$\lim_{\varepsilon \to 0}\int_{\partial B(x, \varepsilon)} u(y) \frac{\partial \Phi}{\partial \nu}(y - x)~dS(y) = \lim_{\varepsilon \to 0}\dashint_{\partial B(x, \varepsilon)} u~dS = u(x).$$
+Summing up,
+$$u(x) = \int_{\partial \RR_+^2} \Phi(y - x) \frac{\partial u}{\partial \nu}(y) - u(y) \frac{\partial \Phi}{\partial \nu}(y - x)~dS(y) - \int_{\RR_+^2} \Phi(y - x)\Delta u(y)~dy.$$
+Since we are given $\Delta u = g$ and $\partial_\nu u = 0$,
+$$u(x) = -\int_{\partial \RR_+^2} u(y) \frac{\partial \Phi}{\partial \nu}(y - x)~dS(y) - \int_{\RR_+^2} \Phi(y-x) g(y)~dy.$$
+Therefore if we can find a harmonic error term $\varphi_x(y)$ and consider the integral kernel $K(x, y) = \Phi(x, y) - \varphi_x(y)$, with
+$$\frac{\partial \Phi}{\partial \nu}(y-x) = \frac{\partial \varphi_x}{\partial \nu}(y),$$
+then
+\begin{align*}\int_{\RR_+^2} \varphi^x(y) \Delta u(y)~dy &= -\int_{\partial \RR_+^2} u(y) \frac{\partial \varphi^x}{\partial \nu}(y) - \varphi^x(y) \frac{\partial u}{\partial \nu}(y) ~dS(y)\\
+&= -\int_{\partial \RR^2_+} u(y) \frac{\partial \Phi}{\partial \nu}(y-x)~dS(y).
+\end{align*}
+Adding up the above equations,
+$$u(x) = \int_{\RR_+^2} \varphi^x(y) g(y) - \Phi(y - x) g(y)~dy = -\int_{\RR_+^2} K(x, y)g(y)~dy.$$
+Now we claim that, in fact, $K = -G$. We already showed that
+$$G(x, y) = \Phi(x - y) - \Phi(R_1x - y) - \Phi(R_2x - y) + \Phi(R_{12}x - y).$$
+If $x = (x_1, 0)$ then
+$$\frac{\partial G}{\partial \nu}(x, y) = \frac{\partial \Phi}{\partial \nu}(x - y) - \frac{\partial \Phi}{\partial \nu}(-x-y) - \frac{\partial \Phi}{\partial \nu}(x - y) + \frac{\partial \Phi}{\partial \nu}(-x-y) = 0$$
+which was desired.
+So one has
+$$u(x) = \int_{\RR^2_+} G(x, y) g(y)~dy.$$
+
+\begin{exer}[Extra 3]
+Suppose that $u_j$ are smooth solutions of the $1$-dimensional heat equation with initial data $f_j$. Show that
+$$v(x_1, \dots, x_d, t) = \prod_{j=1}^d u_j(x_j, t)$$
+is a solution of the $d$-dimensional heat equation with initial data $x \mapsto \prod_j f_j(x_j)$.
+What happens to the fundamental solution?
+\end{exer}
+
+This follows by induction on $d$. If $d = 1$, this is clear.
+Suppose that $v$ is as written, $v$ is harmonic with the desired initial data, and
+$$w(x_1, \dots, x_d, x_{d+1}, t) = \prod_{j=1}^{d+1} u_j(x_j, t).$$
+Then
+$$\frac{\partial w}{\partial t} = \frac{\partial v}{\partial t}u_{d+1} + v\frac{\partial u_{d+1}}{\partial t} = u_{d+1}\Delta v + v\Delta u_{d+1}$$
+by our induction hypothesis.
+But
+$$\Delta w = u_{d+1} \Delta v + v \Delta u_{d+1} + \langle \nabla v, \nabla u_{d+1}\rangle = \frac{\partial w}{\partial t}$$
+since $v$ does not depend on $x_{d+1}$ while $u_{d+1}$ only depends on $x_{d+1}$, so that $\nabla v \perp \nabla u_{d+1}$.
+Plugging in $t = 0$,
+$$w(x, 0) = v(x, 0) u_{d+1}(x_{d+1}, 0) = f_{d+1}(x_{d+1})\prod_{j=1}^d f_j(x_j) = \prod_{j=1}^{d+1} f_j(x_j).$$
+
+
+\end{document}

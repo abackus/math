@@ -1,0 +1,336 @@
+\documentclass[12pt]{article}
+\usepackage[pdftex,pagebackref,letterpaper=true,colorlinks=true,pdfpagemode=none,urlcolor=blue,linkcolor=blue,citecolor=blue,pdfstartview=FitH]{hyperref}
+
+\usepackage{amsmath,amsfonts}
+\usepackage{graphicx}
+\usepackage{color}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\newcommand{\EE}{\mathbb E}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\Hess}{\operatorname{Hess}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Lie}{Lie}
+\DeclareMathOperator{\Out}{Out}
+
+\DeclareMathOperator{\Diffeo}{Diffeo}
+
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\SO}{\operatorname{SO}}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\club}{\ensuremath\clubsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\setlength{\oddsidemargin}{0pt}
+\setlength{\evensidemargin}{0pt}
+\setlength{\textwidth}{6.0in}
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{5px}
+
+\input{macrosblog}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+Having some more free time than usual, I figured I would read a recent paper that looked interesting.
+However, I'm something of a noob at math, so I figure it's worth it to take it slowly and painstakingly think through the details.
+This will be a sort of stream-of-conciousness post where I do just that.
+
+The paper I'll be reading will be Terry Tao's ``Sendov's conjecture for sufficiently high degree polynomials."
+This paper looks interesting to me because it applies ``cheap nonstandard" methods to prove a result in complex analysis.
+In addition it uses probability-theoretic methods, which I'm learning a lot of right now.
+Sendov's conjecture is the following:
+
+\begin{conjecture}
+Let $f: \CC \to \CC$ be a polynomial of degree $n \geq 2$ that has all zeroes $\leq 1$. If $a$ is a zero then $f'$ has a zero in $\overline{D(a, 1)}$.
+\end{conjecture}
+
+Without loss of generality, we may assume that $f$ is monic and that $a \in [0, 1]$.
+Indeed, if $f$ is a polynomial in the variable $z$ we divide by the argument of $z$ and then rescale by the top coefficient.
+
+Tao notes that by Tarski's theorem, in principle it suffices to get an upper bound $n_0$ on the degree of a counterexample and then use a computer-assisted proof to complete the argument.
+I think that for every $n \leq n_0$ you'd get a formula in the theory of real closed fields that could be decided in $O(n^r)$ time, where $r$ is an absolute constant (which, unfortunately, is exponential in the number of variables of the formula, and so is probably quite large).
+Worse, Tao is going to use a compactness argument and so is going to get an astronomical bound $n_0$.
+Still, something to keep in mind -- computer-assisted proofs seem like the future in analysis.
+
+More precisely, Tao proves the following:
+
+\begin{proposition}
+\label{main proposition}
+For every $n$ in a monotone sequence in $\NN$, let $f$ be a monic polynomial of degree $n$ with all zeroes in $\overline{D(0, 1)}$ and let $a \in [0, 1]$ satisfy $f(a) = 0$.
+If for every $n$, $f'$ has no zeroes in $\overline{D(a, 1)}$, then $0 = 1$.
+\end{proposition}
+
+It's now pretty natural to see how ``cheap nonstandard" methods apply.
+One can pass to a subsequence countably many times and still preserve the hypotheses of the proposition, so by diagonalization and compactness, we may assume good (but ineffective) convergence properties.
+For example, we can assume that $a = a^{(\infty)} + o(1)$, where $a^{(\infty)}$ does not depend on $n$ and $o(1)$ is with respect to $n$.
+
+So one can view the proposition model-theoretically: it says that if $n$ is a nonstandard natural number, $f$ a monic polynomial of degree $n$ with a zero $a \in [0, 1]$, and there are no zeroes of $f'$ in $\overline{D(a, 1)}$, then $0 = 1$.
+Tao never fully takes this POV, but frequently appeals to results like the following:
+\begin{proposition}
+Let $P$ be a first-order predicate. Then:
+\begin{enumerate}
+\item (Overspill) If for every sufficiently small standard $\varepsilon$, $P(\varepsilon)$, then there is an infinitesimal $\delta$ such that $P(\delta)$.
+\item (Underspill) If for every infinitesimal $\delta$, $P(\delta)$, then there are arbitrarily small $\varepsilon$ such that $P(\varepsilon)$.
+\item ($\aleph_0$-saturation) If $P$ is $\forall z \in K(f(z) = O(1))$ where $K \subseteq \CC$ is compact, then the implied constant in the statement of $P$ is independent of $z$.
+\end{enumerate}
+\end{proposition}
+
+Henceforth we will use asymptotic notation in the nonstandard sense; for example, a quantity is $o(1)$ if it is infinitesimal. This is equivalent to the cheap nonstandard perspective where a quantity is $o(1)$ iff it is with respect to $n$, where $n$ is ranging over some monotone sequence of naturals.
+I think the model-theoretic perspective is helpful here because we are going to pass to subsequences a lot, and at least in the presence of the boolean prime ideal theorem, letting $n$ be a fixed nonstandard natural number is equivalent to choosing a nonprincipal ultrafilter on $\NN$ that picks out the subsequences we are going to pass to, in the perspective where $n$ ranges over a monotone sequence of standard naturals.
+
+This follows because the Stone-Cech compactification $\beta \NN$ is exactly the space of ultrafilters on $\NN$.
+Indeed, if $n$ ranges over a monotone sequence of standard naturals, then in $\beta \NN$, $n$ converges to an element $U$ of $\beta \NN \setminus \NN$, which then is a nonprincipal ultrafilter.
+If $\NN^\omega/U$ denotes the ultrapower of $\NN$ with respect to $U$, then I think the equivalence class of the sequence $\{1, 2, \dots\}$ in $\NN^\omega/U$ is exactly the limit of $n$.
+Conversely, once a nonprincipal ultrafilter $U \in \beta \NN \setminus \NN$ has been fixed, we have a canonical way to pass to subsequences: only pass to a subsequence which converges to $U$.
+This is possible since $\beta \NN$ is compact.
+
+I think it will be at times convenient to go back to the ``monotone sequence of standard naturals" perspective, especially when we're doing computations, so I reserve the right to go between the two.
+We'll call the monotone sequence perspective the ``cheap perspective" and the model-theoretic perspective the ``expensive perspective".
+
+I'm not familiar with the literature on Sendov's conjecture, so I'm going to blackbox the reduction that Tao carries out.
+The reduction says that, due to the Gauss-Lucas theorem and previously existing partial results on Sendov's conjecture, to prove Proposition \ref{main proposition}, it suffices to show:
+
+\begin{proposition}
+\label{main proposition 2}
+Let $n$ be a nonstandard natural, let $f$ be a monic polynomial of degree $n$ with all zeroes in $\overline{D(0, 1)}$ and let $a \in [0, 1]$ satisfy $f(a) = 0$.
+Suppose that $f'$ has no zeroes in $\overline{D(0, 1)}$ and
+\begin{enumerate}
+\item (Theorem 3.1 in Tao) either $a = o(1/\log n)$, or
+\item (Theorem 5.1 in Tao) there is a standard $\varepsilon_0 > 0$ such that
+$$1 - o(1) \leq a \leq 1 - \varepsilon_0^n.$$
+\end{enumerate}
+Then $0 = 1$.
+\end{proposition}
+
+In the former case we have $a = o(1)$ and in the latter we have $|a - 1| = o(1)$.
+We'll call the former ``case zero" and the latter ``case one."
+
+Tao gives a probabilistic proof of Proposition \ref{main proposition 2}, and that's going to be the bulk of this post and its sequels.
+Let $\zeta$ be a random zero of $f'$, drawn uniformly from the finite set of zeroes.
+Le $\lambda$ denote a random zero of $f$ chosen independently of $\zeta$.
+
+In the cheap perspective, $\zeta$ depends on $n$, we are going to study properties of the convergence of $\zeta$ as $n \to \infty$, by using our chosen ultrafilter to repeatedly pass to subsequences to make $\zeta$ converge in some suitable topology.
+The probability spaces that $\zeta$ lives in depend on $n$, but as long as we are interested in a deterministic limit $c$ that does not depend on $n$, this is no problem.
+Indeed $\zeta$ will converge to $c$ uniformly (resp. in probability) provided that for every $\varepsilon > 0$, $|\zeta - c| \leq \varepsilon$ almost surely (resp. $\PP(|\zeta - c| \leq \varepsilon) = 1 - o(1)$), and this makes sense even though the probability space we are studying depends on $n$.
+The usual definition of convergence in distribution still makes sense even for random variables $\zeta$ converges to a random variable $X$ that deos not depend on $n$ provided that their distributions $\zeta_*\PP$ converge vaguely to $X_*\PP$.
+
+Okay, it's pretty obvious what being infinitesimally close to a deterministic standard real is in the uniform or probabilistic sense.
+Expanding out the definition of the vague topology of measures, a nonstandard measure $\mu$ on a locally compact Hausdorff space $Q$ is infinitesimally close to a standard measure $\nu$ provided that for every continuous function $f$ with compact support,
+$$\left|\int_Q f~d\mu - \int_Q f~d\nu\right| = o(1).$$
+This induces a definition of being infinitesimally close in distribution.
+
+Okay, no more model-theoretic games, it's time to start the actual proof.
+
+\begin{definition}
+Let $\eta$ be a bounded complex random variable. The \emph{logarithmic potential} of $\eta$ is
+$$U_\eta(z) = \EE \log \frac{1}{|z - \zeta|}.$$
+\end{definition}
+Here $\EE$ denotes expected value.
+Tao claims but does not prove that this definition makes sense for almost every $z \in \CC$.
+Clearly the latter claim implies the former.
+To check this, let $K$ be a compact set $\subseteq \CC$ equipped with Lebesgue measure $\mu$ and let $\nu$ be the distribution of $\zeta$. Then
+$$\int_K U_\eta(z) ~d\mu(z) = \int_K \int_\CC \log \frac{1}{|z - \omega|} ~d\nu(\omega) ~d\mu(z)$$
+and the integrand is singular along the set $\{z = \omega\}$, which has real codimension $2$ in $K \times \supp \nu$.
+The double integral of a logarithm makes sense almost surely provided that the logarithm blows up with real codimension $2$ (to see this, check the double integral of log $1/x$ on $\RR^2$) so this looks good.
+
+\begin{definition}
+Let $\eta$ be a bounded complex random variable. The \emph{Stieltjes transform} of $\eta$ is
+$$s_\eta(z) = \EE \frac{1}{z - \eta}.$$
+\end{definition}
+Then $s_\eta$ is ``less singular" than $U_\eta$, so this definition is inoffensive almost everywhere.
+
+Henceforth Tao lets $\mu_\eta$ denote the distribution of $\eta$, where $\eta$ is any bounded complex random variable.
+Then $s_\eta = -\partial U_\eta$ and $\mu_\eta = \overline \partial s_\eta/2\pi$ where $\partial,\overline \partial$ are the complex derivative and Cauchy-Riemann operators respectively.
+Since $\partial \overline \partial = \Delta$ we have
+$$2\pi\mu_n = -\Delta s_\eta.$$
+This just follows straight from the definitions.
+Of course $\mu_\eta$ might not be an absolutely continuous measure, so this only makes sense if we use the calculus of distributions.
+
+Does this make sense if $\eta$ is deterministic, say $\eta = 0$ almost surely? In that case $\mu_\eta$ is a Dirac measure at $0$ and $s_\eta(z) = 1/z$.
+Everything looks good, since $U_\eta(z) = -\log |z|$.
+
+For the next claims I need the Gauss-Lucas theorem:
+\begin{theorem}[Gauss-Lucas]
+If $P$ is a polynomial on $\CC$, then all zeroes of $P'$ belong to the convex hull of the variety $P = 0$.
+\end{theorem}
+
+\begin{lemma}[Lemma 1.6i in Tao]
+$\lambda$ surely lies in $\overline{D(0, 1)}$ and $\zeta$ surely lies in $\overline{D(0, 1)} \setminus \overline{D(a, 1)}$.
+\end{lemma}
+\begin{proof}
+The first claim is just a tautology.
+For the second, by assumption on $f$ all zeroes of $f$ lie in the convex set $\overline{D(0, 1)}$, so so does their convex hull.
+In particular $\zeta$ lies in $\overline{D(0, 1)}$ almost surely by the Gauss-Lucas theorem.
+Our contradiction hypothesis says that $\zeta \notin \overline{D(a, 1)}$.
+\end{proof}
+
+\begin{lemma}[Lemma 1.6ii-iv in Tao]
+One has $\EE\lambda = \EE\zeta$. For almost every $z \in \CC$,
+$$U_\lambda(z) = -\frac{1}{n} \log |f(z)|$$
+and
+$$U_\zeta(z) = -\frac{\log n}{n - 1} - \frac{1}{n - 1} \log |f'(z)|.$$
+Moreover,
+$$s_\lambda(z) = \frac{1}{n} \frac{f'(z)}{f(z)}$$
+and
+$$s_\zeta(z) = \frac{1}{n - 1} \frac{f''(z)}{f'(z)}.$$
+Moreover,
+$$U_\lambda(z) - \frac{n-1}{n}U_\zeta(z) = \frac{1}{n} \log |s_\lambda(z)|$$
+and
+$$s_\lambda(z) - \frac{n - 1}{n} s_\zeta(z) = -\frac{1}{n} \frac{s'_\lambda(z)}{s_\lambda(z)}.$$
+\end{lemma}
+\begin{proof}
+We pass to the cheap perspective, so $n$ is a large standard natural.
+Since $n$ is large, in particular $n \geq 2$, if $b_{n-1}$ is the coefficient of $z^{n-1}$ in $f$ then the roots of $f$ sum to $-b_{n-1}$.
+The roots of $f'$ sum to $-(n-1)b_{n-1}/n$ by calculus. So $\EE\lambda = \EE\zeta$.
+
+We write
+$$f(z) = \prod_{j=1}^n z - \lambda_j$$
+and
+$$f'(z) = n\prod_{j=1}^{n-1} z - \zeta_j.$$
+Taking $-\log|\cdot|$ of both sides and then dividing by $n$ we immediately get $U_\lambda$ and $U_\zeta$.
+Then we take the complex derivative of both sides of the $U_\lambda$ and $U_\zeta$ formulae to get the formulae for $s_\lambda$ and $s_\zeta$.
+
+Now the formula for $\log |s_\lambda|$ follows by subtracting the above formulae, as does the formula for $s_\lambda'/s_\lambda$.
+\end{proof}
+
+Since the distributions of $\lambda$ and $\zeta$ have bounded support (it's contained in $\overline{D(0, 1)}$) by Prokhorov's theorem we can find standard random variables $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ such that $\lambda - \lambda^{(\infty)}$ is infinitesimal in distribution and similarly for $\zeta$.
+The point is that $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ give, up to an infinitesimal error, information about the behavior of $f$, $f'$, and $f''$ by the above lemma and the following proposition.
+
+\begin{proposition}[Theorem 1.10 in Tao]
+One has:
+\begin{enumerate}
+\item In case zero, $\lambda^{(\infty)}$ and $\zeta^{(\infty)}$ are identically distributed and almost surely lie in $C = \{e^{i\theta}: 2\theta \in [\pi, 3\pi]\}$, so $d(\lambda, C)$ is infinitesimal in probability. Moreover, for every compact set $K \subseteq \overline{D(0, 1)} \setminus C$,
+$$\PP(\lambda \in K) = O\left(a + \frac{\log n}{n^{1/3}}\right).$$
+\item In case one, $\lambda^{(\infty)}$ is uniformly distributed on $\partial D(0, 1)$ and $\zeta^{(\infty)}$ is almost surely zero. Moreover,
+$$\EE \log \frac{1}{|\lambda|}, \EE\log |\zeta - \eta| = O\left(\frac{1}{n}\right).$$
+\end{enumerate}
+\end{proposition}
+
+The proposition gives quantitative bounds that force the zeroes to all be in certain locations.
+Looking ahead in the paper, it follows that:
+\begin{enumerate}
+\item In case zero, the Stieltjes transform of $\lambda^{(\infty)}$ is infinitesimally close to $f'/nf$, so by a stability-of-zeroes argument to show that $f$ has no zeroes near the origin, even though $a = o(1)$.
+\item In case one, if $\sigma$ is the standard deviation of $\zeta$, then we have control on the zeroes of $f$ up to an error of size $o(\sigma^2) + o(1)^n$, which we can then use to deduce a contradiction.
+\end{enumerate}
+
+Next time I'll start the proof of this proposition. Its proof apparently follows from the theory of Newtonian potentials, which is not too surprising since $-\Delta \log x = \delta(x)$ if $\Delta$ is the Laplacian of $\RR^2$.
+It needs the following lemma:
+
+\begin{lemma}[Lemma 1.6vi in Tao]
+If $\gamma$ is a curve in $\CC$ that misses the zeroes of $f$ and $f'$ then
+$$f(\gamma(1)) = f(\gamma(0)) \exp\left(n \int_\gamma s_\lambda(z) ~dz\right)$$
+and
+$$f'(\gamma(1)) = f'(\gamma(0)) \exp\left((n-1) \int_\gamma s_\zeta(z) ~dz\right).$$
+\end{lemma}
+\begin{proof}
+One has
+$$ns_\lambda(z) = \frac{f'(z)}{f(z)}$$
+by the previous lemma. Breaking up $\gamma$ into finitely many parts one can assume that $\gamma$ is a contractible curve in a simply connected set, in which case we have a branch of the logarithm along $\gamma$.
+Now apply the fundamental theorem.
+The case for $s_\zeta$ is the same.
+\end{proof}
+
+
+
+
+
+
+\end{document}

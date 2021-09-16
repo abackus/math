@@ -1,0 +1,326 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability II, HW 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $\tau, \sigma$ be stopping times with respect to a filtration $\mathcal F$ and $Y \in L^1$. Show that
+$$E(Y|\mathcal F_\tau) = E(Y|\mathcal F_{\tau \wedge \sigma})$$
+almost surely on $\{\tau \leq \sigma\}$ and
+$$E(E(Y|\mathcal F_\tau)|F_\sigma) = E(Y|\mathcal F_{\tau \wedge \sigma})$$
+almost surely.
+\end{exer}
+
+We will need that since $\tau \wedge \sigma \leq \tau,\sigma$,
+\begin{equation}
+\label{sigma algebra equation}
+F_{\tau \wedge \sigma} \subseteq F_\tau \cap F_\sigma.
+\end{equation}
+
+For the first claim, by (\ref{sigma algebra equation}), it suffices to show that for every event $A \in \mathcal F_{\tau \wedge \sigma}$ such that $A \subseteq \{\tau \leq \sigma\}$,
+\begin{equation}
+\label{first stopping time}
+E(1_A E(Y|\mathcal F_\tau)) = E(1_A E(Y|\mathcal F_{\tau \wedge \sigma})).
+\end{equation}
+Let $n \in \NN$. Then $A \cap \{\tau \wedge \sigma \leq n\} \in \mathcal F_n$, but
+$$A \cap \{\tau \leq n\} = A \cap \{\tau \wedge \sigma \leq n\}$$
+since $\tau = \tau \wedge \sigma$ on $A$, so $A \cap \{\tau \leq n\}$, i.e. $A \in \mathcal F_\tau$.
+Thus (\ref{first stopping time}) follows by the definition of conditional expectation.
+
+For the second claim, by (\ref{sigma algebra equation}), it suffices to show that for every event $A \in \mathcal F_{\tau \wedge \sigma}$,
+\begin{equation}
+\label{second stopping time}
+E(1_A E(E(Y|\mathcal F_\tau)|F_\sigma)) = E(1_A E(Y|\mathcal F_{\tau \wedge \sigma})).
+\end{equation}
+By the definition of conditional expectation applied three times, and (\ref{sigma algebra equation}),
+$$E(1_A E(E(Y|\mathcal F_\tau)|F_\sigma)) = E(1_A E(Y|\mathcal F_\tau)) = E(1_A Y) = E(1_A E(Y|\mathcal F_{\tau \wedge \sigma}))$$
+which implies (\ref{second stopping time}).
+
+\begin{exer}
+Let $X$ be a iid random sequence with $P(X_1 = 1) = p$, $P(X_1 = -1) = q$, $p + q = 1$.
+Consider the random walk
+$$S_n = x + \sum_{j=1}^n X_j$$
+with initial data $x \in \ZZ$.
+Suppose $0 < x < b$, $b \in \ZZ$, and define the stopping times
+$$T_j = \inf_{S_n = j} n$$
+and $T = T_0 \wedge T_b$. Compute $P(T_0 < T_b)$, $P(T_b < T_0)$, and $E(T)$.
+\end{exer}
+
+Let us first treat the cases $p = 0$ and $q = 0$.
+If $p = 0$ then everything is deterministic and $P(T_0 < T_b) = 1$, $P(T_b < T_0) = 1$, and $E(T) = x$.
+Similarly if $q = 0$ then $P(T_0 < T_b) = 0$, $P(T_b < T_0) = 1$, and $E(T) = b - x$.
+Henceforth we assume $0 < p, q < 1$.
+
+Now we treat the case $p = q = 1/2$.
+Then $S$ is a symmetric random walk on $\ZZ$, and so in particular $S$ is a martingale.
+Therefore if $S^T$ denotes the stopped process at time $T$, $S^T$ is a martingale by optional sampling.
+The discussion of the Wald martingale of a symmetric random walk from lecture implies that $T$ is finite almost surely, so $S^T_n \to S_T$ almost surely as $n \to \infty$.
+Moreover $|S^T_n| \leq b$, so by dominated convergence it follows that
+$$E(S_T) = \lim_{n \to \infty} E(S^T_n) = E(S^T_0) = x$$
+since $S^T$ is a martingale.
+On the other hand, either $S_T = 0$ or $S_T = b$ by definition of $T$, and
+$$x = E(S_T) = P(S_T = 0)E(S_T|S_T = 0) + P(S_T = b)E(S_T|S_T = b) = bP(T_b < T_0).$$
+Therefore
+$$P(T_b < T_0) = \frac{x}{b}$$
+and $P(T_0 < T_b) = 1 - x/b$.
+
+To compute $E(T)$ in the case $p = q = 1/2$, we use the stochastic process
+$$A_n = S_n^2 - n,$$
+which was suggested to me in a hint of Tai Gobetti Borges.
+Let us first show that $A$ is a martingale.
+In fact, if $B \in \mathcal F_{n-1}$ then
+\begin{align*}
+E(1_B E(A_n|\mathcal F_{n-1})) &= E(1_B E(A_n))\\
+&= E(1_B((x + X_1 + \cdots + X_{n-1} + X_n)^2 - n))\\
+&= E(1_B(x + X_1 + \cdots + X_{n-1})^2))\\
+&\qquad + 2E(1_B(x + X_1 + \cdots + X_{n-1})X_n) + E(1_B X_n^2) - nP(B).
+\end{align*}
+Now $X_n^2 = 1$ so $E(1_B X_n^2) = P(B)$. Meanwhile, since $A_{n - 1} = (x + X_1 + \cdots + X_{n-1})^2 - (n - 1)$,
+$$E(1_B E(A_n|\mathcal F_{n-1})) = E(1_B A_{n-1}) + 2E(1_B(x + X_1 + \cdots + X_{n-1})X_n).$$
+Since the $X_i$ are iid, $X_n$ is independent of $1_B(x + X_1 + \cdots + X_{n-1})$, so
+$$E(1_B(x + X_1 + \cdots + X_{n-1})X_n) = E(1_B(x + X_1 + \cdots + X_{n-1})) \cdot E(X_n) = 0$$
+since $E(X_n) = 0$.
+Therefore
+$$E(1_B E(A_n|\mathcal F_{n-1})) = E(1_B A_{n-1})$$
+and since $B$ was arbitrary, we conclude that $E(A_n|\mathcal F_{n-1}) = A_{n-1}$ almost surely; i.e. $A$ is a martingale.
+Therefore
+$$E(A_n) = E(A_0) = x^2.$$
+Since $A_T = S_T^2 - T$ by definition,
+$$E(T) = E(S_T^2) - E(A_T) = E(S_T^2) - E(A_T).$$
+Moreover,
+\begin{align*}E(S_T^2) &= P(T_0 < T_b) E(S_T^2|S_T = 0) + P(T_b < T_0) E(S_T^2|S_T = b) \\
+&= \frac{x}{b} \cdot b^2 = bx.
+\end{align*}
+Therefore
+$$E(T) = bx - x^2.$$
+
+Finally let us treat the case $p \neq q$, $0 < p, q < 1$.
+Following another hint of Tai Gobetti Borges, let $\beta = q/p$. Then $\beta \neq 1$, so the random variables $\beta^{X_j}$ are iid.
+Moreover, $\beta^{X_n}$ is independent of $\mathcal F_{n-1}$, so if $B \in \mathcal F_{n-1}$ is an event and $M_n = \beta^{S_n}$, then
+\begin{align*}
+E(1_B E(M_n|\mathcal F_{n-1})) &= E(1_B M_n) = E(1_B M_{n-1} \beta^{X_n})\\
+&= E(1_B M_{n-1}) E(\beta^{X_n}).
+\end{align*}
+But
+$$E((q/p)^{X_n}) = P(X_n = 1)\frac{q}{p} + P(X_n = -1)\frac{q}{p} = q + p = 1$$
+and $B$ was arbitrary, so
+$$E(M_n|\mathcal F_{n-1}) = M_{n-1},$$
+thus $M$ is a martingale.
+Thus the stopped process $M^T$ is also a martingale, by optional stopping.
+Moreover, $|M^T_n| \leq \beta^b < \infty$, so by dominated convergence,
+$$E(M_T) = \lim_{n \to \infty} E(M^T_n) = E(M_0) = \beta^x.$$
+On the other hand,
+$$E(M_T) = P(T_0 < T_b)\beta^0 + P(T_b < T_0)\beta^b = P(T_0 < T_b) + P(T_b < T_0)\beta^b.$$
+We arrive at the system of equations
+$$\begin{cases}
+E(M_T) = \beta^x\\
+E(M_T) = P(T_0 < T_b) + P(T_b < T_0)\beta^b\\
+1 = P(T_0 < T_b) + P(T_b < T_0)
+\end{cases}$$
+which has solution
+$$P(T_0 < T_b) = \frac{\beta^x - \beta^b}{1 - \beta^b},
+\quad P(T_b < T_0) = 1 + \frac{\beta^x - \beta^b}{1 - \beta^b}.$$
+
+\begin{exer}
+Suppose $X$ is a submartingale and $\tau \in L^1$ is a stopping time. If $|X_n - X_{n-1}| \lesssim 1$ almost surely, show that $E(X_\tau) \geq E(X_0)$.
+\end{exer}
+
+Let us prove a version of optional sampling for submartingales:
+
+\begin{lemma}
+The stopped process $X^\tau = n \mapsto X_{\tau \wedge n}$ is a submartingale with respect to $\mathcal F$.
+\end{lemma}
+\begin{proof}
+Let $A_n = 1_{\tau \geq n}$. Then $A_n$ is bounded, nonnegative, and predictable, so
+$$(A \cdot X)_n = \sum_{j=1}^n 1_{\tau \geq j}(X_j - X_{j-1}) = X_{\tau \wedge n} - X_0.$$
+Since
+$$E|(A \cdot X)_n| \leq E|X_0| + E|X_{\tau \wedge n}| \lesssim (1 + \tau \wedge n) E|X_0|$$
+and $\tau$ is finite almost surely, it follows that $(A \cdot X)_n \in L^1$, so $A \cdot X$ is a submartingale.
+Since $X_0$ does not depend on time, it follows that $X^\tau$ is a submartingale.
+\end{proof}
+
+If $n \geq \tau$, then $X^\tau_n = X_\tau$.
+Since $\tau$ is almost surely finite, this means that almost surely,
+$$\lim_{n \to \infty} X^\tau_n = X_\tau.$$
+On the other hand, $X^\tau_0 = X_0$, so since $X^\tau$ is a submartingale, $E(X^\tau_n) \geq E(X_0)$.
+Let us now verify the hypotheses of dominated convergence. By construction,
+$$|X^\tau_n| \leq |X_0| + \sum_{j=1}^\tau |X_j - X_{j-1}| \lesssim |X_0| + \tau$$
+almost surely. Since $X_0, \tau \in L^1$ by hypothesis, then,
+$$E(X_\tau) = \lim_{n \to \infty} E(X^\tau_n) \geq E(X_0)$$
+as desired.
+
+\begin{exer}
+Let $X$ be an iid random sequence in $L^1$ and $\mathcal F$ be the filtration generated by $X$.
+Let $\tau \in L^1$ be a stopping time with respect to $\mathcal F$. Show that
+$$E\sum_{j=1}^\tau X_j = E(X_1) \cdot E\tau.$$
+\end{exer}
+
+Let $Y_j = X_j - E(X_1)$.
+Let $S_n = \sum_{j \leq n} Y_j$. Then $S$ is a martingale with respect to $\mathcal F$. Indeed,
+$$E(S_n|\mathcal F_{n-1}) = \sum_{j=1}^n E(Y_j|\mathcal F_{n-1}) = S_{n-1} + E(Y_n|\mathcal F_{n-1}) = S_{n-1} + EX_n - EX_1 = S_{n-1}$$
+since the $X_j$ are iid.
+By optional sampling, the stopped process $S^\tau$ is also a martingale, $E(S^\tau_n) = E(S_0) = 0$, and $S^\tau_n \to S_\tau$ as $n \to \infty$ almost surely.
+
+First suppose that $X_1 \in L^\infty$; then so is $S_1$, with $||X_1||_{L^\infty} = ||S_1||_{L^\infty}$.
+Then for every $n$, $|S_n - S_{n-1}| \leq 2||S_1||_{L^\infty}$ almost surely.
+Moreover,
+$$|S_n^\tau| \leq \sum_{j=1}^\tau |S_n - S_0| \leq 2\tau||X_1||_{L^\infty}.$$
+Therefore by dominated convergence,
+$$E(S_\tau) = \lim_{n \to \infty} E(S^\tau_n) = E(S_0) = 0.$$
+Therefore
+$$E\sum_{j=1}^\tau X_j = \sum_{j=1}^\tau E(X_1) + \sum_{j=1}^\tau Y_j = E(X_1) \cdot E\tau + 0,$$
+completing the proof if $X_1 \in L^\infty$.
+
+On the other hand, if $X_1$ is arbitrary, then there exist iid $X_j^\ell \in L^\infty$ with $X_j^\ell \to X_j$, since $L^\infty$ is dense in $L^1$
+So
+$$E\sum_{j=1}^\tau X_j = \lim_{\ell \to \infty} E\sum_{j=1}^\tau X_j^\ell = \lim_{\ell \to \infty} E(X_1^\ell) \cdot E\tau = E(X_1) \cdot E\tau$$
+by definition of convergence in $L^1$.
+
+\begin{exer}
+Let $X$ be a potential, i.e. a nonnegative supermartingale with respect to $\mathcal F$ such that $\lim_n EX_n = 0$. Let $X = M - A$ be the Doob decomposition of $X$.
+Show that
+$$X_n = E(A_\infty|\mathcal F_n) - A_n.$$
+\end{exer}
+
+By monotone convergence,
+\begin{align*}
+E(A_\infty|\mathcal F_n) &= \lim_{m \to \infty} E(A_m|\mathcal F_n) = \lim_{m \to \infty} E(M_m|\mathcal F_n) + \lim_{m \to \infty} E(X_m|\mathcal F_n)\\
+&= X_n + A_n + \lim_{m \to \infty} E(X_m|\mathcal F_n).
+\end{align*}
+By hypothesis and Fatou's lemma,
+$$0 \leq \lim_{m \to \infty} E(X_m|\mathcal F_n) \leq E\left(\limsup_{m \to \infty} X_m\bigg|\mathcal F_n\right).$$
+Let $(X_{m_k})_k$ be a subsequence of $X$ which realizes the almost sure limit superior.
+Since $X_n \to 0$ in $L^1$, $X_{m_k} \to 0$ almost surely, since $X_{m_k}$ has an almost sure limit, which cannot be different than the $L^1$ limit.
+So
+$$0 \leq \lim_{m \to \infty} E(X_m|\mathcal F_n) \leq E(0|\mathcal F_n) = 0$$
+as desired.
+
+
+
+
+
+
+\end{document}

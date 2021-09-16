@@ -1,0 +1,396 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Fluid dynamics, HW 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $\psi$ be the stream function of a steady solution to the Euler equations with $d = 2$.
+Show that if $W$ is a smooth function on $\RR$ then
+$$u(x) = (-\partial_2 \psi(\tilde x), \partial_1 \psi(\tilde x), W(\psi(\tilde x)))$$
+is a steady solution to the Euler equations with $d = 3$.
+\end{exer}
+
+Let $\omega = \curl u$. Then, since $\psi$ is a steady stream with $d = 2$, there is a smooth function $F: \RR \to \RR$ such that
+$$
+\omega(x) = (\partial_2(W \circ \psi)(\tilde x), -\partial_1(W \circ \psi)(\tilde x), F \circ \psi(\tilde x)).$$
+Now
+\begin{align*}\partial_1\partial_2(W \circ \psi)(\tilde x) &= \partial_2\partial_1(W \circ \psi)(\tilde x)\\
+&= W''(\psi(\tilde x)) \partial_1 \psi(\tilde x) \partial_2\psi(\tilde x) + W'(\psi(\tilde x)) \partial_1\partial_2 \psi(\tilde x)
+\end{align*}
+while
+$$\partial_j^2(W \circ \psi)(\tilde x) = W''(\psi(\tilde x))\partial_j\psi(\tilde x) + W'(\psi(\tilde x))\partial_j^2\psi(\tilde x)$$
+so
+\begin{align*}
+u \cdot \nabla \omega(x) &= \begin{bmatrix}u^1\partial_1\partial_2(W \circ \psi)(\tilde x) + u^2\partial_2^2(W \circ \psi)(\tilde x)\\ -u^1\partial_1^2(W \circ \psi)(\tilde x) - u^2 \partial_1\partial_2(W \circ \psi)(\tilde x)\\ u^1\partial_1(F(\psi(\tilde x))) + u^2\partial_2(F(\psi(\tilde x))))\end{bmatrix}\\
+&= \begin{bmatrix}
+u^1(\partial_1 \psi(\tilde x) \partial_2\psi(\tilde x) + W'(\psi(\tilde x)) \partial_1\partial_2 \psi(\tilde x)) + u^2(W''(\psi(\tilde x))\partial_2\psi(\tilde x) + W'(\psi(\tilde x))\partial_2^2\psi(\tilde x))\\
+-u^1(W''(\psi(\tilde x))\partial_1\psi(\tilde x) + W'(\psi(\tilde x))\partial_1^2\psi(\tilde x)) - u^2(\partial_1 \psi(\tilde x) \partial_2\psi(\tilde x) + W'(\psi(\tilde x)) \partial_1\partial_2 \psi(\tilde x))\\
+u^1(F'(\psi(\tilde x))\partial_1\psi(\tilde x)) + u^2(F'(\psi(\tilde x))\partial_2\psi(\tilde x))
+\end{bmatrix}\\
+&= \begin{bmatrix}
+-(\partial_2\psi)^2 \partial_1\psi  + \partial_1\psi \partial_2^2\psi W'(\psi) - \partial_2\psi \partial_1\partial_2 \psi W'(\psi) + \partial_1\psi \partial_2\psi W''(\psi)\\
+(\partial_1\psi)^2 \partial_2\psi - \partial_1\psi \partial_1^2\psi W'(\psi) + \partial_1\psi \partial_1\partial_2\psi W'(\psi) -\partial_1\psi \partial_2\psi W''(\psi) \\
+0
+\end{bmatrix}\\
+&= W'(\psi) \partial_2\psi\begin{bmatrix}
+-\partial_1\partial_2\psi\\
+\partial_2^2\psi\\
+W'(\psi) \partial_1\psi
+\end{bmatrix} - W'(\psi)\partial_1\psi\begin{bmatrix}
+-\partial_2^2\psi\\
+\partial_1\partial_2\psi\\
+W'(\psi) \partial_2\psi
+\end{bmatrix}\\
+&= \omega \cdot \nabla u(x).
+\end{align*}
+
+\begin{exer}
+Let $r,\theta,x_3$ denote cylindrical coordinates.
+Assume $\partial_\theta u = u^\theta = 0$ and $\omega = \curl u$. Show that
+$$\omega = (\partial_3 u^r - \partial_r u^3) e_\theta.$$
+Show that $\xi = \omega^\theta/r$ satisfies the transport equation
+\begin{equation}
+\label{transport equation}
+(\partial_t + u^r \partial_r + u^3\partial_3) \xi = 0.
+\end{equation}
+\end{exer}
+
+We recall that in cylindrical coordinates,
+$$\curl F = (r^{-1}\partial_\theta F^3 - \partial_3 F^\theta)e_r + (\partial_3 F^r - \partial_r F^r)e_\theta + r^{-1}(\partial_r(rF^\theta) - \partial_\theta F^r)e_3.$$
+Plugging in $F = u$, all these terms vanish except $\partial_3 u^r e_\theta$ and $\partial_r u^3 e_\theta$, which was desired.
+
+Now we appeal to the lemma in Madja and Bertozzi's book which says that if $h$ is a vector field with
+$$(\partial_t + u \cdot \nabla)h = h \cdot \nabla u$$
+and $f$ is a scalar field which is invariant under trajectories of $u$, then $\xi = \nabla f \cdot h$ solves the transport equation (\ref{transport equation}).
+We can plug in $h = \omega$ as long as we can find an $f$ such that $(\partial_t + u \cdot \nabla)f = 0$ and $\partial_\theta f = r^{-1}$.
+Since solving the transport equation (\ref{transport equation}) is a local property, we only need the decomposition $\xi = \nabla f \cdot \omega$ to be valid locally, i.e. we only need a local solution to this system of ODE.
+We might as well take $f$ to not depend on $x_3$, in which case the constraints simplify to
+$$\begin{cases}
+\partial_tf + u^r \partial_r f = 0\\
+r\partial_\theta f = 1.
+\end{cases}$$
+Since this system has a local solution by the Picard-Linde\"of theorem, the claim follows.
+
+\begin{exer}
+Let $u = \nabla \varphi$ be a potential solution of the Euler equations, $d = 3$. Show that
+$$\nabla_x(\partial_t\varphi + |\nabla_x\varphi|^2/2 + p) = 0.$$
+Assume that $u$ is a steady solution in a smooth bounded domain $\Omega$ with specified normal velocity $u \cdot n = V \cdot n$ on $\partial \Omega$.
+Here $V$ does not depend on time.
+Show that
+\begin{equation}
+\label{Neumann problem}
+\begin{cases}
+\Delta \varphi = 0\\
+\partial_n \varphi = V \cdot n.
+\end{cases}\end{equation}
+Show that $u$ is the minimizer of the kinetic energy
+$$E(v) = \frac{1}{2} \int_\Omega |v(x)|^2 ~dx$$
+among all divergence-free vector fields $v$ satisfying $v \cdot n = V \cdot n$.
+\end{exer}
+
+We directly compute
+\begin{align*}
+\nabla(\partial_t\varphi + \nabla \varphi \cdot \nabla \varphi/2 + p) &= \partial_t u + \nabla(u \cdot u)/2 + \nabla p\\
+&= \partial_t u + 2(u \cdot \nabla)u/2 + \nabla p = 0
+\end{align*}
+since $u$ solves the Euler equations with pressure $p$.
+
+That $\varphi$ is a solution of the Neumann problem (\ref{Neumann problem}) follows immediately from the fact that $\Delta \varphi = \nabla \cdot u = 0$ and $\partial_n \varphi = n \cdot \nabla \varphi = u \cdot n = V \cdot n$.
+
+Now let $v$ be a divergence-free vector field satisfying $v \cdot n = V \cdot n$.
+We first claim
+\begin{equation}
+\label{u is v}
+\int_U |u(x)|^2 ~dx = \int_U u(x) \cdot v(x) ~dx.
+\end{equation}
+To see this, we integrate by parts
+$$\int_U \nabla \varphi \cdot (u - v) = \int_{\partial U} (u - v) \cdot (\varphi n) - \int_U \varphi\nabla \cdot(u - v) = 0$$
+owing to the fact that $u - v$ is divergence-free and $(u - v)\cdot n = (V - V) \cdot n = 0$.
+Moreover,
+$$2\int_U u \cdot v \leq 2\int_U |u||v| \leq \int_U |u|^2 + |v|^2$$
+by the Cauchy-Schwarz and Cauchy inequalities, so by (\ref{u is v}),
+$$\int_U |u(x)|^2 ~dx \leq \frac{1}{2}\int_U |u(x)|^2 + |v(x)|^2 ~dx$$
+or in other words,
+$$\frac{1}{2} \int_U |u(x)|^2 ~dx \leq \frac{1}{2} \int_U |v(x)|^2 ~dx$$
+as desired.
+
+
+
+
+\begin{exer}
+Let $d \geq 1$, $s \in \RR$, and $\alpha = s - d/2$. Prove that if $f \in H^s(\RR^d)$ and $0 < \alpha < 1$ then $f \in C^\alpha(\RR^d)$.
+\end{exer}
+
+The nonfractional version of this proof was taught to me by Maciej Zworski in his class on microlocal analysis at UC Berkeley.
+The only new ideas needed for a fractional version are in the proof of the multiplier estimate (\ref{multiplier estimate}).
+Since this version is specialized to $p = 2$ and the original was for arbitrary $p > 1$, you might be able to replace the Littlewood-Paley theory with some more $L^2$-specialized ideas, but I didn't think very hard about this.
+
+We first recall the Littlewood-Paley decomposition from harmonic analysis.
+There exist smooth, compactly supported, radial functions $\psi_0,\psi_1$ such that $\psi_0$ is supported on $B(0, 1)$, $\psi_1$ is supported on $B(0, 2) \setminus B(0, 1/2)$, and if $\psi_j(x) = \psi_1(2^{-j}x)$, $j \geq 2$, then the $\psi_j$, $j \geq 0$, form a partition of unity on $\RR^d$,
+which we refer to as a dyadic partition of unity since $\psi_j$ is supported near the sphere $\partial B(0, 2^{j-1})$.
+The existence of a smooth dyadic partition of unity allows us to introduce the Littlewood-Paley decomposition
+\begin{equation}
+\label{LP decomp}
+u = \sum_{j=0}^\infty \psi_j(D)u
+\end{equation}
+where the Fourier multiplier $(2^{-j}D)^\ell \psi_j(D)$ by definition satisfies
+$$(2^{-j}D)^\ell \psi_j(D)u = \frac{1}{(2\pi)^d} \int_{\RR^d} \hat u(\xi) \xi^\ell \psi_j(\xi) e^{ix\xi} ~d\xi$$
+whenever $\ell \in \NN^d$ (so $\xi^\ell = \prod_{i \leq d} \xi_i^{\ell_i}$) and $j \in \NN$.
+Thus $\psi_j(D)$ is a projection to frequencies near $2^{j-1}$.
+Let $\eta_\ell(\xi) = \xi^\ell \psi_1(\xi)$, $|\ell| \leq 1$. Then $\eta_\ell(2^{-j}D) = (2^{-j}D)^\ell \psi_j$.
+
+By the Cauchy-Schwarz inequality,
+$$\eta_\ell(hD)u(x) = \frac{1}{(2\pi)^d} \int_{\RR^d} e^{ix\xi} \eta_\ell(h\xi) \hat u(\xi) ~d\xi \lesssim \left(\int_{\RR^d} \frac{|\eta_\ell(h\xi)|^2}{(1 + |\xi|^s)^2} ~d\xi\right)^{1/2} ||u||_{H^s}.$$
+Writing $\zeta = h\xi$ we see that
+$$\int_{\RR^d} \frac{|\eta_\ell(h\xi)|^2}{(1 + |\xi|^s)^2} ~d\xi = h^{-d} \int_{\RR^d} \frac{|\eta_\ell(\zeta)|^2}{(1 + h^{-s}|\zeta|^s)^2} ~d\zeta.$$
+If $\eta_\ell(\xi) \neq 0$ then $|\xi| \sim 1$, so $(1 + h^{-s}|\xi|^s)^2 \sim h^{-2s}$. Therefore
+$$\int_{\RR^d} \frac{|\eta_\ell(h\xi)|^2}{(1 + |\xi|^s)^2} ~d\xi \lesssim h^{2\alpha} ||\eta_\ell||_{L^2}^2,$$
+and it is easy to see $||\eta_\ell||_{L^2} \lesssim ||\eta_0||_{L^2}$ uniformly in $\ell$, so one has the multiplier estimate
+\begin{equation}
+\label{multiplier estimate}
+||\eta_\ell(hD)||_{H^s \to L^\infty} \lesssim h^\alpha
+\end{equation}
+uniformly in $0 < h < 1$ and $|\ell| \leq 1$.
+
+Now fix $f \in H^s$.
+Applying the Littlewood-Paley decomposition (\ref{LP decomp}) of $f$,
+\begin{align*}
+||f||_{L^\infty} &\leq ||\psi_0(D)f||_{L^\infty} + \sum_{j=0}^\infty ||\eta_0(2^{-j}D)f||_{L^\infty}\\
+&\leq ||\psi_0(D)f||_{L^\infty} + \sum_{j=0}^\infty 2^{-j\alpha} ||f||_{H^s}.
+\end{align*}
+using the multiplier estimate (\ref{multiplier estimate}).
+We recall that if $P \in L^2$ then $P(D)$ is a bounded operator $L^2 \to L^\infty$. Indeed, in that case
+\begin{equation}
+\label{L2 symbols are bounded}
+|P(D)u(x)| = \left|\int_{\RR^d} \hat P(x - y) u(y) ~dy\right| \lesssim ||P||_{L^2} ||u||_{L^2}
+\end{equation}
+by the Cauchy-Schwarz inequality, thus $||P(D)||_{L^2 \to L^\infty} \lesssim ||P||_{L^2}$. Since $\psi_0(D)$ is Schwartz and $H^s \subseteq L^2$ it follows that $||\psi_0(D)||_{H^s \to L^\infty} \lesssim 1$.
+Meanwhile, $\sum_j 2^{-j\alpha} \lesssim (2^\alpha - 1)^{-1} < \infty$ since $0 < \alpha < 1$, whence
+\begin{equation}
+\label{sup estimate}
+||f||_{L^\infty} \lesssim_\alpha ||f||_{H^s}.
+\end{equation}
+
+It remains to bound the H\"older seminorm $[f]_\alpha$ of $f$.
+We start by estimating $[\psi_0(D)f]_\alpha$. If $|x - y| \leq 1$ then $|x - y| \leq |x - y|^\alpha$, so in that case it suffices to show that $\psi_0(D)f$ is has finite Lipschitz seminorm $[\psi_0(D)f]_1$.
+Indeed, by the Cauchy-Schwarz inequality,
+$$[\psi_0(D)f]_1 \leq ||\nabla \psi_0(D) f||_{L^\infty} \leq \sup_x \left|\int_{\RR^d} \nabla_x \psi_0(x - y) \hat f(y) ~dy\right| \lesssim ||\nabla \psi_0||_{L^2} ||f||_{L^2} \lesssim ||f||_{H^s}$$
+since $\psi_0$ is Schwartz.
+In the other case $|x - y| > 1$ we instead have the trivial bound $1 \leq |x - y|^\alpha$ and
+$$|\psi_0(D)f(x) - \psi_0(D)f(y)| \leq 2||\psi_0(D)f||_{L^\infty} \lesssim ||\psi_0||_{L^2} ||f||_{L^2} \lesssim ||f||_{H^s} |x - y|$$
+owing to the estimate (\ref{L2 symbols are bounded}) applied to $P = \psi_0$.
+Summing up, we have proven the very low frequency estimate
+\begin{equation}
+\label{very low frequency estimate}
+[\psi_0(D)f]_\alpha \lesssim ||f||_{H^s}.
+\end{equation}
+
+Now we prove the low frequency estimate
+\begin{equation}
+\label{low frequency estimate}
+|\psi_j(D)f(x) - \psi_j(D)f(y)| \lesssim |x - y| 2^{j(1 - \alpha)} ||f||_{H^s},
+\end{equation}
+valid provided that $1 \leq j \leq -\log_2 |x - y|$. To see (\ref{low frequency estimate}), we simply bound
+\begin{align*}
+|\psi_j(D)f(x) - \psi_j(D)f(y)| &\lesssim |\eta_0(2^{-j}D)f(x) - \eta_0(2^{-j}D)f(y)| \leq |x - y| \cdot ||\nabla \eta_0(2^{-j}D)f||_{L^\infty}\\
+&= |x - y| \sum_{|\ell| = 1} ||D_\ell \eta_0(2^{-j}D)f||_{L^\infty} = |x - y| \sum_{|\ell| = 1} 2^j ||\eta_\ell(2^{-j}D)f||_{L^\infty}\\
+&\lesssim |x - y| 2^{j(1 - \alpha)} ||f||_{H^s}
+\end{align*}
+owing to the multiplier estimate (\ref{multiplier estimate}).
+
+Next we prove the high frequency estimate
+\begin{equation}
+\label{high frequency estimate}
+|\psi_j(D)f(x) - \psi_j(D)f(y)| \lesssim 2^{-j\alpha} ||f||_{H^s}
+\end{equation}
+valid provided that $j > -\log_2 |x - y|$. Indeed,
+$$|\psi_j(D)f(x) - \psi_j(D)f(y)| \leq 2||\psi_j(D)f||_{L^\infty} \lesssim h^\alpha ||f||_{H^s}$$
+owing to the multiplier estimate (\ref{multiplier estimate}).
+
+Now we concatenate the low frequency (\ref{low frequency estimate}) and high frequency (\ref{high frequency estimate}) estimates:
+\begin{align*}
+\sum_{j=1}^\infty |\psi_j(D)f(x) - \psi_j(D)f(y)| &= \left(\sum_{2^{-j} \geq |x - y|} + \sum_{2^{-j} < |x - y|}\right) |\psi_j(D)f(x) - \psi_j(D)f(y)|\\
+&\lesssim ||f||_{H^s} \left(\sum_{2^j \leq |x - y|^{-1}} |x - y|2^{j(1 - \alpha)} + \sum_{2^j > |x - y|^{-1}} 2^{-j\alpha}\right)\\
+&\leq ||f||_{H^s} \sum_{j=1}^\infty 2^{-j\alpha} \lesssim 2^{\alpha} ||f||_{H^s}.
+\end{align*}
+If $|x - y| \lesssim 1$ this gives the bound
+$$|\psi_j(D)f(x) - \psi_j(D)f(y)| \lesssim |x - y|^{\alpha} ||f||_{H^s},$$
+while when $|x - y| \gtrsim 1$, we instead have the bound
+$$|\psi_j(D)f(x) - \psi_j(D)f(y)| \leq 2||\psi_j(D)f||_{L^\infty} \lesssim ||\psi_j||_{L^2} ||f||_{L^2} \lesssim |x - y|^{\alpha} ||f||_{H^s}$$
+owing to the operator norm estimate (\ref{L2 symbols are bounded}).
+Combining this estimate with the $L^\infty$ estimate (\ref{sup estimate}) and the very low frequency estimate (\ref{very low frequency estimate}), we deduce
+$$||f||_{C^\alpha} = ||f||_{L^\infty} + [f]_\alpha \leq ||f||_{L^\infty} + \sum_{j=0}^\infty [\psi_j(D)f]_\alpha \lesssim ||f||_{H^s}$$
+which was desired.
+
+\begin{exer}
+Let $s \leq \min(s_1, s_2)$ and $s_1 + s_2 > s + d/2$. Prove that
+$$||fg||_{H^s} \lesssim ||f||_{H^{s_1}} ||g||_{H^{s_2}}.$$
+\end{exer}
+
+It will be convenient to write
+$$||h||_{H^t} = ||((\cdot))^t h||_{L^2}$$
+where $((\cdot))$ is the Japanese bracket, so $((\xi)) \sim 1$ if $|\xi| \lesssim 1$ and $((\xi)) \sim |\xi|$ if $|\xi| \gtrsim 1$.
+From these estimates, we deduce
+\begin{equation}
+\label{Japanese}
+((\xi))^s \lesssim_s ((\xi - \eta))^{s - s_1} + ((\eta))^{s_1} + ((\xi - \eta))^{s_2} ((\eta))^{s - s_2}
+\end{equation}
+provided $s \leq \min(s_1, s_2)$. Indeed, if $|\xi| \lesssim 1$ then the right-hand side is comparable to $((\eta))^s \geq 1$ and the claim follows.
+If instead $|\xi| \gtrsim 1$, then $((\xi))^s \sim |\xi|^s$.
+If $|\eta| \lesssim 1$ then the right-hand side is comparable to $|\xi|^{s_2} \geq |\xi|^s$ so the claim follows.
+If $|\eta| \sim |\xi|$ then $|\xi - \eta| \lesssim 1$ and so the right-hand side is comparable to $|\eta|^{s_2} \gtrsim |\xi|^s$ and so the claim follows.
+Finally, if $|\eta|$ dominates $|\xi|$ then the right-hand side is dominated by $((\eta))^s \gtrsim ((\xi))^s$ and the claim follows.
+
+Since $\widehat{fg} = \hat f * \hat g$, the Japanese bracket estimate (\ref{Japanese}) gives
+\begin{align*}||fg||_{H^s}^2 &= \int_{\RR^d} |\hat f * \hat g(\xi) ((\xi))^s|^2 ~d\xi\\
+&= \int_{\RR^d} \left|\int_{\RR^d} \hat f(\eta) \hat g(\xi - \eta) ((\xi))^s ~d\eta\right|^2 ~d\xi\\
+&\lesssim_s \int_{\RR^d} \bigg|\int_{\RR^d} \hat f(\eta) \hat g(\xi - \eta) ((\eta))^{s_1} ((\xi -\eta))^{s - s_1} ~d\eta \\
+&\qquad+\int_{\RR^d} \hat f(\eta) \hat g(\xi - \eta) ((\xi - \eta))^{s_2} ((\eta))^{s - s_2} ~d\eta\bigg|^2 ~d\xi.
+\end{align*}
+By the $L^2$ triangle inequality,
+\begin{align*}||fg||_{H^s} &\lesssim_s \bigg(\int_{\RR^d} \bigg|\int_{\RR^d} \hat f(\eta) \hat g(\xi - \eta) ((\eta))^{s_1} ((\xi -\eta))^{s - s_1} ~d\eta \\
+&\qquad+\int_{\RR^d} \hat f(\eta) \hat g(\xi - \eta) ((\xi - \eta))^{s_2} ((\eta))^{s - s_2} ~d\eta\bigg|^2\bigg)^{1/2}\\
+&\leq \int_{\RR^d} \left(\int_{\RR^d} |\hat f(\eta) \hat g(\xi - \eta) ((\eta))^{s_1} ((\xi - \eta))^{s - s_1}|^2 ~d\eta\right)^{1/2} ~d\xi\\
+&\qquad+\int_{\RR^d} \left(\int_{\RR^d} |\hat f(\xi - \eta) \hat g(\eta) ((\eta))^{s_2} ((\xi - \eta))^{s - s_2}|^2 ~d\eta\right)^{1/2} ~d\xi\\
+&= \int_{\RR^d} \left(\int_{\RR^d} |\hat f(\eta) \hat g(\xi) ((\eta))^{s_1} ((\xi))^{s - s_1}|^2 ~d\eta\right)^{1/2} ~d\xi\\
+&\qquad+\int_{\RR^d} \left(\int_{\RR^d} |\hat f(\xi) \hat g(\eta) ((\eta))^{s_2} ((\xi))^{s - s_2}|^2 ~d\eta\right)^{1/2} ~d\xi\\
+&\leq \left(\int_{\RR^d} |\hat f(\eta) ((\eta))^{s_1}|^2 ~d\eta\right)^{1/2} \int_{\RR^d}  |\hat g(\xi) ((\xi))^{s - s_1}| ~d\xi\\
+&\qquad+ \left(\int_{\RR^d} |\hat g(\eta) ((\eta))^{s_2}|^2 ~d\eta\right)^{1/2} \int_{\RR^d} |\hat f(\xi) ((\xi))^{s - s_2}| ~d\xi\\
+&= ||f||_{H^{s_1}} \int_{\RR^d} |\hat g(\xi) ((\xi))^{s - s_1}| ~d\xi + ||g||_{H^{s_2}} \int_{\RR^d} |\hat f(\xi) ((\xi))^{s - s_2}| ~d\xi.
+\end{align*}
+Let us show
+\begin{equation}
+\label{hat g Holder}
+\int_{\RR^d} |\hat g(\xi) ((\xi))^{s - s_1}| ~d\xi \lesssim_s ||g||_{H^{s_2}};
+\end{equation}
+the analogous bound for $f$ will then follows by symmetry.
+By the Cauchy-Schwarz inequality,
+\begin{align*}
+\int_{\RR^d} |\hat g(\xi) ((\xi))^{s - s_1}| ~d\xi &\leq ||((\cdot))^{s_2}\hat g||_{L^2} \left(\int_{\RR^d} ((\xi))^{2(s - s_1 - s_2)} ~d\xi\right)^{1/2}\\
+&= ||g||_{H^{s_2}} ||((\cdot))^{s - s_1 - s_2}||_{L^2}.
+\end{align*}
+Since $s - s_1 - s_2 > d/2$, we conclude $((\cdot))^{s - s_1 - s_2} \in L^2$, which proves (\ref{hat g Holder}). Therefore
+$$||fg||_{H^s} \lesssim_s ||f||_{H^{s_1}} ||g||_{H^{s_2}}$$
+which was desired.
+
+
+\end{document}

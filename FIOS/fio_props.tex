@@ -1,0 +1,473 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Fourier integral operators properties]{Properties of Fourier integral operators}
+\author{Aidan Backus}
+\date{July 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Olo}{\mathscr O}
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\Smooth}{\mathscr E}
+\newcommand{\Test}{\mathscr D}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{fios.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+%\begin{abstract}
+%We discuss the u
+%\end{abstract}
+
+\maketitle
+
+\section{Summary of the seminar so far}
+Let $\Lambda$ be a closed conic Lagrange submanifold of $T^*X \setminus 0$, and let $n = \dim X$.
+In Yonah's talk we defined a quantization map
+$$ S^{m + n/4}_\rho(\Lambda, \Omega_{1/2} \otimes L) \to I^m_\rho(X, \Lambda)$$
+where $L$ is the Maslov line bundle (defined in Zhongkai's talk) of $\Lambda$ and $\Omega_{1/2}$ is the half-density bundle on $X$.
+This map is an isomorphism modulo worse classes.
+So the principal symbol of an oscillatory integral in $I^m_\rho(X, \Lambda)$ is an element of $S^{m + n/4}_\rho(\Lambda, \Omega_{1/2} \otimes L)$ which is well-defined modulo worse classes.
+
+Henceforth we will suppress all tensor products against $\Omega_{1/2}$, because every vector bundle that we care about will be tensored against $\Omega_{1/2}$.
+The idea is that we can integrate a half-density $u$ against a test function invariantly. We're doing analysis (or quantum mechanics) so we don't care about $u(x)$, we just care about how $u$ integrates against test functions.
+
+Recall James' talk: If $C$ is a homogeneous canonial relation from $X$ to $Y$, then
+$$C \subseteq (T^*X \setminus 0) \times (T^*Y \setminus 0)$$
+is a closed conic Lagrange manifold, where the symplectic form on $T^* X \setminus T^* Y$ is given by $\sigma_X - \sigma_Y$, where $\sigma_Z$ is the symplectic form on $T^* Z$.
+The Lagrange manifold $C'$ obtained by multiplying by $-1$ in the fibers over $Y$ satisfies the following: elements of $I^m_\rho(X \times Y, C')$ define Fourier integral operators $\mathcal E'(Y) \to \mathcal D'(X)$.
+
+\section{More preliminaries on half-densities}
+\begin{lemma}
+$\Omega^{1/2}$ is a trivial line bundle.
+\end{lemma}
+\begin{proof}
+Choose a Riemannian metric $g$ on $X$. Then $|dV| = \sqrt g$ is a global volume density so $\Omega_1$ is trivial.
+Since $\Omega_{1/2}$ is the tensor square root of $\Omega_1$, the claim holds.
+\end{proof}
+
+Now we recall the notion of Lie derivative for half-densities.
+In general, if $a$ is a section of a vector bundle $E$ and $v$ is a vector field which induces a one-parameter group $\varphi$, we have
+$$\mathcal L_va = \frac{\partial}{\partial t}|_{t = 0} \varphi_t^* a.$$
+The idea: $v$ is the velocity field of a fluid, $a$ is a physical invariant of the fluid, and $\mathcal L_va$ describes how $a$ changes as the fluid flows.
+If $E$ is a trivial line bundle we can write $a = ua_0$ for $a_0$ a nonvanishing section of $E$.
+Now $\mathcal L_va_0$ is a scalar multiple of $a_0$, say $\mathcal L_va_0 = fa_0$ for some smooth function $f$, so by the Leibniz rule
+$$\mathcal L_va = \frac{\partial u}{\partial v} a_0 + fua_0.$$
+It remains to compute $f$.
+
+Suppose that $E = \Omega^{1/2}$.
+Local coordinates $x$ allow us to think of the domain as a subset of $\RR^n$ so we get a notion of ``boxes", a volume form $dV$, and the notion of a flux form, as well as the divergence $\operatorname{div} v = \sum_j \partial_{x_j} v_j$.
+Suppose that
+$$a_0 \otimes a_0 = |dx_1 \wedge \cdots \wedge dx_n| = |dV|.$$
+That is,
+$$2(\mathcal L_va_0) \otimes a_0 = \mathcal L_v|dV| \otimes a_0.$$
+
+\begin{lemma}
+$\mathcal L_v|dV| = \operatorname{div} v |dV|$.
+\end{lemma}
+\begin{proof}
+Fix a small box $B$.
+Then
+$$\iint_B \mathcal L_v |dV| = \iint_B \frac{\partial}{\partial t}|_{t = 0} \varphi_t^* |dV| = \frac{\partial}{\partial t}|_{t = 0} \iint_{(\varphi_t)_* B} |dV|$$
+where we used the transformation law for densities.
+Moreover $(\varphi_t)_*B$ is contractible so as long as we choose it to be positively oriented,
+$$\frac{\partial}{\partial t}|_{t = 0} \iint_{(\varphi_t)_* B} |dV| = \frac{\partial}{\partial t}|_{t = 0} \iint_{(\varphi_t)_* B} dV = \int_{\partial B} \operatorname{flux} v.$$
+Here we used the rule for differentiating the integral of a moving region.
+By the divergence theorem,
+$$\int_{\partial B} \operatorname{flux} v = \iint_B \operatorname{div} v ~dV = \iint_B \operatorname{div} v ~|dV|$$
+as desired.
+\end{proof}
+
+Anyways,
+$$(\mathcal L_va_0) \otimes a_0 = \frac{1}{2} \operatorname{div} v a_0 \otimes a_0.$$
+Multiplying both sides by $a_0^{-1}$ (which is a $-1/2$-density) we get:
+
+\begin{theorem}[the derivative of a half-density]
+Suppose that $a$ is a half-density written in local coordinates. Then
+$$\mathcal L_v a = \left(\frac{\partial}{\partial v} + \frac{1}{2}\operatorname{div} v\right)a$$
+where the divergence is defined using the pullback of the flat metric on $\RR^n$.
+\end{theorem}
+
+\section{The parametrix of an elliptic operator}
+\begin{definition}
+Let $a \in S^{m + n/4}_\rho(\Lambda, L)$ be a principal symbol of $A \in I^m_\rho(X, \Lambda)$.
+We say that $A$ is \dfn{noncharacteristic} or \dfn{elliptic} at $\lambda \in \Lambda$ if $1/a \in S^{-m-n/4}_\rho(\Lambda, \Omega_{-1/2})$, at least near the fiber infinity of a conic neighborhood of $\lambda$.
+\end{definition}
+
+Clearly the choice of principal symbol does not matter.
+Moreover, invertibility of the principal symbol map (Theorem 3.2.6 in H\"ormander I) implies that $\lambda \in WF(A)$.
+
+Recall that a Fourier integral operator is said to be a smoothing operator if it has a smooth Schwartz kernel.
+
+\begin{proposition}[local existence of parametrices]
+Let $C: T^*Y \setminus 0 \to T^*X \setminus 0$ be a homogeneous symplectomorphism, let $K \subseteq \operatorname{graph} C$ be a closed conic set, and let $A \in I^m_\rho(X \times Y, K')$ be elliptic at $((x_0, \xi_0), (y_0, \eta_0))$.
+Then there exists $B \in I^{-m}_\rho(Y \times X, (K^{-1})')$ which is a local inverse to $A$ modulo smoothing operators in the sense that $(x_0, \xi_0) \notin WF(AB - 1)$ and $(y_0, \eta_0) \notin WF(BA - 1)$.
+\end{proposition}
+\begin{proof}[Proof sketch]
+The idea is basically the same as for pseudodifferential operators.
+First show that asymptotic sums are well-defined, then use a Neumann series argument to show that if $B_0$ is the quantization of $1/a$ near infinity, $a$ the principal symbol of $A$, then $AB_0$ is invertible modulo smoothing operators.
+\end{proof}
+
+Clearly we can glue together local inverses $B$ to get a global inverse, if $A$ is in fact globally elliptic.
+
+\section{Subprincipal symbols}
+By expressing pseudodifferential calculus in terms of Lie derivatives, let us show that the principal symbol is not the only part of the full symbol of a pseudodifferential operator which is well-defined.
+
+\begin{proposition}[existence of subprincipal symbols]
+Let $P \in L^m_\rho$ and let $p$ be the full symbol of $P$ in some local coordinates $x$. Let
+$$c = p - (2i)^{-1}\sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j}.$$
+Then $c \mod S^{m + 2(1 - 2\rho)}_\rho$ does not depend on the choice of coordinates.
+\end{proposition}
+\begin{proof}
+To ease the notation let me do the case $\rho = 1$ as the general case is similar.
+
+If $x$ is a system of coordinates on $X$, and $\varphi$ is a diffeomorphism, then we set
+$$\varphi(x, \theta) = \sum_j \varphi_j(x) \theta_j.$$
+Let $w$ be a half-density. Then
+$$e^{-i\varphi}P(we^{i\varphi}) \sim \sum_\alpha \frac{1}{\alpha!} p^{(\alpha)}(x, \varphi_x')D^\alpha_z(w(z) e^{i\rho(x, z, \theta)})|_{z = x}$$
+where
+$$\rho(x, z, \theta) = \varphi(z, \theta) - \varphi(x, \theta) - \langle z - x, \varphi_x'(x, \theta)\rangle$$
+(so $\rho(\cdot, \cdot, \theta)$ vanishes to second order at $x$)
+and $p^{(\alpha)}(x, \xi) = -iD_\xi^\alpha(x, \xi)$.
+This is nothing more than the change-of-variables formula for pseudodifferential operators.
+For $|\alpha| = 3$, $D^\alpha_z(w(z) e^{i\rho(x, z, \theta)})|_{z = x}$ is linear in $\theta$ so
+$$D^\alpha_z(w(z) e^{i\rho(x, z, \theta)})|_{z = x} \in S^1$$
+while clearly $p^{(\alpha)} \in S^{m - 3}$, so
+$$p^{(\alpha)}(x, \varphi_x') D^\alpha_z(w(z) e^{i\rho(x, z, \theta)})|_{z = x} \in S^{m - 2}.$$
+Cutting off to $|\alpha| \leq 2$ we get
+\begin{align*}
+e^{-i\varphi}P(we^{i\varphi}) &= p(x, \varphi_x')w - i\sum_j \frac{\partial p}{\partial \xi_j}(x, \varphi_x')\frac{\partial w}{\partial x_j}\\
+&\qquad + (2i)^{-1} \sum_{j,k} \frac{\partial^2 p}{\partial \xi_j \partial \xi_k}(x, \varphi_x') w(x) \frac{\partial^2 \varphi}{\partial x_j \partial x_k} \mod S^{m - 2}.
+\end{align*}
+Let
+$$v = \left(\frac{\partial p}{\partial \xi_1}(x, \varphi_x'), \dots, \frac{\partial p}{\partial \xi_n}(x, \varphi_x')\right)$$
+so
+$$\operatorname{div} v = \sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j}(x, \varphi_x') + \sum_{j,k} \frac{\partial^2 p}{\partial \xi_j \partial \xi_k}(x, \varphi_x') \frac{\partial^2 \varphi}{\partial x_j \partial x_k}.$$
+In these coordinates we have $|dV|^{1/2} = 1$ so
+$$\mathcal L_vw = \frac{\partial w}{\partial v} + \frac{1}{2} \operatorname{div} v.$$
+Moreover
+$$\sum_j \frac{\partial p}{\partial \xi_j}(x, \varphi_x')\frac{\partial w}{\partial x_j} = \frac{\partial w}{\partial v}$$
+so
+\begin{align*}e^{-i\varphi} P(we^{i\varphi}) &= p(x, \varphi_x')w + i\left(\frac{\partial w}{\partial v} + \frac{1}{2} \operatorname{div} v\right) - (2i)^{-1}\sum_{j} \frac{\partial^2 p}{\partial x_j \partial \xi_j}(x, \varphi_x')w \mod S^{m - 2}\\
+&= p(x, \varphi_x')w - (2i)^{-1}\sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j}(x, \varphi_x')w + i\mathcal L_vw \mod S^{m - 2}
+\end{align*}
+or in other words
+$$e^{-i\varphi} P(we^{i\varphi}) + i\mathcal L_vw = p(x, \varphi_x')w - (2i)^{-1}\sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j}(x, \varphi_x')w \mod S^{m - 2}$$
+and the left-hand side is invariantly defined.
+Therefore so is the right-hand side.
+\end{proof}
+
+\begin{definition}
+Let $\rho = 1$ and $P \in L^m$ have homogeneous principal symbol $p$.
+If the full symbol of $P$ in some coordinate system is $p + r$, $r \in S^{m - 1}$, set
+$$c = r - (2i)^{-1} \sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j} \in S^{m - 1}.$$
+Then $c$ is called the \dfn{subprincipal symbol} of $P$.
+\end{definition}
+
+The above proposition says that the subprincipal symbol does not depend on a coordinates and the full symbol $q$ of $P$ satisfies
+$$q = p + \sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j} + c \mod S^{m - 2}$$
+in any coordinate system whatsoever.
+Here $p$ is the order-$m$ part and $c + \partial^2p/(\partial x_j \partial \xi_j)$ is the order-$m-1$ part of $q$.
+
+Subprincipal symbols allow us to fix a defect in a theorem from last week's talk (Hormander 1, Thm 4.3.3):
+
+\begin{example}
+Let $p(\xi, \eta) = \xi^2 + \eta$.
+This is a full symbol with principal symbol $\xi^2$ and subprincipal symbol $\eta$.
+If $a(\xi, \eta)$ is a smoothed out version of $1_{1 \leq \xi^2 \leq 2}$ and $P,A$ are their quantizations (with $\varphi(x, y, \xi, \eta) = x\xi + y\eta$ of course), then $P = \partial_x^2 + \partial_y$ and $A$ is a Littlewood-Paley projection which means that
+$$PA \sim \partial_y A \in L^1_1$$
+where $B \sim Q$ means that they have the same principal symbol.
+Thus the principal symbol of $PA$ is $\eta a(\xi, \eta)$ which is linear at infinity.
+However, Thm 4.3.3 computes the principal symbol of $PA$ viewed as an element of $L^2_1$, and thus only considers terms that are quadratic at infinity.
+Thus Thm 4.3.3 thinks that the principal symbol of $PA$ is $0$!
+\end{example}
+
+In what follows we write $H_p$ for the Hamiltonian vector field of a symbol $p$.
+We will use the following hypothesis a lot so let's emphasize it:
+
+\begin{definition}
+Let $P \in L^m_1(X)$ with homogeneous principal symbol $p$.
+Suppose that $C \subseteq (T^*Y \setminus 0) \times (T^*X \setminus 0)$ is a homogeneous canonical relation such that $p|\operatorname{range} C = 0$.
+Then we say that $P$ \dfn{degenerates} on $C$ to order $m$.
+\end{definition}
+
+\begin{theorem}[principal symbols of degenerate products]
+Suppose that $P$ degenerates on $C$ to order $m$.
+Let $c$ be the subprincipal symbol of $P$.
+If $A \in I^{m'}_\rho(X \times Y, C')$ has principal symbol $a \in S^{m' + (n_X + n_Y)/4}(C', L)$ then $PA \in I^{m+m'-\rho}_\rho(X \times Y, C')$ and the principal symbol of $PA$ is
+$$\sigma(PA) = (c - i\mathcal L_{H_p})a.$$
+\end{theorem}
+\begin{example}
+In our example $p(\xi, \eta) = \xi^2 + \eta$, $a(\xi, \eta) \approx 1_{1 \leq \xi^2 \leq 2}$ we get
+$$\sigma(PA) = (\eta - i\mathcal L_{H_p})a = \eta a + 2i\xi \frac{\partial a}{\partial x} = \eta a.$$
+This is exactly what we got through our back-of-the-napkin computation.
+\end{example}
+\begin{proof}
+The proof is technical but it's more or less what you'd expect.
+To get rid of the unwanted top-order terms you write $PA$ in a clever way where you can integrate by parts to put a derivative on the symbol of $A$.
+
+Since $C'$ is a Lagrange manifold it is generated by a phase function
+$$\varphi(x, y, \xi, \eta) = \langle x, \xi\rangle + \langle y, \eta\rangle - H(\xi, \eta)$$
+where $H$ is homogeneous conic-near $(\xi_0, \eta_0) \in C'$ and $x,y$ are suitable coordinates on a patch $\tilde X \times \tilde Y$.
+That is, we may write
+$$Au(x) = \iiint_{\tilde Y \times \RR^{n_X + n_Y}} e^{i\varphi(x, y, \xi, \eta)} a(x, y, \xi, \eta) u(y) ~dy \wedge d\xi \wedge d\eta$$
+where $a \in S^{m' - (n_X + n_Y)/4}_\rho$ is supported conic-near $(H'_\xi, H'_\eta, \xi, \eta)|_{(\xi, \eta) = (\xi_0, \eta_0)}$.
+
+If $M$ is the critical manifold of $\varphi$, then
+\begin{align*}
+\iota: (T^* \tilde X \setminus 0) \times (T^* \tilde Y \setminus 0) &\to M\\
+(\xi, \eta) &\mapsto (H'_\xi, H'_\eta, \xi, \eta)
+\end{align*}
+is a local diffeomorphism, by my talk.
+Also $\varphi$ induces a trivialization of the Maslov line bundle $L$ over $\tilde X \times \tilde Y$.
+In this trivialization, the principal symbol of $A$ on $C$ is $(\xi, \eta) \mapsto a(H'_\xi, H'_\eta, \xi, \eta)$.
+Using the local diffeomorphism $\iota$ and the fact that the support of $a$ can be made arbitrarily small around $M$, we may view $a$ as a function $a_0$ of $(\xi, \eta)$ only.
+This shrinking only changes $a$ by a term in $S^{\mu + 1 - 2\rho}_\rho$ where
+$$\mu = m' - 0.25(n_X + n_Y)$$
+is the order of $a$.
+
+Commuting $P$ with the integral sign we get
+$$PAu(x) = \iiint_{\tilde Y \times \RR^{n_X + n_Y}} e^{i\varphi(x, y, \xi, \eta)}(p(x, \xi) + r(x, \xi)) a_0(\xi, \eta) u(y) ~dy \wedge d\xi \wedge d\eta$$
+where $p + r$ is the full symbol of $P$ in $\tilde Y$. This is allowed because $P$ only differentiates in the $x$ variables and the only $x$ variables are on $e^{i\varphi(x, y, \xi, \eta)}$.
+Applying a pseudodifferential operator to differentiate $e^{i\langle x, \xi\rangle}$ in $x$ only multiplies $e^{i\langle x, \xi\rangle}$ by the symbol, which is where we get our formula from.
+
+Our hypothesis on $p$ localized to $\tilde X$ gives $p(H'_\xi, \xi) = 0$, and $p$ is $m$-homogeneous.
+So we can find $p_j$ which is $m$-homogeneous on $\tilde X \times \RR^{n_X + n_Y}$ such that
+$$p(x, \xi) = \sum_j p_j(x, \xi, \eta) \frac{\partial \varphi}{\partial \xi_j}(x, y, \xi, \eta)$$
+Namely we can take $p_j(\cdot, \eta)$ to be the derivative of $p$ with respect to $x_j - \partial_{\xi_j}H = \partial_{\xi_j} \varphi$ and apply Taylor's formula, using the nondegeneracy of $\varphi$.
+(This is where we use the hypothesis that the product $PA$ degenerates!)
+The choice of $\eta$ does not matter.
+Thus
+\begin{align*}
+PA&u(x) =  \iiint_{\tilde Y \times \RR^{n_X + n_Y}} e^{i\varphi(x, y, \xi, \eta)}a_0(\xi, \eta)\\
+&\left(r(x, \xi) + \sum_j p_j(x, \xi, \eta) \frac{\partial \varphi}{\partial \xi_j}(x, y, \xi, \eta)\right) u(y) ~dy \wedge d\xi \wedge d\eta.
+\end{align*}
+We are only interested in behavior at fiber-infinity so we might as well assume that $a_0 = 0$ near $0$, that way when we integrate by parts we don't pick up any junk at the origin (since technically these integrals are over $\tilde Y \times (\RR^{n_X} \setminus 0) \times (\RR^{n_Y} \setminus 0)$, as we don't have any control over the functions at $0$).
+
+Integrating with parts in $\xi_j$ and using the support property of $a_0$, and letting
+$$b(x, y, \xi, \eta) = r(x, \xi)a_0(\xi, \eta) + i\sum_j \frac{\partial p_j}{\partial \xi_j}(x, \xi, \eta) a_0(\xi, \eta) + i\sum_j \frac{\partial a_0}{\partial \xi_j}(\xi, \eta) p_j(x, \xi, \eta),$$
+we get
+$$PAu(x) = \iiint_{\tilde Y \times \RR^{n_X + n_Y}} e^{i\varphi(x, y, \xi, \eta)} b(x, y, \xi, \eta) u(y) ~dy \wedge d\xi \wedge d\eta.$$
+Thus $PA$ is a Fourier integral operator with phase $\varphi$ and full symbol $b \in S^{m + \mu - \rho}_\rho$ on $\tilde Y$.
+We picked up the $-\rho$ term from the differentiation in $\xi_j$.
+Therefore $PA \in I^{m + m' - \rho}_\rho$.
+This corrects the naive calculation that $PA \in I^{m + m'}_\rho$.
+
+Since $a - a_0 \in S^{\mu + 1 - 2\rho}_\rho$, we can replace $a_0$ with $a$ in the definition of $b$ without changing its residue class modulo $S^{\mu + 1 - 2\rho}_\rho$.
+With $x = H_\xi', y = H_\eta'$ we get
+\begin{align*}
+\sum_j \frac{\partial a_0}{\partial \xi_j}(\xi, \eta) p_j(x, \xi, \eta) = -\sum_j &p_j(x, \xi, \eta) \sum_k \frac{\partial a}{\partial x_k} p_j(x, \xi, \eta) \frac{\partial^2 H}{\partial \xi_k \partial \xi_j} \\
+&+ p_j(x, \xi, \eta) \sum_k \frac{\partial a}{\partial y_k} \frac{\partial^2 H}{\partial \eta_k \partial \xi_j} \\
+&+ p_j(x, \xi, \eta) \frac{\partial a}{\partial \xi_j}(x, \xi, \eta).
+\end{align*}
+Also $\partial_{x_j} p = p_j$, $\partial_{\xi_k} p = -\sum_j p_j \partial_{\xi_j} \partial_{\xi_k} p$, $0 = -\sum_j p_j \partial_{\xi_j} \partial_{\eta_k} H$, we get
+$$-\sum_j \frac{\partial a_0}{\partial \xi_j}(\xi, \eta) p_j(x, \xi, \eta) = \sum_j \frac{\partial p}{\partial \xi_j}\frac{\partial a}{\partial x_j} - \frac{\partial p}{\partial x_j} \frac{\partial a}{\partial \xi_j} = \{p, a\}$$
+where $\{\cdot, \cdot\}$ is the Poisson bracket on $T^* M$.
+
+Taking the Lie derivative of the half-density $a$ with respect to the Hamiltonian vector field $H_p$ we get
+$$\mathcal L_{H_p} a = - \{p, a\}|dV| - \frac{1}{2} \operatorname{div}_\xi H_p|dV|$$
+where $|dV|$ is a fixed half-density.
+Now everything cancels and we get
+$$b = -i \mathcal L_{H_p}a + (r - (2i)^{-1})\sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j} \mod S^{\mu + 1 - 2\rho}_\rho.$$
+But $(r - (2i)^{-1})\sum_j \frac{\partial^2 p}{\partial x_j \partial \xi_j}$ is the subprincipal symbol of $P$ so we're done.
+\end{proof}
+
+Now let us solve the equation $PA = B$ for $A$, where $B$ is a given Fourier integral operator and $P$ is a given pseudodifferential operator.
+If the solution to $PA = B$ has principal symbols $p,a,b$ then by the previous theorem,
+$$b = ca - i\mathcal L_{H_p}a$$
+where $c$ is the subprincipal symbol of $P$.
+Also, since these are Fourier integral operators, what we really want is to find $A$ such that $PA - B$ is smoothing.
+
+Again we will repeatedly use a hypothesis so we give it a name that's not in Hormander.
+
+\begin{definition}
+Suppose that $P$ degenerates on $C$ to order $m$, $p = \sigma(P)$, and $b \in S^{m + m' - \rho + n/4}_\rho$.
+Suppose that for every $\mu \in \RR$,
+$$S^{m - 1 + \mu}_\rho(C) \subseteq H_p S^\mu_p(C).$$
+Then we say that $(p, b)$ is \dfn{solvable}.
+\end{definition}
+
+\begin{lemma}[inverting a degenenerate symbol]
+Suppose that $(p, b)$ is solvable.
+Then there exists $a \in S^{m' + n/4}_\rho(C', L)$ such that $b = ca - i\mathcal L_{H_p}a$.
+\end{lemma}
+\begin{proof}
+Let $\omega$ be a nonvanishing global section of $\Omega_{1/2}$ which is homogeneous of degree $0$.
+This exists since $\Omega_{1/2}$ is trivial.
+Suppose $b = b_0\omega$.
+Then we must solve the scalar equation
+$$(c' - iH_p)a_0 = b_0$$
+where $c' \in S^{m - 1}_1$.
+Since $(p, b) $ is solvable there exists $\gamma \in S^0_\rho$ such that $H_p\gamma = c'$.
+The imaginary-exponential of a bounded symbol is bounded, i.e. $e^{i\gamma} \in S^0_\rho$.
+Writing $a_0 = ie^{-i\gamma}a_1$, $b_0 = e^{-i\gamma}b_1$, we must solve
+$$\{p, a_1\} = b_1$$
+for $a_1$, which is possible since $(p, b)$ is solvable.
+\end{proof}
+
+\begin{theorem}[inverting a degenerate pseudodifferential operator]
+Suppose that $(p, b)$ is solvable and $B \in I^{m + m' - 1}_\rho(X \times Y, C')$ is the quantization of $B$.
+Then there exists $A \in I^{m'}_\rho(X \times Y, C')$ such that $PA - B$ is smoothing.
+Moreover, if $b = \sigma(B)$ and $a \in S^{m' + n/4}_\rho(C, L)$ satisfies $b = ca - i\mathcal L_{H_p}a$, then in fact
+$$\sigma(A) = a \mod S^{m' + n/4 + 2 - 3\rho}_\rho(C, L).$$
+\end{theorem}
+\begin{proof}
+By the lemma we can solve for $a$. Let $A_0$ be its quantization. Inductively set
+$$B_{j + 1} = B_j - PA_j.$$
+Then we obtain $A_j \in I^{m' - j(3\rho - 2)}_\rho(X \times Y, C')$ and $B_j \in I^{m + m' - 1 - j(3\rho - 2)}_\rho(X \times Y, C')$, by the previous theorem.
+(The conclusion of that theorem is where the weird $2/3$ factor comes from).
+Summing up these inductive equations we get
+$$P\sum_{j \leq k} A_j = B_0 - B_{k + 1}.$$
+Let $A \sim \sum_j A_j$. This is possible since $3\rho > 2$ so
+$$\lim_{j \to \infty} m' - j(3\rho - 2) = -\infty.$$
+In particular $B_{k + 1}$ converges to a smoothing operator as $k \to \infty$.
+Thus $PA = B_0 \mod I^{-\infty}$.
+\end{proof}
+
+\begin{corollary}
+We can also solve $AP = B$ for $A$ under the same hypotheses.
+\end{corollary}
+\begin{proof}
+Consider the adjoint equation.
+\end{proof}
+
+\section{Regularity of Fourier integral equations}
+Let $H_s(X)$ be the space of distributions $u$ such that for every properly supported $A \in L^s_1$, $Au \in L^2_{loc}(X)$.
+Recall from Mitchell's talk (Hormander 1, Crly 2.2.3) that if $B \in L^m_1$, then $B$ maps $H_s \to H_{s - m}$.
+
+\begin{theorem}[regularity of Fourier integral equations]
+$I^m_\rho(X, \Lambda) \subseteq H_s(X)$ iff $m + n/4 + s < 0$.
+Moreover, if $u \in I^m_\rho(X, \Lambda)$ is elliptic somewhere and $m + n/4 + s \geq 0$ then $u \notin H_s(X)$.
+\end{theorem}
+Of course if $u$ is not elliptic anywhere, then $u$ isn't ``really" of order $m$.
+\begin{proof}
+Let $u \in I^m_\rho(X, \Lambda)$ and suppose $WF(u)$ is a small conic neighborhood $\Gamma$ of $(x_0, \xi_0) \in \Lambda$.
+The claim is local, and if it's true when $s = 0$ then applying an elliptic operator $A: H_s \to L^2_{loc}$ we obtain it for $s \neq 0$ as well.
+This is true because $A$ is an isomorphism modulo smoothing operators.
+So we must show that $u \in L^2_{loc}$ if $m + n/4 < 0$, and $u \notin L^2_{loc}$ if $m + n/4 \geq 0$ and $u$ is elliptic at $(x_0, \xi_0)$.
+
+Let $\chi$ be a homogeneous canonical transformation from a conic neighborhood of $(x_0, \xi_0)$ to a conic neighborhood of $(0, \eta_0) \in T^* \RR^n \setminus 0$ and let $K$ be a conic neighborhood of $(x_0, \xi_0, 0, \eta_0)$ in the graph of $\chi$.
+Then (local existence of paramatrices) says that there exist $A \in I^0_1(X \times \RR^n, K')$ and $B \in I^0_1(\RR^n \times X, (K^{-1})')$ such that $(x_0, \xi_0) \notin WF(AB - 1)$.
+Here $B$ is a Fourier integral operator from $X$ to $\RR^n$ and $A$ is a local parametrix to $B$.
+Shrinking $\Gamma$, we may assume that $WF(AB - 1) \cap \Gamma$ is empty.
+Then $AB - 1$ is smoothing on $\Gamma$, i.e. $(AB - 1)u \in C^\infty$.
+By Hormander 1, Thm 4.3.1 (from last week's talk), which says that properly supported operators in $I^0$ send $L^2_{loc}$ to $L^2_{loc}$, implies
+$$u \in L^2_{loc}(X) \implies Bu \in L^2_{loc}(\RR^n) \implies ABu \in L^2_{loc}(X) \implies u \in L^2_{loc}(X).$$
+Thus $u \in L^2_{loc}(X)$ iff $Bu \in L^2_{loc}(\RR^n)$.
+Henceforth we may assume that $X = \RR^n$ and $x_0 = 0$.
+
+From Ben's talk (Thm 3.1.3 Hormander 1), we may make a change of coordinates so that
+\begin{enumerate}
+\item $\Lambda = \{x = H'(\xi)\}$ where $H$ is homogeneous of degree $1$, and
+\item $\chi(x, \xi) = (x - H'(\xi), \xi)$.
+\end{enumerate}
+Then
+$$\chi \Gamma \subseteq N^* 0 = 0 \times (\RR^n \setminus 0).$$
+This is the conormal bundle of $0$ and therefore by my talk (Hormander 1, Prop 2.4.1) we maya assume that $u$ is a Fourier integral operator with linear phase.
+That is, there is a symbol $a \in S^{m - n/4}(\RR^n \setminus 0)$ such that
+$$u(x) = \int_{\RR^n \setminus 0} e^{-i\langle x, \theta\rangle} a(\theta) ~d\theta.$$
+That is, $u$ is the Fourier transform of $a$ (of course this makes sense even if $a \notin L^1$).
+Since $WF(u)$ is a small neighborhood, $u$ is rapidly decaying at infinity, so $u \in L^2_{loc}$ iff $u \in L^2$.
+Multiplying by $e^{-i\langle x,\theta\rangle}$ is a Fourier integral operator of order $0$ so by Parseval's formula $u \in L^2$ iff $m - n/4 < -n/2$ (given that $u$ is elliptic at $(0, \xi_0)$, otherwise we can pass to a weaker symbol class), thus $m < -n/4$, as desired.
+\end{proof}
+
+\begin{theorem}[characterization of Hilbert-Schmidt operators]
+A Fourier integral operator $A: \mathcal D'(Y) \to \mathcal D'(X)$ is Hilbert-Schmidt iff $A \in I^m_\rho(X \times Y)$ with
+$$m < -\frac{\dim X + \dim Y}{4}$$
+and the Schwartz kernel of $A$ has compact support.
+\end{theorem}
+\begin{proof}
+The proper support in $T^*(X \times Y)$ corresponds to compact support of the Schwartz kernel in $X \times Y$.
+Moreover $A \in I^m_\rho(X \times Y)$ iff $A \in H_{-m - n/4}$ where $n = \dim X + \dim Y$, and $A \in H_0$ iff $A \in L^2$ iff $A$ is Hilbert-Schmidt (since the Hilbert-Schmidt norm is the $L^2$ norm, and $A$ has compact support).
+\end{proof}
+
+
+
+
+\printbibliography
+
+
+\end{document}

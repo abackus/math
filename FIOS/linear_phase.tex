@@ -1,0 +1,406 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Linear phase and wavefront set]{Linear phase and wavefront set for oscillatory integrals}
+\author{Aidan Backus}
+\date{May 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Olo}{\mathscr O}
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\Smooth}{\mathscr E}
+\newcommand{\Test}{\mathscr D}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{fios.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+%\begin{abstract}
+%We discuss the u
+%\end{abstract}
+
+\maketitle
+
+
+\section{Oscillatory integrals with linear phase}
+Recall that pseudodifferential operators are Fourier integral operators whose phase satisfies
+$$\varphi(x, y, \theta) = \langle x - y, \theta\rangle.$$
+A natural generalization is to consider Fourier integral operators for which $\varphi$ is linear in $\theta$.
+So, we need to discuss oscillatory integrals with linear phase.
+
+\begin{definition}
+A phase $\varphi$ is a \dfn{linear phase} if there exists a smooth map $\Phi: X \to \RR^N$ such that
+$$\varphi(x) = \langle \Phi(x), \theta\rangle$$
+and $\Phi$ has at least one zero.
+\end{definition}
+
+The critical points of $\varphi$ are exactly the zeroes of $\Phi$.
+We want $\varphi$ to have a critical point -- H\"ormander is working modulo $C^\infty$, and integration with nonstationary phase implies that if $\varphi$ has no critical points then any Fourier integral operator with phase $\varphi$ is a smoothing operator, and so is $0$ modulo $C^\infty$.
+
+\begin{lemma}
+Let $\varphi(x) = \langle \Phi(x), \theta\rangle$ be a linear phase on $X \subseteq \RR^n$.
+Then $\Phi$ is a submersion in a neighborhood in $\{\Phi = 0\}$.
+\end{lemma}
+\begin{proof}
+Since $\varphi$ is a phase and $\partial_\theta \varphi = \Phi$, if $\Phi(x) = 0$ then $d\Phi$ is surjective on tangent spaces.
+Thus the rank of $\Phi$ is $N$, but rank is lower semicontinuous so this remains true in a neighborhood of $\{\Phi = 0\}$.
+\end{proof}
+
+Since $\{\Phi = 0\}$ is nonempty, it follows that $N \leq n$ and the set $Y = \{\partial_\theta \varphi = 0\}$ is actually a manifold of codimension $N$, which we call the \dfn{critical manifold}.
+
+\begin{example}
+Suppose we are solving the wave equation forwards in time; then we get the phase $\varphi(x, t, \theta) = \langle x,\theta\rangle - t|\theta|$.
+Notice that this is singular along the light cone $\{(x, t): |x| = t, t > 0\}$, which is a rectifiable set of codimension $1$ but not a manifold.
+The takeaways here are that the case $N < n$ really is interesting in non-elliptic problems, and that linear phases really do generalize pseudodifferential operators in ways that general Fourier integral operators do not.
+\end{example}
+
+Our first result is that ``up to isomorphism, a linear phase is determined by its critical manifold".
+
+\begin{lemma}
+If $\varphi_1,\varphi_2$ are linear phases with the same critical manifold $Y$ then there is a neighborhood $U$ of $Y$ and a map $\psi \in C^\infty(U \to GL(\RR^N))$
+such that for every $x \in U$,
+$$\varphi_1(x, \theta) = \varphi_2(x, \psi(x)\theta).$$
+\end{lemma}
+\begin{proof}
+Since $\Phi_1,\Phi_2$ are submersions that cut out the same manifold, for every $x \in Y$, $d\Phi_j(x)$ have the same kernel and cokernel (and their cokernel is $0$).
+Therefore there exists a linear automorphism $\psi(x)$ such that $\Phi_1(x) = \psi(x)\Phi_2(x)$ and so $\Phi_1 - \psi \Phi_2$ has double zeroes on $Y$.
+In particular $\psi$ is smooth since $\Phi_j$ are, so we can extend $\psi$ to a neighborhood of $Y$.
+If $\Phi_j = (\Phi_j^k)_k$ then Taylor's formula says that there exists a smooth family of matrices $R$
+$$\Phi_1^j = \psi_{jk}\Phi_2^k + R_{jk}\Phi_2^k$$
+where $R_{jk}|Y = 0$. Therefore $(\psi + R)^t$ has the required properties, at least when we are so close to $Y$ that $||R|| < ||\psi||$ so that $\psi + R$ is invertible.
+\end{proof}
+
+Conversely, if $Y$ is a submanifold of $X$ of codimension $N$, then we can write $Y = \{x \in X: x_1 = \cdots = x_N = 0\}$ in some coordinate system, and then use this fact to find a linear phase $\varphi$ of critical manifold $Y$.
+
+If $\varphi_1, \varphi_2$ are two linear phases with critical manifold $Y$, $\psi$ is the isomorphism between them, and $a_1$ is a symbol, then
+\begin{equation}
+\label{transformation law for a}
+a_2(y, \theta) = a_1(y, \psi(y)\theta) |\det \psi(y)|
+\end{equation}
+satisfies the equality of oscillatory integrals
+$$\int_{\RR^N} e^{i\varphi_1(y, \theta)} a_1(y, \theta) ~d\theta = \int_{\RR^N} e^{i\varphi_2(y, \theta)} a_2(y, \theta) ~d\theta.$$
+Most of this section will be dedicated to viewing symbols as a suitable map between \emph{bundles} rather than something that obeys (\ref{transformation law for a}) under a transition map $\psi$.
+
+\begin{definition}
+Let $Y$ be a submanifold of $X$, $N = \codim Y$, $1 - \rho \leq \delta < \rho$. Choose a linear phase $\varphi$ of critical manifold $Y$.
+The space of all oscillatory integrals of the form
+$$I(x) = (2\pi)^{-\frac{n+2N}{4}} \int_{\RR^N} e^{i\varphi(x, \theta)} a(x, \theta) ~d\theta$$
+where $a$ is any element of $S^{m+(n-2N)/4}_{\rho,\delta}$ modulo $C^\infty(X)$ is called $I^m_{\rho,\delta}(X, Y)$.
+\end{definition}
+
+Elements of $I^m_{\rho,\delta}(X, Y)$ are equivalence classes of distributions on $X$ modulo $C^\infty(X)$, so $I^m_{\rho,\delta}(X, Y)$ is a subspace of $\mathcal D'(X)/C^\infty(X)$.
+The choice of $\varphi$ does not matter, since such a $\varphi$ exists, and applying the transformation $\psi$ given by the previous lemma will at worst multiply $a$ by a Jacobian which is constant in $\theta$.
+Furthermore, integrating by nonstationary phase implies that we may assume that $a$ is supported in a small neighborhood of $Y$.
+The strange choice of constant $-(n+2N)/4$ will be justified later on, but is partially motivated by this example:
+
+\begin{example}
+We're mainly interested in the case that $I$ is the Schwartz kernel of a pseudodifferential operator on a manifold $Y$ of dimension $N$.
+Then $X = Y^2$, so $n = 2N$.
+In this case, we can write $x = (y_1, y_2)$ and $a$ is a function of $(y_1 - y_2, \theta)$ since the Schwartz kernel of a pseudodifferential operator is not just an oscillatory integral but a singular integral.
+Therefore we get the constant $(2\pi)^{-N}$ that appears in the definition of a pseudodifferential operator.
+\end{example}
+
+\section{A review of differential topology}
+In order to talk about principal symbols, we will need to review some differential topology.
+
+We first treat conormal bundles.
+H\"ormander seems to mix up normal and conormal bundles a few times, which is pretty confusing.
+
+Whenever I refer to a ``closed embedding" I always mean a closed embedding of manifolds.
+Suppose that we have closed embedding $Y \subseteq X$.
+We want to define the normal bundle $NY$ to $Y$ to be the orthocomplement of $TY$ in $TX|Y$, but this requires a choice of Riemannian metric.
+To get rid of this choice we instead observe that \emph{if} we chose a Riemannian metric and $\nu$ was a normal vector, we could identify $\nu$ with a covector $\eta$ using the Riesz representation theorem, and $\eta$ would annihilate $TY$.
+So we can define the normal bundle to be the dual of the annihilator of $TY$.
+The annihilator of $TY$ is a more ``natural" concept, so we define:
+
+\begin{definition}
+If $Y \subseteq X$ is a closed embedding, the \dfn{conormal bundle} $N^*Y$ to $Y$ is the subbundle of $T^*X$ defined by
+$$N^*Y = \{(y, \eta) \in T^*X: y \in Y, ~\langle \eta, T_yY\rangle = 0\}.$$
+\end{definition}
+
+Now we introduce the notion of a density bundle on a manifold $X$.
+We first do the same for a vector space. Suppose that $V$ is a finite-dimensional vector space, and $\mu$ is the Haar measure of $V$.
+Then $\mu$ defines a linear map $\mu: V^{\otimes n} \to \RR$ by letting $\mu(\bigotimes_j v_j)$ be the volume of the parallelpiped $\bigotimes_j v_j$, which satisfies for every linear operator $A$,
+$$\mu(Av_1 \otimes \cdots \otimes Av_n) = |\det A|\mu(v_1 \otimes \cdots \otimes v_n).$$
+Since Haar measures are unique only up to a scalar, we get a one-dimensional vector space of Haar measures, known as the density space of $V$.
+
+\begin{definition}
+Let $X$ be a manifold of dimension $n$. The $s$-\dfn{density bundle}, $\Omega_s$, on $X$ is the line bundle associated to the $GL(\RR^n)$-representation $A \mapsto |\det A|^{-s}$.
+An $s$-\dfn{density} is a smooth section of the $s$-density bundle.
+\end{definition}
+
+More concretely, ``a density is something that transforms like a density" in the sense that $a$ is a $s$-density iff for every change of coordinates $y = \varphi(x)$,
+$$a(y) = a(x) |\det d\varphi|^s.$$
+In particular, a $1$-density transforms like a volume form, and we can integrate $1$-densities.
+
+We obviously have $\Omega_s \otimes \Omega_t = \Omega_{s + t}$.
+Since we can integrate $1$-densities, if $u$ is a $s$-density and $v$ is a $1 - s$-density of compact support then $\langle u, v\rangle = \int_X u \otimes v$ is well-defined.
+
+\begin{definition}
+An $s$-\dfn{distribution density} on $X$ is an element of the dual of $C^\infty_c(X \to \Omega_s)$.
+\end{definition}
+
+\section{Principal symbols for oscillatory integrals}
+We now assign principal symbols to the oscillatory integrals in $I^m_{\rho,\delta}(Y \times \RR^N)$.
+I think that there is a typo in H\"ormander's paper here where he mixes up $n$ and $N$ a few times.
+
+\begin{lemma}
+The quantization map
+$$T: \frac{S^{m+\frac{n-2N}{4}}_{\rho,\delta}(Y \times \RR^N)}{S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(Y \times \RR^N)} \to \frac{I^m_{\rho,\delta}(X, Y)}{I^{m+\delta-\rho}_{\rho,\delta}(X,Y)}$$
+that sends a symbol to its oscillatory integral with linear phase is a well-defined linear isomorphism.
+\end{lemma}
+\begin{proof}
+Elements of $I^m_{\rho,\delta}(X, Y)/I^{m+\delta-\rho}_{\rho,\delta}$ are determined by the restriction of their symbol $a$ to $Y$, so $T$ to the oscillatory integral is a surjective and well-defined linear map.
+Let $Ta = 0$, and without loss of generality assume that:0
+\begin{enumerate}
+\item $a$ is supported in a neighborhood of $Y$.
+\item $Y = \{(0, y) \in X\}$ where we have the decomposition $x = (x', y)$.
+\item $\varphi(x, \theta)=\langle x', \theta\rangle$.
+\end{enumerate}
+That $Ta = 0$ means that for every $u \in \mathcal D(X)$, $\langle Ta, u\rangle = 0$. But we can take $u(x)$ to only depend on $x'$, thus $\langle Ta, u\rangle = 0$ implies
+$$\iint_{Y \times \RR^N} e^{i\langle x', \theta\rangle} a(x, \theta) u(x') ~dx' ~d\theta = 0.$$
+Given $\xi \in \RR^N$ we can replace $u(x')$ by $u(x')e^{-i\langle x',\xi\rangle}$ and conclude that
+\begin{equation}
+\label{Operator in kernel with xi}
+\iint_{Y \times \RR^N} e^{i\langle x', \theta\rangle} a(x, \xi + \theta) u(x') ~dx' ~d\theta = 0.
+\end{equation}
+We are interested in the asymptotics of (\ref{Operator in kernel with xi}) as $\xi \to \infty$.
+In fact, Taylor's formula gives
+$$a(x, \xi + \theta) \sim \sum_\alpha \frac{i\partial_\xi^\alpha}{\alpha!} a(x, \xi)\theta^\alpha$$
+and hence, taking the Fourier inversion of (\ref{Operator in kernel with xi}), we get
+\begin{align*}
+\iint_{Y \times \RR^N} e^{i\langle x', \theta\rangle} a(x, \xi + \theta) u(x') ~dx' ~d\theta &\sim \sum_\alpha \frac{1}{\alpha!} \iint_{Y \times \RR^N} e^{i\langle x', \theta\rangle} i\partial_\xi^\alpha a(x, \xi) \theta^\alpha u(x')~dx' ~d\theta \\
+&= (2\pi)^n \sum_\alpha \frac{(-\partial_{x'}^\alpha)}{\alpha!}(i\partial_\xi)^\alpha a(x, \xi)|_{x' = 0}\\
+&= (2\pi)^n a(0, y, \xi) \\
+&\qquad+ (2\pi)^n\sum_{\alpha \neq 0}\frac{(-\partial_{x'}^\alpha)}{\alpha!}(i\partial_\xi)^\alpha a(x, \xi)|_{x' = 0}.
+\end{align*}
+One has
+$$\left((y, \xi) \mapsto (2\pi)^n\sum_{\alpha \neq 0}\frac{(-\partial_{x'}^\alpha)}{\alpha!}(i\partial_\xi)^\alpha a(x', y, \xi)|_{x' = 0}\right) \in S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(Y \times \RR^N)$$
+which is $0$ in the quotient space $S^{m+\frac{n-2N}{4}}_{\rho,\delta}(Y \times \RR^N)/S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(Y \times \RR^N)$ and hence so is $a$.
+\end{proof}
+
+It's tempting to define the principal symbol of an element of $I^m_{\rho, \delta}(X, Y)$ to be an element of $S^{m+\frac{n-2N}{4}}_{\rho,\delta}(Y \times \RR^{\codim Y})/S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(Y \times \RR^{\codim Y})$,
+but we need to deal with the transformation law (\ref{transformation law for a}) first.
+
+Every linear phase $\varphi$ induces a fiberwise isomorphism
+\begin{align*}
+\kappa_\varphi: Y \times \RR^{\codim Y} &\to N^*Y\\
+(x, \theta) &\mapsto d_x\varphi(x, \theta).
+\end{align*}
+
+\begin{example}
+If the conormal bundle is nontrivial then $\kappa_\varphi$ is clearly not an isomorphism of vector bundles.
+I think this is true for the M\"obius band in $\RR^3$ but I haven't checked it.
+\end{example}
+
+Let us identify $Y \times \RR^{\codim Y}$ with $N^*Y$ using $\kappa_{\varphi_1}$, so view symbols as functions on $N^*Y$.
+Suppose that we transform $\varphi_1$ to $\varphi_2$ by $\psi$, say $\psi(x)\theta_2 = \theta_1$.
+Then, if $(a_1, \varphi_1)$ and $(a_2, \varphi_2)$ define the same oscillatory integral, the transformation law (\ref{transformation law for a}) gives
+$$a_2(x, \theta_2) = a_1(x, \psi(x)\theta_2)|\det \psi(x)| = a_1(x, \theta_1)|\det \psi(x)|.$$
+
+Now we get rid of the Jacobian determinant.
+Fix $\varphi(x, \theta) = \langle \Phi(x), \theta\rangle$, and recall that $\Phi$ is a submersion near $Y$.
+Therefore the pullback distribution $\Phi^*\delta$, $\delta$ the Dirac distribution at $0$ is well-defined.
+In local coordinates $y$, $\Phi^*\delta$ is just $|d\Phi(y)|^{-1} \prod_j dy_j$ (Theorem 6.1.3 in H\"ormander's big book) which clearly transforms like a density on $Y$.
+Since $\RR^{\codim Y}$ comes with the Lebesgue density $dV = \prod_j d\theta_j$, for every linear phase $\varphi$ with critical manifold $Y$ we get a density $\Phi^*\delta ~dV$ on $Y \times \RR^{\codim Y}$.
+Then
+$$D = (\kappa_{\varphi})_*(\Phi^*\delta ~dV)$$
+is a density on $NY$.
+
+Let $\varphi_j(x, \theta) = \langle \Phi_j(x), \theta\rangle$ be linear phases with critical manifold $Y$ which induce densities $D_j$.
+Suppose $\Phi_2 = \psi^t \Phi_1$.
+The transition map $\kappa(y, \theta) = (y, \psi^{-1}(y)\theta)$ satisfies $\kappa^* a_2 = |\det \psi|a_1$, but we also have $\kappa^*D_2 = |\det \psi|^{-2} D_1$. That is,
+$$\kappa^* a_2 \sqrt{D_2} = a_1 \sqrt{D_1}.$$
+Thus $a_1 \sqrt{D_1}$ and $a_2 \sqrt{D_2}$ are the same half-density, namely a bundle map
+$$a \sqrt D \in S^{m+n/4}_{\rho,\delta}(N^*Y \to \Omega_{1/2}).$$
+The fact that the symbol order is now independent of codimension is the other reason we defined $I^m_{\rho,\delta}(X, Y)$ so strangely.
+
+\begin{theorem}
+Let $Y \subseteq X$ be a closed embedding of codimension $N$.
+Let $1 - \rho \leq \delta < \rho$, and choose a linear phase $\varphi$ on $X \times \RR^N$ with critical manifold $Y$.
+Let $I^m_{\rho,\delta}(X, Y)$ be the set of all distribution half-densities on $X$ modulo $C^\infty(X)$ which are smooth on $X \setminus Y$ and are defined by oscillatory integrals
+$$Ta(x) = (2\pi)^{-\frac{n+2N}{4}} \int_{N_x^*Y} e^{i\varphi(x, \theta)} a(x, \theta) ~d\theta,$$
+where $a$ is a symbol of class $S^{m+(n-2N)/4}_{\rho,\delta}(N^*Y \to \Omega^{1/2})$ and the volume form $e^{i\varphi(x, \theta)}~d\theta$ is defined by identifying the conormal space $N_x^* Y$ with $\RR^N$ using the isomorphism $\theta \mapsto d_x\varphi(x, \theta)$.
+Then the quantization map
+$$T: \frac{S^{m+\frac{n-2N}{4}}_{\rho,\delta}(N^*Y \to \Omega_{1/2})}{S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(N^*Y \to \Omega_{1/2})} \to \frac{I^m_{\rho,\delta}(X, Y)}{I^{m+\delta-\rho}_{\rho,\delta}(X,Y)}$$
+is an isomorphism of vector spaces.
+\end{theorem}
+\begin{proof}
+We just need to check that the above construction is invariant under changes of coordinates in $X$.
+This is just a consequence of the chain rule for half-densities used a bunch of times and not very interesting, so I'll omit it (it's page 119 in H\"ormander's paper).
+\end{proof}
+
+\begin{definition}
+With everything as in the previous theorem, we say that
+$$a \in \frac{S^{m+\frac{n-2N}{4}}_{\rho,\delta}(N^*Y \to \Omega_{1/2})}{S^{m+\delta+\frac{n-2N}{4}-\rho}_{\rho,\delta}(N^*Y \to \Omega_{1/2})}$$
+is the \dfn{principal symbol} of a distribution half-density $A$ if $Ta = A$.
+\end{definition}
+
+\section{Wavefront sets}
+Some harmonic analysis review: sheet music tells us, for each time $t \in \RR$, the amplitude (mezzoforte, pianissimo, etc.) that each frequency ($C\sharp$, $F$, etc.) should take at time $t$.
+This specifies a wave (i.e. a function) but in an overdetermined way, by the uncertainty principle.
+Still, it's often helpful to pretend as though a distribution $u$ on $\RR$ really is a function on $T^*\RR \ni (t, \tau)$; namely, $u(t, \tau)$ denotes the amplitude of the note of pitch $\tau$ at time $t$.
+Wavefront sets are an example of this approach, where we are interested in both singularities in time and frequency.
+
+Recall that the singular support of a distribution $u$ only locates its singularities in time, and is defined by
+$$\singsupp u = \bigcap_{\varphi u \in C^\infty} \{x \in X: \varphi(x) = 0\}$$
+where $\varphi$ ranges over cutoffs.
+That is, if $\varphi$ cuts off $u$ to a smooth function, then all the singularities of $u$ must be in the closed set $\{\varphi = 0\}$.
+The idea is that ``applying a pseudodifferential operator to a distribution is just like multiplying it in time-frequency space by the symbol", so we should be testing $u$ against pseudodifferential operators that are cutoffs in time-frequency, rather than just cutoffs in time.
+
+Now let $A$ be a pseudodifferential operator of proper support and order $0$ on $X$, and principal symbol $a$.
+Briefly we write $A \in L^0$.
+Recall that the characteristic set of $A$ is
+$$\gamma(A) = \{(x, \xi): T^*X \setminus 0: \liminf_{t \to \infty} |a(x, t\xi)| = 0\}.$$
+Thus $\gamma(A)$ is a conic subset of $T^*X$, which ``motivates" why we care about cone bundles.
+But it doesn't, really -- why don't we just mod out by the $\RR^+$ action on $T^*X \setminus 0$, since $\gamma(A)$ is clearly invariant under that action, and we only care about the directions of the covectors in $\gamma(A)$, rather than their magnitudes.
+Seriously, what is H\"ormander doing here??
+
+\begin{definition}
+Let $u$ be a distribution on $X$, and define the \dfn{wavefront set} of $u$ to be
+$$WF(u) = \bigcap_{\substack{Au \in C^\infty\\A \in L^0}} \gamma(A).$$
+\end{definition}
+
+Then $WF(u)$ is the intersection of closed conic sets and so is a closed conic set -- but it's probably more helpful to think of as a closed subset of the cosphere bundle $(T^*X \setminus 0)/\RR^+$.
+
+\begin{theorem}
+Let $p: T^*X \to X$ be the natural projection. Then for every distribution $u$,
+$$p_*(WF(u)) = \singsupp u.$$
+Moreover, if $x \in \singsupp u$, then the fiber $WF_x(u)$ of $WF(u)$ at $x$ is the largest cone $\Gamma$ in $T^*_xX$ such that for every cutoff $\varphi$ to a neighborhood of $x$, there exists $N > 0$ such that for every $\xi \in \Gamma$,
+$$|\widehat{\varphi u}(t\xi)| \gtrsim \langle t\xi\rangle^{-N}$$
+as $t \to \infty$.
+\end{theorem}
+
+Here and always $\langle \xi \rangle = \sqrt{1 + \xi^2}$ is the Japanese angle bracket of $\xi$.
+I leave the proof for Ely to cover (or omit) next time. Let me just finish the talk with two examples.
+
+\begin{example}
+The term ``wavefront set" derives from the following example.
+The Dirac measure $\delta$ on $\RR^d$ has
+$$WF(\delta) = T_0^*\RR^d \setminus 0.$$
+To see this, we first note that clearly $\singsupp \delta = \{0\}$.
+Taking the Fourier transform we get $\hat \delta = 1$, which doesn't decay in any direction, so every direction is included in the wavefront set.
+
+If $u$ is the solution of the wave equation with $u(0) = \delta$ and $u'(0) = 0$ then $u$ is supported in the lightcone $\{(t, x) \in \RR^{1 + d}: x^2 = t^2\}$. (I think if $d = 0$ mod $2$ then $u$ is not literally the surface measure on the lightcone, because Huygens' principle is weak in this case.)
+Thus the lightcone is the wavefront of $u$. It is also the projection of $WF(u)$, which is the Hamiltonian flowout of $WF(\delta)$.
+\end{example}
+
+\begin{example}
+Let $U$ be an open subset of $\RR^d$ such that $\partial U$ is a smooth manifold, and let $u = 1_U$.
+Then $WF(u)$ is the conormal bundle of $\partial U$.
+Indeed, it is clear that $\singsupp u = \partial U$, and since $\partial U$ is a smooth manifold, to compute $WF_x(u)$ we can flatten $\partial U$ at $x$ to assume that $\partial U$ is a hyperplane $\{y = 0\}$, in which case $u(x, y) = H(y)$.
+If we consider Schwartz cutoffs $f(x, y) = g(x)h(y)$ then we get
+$$\widehat{uf}(\xi, \eta) = \hat g(\xi) \widehat{Hh}(\eta)$$
+If $\xi \neq 0$ then we clearly get decay in $\widehat{uf}(t\xi, t\eta)$ as $t \to \infty$ since $\hat g$ is a Schwartz function and
+$$\widehat{Hh}(\eta) \lesssim \widehat H(\eta) = \delta(\eta) + \frac{i}{\pi\eta} \sim 1/\eta$$
+(in the sense of Cauchy principal value distributions).
+Meanwhile if $\xi = 0$ then $\widehat{uf}(t\xi, t\eta) = \hat g(0) \widehat{Hh}(t\eta) \sim 1/\eta$, so we get a singularity.
+\end{example}
+
+
+%\tableofcontents
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\printbibliography
+
+
+\end{document}

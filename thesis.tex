@@ -13,9 +13,9 @@
 \usepackage{makeidx}
 \usepackage{enumitem}
 
-\title{The Breit-Wigner formula}
+\title{The Breit-Wigner series and distribution of resonances of potentials}
 \author{Aidan Backus}
-\date{Fall 2019}
+\date{May 2020}
 
 \newcommand{\NN}{\mathbf{N}}
 \newcommand{\ZZ}{\mathbf{Z}}
@@ -26,9 +26,13 @@
 
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\Res}{Res}
-\DeclareMathOperator{\singsupp}{sing supp}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
 \DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
 
 \newcommand{\dbar}{\overline \partial}
 
@@ -38,9 +42,7 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 
-\newcommand{\tr}{\operatorname{tr}}
 
-\theoremstyle{definition}
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{badtheorem}[theorem]{``Theorem"}
 \newtheorem{prop}[theorem]{Proposition}
@@ -50,6 +52,7 @@
 \newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{axiom}[theorem]{Axiom}
 
+\theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{example}[theorem]{Example}
@@ -79,27 +82,187 @@
 \tableofcontents
 
 
-\section*{Acknowledgments}
-I would like to thank Prof. Maciej Zworski for suggesting this topic and mentoring me, as well as teaching me much of what I know about partial differential equations, harmonic analysis, and complex analysis. I would also like to thank Erik Wendt for suggesting the use of conformal mappings to better explain Green functions.
+
+
+\chapter{Introduction}
+%\begin{quote}
+%  ``EVERY MORNING I WAKE UP AND OPEN PALM SLAM A BOOK ONTO THE DESK. IT'S MATHEMATICAL THEORY OF SCATTERING RESONANCES BY DYATLOV AND ZWORSKI AND RIGHT THEN AND THERE I START DOING THE MOVES ALONGSIDE WITH THE AUTHORS, DYATLOV AND ZWORSKI. I DO EVERY PROOF AND I DO EVERY PROOF HARD. MAKIN WHOOSHING SOUNDS WHEN I MEROMORPHICALLY CONTINUE THE RESOLVENT INTO THE LOWER HALF PLANE OR EVEN WHEN I MESS UP TECHNIQUE. NOT MANY CAN SAY THEY CAN BOUND THE NUMBER OF RESONANCES OF A BLOCK BOX OPERATOR. I CAN. I SAY IT AND I SAY IT OUTLOUD EVERYDAY TO PEOPLE IN MY COLLEGE CLASS AND ALL THEY DO IS PROVE PEOPLE IN COLLEGE CLASS CAN STILL BE IMMATURE JEKRS. AND IVE LEARNED ALL THE LEMMAS AND IVE LEARNED HOW TO MAKE MYSELF AND MY APARTMENT LESS LONELY BY SHOUTING EM ALL. 2 HOURS INCLUDING WIND DOWN EVERY MORNIng"
+
+%  -Analytic Memes for Estimate-Loving Teens
+%\end{quote}
 
 
 
-\chapter{Zeroes of Fourier transforms}
-Let $\mu$ be a distribution on $\RR$, i.e. a continuous element of the dual of the space of test functions $C^\infty_{comp}(\RR)$. We will abuse notation and write $\int_E f\mu$ for the pairing of $f$ and $\mu$, whenever it is defined. If $\mu$ satisfies certain growth conditions, then the Fourier transform
+Recall that if $A$ is a quantum observable, then the spectrum of $A$ consists of the possible values $\lambda^2$ that the observable can take when a state $\psi$ is measured. Moreover, $\psi$ is a pure state for measurement $\lambda^2$ (i.e. an observer is guaranteed to measure $\psi$ in state $\lambda^2$) if and only if $\psi$ solves the eigenvalue equation $A\psi = \lambda^2 \psi$. In other words, the pure states for $\lambda^2$ are exactly the kernel of the operator $A - \lambda^2$.
+
+The stationary (homogeneous) Schrödinger equation is the eigenvalue equation when $A$ is the Hamiltonian
+$$H_V = D^2 + V$$
+where $D = -i\partial$ and $V \in L^\infty(\RR \to \RR)$ is a potential. (Here we can view $D^2$ as the Laplacian $-\Delta$, or as the momentum operator.)
+
+Suppose that we are working in one-dimensional space. If $\supp V$ is compact, then a solution $\psi$ of the stationary Schrödinger equation
+with energy $\lambda^2$ has the form
+\begin{equation}
+\label{solutions are waves}
+\psi(x) = \begin{cases}
+  A_+ e^{i\lambda x} + B_-e^{-i\lambda x}, &x \gg 0,\\
+  A_- e^{i\lambda x} + B_+e^{-i\lambda x}, &x \ll 0,
+\end{cases}
+\end{equation}
+as we discuss after the proof of Theorem \ref{meromorphic continuation with compact support}.
+The physical interpretation of (\ref{solutions are waves}) is that since $\psi$ is a pure state, it only has one frequency $\lambda$\footnote{This is our reason for writing the eigenvalue as $\lambda^2$.}, and if $V = 0$, it must be a superposition of an incoming and an outgoing wave of frequency $\lambda$.
+Moreover, since $V$ is bounded, the wave $\psi$ can ``tunnel" through the imperfect barrier $V$; thus the amplitudes $A_+,B_-$ should affect the amplitudes $A_-,B_+$.
+This phenomenon is known as ``scattering", and it can be mathematically described by a linear operator known as the scattering matrix (c.f. Definition \ref{scattering matrix definition}) $S(\lambda)$, which satisfies the equation
+$$S(\lambda)\begin{bmatrix}A_-\\B_-\end{bmatrix} = \begin{bmatrix}A_+\\B_+\end{bmatrix}.$$
+The function $S$ is meromorphic.
+
+Another meromorphic function of significance is the resolvent $R_V$, which tells us how to solve the inhomogeneous stationary Schrödinger equation: it returns an operator $L^2_{comp}(\RR) \to L^2_{loc}(\RR)$ satisfying the equation
+$$(H_V - \lambda^2)R_V(\lambda)f = f.$$
+The poles $\lambda$ of $R_V$ are the square roots of isolated points of the spectrum of $H_V$. Such poles are known as ``scattering resonances" (c.f. Definition \ref{scattering resonance multiplicity}), and they have finite multiplicity.
+We let $\Res V$ be the set of nonzero resonances of $V$ and let $m_R(\lambda)$ denote the multiplicity of a resonance $\lambda$. This satisfies the equation
+$$m_R(-\lambda_0) - m_R(\lambda_0) = \frac{1}{2\pi i}\tr \oint_{\Gamma_{\lambda_0}} S'(\lambda)S(\lambda)^* ~d\lambda$$
+where $\Gamma_{\lambda_0}$ is a sufficiently small contour containing $\lambda_0$.
+So one is naturally interested in the trace of the log-derivative of $S$, $\tr S'S^*$.
+In fact, the Breit-Wigner approximation relates $\tr S'S^*$ to a sum over resonances:
+\begin{theorem}
+Suppose that $V$ is compactly supported and $\lambda_0 \in \RR$. Then the series
+\begin{equation}
+\label{Breit-Wigner series}
+-\infty < \sum_{\lambda \in \Res V \setminus 0} \frac{\Im \lambda}{|\lambda - \lambda_0|^2} < \infty
+\end{equation}
+is absolutely convergent, and we have
+\begin{equation}
+\label{Breit-Wigner formula}
+\frac{1}{2\pi i} \tr S'(\lambda_0) S(\lambda_0)^* = -\frac{1}{\pi}|\ch\supp V| - \frac{1}{2\pi}\sum_{\lambda \in \Res V \setminus 0}\frac{\Im \lambda}{|\lambda - \lambda_0|^2}.
+\end{equation}
+\end{theorem}
+Here $\ch\supp V$ is the convex hull of $\supp V$\footnote{In plain English, this means that $\ch \supp V$ is the intersection of all compact intervals $[\alpha, \beta]$, such that there is a $x \in [\alpha, \beta]$ such that $V(x) \neq 0$.} and $|\ch\supp V|$ is its length.
+Our first goal is to review the proof of the Breit-Wigner approximation outlined by Dyatlov and Zworski in their book \cite{dyatlov2019mathematical}; c.f. Theorem \ref{proof of Breit-Wigner}.
+
+Our main goal is to consider when the Breit-Wigner approximation can be reasonably generalized to non-compactly supported potentials satisfying the following condition:
+\begin{definition}
+A function $V \in L^\infty(\RR)$ is said to be \dfn{super-exponentially decreasing} if for every $N \in \NN$ we can find a $C_N > 0$ such that
+$$V(x) \leq C_Ne^{-N|x|}.$$
+\end{definition}
+For example, a Gaussian is super-exponentially decreasing. We will indicate that a function $V$ is super-exponentially decreasing by writing $V(x) = O(e^{-|x|\infty})$.
+One can define resonances using the Fourier-Laplace transform, which will exist for a super-exponential decreasing potential; so it is reasonable to demand this hypothesis.
+
+\begin{definition}
+The \dfn{Breit-Wigner series} for $V$ is defined by
+$$B(V) = -\sum_{\lambda \in \Res V \setminus 0} \frac{\Im \lambda}{|\lambda|^2}.$$
+\end{definition}
+We will always assume $0 \notin \Res V$ when referring to $B(V)$, even if we do not explicitly note this.
+Since $\Res V$ is a discrete set, this will give a $\delta > 0$ such that every $\lambda \in \Res V$ has $|\lambda| > \delta$, avoiding a trivial form of divergence.
+
+By (\ref{Breit-Wigner series}), $B(V)$ converges if $V$ is compactly supported.
+It is natural, then, to ask whether the Breit-Wigner approximation still holds when $V$ is not compactly supported. It is not obvious that the definition of the scattering matrix $S$ makes sense in this case, but in fact, one can generalize the definition appropriately; see the remarks after Lemma 3.2 in \cite{froese1997asymptotic}.
+Under appropriate assumptions $\tr S'S^*$ remains meromorphic, yet $|\ch\supp V|$ is now infinite, since $V$ is not compactly supported. Therefore, for (\ref{Breit-Wigner formula}) to remain formally valid, (\ref{Breit-Wigner series}) must fail, and hence $B(V) = \infty$.
+\begin{conjecture}
+\label{strong conjecture}
+Let $V(x) = O(e^{-|x|\infty})$. The Breit-Wigner series $B(V)$ converges if and only if $V$ is compactly supported.
+\end{conjecture}
+
+This conjecture is really a statement about the distribution of the discrete set $\Res V$.
+``Most" of the points of $\Res V$ lie in the lower-half plane $\CC_-$, and the Breit-Wigner series will converge just in case the resonances have small imaginary part or large real part.
+
+\section{The main conjecture}
+The distribution of $\Res V$ is in general quite difficult to study.
+However, Froese made a conjecture \cite[Conjecture 1.2]{froese1997asymptotic} which gives one control over the distribution of $\Res V$, and proved that a large class of potentials including Gaussians satisfy this conjecture.
+
+To state Froese's conjecture, recall that if $V(x) = O(e^{-|x|\infty})$, then its Fourier transform $\hat V$ is an entire function.
+By definition, the order $\rho$ of $\hat V$ is
+\begin{equation}
+\label{order of Vhat}
+\rho = \limsup_{r \to \infty} \frac{\sup_\theta \log \log |\hat V(re^{i\theta})|}{\log r}.
+\end{equation}
+We say that $\hat V$ is of normal type provided that
+$$0 < \limsup_{r \to \infty} \frac{\sup_\theta \log|\hat V(re^{i\theta})|}{r^\rho} < \infty.$$
+We say that $\hat V$ is of completely regular growth provided that $\hat V$ is of normal type and that on a set $A \subseteq (0, \infty)$ of density $1$ in $(0, \infty)$, the $\limsup$ in the definition of normal type is actually a uniform limit.
+
+Under these hypotheses, Froese's conjecture gives us a great deal of control over the distribution of $\Res V$:
+\begin{conjecture}[Froese]
+Suppose that $V(x) = O(e^{-|x|\infty})$ and $\hat V$ is of completely regular growth. Then in the lower-half plane $\CC_-$, the distribution  of $\Res V$ is identical to the distribution of the zeroes of
+\begin{equation}
+\label{associated entire function}
+F(z) = \hat V(2z)\hat V(-2z) + 1.
+\end{equation}
+\end{conjecture}
+We thus retreat to a weaker form of Conjecture \ref{strong conjecture}, that, given Froese's conjecture, is somewhat more plausible.
+\begin{conjecture}
+\label{weak conjecture}
+Suppose that $V(x) = O(e^{-|x|\infty})$, $V$ is not compactly supported and $\hat V$ is of completely regular growth. Then either $B(V)$ diverges, or $V$ is a counterexample to Froese's conjecture.
+\end{conjecture}
+
+Aside from the heuristic evidence for Conjecture \ref{weak conjecture}, we prove a special case:
+\begin{theorem}
+\label{divergence of breit wigner, preliminary version}
+Suppose that $V(x) = O(e^{-|x|\infty})$, $V$ is not compactly supported and $\hat V$ is of completely regular growth. Let $F$ be given by (\ref{associated entire function}) and $\rho$ be given by (\ref{order of Vhat}). Let
+$$h(\theta) = \limsup_{r \to \infty} \frac{\log|F(re^{i\theta})|}{r^\rho}.$$
+For $0 \leq \theta < \varphi \leq 2\pi$, let
+$$s(\theta, \varphi) = h'(\theta) - h'(\varphi) + \rho^2\int_\theta^\varphi h(\xi) ~d\xi.$$
+Suppose that one of the following is true:
+\begin{enumerate}
+\item There are $\theta < \varphi$ such that $\pi \notin (\theta, \varphi)$ and $s(\theta, \varphi) \neq 0$.
+\item There are $\theta < \varphi$ such that $\pi \notin (\theta, \varphi)$ and $s(\theta, \varphi)$ is not defined.
+\item One has
+$$\lim_{\varphi \to \pi} s(\pi, \varphi) = 0.$$
+\end{enumerate}
+Then either the Breit-Wigner series $B(V)$ diverges, or $V$ is a counterexample to Froese's conjecture.
+\end{theorem}
+We restate and prove Theorem \ref{divergence of breit wigner, preliminary version} as Theorem \ref{divergence of breit wigner}.
+
+\section{Some explicit examples}
+Let us first note that the assumption that $V$ is super-exponentially decreasing is not sharp. In fact, the P\"oschl-Teller well, given by
+$$V(x) = -\frac{2}{\cosh^2(x)},$$
+has a divergent Breit-Wigner series. In fact, it has resonances of the form $-i(n+2)$, $n \in \NN$ \cite{cevik_2016}, and so
+$$B(V) \geq \sum_{n=0}^\infty \frac{n+2}{|n+2|^2} = \sum_{n=2}^\infty n^{-1} = \infty.$$
+Such a potential is not super-exponentially decreasing.
+
+Let us check that the Breit-Wigner series of the Gaussian potential $V(x) = e^{-x^2}$ also diverges, without using Theorem \ref{divergence of breit wigner, preliminary version}.
+Doing so will illustrate some of the techniques that we will use in the proof. First, up to an irrelevant constant, we have $\hat V(z) = e^{-z^2}$. The function $F$ given by (\ref{associated entire function}) is therefore $F(z) = e^{-8z^2} + 1$.
+By Theorem \ref{Froese conjecture theorem}, a result of Froese \cite[Theorem 1.2]{froese1997asymptotic}, it follows that the asymptotic distribution of resonances of $V$ is identical to the asymptotic distribution of solutions of the equation $e^{-8z^2} = -1$ such that $\Im z \leq 0$. Such solutions are of the form
+$$z = \sqrt{\frac{\pi(2n + 1)}{8}}(-1)^{1/4}$$
+for $n \in \NN$ and the value of $(-1)^{1/4}$ chosen to be in the lower-half plane.
+Thus we have
+$$B(V) \sim \sqrt{\frac{8}{\pi}} \sum_{n=0}^\infty \frac{\sqrt{2(2n+1)}}{2n + 1} = \sqrt{2\pi} \sum_{n=0}^\infty \frac{1}{\sqrt{2n+1}}$$
+which certainly diverges.
+
+The constant $\sqrt 2$ that appears in the summand $\sqrt{2(2n+1)}(2n+1)^{-1}$ arises from the fact that $\sin((-1)^{1/4}) = 1/\sqrt 2$, but we just needed that it is nonzero.
+This explains the added hypothesis in the statement of Theorem \ref{divergence of breit wigner, preliminary version} that does not already appear in Conjecture \ref{weak conjecture}.
+If one could show that a non-compactly supported potential has ``enough" resonances which are ``far from $\RR$"\footnote{By ``far from $\RR$", we mean that there is a uniform $\varepsilon > 0$ such that for every resonance $re^{i\theta}$ which is ``far from $\RR$", $\sin \theta > \varepsilon$.}, one could remove this hypothesis.
+For example, one may hope to use complex scaling to remove this hypothesis if $V$ is in fact holomorphic in a neighborhood of $\RR$.
+
+In addition, while we used the fact that the zeroes of $F$ were distributed at a square-root rate, we only needed them to be distributed at most linearly. This follows essentially because the order $\rho$ of $F$ is $2$; we will show that the any Fourier-Laplace transform of any potential that we are considering has zeroes which are distributed at most linearly ($\rho \geq 1$).
+
+\section{Outline of the thesis}
+In Chapter \ref{review of complex analysis}, we review the complex-analytic preliminaries that will be used throughout this thesis.
+In particular, we give a proof of Titchmarsh's theorem on the zeroes of a Fourier transform, Theorem \ref{Titchmarsh I}, which is somewhat more detailed than the proof that appears in H\"ormander's book \cite{hormander2004analysis}.
+In Chapter \ref{review of scattering theory}, we review the basic theory of scattering for compactly supported potentials, roughly following Dyatlov and Zworski \cite{dyatlov2019mathematical}, and use Theorem \ref{Titchmarsh I} to give a proof of the Breit-Wigner approximation, Theorem \ref{proof of Breit-Wigner}.
+Finally, in Chapter \ref{SED potentials chapter}, we discuss relevant results from Froese's paper \cite{froese1997asymptotic} and then prove Theorem \ref{divergence of breit wigner, preliminary version}.
+
+
+\section{Acknowledgements}
+I would like to thank Prof. Maciej Zworski for suggesting this topic and mentoring me, as well as teaching me much of what I know about partial differential equations, harmonic analysis, and complex analysis. This thesis would not have appeared without him.
+I would also like to thank Erik Wendt and James Leng for various helpful discussions.
+
+This work is dedicated to Java Darleen Villano, who has given me emotional (and mathematical!) support when I needed it the most.
+
+
+\chapter{Review of complex analysis}
+\label{review of complex analysis}
+We review the main prerequisites of this thesis in this chapter.
+In Section \ref{growth of fourier transforms} we recall the basics of distributional calculus, Fourier-Laplace transforms, and the Paley-Wiener theorem, and in Section \ref{growth of entire functions} we discuss the relationship of the growth of an entire function $f$ to the distribution of the zeroes of $f$. Both of these sections are used throughout.
+In Sections \ref{subharmonic functions} and \ref{Titchmarsh section} we give Beurling's proof of Titchmarsh's theorem, which is used in the proof of the Breit-Wigner approximation.
+In Section \ref{noncommutative sequence space section} we discuss the ``Schatten classes" $B^p$, which are necessary to define the Fredholm determinant used in the setup of the proof of main theorem.
+
+\section{The Fourier-Laplace transform}
+\label{growth of fourier transforms}
+We recall basic facts about the Fourier-Laplace transform of a distribution. The exposition given here is based on \cite[Chapter VII]{hormander2015analysis}.
+
+Let $\mu$ be a distribution on $\RR$, i.e. a continuous linear functional space of test functions $C^\infty_{comp}(\RR)$. We will abuse notation and write $\int_E f\mu$ for the pairing of $f1_E$ and $\mu$, whenever it is defined. If $\mu$ satisfies certain growth conditions, then the Fourier-Laplace transform
 $$\hat \mu(\xi) = \int_{-\infty}^\infty e^{-ix\xi} \mu(x) ~dx$$
 is well-defined and is also a distribution.
-
-For any distribution $\mu$ with bounded support $\supp \mu$, the convex hull of the support $\ch \supp \mu$ is given by a compact interval, and the Paley-Weiner theorem guarantees that $\hat \mu$ is an entire function. In particular, the number of zeroes of $\hat \mu$ lying in any compact set is necessarily finite, even when counted with multiplicity, assuming that $\mu \neq 0$.
-
-Our goal is to prove the following theorem, which was first proven by Titchmarsh \cite{titchmarsh1926zeros}. The proof we give is based on the proof of Beurling that was first published in \cite[Chapter XVI]{hormander2004analysis}.
-\begin{theorem}
-    \index{Titchmarsh's theorem}
-    Let $\mu$ be a distribution with $\ch \supp \mu = [a, b]$. Let $N(R)$ denote the number of zeroes $z$ of $\hat \mu$ with $|z| < R$, counted with multiplicity. Then
-    $$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b-a}{\pi}.$$
-\end{theorem}
-
-\section{The Paley-Wiener theorem}
-We review the proof of the Paley-Wiener theorem, proven by Schwartz. The exposition given here is based on \cite[Chapter VII]{hormander2015analysis}.
+We will abuse terminology and refer to the Fourier-Laplace transform as simply the Fourier transform, since it is the analytic continuation of the Fourier transform from $\RR$ to the entire plane $\CC$, and we will rarely need to refer to the classical Fourier transform (only defined for $\xi \in \RR$).
+However, we will on occasion need to talk about the Laplace transform, i.e. the function $\eta \mapsto \hat \mu(i\eta)$ on $\RR$.
 
 \begin{definition}
     For $\alpha,\beta$ multiindices, we define the $(\alpha,\beta)$th \dfn{Schwartz seminorm} on $\Omega \subseteq \CC^n$ by
@@ -115,12 +278,48 @@ $$h_E(\xi) = \sup_{x \in E} x\xi.$$
 \end{definition}
     Taking the closure of $E$ will not affect $h_E$. Then for $\xi > 0$, $h_E(\xi) = b\xi$, $h_E(0) = 0$, and $h_E(-\xi)     = -a\xi$. Taking the convex hull will not change $a$ or $b$, so $h_E = h_{\ch E}$.
 
+      We recall that the notation $A \lesssim_t B$ means that there is a constant $C > 0$ which depends on $t$, such that $A \leq BC$.
+\begin{lemma}
+\label{fourier transforms are horizontally bounded}
+  Let $F$ be an entire function, and assume that there is a super-exponentially decreasing distribution $\mu$ such that $F = \hat \mu$. Then for every $\eta$,
+  $$|F(\cdot + i\eta)| \lesssim_{\eta,\mu} 1$$
+  and in particular $F|_\RR$ is a tempered distribution.
+\end{lemma}
+\begin{proof}
+  Fix $\eta$; then for every $\xi$,
+\begin{align*}
+  |F(\xi + i\eta)| &= \left|\int_{-\infty}^\infty \mu(x)e^{-ix\xi}e^{x\eta}~dx\right| \\
+  &\leq \int_{-\infty}^\infty |\mu(x)|e^{x\eta} ~dx.
+\end{align*}
+  Since $\mu$ is super-exponentially decreasing, $\langle \mu, e^{\eta \cdot}\rangle$ exists, and is a bound on $|F(\xi + i\eta)|$ which is uniform in $\xi$.
+
+  In particular $F|_\RR$ is bounded and smooth, hence tempered.
+\end{proof}
     Let us fix some notation. Let $E_\delta$ denote the ball around $E$ of radius $\delta$; that is,
 $$E_\delta = \{x \in \RR: \exists y \in E~|x - y| < \delta\}.$$
     For $\mu$ a distribution on $\RR$, we will write $||\mu|| = |\int_{-\infty}^\infty \mu(x) ~dx|$, if such an integral is indeed finite. So if $\mu$ is actually a positive function, then $||\mu|| = ||\mu||_{L^1}$.
+
+    \begin{definition}
+    Let $f$ be a entire function. The \dfn{order} $\rho$ of $f$ is defined by
+    $$\rho = \inf \{m \in \RR: f(z) = O(\exp(|z|^m))\}.$$
+    \end{definition}
+    It is easy to see that the order $\rho$ of $f$ is given by
+    $$\rho = \limsup_{r \to \infty} \frac{\log \log \sup_{|z| = r} |f(z)|}{\log r}.$$
+    This motivates the following definition.
+
+    \begin{definition}
+    The \dfn{type} $\tau$ of $f$ is
+    $$\tau = \limsup_{r \to \infty} \frac{\log \sup_{|z| = r} |f(z)|}{r^\rho}.$$
+    If $\tau \in (0, \infty)$, then we say that $f$ is has a \dfn{normal type}.
+    If $\rho = 1$ and $f$ is of normal type, then we say that $\tau$ is the \dfn{exponential type} of $f$.
+    \end{definition}
+
+We now show that a quantitative property of a distribution (the length of its support) is related to a quantitative property of its Fourier transform, the exponential type of its Fourier transform.
 \begin{theorem}[Paley-Wiener]
+\label{PWS theorem}
     Let $E \subset \RR$ be bounded. If $\mu$ is a distribution on $\RR$ with $\supp \mu \subseteq E$, then the Fourier transform $\hat \mu$ is an entire function satisfying the estimate
 $$|\hat \mu(\zeta)| = O(e^{h_E(\Im \zeta)}).$$
+    In particular, $\hat \mu$ is of exponential type $\sup_{x \in E} |x|$.
     Conversely, for every entire function $f$ such that $|f(\zeta)| = O(e^{h_E(\Im \zeta)})$, there is a distribution $\mu$ on $\RR$ with $\supp \mu \subseteq \ch E$ and $\hat \mu = f$.
 \end{theorem}
 \begin{proof}
@@ -129,9 +328,12 @@ $$|\hat \mu(\zeta)| = O(e^{h_E(\Im \zeta)}).$$
     Let $\Im \zeta > 0$ and $\ch E = [a, b]$. Then
 $$|\hat \mu(\zeta)| \leq \int_{-\infty}^\infty |e^{-ix\zeta} \mu(x)| ~dx \leq ||\mu|| \int_a^b e^{x \Im \zeta} ~dx \leq ||\mu|| e^{h_E(\Im \zeta)}.$$
 
-    For the converse, let $f$ be an entire function satisfying $|f(\zeta)| = O(e^{h_E(\Im \zeta)})$. Then the restriction $\tilde f = f|_\RR$ is a bounded smooth function. Therefore $\tilde f$ is tempered, so has an inverse Fourier transform $\mu$.
+    For the converse, let $f$ be an entire function satisfying $|f(\zeta)| = O(e^{h_E(\Im \zeta)})$. Then the restriction $\tilde f = f|_\RR$ is tempered, so has an inverse Fourier transform $\mu$.
 
-    Let $\varphi \in C^\infty_{comp}((-1, 1))$ be a positive function, normalized so that such that $\int_{-1}^1 \varphi = 1$, and set $\varphi_\delta(x) \varphi(x/\delta)/\delta$. Thus $\mu * \varphi_\delta$ is a mollification of $\mu$, i.e. $\mu * \varphi_\delta \in C^\infty(\RR)$ and $\lim_{\delta \to 0} \mu * \varphi_\delta = \mu$. $\widehat{\mu*\varphi_\delta} = \hat \mu  \hat \varphi_\delta = \tilde f \hat \varphi_\delta$. Taking the unique analytic continuation of $\tilde f$ to $\CC$, we extend $\tilde f \hat \varphi_\delta$ to $f \hat \varphi_\delta$.
+    Let $\varphi \in C^\infty_{comp}((-1, 1))$ be a positive function, normalized so that such that $\int_{-1}^1 \varphi = 1$, and set $\varphi_\delta(x) \varphi(x/\delta)/\delta$. (In fact, we can take $\varphi$ to be the standard mollifier.)
+    Thus $\mu * \varphi_\delta$ is a mollification of $\mu$, i.e.
+    $\mu * \varphi_\delta \in C^\infty(\RR)$ and $\lim_{\delta \to 0} \mu * \varphi_\delta = \mu$. $\widehat{\mu*\varphi_\delta} = \hat \mu  \hat \varphi_\delta = \tilde f \hat \varphi_\delta$.
+    Taking the unique analytic continuation of $\tilde f$ to $\CC$, we extend $\tilde f \hat \varphi_\delta$ to $f \hat \varphi_\delta$.
 
     Since $\varphi_\delta$ is supported in $(-\delta, \delta)$, $|\hat \varphi_\delta(\zeta)| = O(\delta |\Im \zeta|)$. Therefore
 $$|f(\zeta) \varphi_\delta(\zeta)| = O(\exp(h_E(\Im \zeta) + \delta|\Im \zeta|)).$$
@@ -149,10 +351,97 @@ $$\mu(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{ix\xi} f(\xi) ~d\xi = \frac{1
 \end{proof}
     Since the Paley-Wiener theorem is a biconditional, the estimate
     $$|\hat \mu(\zeta)| \leq ||\mu|| e^{h_E(\Im \zeta)}$$
-    is sharp: we cannot replace the $a, b$ appearing in the piecewise-linear definition of $h_E$ with better constants. This precision will be important in the proof of Titchmarsh's theorem.
+    is sharp: we cannot replace the $a, b$ appearing in the piecewise-linear definition of $h_E$ with better constants. This precision will be important in the proof of Theorem \ref{Titchmarsh I}.
 
+    For any distribution $\mu$ with bounded support $\supp \mu$, the Paley-Wiener theorem guarantees that $\hat \mu$ is an entire function. In particular, the number of zeroes of $\hat \mu$ lying in any compact set is necessarily finite, even when counted with multiplicity, assuming that $\mu \neq 0$; the zeroes will be counted by Theorem \ref{Titchmarsh I}.
+
+    We will also need the following lower bound on Fourier transforms, which easily follows from the proof of the Paley-Wiener theorem.
+\begin{lemma}
+\label{fourier transforms are at least exponential type}
+Let $\mu$ be a super-exponentially decreasing distribution, and assume that $\hat \mu$ is an entire function. If $\rho$ is the order of $\hat \mu$, then either $\rho \geq 1$, or $\rho = 0$ and $\supp \mu = \singsupp \mu = \{0\}$.
+\end{lemma}
+\begin{proof}
+Let $F = \hat \mu$ and suppose towards contradiction that $\rho < 1$. Then, in particular, $F(\xi + i\eta) = o(e^{\eta})$.
+
+Since $F$ is a Fourier transform, by Lemma \ref{fourier transforms are horizontally bounded}, $\mu$ is tempered.
+Let $\varphi$ be the standard mollifier, so $\mu * \varphi_\delta$ is the standard mollification of $\mu$ and $\widehat{\mu * \varphi_\delta} =  F\hat \varphi_\delta$, and
+$$|F(\xi + i\eta)\varphi_\delta(\xi + i\eta)| = O(e^{\delta\eta}).$$
+Since $\mu * \varphi_\delta$ is compactly supported, by the Paley-Wiener theorem, $\mu*\varphi_\delta$ is supported on $[-\delta, \delta]$.
+Since $\delta$ was arbitrary, it follows that $\supp \mu \subseteq \{0\}$ and the claim follows.
+\end{proof}
+
+
+    \section{Growth of entire functions}
+    \label{growth of entire functions}
+    Recall that our potential $V$ is assumed to be super-exponentially decreasing. This justifies the differentiation under the integral sign
+    $$\dbar \hat V(\xi) = \int_{-\infty}^\infty \dbar_\xi V(x) e^{-ix\xi} ~dx = 0$$
+    whence $\hat V$ is an entire function. We do not have the Paley-Wiener theorem in this case, but we can still recover some results about the growth of entire functions.
+
+    The growth of an entire function is closely tied to its distribution of zeroes, as given by the angular counting function.
+    \begin{definition}
+    Let $R > 0$ and let $\theta,\varphi$ be angles; let $\Gamma_{R,\theta,\varphi}$ be the contour around the sector
+    $$\{re^{i\xi} \in \CC: r < R \text{ and } \xi \in (\theta, \varphi)\}.$$
+    Given an entire function $f$ which is not identically $0$, its \dfn{angular counting function} $N$ to be the number of zeroes of $f$ inside $\Gamma_{R,\theta,\varphi}$, counted by multiplicity.
+    \end{definition}
+    Note that by the argument principle, the angular counting function could also be defined by the contour integral
+    $$N(R, \theta, \varphi) = \int_{\Gamma_{R,\theta,\varphi}} \frac{f'(z)}{f(z)} ~dz.$$
+
+    We now show that we can determine whether a distribution is of compact support by considering its order.
+    \begin{lemma}
+    Let $\mu$ be a super-exponentially decreasing distribution which is not identically zero, and let $F = \hat \mu$. Suppose that $F$ is of normal type, and let $\rho$ be the order of $F$. Then $\rho \geq 1$, and $\rho = 1$ if and only if $\mu$ has compact support.
+    \end{lemma}
+    \begin{proof}
+    Since $F$ is a Fourier transform, $F(\xi + i\eta)$ is bounded in $\xi$ if $\eta$ is held fixed. To see this, note that
+    $$|F(\xi + i\eta)| = \left|\int_{-\infty}^\infty \mu(x)e^{-ix\xi}e^{x\eta} ~dx\right| \leq \int_{-\infty}^\infty |\mu(x)| e^{x\eta} ~dx.$$
+    The last integral converges because $\mu$ is assumed super-exponentially decreasing, so $\mu(x) = O(e^{-2x\eta})$ whence $\mu(x)e^{x\eta} = O(e^{-x\eta})$.
+    Therefore $F(\xi + i\eta) = O(g(\eta))$ for some function $g$ which does not depend on $\xi$, and $\rho = \inf \{m: g(\eta) = O(e^{\eta^m})\}$.
+
+    If $\mu$ has compact support, then by the Paley-Wiener theorem, Theorem \ref{PWS theorem} for every $\varepsilon > 0$ and some $\tau > 0$ which depends on $\supp \mu$, $g(\eta) = O(e^{\tau\eta}) = O(e^{\eta^{1+\varepsilon}})$, and this estimate is sharp; therefore $\rho = 1$.
+    Conversely, if $\rho = 1$, then because $F$ is of normal type there is a $\tau > 0$ such that $g(\eta) = O(e^{\tau\eta})$, and then the Paley-Wiener theorem bounds $\sup\{|x|: x \in \supp \mu\}$ in terms of $\tau$, so $\supp \mu$ is compact.
+
+    We finally show that $\rho \geq 1$. So suppose that $\rho < 1$, and let $\chi$ be the indicator function of a compact set $K$ such that $\int_K |\mu| \neq 0$. (Such a set $K$ must exist, since $\mu$ is not identically zero.)
+    Since $\rho \neq 1$, $\mu$ is not compactly supported, so there is a $\mu_0$ which does not have compact support such that $\mu = \mu\chi + \mu_0$, so that $F = \widehat{\mu\chi} + \widehat{\mu_0}$.
+    Since $\mu_0$ is not compactly supported, the order $\rho_0$ of $\widehat{\mu_0}$ satisfies $\rho_0 \neq 1$.
+    On the other hand, the order of $\widehat{\rho\chi}$ is $1$.
+
+    If $\rho_0 < 1$, then $\widehat{\mu_0}$ is strictly dominated by $\widehat{\mu\chi}$ along any line $\xi + i\eta$ as $\eta \to \infty$ and $\xi$ is held fixed, so $\rho$ is given by the order of $\widehat{\mu\chi}$, and so $\rho = 1$. (Running this argument again then shows that $\rho_0 < 1$ implies a contradiction, but we did not know this a priori.)
+    On the other hand, if $\rho_0 > 1$, then $\widehat{\mu\chi}$ is strictly dominated by $\widehat{\mu_0}$ on the imaginary axis, so $\rho = \rho_0 > 1$.
+    Either way, $\rho \geq 1$.
+    \end{proof}
+
+    If $f$ is of normal type $\tau$, then we can understand how quickly $f$ grows along a ray $\{re^{i\theta}: r > 0\}$ by understanding the growth rate of the logarithm in the definition of $\tau$. This information is encoded by the indicator function of $f$.
+    \begin{definition}
+    Let $f$ be an entire function of order $\rho$ and normal type. The \dfn{indicator function} $h$ of $f$ is given by
+    $$h(\theta) = \limsup_{r \to \infty} \frac{\log|f(re^{i\theta})|}{r^\rho}.$$
+    Suppose that $\alpha < \beta$ are angles. If the $\limsup$ appearing in the definition of $h$ is actually a uniform limit as $r \to \infty$ along a subset of $\{re^{i\theta}: r>0\}$ of density $1$ for every $\theta \in (\alpha, \beta)$, then $f$ is said to have \dfn{completely regular growth} in $(\alpha, \beta)$. If $f$ is of completely regular growth and order $\rho$, then we define
+    $$s(\theta, \varphi) = h'(\theta) - h'(\varphi) + \rho^2 \int_\theta^\varphi h(\xi) ~d\xi$$
+    for every $\theta, \varphi$ such that $h'$ exists and is continuous at $\theta,\varphi$.
+    \end{definition}
+    We will need two facts about the indicator function of a function of completely regular growth, and we omit their proof. They can be found in Levin \cite[Chapter III]{levin1964distribution}.
+    \begin{theorem}
+    \label{indicator function is C1}
+    For every function $f$ of completely regular growth, there is a countable set $Z \subset [0, 2\pi]$ such that the indicator function $h$ is continuously differentiable on $[0, 2\pi] \setminus Z$. In particular, for every $\theta \notin Z$, $\varphi \mapsto s(\theta, \varphi)$ is continuous on $Z$.
+    \end{theorem}
+    \begin{theorem}
+    Let $f$ be a function of completely regular growth. Let $\alpha < \theta < \varphi < \beta$ be angles such that $s(\theta,\varphi)$ exists. Then
+    $$s(\theta, \varphi) = 2\pi\rho \lim_{r\to\infty} \frac{N(r, \theta, \varphi)}{r^\rho}.$$
+    \end{theorem}
+
+    Finally, we will need a Weierstrass-type theorem that was due to Titchmarsh. We omit its proof, but refer the reader to Titchmarsh's original paper \cite[Theorem VI]{titchmarsh1926zeros}.
+    \begin{theorem}
+    \label{Titchmarsh II}
+    Suppose that $\mu$ is a distribution and $\ch \supp \mu = [a, b]$. Let $\{z_n\}$ be an enumeration of the zeroes of $\hat \mu$ such that $|z_n| \leq |z_{n+1}|$, and suppose that $\hat \mu(0) \neq 0$. Then
+    $$\frac{\hat \mu(z)}{\hat \mu(0)} = e^{-i(a+b)z/2} \prod_n\left(1 - \frac{z}{z_n}\right).$$
+    \end{theorem}
+
+
+    It follows from Theorem \ref{Titchmarsh I} that there are infinitely many $z_n$, and that $N(R) \sim R$, so one can show that the product in Theorem \ref{Titchmarsh II} is just conditionally convergent. It is this reason that forces us to add the condition $|z_n| \leq |z_{n+1}|$, as otherwise we could use a Riemann rearrangement to find a counterexample to Theorem \ref{Titchmarsh II}.
 
 \section{Subharmonic functions}
+\label{subharmonic functions}
+We will review the proof of the Riesz representation formula for certain subharmonic functions on the upper-half plane $\CC_+$.
+This material will be used in the proof of Theorem \ref{Titchmarsh I}, which in turn will be used in the proof of the Breit-Wigner approximation for compactly supported potentials, Theorem \ref{proof of Breit-Wigner}.
+
 Fix an open set $\Omega \subseteq \CC$. Recall that a function $u: \Omega \to [-\infty, \infty)$ which is upper-semicontinuous is called subharmonic if for each $z \in \CC$, the averages
 $$M(z, r) = \frac{1}{2\pi} \int_0^{2\pi} u(z + re^{i\theta}) ~d\theta$$
 are increasing in $r$. This condition is logically equivalent to assuming that $u$ satisfies a maximum principle: for every compact set $K$ with nonempty interior $U$, if $u|_K$ attains its maximum on $U$, then $u|_K$ is a constant. To avoid trivialities, we shall assume that $u$ is not identically $-\infty$, though not every author makes this assumption.
@@ -160,7 +449,7 @@ are increasing in $r$. This condition is logically equivalent to assuming that $
 It is a well-known result that an upper-semicontinuous function $u$ is subharmonic iff the weak Laplacian $\Delta u \geq 0$; that is, for any nonnegative test function $\varphi \in C^\infty_{comp}(\Omega)$,
 $$\int_\Omega u(z) \Delta \varphi(z) ~dz \geq 0.$$ If actually $\Delta u = 0$, then we call $u$ harmonic; by a typical mollification argument, if $u$ is harmonic, then $u$ is actually smooth (even real analytic), but such niceties may not be true for subharmonic functions. The reason why we refer to functions $u$ with $\Delta u \geq 0$ as subharmonic rather than superharmonic is that $-\Delta$ is a positive operator, and so we think of applying $\Delta$ as akin to ``multiplying by a negative function". Such a function lies in $L^1_{loc}(\Omega)$. (For the proofs, see \cite[Chapter 1]{hormander1973introduction}.)
 
-By the Paley-Wiener theorem, if $\mu$ is a distribution with $\ch \supp \mu = [a, b]$, then $\hat \mu$ is an entire function which satisfies the estimate
+By the Paley-Wiener theorem, Theorem \ref{PWS theorem}, if $\mu$ is a distribution with $\ch \supp \mu = [a, b]$, then $\hat \mu$ is an entire function which satisfies the estimate
 $$\hat \mu(x + iy) \leq Ce^{h(y)}$$
 for some constant $C$, where $h(y) = by$ for $y > 0$, $h(y) = ay$ for $y < 0$. In particular, in the upper half-plane $\CC_+$, we have the estimate
 $$\hat \mu(x + iy) \leq Ce^{by}.$$
@@ -178,7 +467,7 @@ Using a partition of unity to sum over all zeroes in this manner, it follows tha
 $$\Delta(\log |\hat \mu|) = 2\pi \sum_{z \in Z} \delta_z \geq 0.$$
 It follows that $\log |\hat \mu|$ is subharmonic and, on $\CC_+$, satisfies the estimate
 $$\log |\hat \mu(x + iy)| \leq C + Dy$$
-for some constants $C, D$, by the Paley-Wiener theorem.
+for some constants $C, D$, by the Paley-Wiener theorem, Theorem \ref{PWS theorem}
 
 \begin{definition}
     Let $u$ be a subharmonic function on $\CC_+$. If there are constants $C, D > 0$ so that $u(x + iy) \leq C + Dy$, then we say that $u$ is \dfn{imaginary-sublinear}.
@@ -257,8 +546,10 @@ $$\int_0^{2\pi} P^\flat(z, \theta) ~d\theta = \int_{-\infty}^\infty P(z^\sharp, 
 So for any $r \in (0, 1)$ and any $\varepsilon > 0$, we have the estimate
 \begin{align*}
   |F(re^{i\theta}) - f(e^{i\theta})| &\leq \int_0^{2\pi} P^\flat(re^{i\theta}, e^{i\eta})|f(e^{i\theta}) - f(e^{i\eta})| ~d\eta\\
-    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| + \int_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta})|f(e^{i\theta}) - f(e^{i\eta})| ~d\eta\\
-    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| + \sup_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta}) \int_{B_\varepsilon^c} |f(e^{i\theta}) - f(e^{i\eta})| ~d\eta
+    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| \\
+      &\quad+ \int_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta})|f(e^{i\theta}) - f(e^{i\eta})| ~d\eta\\
+    &\leq \sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| \\
+      &\quad+ \sup_{B_\varepsilon^c} P^\flat(re^{i\theta}, e^{i\eta}) \int_{B_\varepsilon^c} |f(e^{i\theta}) - f(e^{i\eta})| ~d\eta
 \end{align*}
 where $B_\varepsilon$ is a interval in $[0, 2\pi]$ modulo $2\pi$ of radius $\varepsilon$ centered on $e^{i\theta}$. Since $f$ is continuous,
 $$\lim_{\varepsilon \to 0}\sup_{B_\varepsilon} |f(e^{i\theta}) - f(e^{i\eta})| = 0.$$
@@ -305,7 +596,6 @@ Let $h: \CC \to \RR$ be a harmonic function such that $h(z) + h(\overline z) = 0
   we conclude that $h(z) = A\Im z$. Since $h$ is real-valued, $A \in \RR$.
 \end{proof}
 
-\section{The Riesz representation formula}
 Now we are ready to prove the Riesz representation formula for $\CC_+$.
 \begin{theorem}[Riesz representation formula]
     \index{Riesz representation formula}
@@ -321,7 +611,8 @@ Now we are ready to prove the Riesz representation formula for $\CC_+$.
 
     We first prove (\ref{estimate on mu}). Recall that we have assumed that there is a $z \in \CC_+$ so that $u(z) > -\infty$. Moreover, for any $x \in \RR$, $G(z, x) = 0$ By Lemma \ref{estimate on Green function}, for some constant $B > 0$,
 \begin{align*}\int_{\CC_+} \frac{\Im w}{(1 + |w|)^2} \mu(w) ~dw &\leq -B\int_{\CC_+} G(z, w) \Delta u(w) ~dw
-    \\&= B \int_{\CC_+} \nabla G(z, w) \nabla u(w) ~dw + B\int_{-\infty}^\infty G(z, x) \nabla u(x) ~dx\\
+    \\&= B \int_{\CC_+} \nabla G(z, w) \nabla u(w) ~dw \\
+      &\quad+ B\int_{-\infty}^\infty G(z, x) \nabla u(x) ~dx\\
     &= -B \int_{\CC_+} \Delta G(z, w) u(w) ~dw \\&= -B\int_{\CC_+} \delta_z(w) u(w) ~dw = -Bu(w) < \infty.
   \end{align*}
 
@@ -380,7 +671,10 @@ $$u_1(x + iy) = \int_{-\infty}^\infty P(x + i(y-\varepsilon), t) u_1(t + i\varep
     Let $\psi_j$ be an increasing sequence of cutoff functions on $\RR$ which are identically $1$ on $[-j, j]$. Then
 $$h_j(z) = u_1(z + i\varepsilon) - \int_{-\infty}^\infty P(z, x)\psi_j(x)u_1(x + i\varepsilon) ~dx.$$
     Then for $z \in \CC_+$,
-$$\Delta h_j(z) = -\Delta \int_{-\infty}^\infty P(z, x)\psi_j(x) u_1(x + i\varepsilon) ~dx = -\int_{-\infty}^\infty \Delta_z P(z, x) \psi_j(x) u_1(x + i\varepsilon) ~dx = 0$$
+\begin{align*}
+  \Delta h_j(z) &= -\Delta \int_{-\infty}^\infty P(z, x)\psi_j(x) u_1(x + i\varepsilon) ~dx \\
+    &= -\int_{-\infty}^\infty \Delta_z P(z, x) \psi_j(x) u_1(x + i\varepsilon) ~dx = 0
+\end{align*}
     since $P(\cdot, x)$ is harmonic on $\CC_+$. So the $h_j$ are harmonic on $\CC_+$. Since $P$ is a nascent Dirac mass, if $\Im z = 0$, then
 $$h_j(z) = u_1(z + i\varepsilon) - \int_{-\infty}^\infty \delta_x(z) \psi_j(x) u_1(x + i\varepsilon) ~dx = u_1(z + i\varepsilon)(1 - \psi_j(x)) \leq 0$$
     since $u_1 \leq 0$. On the other hand, $P(z, x)$ is small when $|z|$ is large; so
@@ -389,7 +683,8 @@ $$h_j(z) = u_1(z + i\varepsilon) - \int_{-\infty}^\infty \delta_x(z) \psi_j(x) u
     Therefore $h_j|_{\partial \CC_+} \leq 0$, so by the maximum principle, $h_j \leq 0$.
 
     Therefore the $h_j$ increase to a harmonic function $h$, which by the reflection principle, extends uniquely to $\CC$ and satisfies $h(z) + h(\overline z) = 0$. By Corollary \ref{reflected harmonics are linear}, we can find a $A \in \RR$ such that $h(z) = A\Im z$. By our assumption that $C = \gamma = 0$, it follows that $A = 0$, so $h = 0$. But
-    $$u_1(z + i\varepsilon) = \lim_{j \to \infty} h_j(z) + \int_{-\infty}^\infty P(z, x)\psi_j(x)u_1(x + i\varepsilon)~dx = \int_{-\infty}^\infty P(z, x)u_1(x + i\varepsilon) ~dx.$$
+  \begin{align*}u_1(z + i\varepsilon) &= \lim_{j \to \infty} h_j(z) + \int_{-\infty}^\infty P(z, x)\psi_j(x)u_1(x + i\varepsilon)~dx \\
+  &= \int_{-\infty}^\infty P(z, x)u_1(x + i\varepsilon) ~dx.\end{align*}
     The lemma then follows by changing variables.
 \end{proof}
     Since $\gamma = 0$ and $u \leq 0$, for every $\delta > 0$ and every $x \in \RR$, we can choose $y > 0$ so large that $u(x + iy) > -\delta y$. Since $G$ vanishes at infinity, so does $u_2$, so if $y$ is chosen even larger still, we can arrange that $u_1(x + iy) > -\delta y$. By Lemma \ref{approximate sigma rep} with a change of variable in $y$,
@@ -402,8 +697,17 @@ $$u_1(z) = \int_{-\infty}^\infty P(z, x) \sigma(x) ~dx.$$
 \end{proof}
 
 
-
-\section{Proof of Titchmarsh's theorem}
+\section{Titchmarsh's theorem}
+\label{Titchmarsh section}
+Our goal is to prove the following theorem, which was first proven by Titchmarsh \cite{titchmarsh1926zeros}.
+The proof we give is based on the proof of Beurling that was first published in \cite[Chapter XVI]{hormander2004analysis}.
+\begin{theorem}[Titchmarsh]
+    \index{Titchmarsh's theorem}
+    \label{Titchmarsh I}
+    Let $\mu$ be a distribution with $\ch \supp \mu = [a, b]$. Let $N(R) = N(R, 0, 2\pi)$ be the zero-counting function for $\hat \mu$. Then
+    $$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b-a}{\pi}.$$
+\end{theorem}
+To prove Theorem \ref{Titchmarsh I}, we will need to appeal to the following application of the Riesz representation formula.
 \begin{lemma}
     \label{gamma in mean}
     Let $u$ be an imaginary-sublinear subharmonic function on $\CC_+$, and let $\gamma$ be as in Lemma \ref{imaginary sublinear limit}. Then
@@ -429,7 +733,7 @@ $$\frac{u(tz)}{t} - \gamma \Im z = \int_{-\infty}^\infty P(z, x) \sigma(x) ~dx +
 \end{proof}
 
 \begin{proof}[Proof of Titchmarsh's theorem]
-Fix a distribution $\mu$ on $\RR$ with $\ch \supp \mu = [a, b]$. By the Paley-Wiener theorem, $\hat \mu$ is an entire function and $\log |\hat \mu|$ is an imaginary-sublinear subharmonic function. Viewing $\log |\hat \mu|$ as a function on $\CC_+$ and taking $\gamma$ as in Lemma \ref{imaginary sublinear limit}, we have $\gamma = b$, since the estimate in the Paley-Wiener theorem is sharp. On the other hand, viewing $\log |\hat \mu|$ as a function on $\CC_-$, we have $\gamma = a$. Let $Z$ be the multiset of zeroes of $\hat \mu$ with repetition.
+Fix a distribution $\mu$ on $\RR$ with $\ch \supp \mu = [a, b]$. By the Paley-Wiener theorem, Theorem \ref{PWS theorem}, $\hat \mu$ is an entire function and $\log |\hat \mu|$ is an imaginary-sublinear subharmonic function. Viewing $\log |\hat \mu|$ as a function on $\CC_+$ and taking $\gamma$ as in Lemma \ref{imaginary sublinear limit}, we have $\gamma = b$, since the estimate in the Paley-Wiener theorem is sharp. On the other hand, viewing $\log |\hat \mu|$ as a function on $\CC_-$, we have $\gamma = a$. Let $Z$ be the multiset of zeroes of $\hat \mu$ with repetition.
 
 Let $h(t) = at$ for $t < 0$, $h(t) = bt$ for $t > 0$. Then $h'$ is a rescaled Heaviside function, so $h'' = (b-a)\delta_0$. By Lemma \ref{gamma in mean}, we have
 $$\lim_{t \to \infty} \frac{\log |\hat \mu(t\zeta)|}{t} = h(\Im \zeta)$$
@@ -438,27 +742,24 @@ $$\lim_{t \to \infty} \frac{2\pi}{t} \sum_{z \in Z} \delta_{z/t}(w) = (b-a)\delt
 in the sense of distributions.
 
 Integrating both sides,
-$$\int_{D(0, 1)} \lim_{t \to \infty} \frac{2\pi}{t} \sum_{z \in Z} \delta_{z/t} = \int_{D(0, 1)} (b-a)\delta_0(\Im w) ~dw = \int_{-1}^1 b - a ~dw = 2(b - a).$$
+\begin{align*}
+\int_{D(0, 1)} \lim_{t \to \infty} \frac{2\pi}{t} \sum_{z \in Z} \delta_{z/t} &= \int_{D(0, 1)} (b-a)\delta_0(\Im w) ~dw \\
+&= \int_{-1}^1 b - a ~dw = 2(b - a).\end{align*}
 Rewriting the left-hand side, we have
 $$\lim_{R \to \infty} \frac{2\pi }{R} \int_{D(0, R)} \sum_{z \in Z} \delta_z = \lim_{R \to \infty} \frac{2\pi N(R)}{R}.$$
-Dividing both sides by $2\pi$, we see that
-$$\lim_{R \to \infty} \frac{N(R)}{R} = \frac{b - a}{\pi}.$$
-This proves Titchmarsh's theorem.
+Dividing both sides by $2\pi$, we prove Titchmarsh's theorem.
 \end{proof}
 
-\chapter{Other preliminaries}
-TODO Clean me up
-
-
-\section{Noncommutative sequence spaces}
-We review the theory of trace-class operators, which are those operators $T$ such that $T$ has a well-defined trace and $1 + T$ has a well-defined determinant. To do this, we will need the theories of compact and Hilbert-Schmidt operators as well.
+\section{The Schatten classes}
+\label{noncommutative sequence space section}
+We review the theory of operators of trace-class, which are those operators $T$ such that $T$ has a well-defined trace and $1 + T$ has a well-defined determinant. To do this, we will need the theories of compact and Hilbert-Schmidt operators as well.
 
 Fix a Hilbert space $H$. If $T \in B(H)$, then $T^*T$ is a positive operator, so has a unique positive square root $|T| = \sqrt{T^*T}$, which we can reasonably think of as the absolute value of $T$. If $H$ is actually finite-dimensional, then the trace of $T$ is given by $\tr T = \sum_j \langle Te_j, e_j\rangle$ for any and every orthonormal basis $(e_j)_j$. So it is reasonable to define $\tr T$ this way whenever $H$ is separable (hence has a countable orthonormal basis), though the series may not converge in that case. Henceforth we will assume that $H$ is separable.
 
 \begin{definition}
-The \dfn{trace-class norm} is defined by $||T||_1 = \tr |T|$, and the \dfn{Hilbert-Schmidt norm} is defined by $||T||_2^2 = \tr(T^*T)$. If $||T||_1$ (resp. $||T||_2$) is finite, we say that $T$ is a \dfn{trace-class operator} (resp. \dfn{Hilbert-Schmidt operator}). The space of trace-class operators is known as $B^1(H)$ and the space of Hilbert-Schmidt operators is known as $B^2(H)$.
+The \dfn{trace-class norm} is defined by $||T||_1 = \tr |T|$, and the \dfn{Hilbert-Schmidt norm} is defined by $||T||_2^2 = \tr(T^*T)$. If $||T||_1$ (resp. $||T||_2$) is finite, we say that $T$ is an \dfn{operator of trace class} (resp. \dfn{Hilbert-Schmidt operator}). The trace class is known as $B^1(H)$ and the space of Hilbert-Schmidt operators is known as $B^2(H)$.
 \end{definition}
-Let $X$ be a ``good" measure space. Then one can think of $B^1(L^2(X))$ as the ``noncommutative analogue" of $L^1(X)$. In this metaphor, the Hilbert space of Hilbert-Schmidt operators $B^2(L^2(X))$ corresponds to $L^2(X)$, and the space $B^\infty(L^2(X))$ of compact operators corresponds to $L^\infty(X)$. This metaphor is especially good when $X$ is a discrete space, for then we have the chains of inclusions $B^p(L^2(X)) \subseteq B^q(L^2(X))$ and $L^p(X) \subseteq L^q(X)$ for $1 \leq q \leq p \leq \infty$.
+One can define spaces $B^p(H)$ for any $p \in [1, \infty]$; these are known as \dfn{Schatten classes}. However, we will only need $p=1,2,\infty$.
 
 Letting $||\cdot||_\infty$ denote the usual operator norm, we observe that
 \begin{align*}
@@ -491,7 +792,7 @@ $$Ku = \mathcal F^{-1}(\hat f \mathcal F(gu)).$$
 Then $||K||_2 = ||f||_2||g||_2$, so $K \in B^2(L^2(\RR))$.
 \end{lemma}
 \begin{proof}
-By an approximation argument, we may assume that $f$, $g$, and $u$ are Schwartz-class functions. Then
+By an approximation argument, we may assume that $f$, $g$, and $u$ are Schwartz. Then
 \begin{align*}
 Ku(x) &= \frac{1}{2\pi} \int_{-\infty}^\infty e^{i\xi x} \hat f(\xi) \widehat{gu}(\xi) ~d\xi \\
   &= \frac{1}{2\pi} \int_{-\infty}^\infty \int_{-\infty}^\infty e^{i\xi(x - y)} \hat f(\xi) g(y) u(y) ~dy ~d\xi\\
@@ -522,23 +823,26 @@ $$||f||_2^2 = \frac{1}{2\pi} \int_{-\infty}^\infty \frac{d\xi}{\xi^2 + |\lambda|
 wherefore the claim.
 \end{proof}
 
-A trace-class operator $T$ can clearly be approximated by finite-rank operators in $||\cdot||_1$, and the compact operators are those that can be approximated by finite-rank operators in $||\cdot||_\infty$. Therefore a trace-class operator is compact. In particular, its spectrum is countable and its only limit point is $0$ (provided that $H$ is infinite-dimensional). So every element of the spectrum is an eigenvalue except possibly $0$. (That is, every element of the spectrum of $1 + T$ is an eigenvalue except possibly $1$.) We recall that the multiplicity of an eigenvalue $\lambda$ of $1 + T$ is defined to be the dimension of the space of vectors annihilated by $(T - \lambda)^j$ for some $j \geq 0$.
+An operator $T$ of trace class can clearly be approximated by finite-rank operators in $||\cdot||_1$, and the compact operators $B^\infty(H)$ are those that can be approximated by finite-rank operators in $||\cdot||_\infty$. Therefore if an operator is of trace class, then it is compact.
+In particular, its spectrum is countable and its only limit point is $0$ (provided that $H$ is infinite-dimensional). So every element of the spectrum is an eigenvalue except possibly $0$. (That is, every element of the spectrum of $1 - T$ is an eigenvalue except possibly $1$.) We recall that the multiplicity of a nonzero eigenvalue $\lambda$ of $1 - T$ is defined to be the dimension of the space of vectors annihilated by $(T - \lambda)^j$ for some $j \geq 0$ large enough; for compact operators, the kernels of $(T - \lambda)^j$ stabilize as $j \to \infty$, so the multiplicity of $\lambda$ is well-defined.
+
+We now use the fact that finite-rank operators are dense in $B^1(H)$ to define an infinite-dimensional determinant. For the proofs in what follows, see Dyatlov and Zworski \cite[Appendix B]{dyatlov2019mathematical}.
+Recall that if $T$ is a finite-rank operator, then all but finitely many of the eigenvalues (counting multiplicity) of $A$ are zero, so the determinant
+$$\det(1-T) = \prod_{\lambda \in \Spec T} 1 - \lambda$$
+is a finite product, and therefore makes sense.
+\begin{lemma}
+\label{fredholm determinant is well-defined}
+Define a map on finite-rank operators by $T \mapsto \det(1-T)$. This map is continuous for the trace-class norm, so extends uniquely to a continuous map $B^1(H) \to \CC$.
+\end{lemma}
 \begin{definition}
-Let $T \in B^1(H)$ and let $(\lambda_j)_j$ be an enumeration of the spectrum of $1 + T$, counting multiplicities. Then the \dfn{Fredholm determinant} of $1 + T$ is defined by
-$$\det(1 + T) = \prod_j \lambda_j.$$
+Let $T \in B^1(H)$. The \dfn{Fredholm determinant} of $1 - T$ is defined for finite-rank operators by $\det(1 - T)$, and for general $T$ by Lemma \ref{fredholm determinant is well-defined}.
 \end{definition}
 \begin{lemma}
-The infinite product in the definition of the Fredholm determinant converges absolutely, satisfying the estimate
-$$|\det(1 + T)| \leq e^{||T||_1}.$$
-One has $\det(1 + T) = 0$ if and only $1 + T$ is not injective. If $H$ is finite-dimensional, then the Fredholm determinant agrees with the classical determinant.
+Let $T \in B^1(H)$. Then
+$$|\det(1 - T)| \leq e^{||T||_1},$$
+and $\det(1 - T) = 0$ if and only $1 - T$ is not injective. If we enumerate $\Spec T$ so that $|\lambda_0| \geq |\lambda_1| \geq \cdots$, then
+$$\det(1-T) = \prod_{j=0}^\infty 1 - \lambda_j.$$
 \end{lemma}
-\begin{proof}
-The spectrum of $T$ is given by $(\lambda_j - 1)_j$, so
-$$|\det(1 + T)| \leq \exp\left(\sum_j |\lambda_j - 1|\right) = \exp(\tr|T|) = e^{||T||_1} < \infty.$$
-If $1 + T$ is injective, then $\ker(1 + T) = 0$, so $0$ is not an eigenvalue of $1 + T$. Since $0$ is not a limit point of the spectrum of $1 + T$, it follows that there is a $\varepsilon > 0$ such that for every $j$, $|\lambda_j| > \varepsilon$. In particular, $\det(1 + T) \neq 0$. The converse is easy.
-
-Finally, if $H$ is finite-dimensional, we can write $1 + T$ in a Jordan canonical form $J$, and the classical determinant of $1 + T$ will be the product of the diagonal entries of $J$, which are exactly the eigenvalues of $1 + T$, which appear as many times as their multiplicities.
-\end{proof}
 
 By the spectral theorem for compact operators, a compact operator $T \in B^\infty(H)$ admits a singular value decomposition
 $$Tu = \sum_{n=1}^\infty \rho_n \langle u, e_n\rangle f_n$$
@@ -555,555 +859,77 @@ We define a linear map $b: H \otimes H \to B^1(H)$ by
 $$b(f \otimes g)u = \langle u, f \rangle g.$$
 \end{definition}
 
-\section{The Riemann-Lebesgue lemma}
-\begin{lemma}
-\label{RiemannLebesgue}
-Let $(\xi_j)_j$ be a sequence in $\CC$ such that as $j \to \infty$, $|\Re \xi_j| \to \infty$ while $|\Im \xi_j|$ remains bounded. Suppose that $f \in L^1(\RR)$. Then $\hat f(\xi_j) \to 0$ as $j \to \infty$.
-\end{lemma}
-\begin{proof}
-We first check this when $f$ is the indicator function of $[a, b] \subset \RR$. Assume that $M > 0$ is so large that $|\Im \xi_j| \leq M$ and $\max(a, b) \leq M$. Then
-$$|\hat f(\xi_j)| = \left|\int_{-\infty}^\infty f(x)e^{-ix\xi_j} ~dx\right| = \frac{|e^{-i\xi_jb} - e^{-i\xi_ja}|}{|\xi_j|} \leq \frac{\exp(2M^2)}{|\xi_j|}$$
-which vanishes as $j \to \infty$. Linearity extends this argument to simple functions.
-
-Let $\varepsilon > 0$. If $f$ is a general function in $L^1(\RR)$, let $g$ be a simple function such that $||f - g||_{L^1(\RR)} < \varepsilon$. Since the lemma holds for $g$, we can find a $J > 0$ so large that for every $j > J$, $|\hat g(\xi_j)| < \varepsilon$.
-Then, for any such $j$,
-$$\left|\int_{-\infty}^\infty f(x) e^{-ix\xi_j} ~dx\right| \leq ||f - g||_{L^1(\RR)} + \left|\int_{-\infty}^\infty g(x)e^{-ix\xi_j} ~dx\right| < 2\varepsilon.$$
-Therefore $f(\xi_j) \to 0$ as $j \to \infty$.
-\end{proof}
 
 
-\section{Weierstrassian products}
-TODO
+\chapter{Review of scattering theory}
+\label{review of scattering theory}
+In this chapter we review potential scattering for compactly supported and super-exponentially decreasing potentials on $\RR$. The results in Sections \ref{beginning of scat review}-\ref{end of scat review} will often be used without comment in Chapter \ref{SED potentials chapter}, and many are stated without proof, but can reviewed in \cite{dyatlov2019mathematical} and \cite{tang2007potential}.
+In Section \ref{BW section} we fill in the details of the proof of the Breit-Wigner formula outlined by Dyatlov and Zworski in \cite{dyatlov2019mathematical}; Chapter \ref{SED potentials chapter} is independent of this section, which relies on Theorem \ref{Titchmarsh I}.
 
-Suppose that $\mu$ is a compactly supported distribution which is not a polynomial, and let $(z_n)_n$ be the sequence of zeroes of $\hat \mu$, counting multiplicity. Since $\hat \mu$ is entire and nonzero, the sequence of $z_n$ cannot cluster anywhere in $\CC$, so clusters at $\infty$, and we can sensibly rearrange the $z_n$ so that $|z_n|$ is monotonically increasing.
-\begin{theorem}
-Let $\mu$ be a distribution with $\ch \supp \mu = [a, b]$ which is not a polynomial, and let $(z_n)_n$ be the sequence of zeroes of $\hat \mu$, counting multiplicity and monotonically converging to $\infty$. If $\hat \mu(0) \neq 0$, then
-$$\hat \mu(z) = \hat \mu(0) e^{-i(a+b)z/2}\prod_n \left(1 - \frac{z}{z_n}\right),$$
-the product being conditionally convergent.
-\end{theorem}
-\begin{proof}
+\section{The Schr\"odinger picture}
+\label{beginning of scat review}
+In the Schr\"odinger picture of quantum mechanics, one wishes to solve the Schr\"odinger equation
+\begin{equation}
+\label{Schrodinger equation}
+Hu = \partial_tu.
+\end{equation}
+Here $H$ is a fixed self-adjoint operator known as the Hamiltonian and a solution $u = u(t, x)$ is known as a wavefunction, especially if $u(t) \in L^2(\RR)$.
+We will be interested in $H = H_V$, where $H_V = D^2_x + V$, and $V$ is multiplication by a function known as the potential.
+Since $H_V$ is invariant under time-translation, we can solve (\ref{Schrodinger equation}) using separation of variables, so that
+$$u(t, x) = e^{-itH_V}u_0(x).$$
+Here $u_0(x)$ is an initial datum and $e^{-itH_V}$ is the one-parameter family of unitary operators defined by requiring that if $H_Vv_\lambda = \lambda^2v_\lambda$, then
+$$e^{-itH_V}v_\lambda = e^{-it\lambda^2}v_\lambda.$$
+By the spectral theorem for unbounded self-adjoint operators, or, equivalently, Borel functional calculus, $u_0$ can always be written as a direct integral of eigenfunctions of $H_V$,
+so $e^{-itH_V}$ is well-defined and we might as well assume that $u_0 = v_\lambda$ is an eigenfunction, with eigenvalue $\lambda^2 \in \RR$.
+The physical interpretation of this situation is that $v_\lambda$ is a wave with energy $\lambda^2$.
+The problem of solving (\ref{Schrodinger equation}) then reduces to the problem of diagonalizing $H_V$.
 
-\end{proof}
+By definition, the resolvent operator $R_V(\lambda) = (H_V - \lambda^2)^{-1}$ is the right inverse of the Schrödinger operator $H_V - \lambda^2$. The definition of $R_V(\lambda)$ means that it is the linear operator such that
+$$(H_V - \lambda^2)R_V(\lambda) f = f$$
+for all compactly supported $f \in L^2$, assuming that such an operator in fact exists and is unique.
+In particular, if $\lambda^2$ is an eigenvalue of $H_V$, then $R_V(\lambda)$ cannot exist.
 
-
-\chapter{Compactly supported potentials}
-%\begin{quote}
-%  ``EVERY MORNING I WAKE UP AND OPEN PALM SLAM A BOOK ONTO THE DESK. IT'S MATHEMATICAL THEORY OF SCATTERING RESONANCES BY DYATLOV AND ZWORSKI AND RIGHT THEN AND THERE I START DOING THE MOVES ALONGSIDE WITH THE AUTHORS, DYATLOV AND ZWORSKI. I DO EVERY PROOF AND I DO EVERY PROOF HARD. MAKIN WHOOSHING SOUNDS WHEN I MEROMORPHICALLY CONTINUE THE RESOLVENT INTO THE LOWER HALF PLANE OR EVEN WHEN I MESS UP TECHNIQUE. NOT MANY CAN SAY THEY CAN BOUND THE NUMBER OF RESONANCES OF A BLOCK BOX OPERATOR. I CAN. I SAY IT AND I SAY IT OUTLOUD EVERYDAY TO PEOPLE IN MY COLLEGE CLASS AND ALL THEY DO IS PROVE PEOPLE IN COLLEGE CLASS CAN STILL BE IMMATURE JEKRS. AND IVE LEARNED ALL THE LEMMAS AND IVE LEARNED HOW TO MAKE MYSELF AND MY APARTMENT LESS LONELY BY SHOUTING EM ALL. 2 HOURS INCLUDING WIND DOWN EVERY MORNIng"
-
-%  -Analytic Memes for Estimate-Loving Teens
-%\end{quote}
-
-Recall that if $A$ is a quantum observable, then the spectrum of $A$ consists of the possible values $\lambda^2$ that the observable can take when a state $\psi$ is measured. Moreover, $\psi$ is a pure state for measurement $\lambda^2$ (i.e. an observer is guaranteed to measure $\psi$ in state $\lambda^2$) if and only if $\psi$ solves the eigenvalue equation $A\psi = \lambda^2 \psi$. So we are especially interested in the eigenvalue equation $(A - \lambda^2)\psi = 0$.
-
-Let $V \in L^\infty_{comp}(\RR \to \RR)$. We view $V$ as a potential, and define the Hamiltonian
-$$H_V = D_x^2 + V$$
-where $D_x = -i\partial_x$. We can think of $D_x^2$ as the one-dimensional Laplacian $-\Delta_x$, or equivalently as the momentum observable. Since $\supp V$ is compact, a solution $\psi$ of the time-independent Schrödinger equation
-$$(H_V - \lambda^2)\psi = 0$$
-with energy $\lambda^2$ has the form
-$$\psi(x) = Ae^{i\lambda x} + Be^{-i\lambda x},$$
-for $x$ far from the support of $\supp V$ -- so $\psi$ consists of plane waves of frequency $\lambda$. (This is our reason for writing the eigenvalue as $\lambda^2$.) Clearly $\psi$ is not normalizable (i.e. $\psi \notin L^2(\RR \to \CC)$), essentially because $H_V$ has continuous spectrum. On the other hand, since $V$ is bounded, it is possible for a particle to tunnel through the barrier $\supp V$. This mathematically manifests as relations between the coefficients $A,B$: scattering.
-
-More generally, we will study the inhomogeneous Schrödinger equation $(H_V - \lambda^2)\psi = f$, for $f \in L^2_{comp}(\RR)$. By definition, the resolvent $R_V(\lambda)$ tells us how to solve the Schrödinger equation: it is an operator $L^2_{comp}(\RR) \to L^2_{loc}(\RR)$ satisfying the equation
-$$(H_V - \lambda^2)R_V(\lambda)f = f.$$
+Viewing the resolvent $R_V$ as a function valued in $B(L^2_{comp}(\RR) \to L^2_{loc}(\RR))$, we want to understand the relationship between the poles of the resolvent and the scattering behavior of $H_V$; that is, the behavior of solutions $u$ to the eigenvalue equation
+$$H_Vu = \lambda^2u$$
+at infinity, assuming that $V$ is zero at infinity.
 
 \section{Analytic continuation}
-Viewing the resolvent $R_V$ as a function valued in $B(L^2_{comp}(\RR) \to L^2_{loc}(\RR))$, we want to understand the relationship between the poles of the resolvent $R_V$ function and the scattering behavior of $H_V$.
+The trouble is that $R_V(\lambda)$ may not actually exist if $\Im \lambda$ is not too large and $V$ does not decay fast enough.
+In fact, if $V$ is compactly supported, then $R_V$ will admit a meromorphic continuation to all of $\CC$. However, if $V$ is simply super-exponentially decreasing, we may not have this luxury. So we consider certain weighted resolvents to act as a suitable substitute.
 
-We first show that $R_V(\lambda)$ is a meromorphic function in $\lambda$. To do this, we consider the \dfn{resolvent function}, $(x, y) \mapsto R_V(\lambda; x, y)$, defined by
+We introduce the \dfn{resolvent function}, $(x, y) \mapsto R_V(\lambda; x, y)$, defined by
 $$R_V(\lambda)f(x) = \int_{-\infty}^\infty f(y) R_V(\lambda; x, y) ~dy.$$
 Since $R_V(\lambda)$ is a right inverse to $H_V - \lambda^2$, we can appropriately view the resolvent function as the Green function of $H_V - \lambda^2$ on $\RR$.
+The resolvent $R_0$ is known as the free resolvent.
 
-\begin{definition}
-The \dfn{free resolvent} is $R_0(\lambda)$.
-\end{definition}
 When we study the free resolvent, we are just solving the Schrödinger equation for a free particle, so
 $$R_0(\lambda; x, y) = \frac{i}{2\lambda} e^{i\lambda|x - y|}.$$
-In fact,
-$$2i\lambda (H_0 - \lambda^2)R_0(\lambda; x, 0) = (\Delta_x + \lambda^2) e^{i\lambda|x|} = -\lambda^2 e^{i\lambda|x|} + \lambda^2 e^{i\lambda|x|} = -2i\delta_0(x).$$
-Now if $\Im \lambda \leq 0$, then we have no decay in the plane waves $e^{i\lambda|x - y|}$ and so $R_0$ is not a bounded operator on $L^2$. The spectrum of $H_0 = -\Delta$ consists of $\RR_+$, so if $\Im \lambda > 0$, it follows from the spectral radius theorem that
+To see this, we just have to check
+\begin{align*}
+2i\lambda (H_0 - \lambda^2)R_0(\lambda; x, 0) &= (\Delta_x + \lambda^2) e^{i\lambda|x|} = -\lambda^2 e^{i\lambda|x|} + \lambda^2 e^{i\lambda|x|} \\
+&= -2i\delta_0(x).
+\end{align*}
+Thus $R_0(\lambda)$ is in fact the Green function for $H_0 - \lambda^2$.
+
+Now if $\Im \lambda \leq 0$, then we have no decay in the plane waves $e^{i\lambda|x - y|}$, so $R_0(\lambda)$ does not carry $L^2$ to itself.
+The spectrum of $H_0 = -\Delta$ consists of $\RR_+$, so if $\Im \lambda > 0$, it follows from the spectral radius theorem that
 \begin{equation}
 \label{bound on R_0}
   ||R_0(\lambda)||_{L^2 \to L^2} = \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} = \frac{1}{d(\RR_+, \lambda^2)}.
 \end{equation}
 Therefore $R_0(\lambda)$ is bounded on $L^2$ if $\Im \lambda > 0$. In particular, $R_0$ is holomorphic on $\CC_+$.
 
-\begin{lemma}
-  Let $\rho \in C^\infty_{comp}(\RR)$ be such that $\rho V = V$. Then
-$$(1 + VR_0(\lambda))^{-1}\rho = \rho(1 + VR_0(\lambda)\rho)^{-1}.$$
-\end{lemma}
-\begin{proof}
-  We have
-  $$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.$$
-  Suppose $\rho$ is supported on $[-R, R]$. Then
-  $$\supp (1 + VR_0(\lambda))\rho \subseteq [-R, R]$$
-  so it follows that
-  $$\rho(1 + VR_0(\lambda))\rho = (1 + VR_0(\lambda))\rho.$$
-  Inverting the operator $1 + VR_0(\lambda)$, the theorem follows.
-\end{proof}
-
-\begin{theorem}
-\label{meromorphic continuation with compact support}
-The family of operators
-$$R_V: L^2_{comp} \to L^2_{loc}$$
-is meromorphic on $\CC$.
-\end{theorem}
-\begin{proof}
-By the definition of the free resolvent, we have
-$$(H_V - \lambda^2)R_V(\lambda) = 1 + VR_0(\lambda).$$
-If $\Im \lambda$ is very large, then $||VR_0(\lambda)||_{L^2 \to L^2}$ is very small, so the formal Neumann series computation
-$$(1 + VR_0(\lambda))^{-1} = \sum_{k=0}^\infty (-VR_0(\lambda))^k$$
-is valid. Thus $(1 + VR_0(\lambda))^{-1}$ is a holomorphic family of operators on $L^2$, for $\Im \lambda$ sufficiently large.
-
-With $\rho$ a cutoff such that $\rho V = V$, $VR_0(\lambda)\rho = V\rho R_0(\lambda)\rho$ is a meromorphic family of compact operators $L^2 \to H^2_{comp}$, so $1 + VR_0(\lambda)\rho$ is a meromorphic family of Fredholm operators. It follows that
-$$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}$$ is a meromorphic family of operators $L^2 \to L^2_{loc}$. Taking $R \to \infty$, the theorem follows.
-\end{proof}
-
-Since we have assumed that $V$ and $f$ have compact support, if $|x|$ is large, then
-$$(H_0 - \lambda^2)R_V(\lambda)f(x) = 0.$$
-So if we let $\psi = R_V(\lambda)f$, it follows from some calculus that we can find constants $A_+, B_-$ such that for all $x$ large enough,
-$$\psi(x) = a_+e^{i\lambda x} + b_+e^{-i\lambda x}.$$
-Similarly, we can find $A_-, B_+$ such that for every $x$ with $-x$ large enough,
-$$\psi(x) = a_-e^{-i\lambda x} + b_-e^{i\lambda x}.$$
-In case $\lambda > 0$, we can view waves of the form $C e^{i\lambda x}$ as ``moving to the right with frequency $\lambda$" and waves of the form $C e^{-i\lambda x}$ as ``moving to the left with frequency $\lambda$." Of course, this distinction makes sense for any fixed $\lambda \in \CC$, even if $\lambda$ is not a positive real number. So we make the following definition.
-\begin{definition}
-An \dfn{incoming wave} is a linear combination of waves of the form $e^{i\lambda x}$ for $x \ll 0$ and $e^{-i\lambda x}$ for $x \gg 0$. An \dfn{outgoing wave} is a linear combination of waves of the form $e^{-i\lambda x}$ for $x \ll 0$ and $e^{i\lambda x}$ for $x \gg 0$.
-\end{definition}
-
-Let us classify which outgoing solutions can be solutions of the eigenvalue equation
-$$H_Vu = \lambda^2u.$$
-Our goal is the following theorem.
-\begin{theorem}
-\label{real poles are zero}
-Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Then $\lambda$ is not a pole of $R_V$.
-\end{theorem}
-\begin{lemma}
-\label{laurent expansion of the resolvent}
-Suppose that $R_V$ has a pole at $\lambda_0 \neq 0$. Suppose that
-$$R_V(\lambda) = \frac{P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{P_1}{\lambda - \lambda_0} + Q(\lambda)$$
-is the Laurent expansion of $R_V$ at $\lambda_0$ (so $Q$ is holomorphic). Then for every $f \in L^2_{comp}$, $u = P_Nf$ is an outgoing solution of the eigenvalue equation $H_Vu = \lambda_0^2u$.
-\end{lemma}
-\begin{proof}
-We have
-\begin{align*}
-  (\lambda - \lambda_0)^N(H_V - \lambda^2)R_V(\lambda)f &= (\lambda - \lambda_0)^N (H_V - \lambda^2)\left(\frac{u}{(\lambda - \lambda_0)^N} + O((\lambda - \lambda_0)^{1-N}f)\right)\\
-  &= (H_V - \lambda^2)u + O((\lambda - \lambda_0)f)
-\end{align*}
-and taking $\lambda \to \lambda_0$ we see that $(H_V - \lambda_0^2)u = 0$. Therefore $u$ solves the eigenvalue equation. To see that $u$ is outgoing, choose $\rho \in C^\infty_{comp}(\RR)$ such that $\rho V = V$. Then
-$$R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} = R_V(\lambda)\rho$$
-so $(1 + VR_0(\lambda)\rho)^{-1}$ is meromorphic with a pole of order $\leq N$ at $\lambda_0$. Write
-$$(1 + VR_0(\lambda)\rho)^{-1} = \frac{\tilde P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{\tilde P_1}{\lambda - \lambda_0} + \tilde Q(\lambda)$$
-for the Laurent expansion of $(1 + VR_0(\lambda)\rho)^{-1}$ at $\lambda_0$. Then
-$$P_N(\rho(L^2(\RR))) = R_0(\lambda) \rho \tilde P_N(L^2(\RR)) \subseteq R_0(\lambda)(L^2_{comp}(\RR)).$$
-Since $\rho$ was arbitrary, it follows that $u \in R_0(\lambda)(L^2_{comp}(\RR))$. Since $R_0$ is the outgoing free resolvent, $u$ is outgoing.
-\end{proof}
-
-\begin{lemma}
-\label{no outgoing solutions, part 1}
-Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Suppose $H_Vu = \lambda^2u$. If we expand $u$ as
-$$u(x) = \begin{cases}
-  A_+ e^{i\lambda x} + B_-e^{-i\lambda x}, &x \gg 0,\\
-  A_- e^{i\lambda x} + B_+e^{-i\lambda x}, &x \ll 0,
-\end{cases}$$
-then $|A_+|^2 + |B_+|^2 = |A_-|^2 + |B_-|^2$.
-\end{lemma}
-\begin{proof}
-Since $\lambda \in \RR$, $H_V - \lambda^2$ is a real operator, so $(H_V - \lambda^2) \overline u = 0$. Therefore the Wronskian
-$$\begin{vmatrix}
-u&\overline u\\u' & \overline u'
-\end{vmatrix} = -2i\lambda \begin{cases}
-|A_+|^2 + |B_-|^2, &x \gg 0,\\
-|A_-|^2 + |B_+|^2, &x \ll 0,
-\end{cases}$$
-is constant so $|A_+|^2 + |B_-|^2 = |A_-|^2 + |B_+|^2$.
-\end{proof}
-
-We will need the following lemma to show that certain solutions are unique. It guarantees that a wave's transmission cannot be completely intercepted by a bounded potential, and so must scatter. Note that this stands in contrast to, say, the infinite potential well that is taught in introductory quantum mechanics class.
-\begin{lemma}
-\label{bounded potentials must scatter}
-Let $u \in L^\infty(\RR)$, $W \in L^\infty(\RR)$, and $\supp u \subseteq [0, \infty)$. If $H_Wu = 0$, then $u = 0$.
-\end{lemma}
-\begin{proof}
-Let $h \in (0, 1)$ and $v(x) = e^{-x/h}u(x)$. Since $u$ is supported in the right half-ray, it follows that $v \in L^\infty(\RR)$ and that $v$ is rapidly decaying. Therefore $v \in L^2(\RR)$. For $\xi \in \RR$, $|i - h\xi|^2 \geq 1$. Therefore
-$$||v||_{L^2(\RR)}^2 = ||\hat v||_{L^2(\RR)}^2 \leq \int_{-\infty}^\infty |(h\xi - i)^2\hat v(\xi)|^2 ~d\xi.$$
-The inverse Fourier transform of $(h\xi - i)^2 = h^2\xi^2 - 2ih\xi - 1$ is
-$$h^2D^2_x - 2ihD_x - 1 = h^2 e^{-x/h} D^2 e^{x/h}.$$
-So by the Plancherel formula,
-\begin{align*}
-  ||v||_{L^2(\RR)} &\leq \int_{-\infty}^\infty |e^{-x/h}(hD_x)^2 u(x)|^2 ~dx
-  \\&= h^2 \int_{-\infty}^\infty |e^{-x/h}W(x)u(x)|^2 ~dx
-  \\&\leq h^2 ||W||_{L^\infty(\RR)} ||v||_{L^2(\RR)}.
-\end{align*}
-Taking $h \to 0$, we see that $v = 0$, but $e^{-x/h} \neq 0$, so $u = 0$.
-\end{proof}
-
-\begin{corollary}
-\label{no outgoing solutions, part 2}
-Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. If $H_Vu = \lambda^2u$, then $u$ is not outgoing.
-\end{corollary}
-\begin{proof}
-Let $A_\pm,B_\pm$ be as in Lemma \ref{no outgoing solutions, part 1}. If $u$ is outgoing and not compactly supported, then $|A_+|^2 + |B_-|^2 > 0$ while $|A_-|^2 + |B_+|^2 = 0$. Therefore $u$ is compactly supported, but after translating the support of $u$, we may assume that $\supp u \subseteq [0, \infty)$. But then Lemma \ref{bounded potentials must scatter} implies that $u = 0$.
-\end{proof}
-
-\begin{proof}[Proof of Theorem \ref{real poles are zero}]
-Suppose that $\lambda$ is a pole. By Lemma \ref{laurent expansion of the resolvent}, there is an outgoing function $u$ such that $H_Vu = \lambda^2u$. This contradicts Corollary \ref{no outgoing solutions, part 2}.
-\end{proof}
-
-
-\section{The transmission coefficients}
-We construct the eigenfunctions for the continuous spectrum of $H_V$; namely, for $x \in \RR$, $\lambda \in \RR$, $\lambda \neq 0$,
-$$e_\pm(x, \lambda) = e^{\pm i\lambda x} - R_V(\lambda)(V(x)e^{\pm i\lambda x}).$$
-By Theorem \ref{real poles are zero}, $\lambda$ is not a pole of $R_V$, so this definition makes sense.
-\begin{lemma}
-The function $e_\pm(\cdot, \lambda)$ is the unique eigenfunction of $H_V$ with eigenvalue $\lambda^2$ which is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
-\end{lemma}
-\begin{proof}
-Clearly $e_\pm$ is an eigenfunction of $H_V$ with eigenvalue $\lambda^2$. If $\rho V = V$, then
-$$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}.$$
-So
-$$R_V(\lambda)(Ve^{i\pm x}) = R_V(\lambda)(\rho Ve^{i\pm x}) = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} Ve^{i\pm x}$$
-which lies in the image of the outgoing resolvent $R_0(\lambda)$, so is outgoing. Therefore $e_\pm$ is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
-
-Assume that $\tilde e_\pm(x, \lambda) = e^{\pm i\lambda x} + g(x, \lambda)$ is also an eigenfunction with $g(\cdot, \lambda)$ outgoing. Then
-$$\tilde e_\pm(x, \lambda) - e_\pm(x, \lambda) = g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x})$$
-is also an eigenfunction, which is outgoing. Then, by Corollary \ref{no outgoing solutions, part 2}, $g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x}) = 0$.
-\end{proof}
-
-In the trivial case $V = 0$, we have $e_\pm(x, \lambda) = e^{\pm i\lambda x}$. In this case, the Wronskian $W(x, \lambda)$ of $e_\pm(x, \lambda)$ is given by $-2i\lambda$. We interpret this as meaning that the entirety of an incoming wave is transmitted through $\ch \supp V = \emptyset$. But even if $V$ is nonzero, $H_V$ does not have a first-order term, so it follows from Abel's Wronskian formula that the function $W(\cdot, \lambda)$ is a constant.
-
-\begin{definition}
-The \dfn{transmission coefficient} $T$ is defined by
-$$T(\lambda) = \frac{iW(\lambda)}{2\lambda}.$$
-\end{definition}
-
-We now define
-$$\phi_\pm(x, \lambda) = \frac{e_\pm(x, \mp \lambda)}{T(\pm \lambda)}.$$
-
-\begin{lemma}
-\label{construction of intertwining, part 1}
-For every $\lambda \in \RR$, the $\phi_\pm$ are functions on $\RR$ such that $(D_x^2 + V - \lambda^2)\phi_\pm = 0$ and such that $\phi_\pm(x, \lambda) = e^{-i\lambda x}$ for $\pm x$ large enough.
-\end{lemma}
-\begin{proof}
-To show that the $\phi_\pm$ are functions, we must show that they do not have poles.
-
-First we rule out the possibility that $T(\pm \lambda) = 0$. If $\lambda \neq 0$, then the $e_\pm(\lambda)$ are linearly independent %TODO
-so $T(\lambda) \neq 0$.
-
-On the other hand, if the $e_\pm(0)$ are linearly dependent, then there is an $m \in \NN$ such that the $\phi_\pm$ have a pole of order of $m$ at $0$. So
-$$\tilde \phi_\pm(x) = \lim_{\lambda \to 0} \lambda^m\phi_\pm(x, \lambda)$$
-is a holomorphic function on a ball close to $0$, and $\tilde \phi_\pm \in \ker \tilde \phi_\pm$. Since, for $\pm x$ large enough, $\tilde \phi_\pm(x) = 0$, we conclude that $\tilde \phi_\pm = \phi_\pm$, a contradiction. So the $e_\pm(0)$ are linearly independent, and $\phi_\pm$ is defined on all of $\RR$. Clearly we have $(D_x^2 + V - \lambda^2)\phi_\pm = 0$, so we are done.
-\end{proof}
-
-We now put
-$$w_\pm(x, y) = \frac{1}{2\pi} \int_{-\infty}^\infty \phi_\pm(x, \lambda)e^{i\lambda y} ~d\lambda$$
-By Lemma \ref{construction of intertwining, part 1}, $A_\pm$ solves the equation
-\begin{align*}
-  (D_x^2 + V(x))w_\pm(x, y) &= D_y^2(x, y),\\
-  w_\pm(x, y) &= \delta(x - y) &\pm x \gg 0.
-\end{align*}
-Rewriting the first equation as
-$$(D_x^2 - D_y^2)w_\pm(x, y) = V(x)w_\pm(x, y)$$
-we see that the $w_\pm$ are the unique solutions to these equations, by uniqueness for the wave equation (since $D_x^2 - D_y^2$ is the wave operator), c.f. \cite[\S2.4.3]{evans10}.
-
-\begin{lemma}
-\label{construction of intertwining, part 2}
-Let $[a, b] = \ch \supp V$. Then there are distributions $X,Y$ such that if $x \gg 0$,
-$$\partial_yw_-(x, y) = X(y - x) + Y(x + y),$$
-such that $\supp X \subseteq [-2(b-a), 0]$ and $\supp Y \subseteq [2a, 2b]$.
-\end{lemma}
-\begin{proof}
-For $x \gg 0$,
-$$(D_x^2 - D_y^2)\partial_yA_-(x, y) = 0$$
-so $\partial_yA_-(x, y)$ solves the wave equation where $x$ is the time variable and $y$ is the space variable. The lemma then follows from the causality properties of the wave equation, c.f. \cite[\S2.4.1a]{evans10}, where $x = a$ is the inital-time slice of $\RR^2$, the future is $x > a$, and the distributions $X,Y$ must have support of measure at most $2|\ch \supp V|$.
-\end{proof}
-
-
-
-\section{The scattering matrix}
-We now define a matrix which encodes how a wave transforms as it passes through $\ch \supp V$.
-
-Let $A_\pm$, $B_\pm$ be the incoming and outgoing coefficients, as in Lemma \ref{no outgoing solutions, part 1}, and let $X, Y$ be as in Lemma \ref{construction of intertwining, part 2}. The scattering matrix maps the incoming coefficients to the outgoing coefficients. Since $X$ is a compactly supported distribution, the Paley-Weiner theorem implies that the Fourier transform $\hat X$ is an entire function, and in particular $1/\hat X$ is a meromorphic function.
-\begin{definition}
-The \dfn{scattering matrix} is the operator $S(\lambda): \CC^2 \to \CC^2$ defined by
-$$S(\lambda)\begin{bmatrix}A_-\\B_-\end{bmatrix} = \begin{bmatrix}A_+\\B_+\end{bmatrix}.$$
-\end{definition}
-\begin{theorem}
-  The scattering matrix $S$ is a meromorphic family of operators on $\CC$ such that
-  $$S(\lambda) = \begin{bmatrix}\frac{i\lambda}{\hat X(\lambda)} & \frac{\hat Y(\lambda)}{\hat X(\lambda)}\\ \frac{\hat Y(-\lambda)}{\hat X(\lambda)} & \frac{i\lambda}{\hat X(\lambda)}\end{bmatrix}.$$
-  If $\lambda \in \CC_+$ is a pole of $S$ and $\Im \lambda > 0$, then $\lambda^2$ is an eigenvalue of $H_V$.
-\end{theorem}
-\begin{proof}
-  By Lemma \ref{construction of intertwining, part 1}, we may write
-\begin{align*}
-  \phi_-(x, \lambda) &= \begin{cases}
-  A(\lambda)e^{i\lambda x} + B(\lambda)e^{-i\lambda x}, &x \gg 0\\
-  e^{-i\lambda x}, &x \ll 0,
-\end{cases}\\
-  \phi_+(x, \lambda) &= \begin{cases}
-  e^{-i\lambda x}, &x \gg 0\\
-  C(\lambda) e^{i\lambda x} + D(\lambda)e^{-i\lambda x}, &x \ll 0.
-\end{cases}
-\end{align*}
-  By definition of the scattering matrix, we have
-  $$\begin{bmatrix}
-  -\frac{A(\lambda)}{B(\lambda)C(\lambda)} &\frac{A(\lambda)}{B(\lambda)}\\
-  \frac{B(\lambda)D(\lambda) - 1}{B(\lambda)C(\lambda)} & \frac{1}{B(\lambda)}
-  \end{bmatrix}.$$
-  Now
-  $$\partial_yw_-(x, y) = \frac{i}{2\pi} \int_{-\infty}^\infty \phi_=(x, \lambda) \lambda e^{i\lambda y} ~d\lambda$$
-  TODO: This somehow gives the scattering matrix.
-\end{proof}
-\begin{lemma}
-\label{determinant of scatmat}
-  One has
-$$\det S(\lambda) = \frac{\hat X(-\lambda)}{\hat X(\lambda)}.$$
-\end{lemma}
-\begin{proof}
-      TODO: Compute $S$ in terms of $X$ and $Y$.
-
-      TODO: Show that
-      $$t(\lambda) = i\frac{\lambda}{\hat X(\lambda)}.$$
-
-      TODO: Show that
-      $$S(-\lambda)J = JS(\lambda)^*.$$
-
-      TODO: Show that
-      $$\det S(\lambda) = \frac{t(\lambda)}{t(-\lambda)}.$$
-
-      TODO: Show that
-      $$\det S(\lambda) = \frac{\hat X(-\lambda)}{\hat X(\lambda)}.$$
-\end{proof}
-
-
-
-
-\section{The Breit-Wigner formula}
-In what follows, we let $\Gamma_\lambda$ denote a sufficiently small (counterclockwise-oriented) circle centered on $\lambda$.
-
-\begin{definition}
-A \dfn{scattering resonance} is a pole of the resolvent family $R_V$. If $\lambda_0$ is a scattering resonance, its \dfn{multiplicity} $m_R(\lambda_0)$ is defined to be the rank of the operator
-$$\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} R_V(\lambda) ~d\lambda.$$
-We write $\lambda_0 \in P$ to mean that $\lambda_0$ is a scattering resonance.
-\end{definition}
-In fact, if $\lambda_0$ is a scattering resonance, then for any $\lambda$ close to $\lambda_0$, we can express $R_V(\lambda)$ as a Laurent series
-$$R_V(\lambda) = Q(\lambda - \lambda_0) + \sum_{j=1}^N \frac{P_j}{(\lambda - \lambda_0)^j}$$
-for some holomorphic family of operators $Q$ defined on a small neighborhood of $0$ and some operators $P_1, \dots, P_N$. The operators $P_1, \dots, P_N$ are of finite rank by construction of $R_V(\lambda)$. Applying the Cauchy-Goursat theorem,
-$$\int_{\Gamma_{\lambda_0}} Q(\lambda - \lambda_0) ~d\lambda = 0$$
-so the multiplicity is entirely determined by the principal part $R_V(\lambda) - Q(\lambda - \lambda_0)$.
-
-TODO: Resonances are the zeroes of $\hat X$.
-
-We put $m_S(\lambda_0)$ for the trace of the operator
-$$-\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} S'(\lambda)S(\lambda)^* ~d\lambda.$$
-This satisfies the equation $m_S(\lambda) = m_R(\lambda) - m_R(-\lambda)$. (For a proof, see \cite[Theorem 2.14]{dyatlov2019mathematical}.) Therefore we are interested in the matrix $S'(\lambda)S(\lambda)^*$, which we can reasonably think of as the log-derivative of $S$, since
-$$S'(\lambda)S(\lambda)^* = \partial_\lambda(\log S(\lambda)).$$
-Taking the trace of both sides, we have
-$$
-  \tr S'(\lambda)S(\lambda)^* = \tr \partial_\lambda \log S(\lambda)
-  = \partial_\lambda \log \det S(\lambda)
-$$
-so by Lemma \ref{determinant of scatmat},
-\begin{equation}
-\label{trace of log derivative}
-\tr S'(\lambda)S(\lambda)^* = \partial_\lambda \log \frac{\hat X(-\lambda)}{\hat X(\lambda)}.
-\end{equation}
-
-The Breit-Wigner approximation gives a formula for the trace of $S'(\lambda)S(\lambda)^*$ in terms of the support of $V$ and a sum over resonances. Since $P$ is an infinite set in general, one cannot hope to compute $\tr S'(\lambda)S(\lambda)^*$ exactly, but the approximation is suitable enough.
-
-The proof of the Breit-Wigner approximation that we give is outlined by Zworski and Dyatlov (see the remarks after \cite[Theorem 2.20]{dyatlov2019mathematical}), using the theory for zeroes of Fourier transforms developed in Chapter 1.
-
-\begin{theorem}[Breit-Wigner approximation]
-  \index{Breit-Wigner approximation}
-One has
-$$\frac{1}{2\pi i} \tr S'(\lambda_0)S(\lambda_0)^* = -\frac{1}{\pi}|\ch\supp V| - \frac{1}{\pi}\sum_{\lambda \in P} \frac{\Im \lambda}{|\lambda - \lambda_0|^2}.$$
-\end{theorem}
-
-\begin{proof}
-  TODO
-\end{proof}
-
-%\section{The Eisenbud-Wigner time delay formula}
-%We have the intuition that the wave operators should satisfy
-%$$e^{-itH_V}W_- \approx e^{-itH_0}$$
-%in some suitable sense, for $-t$ large enough, and would like to measure how good this approximation is for a typical function $f \in L^2(\RR)$.%
-%%In this section, let $\chi_r(x) = 1_{|x| < r}$ be the indicator function of the interval $(-r,  r)$.
-%\begin{definition}
-%  For every $f \in C^\infty_{comp}(\RR)$, let
-%  $$S_r(f) = \int_{-\infty}^\infty ||\chi_r e^{-itH_V} W_-f||_{L^2(\RR)}^2 ~dt$$
-%  and
-%  $$S_r^0(f) = \int_{-\infty}^\infty ||\chi_r e^{-itH_0} f||_{L^2(\RR)}^2 ~dt.$$
-%  Let $\tilde T_r$ be defined by $\langle \tilde T_rf, f\rangle = S_r(f) - S_r^0(f)$ and let $\tilde T$ be the weak limit of $\tilde T_r$ as $r \to \infty$. Then $\tilde T$ is known as the \dfn{time delay operator} for $V$.
-%\end{definition}
-%It is not obvious that the weak limit $\tilde T$ exists, but we will show that $\tilde T$ can be explicitly computed, so that it is does exist.
-
-%Recall that $\Phi$ is the isomorphism $L^2(\RR) \to L^2(\RR_+) \oplus L^2(\RR_+)$. Let
-%$$T(\lambda) = -2\lambda iS(\lambda)^* S'(\lambda).$$
-%
-%\begin{theorem}[Eisenbud-Wigner]
-%\index{Eisenbud-Wigner time delay formula}
-%The time delay operator $\tilde T$ exists, and
-%$$\tilde Tf(\lambda) = \Phi^*(T(\lambda)\Phi(f))(\lambda).$$
-%\end{theorem}
-%\begin{proof}
-%Expanding out the definitions of $T,\Phi$, we are being asked to prove, for every $f \in C_{comp}^\infty(\RR)$ and $\lambda \in \RR_+$,
-%$$(\widehat{\tilde Tf}(\lambda), \widehat{\tilde Tf}(-\lambda)) = -2i\lambda S(\lambda)^* S'(\lambda)(\hat f(\lambda), \hat f(-\lambda)).$$
-%By the unitarity of the Fourier transform, $2\pi \langle \tilde Tf, f\rangle = \langle \widehat{\tilde Tf}, \hat f\rangle$.
-%TODO: The proof in TZ is just wrong lol.
-% %\end{proof}
-% TODO: Other properties of scatmat as we need them.
-%
-% We now construct an operator on $L^2(\RR)$ which is controlled by the scattering matrix $S$.
-%
-% \begin{definition}
-% The operators $W_\pm$ defined by
-% $$W_\pm u = \lim_{t \to \pm \infty} e^{itH_V} e^{-itH_0} u$$
-% are called the \dfn{wave operators} of $V$.
-% \end{definition}
-% Recall that if $T$ is a self-adjoint operator, then for any initial data $u$, we have
-% $$(i\partial_t - T)e^{-itT}u = 0,$$
-% where $t \mapsto e^{-itT}$ is a one-parameter unitary group, which is well-defined because we can use the spectral theorem to diagonalize $T$ and then plug in the eigenvalues of $T$ into $e^{-it\cdot}$. Thus we can think of $e^{itH_V}e^{-itH_0} u$ as running the Schrödinger equation $(i\partial_t - H_V)u = 0$ back in time by $t$, and then running the equation $(i\partial_t - H_0)u = 0$ forward in time by $t$, so the wave operators approximate $u$ by a solution to the free Schrödinger equation.
-%
-% \begin{definition}
-% The \dfn{scattering operator} is defined by
-% $$\mathcal S = W_+^*W_-.$$
-% \end{definition}
-% It is not obvious that such definitions even make sense, so we now prove this.
-% \begin{lemma}
-% The wave operators $W_\pm$ are well-defined as partial isometries on $L^2(\RR)$.
-% \end{lemma}
-% \begin{proof}
-% Let
-% $$U(t) = e^{itH_V}e^{-itH_0}.$$
-% Then $U$ is a one-parameter unitary group on $L^2(\RR)$, and it suffices to show that the limits
-% $$W_\pm u = \lim_{t \to \pm \infty} U(t)u$$
-% exist for a dense set of $u$. In fact, if
-% $$D = \{u \in L^2(\RR): \hat u \in C^\infty_{comp}(\RR \setminus 0)\},$$
-% then because $C^\infty_{comp}(\RR \setminus 0)$ is dense in $L^2(\RR)$ and the Fourier transform is a unitary operator where it is defined, $D$ is dense in $L^2(\RR)$.
-%
-% Let $u \in D$. Since
-% $$\partial_t e^{itH_V} e^{-itH_0} u = ie^{itH_V}(H_V - H_0)e^{-itH_0}u = ie^{itH_V}Ve^{-itH_0}u,$$
-% the fundamental theorem of calculus implies that
-% $$U(s)u = u + i\int_0^s e^{itH_V}Ve^{-itH_0}u ~dt.$$
-% By definition of $D$, we can find $R > r > 0$ such that if $\xi \in \supp \hat u$, then $\xi$ lies in the annulus $A(r, R)$. Let $u_t = e^{-itH_0}u$. Then
-% $$\partial_{\xi_j}e^{ix\xi - it|\xi|^2} = i(x_j - 2t\xi_j)$$
-% so, integrating by parts,
-% \begin{align*}
-% u_t(x) &= e^{-itH_0}u(x) = \frac{1}{2\pi} \int_{A(r, R)} e^{ix\xi - it|\xi|^2} \hat u(\xi) ~d\xi\\
-%   &= \frac{1}{2\pi} \int_{A(r, R)} \left(\frac{\partial_{\xi_j}}{i(x_j - 2t\xi_j)}\right)^2 e^{ix\xi - it|\xi|^2} \hat u(\xi) ~d\xi\\
-%   &= \frac{1}{2\pi} \int_{A(r, R)} e^{ix\xi - it|\xi|^2}\left(\partial_{\xi_j}\left(\frac{1}{i(x_j - 2t\xi_j)}\right)\right)^2 \hat u(\xi) ~d\xi.
-% \end{align*}
-% If $x \in \supp V$ and $\xi \in A(r, R)$ are held fixed, and $t \to \infty$, then we have
-% $$\left|\frac{1}{|x_j - 2t\xi_j|}\right| = O(|t|^{-1})$$ and $|\hat u(\xi)| = O(1)$ since $\hat u$ is holomorphic and restricted to the compact set $A(r, R)$, so
-% $$
-% |u_t(x)| \leq \frac{1}{2\pi} \int_{A(r, R)} \left|\partial_{\xi_j}\left(\frac{1}{i(x_j - 2t\xi_j)}\right)\right|^2 |\hat u(\xi)| ~d\xi
-%   = O(|t|^{-2}).
-% $$
-% Therefore
-% $$\int_{-\infty}^\infty ||e^{itH_V}Ve^{-itH_0}u||_{L^2(\RR)} ~dt = \int_{-\infty}^\infty ||Vu_t||_{L^2(\RR)} ~dt = \int_{-\infty}^\infty O(|t|^{-2}) ~dt < \infty.$$
-% So the one-parameter unitary group $U$ remains bounded on $L^2(\RR)$ at infinity, so $W_\pm$ exist. A strong limit of unitary operators is a partial isometry, so we are done.
-% \end{proof}
-%
-% \begin{lemma}
-% One has
-% $$W_\pm H_0 = H_VW_\pm.$$
-% \end{lemma}
-% \begin{proof}
-% One has
-% $$e^{isH_V}W_\pm e^{-isH_0} = \lim_{t \to \pm \infty} e^{i(s+t)H_V}e^{-i(s+t)H_0} = W_\pm$$
-% which is independent of $s$. Therefore
-% $$0 = \partial_s(e^{isH_V}W_\pm e^{-isH_0}) = iH_Ve^{isH_V}W_\pm e^{-isH_0} - ie^{isH_V}W_\pm e^{-isH_0}H_0 = i(H_VW_\pm - W_\pm H_0)$$
-%whence $H_VW_\pm = W_\pm H_0$.
-%\end{proof}
-
-%To characterize the scattering operator in terms of the scattering matrix, we define the isomorphism
-%\begin{align*}
-%\Phi: L^2(\RR) &\to L^2(\RR_+) \oplus L^2(\RR_+)\\
-%u &\mapsto (\hat u, \hat u(-\cdot)).
-%\end{align*}
-%Here $L^2(\RR_+) \oplus L^2(\RR_+)$ is being viewed as a Hilbert space with the direct sum inner product. Since the Fourier transform is unitary, so is $\Phi$.
-
-%\begin{lemma}
-%The scattering operator $\mathcal S$ satisfies
-%$$\mathcal S = \Phi^*S\Phi.$$
-%In particular, $\mathcal S$ is unitary.
-%\end{lemma}
-%\begin{proof}
-%Let $v \in C^\infty_{comp}(\RR)$, and let $u = \Phi^*S\Phi v$. Then
-%$$(\hat u(\lambda), \hat u(-\lambda)) = S(\lambda)(\hat v(\lambda), \hat v(-\lambda)).$$
-%We must prove $W_+u = W_-v$. To this end, let
-%$$w(x) = \frac{1}{2\pi} \int_0^\infty e_+(x, \lambda)\hat v(\lambda) + e_-(x, \lambda)\hat v(-\lambda) ~d\lambda.$$
-%Since $e_\pm(\cdot, \lambda)$ are eigenfunctions of $H_V$, they are stationary solutions of the Schrödinger equation, hence $e^{-itH_V}e_\pm(x, \lambda) = e^{-it\lambda^2}e_\pm(x, \lambda)$. Since $e^{-itH_V}$ is unitary, it commutes with integration, so
-%$$e^{-itH_V}w(x) = \frac{1}{2\pi} \int_0^\infty (e_+(x, \lambda) \hat v(\lambda) + e_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2} ~d\lambda.$$
-%We let $f_\pm(x, \lambda) = -R_V(\lambda)(V(x)e^{\pm ix\lambda})$ be the outgoing part of $e_\pm$. Then
-%$$ e^{-itH_V}w(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{i\lambda x}\hat v(\lambda) e^{-it\lambda^2} ~d\lambda + \frac{1}{2\pi} \int_0^\infty (f_+(x, \lambda) \hat v(\lambda) + f_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2} ~d\lambda.$$
-%Since the free Hamiltonian $H_0 = -\Delta$ has continuous spectrum $[0, \infty)$, it can be diagonalized as the multiplier $H_0 = \mathcal F^{-1} \lambda^2 \mathcal F$, where $\mathcal F$ is the Fourier transform. Therefore
-%$$e^{-itH_0}v(x) = \frac{1}{2\pi} \int_{-\infty}^\infty e^{ix\lambda} \hat v(\lambda) e^{-it\lambda^2} ~d\lambda.$$
-%Moreover, if $Q = \{\lambda \in \CC: \Re \lambda > 0, ~\Im \lambda > 0\}$ is the first quadrant, then $Ve^{\pm i\lambda x} \in (1 + VR_0(\lambda))(L^2_{comp}(\RR))$, so since $R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}$ and $R_0$ is holomorphic on $Q$, $f_\pm(\cdot, \lambda)$ exists and is holomorphic in $\lambda$ on $Q$. Since $v \in C_{comp}^\infty(\RR)$, the Paley-Weiner theorem implies that the integrand $I(t, x, \lambda) = e^{i\lambda x}\hat v(\lambda) e^{-it\lambda^2} ~d\lambda + \frac{1}{2\pi} \int_0^\infty (f_+(x, \lambda) \hat v(\lambda) + f_-(x, \lambda) \hat v(-\lambda))e^{-it\lambda^2}$ is holomorphic on $Q$ and remains holomorphic at the ``boundary" $\Re \lambda \to \infty$, since the $f_\pm$ are outgoing waves and hence bounded, and $\hat v(\lambda)$ is bounded for $\Im \lambda$ fixed by the Paley-Weiner theorem, so that $I(t, x, \lambda)$ remains bounded for $t,x,\Im \lambda$ fixed.
-
-%Letting $\gamma$ be the contour $\mu + i\mu: \mu > 0$ through $Q$, we use the Paley-Weiner to find a $C > 0$ such that
-%\begin{align*}
-%\left|\int_0^\infty I(t, x, \lambda) ~d\lambda\right|^2 &= \left|\int_\gamma I(t, x, \lambda) ~d\lambda\right|^2 \\
-%  &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu)\hat v(\mu + i\mu) + f_-(x, \mu+i\mu)\hat v(-\mu - i\mu)|^2e^{-2t\mu^2} ~d\mu\\%
-%  &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu) + f_-(x, \mu + i\mu)|^2 |e^{C\mu - 2t\mu^2})|^2 ~d\mu\\%
-%  &\leq \frac{1}{2} \int_0^\infty |f_+(x, \mu + i\mu)|^2 + |f_-(x, \mu + i\mu)|^2 ~d\mu \int_0^\infty |e^{C\mu - 2t\mu^2})|^2 ~d\mu
-%\end{align*}
-%and recalling that
-%$$||R_V(\mu + i\mu)||_{L^2 \to L^2} = O(\mu^{-2})$$
-%we see that the integral of the $f_\pm$ are bounded, and that the integral of $I(t, x, \cdot)$ vanishes as $t \to \infty$. Therefore $W_-v = w$. A similar argument with $Q, \gamma$ %reflected across the real axis $\Im \lambda = 0$ shows that if
-%$$\tilde w(x) = \frac{1}{2\pi} \int_0^\infty e_+(x, -\lambda)\hat u(-\lambda) + e_-(x, \lambda)\hat u(\lambda) ~d\lambda$$
-%then $W_+u = w$. TODO: This seems nontrivial since we applied a Fourier multiplier to $v$ to get $u$. Also $\hat u$ is not of exponential type but we can approximate $u$ by a %compactly supported function. So these are details to fill in.
-
-%TODO: Use the functional equation for scatmat to prove $w = \tilde w$.
-%\end{proof}
-
-%TODO: If we need it, interpret that crazy commutative diagram to compute the images of $W_\pm$.
-
-
-
-
-
-
-\chapter{Super-exponentially decreasing potentials}
-We are interested in generalizing the Breit-Wigner formula to non-compactly supported potentials. Reasoning formally, we write
-$$\frac{1}{2\pi i}\tr S'(\lambda)S(\lambda)^* = \infty - \frac{1}{\pi} \sum_{\kappa \in P} \frac{\Im \kappa}{|\kappa - \lambda|^2}.$$
-If the left-hand side is to be finite, one then expects
-$$\sum_{\kappa \in P} \frac{\Im \kappa}{|\kappa - \lambda|^2} = \infty.$$
-Of course, our definition of the scattering matrix, or even of the set of resonances $P$, relied on the notion of an outgoing wave, which makes no sense if $\supp V$ is not compact. We thus consider a generalization of these definitions to a broader class of functions.
-
-In general the definition of a potential makes sense for any measurable function $V$, but scattering theory is concerned with the perturbation of the differential operator $-\Delta$ by $V$ at infinity, so it is natural to assume that $V$ decays rapidly.
-\begin{definition}
-A function $V \in L^\infty(\RR)$ is said to be \dfn{super-exponentially decreasing} if for every $N \in \NN$ we can find a $C_N > 0$ such that
-$$V(x) \leq C_Ne^{-N|x|}.$$
-\end{definition}
-For example, a Gaussian is super-exponentially decreasing. We will indicate that a function $V$ is super-exponentially decreasing by writing $V(x) = O(e^{-x\infty})$.
-
-Thus we can now state the main conjecture.
-\begin{definition}
-The \dfn{Breit-Wigner series} for $V$ is defined by
-$$S_V = \sum_{\lambda \in P} \frac{\Im \lambda}{|\lambda|^2}.$$
-\end{definition}
-\begin{conjecture}[Zworski]
-Let $V$ be a super-exponentially decreasing potential. The Breit-Wigner series converges if and only if $V$ is compactly supported.
-\end{conjecture}
-
-
-\section{Trace-class analytic continuation}
-Let $R_V(\lambda) = (H_V - \lambda^2)^{-1}$ denote the resolvent, as in the compactly supported case. Trouble comes because $R_V$ may not extend meromorphically to $\CC$ if $V$ is not compactly supported. Indeed, the proof of Theorem \ref{meromorphic continuation with compact support} used the fact that we could find a cutoff function $\rho$ such that $\rho V = V$, and so we must somehow generalize the meromorphic continuation of $R_V$. This section follows \cite[Lemma 3.1]{froese1997asymptotic}.
-
 We put
-$$S_V(\lambda) = \sqrt VR_0(\lambda)\sqrt{|V|}.$$
-We view $S_V$ as a weighted version of the resolvent of $R_0(\lambda)$. We will need the fact that $S_V$ is a holomorphic family of trace-class operators on the punctured plane when we consider basic properties of resonances of $V$.
+$$W_V(\lambda) = \sqrt VR_0(\lambda)\sqrt{|V|}.$$
+We view $W_V$ as a weighted version of the resolvent $R_0(\lambda)$.
+We will need the fact that $W_V(\lambda)$ is holomorphic in $\lambda$ and trace-class.
 \begin{theorem}
   \label{sv is b1 family}
-Suppose that $V$ is super-exponentially decreasing. Then $S_V$ is holomorphic as a function $\CC \setminus 0 \to B^1(L^2(\RR))$, and has a simple pole at $0$.
+Suppose that $V$ is super-exponentially decreasing. Then $W_V$ is holomorphic as a function $\CC \setminus 0 \to B^1(L^2(\RR))$, and has a simple pole at $0$.
 \end{theorem}
+Before we can prove Theorem \ref{sv is b1 family}, we need some careful estimates on $W_V(\lambda)$.
+Our proof follows \cite[Lemma 3.1]{froese1997asymptotic}.
 
-Before we can prove Theorem \ref{sv is b1 family}, we need some careful estimates on $S_V(\lambda)$.
-
-We recall that $R_0$ admits the resolvent function
-$$R_0(x, y; \lambda) = \frac{i}{2\lambda}e^{i\lambda|x-y|},$$
-which is the Green function of $-\Delta$, i.e.
-$$(-\Delta - \lambda^2)R_0(x, y; \lambda) = \delta(x - y).$$
-Since it is true of the Green function, it follows that $R_0$ is meromorphic with a simple pole at $0$.
 \begin{lemma}
 Let $L > 0$, $x,z \in (-L, L)$. For every $\lambda_1,\lambda_2 \in \CC$ we have
 \begin{align*}R_0(x, z; \lambda_1) - R_0(x, z; \lambda_2)
@@ -1209,18 +1035,17 @@ $$||T_L(\lambda)||_1 = L^2 ||T(L\lambda)||_2 \leq CL^2 e^{4L|\Im \lambda|}{L|\Im
 which proves the lemma.
 \end{proof}
 
-
 \begin{lemma}
 \label{convergence in b1 topology}
 Let $N > 0$. Suppose that $\sqrt{V(x)} = O(e^{-N|x|})$, $\lambda \neq 0$, and $|\Im \lambda| < N/4$. Then
-$$\lim_{L \to \infty} \sqrt V T_L(\lambda) \sqrt{|V|} = S_V(\lambda)$$
+$$\lim_{L \to \infty} \sqrt V T_L(\lambda) \sqrt{|V|} = W_V(\lambda)$$
 in the topology of $B^1(L^2(\RR))$.
 \end{lemma}
 \begin{proof}
 Up to a rescaling we may assume that $|\sqrt{V(x)}| \leq e^{-N|x|}$. Let $w(x) = e^{-LN}$ for $|x| \in (L-1, L]$, so $w$ dominates $\sqrt V$. Therefore
 \begin{align*}
-||\sqrt V T_L(\lambda) \sqrt{|V|} - S_V(\lambda)||_1 &= ||\sqrt V(\chi_L R_0(\lambda)\chi_L)\sqrt{|V|}||_1\\
-  &= \leq ||w(\chi_L R_0(\lambda) \chi_L - R_0(\lambda))w||_1 \\
+||\sqrt V T_L(\lambda) \sqrt{|V|} - W_V(\lambda)||_1 &= ||\sqrt V(\chi_L R_0(\lambda)\chi_L)\sqrt{|V|}||_1\\
+  & \leq ||w(\chi_L R_0(\lambda) \chi_L - R_0(\lambda))w||_1 \\
   &= ||wT_L(\lambda)w - S_{w^2}(\lambda)||_1
 \end{align*}
 so it suffices to prove the lemma when $\sqrt V = w$. Moreover,
@@ -1240,7 +1065,8 @@ $$wR_0(\lambda)(1 - \chi_L)w = \sum_\ell \sum_{m=L}^\infty a_\ell\chi_\ell R_0(\
 whence
 \begin{align*}
   ||wR_0(\lambda)(1 - \chi_L)w||_1 &\leq \sum_\ell \sum_{m=L}^\infty a_\ell a_m ||\chi_\ell R_0(\lambda) \chi_m||\\
-  &\leq \sum_{m=L}^\infty a_m \left(\sum_{\ell=1}^m a_\ell ||\chi_m R_0(\lambda) \chi_m||_1 + \sum_{\ell=m+1}^\infty a_\ell ||\chi_\ell R_0(\lambda) \chi_\ell||_1 \right)\\
+  &\leq \sum_{m=L}^\infty a_m \bigg(\sum_{\ell=1}^m a_\ell ||\chi_m R_0(\lambda) \chi_m||_1\\
+    &\quad+ \sum_{\ell=m+1}^\infty a_\ell ||\chi_\ell R_0(\lambda) \chi_\ell||_1 \bigg)\\
   &= \sum_{m=L}^\infty a_m \left(\sum_{\ell=1}^m a_\ell ||T_m(\lambda)||_1 + \sum_{\ell=m+1}^\infty a_\ell ||T_\ell(\lambda)||_1 \right).
 \end{align*}
 We now apply Lemma \ref{estimate on TL} and the fact that $\sum_\ell a_\ell = 1$ (and the sum converges monotonically) to see that
@@ -1252,7 +1078,7 @@ Similarly,
 $$\sum_{m=L}^\infty \sum_{\ell=m+1}^\infty a_\ell ||T_\ell(\lambda)||_1 = O\left(\sum_{\ell=L}^\infty \ell e^{-\ell(N-4|\Im \lambda|)}\right).$$
 Let $\delta = N - 4|\Im \lambda| > 0$. Then
 \begin{align*}
-  ||\sqrt V T_L(\lambda) \sqrt{|V|} - S_V(\lambda)||_1 &= O(||wR_0(\lambda)(1 - \chi_L)w||_1) \\
+  ||\sqrt V T_L(\lambda) \sqrt{|V|} - W_V(\lambda)||_1 &= O(||wR_0(\lambda)(1 - \chi_L)w||_1) \\
   &= O\left(\sum_{\ell=L}^\infty \ell e^{-\delta \ell} \right) = o\left(\frac{1}{\delta L}\right)
 \end{align*}
 and the theorem holds taking $L \to \infty$.
@@ -1262,15 +1088,308 @@ and the theorem holds taking $L \to \infty$.
 Holomorphy follows from that of $R_0$. Since $V$ is super-exponentially decreasing, so is $\sqrt V$. For every $\lambda$, we can find a $N$ large enough that Lemma \ref{convergence in b1 topology} applies.
 \end{proof}
 
+We now observe that if $V$ is compactly supported, then $R_V$ extends to a meromorphic family of operators.
+To accomplish this, we first extend $R_0$ to a family of bounded operators on $L^2_{comp}$.
+We recall that for an operator $T$ on $L^2_{comp}$ is bounded if, for every $L \in \NN$ and every test function $\rho \in C^\infty_{comp}(\RR)$ such that $\supp \rho \subseteq [-L, L]$, the operator $\rho T\rho$ is bounded on $L^2$.
+\begin{lemma}
+$R_0$ extends to a meromorphic family of operators on $L^2_{comp}$.
+\end{lemma}
+\begin{proof}
+We must show that given $L, \rho$ as above and $\lambda \in \CC_-$, $\rho R_0(\lambda) \rho \in B(L^2)$. In fact,
+\begin{align*}
+  \int_{-\infty}^\infty |\rho(x)\rho(y)R_0(\lambda; x, y)| ~dx &\leq \frac{C}{|\lambda|} \int_{-\infty}^\infty |\rho(x)\rho(y)| e^{-\Im \lambda|x-y|}\\
+  &= \frac{C_\rho}{|\lambda|} e^{2L \Im \lambda}
+\end{align*}
+so, by Schur's criterion,
+$$||\rho R_0(\lambda) \rho||_{L^2 \to L^2} \leq C_\rho \frac{e^{2L\Im \lambda}}{|\lambda|}.$$
+\end{proof}
+
+\begin{lemma}
+Let $\rho \in C^\infty_{comp}(\RR)$ be such that $\rho V = V$. Then
+$$(1 + VR_0(\lambda))^{-1}\rho = \rho(1 + VR_0(\lambda)\rho)^{-1}.$$
+\end{lemma}
+\begin{proof}
+  We have
+  $$R_V(\lambda) = R_0(\lambda)(1 + VR_0(\lambda))^{-1}.$$
+  Suppose $\rho$ is supported on $[-R, R]$. Then
+  $$\supp (1 + VR_0(\lambda))\rho \subseteq [-R, R]$$
+  so it follows that
+  $$\rho(1 + VR_0(\lambda))\rho = (1 + VR_0(\lambda))\rho.$$
+  Inverting the operator $1 + VR_0(\lambda)$, the theorem follows.
+\end{proof}
+
+\begin{theorem}
+\label{meromorphic continuation with compact support}
+If $V$ is compactly supported, then the family of operators
+$$R_V: L^2_{comp} \to L^2_{loc}$$
+is meromorphic on $\CC$.
+\end{theorem}
+\begin{proof}
+By the definition of the free resolvent, we have
+$$(H_V - \lambda^2)R_V(\lambda) = 1 + VR_0(\lambda).$$
+If $\Im \lambda$ is very large, then $||VR_0(\lambda)||_{L^2 \to L^2}$ is very small, so the formal Neumann series computation
+$$(1 + VR_0(\lambda))^{-1} = \sum_{k=0}^\infty (-VR_0(\lambda))^k$$
+is valid. Thus $(1 + VR_0(\lambda))^{-1}$ is a holomorphic family of operators on $L^2$, for $\Im \lambda$ sufficiently large.
+
+With $\rho$ a cutoff such that $\rho V = V$, $VR_0(\lambda)\rho = V\rho R_0(\lambda)\rho$ is a meromorphic family of compact operators $L^2 \to H^2_{comp}$, so $1 + VR_0(\lambda)\rho$ is a meromorphic family of Fredholm operators. It follows that
+$$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}$$ is a meromorphic family of operators $L^2 \to L^2_{loc}$. Taking $R \to \infty$, the theorem follows.
+\end{proof}
+
+\section{The scattering matrix}
+In what follows, we will assume that $V$ is compactly supported, so that we may define a matrix $S(\lambda)$ known as the ``scattering matrix," which encodes how waves are distorted when they pass through the ``barrier" $\ch \supp V$.
+
+Since we have assumed that $V$ and $f$ have compact support, if $|x|$ is large, then
+$$(H_0 - \lambda^2)R_V(\lambda)f(x) = 0.$$
+So if we let $\psi = R_V(\lambda)f$, it follows from some calculus that we can find constants $A_+, B_-$ such that for all $x$ large enough,
+$$\psi(x) = A_+e^{i\lambda x} + B_-e^{-i\lambda x}.$$
+Similarly, we can find $A_-, B_+$ such that for every $x$ with $-x$ large enough,
+$$\psi(x) = A_-e^{-i\lambda x} + B_+-e^{i\lambda x}.$$
+In case $\lambda > 0$, we can view waves of the form $C e^{i\lambda x}$ as ``moving to the right with frequency $\lambda$" and waves of the form $C e^{-i\lambda x}$ as ``moving to the left with frequency $\lambda$." Of course, this distinction makes sense for any fixed $\lambda \in \CC$, even if $\lambda$ is not a positive real number. So we make the following definition.
+\begin{definition}
+An \dfn{incoming wave} is a linear combination of waves of the form $e^{i\lambda x}$ for $x \ll 0$ and $e^{-i\lambda x}$ for $x \gg 0$. An \dfn{outgoing wave} is a linear combination of waves of the form $e^{-i\lambda x}$ for $x \ll 0$ and $e^{i\lambda x}$ for $x \gg 0$.
+\end{definition}
+
+We can use the formalism of incoming and outgoing waves to show that $R_V$ has no nonzero real poles.
+\begin{theorem}
+\label{real poles are zero}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Then $\lambda$ is not a pole of $R_V$.
+\end{theorem}
+\begin{lemma}
+\label{laurent expansion of the resolvent}
+Suppose that $R_V$ has a pole at $\lambda_0 \neq 0$. Suppose that
+$$R_V(\lambda) = \frac{P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{P_1}{\lambda - \lambda_0} + Q(\lambda)$$
+is the Laurent expansion of $R_V$ at $\lambda_0$ (so $Q$ is holomorphic). Then for every $f \in L^2_{comp}$, $u = P_Nf$ is an outgoing solution of the eigenvalue equation $H_Vu = \lambda_0^2u$.
+\end{lemma}
+\begin{proof}
+We have
+\begin{align*}
+  (\lambda - \lambda_0)^N(H_V - \lambda^2)R_V(\lambda)f &= (\lambda - \lambda_0)^N (H_V - \lambda^2)\\
+  &\quad\left(\frac{u}{(\lambda - \lambda_0)^N} + O((\lambda - \lambda_0)^{1-N}f)\right)\\
+  &= (H_V - \lambda^2)u + O((\lambda - \lambda_0)f)
+\end{align*}
+and taking $\lambda \to \lambda_0$ we see that $(H_V - \lambda_0^2)u = 0$. Therefore $u$ solves the eigenvalue equation. To see that $u$ is outgoing, choose $\rho \in C^\infty_{comp}(\RR)$ such that $\rho V = V$. Then
+$$R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} = R_V(\lambda)\rho$$
+so $(1 + VR_0(\lambda)\rho)^{-1}$ is meromorphic with a pole of order $\leq N$ at $\lambda_0$. Write
+$$(1 + VR_0(\lambda)\rho)^{-1} = \frac{\tilde P_N}{(\lambda - \lambda_0)^N} + \dots + \frac{\tilde P_1}{\lambda - \lambda_0} + \tilde Q(\lambda)$$
+for the Laurent expansion of $(1 + VR_0(\lambda)\rho)^{-1}$ at $\lambda_0$. Then
+$$P_N(\rho(L^2(\RR))) = R_0(\lambda) \rho \tilde P_N(L^2(\RR)) \subseteq R_0(\lambda)(L^2_{comp}(\RR)).$$
+Since $\rho$ was arbitrary, it follows that $u \in R_0(\lambda)(L^2_{comp}(\RR))$. Since $R_0$ is the outgoing free resolvent, $u$ is outgoing.
+\end{proof}
+
+\begin{lemma}
+\label{no outgoing solutions, part 1}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. Suppose $H_Vu = \lambda^2u$. If we expand $u$ as
+$$u(x) = \begin{cases}
+  A_+ e^{i\lambda x} + B_-e^{-i\lambda x}, &x \gg 0,\\
+  A_- e^{i\lambda x} + B_+e^{-i\lambda x}, &x \ll 0,
+\end{cases}$$
+then $|A_+|^2 + |B_+|^2 = |A_-|^2 + |B_-|^2$.
+\end{lemma}
+\begin{proof}
+Since $\lambda \in \RR$, $H_V - \lambda^2$ is a real operator, so $(H_V - \lambda^2) \overline u = 0$. Therefore the Wronskian
+$$\begin{vmatrix}
+u&\overline u\\u' & \overline u'
+\end{vmatrix} = -2i\lambda \begin{cases}
+|A_+|^2 + |B_-|^2, &x \gg 0,\\
+|A_-|^2 + |B_+|^2, &x \ll 0,
+\end{cases}$$
+is constant so $|A_+|^2 + |B_-|^2 = |A_-|^2 + |B_+|^2$.
+\end{proof}
+
+We will need the following lemma to show that certain solutions are unique. It guarantees that a wave's transmission cannot be completely intercepted by a bounded potential, and so must scatter. Note that this stands in contrast to, say, the infinite potential well that is taught in introductory quantum mechanics class.
+\begin{lemma}
+\label{bounded potentials must scatter}
+Let $u \in L^\infty(\RR)$, $W \in L^\infty(\RR)$, and $\supp u \subseteq [0, \infty)$. If $H_Wu = 0$, then $u = 0$.
+\end{lemma}
+\begin{proof}
+Let $h \in (0, 1)$ and $v(x) = e^{-x/h}u(x)$. Since $u$ is supported in the right half-ray, it follows that $v \in L^\infty(\RR)$ and that $v$ is rapidly decaying. Therefore $v \in L^2(\RR)$. For $\xi \in \RR$, $|i - h\xi|^2 \geq 1$. Therefore
+$$||v||_{L^2(\RR)}^2 = ||\hat v||_{L^2(\RR)}^2 \leq \int_{-\infty}^\infty |(h\xi - i)^2\hat v(\xi)|^2 ~d\xi.$$
+The inverse Fourier transform of $(h\xi - i)^2 = h^2\xi^2 - 2ih\xi - 1$ is
+$$h^2D^2_x - 2ihD_x - 1 = h^2 e^{-x/h} D^2 e^{x/h}.$$
+So by the Plancherel formula,
+\begin{align*}
+  ||v||_{L^2(\RR)} &\leq \int_{-\infty}^\infty |e^{-x/h}(hD_x)^2 u(x)|^2 ~dx
+  \\&= h^2 \int_{-\infty}^\infty |e^{-x/h}W(x)u(x)|^2 ~dx
+  \\&\leq h^2 ||W||_{L^\infty(\RR)} ||v||_{L^2(\RR)}.
+\end{align*}
+Taking $h \to 0$, we see that $v = 0$, but $e^{-x/h} \neq 0$, so $u = 0$.
+\end{proof}
+
+\begin{corollary}
+\label{no outgoing solutions, part 2}
+Let $\lambda \in \RR$ and suppose $\lambda \neq 0$. If $H_Vu = \lambda^2u$, then $u$ is not outgoing.
+\end{corollary}
+\begin{proof}
+Let $A_\pm,B_\pm$ be as in Lemma \ref{no outgoing solutions, part 1}. If $u$ is outgoing and not compactly supported, then $|A_+|^2 + |B_-|^2 > 0$ while $|A_-|^2 + |B_+|^2 = 0$. Therefore $u$ is compactly supported, but after translating the support of $u$, we may assume that $\supp u \subseteq [0, \infty)$. But then Lemma \ref{bounded potentials must scatter} implies that $u = 0$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{real poles are zero}]
+Suppose that $\lambda$ is a pole. By Lemma \ref{laurent expansion of the resolvent}, there is an outgoing function $u$ such that $H_Vu = \lambda^2u$. This contradicts Corollary \ref{no outgoing solutions, part 2}.
+\end{proof}
+
+We now are in a position to construct the eigenfunctions for the continuous spectrum of $H_V$; namely, for $x \in \RR$, $\lambda \in \RR$, $\lambda \neq 0$,
+$$e_\pm(x, \lambda) = e^{\pm i\lambda x} - R_V(\lambda)(V(x)e^{\pm i\lambda x}).$$
+By Theorem \ref{real poles are zero}, $\lambda$ is not a pole of $R_V$, so this definition makes sense.
+\begin{lemma}
+The function $e_\pm(\cdot, \lambda)$ is the unique eigenfunction of $H_V$ with eigenvalue $\lambda^2$ which is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
+\end{lemma}
+\begin{proof}
+Clearly $e_\pm$ is an eigenfunction of $H_V$ with eigenvalue $\lambda^2$. If $\rho V = V$, then
+$$R_V(\lambda)\rho = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1}.$$
+So
+$$R_V(\lambda)(Ve^{i\pm x}) = R_V(\lambda)(\rho Ve^{i\pm x}) = R_0(\lambda)\rho(1 + VR_0(\lambda)\rho)^{-1} Ve^{i\pm x}$$
+which lies in the image of the outgoing resolvent $R_0(\lambda)$, so is outgoing. Therefore $e_\pm$ is equal to $e^{\pm i\lambda x}$ modulo outgoing terms.
+
+Assume that $\tilde e_\pm(x, \lambda) = e^{\pm i\lambda x} + g(x, \lambda)$ is also an eigenfunction with $g(\cdot, \lambda)$ outgoing. Then
+$$\tilde e_\pm(x, \lambda) - e_\pm(x, \lambda) = g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x})$$
+is also an eigenfunction, which is outgoing. Then, by Corollary \ref{no outgoing solutions, part 2}, $g(x, \lambda) - R_V(\lambda)(V(x)e^{\pm i\lambda x}) = 0$.
+\end{proof}
+
+In the trivial case $V = 0$, we have $e_\pm(x, \lambda) = e^{\pm i\lambda x}$. In this case, the Wronskian $W(x, \lambda)$ of $e_\pm(x, \lambda)$ is given by $-2i\lambda$. We interpret this as meaning that the entirety of an incoming wave is transmitted through $\ch \supp V = \emptyset$. But even if $V$ is nonzero, $H_V$ does not have a first-order term, so it follows from Abel's Wronskian formula that the function $W(\cdot, \lambda)$ is a constant.
+
+\begin{definition}
+The \dfn{transmission coefficient} $T$ is defined by
+$$T(\lambda) = \frac{iW(\lambda)}{2\lambda}.$$
+\end{definition}
+
+We now define
+$$\phi_\pm(x, \lambda) = \frac{e_\pm(x, \mp \lambda)}{T(\pm \lambda)}.$$
+
+\begin{lemma}
+\label{construction of intertwining, part 1}
+For every $\lambda \in \RR$, the $\phi_\pm$ are functions on $\RR$ such that $(D_x^2 + V - \lambda^2)\phi_\pm = 0$ and such that $\phi_\pm(x, \lambda) = e^{-i\lambda x}$ for $\pm x$ large enough.
+\end{lemma}
+\begin{proof}
+To show that the $\phi_\pm$ are functions, we must show that they do not have poles.
+
+First we rule out the possibility that $T(\pm \lambda) = 0$. If $\lambda \neq 0$, then the $e_\pm(\lambda)$ are linearly independent,
+so $T(\lambda) \neq 0$.
+
+On the other hand, if the $e_\pm(0)$ are linearly dependent, then there is an $m \in \NN$ such that the $\phi_\pm$ have a pole of order of $m$ at $0$. So
+$$\tilde \phi_\pm(x) = \lim_{\lambda \to 0} \lambda^m\phi_\pm(x, \lambda)$$
+is a holomorphic function on a ball close to $0$, and $\tilde \phi_\pm \in \ker \tilde \phi_\pm$. Since, for $\pm x$ large enough, $\tilde \phi_\pm(x) = 0$, we conclude that $\tilde \phi_\pm = \phi_\pm$, a contradiction. So the $e_\pm(0)$ are linearly independent, and $\phi_\pm$ is defined on all of $\RR$. Clearly we have $(D_x^2 + V - \lambda^2)\phi_\pm = 0$, so we are done.
+\end{proof}
+
+We now put
+$$w_\pm(x, y) = \frac{1}{2\pi} \int_{-\infty}^\infty \phi_\pm(x, \lambda)e^{i\lambda y} ~d\lambda$$
+By Lemma \ref{construction of intertwining, part 1}, $w_\pm$ solves the equation
+\begin{align*}
+  (D_x^2 + V(x))w_\pm(x, y) &= D_y^2(x, y),\\
+  w_\pm(x, y) &= \delta(x - y) &\pm x \gg 0.
+\end{align*}
+Rewriting the first equation as
+$$(D_x^2 - D_y^2)w_\pm(x, y) = V(x)w_\pm(x, y)$$
+we see that the $w_\pm$ are the unique solutions to these equations, since the operator $D_x^2 - D_y^2$ conserves an energy functional. See Evans \cite[\S2.4.3]{evans10} for details.
+
+We recall that a distribution $u$ is real if for every real test function $\varphi$, $\int u\varphi$ is real.
+\begin{lemma}
+\label{construction of intertwining, part 2}
+Let $[a, b] = \ch \supp V$. Then there are unique distributions $X,Y$ such that if $x \gg 0$,
+$$\partial_yw_-(x, y) = X(y - x) + Y(x + y),$$
+such that $\supp X \subseteq [-2(b-a), 0]$ and $\supp Y \subseteq [2a, 2b]$.
+Besides, $0 \in \supp X$ and $X,Y$ are real.
+\end{lemma}
+\begin{proof}
+For $x \gg 0$,
+$$(D_x^2 - D_y^2)\partial_yw_-(x, y) = 0$$
+so $\partial_yw_-(x, y)$ solves the wave equation with initial data $V$ and forcing data $\delta_0$ where $x$ is the time variable and $y$ is the space variable.
+The lemma then follows from the d'Alembertian formula and causality properties of the wave equation, c.f. \cite[\S2.4.1a]{evans10}, where $x = a$ is the inital-time slice of $\RR^2$, the future is $x > a$, and the distributions $X,Y$ must have support contained in an interval whose length is at most $2|\ch \supp V|$.
+Moreover, since $V$ and $\delta_0$ are real, so must be $\partial_yw_-(x, y)$, and the d'Alembertian formula then implies that $X,Y$ are real.
+\end{proof}
+We will later show that $-2(b - a) \in \supp X$, so that
+$$\ch \supp X = [-2|\ch \supp V|, 0].$$
+
+The scattering matrix maps the incoming coefficients $A_-,B_-$ to the outgoing coefficients $A_+,B_+$. Since $X$ is a compactly supported distribution, the Paley-Wiener theorem, Theorem \ref{PWS theorem},
+implies that the Fourier transform $\hat X$ is an entire function, and in particular $1/\hat X$ is a meromorphic function.
+\begin{definition}
+\label{scattering matrix definition}
+The \dfn{scattering matrix} is the operator $S(\lambda): \CC^2 \to \CC^2$ defined by
+$$S(\lambda)\begin{bmatrix}A_-\\B_-\end{bmatrix} = \begin{bmatrix}A_+\\B_+\end{bmatrix}.$$
+\end{definition}
+If $J = \begin{bmatrix}&1\\1\end{bmatrix}$, then
+$$S(-\lambda) = JS(\lambda)^{-1}J.$$
+This follows immediately from the definition of the coefficients $A_\pm,B_\pm$.
+\begin{theorem}
+\label{properties of scatmat}
+  The scattering matrix $S$ is a meromorphic family of unitary operators on $\CC$ such that
+\begin{equation}
+\label{formula for S}
+S(\lambda) = \frac{1}{\hat X(\lambda)}\begin{bmatrix}i\lambda & \hat Y(\lambda)\\ \hat Y(-\lambda) & i\lambda\end{bmatrix}.
+\end{equation}
+  If $\lambda \in \CC_+$ is a pole of $S$, then $\lambda^2$ is an eigenvalue of $H_V$.
+  Moreover,
+  \begin{equation}
+  \label{unitarity for Xhat}
+  \hat X(\lambda)\hat X(-\lambda) = \lambda^2 + \hat Y(\lambda)\hat Y(-\lambda),
+  \end{equation}
+  and
+  \begin{equation}
+  \label{determinant of scatmat}
+  \det S(\lambda) = \frac{\hat X(-\lambda)}{\hat X(\lambda)}.
+  \end{equation}
+\end{theorem}
+\begin{proof}
+We consider the decompositions
+\begin{align*}
+\phi_-(x, \lambda) &= \begin{cases}
+A(\lambda)e^{i\lambda x} + B(\lambda) e^{-i\lambda x}, &x \gg 0\\
+e^{-i\lambda x}, & x \ll 0,
+\end{cases}\\
+\phi_+(x, \lambda) &= \begin{cases}
+e^{-i\lambda x}, & x \gg 0,\\
+C(\lambda) e^{i\lambda x} + D(\lambda) e^{-i\lambda x}, &x \ll 0.
+\end{cases}\end{align*}
+Here if $y = A,B,C,D$ then $\overline{y(\lambda)} = y(-\lambda)$. In addition, $|A(\lambda)|^2 + 1 = |B(\lambda)|^2$ and $|C(\lambda)|^2 + 1 = |D(\lambda)|^2$.
+Thus
+\begin{equation}
+\label{unitarity}
+A(\lambda)A(-\lambda) + 1 = B(\lambda)B(-\lambda)
+\end{equation}
+and similarly for $C,D$.
+
+From the definition of $S$, we have
+\begin{equation}
+\label{ABCD S-matrix}
+S(\lambda) = \frac{1}{B(\lambda)}\begin{bmatrix}
+-\frac{A(\lambda)}{C(\lambda)} & A(\lambda)\\
+\frac{B(\lambda)D(\lambda)-1}{C(\lambda)} & 1
+\end{bmatrix}.
+\end{equation}
+From Lemma \ref{construction of intertwining, part 2}, if $\lambda \in \RR$, then
+$$i\lambda \phi_-(x, \lambda) = \hat X(\lambda) \phi_+(x, \lambda) + \hat Y(\lambda) \phi_+(x, -\lambda).$$
+For $x \gg 0$,
+$$i\lambda(A(\lambda) e^{i\lambda x} + B(\lambda)e^{-i\lambda x}) = \hat X(\lambda) e^{-i\lambda x} + \hat Y(-\lambda) e^{i\lambda x}$$
+and since the $e^{\pm i\lambda x}$ are linearly independent, $i\lambda A(\lambda) = \hat Y(\lambda)$ and $i\lambda B(\lambda) = \hat X(\lambda)$.
+Similarly, $-i\lambda C(\lambda) = \hat Y(\lambda)$ and $-i\lambda D(\lambda) = \hat Y(\lambda)$. Plugging these formulae into (\ref{ABCD S-matrix}), we establish the formula (\ref{formula for S}).
+Moreover, (\ref{unitarity}) implies (\ref{unitarity for Xhat}). Plugging (\ref{unitarity for Xhat}) into (\ref{formula for S}), we conclude that $S(\lambda)$ is unitary. Since $\hat X, \hat Y$ are entire functions, $S$ is meromorphic.
+Since $S$ is unitary, (\ref{determinant of scatmat}) follows from (\ref{formula for S}).
+
+Finally, if $S$ has a pole at $\lambda_0$, then $B(\lambda_0) = 0$, so if $x \gg 0$,
+$$\phi_-(x, \lambda_0) = A(\lambda)e^{i\lambda x}.$$
+Therefore $\phi_-(\lambda_0)$ has only outgoing terms away from $\ch \supp V$, and if $\Im \lambda_0 > 0$ this implies that
+$$H_V\phi_- = \lambda_0^2\phi_-,$$
+so $\lambda_0^2$ is an eigenvalue of $H_V$.
+\end{proof}
 
 
 
-\section{Resonances of large imaginary part}
-In this section we show that there is a constant $C$ there are no resonances $\lambda$ such that $\Im \lambda > C$. This will ensure that the Breit-Wigner series must be unconditional; i.e. either $B_V$ converges absolutely, or $B_V$ diverges.
+\section{Scattering resonances}
+\label{end of scat review}
+In what follows, we let $\Gamma_\lambda$ denote a sufficiently small (counterclockwise-oriented) circle centered on $\lambda$.
 
-We start by using Theorem \ref{sv is b1 family} to justify the definition of a resonance of the super-exponentially decaying potential $V$. (So throughout this section we assume that $V$ decays fast enough for the estimates in the proof of Theorem \ref{sv is b1 family} will go through.)
+\begin{definition}
+\label{scattering resonance multiplicity}
+Let $V$ be a compactly supported potential. A \dfn{scattering resonance} is a pole of the resolvent family $R_V$. If $\lambda_0$ is a scattering resonance, its \dfn{multiplicity} $m_R(\lambda_0)$ is defined to be the rank of the operator
+$$\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} R_V(\lambda) ~d\lambda.$$
+\end{definition}
+In fact, if $\lambda_0$ is a scattering resonance, then for any $\lambda$ close to $\lambda_0$, we can express $R_V(\lambda)$ as a Laurent series
+$$R_V(\lambda) = Q(\lambda - \lambda_0) + \sum_{j=1}^N \frac{P_j}{(\lambda - \lambda_0)^j}$$
+for some holomorphic family of operators $Q$ defined on a small neighborhood of $0$ and some operators $P_1, \dots, P_N$. The operators $P_1, \dots, P_N$ are of finite rank by construction of $R_V(\lambda)$. Applying the Cauchy-Goursat theorem,
+$$\int_{\Gamma_{\lambda_0}} Q(\lambda - \lambda_0) ~d\lambda = 0$$
+so the multiplicity is entirely determined by the principal part $R_V(\lambda) - Q(\lambda - \lambda_0)$.
 
-If $V$ is compactly supported, then we can meromorphically continue $R_V$ to all of $\CC$, and the following are equivalent for each $\lambda \in \CC \setminus 0$:
+The trouble is that the above definition does not make sense if $R_V$ does not admit a meromorphic continuation to $\CC$.
+To justify a more general definition, note that if $V$ is compactly supported, the following are equivalent for each $\lambda \in \CC \setminus 0$:
 \begin{enumerate}
 \item $\lambda$ is a resonance.
 \item $\lambda$ is a pole of $R_V$.
@@ -1279,129 +1398,232 @@ If $V$ is compactly supported, then we can meromorphically continue $R_V$ to all
 Moreover, we have
 $$R_V(\lambda) = R_0(\lambda)(1 + VR_V(\lambda)),$$
 and it follows that
-$$\sqrt V R_V(\lambda) \sqrt{|V|} = S_V(\lambda)(1 - \sqrt VR_V(\lambda)\sqrt{|V|}),$$
+$$\sqrt V R_V(\lambda) \sqrt{|V|} = W_V(\lambda)(1 - \sqrt VR_V(\lambda)\sqrt{|V|}),$$
 which can be rewritten as
-$$S_V(\lambda) = (1 + S_V(\lambda))\sqrt V R_V(\lambda)\sqrt{|V|}.$$
+$$W_V(\lambda) = (1 + W_V(\lambda))\sqrt V R_V(\lambda)\sqrt{|V|}.$$
+By Theorem \ref{sv is b1 family}, $W_V(\lambda)$ exists, so we have
+$$(1 + W_V(\lambda))^{-1}W_V(\lambda) = \sqrt V R_V(\lambda) \sqrt{|V|} = \infty.$$
+This only makes sense if $1 + W_V(\lambda)$ is singular, and since $W_V(\lambda)$ is in the trace class, this means that $\det(1 + W_V(\lambda)) = 0$.
 
-By Theorem \ref{sv is b1 family}, $S_V(\lambda)$ exists, so we have
-$$(1 + S_V(\lambda))^{-1}S_V(\lambda) = \sqrt V R_V(\lambda) \sqrt{|V|} = \infty.$$
-This only makes sense if $1 + S_V(\lambda)$ is singular, and since $S_V(\lambda)$ is trace-class, this means that $\lambda$ is a zero of $\det(1 + S_V(\lambda))$.
+Conversely, suppose that $\det(1 + W_V(\lambda)) = 0$. If $R_V$ is meromorphic on some open neighborhood of $\lambda$, then $\lambda$ is a pole of $R_V$, even if $V$ is not compactly supported. In fact, $\lambda$ is a pole of $(1 + W_V(\lambda))^{-1}$, hence of $\sqrt VR_V(\lambda) \sqrt{|V|}$. Since $W_V$ is holomorphic near $\lambda$, $\lambda$ must be a pole of $R_V(\lambda)$.
+
 We can therefore easily extend the definition of resonance to super-exponentially decreasing potentials.
 \begin{definition}
 \label{determinant definition of resonance}
 Let
-$$D(\lambda) = \det(1 + S_V(\lambda)).$$
-A \dfn{scattering resonance} of $V$ is a zero of $D$.
+$$D(\lambda) = \det(1 + W_V(\lambda)).$$
+A \dfn{scattering resonance} of $V$ is a zero of $D$. The \dfn{multiplicity} $m_R(\lambda)$ of a resonance $\lambda$ is the order of vanishing of $D$.
+We let $\Res V$ note the multiset of resonances of $V$, counted by multiplicity.
 \end{definition}
 
-Conversely, suppose that $\lambda$ is a nonzero scattering resonance of $V$. If $R_V$ is meromorphic on some open neighborhood of $\lambda$, then $\lambda$ is a pole of $R_V$, even if $V$ is not compactly supported. In fact, $\lambda$ is a pole of $(1 + S_V(\lambda))^{-1}$, hence of $\sqrt VR_V(\lambda) \sqrt{|V|}$. Since $S_V$ is holomorphic near $\lambda$, $\lambda$ must be a pole of $R_V(\lambda)$. So we are interested in when $R_V$ is holomorphic.
-
+Recall that the Breit-Wigner series is by definition the sum
+$$B(V) = -\sum_{\lambda \in \Res V} \frac{\Im \lambda}{|\lambda|^2}.$$
+One might fear that $B(V)$ conditionally converges, because a priori there may be infinitely many resonances in both $\CC_+$ and $\CC_-$. However, this is not the case.
 \begin{lemma}
-\label{no resonances of large imaginary part}
-There is a constant $C$ such that if $\Im \lambda > C$ then $\lambda$ is not a resonance.
-\end{lemma}
-To prove this we will need a standard estimate on $R_0(\lambda)$.
-\begin{lemma}
-If $\Im \lambda > ||V||_{L^\infty}$, then
-$$||VR_0(\lambda)||_{L^2 \to L^2} < 1.$$
+\label{no resonances of positive imaginary part}
+The set $\Res V \cap \overline{\CC_+}$ is finite.
 \end{lemma}
 \begin{proof}
-We note that $||V||_{L^2 \to L^2} \leq ||V||_{L^\infty}$, and by (\ref{bound on R_0}), it follows that
-\begin{align*}||VR_0(\lambda)||_{L^2 \to L^2} &\leq ||V||_{L^\infty} \sup_{\mu \in \RR_+} \frac{1}{|\lambda^2 - \mu|} \leq \frac{||V||_{L^\infty}}{|\lambda| \Im \lambda}
-\\&\leq \frac{||V||_{L^\infty}}{(\Im \lambda)^2}.\end{align*}
-The claim immediately follows.
-\end{proof}
+Let $\Im \lambda \geq 0$. We only have to prove that
+\begin{equation}
+\label{operator norm of SV}
+||W_V(\lambda)||_{L^2 \to L^2} \leq \frac{||V||_{L^1}}{2|\lambda|}
+\end{equation}
+because then if $|\lambda| > 2/||V||_{L^1}$, we have $\Spec W_V(\lambda) \subset D(0, 1)$ and hence $D(\lambda) \neq 0$, so $\lambda$ is not a scattering resonance. Thus every scattering resonance in $\CC_+$ is in the compact disc $\overline{D(0, 2/||V||_{L^1})}$, but $\Res V$ is discrete since it is the set of zeroes of the holomorphic function $D$, so $\Res V \cap \CC_+$ is finite.
 
-\begin{proof}[Proof of Lemma \ref{no resonances of large imaginary part}]
-Again we use the Neumann series computation
-$$(1 + VR_0(\lambda))^{-1} = \sum_{k=0}^\infty (-VR_0(\lambda))^k,$$
-which is valid whenever $\Im \lambda > ||V||_{L^\infty}$. By definition of the free resolvent, we have
-$$(H_V - \lambda^2)R_V(\lambda)\sum_{k=0}^\infty (-VR_0(\lambda))^k = 1$$
-and since that Neumann series is nonzero it follows that $(H_V - \lambda^2)R_V(\lambda)$ is finite.
-Since $H_V$ is an unbounded operator while $\lambda$ is bounded, $H_V \neq \lambda^2$, so it follows that $R_V$ is holomorphic at $\lambda$ and hence $\lambda$ cannot be a resonance of $V$.
-\end{proof}
-
-\begin{lemma}
-\label{density zero in upper half plane}
-Let $n(R, \theta, \varphi)$ be the number of resonances $re^{i\xi}$ such that $r \leq R$ and $\xi \in (\theta, \varphi).$
-Then for every $\varepsilon > 0$ the function $R \mapsto n(R, \varepsilon, \pi - \varepsilon)$ is bounded (in particular $o(R^\rho)$).
-\end{lemma}
-\begin{proof}
-We need to show that there are finitely many resonances $re^{i\theta}$ such that $\theta \in (\varepsilon, \pi - \varepsilon)$.
-Since resonances are zeroes of the entire function $z \mapsto zD(z)$, where $D$ is the determinant that appears in Definition \ref{determinant definition of resonance}, the set of resonances is discrete.
-For any $R$, the sector of $re^{i\theta}$ such that $r \leq R$ and $\theta \in (\varepsilon, \pi - \varepsilon)$ is compact, so only contains finitely many resonances.
-So if there are to be infinitely many resonances $r_ne^{i\theta_n}$, then $r_n \to \infty$, and in particular the imaginary parts
-$$\lim_{n \to \infty} r_n \sin \theta_n \geq \lim_{n \to \infty} r_n \sin \varepsilon = \infty.$$
-This contradicts Lemma \ref{no resonances of large imaginary part}.
+We have $e^{i\lambda|x-y|} \leq 1$, so the Cauchy-Schwarz inequality implies
+\begin{align*}
+||W_V(\lambda)u||_{L^2}^2 &= \int_{-\infty}^\infty\left|\int_{-\infty}^\infty \frac{i\sqrt{V(x)}}{2\lambda} e^{i\lambda|x-y|}u(y)\sqrt{|V(y)|}~dy\right|^2~dx\\
+&\leq \frac{1}{4|\lambda|^2} \int_{-\infty}^\infty |V(x)| \left|\langle u, \sqrt V\rangle\right|^2 ~dx\\
+&= \frac{||u||_{L^2}^2 ||V||_{L^1}^2}{4|\lambda|^2}
+\end{align*}
+which verifies (\ref{operator norm of SV}).
 \end{proof}
 
 
-\section{The growth of an entire function}
-Recall that $V$ is assumed to be super-exponentially decreasing. This justifies the differentiation under the integral sign
-$$\dbar \hat V(\xi) = \int_{-\infty}^\infty \dbar_\xi V(x) e^{-ix\xi} ~dx = 0$$
-whence $\hat V$ is an entire function. We therefore review the theory of growth of entire functions.
-The growth of an entire function is closely tied to its distribution of zeroes, as given by the angular counting function.
-\begin{definition}
-Let $R > 0$ and let $\theta,\varphi$ be angles; let $\Gamma_{R,\theta,\varphi}$ be the contour around the sector
-$$\{re^{i\xi} \in \CC: r < R \wedge \xi \in (\theta, \varphi)\}.$$
-Given an entire function $f$ which is not identically $0$, its \dfn{angular counting function} $N$ to be the number of zeroes of $f$ inside $\Gamma_{R,\theta,\varphi}$, counted by multiplicity.
-\end{definition}
-Note that by the argument principle, the angular counting function could also be defined by the contour integral
-$$N(R, \theta, \varphi) = \int_{\Gamma_{R,\theta,\varphi}} \frac{f'(z)}{f(z)} ~dz.$$
-\begin{definition}
-Let $f$ be a entire function. The \dfn{order} $\rho$ of $f$ is defined by
-$$\rho = \inf \{m \in \RR: f(z) = O(\exp(|z|^m))\}.$$
-\end{definition}
-It is easy to see that the order $\rho$ of $f$ is given by
-$$\rho = \limsup_{r \to \infty} \frac{\log \log \sup_{|z| = r} |f(z)|}{\log r}.$$
+\section{The Breit-Wigner formula}
+\label{BW section}
+We put $m_S(\lambda_0)$ for the trace of the operator
+$$-\frac{1}{2\pi i} \int_{\Gamma_{\lambda_0}} S'(\lambda)S(\lambda)^* ~d\lambda.$$
+This satisfies the equation $m_S(\lambda) = m_R(\lambda) - m_R(-\lambda)$. (For a proof, see \cite[Theorem 2.14]{dyatlov2019mathematical}.)
 
-\begin{definition}
-The \dfn{type} $\tau$ of $f$ is
-$$\tau = \limsup_{r \to \infty} \frac{\log \sup_{|z| = r} |f(z)|}{r^\rho}.$$
-If $\tau \in (0, \infty)$, then we say that $f$ is \dfn{of normal type}.
-If $\rho = 1$ and $f$ is of normal type, then we say that $f$ is \dfn{of exponential type}.
-\end{definition}
-We now show that we can determine whether a distribution is of compact support by considering its order.
-\begin{lemma}
-Let $\mu$ be a super-exponentially decreasing distribution which is not identically zero, and let $F = \hat \mu$. Suppose that $F$ is of normal type, and let $\rho$ be the order of $F$. Then $\rho \geq 1$, and $\rho = 1$ if and only if $\mu$ has compact support.
-\end{lemma}
-\begin{proof}
-Since $F$ is a Fourier transform, $F(\xi + i\eta)$ is bounded in $\xi$ if $\eta$ is held fixed. To see this, note that
-$$|F(\xi + i\eta)| = \left|\int_{-\infty}^\infty \mu(x)e^{-ix\xi}e^{x\eta} ~dx\right| \leq \int_{-\infty}^\infty |\mu(x)| e^{x\eta} ~dx.$$
-The last integral converges because $\mu$ is assumed super-exponentially decreasing, so $\mu(x) = O(e^{-2x\eta})$ whence $\mu(x)e^{x\eta} = O(e^{-x\eta})$.
-Therefore $F(\xi + i\eta) = O(g(\eta))$ for some function $g$ which does not depend on $\xi$, and $\rho = \inf \{m: g(\eta) = O(e^{\eta^m})\}$.
+Therefore we are interested in the matrix $S'(\lambda)S(\lambda)^*$, which can reasonably be thought of as the log-derivative of $S$, since we have the identity\footnote{For all unproven matrix calculus identities, see \cite{petersen2008matrix} or similar.}
+\begin{equation}
+\label{derivative of log det}
+(\log \det S)' = \tr(S'S^*).
+\end{equation}
 
-If $\mu$ has compact support, then by the Paley-Wiener theorem, for every $\varepsilon > 0$ and some $\tau > 0$ which depends on $\supp \mu$, $g(\eta) = O(e^{\tau\eta}) = O(e^{\eta^{1+\varepsilon}})$, and this estimate is sharp; therefore $\rho = 1$.
-Conversely, if $\rho = 1$, then because $F$ is of normal type there is a $\tau > 0$ such that $g(\eta) = O(e^{\tau\eta})$, and then the Paley-Wiener theorem bounds $\sup\{|x|: x \in \supp \mu\}$ in terms of $\tau$, so $\supp \mu$ is compact.
-
-We finally show that $\rho \geq 1$. So suppose that $\rho < 1$, and let $\chi$ be the indicator function of a compact set $K$ such that $\int_K |\mu| \neq 0$. (Such a set $K$ must exist, since $\mu$ is not identically zero.)
-Since $\rho \neq 1$, $\mu$ is not compactly supported, so there is a $\mu_0$ which does not have compact support such that $\mu = \mu\chi + \mu_0$, so that $F = \widehat{\mu\chi} + \widehat{\mu_0}$.
-Since $\mu_0$ is not compactly supported, the order $\rho_0$ of $\widehat{\mu_0}$ satisfies $\rho_0 \neq 1$.
-On the other hand, the order of $\widehat{\rho\chi}$ is $1$.
-
-If $\rho_0 < 1$, then $\widehat{\mu_0}$ is strictly dominated by $\widehat{\mu\chi}$ along any line $\xi + i\eta$ as $\eta \to \infty$ and $\xi$ is held fixed, so $\rho$ is given by the order of $\widehat{\mu\chi}$, and so $\rho = 1$. (Running this argument again then shows that $\rho_0 < 1$ implies a contradiction, but we did not know this a priori.)
-On the other hand, if $\rho_0 > 1$, then $\widehat{\mu\chi}$ is strictly dominated by $\widehat{\mu_0}$ on the imaginary axis, so $\rho = \rho_0 > 1$.
-Either way, $\rho \geq 1$.
-\end{proof}
-
-If $f$ is of normal type $\tau$, then we can understand how quickly $f$ grows along a ray $\{re^{i\theta}: r > 0\}$ by understanding the growth rate of the logarithm in the definition of $\tau$. This information is encoded by the indicator function of $f$.
-\begin{definition}
-Let $f$ be an entire function of order $\rho$ and normal type. The \dfn{indicator function} $h$ of $f$ is given by
-$$h(\theta) = \limsup_{r \to \infty} \frac{\log|f(re^{i\theta})|}{r^\rho}.$$
-Suppose that $\alpha < \beta$ are angles. If the $\limsup$ appearing in the definition of $h$ is actually a uniform limit as $r \to \infty$ along a subset of $\{re^{i\theta}: r>0\}$ of density $1$ for every $\theta \in (\alpha, \beta)$, then $f$ is said to have \dfn{completely regular growth} in $(\alpha, \beta)$. If $f$ is of completely regular growth and order $\rho$, then we define
-$$s(\theta, \varphi) = h'(\theta) - h'(\varphi) + \rho^2 \int_\theta^\varphi h(\xi) ~d\xi$$
-for every $\theta, \varphi$ such that $h'$ exists and is continuous at $\theta,\varphi$.
-\end{definition}
-We will need two facts about the indicator function of a function of completely regular growth, and we omit their proof. They can be found in \cite[Chapter III]{levin1964distribution}.
-\begin{theorem}
-\label{indicator function is C1}
-For every function $f$ of completely regular growth, there is a countable set $Z \subset [0, 2\pi]$ such that the indicator function $h$ is continuously differentiable on $[0, 2\pi] \setminus Z$. In particular, for every $\theta \notin Z$, $\varphi \mapsto s(\theta, \varphi)$ is continuous on $Z$.
+The Breit-Wigner approximation gives a formula for the trace of $S'(\lambda)S(\lambda)^*$ in terms of the support of $V$ and a sum over resonances. Since $P$ is an infinite set in general, one cannot hope to compute $\tr S'(\lambda)S(\lambda)^*$ exactly, but the approximation is suitable enough.
+\begin{theorem}[Breit-Wigner approximation]
+\label{proof of Breit-Wigner}
+  \index{Breit-Wigner approximation}
+For every $\lambda_0 \in \RR$,
+$$\frac{1}{2\pi i} \tr S'(\lambda_0)S(\lambda_0)^* = -\frac{1}{\pi}|\ch\supp V| - \frac{1}{\pi}\sum_{\lambda \in \Res V \setminus 0} \frac{\Im \lambda}{|\lambda - \lambda_0|^2}.$$
 \end{theorem}
-\begin{theorem}
-Let $f$ be a function of completely regular growth. Let $\alpha < \theta < \varphi < \beta$ be angles such that $s(\theta,\varphi)$ exists. Then
-$$s(\theta, \varphi) = 2\pi\rho \lim_{r\to\infty} \frac{N(r, \theta, \varphi)}{r^\rho}.$$
-\end{theorem}
+To begin the proof of Theorem \ref{proof of Breit-Wigner}, we combine (\ref{derivative of log det}) with (\ref{determinant of scatmat}), to see that
+\begin{equation}
+\label{trace of log derivative}
+-\tr S'(\lambda)S(\lambda)^* = \frac{\hat X'(-\lambda)}{\hat X(-\lambda)} + \frac{\hat X'(\lambda)}{\hat X(\lambda)}.
+\end{equation}
+We therefore expect scattering resonances to be closely related to $\hat X$. To see this in greater detail, let
+$$h(x - y)^\pm= \begin{cases}
+1 &\pm x > \pm y\\
+0 &\text{ else}
+\end{cases}$$
+be the Heaviside functions.
+\begin{lemma}
+\label{decomposition of Green function}
+Let $P(x, \partial_x) = a\partial_x^2 + b(x)$ be a differential operator, where $a$ is constant and $b \in L^\infty$. Let $E$ be the Green function of $P$, so that
+$$P(x, \partial_x)E(x, y) = \delta(x - y).$$
+For any two linearly independent solutions $u_1, u_2 \in \ker P$, if $W = u_1u_2' - u_2u_1'$ is the Wronskian of $u_1, u_2$, then
+$$E(x, y) = \frac{h(x - y)^+ u_1(x) u_2(y) + h(x - y)^- u_1(y) u_2(x)}{aW}.$$
+\end{lemma}
+\begin{proof}
+$E(\cdot, y)$ must be $C^2$ away from $y$, and $PE$ must be supported on the diagonal $D$, so
+$$E(x, y) = \begin{cases}
+f_1(y)u_1(x)&x < y\\
+f_2(y)u_2(x)&x > y
+\end{cases}$$
+for some functions $f_1,f_2$. Moreover, $E(\cdot, y)$ must be $C^1$, so that $PE$ can be a distribution of order $1$. On the other hand, for any $\varepsilon$,
+\begin{align*}\int_{y-\varepsilon}^{y + \varepsilon} a\partial_x^2E(x, y) + b(x)E(x, y) ~dx &= \int_{y-\varepsilon}^{y+\varepsilon} \delta(x - y) ~dx \\&= 1.\end{align*}
+Taking $\varepsilon \to 0$ and using the fact that $bE \in L^\infty$, we see that
+$$\lim_{\varepsilon \to 0} \int_{y-\varepsilon}^{y + \varepsilon} a\partial_x^2E(x, y) ~dx = 1$$
+and so $\partial_xE$ must jump by $1/a$ along $D$ while $E$ is continuous there. Therefore $f_1(y)u_1(y) = f_2(y)u_2(y)$ and $a(f_1(y)u_1'(y) - f_2(y)u_2'(y)) = 1$.
+Solving for $f_1,f_2$ we have $f_1 = u_2/aW$ and $f_2 = u_1/aW$, as desired.
+\end{proof}
+\begin{lemma}
+\label{scattering resonances are Xhat zeroes}
+Let $\lambda_0 \in \CC \setminus 0$. Then $m_R(\lambda_0)$ is the order of vanishing of $\lambda_0$ for $\hat X$.
+\end{lemma}
+\begin{proof}
+By Lemma \ref{decomposition of Green function} on $R_V(\lambda)$ with $u_1 = \phi_+(\cdot, -\lambda)$ and $u_2 = \phi_-(\cdot, -\lambda)$, we see that
+$$R_V(\lambda; x, y)= \frac{\phi_+(x, -\lambda)\phi_-(y, -\lambda)h(x -y)^+ + \phi_+(y, -\lambda)\phi_-(x, -\lambda)h(x-y)^-}{2\hat X(\lambda)}.$$
+On the other hand, since
+$$\frac{1}{2\pi} \partial_y \int_{-\infty}^\infty \phi_-(x, \lambda)e^{i\lambda y} ~d\lambda = X(y - x) + Y(y + x),$$
+it follows that
+$$i\lambda\phi_-(x, \lambda) = \hat X(\lambda)\phi_+(x, \lambda) + \hat Y(\lambda)\phi_+(x, -\lambda).$$
+Therefore $m_R(\lambda_0)$ is the rank of the residue $R$ at $\lambda_0$ of the function
+$$\lambda \mapsto \frac{\hat Y(\lambda)}{2i\lambda\hat X(\lambda)}\phi_+(\cdot, -\lambda)\otimes \phi_+(\cdot, \lambda)$$
+where $\otimes$ is defined by Definition \ref{tensor products are trace class}.
 
+If $k+1$ is the order of vanishing of $\lambda_0$ for $\hat X$, then by the Leibniz rule, there are nonzero scalars $c(j, k \ell)$ such that
+\begin{align*}
+R &= \frac{\partial_\lambda^k \hat Y(\lambda)(\lambda)\phi_+(\cdot, -\lambda) \otimes \phi_+(\cdot, \lambda)}{2k!i}\bigg|_{\lambda = \lambda_0}\\
+&= \sum_{\ell=0}^k \partial^\ell_\lambda \phi_+(\cdot, \lambda) \otimes \sum_{j=0}^{k-\ell-j}c(j, \ell) \partial_\lambda^{k-j} \frac{\hat Y(\lambda)}{\lambda} \partial_\lambda^j \phi_+(\cdot, -\lambda)\bigg|_{\lambda = \lambda_0}.
+\end{align*}
+The functions
+$$\partial^j_\lambda \phi_+(x, -\lambda) = (ix)^je^{i\lambda x}$$
+if $x$ is large enough, so are linearly independent in $x$ if $\lambda$ is held constant.
+Since $\hat Y(\lambda_0) \neq 0$ by (\ref{unitarity for Xhat}),
+$$\partial_\lambda^{k-\ell-j} \frac{\hat Y(\lambda)}{\lambda}\bigg|_{\lambda = \lambda_0} \neq 0,$$
+so it can be absorbed into the scalars $c(j, \ell, Y, \lambda)$. Thus
+$$R = \sum_{j+\ell \leq k} c(j, \ell, Y, \lambda) \partial^\ell_\lambda \phi_+(\cdot, -\lambda) \otimes \partial^j_\lambda \phi_+(\cdot, -\lambda)$$
+which has rank $k + 1$.
+\end{proof}
+
+Since we are now interested in the zeroes of $\hat X$, we must also be interested in $\ch \supp X$, by Titchmarsh's theorem.
+\begin{lemma}
+\label{computing ch supp X}
+Let $[a, b] = \ch \supp V$. Then $\ch \supp X = [-2(b - a), 0]$.
+\end{lemma}
+\begin{proof}
+After a change of coordinates we may assume $a = 0$ and $b = |\ch \supp V|$.
+Recall Lemma \ref{construction of intertwining, part 2}.
+We know that $\ch \supp X \subseteq [-2(b - a), 0]$ and $0 \in \ch \supp X$.
+If the claim does not hold, there is a $c < 2b$ such that such that $\ch \supp X = [c, 0]$, and by Titchmarsh's theorem, Theorem \ref{Titchmarsh I}, the density of zeroes of $\hat X$ is $c/\pi$.
+It follows by (\ref{unitarity for Xhat}) that the density of zeroes of $\hat G(\lambda) = \hat Y(\lambda)\hat Y(-\lambda) + \lambda^2$ is $2\lambda/\pi$. Now, if $R$ is the operator $Rf(x) = f(-x)$, then $G = (Y * RY) - \delta''$. Moreover,
+\begin{align*}\ch \supp G &= \{x + y: x \in \ch \supp Y, ~y \in \ch \supp RY\} \\
+&= \{x - y: x, y \in \ch \supp Y\}
+\end{align*}
+and $|\ch \supp G| = 2c$. So if $\ch \supp Y = [0, 2b]$, we would have $4b > 2c$, contradicting that $c < 2b$. Therefore $\ch \supp Y \subset [0, 2b]$.
+
+Let $d = \sup \supp Y$ and suppose that $d < 2b$. Then
+$$-\partial_y w_+(x, y) = X(x - y) + Y(x + y).$$
+Let $E^+(x, y)$ be an upward cone from $(x, y)$, and suppose $d/2 < x < y$. Then $\partial_y w_+$ vanishes on $E(x, y)^+ \cap \{(x', y'): y' > 2b\}$, so by causality properties of the wave equation, $\partial_y w_+ = 0$ if $d/2 < x < y$.
+Therefore $w_+$ only depends on $x$ in that region, so $w_+(x, y) = 0$ if $d/2 < x < y$.
+Therefore $\delta(x - y)V(x) = 0$ there, so if $y > d/2$ then $V(y) = 0$.
+But this implies that $b \notin \ch \supp V$, which is impossible.
+
+Therefore $2b \in \ch \supp Y$. A similar argument with $w_-$ implies that $0 \in \ch \supp Y$, so $\ch \supp Y \subset \ch \supp Y$, which is absurd.
+\end{proof}
+We now recall the definition of a Cauchy principal value of an infinite product. If $(z_n)_n$ is a sequence of complex numbers such that $z_n \to 1$, then
+$$\text{p.v.} \prod_n z_n = \lim_{\varepsilon \to 0} \prod_{|z_n - 1| > \varepsilon} z_n,$$
+if the limit on the right-hand side does in fact exist. The factors on the right-hand are finite products since $(z_n)$ does not have any accumulation points on $\CC \setminus D(1, \varepsilon)$. If the absolutely convergent infinite product $\prod_n z_n$ exists, then it is equal to its Cauchy principal value.
+The Cauchy principal value of an infinite sum is defined similarly.
+\begin{proof}[Proof of Theorem \ref{proof of Breit-Wigner}]
+By Theorem \ref{Titchmarsh II} and Lemma \ref{scattering resonances are Xhat zeroes},
+$$\frac{\hat X(\lambda_0)}{\hat X(0)} = e^{i|\ch\supp V|\lambda_0} \text{p.v.}\prod_{\substack{\hat X(\lambda) = 0\\\lambda \neq 0}} 1 - \frac{\lambda_0}{\lambda}.$$
+
+Taking logarithms and using Lemma \ref{computing ch supp X}\footnote{It is this step which required Theorem \ref{Titchmarsh I}, and its lengthy proof.} and the argument principle,
+$$i\log\left(\frac{\hat X(\lambda_0)}{\hat X(0)}\right) = -|\ch \supp V|\lambda_0 + i \text{p.v.}\sum_{\lambda \in \Res V \setminus 0} \log\left(1 - \frac{\lambda_0}{\lambda}\right).$$
+Therefore, after differentiating,
+$$\frac{1}{\pi i}\frac{\hat X'(\lambda_0)}{\hat X(\lambda_0)} = -\frac{1}{\pi}|\ch \supp V| + \frac{1}{\pi}\text{p.v.} \sum_{\lambda \in \Res V \setminus 0} \frac{i}{\lambda_0 - \lambda}.$$
+
+Recall that $X$ was a real distribution, so if $\lambda \in \RR$, then
+$$\hat X(\lambda) = \int_{-\infty}^\infty X(s) \overline{e^{is\lambda}} ~ds = \overline{\hat X(-\lambda)}.$$
+Therefore
+\begin{equation}
+\label{analytic continuation of symmetry}
+\hat X(\lambda) = \overline{\hat X(-\overline \lambda)},
+\end{equation}
+and $\dbar \overline{\hat X(-\overline \lambda)} = 0$, so (\ref{analytic continuation of symmetry}) is valid for any $\lambda \in \CC$, by analytic continuation.
+
+From (\ref{trace of log derivative}) and (\ref{analytic continuation of symmetry}), it follows that, for $\lambda_0 \in \RR$,
+\begin{equation}
+\label{first two terms good}
+\frac{1}{2\pi i}\tr(S'(\lambda_0)S^*(\lambda_0)) = -\frac{1}{\pi}|\ch \supp V| + \frac{1}{\pi} \text{p.v.} \sum_{\lambda \in \Res V \setminus 0} \frac{i}{\lambda_0 - \lambda}.
+\end{equation}
+Each of the individual summands on the right-hand side are finite, since Lemma \ref{real poles are zero} implies that $\lambda_0 \notin \Res V \setminus 0$.
+
+Lemma \ref{computing ch supp X} and (\ref{analytic continuation of symmetry}) together imply that $\Res V$ is closed under the $\ZZ/2$-action $\Phi(\lambda) = -\overline \lambda$.
+We use this fact to replace the Cauchy principal value in (\ref{first two terms good}) with an absolutely convergent series.
+Since $\Phi$ preserves $|\cdot|$, we may group up terms in the same orbit of $\Phi$, to conclude that
+\begin{align*}
+\frac{1}{2\pi i}\tr(S'(\lambda_0)S^*(\lambda_0)) = &-\frac{1}{\pi}|\ch \supp V| \\
+&\quad+ \frac{1}{\pi} \sum_{\lambda \in \Res V \cap i\RR \setminus 0} \frac{i}{\lambda_0 - \lambda} \\
+&\quad+ \frac{1}{\pi} \sum_{\lambda \in \Res V \cap H_+} \frac{i}{\lambda_0 - \lambda} + \frac{i}{\lambda_0 + \overline{\lambda}},
+\end{align*}
+where $H_+ = \{x + iy \in \CC: x > 0\}$ is the right half-plane, provided that we can justify moving the series
+\begin{equation}
+\label{sum over imaginary axis}
+\frac{1}{\pi} \sum_{\lambda \in \Res V \cap i\RR \setminus 0} \frac{i}{\lambda_0 - \lambda} =
+-\frac{1}{\pi} \sum_{\lambda \in \Res V \cap i\RR \setminus 0} \frac{\Im \lambda - i\lambda_0}{|\lambda - \lambda_0|^2}
+\end{equation}
+out of the sum over $H_+$. The real part of (\ref{sum over imaginary axis}) is a sum over terms of the form $\Im \lambda/|\lambda - \lambda_0|^2$.
+Lemma \ref{no resonances of positive imaginary part} then implies that all but finitely many summands in the real part of (\ref{sum over imaginary axis}) are negative.
+Similarly, the imaginary part of (\ref{sum over imaginary axis}) consists of terms of sign $\sgn \lambda_0$, and hence converges absolutely,
+so if (\ref{sum over imaginary axis}) converges at all, it converges absolutely, and we can pull it out of (\ref{first two terms good}).
+Since we have already proven conditional convergence, decomposition of (\ref{first two terms good}) into $\Phi$-orbits is valid.
+
+As for the sum over $H_+$, write $\lambda = \alpha - i\beta$ to see
+\begin{align*}
+\frac{1}{\pi} \sum_{\lambda \in \Res V \cap H_+} \frac{i}{\lambda_0 - \lambda} + \frac{i}{\lambda_0 + \overline{\lambda}}
+&= \frac{1}{\pi} \sum_{\lambda \in \Res V \cap H_+} \frac{i}{\lambda_0 - \alpha - i\beta} + \frac{i}{\lambda_0 + \alpha - i\beta}\\
+&= \frac{2}{\pi} \sum_{\lambda \in \Res V \cap H_+} i\frac{\lambda_0 - i\beta}{|\lambda_0 - \lambda|^2}\\
+&= \frac{2}{\pi} \sum_{\lambda \in \Res V \cap H_+} \frac{i\lambda_0 + \beta}{|\lambda_0 - \lambda|^2}
+\end{align*}
+and hence conclude
+\begin{equation}
+\label{sum over right half plane}
+\frac{1}{\pi} \sum_{\lambda \in \Res V \cap H_+} \frac{i}{\lambda_0 - \lambda} + \frac{i}{\lambda_0 + \overline{\lambda}}
+= -\frac{1}{\pi} \sum_{\lambda \in \Res V \setminus i\RR} \frac{\Im \lambda - i\lambda_0}{|\lambda - \lambda_0|^2}
+\end{equation}
+where we used the symmetry $\Phi$ to replace the factor $2$ with a sum over the left half-plane $H_-$.
+Lemma \ref{no resonances of positive imaginary part} again implies that (\ref{sum over right half plane}) converges absolutely.
+
+Combining (\ref{first two terms good}), (\ref{sum over imaginary axis}), and (\ref{sum over right half plane}), we have
+\begin{equation}
+\label{eliminate imaginary part}
+\frac{1}{2\pi i}\tr(S'(\lambda_0)S^*(\lambda_0)) = -\frac{1}{\pi}|\ch \supp V| -\frac{1}{\pi} \sum_{\lambda \in \Res V \setminus 0} \frac{\Im \lambda - i\lambda_0}{|\lambda - \lambda_0|^2}.
+   \end{equation}
+But recall (\ref{derivative of log det}); $S$ is unitary, so $\det S$ carries $\CC$ into the unit circle, and hence $\log \det S$ carries $\CC$ into $i\RR$.
+So $\tr S'(\lambda_0)S^*(\lambda_0)$ is imaginary, so taking the real part of both sides of (\ref{eliminate imaginary part}), we complete the proof.
+\end{proof}
+
+
+\chapter{The Breit-Wigner series}
+\label{SED potentials chapter}
+In this chapter we prove Theorem \ref{divergence of breit wigner, preliminary version}, which gives conditions for the Breit-Wigner series $B(V)$ of a super-exponentially decreasing potential to diverge.
 
 \section{Froese's conjecture}
 Froese \cite{froese1997asymptotic} conjectured an asymptotic formula for the distribution of resonances of $V$, provided of course that $V$ is super-exponentially decreasing. The rest of the work that we will do will be largely under the assumption of this conjecture.
@@ -1409,12 +1631,19 @@ Froese \cite{froese1997asymptotic} conjectured an asymptotic formula for the dis
 The \dfn{associated entire function} $F$ to the potential $V$ is the function
 $$F(z) = \hat V(2z)\hat V(-2z) + 1.$$
 \end{definition}
-When we refer to the indicator function $h$, the counting function $N$, and the auxiliary function $s$ that relates $h$ and $N$, we will always do so in the context of the associated entire function $F$ (so, e.g., $N$ counts the zeroes of $F$ in a sector).
+When we refer to the indicator function $h$, the counting function $N$, and the auxiliary function $s$ that relates $h$ and $N$, we will always do so in the context of the associated entire function $F$. So
+$$h(\theta) = \limsup_{r \to \infty} \frac{\log|F(re^{i\theta})|}{r^\rho},$$
+$N$ counts the zeroes of $F$ in a sector, and
+\begin{align*}
+s(\theta, \varphi) &= 2\pi\rho \lim_{r \to \infty} \frac{N(r, \theta, \varphi)}{r^\rho}\\
+&= h'(\theta) - h'(\varphi) + \rho^2\int_\theta^\varphi h(\xi) ~d\xi
+\end{align*}
+where $\rho$ is the order of $F$.
 
 In addition to the zero-counting function $N$, we will need a resonance-counting function, so let $n(R, \theta, \varphi)$ be the number of resonances $re^{i\xi}$ of $V$ such that $r < R$ and $\xi \in [\theta, \varphi]$, assuming that $\pi \leq \theta \leq \varphi \leq 2\pi$.
-This assumption is essential, because the set of resonances in $\CC_+$ is density zero. This follows from Lemma \ref{density zero in upper half plane}.
+This assumption is essential, because the Breit-Wigner series summed over $\Res V \cap \CC_+$ is always finite, by Lemma \ref{no resonances of positive imaginary part}.
 \begin{conjecture}[Froese's conjecture]
-Let $F$ be the associated entire function to $V$. Suppose that $F$ is of order $\rho$ and has completely regular growth. If $\pi \leq \theta \leq \varphi \leq 2\pi$, then
+Let $F$ be the associated entire function to $V$. Suppose that $F$ is of order $\rho$ and has completely regular growth. If $\pi \leq \theta \leq \varphi \leq 2\pi$, then the asymptotic distribution of resonances of $V$ and zeroes of $F$ is identical. So, in particular,
 $$|N(R, \theta, \varphi) - n(R, \theta, \varphi)| = o(R^\rho).$$
 \end{conjecture}
 
@@ -1433,13 +1662,27 @@ Then $V$ satisfies Froese's conjecture.
 \end{theorem}
 Therefore, when we assume that $V$ satisfies Froese's conjecture in the sequel, it will suffice that $V$ meets the hypotheses of Theorem \ref{Froese conjecture theorem}.
 
-In addition, the associated entire function $F$ has a great deal of symmetry. Assuming that $V$ is real-valued,
+\section{Proof of Theorem \ref{divergence of breit wigner, preliminary version}}
+There were three cases in the statement of Theorem \ref{divergence of breit wigner, preliminary version}.
+The first two are treated by Theorem \ref{divergence of breit wigner}; the last is treated by Theorem \ref{third case of divergence}.
+
+\begin{theorem}
+\label{divergence of breit wigner}
+Suppose that $V$ satisfies Froese's conjecture, $F$ is the associated entire function to $V$, and $F$ has completely regular growth.
+If there are $0 \leq \theta < \varphi \leq 2\pi$ such that $\pi \notin (\theta, \varphi)$ and either $s(\theta, \varphi) \neq 0$ or $s(\theta, \varphi)$ does not exist, then $B(V)$ diverges.
+\end{theorem}
+
+We first observe that $F$ has a great deal of symmetry;
 $$\overline{\hat V(2z)} = \int_{-\infty}^\infty \overline{V(x)e^{-2ixz}} ~dx = \int_{-\infty}^\infty V(x) e^{2ixz} ~dx = \hat V(-2z)$$
 so $z$ satisfies $\hat V(2z) \hat V(-2z) = -1$ iff $\overline z$ and $-z$ do; this implies $F$ is preserved by reflection about a real or imaginary axis, or about the origin.
 
+Now let $\rho$ be the order of $\hat V$. By Lemma \ref{fourier transforms are at least exponential type}, either $\rho \geq 1$ or $\rho = 0$ and $V$ is supported at $0$.
+In the latter case, this implies that $V = \sum_{n=1}^N c_n\delta_0^{(n)}$ for some $c_n \in \RR$, which contradicts that $V \in L^\infty$.
+So $\rho \geq 1$.
+
 \begin{lemma}
 \label{order of F}
-Let $\rho$ be the order of $\hat V$. Then $\rho$ is also the order of $F$.
+The order of $F$ is $\rho$.
 \end{lemma}
 \begin{proof}
 We have
@@ -1447,143 +1690,91 @@ We have
   &\sim \sup_{|z| = r} \log(\log |\hat V(2z)| + \log |\hat V(-2z)|)\\
   &\sim \sup_{|z| = r} \log \max_{\sigma \in \{1,-1\}} \log |\hat V(2\sigma z)|\\
   &= \sup_{|z| = r} \log \log |\hat V(2z)|\\
-  &= \log \log \sup_{|z| = r} |F(z)|
+  &= \log \log \sup_{|z| = r} |\hat V(z)|
 \end{align*}
 where we used the fact that $\rho \geq 1$ to remove the dependency on the summand $1$ and took $r$ large enough that $\log(A + B) \sim \log(\max(A, B))$. Precomposing with a constant factor does not affect order, so we are done.
 \end{proof}
 
-For functions satisfying Froese's conjecture we have an existence theorem for resonances.
+As a consequence, we obtain a linear lower bound on the growth of the resonance-counting function $n$.
 \begin{lemma}
-\label{existence theorem for resonances}
-Suppose that $\hat V$ is of completely regular growth.
-Let $F$ be the associated entire function and let $s, h$ be as above.
-If $\hat V$ is of normal type, then there is a $\theta \in [\pi, 2\pi]$ such that $s(0, \theta) \neq 0$ or $s(0, \theta)$ is not defined.
+\label{linear lower bound on resonances}
+There is an angle $\theta \in [\pi, 2\pi]$ such that $s(\pi, \theta)$ exists and is nonzero. In particular, $n(\cdot, 0, 2\pi)$ grows at least linearly.
 \end{lemma}
 \begin{proof}
-Suppose otherwise. Then by symmetry properties of $F$, for every $\theta \in [0, 2\pi]$ -- a stronger assumption than the original contradiction assumption -- $s(0, \theta) = 0$. Thus,
-$$0 = s'(\theta) = -h^{(2)}(\theta) + \rho^2 h(\theta).$$
-This implies that there are constants $c_\pm$ such that
-$$h(\theta) = c_+e^{\rho \theta} + c_-e^{-\rho\theta}$$
-so $h$ is not periodic; yet $h(\theta + 2\pi k) = h(\theta)$ by definition, so this is a contradiction unless $h = 0$, but then the type of $\hat V$ is zero, which is also a contradiction.
+We first show that $s(0, \cdot)$ is not identically zero. If it is, then so is $s'(0, \cdot)$, so $0 = -h^{(2)} + \rho^2 h$,
+and solving this ODE we see that
+$$h(\xi) = c_+e^{\rho\xi} + c_-e^{-\rho\xi}.$$
+If $h$ is identically zero, then $F$ is of zero type, yet $F$ is of normal type since $F$ is of completely regular growth, so this is a contradiction. Therefore $h$ is not identically zero.
+
+Since $F$ is of completely regular growth, $h(0) = h(2\pi)$. Moreover, $F(z) = F(-z)$, so $h(0) = h(\pi)$. Moreover, $\rho \neq 0$ and $h$ is analytic, so $h'$ must have two real zeroes since $h$ maps three to one. However, the only real zero $\alpha$ of $h'$ is
+$$\alpha = \frac{\log c_- - \log c_+}{2\rho},$$
+unless one of $c_\pm = 0$ (but then $h$ is injective, which is impossible).
+This is a contradiction. So there is a $\theta \in [0, 2\pi]$ such that $s(0, \theta) \neq 0$ or $s(0, \theta)$ does not exist. Using the fact that $F(z) = F(-z)$, we may replace $\theta$ with a $\theta \in [\pi, 2\pi]$ such that $s(\pi, \theta) \neq 0$ or $s(\pi, \theta)$ does not exist, if necessary.
+
+Let $Z$ be the countable set of points $\xi$ such that $s(0, \xi)$ does not exist. If $\theta \in Z$, then since $s(0, \cdot)$ is monotone, it must have a jump discontinuity at $\theta$, and since $Z$ is countable, for every $\varepsilon > 0$ we can find a $\delta < \varepsilon$ such that $s(0, \theta + \delta)$ exists and is nonzero. We may then replace $\theta$ with $\theta + \delta$ if $\varepsilon$ was chosen small enough.
+
+This proves the first claim. The second follows immediately from the first claim, Froese's conjecture, and the fact that $\rho \geq 1$.
 \end{proof}
 
-
-
-\section{Resonances in the lower-half plane}
-In the following we will assume that $\varepsilon$ and other small parameters are less than $\pi/2$, or any other angle that we have to consider which does not depend on a small parameter.
-For every $\varepsilon > 0$, we let
-$$\Res^\varepsilon V = \{re^{i\theta} \in \Res V: \theta \in (\pi + \varepsilon, 2\pi - \varepsilon)\}.$$
-We also define the series
-$$B_\varepsilon(V) =\sum_{\lambda \in \Res^\varepsilon V} \frac{\Im \lambda}{|\lambda|^2}.$$
-We let
-$$B_-(V) = -\inf_\varepsilon B_\varepsilon(V)$$
-so that, if all the series involved converge absolutely, $B(V) = B_+(V) - B_-(V)$, where $B_+(V)$ is the sum over resonances in the upper-half plane.
-
-It is not obvious, however, that $B(V)$ converges absolutely iff it converges. One could conceieve of a sequence of resonances $\lambda_n$ such that $\Im \lambda_n \to -\infty$ yet $\arg \lambda_n \to 0$.
-If in addition the complex conjugates of the $\lambda_n$ are also resonances, then their terms in the Breit-Wigner series will all telescope, and $B(V)$ will converge, but possibly conditionally.
-Therefore we must show that this is not the case.
-
-To accomplish this, we first note that $B_\varepsilon(V)$ consists of terms of all the same sign. Therefore $B_\varepsilon(V)$ converges iff $B_\varepsilon(V)$ converges absolutely. In particular, $B_-(V)$ converges iff $B_-(V)$ converges absolutely.
-
-We now consider the relationship between certain series converging and the function $s$ being zero.
-\begin{lemma}
-\label{s zero iff converge}
-Let $\pi \leq \theta \leq \varphi \leq 2\pi$ be angles, and let $B(\theta, \varphi, V)$ be the sum over resonances $\lambda$ such that $\arg \lambda \in [\theta, \varphi]$. If $V$ satisfies Froese's conjecture and $B(\theta, \varphi, V)$ converges, then either $s(\theta, \varphi)$ does not exist or $s(\theta, \varphi) \neq 0$.
-\end{lemma}
-\begin{proof}
-Let us prove the contrapositive. If $s(\theta, \varphi)$ does not exist then neither does $\lim_{r \to \infty} n(r, \theta, \varphi)/r^\rho$. Thus there is a sequence of $r_k$ such that
-$$\lim_{k \to \infty} \frac{n(r_k, \theta, \varphi)}{r_k^\rho}$$
-does not exist and since the $n(\cdot, \theta,\varphi)$ is clearly a monotone function it follows that that limit is infinite. Since $\rho \geq 1$ it follows that $n(r, \theta, \varphi) \gtrsim r$. On the other hand, if $s(\theta, \varphi) > 0$ then $n(r, \theta, \varphi) \sim s(\theta, \varphi)r^\rho \gtrsim r$.
-
-Let $\Lambda_{\theta,\varphi}$ be the set of resonances $\lambda \in \Res V$ such that $\arg \lambda \in [\theta, \varphi]$. Assume without loss of generality that $|\theta - \pi| \leq |2\pi - \varphi|$. Then
-\begin{align*}
-B(\theta, \varphi, V) &= \sum_{\lambda \in \Lambda_{\theta,\varphi}} \frac{\Im \lambda}{|\lambda|^2}
-  = \sum_{\lambda \in \Lambda_{\theta,\varphi}} \frac{\arg \sin \lambda}{|\lambda|}\\
-  &\leq \sin \theta \sum_{\lambda \in \Lambda_{\theta,\varphi}} |\lambda|^{-1}
-  \leq \sin \theta \sum_{k=0}^\infty \sum_{\substack{\lambda \in \Lambda_{\theta,\varphi}\\|\lambda| \in [k, k+1)}} \frac{1}{k+1}\\
-  &= \sin \theta \sum_{k=0}^\infty \frac{n(k+1, \theta, \varphi) - n(k, \theta, \varphi)}{k+1}
-  \lesssim \sin \theta \sum_{k=0}^\infty \frac{(k+1)^\rho - k^\rho}{k+1}\\
-  &\lesssim -\sum_{k=0}^\infty \frac{1}{k+1} = -\infty.
-\end{align*}
-Therefore the series diverges.
-\end{proof}
+In what follows, let
+$$B(V, \theta, \varphi) = -\sum_{\substack{\lambda \in \Res V\\\arg \lambda \in [\theta, \varphi]}} \frac{\Im \lambda}{|\lambda|^2}.$$
+So $B(V) = B(V, 0, 2\pi)$.
 
 \begin{lemma}
-\label{epsilon absolute converge in lower half plane}
-Assume that $V$ satisfies Froese's conjecture. The series $B_-(V)$ converges iff for every $\varepsilon$, $B_\varepsilon(V)$ converges.
-\end{lemma}
-\begin{proof}
-Clearly $B_-(V)$ dominates the $B_\varepsilon(V)$, so if $B_-(V)$ converges then so do the $B_\varepsilon(V)$. Conversely, suppose that the $B_\varepsilon(V)$ converge.
-
-TODO: Show that in fact, if $s(\pi, \theta)$ does not exist or is nonzero, then $N(R, \pi, \theta) = \Omega(R^\rho)$ so $B_\theta(V)$ diverges. (This is important enough that it could be its own lemma).
-This implies that, since $B_\theta(V)$ is convergent $s(\pi, \theta)$ exists and is $0$, possibly except for $s(\pi, \pi)$. Once we have shown this, the Riemann-Lebesgue lemma guarantees that the resonances corresponding to $s(\pi, \pi)$'s nonexistence all have bounded imaginary part, but this implies that $B_-(V)$ converges.
-
- Theorem \ref{indicator function is C1}.
-
-A similar argument applies to $2\pi$.
-\end{proof}
-
-\begin{lemma}
-\label{epsilon absolute convergence}
-The following are equivalent:
-\begin{enumerate}
-\item The Breit-Wigner series converges.
-\item The Breit-Wigner series converges absolutely.
-\item For every $\varepsilon > 0$, $B_\varepsilon(V)$ converges.
-\item For every $\varepsilon > 0$, $B_\varepsilon(V)$ converges absolutely.
-\end{enumerate}
-\end{lemma}
-\begin{proof}
-Note that $B_\varepsilon(V)$ is a sequence of negative terms, since $\Im \lambda = |\lambda| \sin \arg \lambda < -|\lambda| \sin \varepsilon < 0$. Therefore $B_\varepsilon V$ cannot converge conditionally, so (3) and (4) are equivalent. Clearly (2) implies (1) and (1) implies (3).
-
-It remains to show that (4) implies (2). Note that
-$$B(V) = B_\varepsilon(V) + \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\Im \lambda}{|\lambda|^2}
-= B_\varepsilon(V) + \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\sin \arg \lambda}{|\lambda|^2}.$$
-If (1) fails, then $B(V) = \infty$, but if (3) is true, then $B_\varepsilon(V)$ is finite, so the remainders
-$$R_\varepsilon = \sum_{\substack{\lambda \in \Res V\\\arg \lambda \geq -\varepsilon}} \frac{\sin \arg \lambda}{|\lambda|^2}$$
-must all diverge. Notice that we can ignore $\lambda \in \Res V \cap \RR$ and hence assume that $\arg \lambda \neq 0$. Moreover,
-$$\sum_{\substack{\lambda \in \Res V\\\arg \lambda > 0}} \frac{\sin \arg \lambda}{|\lambda|^2} < \infty$$
-by Lemma \ref{density zero in upper half plane}. Since $R_\varepsilon$ diverges for every $\varepsilon$, it must be that
-$$\sum_{\substack{\lambda \in \Res V\\-\varepsilon < \arg \lambda < 0}} \frac{\sin \arg \lambda}{|\lambda|^2} = \infty.$$
-TODO This seems impossible to prove -- what we actually want is that (1) and (4) implies (2) which is stronger than (4) implies (2).
-If it is possible to prove, use a pigeonhole argument on the rays $1/n$ for $n > 1/\varepsilon$.
-\end{proof}
-
-\begin{lemma}
-\label{divergence of epsilon series}
-If $N(r, \pi + \varepsilon, 2\pi - \varepsilon) \gtrsim r$, then $B_\varepsilon(V)$ diverges.
+\label{divergence of angular series}
+Suppose that $\pi < \theta \leq \varphi < 2\pi$. If $N(r, \theta, \varphi) \gtrsim r$, then $B(V, \theta, \varphi)$ diverges.
 \end{lemma}
 \begin{proof}
 For convenience let
-$$N_\varepsilon(j) = N(j, \pi + \varepsilon, 2\pi - \varepsilon).$$
-We check
+$$k_j = n(j, \theta, \varphi).$$
+Without loss of generality assume that $e^{i\theta}$ is closer to the real axis than $e^{i\varphi}$.
+Let $\Res^* V$ be the set of resonances $re^{i\xi}$ such that $\theta \leq \xi \leq \varphi$.
+
+We readily check
 \begin{align*}
--B_\varepsilon(V) &= -\sum_{\lambda \in \Res^\varepsilon V} \frac{\Im \lambda}{|\lambda|^2} = -\sum_{\lambda \in \Res^\varepsilon V} \frac{\sin \arg \lambda}{|\lambda|}\\
-  &> \sin \varepsilon \sum_{\lambda \in \Res^\varepsilon V} |\lambda|^{-1} \geq \sin \varepsilon \sum_{j=0}^\infty \sum_{\substack{\lambda \in \Res^\varepsilon V\\|\lambda| \in [j, j+1)}} (j+1)^{-1}\\
-  &= \sin \varepsilon \sum_{j=1}^\infty \frac{N_\varepsilon(j) - N_\varepsilon(j-1)}{j} = \sin \varepsilon \sum_{j=1}^\infty N_\varepsilon(j)\left(\frac{1}{j} - \frac{1}{j-1}\right) \\
-  &= \sin \varepsilon N_\varepsilon(1) + \sin \varepsilon \sum_{j=2}^\infty \frac{N_\varepsilon(j)}{j(j+1)}.
+B(V, \theta, \varphi) &= -\sum_{\lambda \in \Res^* V} \frac{\Im \lambda}{|\lambda|^2} = -\sum_{\lambda \in \Res^* V} \frac{\sin \arg \lambda}{|\lambda|}\\
+  &\geq \sin \theta \sum_{\lambda \in \Res^* V} |\lambda|^{-1} \geq \sin \theta \sum_{j=0}^\infty \sum_{\substack{\lambda \in \Res^* V\\|\lambda| \in [j, j+1)}} (j+1)^{-1}\\
+  &= \sin \theta \sum_{j=1}^\infty \frac{k_j - k_{j-1}}{j} = \sin \theta \sum_{j=1}^\infty k_j\left(\frac{1}{j} - \frac{1}{j-1}\right) \\
+  &= \sin \theta\left(k_1 + \sum_{j=2}^\infty \frac{k_j}{j(j+1)}\right).
 \end{align*}
-Under the growth assumption on $N_\varepsilon$, we have
-$$-B_\varepsilon(V) \gtrsim 1 + \sum_{j=2}^\infty \frac{j}{j(j+1)} = 1 + \sum_{j=3}^\infty j^{-1}$$
+By Froese's conjecture, $k_j \sim N(j, \theta, \varphi)$, and by assumption this implies that $k_j \gtrsim j$. So
+$$B(V, \theta, \varphi) \gtrsim 1 + \sum_{j=2}^\infty \frac{j}{j(j+1)} = 1 + \sum_{j=3}^\infty j^{-1}$$
 which clearly diverges.
 \end{proof}
-
-
-\section{Divergence}
-Let $\rho$ be the order of $\hat V$, and let $F$ be the associated entire function. Then $\rho$ is also the order of $F$, by Lemma \ref{order of F}.
-
-If $V$ is compactly supported, then by the Paley-Wiener theorem, $\hat V(z) = O(e^{h(\Im z)})$ where $h$ is a linear function which depends on $\supp V$. Therefore $\hat V$ is of exponential type $\sup\{|x|: x \in \supp V\} < \infty$. In particular, if $\hat V$ is of normal type (for example, if $F$ has completely regular growth), then $V$ has compact support if and only $\rho = 1$.
-\begin{conjecture}
-Suppose that $V$ satisfies Froese's conjecture and $F$ has completely regular growth. Then the Breit-Wigner series $B_V$ converges if and only if $V$ has compact support.
-\end{conjecture}
-We prove a weak form of this conjecture.
-\begin{theorem}
-\label{divergence of breit wigner}
-Suppose that $V$ satisfies Froese's conjecture and $F$ has completely regular growth. If $s$ is defined on $\{0, \pi\}$, then the Breit-Wigner series $B_V$ diverges. Conversely, if $V$ has compact support, then $s$ is not defined at $\{0, \pi\}$, and $B_V$ converges.
-\end{theorem}
-Of course, we already knew that if $V$ had compact support, then $B_V$ converges, as a consequence of Titchmarsh's theorem, but this is an amusing alternative proof. Note that this does not quite prove the conjecture, as it does not rule out the possibility that $s_F = c\delta_\pi + c'\delta_{2\pi}$ even if $V$ does not have compact support, or even that $s_F = 0$ identically (TODO: But I can probably fix that -- if this happens then $s_F$ has an indicator diagram, which should give control on the measure of $\ch\supp V$, or else $h$ may fail to be periodic!)
+At this point of the proof, we have shown that the only way that $B(V)$ could possibly converge is if ``most of the resonances of $V$ are close to the real axis" in the sense that they are clustered in arbitrarily small sectors about $\RR$, except possibly for an exceptional set of resonances that grows sublinearly.
+For compactly supported potentials, this was already proven by Zworski \cite{zworski1987distribution}.
+This explains the somewhat unnatural hypotheses in Theorem \ref{divergence of breit wigner, preliminary version}: they are sufficient conditions that resonances of $V$ cannot be contained in arbitrarily small sectors about $\RR$.
 
 \begin{proof}[Proof of Theorem \ref{divergence of breit wigner}]
+Suppose first that $s(\theta, \varphi)$ does not exist. Then neither does $\lim_{r \to \infty} N(r, \theta, \varphi)/r^\rho$, so there is a sequence of $r_k$ such that
+$$\lim_{k \to \infty} \frac{N(r_k, \theta, \varphi)}{r_k^\rho} = \infty;$$
+since $N(\cdot, \theta, \varphi)$ is a monotone function, it follows that $N(r, \theta, \varphi) \gtrsim r^\rho$.
+On the other hand, if $s(\theta, \varphi)$ exists and is nonzero, then $N(r, \theta, \varphi) \gtrsim r^\rho$ is clear.
+
+By symmetry properties of $F$ and the assumption that $\pi \notin [\theta, \varphi]$, we may reflect the angle $[\theta, \varphi]$ around the real axis and so assume that $[\theta, \varphi] \subset [\pi, 2\pi]$.
+Under this assumption, Froese's conjecture implies that
+$$N(r, \theta, \varphi) \gtrsim r^\rho \geq r.$$
+By Lemma \ref{no resonances of positive imaginary part}, there are only finitely many resonances in $\overline{\CC_+}$, which we may remove without affecting convergence properties of $B(V)$.
+After doing so, all summands in $B(V)$ have the same sign, so $B(V) \geq B(V, \theta, \varphi)$, and by Lemma \ref{divergence of angular series}, $B(V, \theta, \varphi) = \infty$.
+\end{proof}
+
+\begin{theorem}
+\label{third case of divergence}
+Suppose that $V$ satisfies Froese's conjecture, $F$ is the associated entire function to $V$, and $F$ has completely regular growth.
+If
+$$\lim_{\varphi \to \pi} s(\pi, \varphi) = 0$$
+then $B(V)$ diverges.
+\end{theorem}
+\begin{proof}
+If $s(0, \pi)$ does not exist, then there is a jump discontinuity in $\varphi \mapsto s(0, \varphi)$ at $\pi$, say by $\eta > 0$, and then $s(0, \pi + \varepsilon) \geq \eta$ for any $\varepsilon > 0$, contradicting the hypothesis. So $s(0, \pi)$ exists.
+
+By Lemma \ref{linear lower bound on resonances}, there is a $\xi \in [\pi, 2\pi]$ such that $s(\pi, \xi)$ exists and is nonzero.
+Therefore $s(0, \xi) = s(0, \pi - \xi) + s(\pi - \xi, \pi) + s(\pi, \xi)$.
+By symmetry of $F$, $s(0, \pi - \xi) = s(\pi, \xi)$ and $s(\pi - \xi, \pi) = s(2\pi - \xi, 2\pi)$, so
+$$0 \neq 2s(\pi, \xi) + s(2\pi - \xi, 2\pi).$$
+The terms on the right-hand side are nonnegative, so one of them is positive.
+
+Suppose that $s(\pi, \xi) > 0$; the other case is similar. Since there is not a jump discontinuity at $\pi$, there must be a $\theta > \pi$ such that $s(\theta, \xi) > 0$. Thus this case reduces to Theorem \ref{divergence of breit wigner}.
 \end{proof}
 
 

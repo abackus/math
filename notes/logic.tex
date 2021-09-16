@@ -1,0 +1,1585 @@
+
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathrsfs}
+
+\usepackage{enumitem}
+%\usepackage[shortlabels]{enumerate}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{amscd}
+\usepackage{makeidx}
+\usepackage{enumitem}
+\title{Logic notes}
+\author{Aidan Backus}
+\date{2021}
+
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\DD}{\mathbb{D}}
+
+\newcommand{\Torus}{\mathbb{T}}
+
+\newcommand{\AAA}{\mathcal A}
+\newcommand{\BB}{\mathcal B}
+\newcommand{\HH}{\mathcal H}
+
+\newcommand{\Grp}{\mathbf{Grp}}
+\newcommand{\Open}{\mathbf{Open}}
+\newcommand{\Vect}{\mathbf{Vect}}
+\newcommand{\Set}{\mathbf{Set}}
+
+\newcommand{\Cau}{\mathbf{Cau}}
+\newcommand{\ISF}{\mathbf{ISF}}
+\newcommand{\Simp}{\mathbf{Simp}}
+\newcommand{\Sch}{\mathscr S}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\dom}{dom}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rad}{rad}
+
+\newcommand{\Fin}{\mathsf{Fin}}
+\newcommand{\Seq}{\mathsf{Seq}}
+\DeclareMathOperator{\lh}{lh}
+
+\newcommand{\ACA}{\mathbf{ACA}}
+\newcommand{\RCA}{\mathbf{RCA}}
+\newcommand{\WKL}{\mathbf{WKL}}
+
+\newcommand{\dbar}{\overline\partial}
+
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all % 'all' will create links for everything in the TOC
+    %Ning added hyperlinks to the table of contents 6/17/19
+}
+
+\theoremstyle{definition}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{axiomx}[theorem]{Axiom}
+\newtheorem{theoremxx}[theorem]{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definitionx}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{examplex}[theorem]{Example}
+\newtheorem{exercisex}{Exercise}[chapter]
+\newtheorem{problem}[theorem]{Problem}
+
+\newenvironment{axiom}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\axiomx}
+  {\popQED\endexamplex}
+
+\newenvironment{definition}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\definitionx}
+  {\popQED\endexamplex}
+
+\newenvironment{example}
+  {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\examplex}
+  {\popQED\endexamplex}
+
+  \newenvironment{exercise}
+    {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\exercisex}
+    {\popQED\endexamplex}
+
+  \newenvironment{theoremx}
+        {\pushQED{\qed}\renewcommand{\qedsymbol}{$\diamondsuit$}\theoremxx}
+        {\popQED\endexamplex}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\chapter{Reverse math}
+In reverse math, we try to determine which axioms of set theory are strictly necessary to do mathematics.
+
+This chapter is based on lectures of Reed David Solomon at UConn.
+
+\begin{example}
+The axiom of choice is equivalent to Zorn's lemma. In order to make this precise, we need to specify a base theory.
+Indeed we work in $\mathbf{ZF}$, which proves neither the axiom of choice nor Zorn's lemma. Now $\mathbf{ZF}$ is a very strong theory which collapses a lot of statements to be equivalent, but is still weak enough for our purposes here.
+\end{example}
+
+Since $\mathbf{ZF}$ is too strong to be useful as a ground theory, we need to replace it with a much weaker theory when doing reverse math.
+However, the base theory $B$ cannot be too weak, because it needs to be able to prove a suitable version of G\"odel coding.
+For example, $B$ must be at least strong enough to prove that the G\"odel $\beta$-map is a bijection.
+In addition, $B$ cannot be so useless as to not be able to prove that anything is equivalent.
+
+\section{Setting up the base theory}
+We introduce the language in which we will define our base theories.
+
+\begin{example}
+Let $B$ be the trivial theory in some first-order language $\mathcal L$, which has no axioms. Then two theorems are equivalent over $B$ iff they are tautologically equivalent, and the space of theorems modulo equivalence over $B$ is the Lindenbaum algebra of $\mathcal L$. This is totally useless! So we need $B$ to be nontrivial.
+\end{example}
+
+\begin{definition}
+The language $\mathscr L_2$ is the first-order language generated by:
+\begin{enumerate}
+\item Lowercase \dfn{number variables}.
+\item Uppercase \dfn{set variables}.
+\item Constant symbols $0,1$.
+\item Function symbols $+,\times$.
+\item Relation symbols $<,\in$.
+\end{enumerate}
+Here function and constant symbols, and $<$, only act on number variables, while $\in$ compares a number variable to a set variable.
+\end{definition}
+\begin{definition}
+A \dfn{model} of $\mathscr L_2$ consists of
+$$M = (M, S_M) = (M, S_M, +_M, \times_M, 0_M, 1_M, <_M)$$
+where $\emptyset \subset M \subseteq \omega$ is the range of the number variables, $\emptyset \subset S_M \subseteq \mathscr P(M)$ is the range of the set variables, $+_M,\times_M \in M^{M^2}$, $0_M,1_M \in M$, and $<_M \subseteq M^2$.
+\end{definition}
+
+Note that we do not explicitly interpret $\in$. Rather, we interpret it as true membership in $S_M$.
+This is reasonable because we require that $S_M \subseteq \mathscr P(M)$.
+
+The intended model of any theory in $\mathscr L_2$ is $\omega$, in which the number variables range over $\omega$, and the set variables range over the power set of $\omega$.
+Here the constant, function, and relation symbols have their usual meaning.
+We will occasionally use the obvious shorthands, such as $X \subseteq Y$ to mean $\forall x((x \in X) \to (x \in Y)$.
+
+We have not imposed that $S_M$ is uncountable. Indeed, one way that $M$ could fail to be the intended model is that $S_M$ is countable.
+
+\begin{example}
+Let $M = (\omega, R)$ where $R$ is the set of all recursive subsets of $\omega$. Then $R$ is countable, so $M$ is not isomorphic to the intended model of $\mathscr L_2$.
+\end{example}
+
+We define $\models$ in the usual way, by induction on formula complexity.
+
+\begin{definition}
+Let $M$ be a model of $\mathscr L_2$. We say $B \subseteq M$ is \dfn{definable} in $M$ if there is a formula $Q(x, y, Y)$, $m \in M$, $A \in S_M$, such that $B = \{b \in M: M \models Q(b, m, A)\}$.
+\end{definition}
+
+In particular, definable always means definable with parameters (here, $(m, A) \in M \times S_M$).
+
+\begin{definition}
+The \dfn{basic axioms} are the universal closures of $n + 1 \neq 0$, $m + 1 = n + 1 \to m = n$, $m + 0 = m$, $m + (n + 1) = (m + n) + 1$, $0m = 0$, and $m(n + 1) = mn + m$.
+\end{definition}
+
+\begin{definition}
+The theory of \dfn{second-order arithmetic}, $Z_2$, is the set of axioms in the language $\mathscr L_2$:
+\begin{enumerate}
+\item The basic axioms.
+\item The set induction axiom
+$$\forall X((0 \in X \wedge \forall n(n \in X \to n + 1 \in X)) \to \forall n(n \in X)).$$
+\item For every formula $Q(n)$ that does not contain $X$ freely, the universal closure of $\exists X \forall n(n \in X \leftrightarrow Q(n))$.
+\end{enumerate}
+The final bullet is known as the \dfn{comprehension scheme}.
+\end{definition}
+
+Here the assumption that $Q(n)$ does not contain $X$ freely is to prevent us from taking the axiom $\exists X \forall n(n \in X \leftrightarrow n \notin X)$.
+However, $Q(n)$ may contain free variables other than $n$, so we do have comprehension with parameters.
+This is why we require that the comprehension axioms have universal closure, so we can write
+$$\forall m \exists X \forall n(n \in X \leftrightarrow n < m)$$
+(say) which implies that $\{n \in \omega: n < m\} \in S_M$.
+The set induction axiom, along with the comprehension scheme, implies formula induction, thus
+$$Z_2 \vdash (Q(0) \wedge \forall n(Q(n) \to Q(n+1))) \to \forall n Q(n)$$
+whenever $Q(n)$ is a formula. Indeed, one can let $X = \{n \in \omega: Q(n)\}$ by the comprehension scheme, and then apply set induction.
+
+The strange notation $Z_2$ is motivated the idea that $Z_1$ is an old name for Peano arithmetic.
+
+The advantages of $Z_2$ are that it is closely related to recursion theory, so that we will both be able to apply recursion theory and use reverse math to prove theorems in recursion theory, and that its subtheories are weak enough to make reverse math possible.
+However, $Z_2$ cannot talk about real analysis directly, so we will be heavily reliant on G\"odel coding.
+In addition, $Z_2$ cannot talk about deeply uncountable areas of mathematics.
+
+Let us prove some basic facts about models $M$ of $Z_2$.
+\begin{lemma}
+$\emptyset, M \in S_M$.
+\end{lemma}
+\begin{proof}
+By comprehension $\exists X \forall n(n \in X \leftrightarrow 0 = 1)$, thus $\emptyset \in S_M$. Similarly for $M$ with $0 = 1$ replaced with $0 = 0$.
+\end{proof}
+Henceforth we will abuse notation and write $\NN = M$ whenever we want to refer to just the first-order part of $M$.
+
+\begin{lemma}
+If $A, B \in S_M$ then $A \cap B \in S_M$, and similarly for $A \cup B$, $A \setminus B$, etc.
+\end{lemma}
+\begin{proof}
+By comprehension $\forall Y \forall Z \exists X \forall n(n \in X \leftrightarrow n \in Y \wedge n \in Z)$.
+Similarly for the others.
+\end{proof}
+
+The moral is that any set which is definable with parameters in $(M, S_M)$ is itself in $S_M$.
+
+Let us use $(\omega, \mathscr P(\omega))$ to denote the standard model of $Z_2$ (given a background set theory).
+Models of $Z_2$ may be nonstandard in the following senses. They can be of the form $(\omega, S)$ where $S \subset \mathscr P(\omega)$, in particular $S$ countable, by the downwards L\"owenheim-Skolem theorem.
+\begin{definition}
+An \dfn{$\omega$-model} of $Z_2$ is a model of the form $(\omega, S)$ where $S \subseteq \mathscr P(\omega)$.
+\end{definition}
+One could also have $(M, S_M)$ where $M$ is a nonstandard model of arithemtic, which exists by the ultrapower construction, so there are models of $Z_2$ which are not $\omega$-models.
+
+\begin{example}
+Let $M$ be an $\omega$-model of $Z_2$. Then $S_M$ is closed under the Turing jump, since $A'$ is definable from $A$ with a $\Sigma_1^0$ formula.
+Actually, $S_M$ is closed under the ``Turing jump" of $M$ regardless of whether $M$ is an $\omega$-model, but if $M$ is not an $\omega$-model, then the Turing jump adds a bunch of junk that doesn't actually describe which programs halt.
+\end{example}
+
+\section{The base theory $\RCA_0$}
+We now introduce the subsystem of $Z_2$ that we will use as a base theory.
+
+\begin{definition}
+The \dfn{$\Sigma_k^0$-induction scheme} consists of the universal closures of
+$$\varphi(0) \wedge \forall n(\varphi(n) \to \varphi(n+1)) \to \forall n\varphi(n)$$
+whenever $\varphi$ is a $\Sigma_k^0$ formula.
+\end{definition}
+
+\begin{definition}
+The \dfn{$\Delta_1^0$-comprehension scheme} consists of the universal closures of
+$$\forall n(\varphi(n) \leftrightarrow \psi(n)) \to \exists X \forall n(n \in X \leftrightarrow \varphi(n))$$
+whenever $\varphi$ is a $\Sigma_1^0$ formula and $\psi$ is a $\Pi_1^0$ formula.
+\end{definition}
+
+We recall that $\varphi$ is $\Delta_1^0$ exactly if it is both $\Sigma_1^0$ and $\Pi_1^0$, and that happens iff $\{n \in \omega: \varphi(n)\}$ is recursive.
+Thus the $\Delta_1^0$-comprehension scheme ensures that every recursive set exists.
+
+\begin{definition}
+The subsystem $\RCA_0$ consists of:
+\begin{enumerate}
+\item The basic axioms.
+\item The set induction axiom.
+\item The $\Delta_1^0$-comprehension scheme.
+\item The $\Sigma_1^0$-induction scheme.
+\end{enumerate}
+The axiom schemes $\Delta_1^0$-comprehension and $\Sigma_1^0$-induction are together known as the \dfn{recursive comprehension axioms}, hence the name $\RCA_0$.
+\end{definition}
+
+Note that the set induction axiom and $\Delta_1^0$-comprehension implies $\Delta_1^0$-induction, but that is strictly weaker than $\Sigma_1^0$-induction.
+
+Let $[\cdot]$ denote the Turing equivalence class.
+We let $\oplus$ be the recursion-theoretic join, thus $[A \oplus B]$ is the supremum in the Turing degrees of $[A]$ and $[B]$.
+We note that if an $\omega$-model $S$ is closed under Turing equivalence, then it is well-defined to say that $S$ is closed under $\oplus$, since $[A \oplus B] \in S$ can be interpreted to mean that for every representative $T \in [A \oplus B]$, $T \in S$.
+
+\begin{theorem}
+Let $S$ be an $\omega$-model. Then $S \models \RCA_0$ iff $S$ is closed under $\oplus$, and for every $B \in S$, if $[A] \leq [B]$ then $A \in S$.
+\end{theorem}
+\begin{proof}
+We prove one direction as the proof of the other is similar.
+Let $S \models \RCA_0$. First suppose $A, B \in S$; then we can take
+$$\{m: (\exists n < m)(n + n = m \wedge n \in A) \vee (\exists n < m)(n + n + 1 = m \wedge n \in B)\}$$
+as a representative of $[A \oplus B]$, as this definition is $\Sigma_0^0 = \Delta_1^0$.
+Closure under $\oplus$ is well-defined as a consequence of closure under Turing descent.
+So now suppose $[A] \leq [B]$ and $B \in S$.
+Then $A$ and $A^c$ are both r.e. in $B$, thus both $A,A^c$ are $\Sigma_1^0$-definable from $B$.
+In particular $A$ is $\Delta_1^0$-definable from $B$, so $A \in S$.
+\end{proof}
+
+\section{Basic mathematics in $\RCA_0$}
+When talking about $\RCA_0$ we will use $\NN$ to refer to the object that $\RCA_0$ thinks is the natural numbers, even if it is nonstandard, and $\omega$ to mean the true natural numbers, which are the intended model of $\RCA_0$.
+
+We can easily but tediously verify the following.
+\begin{theorem}
+The following is a theorem of $\RCA_0$: $\NN$ is a discretely ordered, cancellative, commutative semiring.
+\end{theorem}
+\begin{proof}
+Let us show that $\RCA_0$ proves that addition is associative, thus
+$$\RCA_0 \vdash \forall m\forall n\forall p((m+n)+p = m+(n+p)).$$
+Let us let $A$ denote the basic axiom $\forall x(x + 0 = x)$ and $B$ the basic axiom $\forall x \forall y(x+(y+1) = (x+y) + 1)$.
+We will use $\Sigma_0^0$-induction on $p$.
+Indeed, by $A$, if $p = 0$ then
+$$(m+n)+0=m+n=m+(n+0).$$
+Similarly, $B$ proves the case when $p = 1$.
+Now, to prove it for $p + 1$, by $B$,
+$$n+(m+(p+1)) = n+((m+p)+1) = (n+(m+p))+1.$$
+By the inductive hypothesis and $B$ again,
+$$(n+(m+p))+1 = ((n+m)+p)+1 = (n+m)+(p+1).$$
+The other axioms of a discretely ordered, cancellative, commutative semiring are proven similarly.
+\end{proof}
+
+We introduce a \dfn{pairing map}
+$$[i, j] = (i+j)^2 + i.$$
+\begin{lemma}
+The following is a theorem of $\RCA_0$: the pairing map is injective and
+$$\forall i \forall j(i \leq [i,j] \wedge j \leq [i,j]).$$
+\end{lemma}
+\begin{proof}
+These results can be deduced from the basic axioms and $\Sigma_0^0$-induction.
+\end{proof}
+
+We will write $[i_0, i_1, \dots, i_{k-1}]$ to mean $[i_0, [i_1, \cdots [i_{k-2}, i_{k-1}] \cdots ]]$.
+
+We let $X = Y$ to mean $\forall n(n \in X \leftrightarrow n \in Y)$, which is $\Pi_1^0$, and $X \subseteq Y$ to mean $\forall n(n \in X \to n \in Y)$, which is also $\Pi_1^0$.
+We let
+$$X \times Y = \{[n, m]: n \in X \wedge m \in Y\}.$$
+Then $\RCA_0$ proves that $X \times Y$ exists, since it is defined by
+$$X \times Y = \{p: \exists n \leq p \exists m \leq p(p = [n, m] \wedge n \in X \wedge m \in Y)\},$$
+which is a $\Sigma_0^0$ definition.
+
+\begin{definition}
+A \dfn{function} $f: X \to Y$ in $\RCA_0$ is a set $f \subseteq X \times Y$ such that
+$$\forall i \forall j \forall k(([i,j] \in f \wedge [i,k]\in f) \to j = k)$$
+and
+$$\forall i \exists j(i \in X \to [i,j] \in f).$$
+We write $f(i) = j$ if $(i, j) \in f$.
+\end{definition}
+
+\begin{example}
+The function $f(x) = 2x$ exists according to $\RCA_0$.
+Indeed,
+$$f = \{n: \exists x \leq n \exists y \leq n(n = [x, y] \wedge y = x + x)\}$$
+which is a $\Sigma_0^0$ definition.
+\end{example}
+
+\begin{lemma}[$\RCA_0$]
+If $f: X \to Y$ and $g: Y \to Z$ exist, then there is a $h: X \to Z$ with $h(x) = g(f(x))$.
+\end{lemma}
+\begin{proof}
+The definition
+$$h = \{[i,k]: \exists j(f(i)=j \wedge g(j) = k)$$
+is $\Sigma_1^0$, and the definition
+$$h = \{[i,k]: \forall j(f(i)=j \to g(j) = k)$$
+is $\Pi_1^0$, so $h$ has a definition which is $\Delta_1^0$.
+\end{proof}
+
+\begin{theorem}
+The following is independent of $\RCA_0$: The range of a function exists.
+\end{theorem}
+\begin{proof}
+The range of a function $f$ is given by
+$$R = \{y \in Y: \exists x(f(x) = y)\}$$
+which is $\Sigma_1^0$ in general.
+In particular, if $R$ is r.e. but not recursive, then there is a recursive function $f$ such that $R$ is the range of $f$.
+Then $f$ is an element of every $\omega$-model of $\RCA_0$ but $R$ is not in the $\omega$-model of all recursive sets in $\RCA_0$.
+\end{proof}
+
+\begin{lemma}[$\RCA_0$]
+The range of an increasing function exists.
+\end{lemma}
+\begin{proof}
+Let $f$ be an increasing function and take the definitions
+$$R = \{y: \exists f(x) = y\} = \{y: \forall k(y \leq f(y) \to \exists n \leq k(f(n) = y))\}$$
+which together is $\Delta_1^0$.
+\end{proof}
+
+Let us now discuss the coding of finite sets in $\RCA_0$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{finite set} is a set $X$ such that $\exists k \forall i(i \in X \to i \leq k)$.
+\end{definition}
+
+If $M$ is not an $\omega$-model and $k$ is nonstandard, then $\RCA_0$ proves that $A = \{i: i < k\}$ is finite, but externally $A$ is an infinite set.
+So this definition of finite set is externally very weird.
+
+We use $m|n$ as a shorthand for
+$$\exists q \leq n(mq = n),$$
+so $|$ is $\Sigma_0^0$. Thus $\RCA_0$ can talk about coprimality, namely $m_1$ is coprime to $m_2$ if
+$$\forall n(m_2|m_1n \to m_2|n).$$
+\begin{lemma}[$\RCA_0$]
+If $m_1$ is coprime to $m_2$ then $m_2$ is coprime to $m_1$.
+\end{lemma}
+\begin{proof}
+Fix $n$ such that $m_1|m_2n$. We want to show $m_1|n$.
+There is a $q \leq n$ such that $m_1q = m_2n$, so $m_2|m_1q$, so $m_2|q$ since $m_1$ is coprime to $m_2$.
+Therefore there is an $r$ such that $m_2r = q$, so $m_1m_2r = m_1q = m_2n$.
+So $m_1r = n$ so $m_1|n$.
+\end{proof}
+
+\begin{lemma}[$\RCA_0$]
+$\forall k \exists m \forall i \leq k((i+1)|m)$. Moreover, if $k,m$ satisfy $\forall i \leq k((i+1)|m)$, then for all $i < j < k$, $m(i+1)+1$ and $m(j+1)+1$ are coprime.
+\end{lemma}
+\begin{proof}
+The first result here follows by $\Sigma_1^0$-induction on $k$.
+For the second result, assume $\forall i < k(i+1|m)$ and fix $i < j < k$.
+Let us show that $m(j+1)+1$ and $m(j+1)+1$ are coprime.
+We assume $m(i+1)+1|(m(j+1)+1)n$ and prove $m(i+1)+1|n$.
+First, $m(i+1)+1$ and $m$ are coprime. Indeed, if $m|(m(i+1)+1)n$ then we can write $mq = (m(i+1)+1)n = m(i+1)n + n$, so $m|n$.
+Since $i < j$ the number $\ell = j - (i + 1)$ is well-defined and $\ell < k$.
+We have
+$$(m(j+1)+1)n = (m(i+\ell+2)+1)n = (m(i+1)+1)n + (m(\ell + 1))n.$$
+Now $m(i+1)+1|(m(j+1)+1)n$ by assumption and obviously $m(i+1)+1|(m(i+1)+1)n$ so $m(i+1)+1|(m(\ell + 1))n$.
+Since $m$ and $m(i+1)+1$ are coprime then $m(i+1)+1|m((\ell + 1)n)$ so $m(i+1)+1|(\ell + 1)n$.
+Therefore there is $q$ with $(m(i+1)+1)q = (\ell + 1)n$.
+Since $\ell < k$, $\ell + 1|m$ by assumption.
+Therefore there is $r$ such that $(\ell + 1)r = m$.
+Thus
+$$(m(i+1)+1)(qr) = (r(\ell + 1))n = mn$$
+so $m(i+1)+1|mn$. But $m$ and $m(i+1)+1$ are coprime so $m(i+1)+1|n$.
+\end{proof}
+
+The above argument is not very important except inasmuch it requires nothing except $\Sigma_0^0$ facts about natural numbers.
+
+\begin{theorem}[$\RCA_0$; main coding theorem]
+For every finite set $X$ there is a $[k, m, n] \in \NN$ such that
+$$\forall i(i \in X \leftrightarrow(i < k \wedge m(i+1)+1|n)).$$
+\end{theorem}
+\begin{proof}
+Let $k \in \NN$ be such that $\forall i \in X(i < k)$.
+Let $m \in \NN$ be such that $m > 0$ and for every $i < j < k$, $m(i+1)+1$ and $m(j+1)+1$ are coprime, which is possible by the previous lemma.
+We want
+$$n = \prod_{\substack{i < k\\i \in X}} (m(i+1) + 1).$$
+Externally we can see why this definition makes no sense: a priori $k$ is nonstandard, in which case the definition of $n$ makes no sense.
+We need a definition of product that is uniform in the number of factors.
+To do this we use $\Sigma_1^0$-induction.
+Let $\sigma(j)$ be the $\Sigma_1^0$ formula
+$$\sigma(j) = (j>k) \vee \exists n(\forall i < k(m(i+1)+1|n \leftrightarrow (i \in X \wedge i < j))).$$
+The point is we want $\sigma(k)$ to be true, so it suffices to prove $\forall j\sigma(j)$.
+
+Indeed
+$$\sigma(0) = (0>k) \vee \exists n(\forall i < k(m(i+1)+1|n \leftrightarrow (i \in X \wedge i < 0)))$$
+and some of the disjuncts and conjuncts are trivially false here, so $\sigma(0)$ is equivalent over $\RCA_0$ to
+$$\exists n(\forall i < k\neg(m(i+1)+1|n)).$$
+Since $m > 0$, $m(i+1)+1 \geq 2$ so we might as well take $n = 1$.
+
+If $j > k$ then trivially $\sigma(j)$ holds, so let us take $\sigma(j)$ with $j + 1 \leq k$ and prove $\sigma(j+1)$.
+Since $\sigma(j)$ holds and $j + 1 \leq k$, there is an $n$ such that
+$$\forall i < k(m(i+1)+1|n \leftrightarrow (i \in X \wedge i < j)).$$
+Since $j < k$ and $\neg(j < j)$ it follows that $\neg(m(i+1)+1)|n$.
+If $j \notin X$ let $\hat n = n$, and then $\hat n$ witnesses $\sigma(j+1)$ since $\neg(m(i+1)+1|\hat n)$.
+Otherwise set $\hat n = n(m(j+1)+1)$.
+Then $m(i+1)+1|\hat n$ iff $m(i+1)+1|m(j+1)+1$ or $m(i+1)+1|n$, which happens iff $i = j$ or $m(i+1)+1|n$, thus $\hat n$ witnesses $\sigma(j+1)$.
+\end{proof}
+
+Given $[k,m,n]$ we define
+$$X = \{i: i < k \wedge m(i+1)+1|n\}.$$
+This definition is $\Sigma_0^0$ so $\RCA_0$ proves that $X$ exists.
+However, given $X$ we can find lots of triples that code $X$ in general.
+What if $[k_0, m_0, n_0]$ codes the same set as $[k_1, m_1, n_1]$?
+This condition is
+$$\forall i < k_0(m_0(i+1)+1|n_0 \to (i < k_1 \wedge m_1(i+1)+1|n_1)) \wedge \forall i < k_1(m_1(i+1)+1|n_1 \to (i < k_0 \wedge m_0(i+1)+1|n_0))$$
+which is $\Sigma_0^0$.
+
+\begin{definition}[$\RCA_0$]
+$\mathsf{Fin}$ is the set of all $[k, m, n]$ such that there are no $[\hat k, \hat m, \hat n] < [k, m, n]$ which do not code the same set as $[k, m, n]$.
+\end{definition}
+
+Thus we identify the finite set $X$ with the least code $[k, m, n] \in \Fin$ of $X$.
+Note that $\Fin$ makes sense because the condition defining $\Fin$ is $\Sigma_0^0$.
+
+\begin{example}
+$[0, 0, 0] \in \Fin$ because $[0, 0, 0]$ is minimal among codes for $\emptyset$.
+\end{example}
+
+In the future we will quantify over finite sets, but what we really mean is that we are quantifying over $\mathsf{Fin}$.
+
+\begin{example}
+The sentence ``$7$ is the largest element of $[k, m, n]$" means
+$$7 < k \wedge m(7+1)+1|n \wedge \forall i < k(7<i \to \neg(m(i+1)+1|n))$$
+in $\RCA_0$.
+\end{example}
+
+Now that we can code finite sets (and hence finite functions), we can also code finite sequences.
+To do this, we identify $\ell \in \NN$ with the finite set $\{0, \dots, \ell - 1\}$.
+
+\begin{definition}[$\RCA_0$]
+Let $\ell \in \NN$.
+A \dfn{finite sequence} is a function $s: \ell \to \NN$. The \dfn{length} of $s$ is $\ell$, denoted $\ell = \lh s$.
+\end{definition}
+
+Then $\RCA_0$ proves that length is unique, and the code of a finite sequence $s$ is just the code of $s$ viewed as a finite function (that is, a finite subset of $\ell \times \NN$).
+Moreover the definition of a finite sequence is $\Sigma_0^0$.
+
+\begin{definition}[$\RCA_0$]
+The set $\Seq = \NN^{<\NN}$ is the set of all (minimal codes of) finite sequences.
+\end{definition}
+
+If $s, t \in \Seq$, we will write $s \subseteq t$ to mean that $s$ is an initial segment of $t$, which is $\Sigma_0^0$ since it can be expanded as
+$$\lh s \leq \lh t \wedge \forall i < \lh s(s(i) = t(i)).$$
+We will write $s \frown t$ for the concatenation of $t$, thus $s \frown t = u$ can be expressed as
+$$(\lh u = \lh s + \lh t) \wedge \forall i < \lh s(u(i) = s(i)) \wedge i < \lh t(u(\lh s + i) = t(i)).$$
+We let
+$$k^{<\NN} = \{s \in \Seq: \forall i < \lh s(s(i) < k)\},$$
+thus $k^{\NN}$ is the set of all finite $k$-ary sequences.
+
+If $X$ is a set, we can think of $X$ as an infinite binary string by identifying $X$ with its indicator function $X: 2 \to \NN$.
+We will write $X[m]$ for the initial segment of $X$ of length $m$, thus $X[m] \in 2^{<\NN}$, $\lh X[m] = m$, and
+$$\forall i<\lh s(s(i) = 1 \leftrightarrow i \in X).$$
+So initial segments have a $\Sigma_0^0$ definition.
+
+We let $\NN^k = \{s \in \NN^{<\NN}: \lh s = k\}$.
+Thus we identify $k$-tuples with finite sequences of length $k$.
+In particular we can talk about functions $\NN^k \to \NN$.
+
+Now we show that primitive recursive functions exist.
+As motivation, let's look at some examples of primitive recursive functions.
+\begin{example}
+We want to show that $h(n) = 2^n$ exists in any model of $\RCA_0$. To see this, set $h(0) = 1$ and $h(n+1) = 2h(n)$.
+By external induction it follows that $h(n)$ really is $2^n$.
+We can formalize this by thinking of the ``initial condition" $f$ as the constant $f = 1$, and the ``inductive step" is $g(x, y) = 2x$.
+Here $y$ is the variable that we plug $n$ into (we plug $h(n)$ into $x$) but it turns out that $y$ doesn't matter.
+\end{example}
+
+\begin{example}
+Let $u$ be a function $\NN \to \NN$.
+We want to show that
+$$h(m) = \sum_{i=0}^m u(i)$$
+is well-defined in $\RCA_0$. We set $h(0) = u(0)$ and
+$$h(m + 1) = h(m) + u(m + 1).$$
+Formally, the initial condition $f$ is $f = u(0)$ and
+$$g(x, y) = x + u(y + 1).$$
+Then $h(0) = f$ and $h(m+1) = g(h(m), m)$.
+\end{example}
+
+\begin{theorem}[$\RCA_0$; existence of primitive recursion]
+Suppose that we are given $k \in \NN$ and functions $f: \NN^k \to \NN$ and $g: \NN^{k+2} \to \NN$.
+Then there is a function $h: \NN^{k+1} \to \NN$ defined by
+$$\begin{cases}
+h(0, n_1, \dots, n_k) &= f(n_1, \dots, n_k) \\
+h(m+1,n_1, \dots, n_k) &= g(h(m, n_1, \dots, n_k), m, n_1, \dots, n_k)
+\end{cases}.$$
+\end{theorem}
+\begin{proof}
+Let $\theta(s, m, n_1, \dots, n_k)$ mean
+$$s \in \Seq \wedge \lh s = m + 1 \wedge s(0) = f(n_1, \dots, n_k) \wedge \forall i < m(s(i+1) = g(s(i), i, n_1, \dots, n_k)).$$
+Then $\forall m \forall n \theta(s, m, n_1, \dots, n_k)$ says that $s$ is an initial segment of $h$ of length $m + 1$ and $\theta$ is $\Sigma_0^0$.
+
+We claim $\forall m \exists s \theta(s, m, n_1, \dots, n_k)$, which can be proven by $\Sigma_0^1$-induction.
+If $m = 0$ then the witness is $s = [f(n_1, \dots, n_k)]$.
+For $m + 1$ suppose $\theta(s, m, n_1, \dots, n_k)$ and let
+$$t = s \frown [g(s(m), m, n_1, \dots, n_k)].$$
+Then $\theta(t, m + 1, n_1, \dots, n_k)$.
+
+Now if $\theta(s, m, n_1, \dots, n_k) \wedge \theta(t, m, n_1, \dots, n_k)$ then $\forall i < m(s(i) = t(i))$.
+This is the same proof as the previous paragraph, it's just $\Sigma_0^1$-induction.
+
+So there is a unique $s \in \Seq$ such that $\theta(s, m, n_1, \dots, n_k)$.
+In other words the definition of $s$ is $\Delta_0^1$. Therefore the definition of $h$ is $\Delta_1^0$.
+\end{proof}
+
+This is the exact same proof as class recursion in $\mathbf{ZFC}$, but without limit stages.
+
+\begin{theorem}[$\RCA_0$; existence of minimization]
+Let $f: \NN^{k+1} \to \NN$ satisfy
+$$\forall n_1, \dots, n_k \exists m(f(n_1, \dots, n_k, m) = 1).$$
+Then there is a $g: \NN^k \to \NN$ such that $g(n_1, \dots, n_k)$ is the least $m$ such that $f(n_1, \dots, n_k, m) = 1$.
+\end{theorem}
+\begin{proof}
+Let
+$$g = \{[n, m]: f(n, m) = 1 \wedge \forall i < m(f(n, i) \neq 1)\}.$$
+Then $g$ clearly satisfies the constraints and the definition of $g$ is $\Sigma_0^0$ in $f$.
+\end{proof}
+
+Now we show that we can enumerate any set (but possibly not any class).
+The recursion-theoretic analogue of this fact is that every recursive real number has a recursive enumeration.
+
+\begin{theorem}[$\RCA_0$; existence of enumeration]
+Let $X \subseteq \NN$ be infinite. Then there is a function
+$$\pi_X: \NN \to X$$
+which enumerates $X$ in the sense that $\pi_X$ is increasing and surjective.
+\end{theorem}
+\begin{proof}
+By $\Delta_1^0$-comprehension, define $f(n, m) = 1$ if $m \geq n \wedge m \in X$ and $0$ else.
+Since $X$ is infinite, $\forall n \exists m f(n, m) = 1$, so by minimization, let $\nu_X(n)$ be the least $m$ such that $f(n, m) = 1$.
+Then $\nu_X(n)$ is the least $m \geq n$ such that $m \in X$.
+Now by primitive recursion, let $\pi_X(0) = \nu_X(0)$ and $\pi_X(m+1) = \nu_X(\pi_X(m) + 1)$; then $\pi_X(m+1)$ is the least element of $X$ that is $\geq \pi_X(m) + 1$.
+Therefore $\pi_X$ is increasing and surjective by $\Sigma_0^1$-induction.
+\end{proof}
+
+Note that if a formula $\varphi$ is $\Sigma_1^0$ we cannot define a set $\{x: \varphi(x)\}$.
+Instead we consider the \emph{class} $\mathcal C =\{x: \varphi(x)\}$, which is not necessarily a set in $\RCA_0$.
+We now show that either $\mathcal C$ is finite (in which case it is actually a set) or $\mathcal C$ is infinite and can be enumerated.
+The recursion-theoretic analogue of this fact is that every $\Sigma_1^0$ real number is recursively enumerable.
+
+\begin{theorem}[$\RCA_0$; $\Sigma_1^0$-enumeration]
+Let $\varphi$ be a $\Sigma_1^0$ formula in which $n$ but not $X,f$ appear freely.
+Then either there is a finite $X$ such that $\forall n(n \in X \leftrightarrow \varphi(n))$ or there is an injective function $f: \NN \to \NN$ such that for every $n$, $\varphi(n)$ holds iff $\exists m(f(m) = n)$.
+\end{theorem}
+\begin{proof}
+Write $\varphi(n) = \exists j \theta(j, n)$ where $\theta$ is $\Sigma_0^0$.
+By $\Delta_1^0$-comprehension, there is a set
+$$Y = \{[j, n]: \theta(j, n)\} \wedge \forall i < j\neg\theta(i, n)\}.$$
+If $Y$ is finite, let $m > \max Y$ and let
+$$X = \{n: \exists j < m([j, n] \in Y)\}.$$
+Then $n \in X$ iff $\varphi(n)$ and $X$ is finite since $\max X \leq \max Y < m$.
+Otherwise, let $\pi_Y$ be the increasing enumeration of $Y$.
+Then if $\pi_Y(k) = [j, n]$ then $\varphi(n)$ holds.
+So let $p([x, y]) = y$; then $\varphi(p(\pi_Y(k)))$ holds for any $k$, and conversely if $\varphi(n)$ holds then there is a minimal $j$ such that $\theta(j, n)$, and since $\pi_Y$ is surjective there is a $k$ such that $n = p(\pi_Y(k))$.
+The fact that $j$ is minimal implies $p \circ \pi_Y$ is injective.
+\end{proof}
+
+\section{Induction in nonstandard arithmetic}
+Let $I\Sigma_n$ denote the induction scheme for formulas of complexity $\Sigma_n^0$.
+One defines $I\Pi_n$ similarly.
+In this terminology, $\RCA_0$ is equivalent over the basic axioms to $I\Sigma_1 + \Delta_1^0$-comprehension.
+
+We can get a nonstandard model of $I\Sigma_1$ or similar by adjoining a new constant $c$ and the scheme $n < c$, $n \in \omega$.
+By the compactness theorem, this new theory has a model, which clearly is not archimedean.
+We will later show that if $M$ is a model of $I\Sigma_1$ then there is $S \subseteq \mathscr P(M)$ such that $(M, S)$ is a model of $\RCA_0$, so we will have lots of models of $\RCA_0$ with nonstandard first-order part.
+
+Now let $M \models \RCA_0$ and suppose that the first-order part of $M$ is nonstandard.
+Since $M$ is a model of the basic axioms, an external induction shows that $M$ has an initial segment which is isomorphic to $\omega$, say
+$$\{0_M, 1_M, 2_M, \dots\} \subseteq M.$$
+Let $a$ be nonstandard. Since $a > 0$, there is an element $a - 1$ such that $(a - 1) + 1 = a$, and certainly $a - 1$ is nonstandard.
+It follows that $2a$ is not equal to $a + \ell$ for any $\ell \in \ZZ$, so $a$ and $2a$ live in different copies of $\ZZ$ after the initial segment.
+Moreover either $a$ is even or odd, so there is a nonstandard number $b$ which is in a copy of $\ZZ$ before the copy of $\ZZ$ that $a$ is in.
+One can then use the existence of a fraction between $a,2a$ to show that the ordertype of the set of copies of $\ZZ$ is $\QQ$.
+So the ordertype of $M$ is $\omega + \ZZ\QQ$ provided that $M$ is countable.
+More generally, there exists a dense linear order $L$ such that the ordertype of $M$ is $\omega + \ZZ L$.
+In particular, $M$ is not well-founded, so set induction fails for $M$.
+
+\begin{definition}
+Let $M$ be a model of $I\Sigma_1$.
+A \dfn{cut} in $M$ is a nonempty subset $I \subseteq M$ such that for every $x \in I$, if $y < x$ then $y \in I$, and $x + 1 \in I$.
+\end{definition}
+
+Let $(M, S)$ be a model of $\RCA_0$.
+We recall that if $I$ is a proper cut then $I \notin S$.
+Indeed, if $I \in S$ then $I$ satisfies $\Sigma_1^0$ set induction, since $(M, S) \models \RCA_0$; therefore $I = M$.
+For the same reason, any proper cut cannot be a $\Sigma_1^0$ class.
+In particular, we can construct a model $(M, S)$ of $\RCA_0$ which is not a model of $I\Sigma_2$ simply by constructing a $\Sigma_2^0$-definable cut in $M$.
+
+Let $n$ be a nonstandard element of $M$.
+Then $X = \{i: i < n\}$ is a finite set, $X \in S$, so it has a code $q$.
+But $X$ is infinite in reality, so $q$ must be nonstandard itself.
+
+\begin{definition}
+The \dfn{bounded $\Sigma_k^0$-comprehension scheme} consists of all universal closures of sentences of the form
+$$\forall n \exists X \forall i(i \in X \leftrightarrow (i < n \wedge \varphi(i)))$$
+whenever $\varphi$ is $\Sigma_k^0$.
+\end{definition}
+
+The bounded $\Sigma_k^0$-comprehension scheme allows us to define the sets
+$$X = \{i < n: \varphi(i)\}.$$
+Thus we can form every internally finite set of complexity $\Sigma_k^0$, which seems trivial, but of course $X$ may not be externally finite, if $n$ is nonstandard.
+Therefore we should not expect $\RCA_0$ to prove bounded $\Sigma_k^0$-comprehension, at least if $k$ is large.
+
+\begin{theorem}
+$\RCA_0$ proves bounded $\Sigma_1^0$-comprehension.
+\end{theorem}
+\begin{proof}
+Let $\varphi$ be a $\Sigma_1^0$ formula.
+Suppose that there is a model $(M, S)$ of $\RCA_0$ which thinks $X = \{i < n: \varphi(i)\}$ is a proper class.
+Since $\varphi$ is $\Sigma_1^0$, it follows that there is an injective function $f: \NN \to [n] = \{0, \dots, n - 1\}$ which enumerates the proper class $X$.
+This looks impossible, but of course $[n]$ could be externally infinite.
+Let $S = f|[n]$. Then $S = \{(k, \ell) \in f: k \leq n\}$ has a $\Sigma_0^0$ definition and so is a set.
+Then $S$ is a finite sequence which gives an injective function $[n + 1] \to [n]$.
+On the other hand, $\Sigma_1^0$-induction shows that for every $m$, there is no injective function $[m + 1] \to [m]$.
+Indeed, there is no injective function $\{0\} \to \emptyset$, and if there is an injective function $s: [n + 1] \to [n]$, define $t: [n] \to [n - 1]$ by setting $t(m) = s(m)$ if $s(m) < n$ and otherwise $t(m)$ is whatever is left over in $[n]$ by $t$.
+\end{proof}
+
+The point is that while $\RCA_0$ can't prove things easily about the infinite function $f$, it can prove things about the finite function $S$ quite easily.
+
+\begin{theorem}
+$\RCA_0$ proves $\Pi_1^0$-induction.
+\end{theorem}
+\begin{proof}
+Let $\psi$ be a $\Pi_1^0$ formula such that $\psi(0) \wedge \forall n(\psi(n) \to \psi(n+1))$.
+Let $n \in \NN$.
+By bounded $\Sigma_1^0$-comprehension, $X = \{i < n: \neg\psi(i)\}$ is a set.
+Let $Y$ be the complement of $X$.
+By assumption on $\psi$, $0 \in Y$.
+If $m \in Y$, then either $m \geq n$, so $m + 1 \geq n$ and hence $m \in Y$, or $\psi(m)$, so $\psi(m+1)$ and hence $m \in Y$.
+Also $Y$ has a $\Sigma_0^0$ definition, so by set induction, $Y = \NN$.
+So $\psi(n)$.
+\end{proof}
+
+\begin{definition}
+The \dfn{$\Sigma_k^0$-bounding scheme} consists of the universal closures of
+$$\forall x < t \exists y \varphi(x, y) \leftrightarrow \exists s \forall x < t \exists y < s \varphi(x, y)$$
+whenever $\varphi$ is $\Sigma_k^0$. We let $B\Sigma_k^0$ denote the $\Sigma_k^0$-bounding scheme.
+\end{definition}
+
+Note that
+$$\exists s \forall x < t \exists y < s \varphi(x, y) \to \forall x < t \exists y \varphi(x, y)$$
+is trivially true as it removes the bound $s$. The converse is more interesting.
+It says that if $y$ only depends on a bound quantifier $x$, then $y$ itself is uniformly bounded.
+
+\begin{theorem}
+$\RCA_0$ proves $B\Sigma_1^0$.
+\end{theorem}
+\begin{proof}
+We want to prove
+$$\forall x < t \exists y \varphi(x, y) \to \exists s \forall x < t \exists y < s \varphi(x, y).$$
+Suppose that $\RCA_0$ proves $B\Sigma_0^0$.
+Suppose $\varphi = \exists z \psi$ is $\Sigma_1^0$.
+We want to prove
+$$\forall x < t \exists y \exists z \psi(x, y, z) \to \exists s \forall x < t \exists y < s \exists z \psi(x, y, z).$$
+Then, we can absorb $z$ into $y$, and so replace $\exists z$ with $\exists z < s$, and $\exists z < s(\psi)$ is $\Sigma_0^0$.
+
+Now we show that $\RCA_0 \vdash B\Sigma_0^0$.
+Let $(M, S)$ be a model of $\RCA_0$ and $t \in M$.
+Assume
+$$(M, S) \models \forall x < t \exists y \varphi(x, y)$$
+where $\varphi$ is $\Sigma_0^0$.
+We need to get a bound $s$ on $y$ which is uniform in $x$.
+By the completeness theorem, this will imply $\RCA_0 \vdash B\Sigma_0^0$.
+
+Let $\psi(w)$ mean
+$$(\exists s \forall x < w \exists y < s \varphi(x, y)) \vee (w > t).$$
+We want to prove $\psi(t)$ so we prove $\forall w\psi(w)$ by $\Sigma_1^0$-induction.
+The quantifier $\forall x < 0$ is vacuous, so $\psi(0)$ is true.
+Now assume $\psi(w)$.
+If $w + 1 > t$ then we're done. Otherwise $w < t$, so
+$$(M, S) \models \exists s \forall x < w \exists y < s \varphi(x, y).$$
+So there is $s_1$ such that
+$$(M, S) \models \forall x < w \exists y < s_1 \varphi(x, y)$$
+Since $w < t$ and $\forall x < t \exists y \varphi(x, y)$, we can set $s_2 = y + 1$ and set $s = \max(s_1, s_2)$.
+Then
+$$(M, S) \models \forall x < w + 1 \exists y < s \varphi(x, y)$$
+as desired.
+\end{proof}
+
+We often say $\varphi$ is $\Sigma_1^0$ even if $\varphi$ is not explicitly of the form $\exists x \psi$ where $\psi$ has bounded quantifiers, as long as we can show a logical equivalence between $\varphi$ and a formula of that form over $\RCA_0$ or another suitably weak theory.
+For example, $\exists x \alpha(x) \vee \exists x \beta(x)$ is $\Sigma_1^0$ since it is logically equivalent to $\exists x(\alpha(x) \vee \beta(x))$.
+Similarly, $\exists x \alpha(x) \wedge \exists x \beta(x)$ is equivalent to $\exists z(\exists x < z \exists y < z(z = [x, y] \wedge \alpha(x) \wedge \beta(y)))$.
+Thus $\Sigma_1^0$ is closed under $\vee$, $\wedge$, and unbounded existential quantification $\exists y$.
+But it is not so trivial to show that $\Sigma_1^0$ is closed under bounded universal quantification $\forall x < t$.
+To do that, given a bounded formula $\psi$ we need to show that there is a formula $\varphi$ such that $\forall x < t \exists y \psi(x, y)$ is logically $\exists y \forall x < t \varphi(x, y)$.
+But this is exactly what $B\Sigma_1^0$ says.
+The moral is that any reasonable ground theory should satisfy $B\Sigma_1^0$, and $\RCA_0$ meets this constraint.
+By taking negations we can show similar things for $\Pi_1^0$, thus:
+
+\begin{corollary}[$\RCA_0$]
+$\Sigma_1^0$ and $\Pi_1^0$ are closed under $\vee$, $\wedge$, and bounded quantification.
+$\Sigma_1^0$ is closed under existential quantification and $\Pi_1^0$ is closed under universal quantification.
+\end{corollary}
+
+\begin{definition}
+The $\Pi_k^0$-least number scheme, denoted $L\Pi_k^0$, consists of the universal closures of
+$$\exists x \varphi(x) \to \exists x(\varphi(x) \wedge \forall w < x(\neg \varphi(w)))$$
+whenever $\varphi$ is $\Pi_k^0$.
+\end{definition}
+
+The intuition is that $L\Pi_k^0$ expresses that $\Pi_k^0$ classes are internally well-founded.
+
+\begin{theorem}
+$\RCA_0$ proves $L\Pi_1^0$.
+\end{theorem}
+\begin{proof}
+Let $\varphi$ be $\Pi_1^0$ and fix $(M, S) \models \RCA_0$ with $(M, S) \models \exists x \varphi(x)$.
+Suppose that for every $z \in M$ such that $\varphi(z)$, there is a $w < z$ such that $\varphi(w)$, i.e. the class $\{x: \varphi(x)\}$ is not well-founded.
+Let $\theta(z)$ mean $\forall w < z(\neg \varphi(w))$.
+We claim that $\forall z \theta(z)$, by $\Sigma_1^0$-induction, which gives a contradiction.
+
+First, $\theta(0)$ is vacuous. Suppose $\theta(z)$.
+If $w < z + 1$ then $w < z$ or $w = z$. If $w < z$ then we are given $\neg \varphi(w)$.
+So we claim $\neg \varphi(z)$.
+If $\varphi(z)$, then by hypothesis on $M$ there is $w < z$ such that $\varphi(w)$ and hence $\varphi(w) \wedge \neg\varphi(w)$, a contradiction.
+So $\neg \varphi(z)$ and hence $\theta(z + 1)$.
+\end{proof}
+
+Summing up we have the following.
+\begin{theorem}[$\RCA_0$]
+We have the following induction scheme relationships:
+\begin{enumerate}
+\item $I\Sigma_{k+1}^0 \to B\Sigma_{k+1}^0 \to I\Sigma_k^0$.
+\item $B\Sigma_{k+1}^0 \leftrightarrow B\Pi_k^0$.
+\item $I\Sigma_k^0 \leftrightarrow I\Pi_k^0 \leftrightarrow L\Sigma_k^0 \leftrightarrow L\Pi_k^0 \leftrightarrow$ bounded $\Sigma_k^0$-comprehension $\leftrightarrow$ bounded $\Pi_k^0$-comprehension.
+\end{enumerate}
+Moreover, the implications $I\Sigma_{k+1}^0 \to B\Sigma_{k+1}^0 \to I\Sigma_k^0$ are strict.
+\end{theorem}
+\begin{proof}
+Concatenate the above arguments and relativize. Use the compactness theorem (I think?) to show that the implications are strict.
+\end{proof}
+
+Recall that if $X$ is a set then $X[m]$ is the initial segment of $X$ of length $m$.
+Since $X[m]$ is a finite set, it has a code, so we can view it as part of the first-order part.
+
+Now let us show that $\Sigma_1^0$ definitions of sets only depend on some (possibly arbitrarily long) initial segments of those sets.
+
+\begin{theorem}
+Let $\varphi(x)$ be $\Sigma_1^0$. Then there is a $\Sigma_0^0$ formula $\theta(s)$ such that
+$$\RCA_0 \vdash \forall x(\varphi(x) \leftrightarrow \exists m \theta(X[m])),$$
+possibly after taking universal closures.
+\end{theorem}
+
+\chapter{Reverse math with arithmetic comprehension}
+This chapter is based on lectures of Reed Solomon.
+
+We define a new theory $\ACA_0$ and see which theorems are equivalent to $\ACA_0$ over $\RCA_0$.
+
+\section{Definition of arithmetic comprehension}
+\begin{definition}
+An \dfn{arithmetic formula} which does not quantify over sets.
+\end{definition}
+
+An arithmetic formula may have free set variables.
+
+\begin{definition}
+The \dfn{arithmetic comprehension scheme} consists of, for every arithmetic formula $\varphi$ without $X$ free, the universal closure of
+$$\exists X \forall n(n \in X \leftrightarrow \varphi(n)).$$
+The system $\ACA_0$ consists of the basic axioms, the set induction axiom, and the arithmetic comprehension scheme.
+\end{definition}
+
+Note that $\ACA_0$ proves $\Sigma_n^0$-induction, since any $\Sigma_n^0$ formula is arithmetic and thus corresponds to a set.
+In particular $\ACA_0$ proves $B\Sigma_n^0$ and $L\Sigma_n^0$.
+
+\begin{theorem}[$\RCA_0$]
+The following are equivalent:
+\begin{enumerate}
+\item $\ACA_0$.
+\item $\Sigma_1^0$-comprehension.
+\item For every injective function $f: \NN \to \NN$, the image of $f$ is a set.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Every $\Sigma_1^0$ formula is arithmetical, so $\ACA_0$ implies $\Sigma_1^0$-comprehension.
+Similarly, we can let
+$$f(\NN) = \{m: \exists n: f(n) = m\}$$
+which is a $\Sigma_1^0$ definition, so $\Sigma_1^0$-comprehension implies that every injective function has a set-sized image.
+
+Conversely, assume that every injective function has a set-sized image.
+Let $\varphi$ be $\Sigma_1^0$ and consider the class $X = \{n: \varphi(n)\}$; we must show that $X$ is a set.
+In $\RCA_0$ one knows that either $X$ is a finite set, or there is an injective function $f$ whose image is $X$; but then $X$ is a set anyways, so $\Sigma_1^0$-comprehension holds.
+
+Finally assume $\Sigma_1^0$-comprehension; we must show arithmetic comprehension.
+If $\varphi$ is arithmetic, then there exists $k \in \omega$ such that $\varphi$ is $\Sigma_k^0$.
+Therefore we must show $\Sigma_k^0$-induction, which we prove use external induction on $k$.
+(Note that $\NN$ is possibly nonstandard, so $k \in \omega$ is stronger than $k \in \NN$ and is necessary to do external induction.)
+Assume that we have $\Sigma_k^0$-comprehension and let $\varphi$ be $\Sigma_{k+1}^0$.
+Then we may write $\varphi(n) = \exists j \psi(n, j)$ where $\neg \psi$ is $\Sigma_k^0$.
+By $\Sigma_k^0$-comprehension, $Y = \{(n, j): \neg \psi(n, j)\}$ is a set.
+By $\Sigma_1^0$-comprehension, $X = \{n: \exists j((n, j) \notin Y)\}$ is also a set.
+Therefore $X = \{n: \exists j(\psi(n, j))\} = \{n: \varphi(n)\}$ is as desired.
+\end{proof}
+
+The proof actually shows that $S \subseteq \mathscr P(\omega)$ is an $\omega$-model of $\ACA_0$ iff $S$ is a \dfn{jump-ideal}; i.e. $\omega \in S$, $S$ is downwards closed with respect to Turing reduction, $S$ is closed under direct sum, and $S$ is closed under Turing jump.
+
+\begin{definition}[$\RCA_0$]
+Let $\ZZ$ be the set of pairs $[n, m]$ equipped with the equivalence relation $[n, m] = [p, q]$ if $m + q = n + p$.
+\end{definition}
+This is just the construction of $\ZZ$ as the abelian group obtained by inverting all elements of $\NN$.
+We can use bounded quantifiers to identify $\ZZ$ with the set of least representatives of the equivalence classes of $x$.
+The pair $[n, m]$ represents the integer $n - m$.
+\begin{definition}
+Let $\QQ$ be the set of pairs $[a, b] \in \ZZ^2$ where $b > 0$ equipped with the equivalence relation $[a, b] = [c, d]$ if $ad = bc$.
+\end{definition}
+The pair $[a, b]$ represents $a/b$. This is just the usual construction of $\QQ$ as the field of fractions of $\ZZ$.
+
+\section{Graph theory in $\ACA_0$}
+Let us show that $\ACA_0$ is equivalent to the existence of connected components of graphs.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{graph} is a set $V$, elements of which we call \dfn{nodes}, equipped with a set $E \subseteq V^2$ which is symmetric and irreflexive, elements of which we call \dfn{edges}.
+\end{definition}
+
+In more more general settings, this is the definition of a countable graph which is directed, such that for every node $x$, there is no edge $(x, x)$.
+We will abuse notation and write $V = (V, E)$.
+
+\begin{definition}[$\RCA_0$]
+Let $V$ be a graph and $u, v \in V$.
+A \dfn{path} $u \to v$ is a finite sequence $(x_0, \dots, x_k) \in V^{<\NN}$ of verties such that $u = x_0$, $v = x_k$, and for every $i < k$, there is an edge $(x_i, x_{i+1})$.
+\end{definition}
+
+The statement ``There is a path $u \to v$" is $\Sigma_1^0$, since the definition of a path is clearly $\Sigma_0^0$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{connected component} of $G$ is a nonempty $C \subseteq V$ such that for every $u \in C$ and $v \in V$ such that $v \in C$ iff there is a path $u \to v$.
+\end{definition}
+
+It would be possible to show that ``in the same connected component" is an equivalence relation, except that to do so would be an existential statement, which may not be possible to state in $\RCA_0$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{decomposition} of $G$ is a function $f: V \to \NN$ such that for every $n \in f(V)$, $\{v \in V: f(v) = n\}$ is a connected component.
+\end{definition}
+
+\begin{theorem}[$\RCA_0$]
+The following are equivalent: $\ACA_0$, and every graph has a decomposition.
+\end{theorem}
+\begin{proof}
+Assume $\ACA_0$ and let $G = (V, E)$.
+Define $f: V \to \NN$ where $f(u)$ is the least $v \leq u$ such that $v \in V$ and there is a path $u \to v$.
+That is,
+$$f = \{(u, v): v \leq u \wedge v \in V \wedge \exists p: u \to v \wedge \forall x < v(\neg \exists p: u \to x)\}.$$
+The condition $\exists p$ is $\Sigma_1^0$ so $\forall x < v(\neg \exists p)$ is $\Pi_1^0$.
+In particular the definition of $f$ is $\Delta_2^0$ and hence $f$ exists according to $\ACA_0$.
+
+To see that $f$ is a decomposition of $G$, let $v \in f(V)$.
+We first claim that if $u < v$ there is no path $u \to v$.
+If $p: u \to v$ is a path, and $f(w) = v$, then there is a path $w \to v$ and if $x < v$ then there is no path $x \to w$.
+In particular there is no path $u \to w$, but the path $u \to w \to v$ induced by $p$ gives a contradiction.
+By definition $f(v) \leq v$ and there is a path $f(v) \to v$, but by the first claim if $f(v) < v$ then there is no path $f(v) \to v$, so $f(v) \geq v$, and hence $f(v) = v$.
+Now let $w \in V$. Then there is a path $v \to w$ iff $f(w) = v$.
+One direction holds by definition, so supppose there is a path $v \to w$.
+Then $v \leq w$ and there is no path $w \to u$ if $u < w$.
+Therefore $f(w) = v$.
+So for every $u,w \in V$, $f(u) = f(w)$ iff there is a path $u \to w$. Indeed, if $f(u) = v$, then there are paths $u \to v \to w$, as desired, and the converse is similar.
+Note that the proof that $f$ is a decomposition is just the usual proof but modified to carry it out in $\RCA_0$.
+We only really needed $\ACA_0$ to argue that $f$ exists.
+
+For the converse, assume that every graph has a decomposition and let $g$ be an injective function.
+Let us show $g(\NN)$ is a set.
+Let
+$$V = \{2[x, y]: x, y \in \NN\} \cup \{2[x, y] + 1: x, y \in \NN\}.$$
+Let
+$$u_i^n = 2[i, n], \qquad v_i^n = 2[i, n] + 1.$$
+Adjoin edges $u_i^n \to u_{i+1}^n$ iff $g(i) \neq n$ and $v_i \to v_{i+1}^n$ iff $g(i) \neq n$.
+Adjoin edges $u_i^n \to v_i^n$ iff $g(i) = n$ and $u_{i+1}^n \to v_{i+1}^n$ iff $g(i) = n$.
+
+Thus if $n \notin g(\NN)$ then there are edges $u_i^n \to u_{i+1}^n$ and $v_i^n \to v_{i+1}^n$ for every $i$, so $(v_i^n)_i$ and $(u_i^n)_i$ are both connected sets.
+Conversely, if $g(i) = n$ then $\{u_0^n, v_0^n, \dots, u_i^n, v_i^n\}$ is a connected set, as is $\{u_j^n, v_j^n: j > i\}$.
+In particular, $v_0^n$ and $u_0^n$ are in the same connected component iff $n \in g(\NN)$.
+So let $f$ be a decomposition of $G$. Then let
+$$g(\NN) = \{n: f(v_0^n) = f(u_0^n)\}.$$
+This is a $\Delta_0^1$ definition of $g(\NN)$ so we're done.
+\end{proof}
+
+The intuition for the reversal here is that there exists a recursive graph $G$ such that any decomposition of $G$ is above $0'$.
+
+As it turns out the main reason this decomposition is equivalent to $\ACA_0$ is that we allowed infinitely many connected components.
+
+\begin{definition}[$\RCA_0$]
+If $k \in \NN$, then $G$ has $k$ \dfn{connected components} if there is a finite set $X$ of $k$ vertices such that for every vertex $v$ there is a unique $w \in X$ such that there is a path $v \to w$.
+\end{definition}
+
+\begin{theorem}[$\RCA_0$]
+Every graph with $k$ connected components has a decomposition into connected components.
+\end{theorem}
+\begin{proof}
+Let $X$ witness that $G$ has $k$ connected components.
+Let $f(v)$ be the unique $z \in X$ such that there is a path $v \to z$, namely
+$$f = \{(v, z): z \in X \wedge \exists p: v \to z\} = \{(v, z): \forall y \neq z: \neg \exists p: v \to y\}$$
+which is $\Delta_1^0$.
+So $f$ exists and is obviously a decomposition.
+\end{proof}
+
+\section{Group theory}
+\begin{definition}[$\RCA_0$]
+A \dfn{group} is a triple $(G, +, 0)$ consisting of a set $G$, a binary operation $+$ on $G$, and a distinguished element $0 \in G$ which satisfies the axioms of group theory.
+\end{definition}
+
+The definition of an abelian group is similar. Note that the axioms of group theory are all $\Pi_1^0$ except for the existence of inverses, which is $\Pi_2^0$.
+The inverse operation $a \mapsto -a$ is $\Sigma_0^0$ since it is
+$$\{[a, b]: a + b = 0\}.$$
+We can take the product of two groups in $\RCA_0$, and the direct sum of countably many group.
+To define the latter, we need some terminology.
+
+\begin{definition}[$\RCA_0$]
+If $X$ is a set, the $i$th \dfn{column} of $X$ is the set $X_i = \{y: [y, i] \in X\}$.
+\end{definition}
+
+In other words the column $X_i$ is the fiber of $i$ under a projection.
+This allows us to view a single set $X$ as a sequence of sets instead.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{countable sequence of groups} is a triple $(A, P, Z)$ where $A,P$ are sets and $Z$ is a function, such that for every $i$, the columns satisfy $P_i: A_i \times A_i \to A_i$, $Z(i) \in A_i$, and $(A_i, P_i, Z(i))$
+\end{definition}
+
+The intuition is that $A_i$ is the domain of the $i$th group and $P_i$ is the (set coding the) binary operation on the $i$th group, and $Z$ is the $i$th identity.
+Now that we've gotten this coding out of the way, we will always write $(A_i)_i$ to mean a countable sequence of groups with the operation and identity left understood.
+
+\begin{definition}[$\RCA_0$]
+The \dfn{direct sum} $\sum_i A_i$ of a countable sequence of groups $(A_i)_i$ consists of the set of all finite sequences $\sigma$ such that for every $i$, $\sigma(i) \in A_i$ and the final value of $\sigma$ is nonzero.
+We let $0$ be the empty sequence.
+If $\sum_i a_i, \sum_i b_i \in \sum_i A_i$, we let
+$$\sum_{i < k} a_i + \sum_{i < \ell} b_i = \sum_{i < n} a_i + b_i$$
+where $n$ is least possible so that if $i \geq n$ then $a_i + b_i = 0_i$, and if $i \geq k$, we take $a_i = 0_i$ by convention (similarly for $b,\ell$).
+\end{definition}
+
+Now we define quotient groups of abelian groups.
+
+\begin{definition}[$\RCA_0$]
+Let $G$ be an abelian group and $H$ a subgroup.
+Let $f_H(g)$ be the least $k \leq g$ such that $g - k \in H$.
+We let $G/H$ be the set of $g \in G$ such that for every $k < g$, $g - k \notin H$.
+Then $f_H$ maps $G$ onto $G/H$ and we let $0 = f_H(0_G)$.
+If $g_0, g_1 \in G/H$ we let $g_0 +_{G/H} g_1 = f_H(g_0 +_G g_1)$.
+\end{definition}
+
+Here the order is the order on $\NN$, as usual.
+
+We define a multiplication $\NN \times G \to G$ by primitive recursion.
+Namely, we set $0g = 0$ and $(n+1)g = ng + g$.
+
+\begin{definition}[$\RCA_0$]
+Let $G$ be an abelian group.
+An element $g \in G$ has \dfn{torsion} if there is an $n \in \NN$ such that $n > 0$ and $ng = 0$.
+A \dfn{torsion subgroup} of $G$ is a subgroup of $G$ whose elements are exactly the elements of $G$ with torsion.
+\end{definition}
+
+\begin{theorem}[$\RCA_0$]
+$\ACA_0$ holds iff every abelian group has a torsion subgroup.
+\end{theorem}
+\begin{proof}
+If $\ACA_0$ holds, let $T$ be the set of torsion elements.
+The definition of torsion is $\Sigma_1^0$ so this is clear.
+The proof that $T$ is a group can be done in $\RCA_0$.
+
+For the converse, let $f$ be an injective function.
+We claim there exists a group which codes the image of $f$ over $\RCA_0$.
+We take the maximally free abelian group $G$ generated by elements $x_i$, with $i \in \NN$, so that
+$$(2m + 1)x_{f(m)} = 0.$$
+Then $f(\NN) = \{i: x_i \text{ has torsion}\}$.
+It remains to show that $\RCA_0$ proves the existence of $G$.
+
+To do this, take the finite sets $G_m = \{-mx_{f(m)}, -(m-1)x_{f(m)}, \dots, 0, \dots, mx_{f(m)}\}$.
+This is a finite set so $\RCA_0$ has no problem with it.
+Then take $G = \sum_m G_m$.
+\end{proof}
+
+We could also construct $G$ by showing that $\RCA_0$ admits its presentation.
+Consider the group $A = \sum_\NN \ZZ$, the free abelian group on $\NN$ generators, and let $N$ be the subgroup generated by $(2m+1)x_{f(m)}$ where $x_i$ is the $i$th generator of $A$.
+Then $G = A/N$.
+The technicality here is that we need to show that $N$ is a set in $\RCA_0$.
+Its definition is, for $\sum_{i < k} n_i x_i$ an element of $A$,
+$$\{(\forall i < k)(\exists \ell < |n_i|)(f(\ell) = i \wedge (2\ell + 1)||n_i|)$$
+which is $\Sigma_0^0$.
+
+\section{Linear algebra}
+\begin{definition}[$\RCA_0$]
+A \dfn{field} $K$ consists of a set $|K|$ and two binary operations on $K$ which satisfy the axioms of a field.
+A \dfn{vector space} $V$ over a field $K$ is an abelian group $|V|$ equipped with a function $S: |K| \to |V|$ which satisfies the axioms of a vector space.
+\end{definition}
+
+We need to show that we can work with finite formal sums $\sum_{v \in F} a_v v$ where $F \subseteq |V|$ is finite and $a_v \in |K|$.
+This is coded as $[c, d]$ where $c$ is a code for the finite set $F$ and $d$ is a code for a finite function $F \to |K|$.
+Then by primitive recursion, we can evaluate these codes $[c, d]$ as elements $E([c, d])$ of $|V|$.
+Indeed, we first define $E(\cdot)$, the evaluation of the empty formal sum, by $E(\cdot) = 0$.
+Then we recurse on the cardinality of the set $F$.
+Henceforth we suppress this coding and just work with the evaluations of sums as usual.
+
+\begin{definition}[$\RCA_0$]
+A set $I \subseteq |V|$ is \dfn{linearly independent} if for every finite $F \subseteq I$, if $\sum_{w \in F} a_w w = 0$, then for every $w \in F$, $a_w = 0$.
+
+A set $S \subseteq |V|$ \dfn{spans} $V$ if for every $u \in V$ there is a finite $F \subseteq S$ and $a_w \in |K|$ for every $w \in F$ such that $u = \sum_{w \in F} a_w w$.
+
+A \dfn{basis} for $V$ is a linearly independent set which spans $V$.
+\end{definition}
+
+\begin{lemma}[$\RCA_0$]
+A set $B \subseteq |V|$ is a basis for $V$ iff for every nonzero $v \in V$ there is a unique finite formal sum $\sum_{w \in B} a_w w$ which equals $v$.
+\end{lemma}
+\begin{proof}
+Same as in classical linear algebra.
+\end{proof}
+
+\begin{lemma}[$\RCA_0$]
+If $U \subseteq V$ are vector spaces, then the quotient space $V/U$ is also a well-defined vector space.
+\end{lemma}
+\begin{proof}
+Same as for abelian groups.
+\end{proof}
+
+\begin{theorem}[$\RCA_0$]
+The following are equivalent:
+\begin{enumerate}
+\item $\ACA_0$.
+\item For every field $K$, every $K$-vector space has a basis.
+\item For every infinite field $K$, every $K$-vector space has a basis.
+\item There is an infinite field $K$ such that every $K$-vector space has a basis.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Work internal to $\ACA_0$ and let $V$ be a $K$-space, $K$ a field.
+If $V$ does not have a finite basis, we will construct an algorithm which enumerates a basis for $K$.
+Let $S$ be the set of all finite sequences in $V \setminus \{0\}$ such that there is a finite sequence $a$ in $K$ with $v_n = \sum_{i < n} a_i v_i$; that is, $v_n$ is a linear combination of $0, \dots, v_{n-1}$.
+This makes sense since $S$ is $\Sigma_1^0$.
+Let $f(0)$ be the $\NN$-least $u \in V$ such that $u \neq 0$.
+Then let $f(n+1)$ be the $\NN$-least $u \in V$ such that $(f(0), \dots, f(n), u) \notin S$, that is, $u$ is not linearly dependent on $f(0), \dots, f(n)$.
+This exists since $V$ has no finite basis.
+Then $f(n)$ makes sense by primitive recursion on $n$ and by induction, $\{f(0), \dots, f(n)\}$ is linearly independent.
+Now let $B$ be the image of $f$, which exists since we are in $\ACA_0$.
+Then $B$ is linearly independent, and a straightforward argument by contradiction shows that $B$ spans $V$.
+
+For the converse, let $K$ be an infinite field such that every $K$-space has a basis.
+Let $f$ be an injective function, and let $V_0 = K[x]$ be the polynomial ring in one variable over $K$. This can be constructed by taking the space of finite partial functions $F \to \NN$, $F \subseteq |K|$, and identifying $\{q_0, \dots, q_{n-1}\}$ with $q_0 + q_1x + \cdots + q_{n-1}x^{n-1}$.
+Then $V_0$ is a $K$-space.
+
+Let $\hat x_m = x^{2f(m)} + mx^{2f(m) + 1}$ and let $U$ be the subspace generated by the $\hat x_m$.
+If $q,r \in K \setminus 0$, $m \neq n$, then
+$$q\hat x_m + r\hat x_n = qx^{2f(m)} + qmx^{2f(m)+1} + rx^{2f(n)} + rx^{2f(n) + 1}$$
+so $\hat x_m$ and $\hat x_n$ are linearly independent.
+Thus a polynomial $g(x) = \sum_{i \in I} q_ix^i$ satisfies $g \in U$ iff for every $i \in I$ and $n \leq \max I$ if $i = 2n$ then $2n + 1 \in I$ and
+$$f\left(\frac{q_{2n+1}}{q_{2n}}\right) = n.$$
+Therefore $\RCA_0$ proves that $U$ exists (since $I$ is a finite set).
+
+We conclude that $V = V_0/U$ is a $K$-space in $\RCA_0$.
+By hypothesis, $V$ has a basis $X'$.
+Then $X'$ is (modulo coding, lifts to) a subset of $V_0$.
+If $\hat X$ is the set of $\hat x_m$, then $\hat X \cup X'$ is a basis of $V_0$.
+
+We claim that $n \in f(\NN)$ iff one of the unique expressions for $x^{2n}$ or $x^{2n+1}$ with respect to the basis $\hat X \cup X'$ involves an element $\hat x_m$ with $f(m) = n$.
+If one of the unique expressions for $x^{2n}$ or $x^{2n+1}$ with respect to the basis $\hat X \cup X'$ involves an element $\hat x_m$ with $f(m) = n$, then obviously $n \in f(\NN)$.
+Conversely, suppose $f(m) = n$, but $x^{2n + 1}$ is not expressed in terms of $\hat X \cup X'$.
+We must show that instead, $x^{2n}$ is.
+In fact,
+$$\hat x_{2m} - mx^{2n + 1} = x^{2n}.$$
+By assumption on $x^{2n + 1}$ there's nothing to cancel out $\hat x_{2m}$ in the expansion of $mx^{2n + 1}$, so it must be cancelled by the expansion of $x^{2n}$.
+
+The claim gives a definition for $f(\NN)$ that can be checked on the finite sets of summands that appear in $x^{2n}$ and $x^{2n+1}$.
+\end{proof}
+
+\section{K\"onig's lemma}
+Let $\sigma$ be a finite sequence. We write $\tau \leq \sigma$ to mean that $\tau$ has a shorter length than $\sigma$ and for every $i \leq |\tau|$, $\tau(i) = \sigma(i)$; thus $\tau$ is an initial segment of $\sigma$.
+Let $\lambda$ denote the empty string.
+We write $\sigma \smile \tau$ for the concatenation of $\sigma,\tau$ and $\sigma \smile m = \sigma \smile [m]$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{tree} is a set $T \subseteq \NN^{<\NN}$ such that for every $\sigma \in T$, if $\tau \leq \sigma$, then $\tau \in T$.
+\end{definition}
+
+\begin{definition}[$\RCA_0$]
+A string $\tau$ is an \dfn{immediate successor} of $\sigma$ if there is $m$ such that $\tau = \sigma \smile m$.
+A tree $T$ is \dfn{finitely branching} if for every $\sigma \in T$ there is $n$ such that for every $m$, if $\sigma \smile m \in T$ then $m < n$.
+\end{definition}
+
+Note that a finitely branching tree does not have a uniform bound on the branching bound $n$; as $\sigma$ becomes longer and longer $n$ may blow up.
+For example at generation $m$ every node may have $2^m$ children.
+
+Write $g[m] = (g(0), \dots, g(m - 1))$ for the initial segment for a function $g$ of length $m$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{path} in a tree $T$ is a function $g: \NN \to \NN$ such that for every $m$, $g[m] \in T$.
+\end{definition}
+
+\begin{definition}[$\RCA_0$]
+\dfn{K\"onig's lemma} is the statement that every infinite finitely branching tree $T$ has a path.
+\end{definition}
+
+\begin{theorem}[$\RCA_0$]
+The following are equivalent:
+\begin{enumerate}
+\item $\ACA_0$.
+\item K\"onig's lemma.
+\item For every infinite finitely branching tree $T$ such that for every $\sigma \in T$ has at most $2$ immediate successors, $T$ has a path.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Work in $\ACA_0$.
+Fix $T$ which is infinite and finitely branching.
+Let $T^* = \{\sigma \in T: \forall r \geq |\sigma| \exists \tau \in T(\sigma \leq \tau \wedge |\tau| = r)\}$ be the set of nodes $\sigma$ such that there are infinitely many descendants of $\sigma$ in $T$.
+Then $T^*$ is $\Pi_2^0$ so $\ACA_0$ proves that $T^*$ is a set.
+It is easy to see that $\lambda \in T^*$ and if $\sigma \in T^*$ then there is $m$ such that $\sigma \smile m \in T^*$.
+Define a path $g$ by primitive recursion, where $g(0)$ is the least $m$ such that $[m] \in T^*$ and $g(n+1)$ the least $m$ such that $g[n] \smile m \in T^*$.
+This is the usual proof, the only fancy thing here is that we had to write down the definition of $T^*$ in a $\Pi_2^0$ way.
+
+Conversely, suppose that for every infinite finitely branching tree $T$ such that for every $\sigma \in T$ has at most $2$ immediate successors, $T$ has a path.
+Let $f$ be an injective function.
+Define $T$ by saying that $\tau \in T$ iff for every $m,n \leq |\tau|$ then $\tau(n) = m + 1$ iff $f(m) = n$, and if $n < |\tau|$ then $\tau(n) > 0$ implies $f(\tau(n) - 1) = n$.
+Then $T$ is $\Delta_1$ so $T$ exists in $\RCA_0$.
+
+If $\tau \in T$ and $\sigma \leq \tau$ then $\sigma(n) = m + 1$ iff $f(m) = n$ so $\sigma \in T$.
+Therefore $T$ is a tree.
+
+Also $\sigma \in T$ has at most two successors.
+Indeed, the only successors are $\sigma \smile 0$ and $\sigma \smile m + 1$ if $|\sigma| = n$ and $f(m) = n$.
+
+Also $T$ is infinite since for every $k \in \NN$ there is $\sigma \in T$ such that $|\sigma| = k$.
+In fact $\sigma(n) = 0$ if $n \notin Y$, $\sigma(n) = m + 1$ if $n \in Y$ and $f(m) = n$, where $Y = \{n < k: \exists m f(m) = n\}$.
+
+Then $T$ has a path $g$.
+So $f(m) = n$ iff $g(n) = m + 1$.
+\end{proof}
+
+\section{Ramsey theory}
+Let us now give an example of a deep computational analysis, where $\ACA_0$ proves a theorem of classical mathematics, but its classical proof is \emph{not} valid.
+
+We start by discussing the infinite pigeonhole principle.
+Let us abuse notation by writing $k = \{0, \dots, k - 1\}$
+\begin{theorem}
+Let $k \in \NN$, $X \subseteq \NN$ infinite.
+Then for every coloring $c: X \to k$ there is an infinite $c$-monochromatic set $H \subseteq X$.
+\end{theorem}
+Ramsey theory generalizes this theorem to higher order.
+Namely if $X \subseteq \NN$ we write $[X]^n = \{F \subseteq X: |F| = n\}$.
+Then there is a canonical identification $[X]^1 = X$.
+
+The above results make sense in $\RCA_0$ because we can define
+$$[X]^n = \{\sigma \in \NN^n: \forall i < n(\sigma(i) < \sigma(i + 1)).$$
+\begin{definition}
+A \dfn{$k$-coloring} of $X^n$ is a function $c: [X]^n \to k$.
+We say $H \subseteq X$ is \dfn{homogeneous} for $c$ or $c$-\dfn{monochromatic} if there is a color $i < k$ such that $c|[H]^n$ is constant with value $i$.
+\end{definition}
+
+Let us state Ramsey's theorem.
+\begin{definition}
+\dfn{Ramsey's theorem} is the statement that for every $k, n \in \NN$ and $c: [\NN]^n \to k$ there is an infinite homogeneous set $H$.
+\end{definition}
+This is trivial when $n = 0$ or $k \leq 1$ (as we could just take $H = \NN$ in that case).
+The statement for $n = 1$ is the infinite pigeonhole principle.
+\begin{definition}
+$RT^n_k$ is the statement that for every $c: [\NN]^n \to k$ there is an infinite homogeneous set $H$.
+\end{definition}
+
+But $RT^1_k$ is the pigeonhole principle, and we can prove $RT^{n+1}_k$ from $RT^n_k$ assuming that we can use as much transfinite induction as we like.
+Indeed, if $c: [\NN]^{n+1} \to k$ we set $a_s = \min H_s$, $a_i < a_{i+1}$, and $H_0 \subseteq H_1 \subseteq \cdots$.
+Then we set
+$$c_s: [H_s \setminus \{a_s\}]^n \to k$$
+by $c_s(F) = c(\{a_s\} \cup F)$.
+But by $RT^n_k$ there is an infinite homogeneous set $H_{s+1} \subseteq H_s \setminus \{a_s\}$ for some color $i_s$.
+So let $d(a_s) = i_s$.
+
+At the end of the recursive construction we get $d: \{a_s: s\} \to k$.
+By $RT^1_k$ there is $H \subseteq \{a_s:s\}$ and $j < k$ such that for every $a_e \in H$, $d(a_e) = j$.
+Then $H$ is homogeneous for $c$ with color $j$.
+To see this, assume $F \subseteq H$ and $|F| = n + 1$.
+Then we can write
+$$F = \{a_{e_0} < \dots < a_{e_n}\}.$$
+Then $e_0 < \dots < e_n$.
+Let $\hat F = \{a_{e_1} < \dots < a_{e_n}\}$.
+Since $a_{e_0} = \min H_{e_0}$, and $e_0 < e_1$, $a_{e_1}, \dots, a_{e_n} \in H_{e_0 + 1}$.
+So $\hat F \subseteq H_{e_0 + 1}$.
+But $H_{e_0 + 1}$ is homogeneous for $c_{e_0}$. Then
+$$c_{e_0}(\hat F) = c(\{a_{e_0}\} \cup \hat F) = c(F)$$
+so we conclude $c(F) = j$.
+
+The idea of the above argument was to think out $\NN$ to a set $\{a_0, a_1, \dots\}$ such that $c|[\{a_s:s\}]^{n+1}(F)$ only depends on the least element of $F$, whenever $|F|^{n+1}$.
+This construction took place in $\omega + 1$ many steps, with the $n$th step using $RT^n_k$, and step $\omega$ using $RT^1_k$.
+This process is too complicated to do in $\ACA_0$.
+So we need to replace the classical proof of Ramsey's theorem with a proof from weaker axioms.
+The point is that the transfinite induction is not uniform in the amount of information each steps uses, as $RT^n_k$ is ``like $0^{(n)}$" so we need something like $0^{(\omega)}$ to make the computations that the proof of Ramsey's theorem does.
+Getting rid of this will cause the $\omega$th step of the construction to invoke something really strong, but that only happens once so whatever.
+
+Write $F < x$ if for every $y \in F$, $y < x$.
+
+\begin{definition}
+Let $c: [\NN]^n \to k$. A set $B \subseteq \NN$ is $c$-\dfn{prehomogeneous} if for every $F \in [B]^{n-1}$ and every $(x, y) \in B^2$, if $F < x, y$ then $c(F \cup \{x\}) = c(F \cup \{y\})$.
+\end{definition}
+
+If we restrict $c$ to $[B]^n$ where $B$ is $c$-prehomogeneous, then for every $\hat F \subseteq B$ with $|\hat F| = n$, $c(\hat F)$ depends only on $\hat F \setminus \{\max \hat F\}$.
+So instead of relying only on the least element we're allowed to rely on the first $n - 1$ elements.
+
+\begin{lemma}
+Let $c: [\NN]^n \to k$ and $B$ an infinite $c$-prehomogeneous set.
+A single application of $RT^{n-1}_k$ returns an infinite $c$-homogeneous set $H \subseteq B$.
+\end{lemma}
+\begin{proof}
+Define $d: [B]^{n-1} \to k$ by setting $d(F) = i$ iff for every $x \in B$ with $F < x$, $c(F \cup \{x\}) = i$.
+This makes sense since $B$ is $c$-prehomogeneous.
+By $RT^{n-1}_k$, there is an infinite $H \subseteq B$ that is $d$-homogeneous, say with color $j$.
+Then $H$ is $c$-homogeneous since if $F \in [H]^n$ then $F = \hat F \cup \{\max F\}$ so $c(F) = d(\hat F) = j$.
+\end{proof}
+
+Now let us outline the construct of an infinite $c$-prehomogeneous set in $[\NN]^n$.
+By recursion, we find define $b_0 < b_1 < \cdots$ and $I_0 \supset I_1 \supset \cdots$, where $b_e = \min I_e$
+We start with $I_0 = \NN$, $I_1 = \NN \setminus \{0\}$, through $I_{n-2} = \NN \setminus \{0, \dots, n - 3\}$.
+At stage $e \geq n - 1$, let $\mathscr F_e = [\{b_0, \dots, b_{e-1}\}]^{n-1}$.
+Then define $c_e = I_{e-1} \setminus \{b_{e-1}\} \to k^{\mathscr F_e}$ by letting
+$$c_e(x)(F) = c(F \cup \{x\}).$$
+We can then use $RT^1_{|k^{\mathscr F_e}|}$ to find $I_e \subseteq I_{e-1} \setminus \{b_{e-1}\}$, and $s_e \in k^{\mathscr F_1}$, such that $I_e$ is infinite and for all $x \in I_e$, $c_e(x) = s_e$.
+Then we set $b_e = \min I_e$.
+
+\begin{lemma}
+The set
+$$H = \{b_0 < b_1 < b_2 < \cdots\}$$
+is $c$-prehomogeneous.
+\end{lemma}
+\begin{proof}
+Let $F \subset H$, $|F| = n - 1$.
+We claim there is a color $j < k$ such that for every $y \in H$ with $F < y$, $c(F \cup y) = j$.
+
+Write $F = \{b_{i_0} < b_{i_1} < \cdots < b_{i_{n-2}}\}$.
+Let $e = i_{n-2} + 1$, so $b_{e-1} = \max F$.
+Recall that $\mathscr F_e = [\{b_0, \dots, b_{e-1}\}]^{n-1}$, so $F \in \mathscr F_e$.
+Thus $s_e \in k^{\mathscr F_e}$ implies that $s_e(F)$ is defined.
+Let us set $j = s_e(F)$.
+
+Let $y \in H$, $F < y$.
+We claim $c(y) = s_e(F)$, which completes the proof.
+By construction, $y \in I_e$, but by construction this means $c_e(y) = s_e$, so $c(F \cup y) = s_e(F)$ as desired.
+\end{proof}
+
+This argument can be formalized in $\ACA_0$.
+
+\begin{definition}[$\RCA_0$]
+For every $n \geq 1$ and $X$, $[X]^n = \{\sigma \in X^n: \forall i < n - 1(\sigma(i+1) > \sigma(i))$.
+The statement $RT_k^n$ is ``$\forall f \exists H$, if $f$ is a function $[\NN]^n \to k$, then $H$ is infinite and $f|[H]^n$ is constant."
+\end{definition}
+
+The statement ``$f$ is a function $[\NN]^n \to k$" is $\Pi_1^0$, the statement ``$H$ is infinite" is $\Pi_2^0$, and ``$f|[H]^n$ is constant" is $\Pi_1^0$.
+In particular ``If $f$ is a function $[\NN]^n \to k$, then $H$ is infinite and $f|[H]^n$ is constant" is arithmetical, so $RT_k^n$ is $\Pi_2^1$ -- that is, it is of the form $\forall\exists\psi$ where $\psi$ is arithmetical and the quantifiers are allowed to range over sets.
+
+Let $RT_{<\infty}^n = \forall k(RT^n_k)$, and $RT = \forall n(RT_{<\infty}^n)$. Note that these quantifiers may not be in an $\omega$-model.
+Let $\underline n$ be the term $1 + 1 + \cdots + 1$ with $n$ ones.
+If $\RCA_0$ proves the pigeonhole principle, then for every model $M$ of $\RCA_0$, $M \models \forall RT^1_{<\infty}$, even if $M$ has a nonstandard first-order part.
+However, $RT^k_{<\infty}$ is $\Pi_2^1$, and $\ACA_0$ cannot prove $\Pi_2^1$-induction, so we cannot use induction to conclude $RT$ in $\ACA_0$.
+
+To check whether $\RCA_0$ proves the pigeonhole principle, let us note that obviously $\RCA_0 \vdash RT_1^1$. In fact, $\RCA_0 \vdash RT_2^1$, since if $c$ is a $2$-coloring of $\NN$ and $X = \{n: c(n) = 0\}$, $Y = \{n: c(n) = 1\}$, then $X,Y$ cannot be both finite.
+Indeed, if they are both finite, then we can find $\ell_0,\ell_1$ which are upper bounds on $X, Y$. So $\ell_0 + \ell_1$ is an upper bound on $X \cup Y$, a contradiction.
+
+\begin{proposition}
+Let $k \geq 1$ be a standard natural. Then $\RCA_0 \vdash RT_k^1$.
+\end{proposition}
+\begin{proof}
+Suppose $k \geq 2$ and suppose that $\RCA_0 \vdash RT_k^1$.
+We claim $\RCA_0 \vdash RT_{k+1}^1$. Fix $c: \NN \to k + 1$ and define a $2$-coloring $d$ of $\NN$ by setting $d(n) = 0$ if $c(n) < k$ and $d(n) = 1$ if $c(n) = k$.
+Then, by $RT_2^1$, there is an infinite homogeneous set $X$ for $d$.
+If $X$ is homogeneous for $1$ for $d$, then $X$ is homogeneous for $k$ for $c$ and we're done.
+Otherwise, $X$ is homogeneous for $0$ for $d$, so $c|X$ is a $k$-coloring, so by $RT_k^1$, we can find an infinite homogeneous subset of $Y$ for $c$.
+
+We could also prove this result by using the fact that $k = \underline k$.
+\end{proof}
+
+We conclude $\RCA_0 \vdash RT_k^1$ whenever $k$ is standard.
+What we want to really prove though is
+$$\forall k(\forall c: \NN \to k)(\exists j < k)\forall x \exists y(y > x \wedge c(y) = j).$$
+Then $H = \{n \in \NN: c(n) = j\}$ is the desired homogeneous set.
+To accomplish this, let $M \models \RCA_0$, $k \in \NN$, $c: \NN \to k$.
+Suppose that
+$$(\forall j < k)\exists x \forall y(y > x \to c(y) \neq j).$$
+If $B\Pi_1^0$ is true,
+$$(\forall j < k)\exists x\theta \to \exists s(\forall j < k)(\exists x < s)\theta$$
+and hence
+$$\exists s(\forall j < k)(\exists x < s)\forall y(y < x \to c(y) \neq j).$$
+Therefore
+$$\RCA_0 + B\Pi_1^0 \vdash RT_{<\infty}^1.$$
+In fact, this implication is sharp.
+
+\begin{theorem}[$\RCA_0$]
+$B\Pi_1^0$ iff $RT^1_{<\infty}$.
+\end{theorem}
+\begin{proof}
+Suppose $RT_{<\infty}^1$ and let $M \models \RCA_0 + RT_{<\infty}^1$.
+We claim $M \models B\Pi_1^0$. Let $\forall w\theta(x, z, w)$ be a $\Pi_1^0$ formula, so $\theta \in \Sigma_0^0$.
+Suppose
+$$M \models (\forall x < y)\exists z \forall w \theta(x, z, w).$$
+We must show there is an $s \in M$ such that
+$$M \models (\forall x < y)(\exists z < s)\forall w \theta(x, z, w).$$
+Let $c(t)$ be the least $n < t$ such that $(\forall x < y)(\exists z < n)(\forall w < t)\theta(x, z, w)$ if such an $n$ exists, and otherwise $c(t) = t$.
+Since $c(t) \neq n - 1$ means $(\exists x < y)(\forall z < n - 1)(\exists w < t)\neg\theta(x, z, w)$.
+
+Suppose $\exists k \forall t(c(t) < k)$, that is, $c$ is a $k$-coloring.
+Then by $RT^1_{<\infty}$, there is an infinite $X$ and $s < k$ such that $(\forall t \in X)(c(t) = s)$.
+Thus by $B\Sigma_1^0$,
+$$(\forall t \geq \ell)(\forall x < y)(\exists z < s)(\forall w < t)\theta(x, z, w)$$
+implies
+$$(\forall x < y)(\exists z < w)(\forall t \geq \ell)(\forall w < t)\theta(x, z, w)$$
+so
+$$(\forall x < y)(\exists z < s)\forall w \theta(x, z, w)$$
+which is $B\Pi_1^0$.
+
+Otherwise $\forall k \exists t(c(t) > k)$.
+Let $Y$ be the jump points
+$$Y = \{t: (\forall x < t)(c(x) < c(t))$$
+so $Y$ is an infinite set.
+So there is a function $f: \NN \to \NN$ whose image is $Y$; let $t_i = f(i)$.
+For each $i$, such $c(t_i) \neq c(t_i) - 1$,
+$$(\exists x < y)(\forall z < c(t_i) - 1)(\exists w < t_i)\neg \theta(x, z, w).$$
+This is a $\Sigma_0^0$ statement, so there is $g: \NN \to y$ where $g(i)$ is the least $x < y$ such that
+$$(\forall z < c(t_i) - 1)(\exists w < t_i) \neg \theta(x, z, w).$$
+Then $g$ is a $y$-coloring, so by $RT_{<\infty}^1$ there is an infinite set $H$ and $x_0 < y$ such that $(\forall i \in H)(g(i) = x_0)$.
+Now we claim $\forall z \exists w \neg \theta(x_0, z, w)$ which contradicts $(\forall x < y) \exists z \forall w \theta(x, z, w)$.
+To see the claim, fix $z_0$. Since $c(t_i) > c(t_{i-1})$ the $c(t_i)$ are unbounded, so since $H$ is infinite, there is $i \in H$ such that $c(t_i) - 1 > z_0$.
+Thus $(\exists w < t_i) \neg \theta(x_0, z_0, w)$, which proves the claim.
+\end{proof}
+
+Since there are models of $\RCA_0$ with a proper $\Sigma_2^0$-cut, it follows that $\RCA_0$ does not prove $RT^1_{<\infty}$, even though $\RCA_0$ proves $RT^1_k$ for every $k < \omega$.
+
+We will later show
+$$\ACA_0 \vdash \forall n(RT_{<\infty}^n \to RT^{n+1}_{<\infty}),$$
+and along with the implication $RT^3_2 \to \ACA_0$, this will imply that over $\RCA_0$, Ramsey's theorem is equivalent to $\ACA_0$.
+
+\begin{theorem}[$\RCA_0$]
+If $RT^3_2$ is true then so is $\ACA_0$.
+\end{theorem}
+\begin{proof}
+We will show $\Sigma_1^0$-comprehension; that is, we will fix $\varphi \in \Sigma_1^0$ and show there is a set $Z$ such that $\forall m((m \in Z) \leftrightarrow \varphi(m))$ assuming $RT^3_2$.
+Let us write $\varphi(m) = \exists n \theta(n, m)$ where $\theta$ is bounded.
+Define $c: [\NN]^3 \to 2$ by setting $c(a, b, c) = 1$ iff
+$$(\forall m < a)(\exists n < b)(\theta(n, m) \leftrightarrow (\exists n < c) \theta(n, m))$$
+and $c(a, b, c) = 0$ otherwise.
+In other words $a,b,c$ are ``friends" (thus $c(a, b, c) = 0$) iff for every $m < a$, we can find a witness to $\varphi(m)$ under $b$ iff we can find a witness under $c$.
+
+By $RT_2^3$, let $H \subseteq \NN$ be an infinite set such that there is a color $j$ such that if $a, b, c \in H$, $c(a, b, c) = j$.
+Then $j = 1$. Indeed, fix $a \in H$.
+Let $Y = \{m < a: \varphi(m)\}$, which exists by $B\Sigma_1^0$.
+Then by $B\Sigma_0^0$ there is $k$ such that
+$$(\forall m < a)(\exists n < k)(m \in Y \to \theta(m, n)).$$
+Since $H$ is infinite, there are $b < c$ in $H$ such that $k < b < c$, and without loss of generality we can assume $a < k$.
+Since $k < b$,
+$$\exists n \theta(m, n) \leftrightarrow (\exists n < b) \theta(m, n)$$
+and similarly for $k < c$.
+Thus
+$$(\forall m < a)((\exists n < b)\theta(m, n) \leftrightarrow (\exists n < c)\theta(m, n))$$
+so $c(a, b, c) = 1$.
+In particular, $j = 1$.
+
+Now we claim that for every $m \in \NN$,
+$$\exists n \theta(m, n) \leftrightarrow (\forall a,b \in H)(m < a < b \to (\exists n < b)\theta(m, n)).$$
+The backwards direction is clear since $H$ is infinite (so that the right side is not vacuously true).
+Conversely, $\theta(m, n_0)$ and $m < a < b$.
+If $\neg(\exists n < b) \theta(m, n)$ then $(\forall n < b)\neg \theta(m, n)$.
+So
+$$(\exists m < a)(\neg(\exists n < b) \theta(m, n) \wedge (\exists n < c)\theta(m, n))$$
+which implies $c(a, b, c) = 0$, so $0 = 1$.
+
+So $\varphi(m) = \exists n \theta(m, n)$ is equivalent to
+$$\forall a, b(((a, b \in H) \wedge (m < a < b)) \to (\exists n < b)\theta(m, n))$$
+which is a $\Pi_1^0$ formula.
+Therefore $\varphi$ is $\Delta_1^0$.
+So we may use $\Delta_1^0$-comprehension.
+\end{proof}
+
+\begin{theorem}[$\ACA_0$]
+For every $n$, $RT^n_{<\infty} \to RT^{n+1}_{<\infty}$.
+\end{theorem}
+We omit the proof because I was sick that day.
+
+Note that $\ACA_0$ does not prove $\forall n(RT_{<\infty}^n)$.
+Indeed, if it did, there would be $m \in \omega$ such that for every $n, k$ and computable $c: [\NN]^n \to k$, there is an infinite homogeneous set $H \leq_T 0^{(m)}$.
+But Jockusch showed that there is no such $m$.
+What we need to prove $\forall n(RT_{<\infty}^n)$, we need a principle of the form ``For every $n$ there is a sequence of sets $X_1, \dots, X_n$ such that $X_{i+1} = X_i'$."
+Stronger, we could assume that $0^{(\omega)}$ exists.
+
+\chapter{Weak K\"onig's lemma}
+Still following Reed Solomon.
+
+Recall that $\ACA_0$ holds over $\RCA_0$ if K\"onig's lemma does, or even K\"onig's lemma restricted to trees such that each node had at most two children.
+So we really need to weaken K\"onig's lemma to recover a weaker theory than $\ACA_0$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{binary tree} is a set $T$ of binary strings which is closed under initial segments.
+\end{definition}
+
+\begin{definition}[$\RCA_0$]
+\dfn{Weak K\"onig's lemma} is the sentence that every infinite binary tree has a path.
+\end{definition}
+
+The point is that binary trees are very different than trees $S \subseteq \NN^{<\NN}$ such that every node has at most two children, because the indexes of those nodes may be nonuniformly large.
+
+If $T$ is a binary tree and $\sigma \in T$, then the statement ``$\sigma$ has no successors" is $\sigma \frown 0 \notin T \wedge \sigma \frown 1 \notin T$, which is $\Sigma_0^0$.
+On the other hand, if $S$ is a tree such that every node has at most two children and $\sigma \in S$, then ``$\sigma$ has no successors" is $\forall n(\sigma \frown 0 \notin S)$ which is $\Pi_1^0$.
+In general, $S$ can be constructed so that ``$\sigma$ has no successors" can compute $0'$, which is why $\RCA_0$ is so bad at reasoning about it.
+On the other hand, $T$ has a path $f$ of low degree by the low basis theorem, thus $f' = 0'$, so paths through $T$ may have very poor coding ability.
+
+\begin{definition}[$\RCA_0$]
+$\WKL_0$ is the subsystem of $Z_2$ generated by $\RCA_0$ and weak K\"onig's lemma.
+\end{definition}
+
+Clearly we have
+$$\RCA_0 \subseteq \WKL_0 \subseteq \ACA_0.$$
+In fact these are both strict inequalities.
+First, the $\omega$-model of recursive sets is not a model of $\WKL_0$ since there are recursive binary trees with no recursive paths.
+On the other hand, by the low basis theorem, there is an $\omega$-model $S \models \WKL_0$ such that every $X \in S$ is low.
+Since $0^{(2)} \neq 0'$, it follows that $0' \notin S$, but $\ACA_0$ proves that $0'$ is a set.
+
+More dramatically, we will show that $\WKL_0$ is $\Pi_1^1$-conservative over $\RCA_0$.
+But $I\Sigma_n^0$ is arithmetic and hence $\Pi_1^1$.
+Thus $\WKL_0$ doesn't prove \emph{any} induction principles that $\RCA_0$ doesn't, let alone $\ACA_0$!
+For similar reasons, $\WKL_0$ cannot prove $RT_{<\infty}^1$ or $RT_2^2$.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{bounded tree} $T \subseteq \NN^{<\NN}$ is a tree such that there is a function $g: \NN \to \NN$ such that for every $\tau \in T$ and $m < |\tau|$, $\tau(m) < g(m)$.
+\end{definition}
+
+Note that over $\WKL_0$, a tree is not necessarily bounded iff it is finitely branching.
+The reason is that the number of children at each stage could grow, say, much faster than an Ackermann function.
+
+\begin{theorem}[$\RCA_0$]
+$\WKL_0$ holds iff every bounded infinite tree has a path.
+\end{theorem}
+\begin{proof}
+Easy.
+\end{proof}
+
+\begin{corollary}[$\WKL_0$]
+For every $k \geq 2$, if $T \subseteq k^{<\NN}$ is an infinite tree, then $T$ has a path.
+\end{corollary}
+
+\section{$\Sigma_1^0$-separation}
+\begin{definition}[$\RCA_0$]
+$\Sigma_1^0$-\dfn{separation} is the statement that for every $\Sigma_1^0$ formulae $\varphi_0,\varphi_1$ such that $\forall n\neg(\varphi_0(n) \wedge \varphi_1(n))$, there is a set $X$ such that
+$$\forall n((\varphi_0(n) \to (n \in X)) \to (\varphi_1(n) \to (n \notin X))).$$
+In that case, the set $X$ is called a \dfn{separating set} for $\varphi_0,\varphi_1$.
+\end{definition}
+
+So separation is a weak form of comprehension.
+In particular, $\{n: \varphi_0(n)\}$ is r.e. so $\Sigma_1^0$-separation says that disjoint r.e. sets can always be separated.
+This gives another proof that $\WKL_0$ is strictly stronger than $\RCA_0$, as there exist disjoint r.e. sets which are recursively inseparable.
+
+When we work with $\ACA_0$, we want to use the formulation in terms of images of injective functions.
+As it turns out, $\WKL_0$ has a similar formulation:
+
+\begin{theorem}[$\RCA_0$]
+The following are equivalent:
+\begin{enumerate}
+\item $\WKL_0$.
+\item $\Sigma_1^0$-separation.
+\item For every pair of injective functions $f,g: \NN \to \NN$ with disjoint images, there is a set $X$ such that for every $n \in \NN$, $f(n) \in X$ and $g(n) \notin X$.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Suppose $\Sigma_1^0$-separation, let $f,g$ be injective, $\varphi_0(n) = \exists m(f(m) = n)$ and $\varphi_1(n) = \exists m(g(m) = n)$.
+By $\Sigma_1^0$-separation we can separate these formulae.
+The converse is similar.
+
+Now let us prove $\Sigma_1^0$-separation in $\WKL_0$.
+Fix $\varphi_0(n) = \exists m \theta_0(n, m)$ and $\varphi_1(n) = \exists m \theta_1(n, m)$, such that $\theta_0,\theta_1$ are bounded and separable.
+We interpret binary strings $\sigma$ as ``potential separating sets"; that is, if $\sigma(n) = 1$ then $\sigma$ wants $n \in X$.
+We call $\sigma$ a \dfn{good guess} if for every $m, n < |\sigma|$, if $\theta_0(n, m)$ then $\sigma(n) = 1$, and if $\theta_1(n, m)$ then $\sigma(n) = 0$.
+Let $T$ be the tree of all good guesses.
+Furthermore $T$ is infinite -- that is, for every $n$ there is a $\sigma \in T$ with $|\sigma| = n$.
+Such a $\sigma$ can always be constructed recursively from $n$.
+So let $g$ be a path of $\sigma$. Then if $\varphi_j(n)$, then $g(n) = 1 - j$.
+So we can let $X = \{n: g(n) = 1\}$, and then $X$ separates $\varphi_0,\varphi_1$.
+
+We omit the proof of the converse.
+\end{proof}
+
+\chapter{Analysis in reverse math}
+Still following Reed Solomon.
+
+\begin{definition}[$\RCA_0$]
+A \dfn{real number} is a function $x: \NN \to \QQ$ such that for every $k,i$,
+$$|x_k - x_{k + i}| \leq 2^{-k}.$$
+We let $\RR$ be the class of real numbers and write $x = y$ to mean
+$$\forall k(|x_k - y_k| \leq 2^{-k+1}).$$
+\end{definition}
+
+Note that $\RR$ is not a set, and that the notion of Cauchy equivalence is third-order, which is why we needed the strong convergence property (since $\RCA_0$ only knows about second-order properties) rather than just Cauchy equivalence.
+
+Let $x, y \in \RR$. We write $x \leq y$ to mean $\forall k(x_k \leq y_k + 2^{-k+1})$.
+Then $x \leq y$ and $y \leq x$ is equivalent to $x = y$.
+We let $(x + y)_k = x_{k+1} + y_{k+1}$ to ensure good convergence rates, and similarly let $(xy)_k = x_{n+k}y_{n+k}$ where $n$ is so large that
+$$2^n \geq |x(0)| + |y(0)| + 2.$$
+This is well-defined by minimization.
+
+\begin{theorem}[$\RCA_0$]
+$\RR$ is an archimedean ordered field.
+\end{theorem}
+
+The proof is pretty much the same as always.
+
+\section{Sequences of real numbers}
+We define sequences of real numbers by currying the definition of a real number.
+
+\begin{definition}
+A \dfn{sequence} in $\RR$ is a function $r: \NN \times \NN \to \QQ$ such that for each $n$, $r_n: \NN \to \QQ$ given by $r_n(k) = r_{n,k}$ is a real number.
+We say
+$$\lim_{n \to \infty} r_n = x$$
+if for every $\varepsilon \in \QQ$ such that $\varepsilon > 0$, there is $N \in \NN$ such that if $n \geq N$ then $|r_n - x| < \varepsilon$.
+\end{definition}
+
+
+
+
+\newpage
+\printindex
+\printbibliography
+
+\end{document}

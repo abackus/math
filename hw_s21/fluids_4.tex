@@ -1,0 +1,331 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Fluid dynamics, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $u_0 \in H^s_\sigma(\RR^d)$, $s > 1 + d/2$. Let $u^\nu$ be the solution to the Navier-Stokes system with viscosity $\nu > 0$ and initial data $u_0$.
+Let $u$ be the solution to the Euler system with initial data $u_0$.
+Assume that neither $u^\nu$ nor $u$ blow up at or before time $T > 0$.
+Show that
+$$||u^\nu - u||_{L^\infty([0, T])} \lesssim \nu.$$
+\end{exer}
+
+This follows from an energy estimate for the \emph{forced} Navier-Stokes equation.
+\begin{lemma}
+Let $v_1, v_2 \in L^2$ and $F_1, F_2 \in L^1$ satisfy
+\begin{equation}
+\label{forced equation}
+\partial_t v_j + \PP(v_j \cdot \nabla v_j) = \nu \Delta v_j + F_j.
+\end{equation}
+If $v_1,v_2$ have the same initial data, then
+\begin{equation}
+\label{forced energy}
+||v_1 - v_2||_{L^\infty([0, T] \to L^2)} \leq ||F_1 - F_2||_{L^1([0, T] \to L^2)} \exp||\nabla v_2||_{L^1([0, T] \to L^\infty)}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Since the proof is very similar to that of the energy estimates for the Euler system we gave on the previous homework, we will omit all details which are identical to those that already appeared in that argument.
+
+Subtracting the two given equations (\ref{forced equation}) from each other we obtain
+\begin{equation}
+\label{energy estimate 1}
+\partial_t \tilde v + \PP(v_1 \cdot \nabla \tilde v + \tilde v \cdot \nabla v_2) = \nu \Delta \tilde v + \tilde F.
+\end{equation}
+where $\tilde v = v_1 - v_2$ and $\tilde F = F_1 - F_2$.
+Taking the $L^2$ inner product of (\ref{energy estimate 1}) with $\tilde u$ we obtain
+$$(\partial_t \tilde v, \tilde v) + (\tilde v \cdot \nabla v_2, \tilde u) - \nu(\Delta \tilde v, \tilde v) = (\tilde F, \tilde v).$$
+Integrating by parts and using the fact that $\nabla \cdot \tilde v = 0$, $-(\Delta \tilde v, \tilde v) = ||\nabla \tilde v||_{L^2}^2$, thus
+$$(\partial_t \tilde v, \tilde v) + \nu||\nabla \tilde v||_{L^2}^2 = (\tilde F, \tilde v) - (\tilde v \cdot \nabla v_2, \tilde u).$$
+Since $||\nabla \tilde v||_{L^2}^2 \geq 0$ we can eliminate the viscosity term, thus
+$$(\partial_t \tilde v, \tilde v) \leq (\tilde F, \tilde v) - (\tilde v \cdot \nabla v_2, \tilde v).$$
+Applying the Cauchy-Schwarz and Gr\"onwall inequalities exactly as in the proof of the Euler energy estimates,
+$$||\tilde v||_{L^\infty([0, T] \to L^2)} \leq (||\tilde v(0)||_{L^2} + ||\tilde F||_{L^1([0, T] \to L^2)}) \exp ||\nabla v_2||_{L^1([0, T] \to L^\infty)}.$$
+But $\tilde v(0) = 0$ by hypothesis, so this inequality is exactly (\ref{forced energy}).
+\end{proof}
+
+By hypothesis, $v_1 = u^\nu$ solves the (unforced!) Navier-Stokes equation, while $v_2 = u$ solves the forced Navier-Stokes equation with $F_2 = -\nu \Delta u$. Thus by (\ref{forced energy}),
+\begin{equation}
+\label{applied forced energy}
+||u^\nu - u||_{L^\infty([0, T] \to L^2)} \leq \nu ||\Delta u||_{L^1([0, T] \to L^\infty)} \exp ||\nabla u||_{L^1([0, T] \to L^\infty)}.
+\end{equation}
+We can absorb all of the right-hand side of (\ref{applied forced energy}) except the viscosity $\nu$ into a constant, as it does not depend on $\nu$ but only on the initial data $u_0$. That is,
+$$||u^\nu - u||_{L^\infty([0, T] \to L^2)} \lesssim \nu,$$
+which was to be shown.
+
+\begin{exer}
+Recall that $u$ is a $2.5$-dimensional flow if $u: \RR^{1+2} \to \RR^3$.
+Prove that for any initial data $u_0 \in H^s_\sigma(\RR^2)$ with $s > 2$ the Euler system with $d = 2.5$ has a unique global solution $u \in C([0, T] \to H^s)$.
+\end{exer}
+
+We will first show that a local solution of $u_0$ remains $2.5$-dimensional.
+This is a somewhat tricky point as we only have $s > 2$ so we cannot apply the well-posedness theory for $d = 3$ directly.
+
+To this end, let $K^s$ be the kernel of the operator
+$$(\partial_1 + \partial_2, \partial_3): H^s(\RR^3) \to \CC^2.$$
+Since $s > 2 > 1$, $K^s$ is a Hilbert space and we have a canonical isomorphism $H^s_\sigma(\RR^2) \to K^s$ given by $u \mapsto (x \mapsto u(x_1, x_2, 0))$.
+Let $Q: H^s(\RR^3) \to K^s$ be the orthogonal projector.
+
+Let $J_\varepsilon$ be the standard mollifier.
+\begin{lemma}
+\label{commutation}
+The commutators $[Q, J_\varepsilon]$ and $[Q, \partial^\alpha]$ are both zero.
+\end{lemma}
+\begin{proof}
+If $\PP_2: H^s(\RR^2) \to H^s_\sigma(\RR^2)$ denotes the Leray projector, then
+$$Q = \PP_2(1 - \partial_3^{-1}\partial_3)$$
+where $1 - \partial_3^{-1}\partial_3$ is the orthogonal projector onto the Hilbert space $H^s(\RR^2) = \{u \in H^s(\RR^3): \partial_3 u = 0\}$.
+
+Since $\PP_2$ commutes with the standard mollifier $J_\varepsilon$ and the differential operator $\partial^\alpha$, to show that $Q$ has the same property it suffices to show that $\partial_3^{-1}\partial_3$ has the same property.
+Since $\partial_3^{-1}\partial_3$ is an orthogonal projector, then, it suffices to show that $J_\varepsilon$ and $\partial^\alpha$ preserve $H^s(\RR^2)$ and $H^s(\RR^2)^\perp$.
+Here $H^s(\RR^2)^\perp$ is the kernel of $(\partial_1, \partial_2)$.
+However, since $J_\varepsilon$ and $\partial^\alpha$ both commute with $\partial_3$ and $(\partial_1, \partial_2)$, this follows.
+\end{proof}
+
+\begin{lemma}[local well-posedness]
+Suppose that $u$ is a solution to the Euler system with $d = 3$ and initial data $u_0 \in H^s_\sigma(\RR^2)$.
+Then $u$ is a $2.5$-dimensional solution.
+\end{lemma}
+\begin{proof}
+The regularized $2.5$-dimensional Euler equation
+$$\partial_t u^\varepsilon + QJ_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon) = 0$$
+induces the ODE $\dot u^\varepsilon = F_\varepsilon(u^\varepsilon)$ on $K^s$ where
+$$F_\varepsilon(u^\varepsilon) = -QJ_\varepsilon(J_\varepsilon u^\varepsilon \cdot \nabla J_\varepsilon u^\varepsilon).$$
+The previous lemma now allows us to carry out the argument which shows that the regularized $2.5$-dimensional Euler equation is well-posed.
+Since $Q$ has the same commutation properties and operator norm bounds as $\PP$, the proof is identical, so we omit the details.
+The only nontrivial point is that in the statement of any Sobolev inequality that appears in the argument, the dimension $2$ of the domain is allowed to influence $s$, but the dimension $3$ of the codomain is not, so the assumption here is that $s > 1 + 2/2 = 2$.
+
+It follows that for some $T > 0$ which only depends on $||u_0||_{H^s}$, the $2.5$-dimensional Euler equation has a solution $u$ on $[0, T]$.
+By uniqueness for solutions to the (three-dimensional) Euler equation, $u$ is the unique solution with initial data $u_0$.
+We conclude that if $u$ is a solution to the three-dimensional Euler equation on $[0, T]$ where $0 < T < \infty$, and $u$ is a solution to the $2.5$-dimensional Euler equation on $[0, T']$ where $0 \leq T' \leq T$, then in fact $u$ is a solution to the $2.5$-dimensional Euler equation on $[0, T]$.
+Indeed, if not, then by the local well-posedness of the $2.5$-dimensional Euler equation, there would be a time $T' < T'' \leq T$ and a solution $u'$ to the $2.5$-dimensional Euler equation on $[0, T'']$ such that $u = u'$ on $[0, T']$ but $u \neq u'$ on $(T', T'']$.
+Since $T'' > T'$, this contradicts the uniqueness for solutions to the (three-dimensional) Euler equation.
+\end{proof}
+
+Let us now show global well-posedness.
+Suppose that $u = (u^\flat, u_3)$ is a solution with $d = 2.5$.
+Then $u \cdot \nabla u = u_1 \partial_1 u + u_2 \partial_2 u$ since $\partial_3 u = 0$, so the Euler equations partially decouple into equations for $u^\flat$ and $u_3$, and we conclude that $u$ solves the system
+\begin{align*}
+\partial_t u^\flat + u^\flat \cdot \nabla^\flat u^\flat &= \nabla^\flat p\\
+\nabla^\flat \cdot u^\flat &= 0\\
+u^\flat(0) &= u_0^\flat\\
+\partial_t u_3 + u^\flat \cdot \nabla^\flat u_3 &= \partial_3 p\\
+u_3(0) &= u_{0,3}
+\end{align*}
+where $\nabla^\flat = (\partial_1, \partial_2)$ and $p$ is a Lagrange multiplier.
+The first three equations are just the Euler system with $d = 2$, so $u^\flat$ extends to a global solution.
+It remains to solve the system
+\begin{align*}
+\partial_t u_3 + u^\flat \cdot \nabla^\flat u_3 &= \partial_3 p\\
+u_3(0) &= u_{0, 3}
+\end{align*}
+for $u_3$, given $u^\flat$. This is a system of linear first-order PDE for $u_3: \RR^{1+2} \to \RR$,
+
+We first eliminate the pressure $p$.
+Since $u$ solves the Euler system, the pressure satisfies the Poisson equation
+\begin{equation}
+\label{Poisson 1}
+-\Delta p = \sum_{i,j=1}^3 \partial_j u^i \partial_i u^j
+\end{equation}
+but $u^\flat$ also solves the Euler system, so the pressure also satisfies the Poisson equation
+\begin{equation}
+\label{Poisson 2}
+-\Delta p + \partial_3^2 p = \sum_{i,j=1}^2 \partial_j u^i - \partial_i u^j.
+\end{equation}
+Subtracting (\ref{Poisson 1}) from (\ref{Poisson 2}) and using the relation $\partial_3 u^j = 0$, we conclude that $\partial_3^2 p = 0$, so that if $x^\flat$ is held fixed, then $\partial_3 p(x)$ is a linear function of $x$.
+But $\partial_3 p$ vanishes at infinity, so $\partial_3 p = 0$.
+
+We have reduced the problem to solving the transport equation
+\begin{equation}
+\label{linear transport}
+\partial_t u_3 + u^\flat \cdot \nabla u_3 = 0
+\end{equation}
+where $u^\flat$ is given.
+
+\begin{lemma}[backwards propagation]
+\label{solving the terminal value problem}
+Fix $x_1 \in \RR^2$, $s > 2$, $T > 0$, and $u^\flat \in C([0, T] \to H^s_\sigma(\RR^2 \to \RR^2))$ which is a solution to the Euler system with $d = 2$.
+Then there is a unique $x \in C^1([0, T])$ such that $\dot x = u^\flat(x(t), t)$ and $x(T) = x_1$.
+Thus we have a time-reversal map $\varphi(x_1) = x(0)$.
+\end{lemma}
+\begin{proof}
+We want to use the Picard-Lindel\"of theorem, so we first show that $[u^\flat(t)]_{Lip} \lesssim 1$, the point being that the implied constant does not depend on $t$.
+To this end, let $\delta = \min(1, s - 2) > 0$, $p = 2/(1 - \delta) > 2$, and $\gamma = 1 - 2/p > 0$.
+The Gagliardo-Nirenberg inequality says
+$$||u^\flat(t)||_{W^{2,p}} \lesssim ||u^\flat(t)||_{H^s}$$
+so by Morrey's inequality,
+\begin{align*}[u^\flat(t)]_{Lip} &\leq ||\nabla u^\flat(t)||_{L^\infty} \leq ||\nabla u^\flat(t)||_{C^\gamma} \\
+&\lesssim ||\nabla u^\flat(t)||_{W^{1,p}} \lesssim ||u^\flat(t)||_{H^s} \leq ||u^\flat||_{L^\infty([0, T] \to H^s)} < \infty
+\end{align*}
+as desired.
+
+So by the Picard-Lindel\"of theorem, the terminal-value problem $\dot x(t) = u^\flat(x(t), t)$, $x(T) = x_1$ is well-posed in an open interval $I \ni T$.
+We must show that $0 \in I$, so suppose that $t > 0$ and $t \in \overline I$, so that by Gr\"onwall's inequality, for every $\varepsilon > 0$,
+$$|x(t + \varepsilon)| \leq |x(T)| \exp\left(\int_{t + \varepsilon}^T ||u^\flat(\tau)||_{L^\infty} ~d\tau\right) \leq |x'| \exp ((T - t) ||u^\flat||_{L^\infty([0, T] \to L^\infty)}).$$
+Since this bound is uniform in $\varepsilon$,
+$$\lim_{\varepsilon \to 0} |x(t + \varepsilon)| \leq |x'| \exp((T - t)||u^\flat||_{L^\infty([0, T] \to L^\infty)})$$
+as well.
+By Morrey's inequality and the Gagliardo-Nirenberg inequality,
+\begin{align*}
+||u^\flat(\tau)||_{L^\infty} &\leq ||u^\flat(\tau)||_{C^{1/2}} \lesssim ||u^\flat(\tau)||_{W^{1,4}} \\
+&\lesssim ||u^\flat(\tau)||_{H^{3/2}} \leq ||u^\flat||_{L^\infty([0, T] \to H^s)} < \infty
+\end{align*}
+which is a uniform bound in $\tau$, so that
+$$\lim_{\varepsilon \to 0} |x(t + \varepsilon)| \leq |x'|\exp((T - t)||u^\flat||_{L^\infty([0, T] \to H^s)}) < \infty.$$
+So by the Picard-Lindel\"of theorem, $t \in I$, but $t$ was arbitrary, so $0 \in \overline I$.
+Moreover, since the Euler system can be solved backwards in time, there is a $\varepsilon > 0$ such that $u^\flat$ extends uniquely to a solution of the Euler system in $C([-\varepsilon, T] \to H^s_\sigma(\RR^2 \to \RR^2))$.
+After applying this extension, we conclude that in fact that $0 \in I$.
+\end{proof}
+
+Let us finally show that (\ref{linear transport}) has a solution $u_3$ which is global in time with initial data $u_{0,3}$.
+To do this, we use the method of characteristics. Let
+$$F(q, x, t) = (u^\flat(x, t), 1) \cdot q.$$
+Then the transport equation reads $F(\nabla^\sharp u(x, t), x, t) = 0$, where $\nabla^\sharp$ is the spacetime gradient $(\partial_t, \nabla)$ (and $\nabla = (\partial_1, \partial_2)$).
+Since $F$ is linear, its characteristic system is particularly simple, namely
+\begin{align*}
+\dot x(s) &= u^\flat(x(s), t(s))\\
+\dot t(s) &= 1\\
+\dot z(s) &= 0\\
+z(s) &= u_3(x(s), t(s)).
+\end{align*}
+We can eliminate $z$ and $s$ to arrive at the system
+\begin{align*}
+\dot x(t) &= u^\flat(x(t), t)\\
+\partial_t u_3(x(t), t) &= 0.
+\end{align*}
+So by Lemma \ref{solving the terminal value problem}, for every $y \in \RR^2$ and $t \in [0, T]$, there is a unique $\psi(y, t) \in \RR^2$ such that if $x$ solves the characteristic system with initial data $\psi(y, t)$, then $x(t) = y$.
+Moreover, the time-reversal map $\psi$ is $C^1$ in time and $H^s$ in space.
+On the other hand, if $\psi$ solves the characteristic system and $u_3$ exists, then $u_3$ must be invariant on the trajectories of $\psi$.
+Therefore we can eliminate the dependence of $x$ on $t$ and posit
+$$u_3(x, t) = u_{0,3}(\psi(x, t), t).$$
+
+To verify that $u_3$ really is a solution of (\ref{linear transport}), we first observe that since $\psi$ is the time-reversal map associated to the characteristic system and $\psi$ is $C^1$ in time, it follows that
+$$\partial_t \psi(x, t) + u^\flat(x, t) = 0.$$
+Therefore $u_3$ solves the transport equation (\ref{linear transport}).
+
+Since $\psi$ is a $C^1$ group action, $u_3$ is continuous in time.
+Moreover, since $\nabla \cdot u^\flat = 0$, transport along $u^\flat$ is an isometry.
+Therefore $||u_3(0)||_{H^s} = ||u_3(t)||_{H^s}$ for any $s$; so, in particular, since $u_{0,3} \in H^s$, $s > 2$, we conclude that $u_3 \in L^\infty([0, T] \to H^s)$, as desired.
+
+
+
+\end{document}

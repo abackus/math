@@ -1,0 +1,328 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Fluid dynamics, HW 5} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Show that if $u$ is a Leray-Hopf solution then
+$$\lim_{t \to 0} u(t) = u(0)$$
+in the topology of $L^2$.
+\end{exer}
+
+First, since $u$ is a weak solution, $u(t) \to u(0)$ weakly in $L^2$.
+On the other hand, the Leray-Hopf energy inequality says
+$$\frac{1}{2} \int_\Omega |u(x, t)|^2 ~dx \leq \frac{1}{2} \int_\Omega |u_0(x)|^2 ~dx + \int_0^t \langle f(s), u(s)\rangle ~ds$$
+where the pairing uses $(V, V')$ duality and we discarded the viscosity term since it was positive on the right-hand side.
+Rewriting the energy inequality,
+$$||u(x, t)||_{L^2} \leq \sqrt{\int_\Omega |u_0(x)|^2 ~dx + 2\int_0^t \langle f(s), u(s)\rangle~ds}.$$
+Furthermore,
+$$\int_0^t \langle f(s), u(s)\rangle~ds \leq \int_0^t ||f(s)||_{V'} ||u(s)||_V ~ds \leq ||f(s)||_{L^2([0, T] \to V')} ||u(s)||_{L^2([0, T] \to V)} < \infty.$$
+So, by measure continuity,
+$$\lim_{t \to 0} \int_0^t \langle f(s), u(s)\rangle~ds = 0.$$
+Therefore
+$$\limsup_{t \to 0} ||u(x, t)||_{L^2} \leq \sqrt{\int_\Omega |u_0(x)|^2 ~dx + 2\lim_{t \to 0} \int_0^t \langle f(s), u(s)\rangle ~ds} = ||u_0||_{L^2}.$$
+Given the \emph{weak} convergence, this norm bound is sufficient that $u(t) \to u(0)$ \emph{strongly} in $L^2$.
+
+\begin{exer}
+Suppose that $f = 0$.
+Let $u_1$ and $u_2$ be weak Navier-Stokes solutions on $[0, T_1]$ and $[T_1, T_2]$ respectively, such that $u_1(T_1) = u_2(T_1)$. Let $u$ be the concatenation of $u_1,u_2$.
+Show that $u$ is a weak Navier-Stokes solution on $[0, T_2]$.
+\end{exer}
+
+Let $\varphi \in C^\infty_c((0, T_2) \to C^\infty_{c, \sigma}(\Omega))$. It suffices to show that
+\begin{equation}
+\label{exer 2 goal}
+\int_0^{T_2} \int_\Omega (u \cdot \nabla u) \cdot \varphi - u \cdot \partial_t \varphi + \nu \nabla u \nabla \varphi = 0
+\end{equation}
+where the above equality is meant in the sense of distributions (since, a priori, $\partial_t u$ is not a function, but it is at least a distribution, since the class of distributions is closed under concatenation and differentation).
+
+Let $\varphi_n^- \in C^\infty((0, T_1) \to C^\infty_{c, \sigma}(\Omega))$ increase pointwise to $\varphi$ on $(0, T_1)$, such that $\varphi_n^-(x) = \varphi(x)$ on $(0, T_1 - 1/n)$.
+These functions can be constructed by taking cutoffs of $\varphi$ to $(0, T_1 - 1/n))$.
+Similarly, let $\varphi_n^+ \in C^\infty((T_1, T_2) \to C^\infty_{c, \sigma}(\Omega))$ increase pointwise to $\varphi$ in $(T_1, T_2)$.
+
+We first show
+\begin{equation}
+\label{left trilinear}
+\lim_{n \to \infty} \int_0^{T_1} \int_\Omega (u \cdot \nabla u) \cdot \varphi_n^- = \int_0^{T_1} \int_\Omega (u \cdot \nabla u) \cdot \varphi.
+\end{equation}
+To see this, we bound
+\begin{align*}
+\limsup_{n \to \infty} \int_0^{T_1} \int_\Omega |(u \cdot \nabla u) \cdot \varphi_n^-| &\leq \limsup_{n \to \infty} \int_0^{T_1} ||u \cdot \nabla u||_{L^1} ||\varphi_n^-||_{L^\infty} \\
+&\leq ||\varphi||_{L^\infty([0, T] \to L^\infty)} \int_0^{T_1} ||u_1||_{L^2} ||\nabla u||_{L^2}\\
+&\leq ||\varphi||_{L^\infty([0, T] \to L^\infty)} ||u_1||_{L^2([0, T] \to L^2)} ||u_1||_{L^2([0, T] \to \dot H^1)} < \infty.
+\end{align*}
+This justifies the computation (\ref{left trilinear}) using dominated convergence.
+Similarly, we conclude
+$$\lim_{n \to \infty} \int_{T_1}^{T_2} \int_\Omega (u \cdot \nabla u) \cdot \varphi_n^+ = \int_{T_1}^{T_2} \int_\Omega (u \cdot \nabla u) \cdot \varphi.$$
+Adding this equation to (\ref{left trilinear}), we conclude
+\begin{equation}
+\label{trilinear}
+\lim_{n \to \infty} \int_0^{T_2} \int_\Omega (u \cdot \nabla u) \cdot (\varphi_n^- + \varphi_n^+) = \int_0^{T_2} \int_\Omega (u \cdot \nabla u) \cdot \varphi.
+\end{equation}
+
+Similarly, let us show
+\begin{equation}
+\label{left viscosity}
+\lim_{n \to \infty} \int_0^{T_1} \int_\Omega \nu \nabla u \nabla \varphi_n^- = \int_0^{T_1} \int_\Omega \nu \nabla u \nabla \varphi.
+\end{equation}
+Thus we bound
+\begin{align*}
+\limsup_{n \to \infty} \int_0^{T_1} \int_\Omega |\nu \nabla u \nabla \varphi_n^-| &\leq \nu \limsup_{n \to \infty} \int_0^{T_1} ||u_1||_{\dot H^1} ||\varphi_n^-||_{\dot H^1}\\
+&\leq \nu ||u_1||_{L^2([0, T] \to \dot H^1)} ||\varphi||_{L^2([0, T] \to \dot H^1)}.
+\end{align*}
+Thus we may use dominated convergence to prove (\ref{left viscosity}), and after applying the same argument to $\varphi_n^+$ and $[T_1, T_2]$, we conclude
+\begin{equation}
+\label{viscosity}
+\lim_{n \to \infty} \int_0^{T_2} \int_\Omega \nu \nabla u \nabla (\varphi_n^- + \varphi_n^+) = \int_0^{T_2} \int_\Omega \nu \nabla u \nabla \varphi.
+\end{equation}
+
+Now we treat the time derivative, which is the nontrivial term.
+Since $u_j \in L^{\infty,2}$, for almost every $x$, $u_j(x) \in L^2$.
+In particular $u_j(x)$ is a distribution with compact support (since $[0, T_2]$ is compact), and so the concatenation $u(x)$ is also a distribution with compact support.
+According to the structure theorem for distributions for compact support, there is a continuous function $v: [0, T_2] \to \RR$ and a linear differential operator $P$ of order $|P|$ such that $\partial_t u(x) = Pv$, and in particular there are finitely many ``singularity times" $t_1 < \cdots < t_J \in [0, T_2]$, constants $c_{j,k}(x) \in \RR$, $\varepsilon > 0$ and $\tilde v \in L^1([T_1 - \varepsilon, T_1 + \varepsilon])$ such that
+$$Pv = \tilde v + \sum_{j=1}^J \sum_{k=0}^{|P|} c_{j,k}(x) \delta^{(k)}_{t_j}.$$
+Henceforth we absorb the terms involving singularity times other than $T_1$ into $\tilde v$, which can be done without affecting the hypotheses on $\tilde v$ as long as $\varepsilon$ is chosen small enough, and suppress the now trivial index $j$.
+Thus
+\begin{equation}
+\label{time derivative sing supp}
+\partial_t u(x) = \tilde v + \sum_{k=0}^{|P|} c_k(x) \delta^{(k)}_{T_1}.
+\end{equation}
+Therefore $\partial_t u(x) - \tilde v$ has support at the single point $T_1$, and so
+$$c_k(x) = \frac{(-1)^k}{k!} \lim_{\rho \to 0} \int_{T_1 - 1}^{T_1 + 1} \partial_t u(x, t)t^k - \tilde v(x, t) t^k ~dt.$$
+By measure continuity, we may assume that $\tilde v = 0$. Then an integration by parts and another appeal to measure continuity gives
+$$|c_k(x)| \leq \frac{(-1)^{k-1}}{(k-1)!}T_1^{k-1} \limsup_{\rho \to 0} |u(x, T_1+\rho) - u(x, T_1-\rho)|.$$
+
+Let $Z$ be the set of all $x$ for which
+$$\limsup_{\rho \to 0} |u(x, T_1+\rho) - u(x, T_1-\rho)| > 0,$$
+so that $c_k(x) = 0$ if $x \notin Z$.
+Since $u \in C_w([0, T] \to L^2)$, for every $\psi \in L^2(\Omega)$,
+$$\lim_{\rho \to 0} \int_\Omega (u(x, T_1 + \rho) + u(x, T_1 - \rho))\psi(x) ~dx.$$
+So let $\psi_\pm$ be the indicator function of the set of all $x$ such that
+$$\limsup_{\rho \to 0} \pm(u(x, T_1 + \rho) + u(x, T_1 - \rho)) > 0.$$
+Then
+$$\limsup_{\rho \to 0} \pm \psi_\pm (u(x, T_1 + \rho) + u(x, T_1 - \rho)) \geq 0$$
+yet that that quantity has zero mean, so it must be the case that for almost every $x$, $\pm \psi_\pm (u(x, T_1 + \rho) + u(x, T_1 - \rho)) = 0$.
+Therefore $Z$ is null, so by (\ref{time derivative sing supp}), for almost every $x$, there is $\varepsilon(x) > 0$ such that
+\begin{equation}
+\label{time derivative is L1}
+\partial_t u(x) \in L^1([T_1 - \varepsilon(x), T_1 + \varepsilon(x)]).
+\end{equation}
+
+Writing $\varphi_n^0 = \varphi - \varphi_+^n - \varphi_-^n$ and restricting to $x \in \Omega$ not in a null set, we conclude that $\varphi_n^0(x) \in L^\infty([0, T_2])$ uniformly, $\varphi_n^0(x) \to 0$ almost pointwise, and the support of $\varphi_n^0(x)$ shrinks to $\{T_1\}$.
+In particular, there is $N(x) > 0$ so large that if $n \geq N(x)$, then $\varphi_n^0(x) = 0$ away from $[T_1 - \varepsilon(x), \varepsilon(x)]$.
+Using (\ref{time derivative is L1}), we conclude that if $n \geq N(x)$,
+$$\int_0^{T_2} |\partial_t u(x, t) \cdot \varphi_n^0(x, t)| ~dt \leq ||\partial_t u(x)||_{L^1([T_1 - \varepsilon(x), T_1 + \varepsilon(x)])}  ||\varphi^0(x)||_{\ell^\infty L^\infty} < \infty.$$
+This bound is uniform in $n$, so by dominated convergence,
+$$\lim_{n \to \infty} \int_0^{T_2} \partial_t u(x, t) \cdot \varphi_n^0(x, t) ~dt = 0.$$
+Since $\varphi_n^0$ is a test function and $\partial_t u(x, t)$ is a distribution, we can then integrate by parts to get
+$$\lim_{n \to \infty} \int_0^{T_2} u(x, t) \cdot \partial_t \varphi_n^0(x, t) ~dt = 0.$$
+Now we can get a bound
+$$\int_\Omega \int_0^{T_2} |u(x, t) \cdot \partial_t \varphi_n^0(x, t)| ~dt ~dx \leq (||u_1||_{L^\infty;L^2} + ||u_2||_{L^\infty;L^2})||\partial_t \varphi_n^0||_{L^1;L^2}.$$
+Furthermore we have the bound
+$$||\partial_t \varphi_n^0||_{L^1;L^2} \lesssim ||\varphi||_{L^1;L^2} + ||\varphi(T_1)||_{L^2} < \infty$$
+since $\varphi_n^0$ is a localization of $\varphi$ to a small neighborhood of $T_1$, and applying the fundamental theorem of calculus gives us terms equal to $\varphi(T_1, x)$.
+Thus we can apply dominated convergence again to conclude
+$$\lim_{n \to \infty} \int_0^{T_2} \int_\Omega u(x, t) \cdot \partial_t \varphi_0^n(x, t) ~dx ~dt = 0$$
+which readily implies
+$$\lim_{n \to \infty} \int_0^{T_2} \int_\Omega u(x, t) \cdot \partial_t (\varphi_+^n(x, t) + \varphi_-^n(x, t)) ~dx ~dt = \int_0^{T_2} \int_\Omega u(x, t) \partial_t \varphi(x, t) ~dx ~dt.$$
+Combining this computation with (\ref{trilinear}) and (\ref{viscosity}), we deduce
+\begin{align*}
+\int_0^{T_2} \int_\Omega (u \cdot \nabla u) \cdot \varphi - u \cdot \partial_t \varphi + \nu \nabla u \nabla \varphi
+&= \lim_{n \to \infty} \int_0^{T_1} \int_\Omega (u_1 \cdot \nabla u_1) \cdot \varphi_n^- - u_1 \cdot \partial_t \varphi_n^- + \nu \nabla u_1 \nabla \varphi_n^+ \\
+&\qquad + \int_{T_1}^{T_2} \int_\Omega (u_2 \cdot \nabla u_2) \cdot \varphi_n^+ - u_2 \cdot \partial_t \varphi_n^+ + \nu \nabla u_2 \nabla \varphi_n^-\\
+&= 0 + 0 = 0
+\end{align*}
+since $u_1, u_2$ were weak Navier-Stokes solutions and $\varphi_n^\pm$ were test functions on their respective time intervals.
+This completes the proof of (\ref{exer 2 goal}).
+
+
+\begin{exer}
+Suppose that $u$ is a weak Navier-Stokes solution such that $u \in L^4([0, T] \to L^4)$.
+Show that $u$ satisfies the energy equality.
+\end{exer}
+
+Since $\Omega$ is bounded, $V = H^1_{0, \sigma} \subset H^1_0$ where the inclusion map $i$ is continuous; now $i^*$ is the inclusion map $H^{-1} \subseteq V'$, so for any $g \in H^{-1}$, $||g||_{H^{-1}} \lesssim ||g||_{V'}$.
+We abuse notation to let $\langle g, h\rangle$ denote the integral $\int_\Omega gh$ as long as $h \in V$, even if it is not finite.
+
+By the weak Navier-Stokes equation, for every test function $\varphi$ on spacetime,
+\begin{equation}
+\label{weak NS duality}
+\int_0^T \langle \partial_t u(t), \varphi(t)\rangle ~dt = \int_0^T \nu \langle \nabla u(t), \nabla \varphi(t)\rangle + \langle f(t), \varphi(t)\rangle - \langle u(t) \cdot \nabla u(t), \varphi\rangle ~dt.
+\end{equation}
+We will now show that the right-hand side is controlled by a constant times $||\varphi||_{L^2;V}$.
+In fact, $u \in L^2([0, T] \to V)$ so $\nabla u \in L^2([0, T] \to L^2)$
+and hence
+$$\int_0^T |\langle \nabla u(t), \nabla \varphi(t)\rangle| ~dt \leq ||u||_{L^2;L^2}||\nabla \varphi||_{L^2;L^2} \leq ||u||_{L^2;L^2} ||\varphi||_{L^2;V}.$$
+Since $f \in L^2([0, T] \to V')$ by assumption, the second term on the right-hand side of (\ref{weak NS duality}) is inoffensive and is bounded by a constant times $||\varphi||_{L^2;V}$.
+
+For the third term on the right-hand side of (\ref{weak NS duality}), we need the inequality
+\begin{equation}
+\label{GagNir}
+||g||_{L^4([0, T] \to L^4)} \lesssim ||g||_{L^2([0, T] \to V)},
+\end{equation}
+valid whenever $g(t)$ has zero trace in $\Omega$ for almost every $t \in [0, T]$.
+To deduce (\ref{GagNir}), we first note that since $[0, T]$ is compact, $||g||_{L^4;L^4} \leq ||g||_{L^2;L^4}$, so we may fix $t \in [0, T]$ and bound $||g(t)||_{L^4}$.
+If $d = 2$, then we bound
+$$||g(t)||_{L^4} \leq ||g(t)||_{L^{2/\varepsilon}} \lesssim ||\nabla^{1 - \varepsilon} g(t)||_{L^2} = ||g(t)||_{\dot H^{1 - \varepsilon}}$$
+where $\nabla^{1-\varepsilon}$ is the pseudodifferential operator with symbol $(i\xi)^{1 - \varepsilon}$.
+Here we used the Gagliardo-Nirenberg inequality and the fact that $g(t)$ has no trace (so, in particular, we may assume that $g$ is a smooth function with compact support in $V$, which is necessary to apply the Gagliardo-Nirenberg inequality without picking up lower-order terms).
+If $g(t)$ has a Schwartz Fourier transform, then we may use dominated convergence to conclude $||g(t)||_{\dot H^{1 - \varepsilon}} \to ||g(t)||_{\dot H^1}$ so
+$$||g(t)||_{L^4} \leq ||g(t)||_{\dot H^1} = ||g(t)||_V;$$
+this bound then extends by density to all of $V$.
+If $d = 3$ then we use the much simpler bound
+$$||g(t)||_{L^4} \leq ||g(t)||_{L^6} \lesssim ||\nabla g(t)||_{L^2} = ||g(t)||_V$$
+given by the Gagliardo-Nirenberg inequality and the fact that $g(t)$ has no trace.
+This completes the proof of (\ref{GagNir}).
+
+By H\"older's inequality with $1 = 1/4 + 1/2 + 1/4$ repeated twice and (\ref{GagNir}),
+\begin{align*}
+\int_0^T \langle u(t) \cdot \nabla u(t), \varphi(t)\rangle ~dt &\leq \int_0^T ||u(t)||_{L^4} ||\nabla u(t)||_{L^2} ||\varphi(t)||_{L^4} ~dt\\
+&\leq ||u||_{L^4;L^4} ||\nabla u||_{L^2;L^2} ||\varphi||_{L^4;L^4}\\
+&\lesssim ||u||_{L^4;L^4} ||u||_{L^2;V} ||\varphi||_{L^2;V}.
+\end{align*}
+Here we used the compactness of $[0, T]$ to replace $L^4$ with $L^2$.
+Putting all these bounds together in (\ref{weak NS duality}), we conclude
+\begin{equation}
+\label{weak NS duality bound}
+\int_0^T |\langle \partial_t u(t), \varphi(t)\rangle| ~dt \lesssim ||\varphi||_{L^2;V}
+\end{equation}
+(and the implied constant depends on $u$).
+
+Taking the supremum of (\ref{weak NS duality bound}) over all $\varphi$, we conclude that
+$$\partial_t u \in (L^2([0, T] \to V))' = L^2([0, T] \to V').$$
+In particular (\ref{weak NS duality}) extends by density to all of $L^2([0, T] \to V)$, but then we can take $\varphi = u$.
+So we can now copy word for word the proof of the strong energy equality from class in the special case that $t_0 = 0$ and $t_1 = T$.
+To be more precise, we have just shown
+\begin{equation}
+\label{almost energy equality}
+b(u, u, u) + \nu \int_0^T ||\nabla u||_{L^2}^2 = \int_0^T \langle f, u\rangle + \langle \partial_t u, u\rangle
+\end{equation}
+where $b$ is the trilinear form taken over all spacetime. An integration by parts gives $b(u, u, u) = 0$, and by the Lions-Magenes lemma,
+$$2\int_0^T \langle \partial_t u, u\rangle = ||u(T)||_{L^2} - ||u(0)||_{L^2}.$$
+Plugging these two facts into (\ref{almost energy equality}) gives the claim.
+
+
+
+
+
+
+\end{document}

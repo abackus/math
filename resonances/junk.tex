@@ -1,0 +1,415 @@
+
+\subsection{Riemann surface stuff}
+I'm pretty sure the following lemma is well-known but I couldn't find a good reference.
+\begin{definition}
+Let $X,Y$ be complex manifolds.
+A \dfn{holomorphic submersion} is a holomorphic map $F: X \to Y$ if $\nabla F$ is surjective on holomorphic tangent spaces.
+\end{definition}
+The criterion for being a holomorphic submersion says that
+$$\rank \nabla F = \dim Y$$
+where all dimensions are computed over $\CC$.
+\begin{lemma}
+Let $U \subseteq \CC^n$ be an open set, $Y$ a complex manifold of (complex) dimension $k$, $k \leq n$, $y \in Y$, and $F: U \to Y$ a holomorphic submersion.
+Then $F^{-1}(y)$ is a complex submanifold of $\CC^n$ of dimension $n - k$.
+\end{lemma}
+\begin{proof}
+Since $F$ is a submersion, there is a permutation $\sigma$ of $\{1, \dots, n\}$ such that the columns $\sigma(k+1), \dots, \sigma(n)$ of $\nabla F$ are linearly independent.
+Let $G: U \to Y \times \CC^{n - k}$ be the map
+$$G(z) = (z_{\sigma(1)}, \dots, z_{\sigma(k)}, F(z)).$$
+Then $\nabla G$ has full rank and maps between vector spaces of the same dimension, so $\nabla G$ is an isomorphism.
+So by the holomorphic inverse function theorem, $G$ is locally invertible, and $G^{-1}$ is holomorphic.
+
+Locally, let
+$$f(z)_j = G^{-1}(z, y)_{\sigma(n-j)},$$
+$j \in \{0, \dots, n - k + 1\}$, $z \in \CC^{n - k}$.
+Then $f$ is holomorphic and locally the graph of $f$ is $X = F^{-1}(y)$.
+That is, for any $x_0 \in X$ we can find a $U \ni x_0$ such that $X \cap U = \{(z, f(z)): z \in U'\}$ for some $U'$.
+But then the map $z \mapsto (z, f(z))$, $U \to U'$, is a holomorphic chart, and the transition maps are just the identity on $\CC^{n-k}$, so $X$ is a complex manifold of dimension $n - k$.
+\end{proof}
+
+
+There's another definition of the Riemann surface of a holomorphic map, namely that of its maximal analytic continuation.
+Fix $f: U \to \CC^m$.
+Define a category $A(f)$, whose objects are commutative diagrams of holomorphic maps
+$$\begin{tikzcd}
+X \arrow[r,"\pi"] & \CC^m\\
+U \arrow[u,"\iota"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where $\iota$ is injective and $X$ is a connected Riemann surface.
+We call the above diagram, or equivalently the tuple, $(X, \pi, \iota)$, an analytic continuation of $f$.
+A morphism $\psi: (X_1, \pi_1, \iota_1) \to (X_2, \pi_2, \iota_2)$ in $A(f)$ is a commutative diagram of holomorphic maps
+$$\begin{tikzcd}
+X_2 \arrow[r,"\pi_2"] & \CC^m\\
+X_1 \arrow[u,"\psi"] \arrow[r,"\pi_1"] & \CC^m \arrow[u]\\
+U \arrow[u,"\iota_1"] \arrow[bend left=60,uu,"\iota_2"] \arrow[ur,"f"]
+\end{tikzcd}$$
+where the map $\CC^m \to \CC^m$ is equality.
+Since the diagram
+$$\begin{tikzcd}
+X_1 \arrow[rr,"\psi"] && X_2\\
+&U \arrow[ul,"\iota_1"] \arrow[ur,"\iota_2"]
+\end{tikzcd}
+$$
+commutes it follows that $\psi$ is injective, i.e. $X_1$ is a submanifold of $X_2$.
+Clearly $(U, f, \id)$ is the initial object in $A(f)$. On the other hand, by Zorn's lemma, $A(f)$ has final objects.
+\begin{definition}
+The \dfn{maximal analytic continuation} of $f$ is the final object of $A(f)$.
+\end{definition}
+
+
+\begin{lemma}[Vakil, Miracle 18.4.2]
+\label{genus formula}
+Let $X$ be the projective curve defined by $f = 0$, where $f: \PP^2 \to \CC$ is a homogeneous polynomial of degree $d$.
+Let
+$$2g = (d - 1)(d - 2).$$
+If $X$ is smooth, then $X$ is a compact Riemann surface of genus $g$.
+\end{lemma}
+
+\begin{lemma}[Vakil, Proposition 19.3.1]
+\label{curves of genus 0}
+Let $X$ be a projective curve of genus $0$. Then $X$ is isomorphic to $\PP^1$.
+\end{lemma}
+
+
+
+\subsection{Bounds on the free resolvent}
+Let $\mathcal H^k = H^k \oplus H^k$ where $H^k$ is the Sobolev space $H^k = W^{2,k}$.
+We are interested in the $\mathcal H^0 \to \mathcal H^2$ norm of $R_0(z)$.
+
+\begin{lemma}
+\label{bounds on partial resolvent}
+Let $L > 0$ and let $\rho$ be a cutoff such that $\supp \rho \subseteq (-L, L)$.
+Let $\chi$ be a cutoff such that $\chi = 1$ on $\supp \rho$.
+Fix a sign $\sigma$.
+Let
+$$G_\pm(z) = \chi(x) \frac{\exp(i\sqrt{\pm z - 1}_\sigma|x-y|)}{\sqrt{\pm z - 1}_\sigma} \rho(y).$$
+Then for every $z$ such that $\pm z - 1$ is in the domain of $\sqrt\cdot_\sigma$, one has
+$$||G_\pm(z)||_{L^2 \to L^2} \lesssim L\frac{\exp(4|\Im \sqrt{\pm z - 1}_\sigma)}{|\sqrt{\pm z - 1}_\sigma}.$$
+\end{lemma}
+\begin{proof}
+By Schur's test,
+\begin{equation}
+\label{schur bound}
+||G_\pm(z)||_{L^2 \to L^2}^2 \leq \sup_{(x, y) \in \RR^2} ||G_\pm (\cdot, y, z)||_{L^1}\cdot||G_\pm (x, \cdot, z)||_{L^1}.
+\end{equation}
+Since
+\begin{align*}
+||G_\pm (\cdot, y, z)||_{L^1} &= \int_{-\infty}^\infty \chi(x) \frac{|\exp(i\sqrt{\pm z-1}|x-y|)|}{|\sqrt{\pm z-1}|}\rho(y)~dx\\
+&\leq \frac{\rho(y)}{|\sqrt{\pm z-1}|} \int_{-2L}^{2L} |\exp(i\sqrt{\pm z-1}|x-y|)~dx\\
+&\leq \frac{1}{|\sqrt{\pm z-1}|} \int_{-2L}^{2L} |\exp(4Li\sqrt{\pm z-1})\\
+&\lesssim \frac{L}{|\sqrt{\pm z-1}|} \exp(4 |\Im\sqrt{\pm z-1}|).
+\end{align*}
+The same bound is clearly valid on $||G_\pm(x, \cdot, z)||_{L^1}$ by symmetry. Taking the square root of (\ref{schur bound}),
+$$||G(z)||_{L^2 \to L^2} \lesssim \frac{L}{|\sqrt{z-1}|} \exp(4 |\Im\sqrt{z-1}|)$$
+follows and the proof is complete.
+\end{proof}
+
+\begin{lemma}
+\label{exponential bound on free resolvent}
+Let $L > 0$ and let $\rho$ be a cutoff such that $\supp \rho \subseteq (-L, L)$.
+Let $\chi$ be a cutoff such that $\chi = 1$ on $\supp \rho$.
+Then for every $w \in \Sigma$,
+$$||\chi R_0(x, y, w) \rho||_{\mathcal H^0(\RR) \to \mathcal H^2((-L, L))} \lesssim 1 + L\langle w_1^2 - w_2^2\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+In particular, $\rho R_0(x, y) \rho$ is a meromorphic family of compact operators on $\Sigma$ acting on $\mathcal H^0$, with poles exactly at $p_\pm^j$.
+\end{lemma}
+\begin{proof}
+If $\chi$ is a cutoff, $\chi = 1$ on $\supp \rho$, $u \in \mathcal H^2$, then by elliptic regularity,
+$$||\rho u||_{\mathcal H^2} \lesssim_\chi ||\chi u||_{\mathcal H^0} + ||\chi D^2 u||_{\mathcal H^0}.$$
+Taking $u = R_0(w)\rho f$ we see that
+$$||\rho R_0(w)\rho f||_{\mathcal H^2} \lesssim ||\chi R_0(w) \rho f||_{\mathcal H^0} + ||\chi D^2 R_0(w) \rho f||_{\mathcal H^0}.$$
+First assume $w \in \mathring \Sigma$, so that if we define $z$ by (\ref{recovering the standard branch}), one has
+$$R_0(w) = \diag(G_+(z), G_-(z)).$$
+By Lemma \ref{bounds on partial resolvent}, one has
+$$||\chi R_0(w) \rho f||_{\mathcal H^0} \lesssim L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}.$$
+Treating the second term,
+$$D^2R_0(w) = \diag(1, - 1) - \diag(1-z,1+z)R_0(w)$$
+so
+$$||\chi D^2 R_0(w) \rho f||_{\mathcal H^0} \leq ||\rho f||_{\mathcal H^0} + ||\chi R_0(w) \rho f||_{\mathcal H^0} + ||\chi z R_0(w) \rho f||_{\mathcal H^0}.$$
+The second term in this sum was already bounded and the first is trivially bounded by $||f||_{\mathcal H^0}$.
+The final term is
+$$\lesssim |z|L \max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right) ||f||_{\mathcal H^0}$$
+so we can bound
+$$||\chi R_0(w) \rho||_{\mathcal H^0 \to \mathcal H^2} \lesssim 1 + L\langle z\rangle\max\left(\frac{\exp(4 |\Im w_1|)}{|w_1|}, \frac{\exp(4 |\Im w_2|)}{|w_2|} \right).$$
+Plugging in (\ref{recovering the standard branch}) proves the first claim.
+The second claim follows by the Rellich-Kondrachov theorem.
+\end{proof}
+
+Now we treat the special case of the standard branch of $R_0$; here we identify $\CC_+$ with the upper-half plane of $\CC \setminus S$.
+
+\begin{lemma}
+\label{sharp bound on upper half free resolvent}
+For every $z \in \CC_+$ and $s \in [0, 2]$, let $2s' = s - 1$; then
+$$||R_0(z)||_{\mathcal H^0 \to \mathcal H^s} \lesssim \max_{0 \leq t_1,t_2 \leq s} \frac{|1-z|^{t_1'}}{\Im \sqrt{1 - z}_+} + \frac{|1+z|^{t_2'}}{\Im \sqrt{1+ z}_+}.$$
+In particular, $R_0$ is a holomorphic family of compact operators acting on $\mathcal H_0$ on $\CC_+$.
+\end{lemma}
+\begin{proof}
+We must bound $||R_0(z)_j||_{L^2 \to H^s}$, and by interpolation it suffices to check when $s \in \NN$. In that case,
+$$||R_0(z)_j||_{L^2 \to H^s} = \sum_{0 \leq t \leq s} ||D^tR_0(z)_j||_{L^2 \to L^2}.$$
+Letting $K(t, z)$ denote the integral kernel of $D^tR_0(z)_j$ and $\mathcal F$ the Fourier transform,
+$$K(t, x, y, z) = \int_{-\infty}^\infty \frac{\xi^t}{\pm(\xi^2 + 1)-z}e^{i\xi(x-y)}~d\xi = \mathcal F^{-1}\left(\xi \mapsto \frac{\xi^t}{\pm(\xi^2 +1)-z}\right)(x-y).$$
+Here we take $+$ in the $\pm$ if $j = 1$ and $-$ otherwise. We now consider the case $j = 1$; the other case is similar. Letting $w = 1 - z$, we have
+$$K(t, x, y, z) = \mathcal F^{-1}\left(\xi \mapsto \frac{\xi^t}{\xi^2 - w}\right)(x-y).$$
+
+When $t = 0$ we just recover the usual integral kernel of the resolvent,
+$$|K(0, x, y, z)| = \frac{e^{i|x-y|\sqrt w}}{\sqrt w}.$$
+Moreover,
+\begin{align*}
+  |K(t, x, y, z)| &= |\mathcal F^{-1}(\xi \mapsto \xi^t)(x-y) * K(0, x, y, w)|.\\
+  &= \left|\delta^{(t)}_0(x-y) * \frac{e^{i|x-y|\sqrt w}}{\sqrt w}\right|\\
+  &= \left|\partial_{x-y}^{(t)} \frac{e^{i|x-y|\sqrt w}}{\sqrt w}\right|\\
+  &= \left|\sqrt{w^{t-1}} \exp(i|x-y|\sqrt w)\right|
+\end{align*}
+where the square roots above satisfy $\Im \sqrt w > 0$ for any $w \notin [0, \infty)$, and in particular when $\Im z > 0$. Changing variables back,
+$$|K(t, x, y, z)| = \left|\sqrt{(1-z)^{t-1}} \exp(i|x-y|\sqrt{1-z})\right|.$$
+
+We now apply Schur's test. In fact,
+$$||K(t, z)||_{L^2 \to L^2}^2 \leq \sup_{(x, y) \in \RR^2} ||K(t, x, \cdot, z)||_{L^1} \cdot ||K(t, \cdot, y, z)||_{L^1} = ||K(t, 0, \cdot, z)||_{L^1}^2$$
+by symmetry. Provided that $t \leq 2$,
+\begin{align*}
+  ||K(t, 0, \cdot, z)||_{L^1} &\leq \sqrt{|1-z|^{t-1}} \left|\int_{-\infty}^\infty \exp(i|y|\sqrt{1-z}) ~dy\right|\\
+  &\leq 2\sqrt{|1-z|^{t-1}} \int_0^\infty \exp(-y\Im\sqrt{1-z})~dy\\
+  &= \frac{2\sqrt{|1-z|^{t-1}}}{\Im \sqrt{1-z}}.
+\end{align*}
+Letting $K'(t, z)$ denote the integral kernel of $D_jR_0(z)_2$ we find a similar estimate, and unifying them proves the first claim.
+Again, the second claim follows by the Rellich-Kondrachov theorem.
+\end{proof}
+
+\subsection{Resolvents with compactly supported potential}
+In the previous section  we let $\Sigma$ be a certain nonsingular algebraic curve, and meromorphically continued the free resolvent to $\Sigma$.
+Now let $V$ be a compactly supported, matrix-valued potential, $\rho$ a (scalar-valued) cutoff such that $\rho V = V$, and
+$$P_V = \diag(D^2 + 1, -D^2 - 1) + V.$$
+We must show that the resolvent $R_V(z) = (P_V - z)^{-1}$ has Riemann surface $\Sigma$.
+Since $\rho$ is arbitrary it suffices to show this for $\rho R_V(z) \rho$.
+Let $L > 0$ be so large that $\rho(x) = 0$ whenenever $|x| > L$.
+
+Let $||V||$ denote the operator norm of $V$ as a multiplication operator on $\mathcal H^0$; we will assume $||V|| < \infty$.
+Let $K = VR_0$.
+
+We recall that if $z \in \Spec P_0$ then $-z - 1$ or $z + 1 \in \Spec D^2 = [0, \infty)$, so $z \in \RR$ with $|z| \geq 1$.
+In particular, spectral theory gives
+\begin{equation}
+\label{R0 bound at infinity}
+||R_0(z)|| \leq \frac{1}{d(z, \Spec P_0)} \leq \frac{1}{\Im z}
+\end{equation}
+whenever $\Im z > 0$.
+
+\begin{lemma}
+Let $V \in L^\infty(\RR \to \CC^{2 \times 2})$.
+If $\Im z > 1/||V||$, $z \in U^+_+$, then $R_V(z)$ exists and
+\begin{equation}
+\label{resolvent equation}
+R_V(z) = R_0(z)(1 + K(z))^{-1}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+By (\ref{R0 bound at infinity}), if $\Im z > 1/||V||$ then
+$$||R_0(z)V|| \leq ||R_0(z)||\cdot ||V|| \leq \frac{||V||}{\Im z} < 1.$$
+This implies that $VR_0(z)$ is a sufficiently small perturbation that $1 + VR_0(z)$ is invertible.
+
+One has
+\begin{align*}(H_V - z)R_0(z) &= \begin{bmatrix}D^2 + V + 1 - z\\& -D^2 + V - 1 - z\end{bmatrix}\begin{bmatrix}(D^2 + 1 - z)^{-1}\\&(-D^2-1-z)^{-1}\end{bmatrix}\\
+ &= \begin{bmatrix}1 + V(D^2 + 1 - z)^{-1}\\&1 + V(-D^2 - 1 - z)^{-1}\end{bmatrix}
+ \\& = 1 + VR_0(z).
+ \end{align*}
+Inverting both sides,
+$$(1 + VR_0(z))^{-1} = R_0(z)^{-1}R_V(z)$$
+or in other words the claimed formula.
+\end{proof}
+
+\begin{theorem}
+Let $V \in L^\infty(\RR \to \CC^{2 \times 2})$.
+The resolvent $R_V$ extends to a meromorphic family of operators
+$$R_V(z): \mathcal H^0 \to \mathcal H^2$$
+on $\CC_+$.
+\end{theorem}
+\begin{proof}
+If $\Im z > 0$, then $K(z)$ is compact on $\mathcal H^0$ by Lemma \ref{sharp bound on upper half free resolvent}. In particular, $1 + K(z)$ is Fredholm, and is invertible if $\Im z$ is large enough.
+Hence by analytic Fredholm theory, $1 + K(z)$ is a meromorphic family of operators in $z \in \CC_+$. This implies the claim.
+\end{proof}
+
+\begin{theorem}
+Let $V \in L^\infty_{comp}(\RR \to \CC^{2 \times 2})$.
+The resolvent $R_V$ extends to a meromorphic family of operators
+$$\rho R_V(w) \rho: \mathcal H^0 \to \mathcal H^2$$
+on $\Sigma$.
+\end{theorem}
+\begin{proof}
+For any cutoff $\chi$, $\chi K \chi$ is a meromorphic family of operators on $\Sigma$, which acts on $L^2$, with poles at $p_\pm^j$.
+Since $\rho V = V$,
+$$(1 + K(w)(1-\rho))^{-1} = 1 - K(w)(1 - w).$$
+Defining $z$ by (\ref{recovering the standard branch}), if $\Im z \gg 1$ then $1 + K(z)$ is invertible, so
+$$(1 + K(w))^{-1} = (1 + K(w)\rho)^{-1}(1 - K(w)(1 - \rho)).$$
+Substituting into $R_V(w)$ we see that
+$$R_V(w) = R_0(w)(1 + K(w)\rho)^{-1}(1 - K(w)(1 - \rho)).$$
+
+Since $V = V\chi$, Lemma \ref{exponential bound on free resolvent} implies that $K(w)\rho$ is compact, so $1 + K(w)\rho$ is a meromorphic family of Fredholm operators, and by analytic Fredholm theory, $z \mapsto (1 + K(w)\rho)^{-1}$ is a meromorphic family of operators on $\Sigma$.
+But that implies that $\rho R_V \rho$ extends to a meromorphic family of operators on $\Sigma$.
+\end{proof}
+
+\begin{definition}
+A point $z \in \Sigma$ is a \dfn{resonance} of $V$ if the meromorphic continuation of $R_V$ to $\Sigma$ admits a pole at $z$.
+\end{definition}
+
+\begin{corollary}
+There are only finitely many resonances of $V$ in $\CC_+ = (U_+^+)_+$. In fact, if $z \in \CC_+$ and $|z|$ is large enough, then $z$ is not a resonance.
+\end{corollary}
+\begin{proof}
+By Lemma \ref{sharp bound on upper half free resolvent} we have
+$$||K(z)||_{\mathcal H^0 \to \mathcal H^0} \lesssim \langle z \rangle^{-1/2},$$
+at least when $|z| \gtrsim 1$ and $\Im z > 0$.
+We already proved
+$$R_V(z) = R_0(z)(1 + K(z)\rho)^{-1}(1 - K(z)(1 - \rho))$$
+provided that $||K(z)||_{\mathcal H^0 \to \mathcal H^0} < 1$, and in particular when $z \gtrsim 1$. So there are no resonances $z$ such that $|z| \gtrsim 1$. The finiteness claim follows by compactness of $\{z \in \CC: |z| \leq 1, ~\Im z \geq 0\}$.
+\end{proof}
+
+\subsection{Maximal analytic continuation the stupid way}
+Let $(\Gamma, p, \iota)$ be the maximal analytic continuation of $(\Sigma, R_0(x, y), \varphi)$, where $p: \Gamma \to \PP^1 \to \PP^1$.
+Let $\j: \Sigma \to \PP^1$ be the projective completion of $\Sigma$; then $\j$ misses two points, namely the essential singularities
+
+Suppose that $\iota$ is not surjective.
+Since $\Gamma$ is path-connected, there is a path $\gamma$ in $\Gamma$ from a point $\gamma(0)$ in the image of $\iota$, to $\gamma(1)$ which is not in the image of $\iota$.
+Since $\PP^1$ has no boundary, there must be a $t \in [0, 1]$ with $\gamma(t) = \iota(0)$ or $\gamma(t) = \iota(\infty)$.
+In particular, $R_0(x, y)$ has at most one essential singularity on $\PP^1$, so that we can analytically continue $R_0(x, y)$ over $\gamma(t)$.
+
+We now show that $R_0(x, y)$ has two essential singularities.
+In fact, if
+$$w^\pm = [0:1:\pm i]$$
+then $w^\pm$ are distinct essential singularities.
+In fact, we can approximate $w^\pm$ by $w^\pm_{(k)} = k(1, \pm i) \in \CC^2$.
+Now $R_0(x, y)$ extends to a meromorphic function on $\CC^2$ in the evident way, and so by continuity, one has
+$$R_0(x, y, w^\pm_{(k)})_1 = \frac{i}{2} \frac{\exp(ik|x-y|)}{k}$$
+which exhibits essentially singular behavior as $k \to \infty$, a contradiction.
+
+So $\iota$ is surjective, and therefore is an isomorphism $\iota: \Sigma \to \Gamma$.
+
+
+\section{Vasy's method: Fredholm operators}
+
+If $V$ is a potential, we are interested in the linearization of the steady cubic NLS with potential $V$, namely
+$$P_Vu = (j(D_x^2 + 1) + V(x))u = f.$$
+With the change of coordinates $y = \tanh x$
+we get
+$$P_{V^\flat}^\flat = j((1 - y^2)^2 D_y^2 + 1) + V^\flat(y).$$
+
+\subsection{Outgoing solutions}
+Recall that if $P$ is a Schr\"odinger operator such that $P + \Delta = O(|x|^{-2})$, and $Pu = zu$, we say that $u$ is an outgoing eigenfunction of $P$ provided that
+$$u(x) = c_{\sgn x} e^{i\sqrt z|x|} + O(|x|^{-2})$$
+if $|x| \gg 1$. Setting $y = x^\flat$ we get
+$$u^\flat(y) = c_{\sgn y} \left(\frac{1 + y}{1 - y}\right)^{\frac{i\sqrt z}{2}\sgn y} + g(y)$$
+where $g$ has a double zero at $\pm 1$.
+
+By analogy for the equation $P_Vu = f$, we define:
+
+\begin{definition}
+Given $z \in \CC$, let
+$$\zeta = \frac{i\sqrt{jz - 1}}{2}, \quad R(\zeta)(y) = \left(\frac{1 + y}{1 - y}\right)^{\zeta \sgn y}.$$
+A function $u$ with $(P_V^\flat - z)u = f$ is an \dfn{outgoing solution} provided that there are constants $c_\pm$ such that
+$$y \mapsto u(y) - c_{\sgn y} R(\zeta)(y)$$
+has a double zero at $\pm 1$.
+\end{definition}
+
+Let
+$$Q(z) = R(-\zeta)(P_V^\flat - z)R(\zeta).$$
+
+\begin{lemma}
+Let $g = R(-\zeta)f$, $v = R(-\zeta)u$, and suppose that $u \in C^1$.
+Then $u$ is outgoing iff $v$ solves the Neumann problem $Q(z)v = g$, $g'(1) = g'(-1) = 0$.
+\end{lemma}
+\begin{proof}
+Suppose that $u$ is outgoing. Then there are $c_\pm$ such that $y \mapsto v(y) - c_{\sgn y}$ has a double zero at $\pm 1$, so $v$ solves the Neumann problem.
+The converse is similarly clear.
+\end{proof}
+
+\begin{lemma}
+\label{formula for Q}
+Suppose that $V^\sharp$ is a rapidly decaying potential.
+Then on $\{(y, z) \in \RR \times \CC: 1 \lesssim y < 1,~\Im z > 0\}$, there is a family of matrices $Q_0(z, y)$ which is holomorphic in $z$, smooth in $y$, and has no zeroes, such that
+\begin{equation}
+\label{formula for Q explicit}
+Q(z) = j(y^2 - 1)^2 D_y^2 + 4ij\zeta(y^2 - 1)D_y + Q_0(z, y).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Since $j$ is a diagonal matrix, so is $\zeta$.
+Therefore $R$ is a one-parameter group of operators which commute with $j - z$ and $j(1 - y^2)^2$, thus
+\begin{align*}
+Q(z) &= R(-\zeta) (P_V^\flat - z) R(\zeta)\\
+&= j(y^2 - 1)^2 R(-\zeta)D_y^2R(\zeta) + j - z + R(-\zeta)V(y)R(\zeta).
+\end{align*}
+Since $y \gtrsim 1$, if we view $R(\zeta)$ as a function, then
+\begin{equation}
+\label{derivative of conjugator}
+D_yR(\zeta) = 2i\frac{\zeta}{y^2 - 1} R(\zeta), \quad D_y^2 R(\zeta) = -4\frac{\zeta(y + \zeta)}{(y^2 - 1)^2} R(\zeta).
+\end{equation}
+Owing to (\ref{derivative of conjugator}), the group property, and the product rule, if we instead view $R(\zeta)$ as a differential operator,
+\begin{align*}
+R(-\zeta) D_y^2 R(\zeta) &= R(-\zeta) D_yR(\zeta)D_y + D_y(D_y R(\zeta))\\
+&= D_y^2 + R(-\zeta) 2(D_y R(\zeta)) D_y + R(-\zeta) (D_y^2 R(\zeta))\\
+&= D_y^2 + 4i\frac{\zeta}{y^2 - 1} D_y - 4\frac{\zeta(y + \zeta)}{(y^2 - 1)^2}.
+\end{align*}
+Multiplying both sides by $j(y^2 - 1)^2$, we arrive at (\ref{formula for Q explicit}) with\footnote{Note carefully that $R(\zeta)$ does not commute with $V(y)$, as $V(y)$ is not diagonalizable in general.}
+\begin{align*}
+Q_0(z, y) &= -4j\zeta(y + \zeta) +j - z + R(-\zeta)V(y)R(\zeta)\\
+&=  -4j\zeta(y + \zeta) +j - z + \left(\frac{1 + y}{1 - y}\right)^{-\zeta} V(y) \left(\frac{1 + y}{1 - y}\right)^\zeta.
+\end{align*}
+In particular, since $V^\sharp$ is rapidly decaying,
+$$Q_0(z, 1) = -4j\zeta(1 + \zeta) + j - z = -2ij\sqrt{jz - 1},$$
+which is nonzero and holomorphic on $\CC_+$.
+Since $Q_0(z, y)$ is clearly smooth in $y$, it follows that $Q_0(z)$ has no zeroes near $1$.
+\end{proof}
+
+In particular, the symbol of $Q(z)$ near $1$ is
+$$q(z, y, \eta) = j(y^2 - 1)^2 \eta^2 + 4ij\zeta(y^2 - 1)\eta - Q_0(z, y).$$
+Thus $Q(z)$ is elliptic, but not uniformly elliptic, on $(-1, 1)$, as we lose control of the ellipticity near $S^0$.
+
+\subsection{Time-frequency analysis}
+Let $V^\sharp$ be a rapidly decaying potential.
+Then $V$ vanishes to infinite order on $S^0$, so we can (and do) extend $V$ by $0$ to all of $\RR$, and thus view $Q(z)$ as a differential operator on all of $\RR$.
+
+\begin{definition}
+Let $\Omega \subseteq T^*\RR$ be an open set and $N \in \NN$.
+A \dfn{time-frequency cutoff} to $\Omega$ with decay $N$ is a pseudodifferential operator $\chi$ of order $0$ such that for every Schwartz function $u$, TODO We get decay at rate $N$.
+\end{definition}
+
+\begin{lemma}\label{uncertainty principle converse}
+Let $\Omega \subseteq T^*\RR$ be an open set.
+If $|\Omega| \gtrsim 1$ then for every $N \in \NN$ there is a time-frequency cutoff to $\Omega$ with decay $N$.
+\end{lemma}
+
+TODO
+
+\begin{lemma}
+Suppose that $P_V^\flat u = f$ and $\Im z > 0$. Then
+\begin{equation}
+\label{regularity}
+||u||_{L^2} \lesssim ||f||_{L^2} + ||u||_{H^{-\infty}}
+\end{equation}
+where the constant only depends on $V,z$.
+\end{lemma}
+\begin{proof}
+We may assume that $u$ is Schwartz. We shall suppress all dependence of constants on $V,z$.
+By Lemma \ref{formula for Q}, there exist $\varepsilon > 0$ and $\delta > 0$ such that if $(y^2 - 1)^2 < \varepsilon$ then $|Q_0(z, y)| > \delta$.
+
+We first treat the \emph{uniformly elliptic} regime.
+Let $\chi$ be a cutoff to a compact subset of $\{y \in \RR: (y^2 - 1)^2 > \varepsilon/2\}$.
+Thus the principal symbol $q_2(z)$ of $Q(z)$ satisfies
+$$|q_2(z, y, \eta)| = (y^2 - 1^2)^2\eta^2 > \frac{\varepsilon}{2} \eta^2,$$
+so $\chi$ is a time-frequency cutoff of decay $\infty$ to a subset of $\Ell Q(z)$ and so there exists an inverse $Q(z)^{-1}$ modulo $\Psi^{-\infty}$, which is order $-2 < 0$.
+In particular $Q(z)^{-1}$ is bounded on $L^2$, so
+$$||\chi u||_{L^2} \lesssim ||f||_{L^2} + ||u||_{H^{-\infty}}.$$
+
+Now we treat the \emph{order-zero} regime.
+Let
+$$\Omega = \{(y, \eta): |y^2 - 1| < \varepsilon, ~|(y^2 - 1)^2\eta^2 + 4j(y^2 - 1)\eta| < \delta/2\}.$$
+TODO:
+$$\Omega \supseteq \{(y, \eta): |\eta| < \eta^*\}.$$
+That is,
+$$|\Omega| \gtrsim \int_{\sqrt{1 - \varepsilon}}^{\sqrt{1 + \varepsilon}} \eta^* ~dy \gtrsim \int_{\sqrt{1 - \varepsilon}}^{\sqrt{1 + \varepsilon}} \frac{dy}{y - 1} = \infty,$$
+so by Lemma \ref{uncertainty principle converse}, for every $N \in \NN$ there is a time-frequency cutoff $\chi$ to $\Omega$ of decay $N$.
+But by definition of $\Omega$ and $\varepsilon$, we have
+$$|q(z, y, \eta)| \geq |Q_0(z, y)| - |(y^2 - 1)^2\eta^2 + 4j(y^2 - 1)\eta| > \frac{\delta}{2}$$
+
+
+
+
+\end{proof}

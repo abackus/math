@@ -1,0 +1,369 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability II, HW 1} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $P \ll Q$ be probability measures. Given $x \in (0, 1)$, define
+$$V(x) = \sup_{Q(E) \leq x} P(E).$$
+Suppose that there is a $k^*$ such that if $E^* = \{dP \geq k^* dQ\}$ then $Q(E^*) = x$.
+Show that $V(x) = P(E^*)$.
+\end{exer}
+
+Let $f = dP/dQ$. Expanding out the definitions, we are given $Q(f \geq k^*) = x$, $||f||_{L^1} = 1$, and $f \geq 0$, and want to show
+$$\sup_{Q(E) \leq x} \int_E f~dQ = \int_{f \geq k^*} f ~dQ.$$
+Since $Q(f \geq k^*) = x$, we immediately have
+$$\int_{f \geq k^*} f ~dQ \leq \sup_{Q(E) \leq x} \int_E f~dQ$$
+and it suffices to prove the complementary bound, namely that if $Q(E) \leq x$, then
+$$\int_E f ~dQ \leq \int_{f \geq k^*} f~dQ.$$
+Partition the sample space into events $A,B,C,D$ where $A = \{f < k^*\} \cap E$, $B = \{f < k^*\} \setminus E$, $C = \{f \geq k^*\} \cap E$, $D = \{f \geq k^*\} \setminus E$.
+Then $Q(A) + Q(C) \leq x$ and $Q(C) + Q(D) = x$, so $Q(D) \geq Q(A)$.
+Also $E = A \cup C$ while $\{f^* \geq k\} = C \cup D$ so it suffices to show that
+$$\int_D f~dQ - \int_A f~dQ \geq 0.$$
+Indeed,
+$$\int_D f~dQ \geq k^*Q(D) \geq k^*Q(A) \geq \int_A f~dQ$$
+as desired.
+
+
+\begin{exer}
+Let $(A_n)$ be a measurable partition. Prove that if $\mathcal G$ is the $\sigma$-algebra generated by the $A_n$ and $X \in L^1$ then
+$$E(X|\mathcal G) = \sum_{n=1}^\infty \frac{E(X1_{A_n})}{P(A_n)} 1_{A_n}$$
+with the fraction an arbitrary real if $P(A_n) = 0$.
+\end{exer}
+
+We can eliminate the case that any of the elements of the partition have measure zero, possibly at the case of making the partition only have finitely many entries, by recalling that $E(X|\mathcal G)$ is only defined up to a set of measure zero anyways, and so we can replace $1_{A_n}$ with zero.
+
+Now we note that the set $P = \{\emptyset\} \cup \{A_n: n \in \NN\}$ is a $\pi$-class, since the $A_n$ form a partition.
+Therefore it suffices to show that for every $m$,
+$$\int_{A_m} \sum_{n=1}^\infty \frac{E(X1_{A_n})}{P(A_n)} 1_{A_n}~dP = \int_{A_m} X ~dP.$$
+In fact,
+$$\int_{A_m} \sum_{n=1}^\infty \frac{E(X1_{A_n})}{P(A_n)} 1_{A_n}~dP = \int_{A_m} \frac{E(X1_{A_m})}{P(A_m)} ~dP = E(X1_{A_m}) = \int_{A_m} X~dP$$
+as desired.
+
+\begin{exer}
+Let $(X_j)$ be an iid random sequence and $X_1 \in L^1$. Let $S_n = \sum_{j \leq n} X_j$ and $\mathcal G_n = \sigma(S_n, S_{n+1}, \dots)$.
+Show that $E(X_1|\mathcal G_n) = S_n/n$ almost surely.
+\end{exer}
+
+Let $A \in \mathcal G_n$. Since $S_n/n$ is measurable with respect to $\mathcal G_n$,
+$$\int_A \frac{S_n}{n} ~dP = \frac{1}{n} \sum_{j=1}^n \int_A X_j ~dP = \int_A X_1 ~dP$$
+which implies the claim.
+
+\begin{exer}
+Let $X \in L^2$. Show that
+$$\Var X = \Var E(X|\mathcal G) + E(\Var(X|\mathcal G)).$$
+\end{exer}
+
+By definition of variance,
+$$E(X^2) = E(E(X^2|\mathcal G)) = E(\Var(X|\mathcal G) + E(X|\mathcal G)^2).$$
+Similarly $(EX)^2 = E(E(X|\mathcal G)^2)$.
+Therefore
+\begin{align*}\Var X
+&= E(\Var(X|\mathcal G) + E(X|\mathcal G)^2) - E(E(X|\mathcal G))^2\\
+&= E(\Var(X|\mathcal G)) + E(E(X|\mathcal G)^2) - E(E(X|\mathcal G))^2\\
+&= E(\Var(X|\mathcal G)) + \Var(E(X|\mathcal G)^2).
+\end{align*}
+
+\begin{exer}
+If $X_n \to X$ in $L^p$, show that $E(X_n|\mathcal G) \to E(X|\mathcal G)$ in $L^p$.
+\end{exer}
+
+Let $T$ be the linear operator $TY = E(Y|\mathcal G)$.
+It suffices to show that $T$ is bounded on $L^p$, since then
+$$||E(X_n|\mathcal G) - E(X|\mathcal G)||_p = ||T(X_n - X)||_p \lesssim ||X_n - X||_p.$$
+Since $L^\infty$ is dense in $L^p$, we may assume that $Y \in L^\infty$ and prove $||TY||_p \lesssim ||Y||_p$ where the constant does not depend on $Y$.
+By Riesz-Thorin interpolation, it suffices to treat the cases $p = 1, \infty$, as $||T||_p \lesssim ||T||_1^\theta ||T||_\infty^{1 - \theta} = 1$ where $\theta \in [0, 1]$ depends on $p$.
+
+First suppose $p = 1$. If $Y \geq 0$, then
+$$||TY||_1 = E(E(Y|\mathcal G)) = EY = ||Y||_1.$$
+Otherwise, since $Y \in L^\infty$, we may write $Y = Y_+ - Y_-$ where the $Y_\pm \in L^\infty$ are nonnegative. Then
+$$||TY||_1 = ||T(Y_+ - Y_-)||_1 \leq ||TY_+||_1 + ||TY_-||_1 \leq ||Y_+||_1 + ||Y_-||_1 \leq 2||Y||_1.$$
+
+Now suppose $p = \infty$. If $Y \geq 0$, then $||TY||_\infty$ is the essential supremum of $E(Y|\mathcal G)$.
+After modifying $Y$ on a set of measure zero, it is no loss of generality to assume that $\sup Y = ||Y||_\infty$.
+By definition of conditional expectation, for any event $A \in \mathcal G$,
+$$\frac{1}{P(A)} \int_A E(Y|\mathcal G) ~dP = \frac{1}{P(A)} \int_A Y~dP \leq \sup Y.$$
+Let $B = \{E(Y|\mathcal G) > \sup Y\}$. We need to show $P(B) = 0$. Since $E(Y|\mathcal G)$ is $\mathcal G$-measurable, so is $B$.
+In particular, if $P(B) > 0$, then
+$$\frac{1}{P(B)} \int_B E(Y|\mathcal G) ~dP > \sup Y,$$
+a contradiction.
+Therefore $||TY||_\infty \leq ||Y||_\infty$.
+Now, instead of assuming $Y \geq 0$, suppose $Y = Y_+ - Y_-$ where the $Y_\pm \in L^\infty$ are nonnegative. Then
+$$||TY||_\infty = ||T(Y_+ - Y_-)||_\infty \leq ||TY_+||_\infty + ||TY_-||_\infty \leq ||Y_+||_\infty + ||Y_-||_\infty \leq 2||Y||_\infty.$$
+This was the bound that we needed.
+
+\begin{exer}
+Let $\mathcal G \subseteq \mathcal F$ be $\sigma$-algebras.
+Let $Q \ll P$ be measures on $\mathcal F$, let $X = dQ/dP$ with respect to $\mathcal F$, and let $Y = dQ/dP$ with respect to $\mathcal G$.
+Then:
+\begin{enumerate}
+\item Show that $Y = E^P(X|\mathcal G)$.
+\item Define the relative entropy of $Q$ with respect to $P$ by
+$$R_{\mathcal F}(Q|P) = E^Q(\log X)$$
+and
+$$R_{\mathcal G}(Q|P) = E^Q(\log Y).$$ Show that
+\begin{equation}
+\label{relative entropy bound}
+R_{\mathcal G}(Q|P) \leq R_{\mathcal F}(Q|P).
+\end{equation}
+\item Show that
+\begin{equation}
+\label{TV bound}
+R_{\mathcal F}(Q|P) \geq 2||P - Q||^2
+\end{equation}
+where $||R|| = \sup_A |R(A)|$ is the total variation norm.
+\end{enumerate}
+\end{exer}
+
+If $A \in \mathcal G$ then
+$$\int_A Y~dP = Q(A) = \int_A X~dP$$
+which implies $Y = E^P(X|\mathcal G)$.
+
+The proof of the relative entropy bound (\ref{relative entropy bound}) is quite long, so we break it up into lemmata.
+The first lemma, in particular, is a horribly boring factoid about $\sigma$-algebras.
+
+Henceforth when we refer to a ``partition", we will always mean a partition of the sample space into countably many events in $\mathcal F$.
+We will say that a partition $\mathcal B$ is a refinement of $\mathcal A$ if for every event $A \in \mathcal A$, there is a subset $\mathcal B_A \subseteq \mathcal B$ such that $\mathcal B_A$ is a partition of $A$.
+We will write $\mathcal H = \sigma(\mathcal A)$ to mean that $\mathcal H$ is the sub-$\sigma$-algebra of $\mathcal F$ generated by every event $A \in \mathcal A$.
+
+\begin{lemma}
+Let $\mathcal H$ be a sub-$\sigma$-algebra of $\mathcal F$ and $Z$ a $\mathcal H$-measurable random variable.
+If there is a partition $\mathcal A$ such that $\mathcal H = \sigma(\mathcal A)$, then there is a partition $\mathcal B$ such that $\mathcal A$ is a refinement of $\mathcal B$ and $\sigma(Z) = \sigma(\mathcal B)$.
+\end{lemma}
+\begin{proof}
+Since $Z$ is $\mathcal H$-measurable, for every $A \in \mathcal A$, the restriction $Z|A$ is constant.
+In particular, since $\mathcal A$ is countable, $A$ only takes countably many values.
+Let
+$$\mathcal B = \{\{Z = z\}: z \in \RR\}.$$
+Then $\mathcal B$ is countable, since all but countably many of the members of $\mathcal B$ are empty, so $\mathcal B$ is a partition and $\sigma(Z) = \sigma(\mathcal B)$.
+Moreover, $\mathcal A$ is a refinement of $\mathcal B$, since every $\{Z = z\} \in \mathcal B$ can be partitioned into those events $A \in \mathcal A$ such that $Z|A = z$.
+\end{proof}
+
+\begin{lemma}
+If $\mathcal H$ is a sub-$\sigma$-algebra of $\mathcal F$, then $R_{\mathcal H}(Q|P) \geq 0$.
+\end{lemma}
+\begin{proof}
+In fact,
+$$R_{\mathcal H}(Q|P) = E^Q(\log E^P(X|\mathcal H)) \geq \log E^Q(E^P(X|\mathcal H)).$$
+Since $E^Q(1|\mathcal H)$ is defined the property that, whenever $A \in \mathcal H$,
+$$E^Q(1_A E^Q(1|\mathcal H)) = Q(A),$$
+and
+$$E^P(1_A E^P(X|\mathcal H)) = E^P(1_A X) = E^Q(1_A) = Q(A),$$
+it follows that $E^Q(E^P(X|\mathcal H)) = E^Q(E^Q(1|\mathcal H)) = 1$.
+Now take logarithms.
+\end{proof}
+
+\begin{lemma}
+The relative entropy bound (\ref{relative entropy bound}) is true if $\sigma(X)$ is generated by a partition.
+\end{lemma}
+\begin{proof}
+By the first part of this problem, $Y = E^P(X|\mathcal G)$ is $\sigma(X)$-measurable.
+Therefore, by the first lemma, we may let $\sigma(Y) = \sigma(\mathcal A)$ and $\sigma(X) = \sigma(\mathcal B)$, where $\mathcal A, \mathcal B$ are partitions and $\mathcal B$ is a refinement of $\mathcal A$.
+Then
+$$Y = \sum_{A \in \mathcal A} 1_A \frac{E^P(X1_A)}{P(A)} = \sum_{A \in \mathcal A} 1_A \frac{Q(A)}{P(A)}$$
+so that, if $Y|A$ denotes the restriction of $Y$ to $A$,
+$$\log(Y|A) = \log \frac{Q(A)}{P(A)}.$$
+Therefore
+$$R_{\mathcal G}(Q|P) = \sum_{A \in \mathcal A} \int_A \log \frac{Q(A)}{P(A)} ~dQ = \sum_{A \in \mathcal A} Q(A) \log \frac{Q(A)}{P(A)}.$$
+
+Since $\mathcal B$ is a refinement of $\mathcal A$,
+$$R_{\mathcal F}(Q|P) = \sum_{A \in \mathcal A} \int_A \log \frac{dQ}{dP} ~dQ
+= \sum_{B \subseteq A} \int_B \log \frac{dQ}{dP} ~dQ = \sum_{B \subseteq A} Q(B) \log \frac{Q(B)}{P(B)}.$$
+Here and in the sequel $B$ ranges over $\mathcal B$ while $A$ ranges over $\mathcal A$.
+
+We now claim
+\begin{equation}
+\label{discrete relative entropy bound}
+Q(A) \log \frac{Q(A)}{P(A)} \leq \sum_{B \subseteq A} Q(B) \log \frac{Q(B)}{P(B)},
+\end{equation}
+which, if proven, completes the proof of the lemma.
+To see (\ref{discrete relative entropy bound}), we fix $A^* \in \mathcal A$ and show
+$$Q(A^*) \log \frac{Q(A^*)}{P(A^*)} \leq \sum_{B \subseteq A^*} Q(B) \log \frac{Q(B)}{P(B)}.$$
+The key point is that unlike in (\ref{discrete relative entropy bound}), the sum now ranges over just $\mathcal B$, rather than also $\mathcal A$.
+So we can define the ``conditional" measures $Q^*(E) = 1_{E \subseteq A^*}Q(E)/Q(A^*)$ and $P^*(E) = 1_{E \subseteq A^*}P(E)/P(A^*)$, which are probability measures on the same sample space as $P,Q$ but supported on $A^*$.
+Then
+\begin{align*}
+\sum_{B \subseteq A^*} Q(B) \log \frac{Q(B)}{P(B)} &= Q(A^*) \sum_{B \subseteq A^*} Q^*(B) \log \frac{Q^*(B)}{P^*(B)} + Q^*(B) \log \frac{Q^*(A)}{P^*(A)}\\
+&= Q(A^*) R_{\mathcal F}(Q^*|P^*) + Q(A^*) \log \frac{Q(A^*)}{P(A^*)}.
+\end{align*}
+By the previous lemma,
+$$Q(A^*) R_{\mathcal F}(Q^*|P^*) \geq 0,$$
+which completes the proof of the estimate (\ref{discrete relative entropy bound}) and the lemma.
+\end{proof}
+
+Now let us remove the assumption that $\sigma(X)$ is generated by a partition.
+Fix $Q$ and $X = dQ/dP$. Then $X \in L^1(P)$, so one can approximate $X$ in $L^1(P)$ by simple functions $X_n$ which increase to $X$.
+Then $\sigma(X_n)$ is generated by a partition
+$$\mathcal C_n = \{\{X_n = x\}: x \in \RR\}.$$
+In fact, $\mathcal C_n$ is countable, since all but countably many of its members are empty.
+By the previous lemma, then,
+\begin{equation}
+\label{approximate relative entropy}
+E^{Q_n}(\log E^P(X_n|\mathcal G)) \leq E^{Q_n}(\log X_n).
+\end{equation}
+Let us now check the hypotheses of monotone convergence.
+By the second lemma, $E^{Q_n}(\log E^P(X_n|\mathcal G)) \geq 0$.
+If $E^P(X_n \log X_n) = \infty$ for infinitely many $n$, then by Fatou's lemma,
+\begin{align*}
+R_{\mathcal F}(Q|P) &= E^Q(\log X) = E^P(X \log X) = E^P\left(\lim_{n \to \infty} X_n \log X_n\right)\\
+&\geq \limsup_{n \to \infty} E^P(X_n \log X_n) = \infty
+\end{align*}
+and the bound (\ref{relative entropy bound}) is trivial.
+So we may assume $E^P(X_n \log X_n) \lesssim 1$, and the hypotheses of monotone convergence are met.
+So by (\ref{approximate relative entropy}),
+$$E^Q(\log E^P(X|\mathcal G)) \leq E^Q(\log X)$$
+which implies (\ref{relative entropy bound}).
+
+Now let us prove the total variation estimate (\ref{TV bound}).
+We must show that for every event $E \in \mathcal F$,
+$$R_{\mathcal F}(Q|P) \geq 2|P(E) - Q(E)|^2.$$
+By measure continuity, we can approximate events that are almost surely true, or almost surely false, by those which may or may not happen, and thus assume $0 < P(E), Q(E) < 1$.
+Let $\mathcal G = \sigma(E)$; by the previous part, it suffices to prove
+$$R_{\mathcal G}(Q|P) \geq 2|P(E) - Q(E)|^2.$$
+On the other hand,
+$$R_{\mathcal G}(Q|P) = Q(E) \log \frac{Q(E)}{P(E)} + (1 - Q(E)) \log \frac{1 - Q(E)}{1 - P(E)}$$
+since $\mathcal G$ is generated by the partition $\{E, E^c\}$ and $Q(E^c) = 1 - Q(E)$, $P(E^c) = 1 - P(E)$.
+Thus the problem reduces to the elementary estimate
+\begin{equation}
+\label{easy estimate}
+F(x, y) = x \log \frac{x}{y} + (1 - x) \log\frac{1 - x}{1 - y} - 2(x - y)^2 \geq 0
+\end{equation}
+whenever $0 < x, y < 1$.
+
+As stated, (\ref{easy estimate}) seems false. For example if $y = 0.5$ then it is false except exactly at $x = 0.5$, where equality is attained.
+On the other hand it is true if we replace the constant $2$ by $1/2$, which seems to better agree with the Wikipedia article's discussion of Pinsker's inequality.
+So maybe that's what I should prove. I'll try to prove the estimate with $2$ replaced by $1/2$.
+
+Let us fix $y$. Then
+$$G(x, y) = \partial_1 F(x, y) = \log\frac{y - 1}{x - 1} + \log \frac{x}{y} + y - x.$$
+Clearly $G(y, y) = 0$. On the other hand,
+$$\partial_1 G(x, y) = \frac{1}{x} - \frac{x}{x - 1} \geq 3 > 0$$
+so $G(\cdot, y)$ is strictly increasing and so $G$ has no other critical points.
+Therefore $F(\cdot, y)$ can only change sign at $y$. But it is easy to check that $F(\varepsilon, y) > 0$ and similarly $F(1 - \varepsilon, y) > 0$.
+So we conclude that $F \geq 0$ as desired.
+
+
+\end{document}

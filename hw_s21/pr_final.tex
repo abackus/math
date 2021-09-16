@@ -1,0 +1,463 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\cl}{\operatorname{cl}}
+\newcommand{\ch}{\operatorname{ch}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\dom}{\operatorname{dom}}
+\newcommand{\End}{\operatorname{End}}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\DeclareMathOperator{\Cov}{Cov}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Probability II, Final Exam} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $X$ be an adapted $L^1$ process such that for every pair of bounded stopping times $\sigma \leq \tau$, $EX_\sigma \geq EX_\tau$.
+Show that $X$ is a supermartingale.
+\end{exer}
+
+If the claim fails, then there are times $n > m$ such that the event $A = \{E(X_n|\mathcal F_m) > X_m\}$ has probability $p > 0$.
+Let $\sigma = m$ if $A$ is true and $\sigma = n$ if $A$ is false.
+Then $\sigma$ is a stopping time, since $A$ is $\mathcal F_m$-measurable.
+Furthemore, by hypothesis,
+\begin{align*}
+EX_n &\leq EX_\sigma = pEX_m + (1 - p)EX_n \\
+&< pEE(X_n|\mathcal F_m) + (1 - p)EX_n = EX_n
+\end{align*}
+which is a contradiction.
+
+\begin{exer}
+Let $X$ be an $L^2$ martingale with $EX_n = 0$. Show that for every $\lambda > 0$,
+$$P\left(\max_{0 \leq i \leq n} X_i > \lambda\right) \leq \frac{EX_n^2}{EX_n^2 + \lambda^2}.$$
+\end{exer}
+
+I think you can deduce this from the first submartingale inequality somehow.
+Most applications of the first submartingale inequality end up with a $\lambda^{-p}$ in the denominator, so you have to use the quadratic variation process of $X_n^2$ somehow to get the $EX_n^2$ term in the denominator.
+I don't really know how to do this beyond that.
+
+\begin{exer}
+Let $X$ be a martingale which is uniformly bounded in $L^p$, $p > 1$.
+Show that there is $Y$ such that $X_n \to Y$ in $L^p$.
+\end{exer}
+
+Since $X$ is uniformly bounded in $L^p$, it is in $L^1$ as well, so by martingale convergence there is $Y$ such that $X_n \to Y$ almost surely.
+Let $Z = \sup_n |X_n|$.
+By Doob's maximal inequality and monotone convergence,
+$$||Z||_{L^p} = \lim_{n \to \infty} \left|\left|\sup_{m \leq n} X_m\right|\right| \leq \frac{p}{p - 1} \sup_n ||X_n||_{L^p} < \infty.$$
+So by dominated convergence, since $X_n \leq Z$, $X_n \to Y$ in $L^p$.
+
+\begin{exer}
+Let $X$ be a uniformly $L^1$ supermartingale.
+Show that $X$ has a unique Riesz decomposition
+$$X = M + Z$$
+where $M$ is a uniformly $L^1$ martingale and $Z \geq 0$ is a supermartingale with $Z_n \to 0$ in $L^1$.
+\end{exer}
+
+Fix $n$ and let $Y_m = E(X_m|\mathcal F_n)$.
+Then all but finitely many $m$ satisfy $Y_m \leq X_n$ and $Y$ is a martingale with respect to the filtration $(\mathcal F_m)_{m \geq n}$, so by martingale convergence $Y$ is almost surely Cauchy; thus we can set
+$$M_n = \lim_{m \to \infty} Y_m.$$
+Since $Y_m \leq X_n$, we also have $M_n \leq X_n$.
+Since $X$ is uniformly $L^1$, we can find a last element
+$$X_\infty = \lim_{m \to \infty} X_m.$$
+Then since $X$ is uniformly $L^1$, we can commute the expected value and limit using dominated convergence to see that
+$$E(X_\infty|\mathcal F_n) = E\left(\lim_{m \to \infty} X_m\bigg|\mathcal F_n\right) = \lim_{m \to \infty} Y_m = M_n.$$
+Therefore $M$ is a Doob martingale, so uniformly $L^1$.
+
+Now let $Z = X - M$. Since $-M$ is a supermartingale, it follows that $Z$ is a supermartingale, and since $M \leq X$ we have $Z \geq 0$.
+Furthermore, $Z$ is uniformly $L^1$, so we can again use dominated convergence to see that
+$$\lim_{n \to \infty} EZ_n = E\left(\lim_{n \to \infty} X_n - M_n\right) = E(X_\infty - X_\infty) = 0.$$
+
+Finally we check the uniqueness. Suppose that $M,Z$ are given. Since $M$ is uniformly $L^1$, $M$ is a Doob martingale, say $M_n = E(M_\infty|\mathcal F_n)$.
+It suffices to show $M_\infty = X_\infty$, for then $M$ is as previously, and thus so is $Z = X - M$.
+Indeed, $\lim_n EZ_n = E(X_\infty - M_\infty)$, which is only $0$ if $M_\infty = X_\infty$.
+
+\begin{exer}
+Let $(X_i)$ be a sequence of independent random variables, $X_i \geq 0$, $EX_i = 1$. Let
+$$M_n = \prod_{i=1}^n X_i.$$
+Show that there is $M_\infty \in L^1$ such that $M_n \to M_\infty$ almost surely.
+Show that $M_n \to M_\infty$ in $L^1$ iff $\prod_i E(\sqrt{X_i}) > 0$.
+Show that $M_\infty = 0$ almost surely iff $M_n$ does not converge to $M_\infty$ in $L^1$.
+\end{exer}
+
+We first claim that $M$ is a martingale. In fact,
+$$E(M_n|\mathcal F_m) = \prod_{i=1}^m X_i \prod_{j=m+1}^n EX_j = \prod_{i=1}^m X_i = M_m$$
+where $\mathcal F$ is the filtration induced by $X$.
+Furthermore, $M \geq 0$ since the same is true of $X$, so by martingale convergence, there is $M_\infty \in L^1$ such that $M_n \to M_\infty$ almost surely.
+
+Let us write $\diamondsuit A$ to mean that an event $A$ has positive probability.
+Notice that $\diamondsuit(M_\infty > 0)$ iff it is false that $M_\infty = 0$ almost surely.
+
+Let us show the following implications: if $M_1 \to M_\infty$ in $L^1$ then $\diamondsuit(M_\infty > 0)$; if $\diamondsuit(M_\infty > 0)$ then $\prod_i E\sqrt{X_i} > 0$; and if $\prod_i E\sqrt{X_i} > 0$ then $M_1 \to M_\infty$ in $L^1$.
+
+Let us show that if $M_1 \to M_\infty$ in $L^1$ then $\diamondsuit(M_\infty > 0)$.
+If $M_n \to M_\infty$ in $L^1$, then $M$ is uniformly $L^1$, so
+$$M_n = E(M_\infty|\mathcal F_n),$$
+but $M_n > 0$ so it follows that $\diamondsuit(M_\infty > 0)$.
+
+Let us show that if $\diamondsuit(M_\infty > 0)$ then $\prod_i E\sqrt{X_i} > 0$.
+If $\diamondsuit(M_\infty > 0)$, then we claim there is $\theta > 0$ such that for every $n$, $EM_n \geq \theta$.
+If not, then there is a subsequence $(M_{n_k})_k$ with $EM_{n_k} \to 0$, thus $M_{n_k} \to 0$ in $L^1$.
+Accelerating the convergence sufficiently, we can find a subsequence $(M_{n_{k_\ell}})_\ell$ such that $M_{n_{k_\ell}} \to 0$ almost surely.
+But $M_{n_{k_\ell}} \to M_\infty$ almost surely, so $M_\infty = 0$ almost surely, which contradicts $\diamondsuit(M_\infty > 0)$.
+Therefore such a $\theta$ exists. So, by Jensen's inequality,
+$$\prod_{i = 1}^n E\sqrt{X_i} = E\sqrt{M_n} \geq \sqrt{EM_n} \geq \sqrt \theta > 0.$$
+Since $\theta$ is uniform in $n$, we can take $n \to \infty$ to deduce $\prod_i E\sqrt{X_i} \geq \sqrt \theta > 0$.
+
+Let us show that if $\prod_i E\sqrt{X_i} > 0$ then $M_n \to M_\infty$ in $L^1$.
+If we do not have convergence in $L^1$, then nor do we have uniform integrability, thus
+$$\limsup_{\lambda \to \infty} \sup_n E(1_{M_n > \lambda} M_n) > 0.$$
+Thus there is $\theta$ and a subsequence $(M_{n_m}),(\lambda_{n_m})$ with $\lim_{m \to \infty} \lambda_{n_m} = \infty$ and
+$$E(1_{M_n > \lambda_n} M_n) \geq \theta > 0,$$
+where we have suppressed the subindex $m$.
+If we choose $\theta$ small enough, then the hypothesis on $\prod_i E\sqrt{X_i}$ gives $E\sqrt{M_n} \geq \theta$.
+If we set $Y_n = \sqrt{M_n}$, then we have
+$$\Var Y_n \leq 1 - \theta^2 < 1$$
+so by Chebyshev's inequality,
+$$P(Y_n \geq 1 + \alpha) \leq \frac{1 - \theta^2}{\alpha^2}.$$
+Noticably, this is strictly less than $\alpha^{-2}$, so I guess that's somehow supposed to contradict the bound $E(1_{M_n > \lambda_n} M_n) \geq \theta$ and the fact that $M$ is the multiplicative version of a Doob martingale and so ``must not concentrate".
+However, I've spent way too much time on this, getting way too frustrated, and I give up.
+
+
+\begin{exer}
+Let $B$ be a measurable adapted process with continuous sample paths and $B_0 = 0$.
+Show that $B$ is standard Brownian motion iff for every $f \in C^2_c(\RR)$,
+$$M_t = f(B_t) - \frac{1}{2} \int_0^t f''(B_s) ~ds$$
+is a martingale.
+\end{exer}
+
+Suppose that $B$ is standard Brownian motion.
+By the It\^o formula,
+$$dM_t = df(B_t) - \frac{1}{2} f''(B_t) ~dt = f'(B_t) ~dB_t + \frac{1}{2} f''(B_t) ~dt - \frac{1}{2} f''(B_t) ~dt = f'(B_t) ~dB_t.$$
+That is,
+$$M_t = f(0) + \int_0^t f'(B_s) ~dB_s.$$
+Now
+$$E\int_0^T f'(B_s)^2 ~ds \leq T||f||_{C^2} < \infty$$
+as $f \in C^2_c$, so $(s \mapsto f'(B_s)) \in \mathcal H$.
+It follows that $M$ is a martingale.
+
+Conversely, suppose that $M$ is a martingale.
+By L\'evy's theorem, we must show that $B$ is a local martingale such that $\langle B\rangle_t = t$.
+Let $f_n(t) = t$ on $[0, n]$, and let $g_n(t) = t^2$ on $[0, n]$.
+Let $dM^{(n)}_t = df_n(B_t) - f_n''(B_t) ~dt/2$ and similarly $dN^{(n)}_t = dg_n(B_t) - g_n''(B_t) ~dt/2$.
+We can extend $f_n,g_n$ to elements of $C^2_c(\RR)$ using a smooth cutoff, and if $t \in [0, n]$, we have $M^{(n)}_t = B_t$.
+Therefore $B$ is a local martingale.
+Furthermore,
+$$B_t^2 = N^{(n)}_t + \int_0^t ~ds = N^{(n)}_t + t,$$
+thus $t$ is the quadratic variation of $B$, as desired.
+
+\begin{exer}
+Let $B$ be standard Brownian motion.
+By a stochastic control we mean a progressively measurable process $U$ with $|U| \leq 1$.
+Let
+$$v(x) = \inf_U E\int_0^\infty e^{-\alpha t} X_t^2 ~dt$$
+be the cost function where $\alpha > 0$,
+$$X_t = x + B_t - \int_0^t U_s ~ds,$$
+and $U$ ranges over all controls.
+
+Explain why $v$ solves the Hamilton-Jacobi-Bellman equation
+$$-\alpha v(x) + \frac{v''(x)}{2} + \inf_{|u| \leq 1} -uv'(x) + x^2 = 0.$$
+Guess the value of an optimal $u$, namely $u^*$, and write the simplified Hamilton-Jacobi-Bellman equation in terms of $u^*$.
+
+Solve the Hamilton-Jacobi-Bellman equation to get a solution $\overline v \in C^2$.
+Show that $\overline v \leq v$ by applying the It\^o formula to the process
+$$Y_t = \int_0^t e^{-\alpha s} X_s^2 ~ds + e^{-\alpha t} \overline v(X_t).$$
+Show that $\overline v = v$.
+\end{exer}
+
+To derive the Hamilton-Jacobi-Bellman equation, let us say that a stochastic control $U$ is a \emph{good control} if $U$ is given up to time $t$, deterministic on $[t, t + dt]$, and optimal after $t + dt$.
+The intuition is that since we cannot ``cannot look into the past" (this can be formalized by progressive measurability, but this is just an informal derivation anyways) we may assume that $U$ is deterministic, say $U = u$, on the infinitesimal time interval $[t, t + dt]$.
+Thus a good control $U$ is the same thing as a measurable function $u$ on $[t, t + dt]$ with $|u| \leq 1$, since then we can set $U = u$ on $[t, t + dt]$ and then choose an optimal control on $[t + dt, \infty)$ given the value of $U$ on $[0, t + dt]$.
+
+Let
+$$v(x, t) = \inf_U E\int_t^\infty e^{-\alpha s} X_s^2 ~ds$$
+be the \emph{debt} (that is, cost yet to be paid) at time $t$, where
+$$X_s = x + B_{t - s} - \int_0^s U_r ~dr$$
+and $U$ ranges over good controls.
+We then have a Bellman-type equation
+$$v(X_t, t) = \inf_u v(X_{t + dt}, t + dt) + E\int_t^{t + dt} e^{-\alpha s} X_s^2 ~ds$$
+where $u$ ranges over measurable functions on $[t, t + dt]$ with $|u| \leq 1$ and determines $X$ via a good control.
+Since $u$ is deterministic, so is the cost on $[t, t + dt]$, thus
+\begin{equation}
+\label{v(X_t)}
+v(X_t, t) = \inf_u v(X_{t + dt}, t + dt) + \int_t^{t + dt} e^{-\alpha s} X_s^2 ~ds.
+\end{equation}
+Taking the Taylor expansion of $v$ using the It\^o formula and the stochastic differential equation
+$$\frac{dX_t}{dt} = \frac{dB_t}{dt} - U_t,$$
+(which should be understood as an integral equation, as the expression $dB_t/dt$ is of course nonsense, but this is all informal), we have
+\begin{align*}
+v(X_{t + dt}, t + dt) - v(X_t, t) &= \frac{\partial v}{\partial t}(X_t, t) ~dt + \frac{\partial v}{\partial x}(X_t, t) ~dB_t \\
+&\qquad+ u(t)\frac{\partial v}{\partial x}(X_t, t) ~dt + \frac{1}{2}\frac{\partial^2 v}{\partial x}(X_t, t) ~dt + O(dt^2 + dt ~dX_t).
+\end{align*}
+Dividing both sides by $dt$ and using $dB_t^2 = dt$, we conclude
+$$\frac{v(X_{t + dt}, t + dt) - v(X_t, t)}{dt} = \frac{\partial v}{\partial t}(X_t, t) + \frac{\partial v}{\partial x}(X_t, t)\left(\sqrt{dt} - u(t)\right) + \frac{1}{2}\frac{\partial^2 v}{\partial x}(X_t, t) + O(\sqrt{dt}).$$
+So we may take $dt \to 0$ and $t = 0$ to conclude
+\begin{equation}
+\label{partial HJB}
+\frac{\partial}{\partial t}v(X_t, t)|_{t = 0} = \frac{\partial v}{\partial t}(X_t, 0) - u(t)\frac{\partial v}{\partial x}(X_t, 0) + \frac{1}{2}\frac{\partial^2 v}{\partial x^2}(X_t, 0).
+\end{equation}
+Applying (\ref{v(X_t)}) with the $v(X_{t + dt}, t + dt)$ term discarded, and using the fact that $\int_0^{dt} u = O(dt)$, we conclude
+\begin{equation}
+\label{pptv}
+\frac{\partial}{\partial t}v(X_t, t)|_{t = 0} = -\lim_{dt \to 0} \dashint_0^{dt} e^{-\alpha s} X_s^2 ~ds = -x^2.
+\end{equation}
+Moreover, if $t$ is small, then with overwhelming probability we have $X_s = x + O(s)$ regardless of the choice of $U$, thus
+$$\frac{\partial v}{\partial t}(x, 0) = \frac{\partial}{\partial t} \int_t^\infty e^{-\alpha s}(x + O(s))^2 ~ds\bigg|_{t = 0} \approx \frac{\partial}{\partial t} \frac{x^2}{\alpha}e^{-\alpha t} = -x^2e^{-\alpha t}$$
+while
+$$v(x, 0) = \frac{x^2}{\alpha}.$$
+Discarding the error term, which intuitively should be zero after taking expectations, we get
+\begin{equation}
+\label{pvpt}
+\frac{\partial v}{\partial t}(x, 0) = -\alpha v(x, 0).
+\end{equation}
+We can plug (\ref{pptv}) and (\ref{pvpt}) into (\ref{partial HJB}) to complete the derivation of the Hamilton-Jacobi-Bellman equation.
+
+We now observe that
+$$\inf_u -uv' = -|v'|.$$
+In fact, if $v'(x) = 0$, then $u(x)$ does not matter; if $v'(x) > 0$, then the minimizer is $u(x) = 1$, and similarly for $v'(x) < 0$.
+Thus $u^* = \sgn v$, thus
+$$\frac{v''(x)}{2} - |v'(x)| - \alpha v(x) + x^2 = 0.$$
+At this point we need to compute the critical points of $v$.
+I think that the only critical point is $0$, and clearly
+$$\pm \lim_{x \to \infty} v(x) = +\infty,$$
+since the Brownian motion term has expected value $0$ and variance $t$, and the control term is at most $1$, so that $X_t^2 \sim x^2$ as $x \to \infty$ with at most linear error in $t$ on average.
+So we should get
+\begin{equation}
+\label{uStar}
+u^*(x) = \sgn x.
+\end{equation}
+I don't know how to prove this however, since we have a stupid infimum in the definition of the function that we want to differentiate. Anyways, if the conjecture (\ref{uStar}) is correct, we get the ``reduced Hamilton-Jacobi-Bellman equation"
+\begin{equation}
+\label{reduced HJB}
+\frac{v''(x)}{2} - \sgn x v'(x) - \alpha v(x) + x^2 = 0.
+\end{equation}
+
+We now solve (\ref{reduced HJB}).
+To do this, we need the fact that
+$$\int_0^\infty e^{-\alpha t} X_t^2 ~dt = \int_0^\infty e^{-\alpha t} O((x + t + 1)^2) ~dt = O((x + 1)^2)$$
+regardless of the choice of control $U$, thus
+\begin{equation}
+\label{growth condition}
+v(x) = O(x^2 + 1).
+\end{equation}
+
+If $x > 0$ then (\ref{reduced HJB}) reads
+$$\frac{v''(x)}{2} - v'(x) - \alpha v(x) + x^2 = 0$$
+so, by a variation-of-parameters argument,
+$$v_+(x) = \frac{2}{\alpha^3} + \frac{2 - 2x}{\alpha^2} + \frac{x^2}{\alpha} + c_1 e^{\beta_1x} + c_2 e^{\beta_2x}$$
+where $v = v_+$ on $(0, \infty)$,
+$$2\beta_j = 1 + (-1)^j \sqrt{4\alpha + 1},$$
+and $c_j$ are constants to be determined later.
+Since $\sqrt{4\alpha + 1} > 1$, $\beta_1 < 0$ while $\beta_2 > 0$.
+But $\beta_2 > 0$ implies that $v(x)$ has exponential growth as $x \to +\infty$, which contradicts (\ref{growth condition}) unless $c_2 = 0$.
+
+If $x < 0$ then the solution of (\ref{reduced HJB}) is
+$$v_-(x) = \frac{2}{\alpha^3} + \frac{2 + 2x}{\alpha^2} + \frac{x^2}{\alpha} + d_1 e^{\gamma_1x} + d_2 e^{\gamma_2x}$$
+where $v = v_-$ on $(-\infty, 0)$,
+$$2\gamma_j = -1 + (-1)^j \sqrt{4\alpha + 1},$$
+and $d_j$ are to be determined.
+Thus $\gamma_1 < 0$ while $\gamma_2 > 0$, so by (\ref{growth condition}), we have $d_1 = 0$.
+
+Clearly $v$ is $C^2$ everywhere except $0$.
+Moreover
+$$v_+(0) - v_-(0) = c_1 - d_2$$
+so $d_2 = c_1$. We can then compute
+$$v_+'(0) - v_-'(0) = -\frac{4}{\alpha^2} + c_1(\beta_1 - \gamma_2) = -\frac{4}{\alpha^2} + 2c_1\beta_1$$
+as $\beta_1 + \gamma_2 = 0$, and thus set
+$$c_1 = \frac{2}{\alpha^2\beta_1}.$$
+Then
+$$v_+''(0) - v_-''(0) = \frac{2}{\alpha^2\beta_1}(\beta_1^2 - \gamma_2^2) = 0.$$
+So $v$ is $C^2$ at $0$; that is, we can set
+$$\overline v(x) = \frac{2}{\alpha^3} + \frac{2}{\alpha^2} + \frac{x^2}{\alpha} + \begin{cases}
+-2x/\alpha + ce^{\beta x}, &x \geq 0\\
+2x/\alpha + ce^{-\beta x}, &x \leq 0
+\end{cases}$$
+where $2\beta = 1 - \sqrt{4\alpha + 1}$ and $c\alpha^2\beta = 2$.
+Then $\overline v$ is a solution to (\ref{reduced HJB}) and a candidate for the honest cost function, which we now refer to as $v$.
+
+We now show $\overline v \leq v$. To do this, set
+$$Y_t = \int_0^t e^{-\alpha s} X_s^2 ~ds + e^{-\alpha t} \overline v(X_t).$$
+Clearly $\overline v(x) = Y_0$, while
+$$v(x) = \inf_U E\left(\lim_{t \to \infty} Y_t\right).$$
+Suppose for now that $EY_t$ is increasing. Then
+$$\overline v(x) = Y_0 = \inf_U EY_0 \leq \inf_U \lim_{t \to \infty} EY_t \leq \inf_U E\left(\lim_{t \to \infty} Y_t\right) = v(x),$$
+as can be seen by applying Fatou's lemma to the truncated processes $Y_t \wedge m$ and taking $m \to \infty$.
+
+So we want to show that $EY_t$ is increasing. To do this, we compute
+$$e^{\alpha t} ~dY_t = X_t^2 ~dt - \alpha \overline v(X_t) ~dt + \overline v'(X_t) ~dX_t + \frac{\overline v''(X_t)}{2} ~dt$$
+using It\^o's formula.
+Thus
+$$X_t^2 - \alpha \overline v(X_t) = - \frac{2}{\alpha^2} - \frac{2}{\alpha} + 2|X_t| - ce^{\beta |X_t|},$$
+so
+\begin{align*}
+e^{\alpha t} ~dY_t &= \left(-\frac{2}{\alpha^2} - \frac{2}{\alpha} + 2|X_t| - ce^{\beta |X_t|} + \frac{c\beta^2}{2} e^{\beta|X_t|}\right) ~dt \\
+&\qquad+ \left(\frac{2}{\alpha}(X_t - \sgn X_t) + c\beta(\sgn X_t)e^{\beta|X_t|}\right)~dX_t.
+\end{align*}
+Now $\beta|X_t| < 0$ so $e^{\beta|X_t|} \in [0, 1]$.
+A direct computation shows that
+$$-\frac{2}{\alpha^2} - \frac{2}{\alpha} + 2|X_t| - c + \frac{c\beta^2}{2} \geq 0,$$
+so that covers the case that $|X_t| = 0$, while if $|X_t|$ is large then we just use the fact that
+$$-\frac{2}{\alpha^2} - \frac{2}{\alpha} + 2|X_t| > 0.$$
+I think we can show that this function has no critical points but I have thirty minutes left until I have to turn in this exam, so I omit the details, to conclude that the $dt$ term is nonnegative.
+For the $dX_t$ term, we note that as $\beta < 0$, this term can be written as $\zeta_1 X_t ~dX_t - \zeta_2 \sgn X_t ~dX_t$ where $\zeta_j > 0$.
+Now $X_t ~dX_t$ is clearly nonnegative, while $\sgn X_t ~dX_t$ is only a problem if $X_t \ll 0$, but in that case we should expect the $2|X_t| ~dt$ term to dominate everything.
+Again, I don't have time to fill in the details but this seems like what's supposed to happen.
+Anyways, $e^{\alpha t} ~dY_t \geq 0$, which implies that $EY_t$ is increasing.
+
+To complete the proof, suppose that $\overline v(x) < v(x)$.
+Thus for every stochastic control $U$,
+$$\overline v(x) < E\int_0^\infty e^{-\alpha t} X_t^2 ~dt.$$
+But $u^*$ defines a stochastic control $U^*$, namely $U^* = \sgn X$.
+According to the hint, we can solve the stochastic equation
+$$dX_t = dB_t + \sgn X_t ~dt$$
+to obtain some process $X^*$, and then we have
+$$\overline v(x) < E\int_0^\infty e^{-\alpha t} (X_t^*)^2 ~dt.$$
+Now suppose that the cost function
+$$v^*(x) = E\int_0^\infty e^{-\alpha t} (X_t^*)^2 ~dt$$
+is a $C^2$ solution of the reduced Hamilton-Jacobi-Bellman equation (\ref{reduced HJB}).
+If this is true, then we recall that the kernel of the differential operator
+$$P_\alpha(x, D) = \frac{D^2}{2} - \sgn x \cdot D - \alpha$$
+is at most two-dimensional, since $P_\alpha$ is an ordinary differential operator of order $2$.
+Thus, by variation of parameters, the only possible solutions of (\ref{reduced HJB}) are of the form $v(x) = 1_{x > 0} v_+(x) + 1_{x < 0} v_-(x)$ where $c_j,d_j$ are to be determined.
+But $v^*(x) = O(x^2 + 1)$ and $v^*$ is $C^2$, so we can repeat the derivation of $\overline v$ to conclude that $\overline v < v^* = \overline v$, a contradiction.
+
+So we must show that $v^* \in C^2$, and $v^*$ solves (\ref{reduced HJB}).
+In fact,
+$$\frac{\partial}{\partial x} (X_t^*)^2 = 2X_t^* \frac{\partial X_t^*}{\partial x} = 2X_t^*.$$
+Thus
+$$\frac{\partial^2}{\partial x^2} (X_t^*)^2 = 2.$$
+At this point I'm out of time, but I want to differentiate under the integral sign, which is legal since we will be able to show that $X^*$ has continuous sample paths, and conclude the claims.
+
+
+
+
+\end{document}
