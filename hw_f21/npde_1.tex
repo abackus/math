@@ -1,0 +1,458 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, HW 1} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Consider the method
+$$v_j^{n+1} = v_j^n + \frac{k}{h}(v^n_\ell - v^n_{\ell - 1})$$
+for the transport equation. In order for $|\hat Q| \leq 1$, should $\ell = j + 1$ or $\ell = j$?
+\end{exer}
+
+If $\ell = j + 1$ then $Q = 1 + kD_+$ while if $\ell = j$ then $Q = 1 + kD_-$. So let $Q_\pm = 1 + kD_\pm$.
+Taking the Fourier transform,
+$$\hat Q_\pm(\omega) = 1 \pm k(e^{\pm i\xi} - 1).$$
+We now simplify
+\begin{align*}
+|\hat Q_\pm(\omega)|^2 &= |1 \pm k(\cos \xi - 1 \pm i\sin \xi)|^2 \\
+&= |1 \pm k (\cos \xi - 1)|^2 + k^2 \sin^2 \xi\\
+&= 1 + k^2(\cos \xi - 1)^2 + k^2 \sin^2 \xi \pm 2k (\cos \xi - 1)\\
+&= 1 + k^2(\cos^2 \xi - 2\cos \xi + 1 + \sin^2 \xi) \pm 2k(\cos \xi - 1)\\
+&= 1 + k^2 + k - 2k \cos \xi \pm 2k(\cos \xi - 1).
+\end{align*}
+Therefore
+$$|\hat Q_+(\omega)|^2 = 1 - k + k^2$$
+and since we are interested in the case when $k \ll 1$, so in particular $k < 1$, $k^2 < k$ and hence $|\hat Q_+(\omega)|^2 < 1$.
+Meanwhile,
+$$|\hat Q_-(\omega)|^2 = 1 + 3k + k^2 - 4k \cos \xi$$
+so $|\hat Q_-(\omega)|^2 > 1$ if $\cos \xi = -1$ (say).
+Therefore we want $\ell = j + 1$.
+
+
+\begin{exer}
+Compute the truncation error $\tau^n$ for the upwind method
+$$v^{n + 1} = v^n + kD_+v^n.$$
+Can the upwind method be more accurate than the Lax-Wendroff method?
+\end{exer}
+
+Assume that $u$ solves the transport equation, so that
+$$u(x, t) = f(x + t).$$
+Plugging this into the definition of truncation error, we conclude that
+$$f(hj + (n + 1)k) - f(hj + nk) = \frac{k}{h}(f(h(j+1) - nk) - f(hj - nk)) + k\tau^n_j$$
+and hence
+$$\tau^n_j = \frac{f(hj + (n + 1)k - f(hj + nk))}{k} - \frac{f(h(j + 1) - nk) - f(hj - nk)}{h}.$$
+To first order, this is
+$$\tau^n_j = f'(hj + nk) + O(k^2) - f'(hj + nk) + O(h^2) = O(k^2 + h^2)$$
+which is comparable to the error of the Lax-Wendroff method.
+So whether the upwind method is more accurate than the Lax-Wendroff method depends on the second derivatives of $f$; in general, it's possible.
+
+\begin{exer}
+Consider the method
+$$v^{n + 1} = Qv^n$$
+where $Q = \sum_{\nu = -r}^s A_\nu(k, h) E^\nu$. Let $N$ be even and show that
+\begin{equation}\label{exer 3 concl}
+v^n_j = \frac{1}{\sqrt{2\pi}} \sum_{\omega = -N/2}^{N/2} \hat Q(\omega)^n e^{i\omega x_j} \tilde f(\omega)
+\end{equation}
+where
+\begin{equation}\label{exer 3 hyp}
+f_j = \frac{1}{\sqrt{2\pi}} \sum_{\omega = -N/2}^{N/2} e^{i\omega x_j} \tilde f(\omega)
+\end{equation}
+and $\hat Q$ is to be determined.
+\end{exer}
+
+We proceed by induction on $n$.
+If $n = 1$ then by definition of $Q$ and (\ref{exer 3 hyp}),
+$$v^1_j = Qf_j = \sum_{\nu = -r}^s A_\nu(k, h) E^\nu f_j = \frac{1}{\sqrt{2\pi}} \sum_{\omega = -N/2}^{N/2} \sum_{\nu = -r}^s A_\nu(k, h) E^\nu e^{i\omega x_j} \tilde f(\omega).$$
+But
+$$E^\nu e^{i \omega x_j} = e^{i\nu h\omega} e^{i\omega x_j}$$
+so that if we set
+$$\hat Q(\omega) = \sum_{\nu = -r}^s A_\nu(k, h) e^{i\nu h \omega},$$
+we obtain (\ref{exer 3 concl}) with $n = 1$.
+
+Now suppose that $n \geq 2$.
+In particular, by induction, $v^{n - 1}$ satisfies (\ref{exer 3 concl}) with $n$ replaced by $n - 1$.
+Then applying the $n = 1$ case with $\tilde f$ replaced by $\hat Q^{n - 1} \tilde f$ we see that $v^n$ satisfies (\ref{exer 3 concl}).
+
+\begin{exer}
+Consider the scheme
+$$(1 - \theta kD_0) v^{n + 1} = (1 + (1 - \theta)kD_0) v^n.$$
+Compute $\hat Q$ and give an explicit formula for $v^n$ in terms of (\ref{exer 3 hyp}).
+Show that this scheme is unconditionally stable if $\theta \in [0.5, 1]$.
+\end{exer}
+
+Let $A = 1 - \theta kD_0$, so $A$ is the circulant matrix of length $N + 1$ whose first row is
+$$A_1 = (1, -\theta \lambda/2, 0, \dots, 0, \theta \lambda/2).$$
+Since $A$ is circulant, the eigenvectors of $A$ are given by the Fourier transform
+$$\mathcal F(\omega) = \frac{1}{\sqrt{N + 1}} (1, e^{i\xi}, \dots, e^{iN\xi})$$
+and the eigenvalues are
+$$\mu(\omega) = 1 - i\theta \lambda \sin \xi.$$
+Similarly if $B = 1 + (1 - \theta)k D_0$, $B$ is the circulant matrix whose first row is
+$$B_1 = (1, (1 - \theta)\lambda/2, 0, \dots, 0, -(1 - \theta)\lambda/2).$$
+The eigenvalues are given by
+$$\delta(\omega) = 1 + i(1 - \theta)\lambda \sin \xi.$$
+Let $\hat A, \hat B$ be the diagonalized matrices.
+The scheme is implicitly defined by the equation
+$$Av^{n+1} = Bv^n$$
+and if we take the Fourier transform of both sides we get
+$$\tilde v^{n + 1} = \hat A^{-1} \hat B \tilde v^n.$$
+So
+$$\hat Q(\omega) = \hat A^{-1}(\omega) \hat B(\omega) = \frac{1 + i(1 - \theta)\lambda \sin \xi}{1 - i\theta \lambda \sin \xi}$$
+and hence, if $\theta \in [0, 1]$,
+$$|\hat Q(\omega)|^2 = \frac{1 + (1 - \theta)^2\lambda^2 \sin^2 \xi}{1 + \theta^2 \lambda^2 \sin^2 \xi}.$$
+If $\theta \geq 1/2$ then $\theta^2 \lambda^2 \sin^2 \xi \geq (1 - \theta)^2 \lambda^2 \sin^2 \xi$ and so the scheme is unconditionally stable.
+By the previous question,
+$$v^n_j = \frac{1}{\sqrt{2\pi}} \sum_{\omega = -N/2}^{N/2} \left(\frac{1 + i(1 - \theta)\lambda \sin \xi}{1 - i\theta \lambda \sin \xi}\right)^n e^{i\omega x_j} \tilde f(\omega).$$
+
+\begin{exer}
+Derive the linear system for the Crank-Nicholson scheme.
+\end{exer}
+
+In the notation of the previous exercise with $\theta = 1/2$, the matrix of the Crank-Nicholson system is characterized by
+\begin{align*}
+A_1 &= (1, -\lambda/4, 0, \dots, 0, \lambda/4)\\
+B_1 &= (1, \lambda/4, 0, \dots, 0, -\lambda/4).
+\end{align*}
+Here $A,B$ are circulant matrices with first row $A_1,B_1$, and the Crank-Nicholson scheme is
+$$Av^{n + 1} = Bv^n,$$
+thus $Q = A^{-1}B$.
+
+It's not part of the problem but it seemed interesting to me that the Fourier transform of the Crank-Nicholson scheme has a particularly simple form.
+In fact, the tangent half-angle formula says that
+$$\hat Q(\omega) = \exp\left(2 \atanh \left(\frac{i\lambda}{2} \sin \xi\right)\right).$$
+
+\begin{exer}
+Code the upwind scheme, the naive centered scheme, the Lax-Wendroff scheme, the Lax-Frederichs scheme, backwards Euler scheme, and the Crank-Nicholson scheme.
+With $\lambda = 1/2$, $h = 2^{-j}$, $j \in \{5, 6, 7\}$, apply these methods to the transport equation with initial data
+$$f(x) = \begin{cases} x, & x \in [0, \pi]\\
+2\pi - x, & x \in (\pi, 2\pi].
+\end{cases}$$
+Plot your solutions at time $t = 1$ and give the error in the $L^2_h$ norm with $t = 1$, $h = 2^{-7}$.
+Which methods do best?
+\end{exer}
+
+This is the truncation error's $L^2_h$-norm with $h = 2^{-7}$ and $t = 1$:
+
+\begin{center}
+\begin{tabular}{ l c r }
+  Scheme & Error \\
+  \hline
+  Upwind & $0.0175$ \\
+  Naive & $5.16 \cdot 10^8$ \\
+  Lax-Frederichs & $0.0347$ \\
+  Lax-Wendroff & $0.0101$ \\
+  Crank-Nicholson & $0.0106$ \\
+  Backwards Euler & $0.0174$
+\end{tabular}
+\end{center}
+
+The best schemes are Lax-Wendroff and Crank-Nicholson. It makes sense that Lax-Wendroff would be stronger than Lax-Frederichs, since both use vanishing viscosity, but the viscosity coefficient is smaller for Lax-Wendroff.
+I'm not sure why Crank-Nicholson is better than backwards Euler; maybe this is just an artifact of how I carried out matrix multiplication.
+
+We used the following auxiliary code:
+
+\begin{verbatim}
+% A function that takes in a vector x and returns the circulant matrix
+% whose first row is x.
+
+function A = circulant(x)
+    A = zeros(length(x), length(x));
+    for n = 1:length(x)
+        for m = 1:length(x)
+            A(n, m) = x(m);
+        end
+        x = circshift(x, 1);
+    end
+end
+
+% Modify mod to avoid off-by-one bugs
+% Intead of using 0 as a rep, uses the order k of the cyclic group as a rep
+
+function l = obob_mod(n, k)
+    l = mod(n, k);
+    if l == 0
+        l = k;
+    end
+end
+\end{verbatim}
+
+Here were our implementations of the various schemes:
+
+\begin{verbatim}
+% An implementation of an upwind scheme for the transport equation
+% on a circle.
+% f is the initial data, lambda is the ratio
+% of spatial to temporal grid sizes, T is the final time.
+
+function v = upwind_scheme(f, lambda, T)
+    h = 2 * pi/length(f); % Spatial grid size
+    k = h * lambda; % Temporal grid size
+    timesteps = round(T / k);
+
+    v = zeros(timesteps, length(f));
+
+    % Initialize v
+    for j = 1:length(f)
+        v(1, j) = f(j);
+    end
+
+    for n = 2:timesteps
+        for j = 1:length(f)
+            next = obob_mod(j + 1, length(f));
+            v(n, j) = v(n - 1, j) + lambda * (v(n - 1, next) - v(n - 1, j));
+        end
+    end
+end
+
+% An implementation of a naive central scheme for the transport equation
+% on a circle.
+% f is the initial data, lambda is the ratio
+% of spatial to temporal grid sizes, T is the final time.
+
+function v = naive_scheme(f, lambda, T)
+    h = 2 * pi/length(f); % Spatial grid size
+    k = h * lambda; % Temporal grid size
+    timesteps = round(T / k);
+
+    v = zeros(timesteps, length(f));
+
+    % Initialize v
+    for j = 1:length(f)
+        v(1, j) = f(j);
+    end
+
+    for n = 2:timesteps
+        for j = 1:length(f)
+            next = obob_mod(j + 1, length(f));
+            last = obob_mod(j - 1, length(f));
+            v(n, j) = v(n - 1, j) + lambda * (v(n - 1, next) - v(n - 1, last)) / 2;
+        end
+    end
+end
+
+% An implementation of Lax schemes for the transport equation
+% on a circle.
+% f is the initial data, lambda is the ratio
+% of spatial to temporal grid sizes, T is the final time.
+% The viscosity should be "Fred" or "Wend".
+
+function v = lax_schemes(f, lambda, type, T)
+    h = 2 * pi/length(f); % Spatial grid size
+    k = h * lambda; % Temporal grid size
+    timesteps = round(T / k);
+
+    v = zeros(timesteps, length(f));
+
+    % Initialize v
+    for j = 1:length(f)
+        v(1, j) = f(j);
+    end
+
+    for n = 2:timesteps
+        for j = 1:length(f)
+            next = obob_mod(j + 1, length(f));
+            last = obob_mod(j - 1, length(f));
+            v(n, j) = v(n - 1, j) + lambda * (v(n - 1, next) - v(n - 1, last)) / 2;
+            viscosity = (v(n - 1, next) + v(n - 1, last) - 2 * v(n - 1, j)) / 2;
+            if type == "Wend"
+                v(n, j) = v(n, j) + lambda^2 * viscosity;
+            elseif type == "Fred"
+                v(n, j) = v(n, j) + viscosity;
+            end
+        end
+    end
+end
+
+% An implementation of an implicit \theta-scheme for the transport equation
+% on a circle.
+% f is the initial data, theta is the \theta-parameter, lambda is the ratio
+% of spatial to temporal grid sizes, T is the final time.
+% Need \theta \in [0.5, 1] to get stability.
+
+function v = theta_scheme(f, theta,lambda, T)
+    h = 2 * pi/length(f); % Spatial grid size
+    k = h * lambda; % Temporal grid size
+    timesteps = round(T / k);
+
+    v = zeros(timesteps, length(f));
+
+    % Initialize v
+    for j = 1:length(f)
+        v(1, j) = f(j);
+    end
+
+    % Create the difference operator
+    x = zeros(length(f));
+    x(1) = 1;
+    x(2) = -theta * lambda/2;
+    x(length(f)) = theta * lambda/2;
+    A = circulant(x);
+    x(2) = (1 - theta) * lambda/2;
+    x(length(f)) = - (1 - theta) * lambda/2;
+    B = circulant(x);
+    Q = A\B;
+
+    for n = 2:timesteps
+        x = zeros(length(f));
+        for j = 1:length(f)
+            x(j) = v(n - 1, j);
+        end
+        x = Q * x;
+        for j = 1:length(f)
+            v(n, j) = x(j);
+        end
+    end
+end
+\end{verbatim}
+
+Finally, we called a scheme using the following code:
+
+\begin{verbatim}
+h = 2^(-7);
+x = 0:h:2 * pi;
+f = zeros(length(x),1);
+u = zeros(length(x),1); % Represents u at time 1.
+
+for j = 1:length(x)
+    if x(j) <= pi
+        f(j) = x(j);
+        u(mod(j - 1/h, length(x)) + 1) = x(j);
+    else
+        f(j) = 2 * pi - x(j);
+        u(mod(j - 1/h, length(x)) + 1) = 2 * pi - x(j);
+    end
+end
+
+v = 0; % SCHEME FUNCTION CALL HERE
+
+uapprox = v(end,:);
+
+err = sqrt(h) * norm(u - transpose(uapprox));
+
+plot(x, u, x, uapprox);
+legend({'Analytic solution', 'Numeric solution'});
+disp(err);
+\end{verbatim}
+
+
+
+\end{document}

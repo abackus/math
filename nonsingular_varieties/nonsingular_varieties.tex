@@ -1,0 +1,369 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{Nonsingular curves}
+\author{Aidan Backus}
+\date{October 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\Aff}{\mathbf A}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Olo}{\mathscr O}
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\Smooth}{\mathscr E}
+\newcommand{\Test}{\mathscr D}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{nonsingular_varieties.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\begin{abstract}
+We show that every curve is birational to a nonsingular projective curve.
+This follows Hartshorne, Chapter 1.
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+In complex analysis last semester, we proved a weaker form of the following theorem:
+
+\begin{theorem}[classification of nonsingular projective curves]
+Let $X$ be a smooth projective curve over $k$.
+There is an invariant $g \in \NN$ of $X$, called the \emph{genus} of $X$, such that:
+\begin{enumerate}
+\item $g = \dim \Omega^1(X)$ where $\Omega^1$ is the sheaf of $1$-forms with coefficients in $\Olo_X$.
+\item $g = \dim H^1(X, \Olo_X)$ (in the sense of sheaf cohomology).
+\item If $k = \CC$, then $g = \dim H^1(X^{an}, \CC)/2$ (in the sense of singular cohomology).
+\end{enumerate}
+Moreover:
+\begin{enumerate}
+\item If $g = 0$, then $X$ is isomorphic to $\PP^1$.
+\item If $g = 1$, then $X$ is an elliptic curve. Moreover, the moduli space of elliptic curves is $k$.
+\item There is an explicit threefold which is the moduli space of curves such that $g = 2$.
+\item And so on...
+\end{enumerate}
+\end{theorem}
+
+See also Chapter IV of Hartshorne.
+
+The goal of this talk is to show:
+
+\begin{theorem}
+In every birational class $[X]$ of curves there exists a unique smooth projective curve $X$.
+In fact, every smooth curve $Y$ birational to $X$ embeds in $X$.
+\end{theorem}
+
+Assuming this is true for a moment, then the classification of smooth projective curves is actually a classification of all curves modulo birationality.
+
+\section{Abstract curves}
+The definition of a scheme was based on the idea that we can study varieties up to isomorphism by understanding the regular functions on them.
+To study varieties up to birationality we need a larger class of functions (so that the notion of isomorphism is weaker), namely the rational functions.
+
+\begin{definition}
+An (abstract) \dfn{function field} $K$ (of dimension $1$) is a finitely generated field extension $k \to K$ with transcendence degree $1$.
+\end{definition}
+
+Let $K$ be the function field of a smooth curve $Y$.
+Recall from the main lecture: for every $y \in Y$ there is a natural discrete valuation
+$$v(y): K \to \ZZ$$
+where $v(y)(f)$ is the order of vanishing of $f$ at $y$ and with discrete valuation ring $\Olo_{Y, y}$.
+We always view this ring $\Olo_{Y, y}$ as a subring of the function field $K$.
+
+\begin{definition}
+If $K$ is a function field of dimension $1$, then the \dfn{abstract smooth projective curve} $C_K$ is, as a set, the set of all discrete valuation subrings of $K$.
+(We'll turn $C_K$ into a scheme later...)
+\end{definition}
+
+\begin{lemma}
+Let $X$ be a smooth curve.
+Then the map $x \mapsto \Olo_{X, x}$ is an injective map $X \to C_{K(X)}$.
+\end{lemma}
+\begin{proof}
+If $\Olo_{X,x} \subseteq \Olo_{X,y}$ as subrings of $K$, then we can choose an affine open set $U = \Spec A$ containing $\{x, y\}$ and then find maximal ideals $\mathfrak m, \mathfrak n$ with $\Olo_{X, x} = A_{\mathfrak m}$ and $\Olo_{X, y} = A_{\mathfrak n}$, thus $\mathfrak m \subseteq \mathfrak n$.
+By maximality of $\mathfrak m$ we obtain $\mathfrak m = \mathfrak n$ and hence $x = y$.
+\end{proof}
+
+Owing to the above lemma, it is natural to identify $C = C_{K(X)}$ with the ``projective completion" of $X$.
+To make this rigorous, we need to turn $C$ into a scheme; first we introduce a Zariski topology for $C$.
+The closed sets are the sets
+$$Z_f = \{x \in C: f \notin x\}.$$
+Thinking of $x$ as a point, the assumption is that $f$ does not restrict to an element of the stalk $\Olo_{C, x}$; that is, $f$ has a pole at $x$.
+Thus our closed sets will be the sets of poles of rational maps.
+But the Zariski topology on a curve is nothing more than the cofinite topology, so we need to check that the closed sets $Z_f$ are finite:
+
+\begin{lemma}
+Let $K$ be a function field.
+Then:
+\begin{enumerate}
+\item For every $f \in K$, $Z_f$ is a finite set.
+\item For every discrete valuation ring $R$ in $K$ there is a smooth affine curve $X$ such that $R$ is isomorphic to a local ring of $X$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+See Hartshorne, Lemma I.6.5; make sure to review Dedekind domains beforehand.
+\end{proof}
+
+Now we introduce the structure sheaf of $C = C_K$.
+For every open set $U \subseteq C$, write $\Olo_C(U) = \bigcap_{R \in U} R$.
+The stalks of $\Olo_C$ are local rings of affine curves, so $C$ is locally ringed.
+
+\begin{definition}
+By an \dfn{abstract smooth curve} we mean an open subset of $C_K$ for some function field $K$ of dimension $1$.
+\end{definition}
+
+Morphisms of the abstract curves $C$ will be morphisms of locally ringed spaces.
+Since quasiprojective curves are also locally ringed spaces, it makes sense to ask whether a quasiprojective curve is isomorphic to an abstract curve (in the category of locally ringed spaces).
+
+\begin{proposition}
+Every smooth quasiprojective curve is isomorphic to an abstract smooth curve according to the embedding that sends a point to its local ring.
+\end{proposition}
+\begin{proof}
+Let $K$ be the function field of the smooth quasiprojective curve $Y$ and let $U$ be the set of local rings of $Y$.
+We already showed that we have an isomorphism
+$$\varphi: Y \to U$$
+in the category of sets and we just need to show that $U$ is an abstract smooth curve and upgrade $\varphi$ to a morphism of locally ringed spaces.
+
+First we show that $U$ is open, and hence an abstract smooth curve.
+Since $C = C_K$ has the cofinite topology, a superset of any open subset of $C$ is open, so we just need to show that $U$ contains a nonempty open subset of $C$.
+Thus we can replace $Y$ by an open subset of $Y$.
+But $Y$ is quasiprojective and therefore admits an open cover by affine curves, so we may assume that $Y$ is affine, say $Y = \Spec A$.
+
+Since $Y = \Spec A$, $K$ is the field of fractions of $A$, there are $x_1, \dots, x_n$ and $f$ such that
+$$A = \frac{k[x_1, \dots, x_n]}{f(x_1, \dots, x_n)},$$
+and $U$ is the space of all discrete valuation rings of $K$ containing $A$.
+So for every $R \in U$, $A \subseteq R$ iff $x_1, \dots, x_n \in R$, and hence
+$$U = \bigcap_{i=1}^n \{R \in C: x_i \in R\} = \bigcap_{i=1}^n U_i.$$
+Now the complement of $U_i$ is finite by the previous lemma, so $U_i$ is open and hence $U$ is open.
+
+Since $U$ and $Y$ both have the cofinite topology and $\varphi$ is a bijection, it follows that $\varphi$ is a homeomorphism.
+For any $V \subseteq Y$ open, $\Olo_Y(V) = \bigcap_{y \in Y} \Olo_{Y,y}$ which is exactly the definition of $\Olo_C(\varphi(V))$, so $\varphi$ is an isomorphism of locally ringed spaces.
+\end{proof}
+
+As a consequence, $C = C_K$ is a scheme.
+In fact, if $R \in C$ then there is a smooth curve $V = \Spec A$ and a point $x \in V$ such that $R = \Olo_{X,x}$.
+So the function field of $V$ is $K$ and hence there is an open embedding
+$$\varphi: V \to K$$
+with $\varphi(x) = R$. This furnishes an open cover of $C$ by affine schemes.
+
+We now begin the proof of the converse to the above lemma.
+More precisely, we show that $C$ is isomorphic to a smooth projective curve, so open subsets of $C$ are quasiprojective.
+
+\begin{lemma}
+Let $X$ be an abstract smooth curve, $x \in X$, $Y$ a projective variety, and $\varphi: X \setminus \{x\} \to Y$ a morphism.
+Then $\varphi$ extends uniquely to $\overline \varphi: X \to Y$.
+\end{lemma}
+\begin{proof}
+By assumption $Y \subseteq \PP^n$ is closed, so by continuity if $\varphi$ extends to a map $X \to \PP^n$ then it extends to a map $X \to Y$.
+So we may assume that $Y = \PP^n$.
+
+Let $z_0, \dots, z_n$ be coordinates on $\PP^n$ and let
+$$U = \{[z] \in \PP^n: z_0, z_1, \dots, z_n \neq 0\}.$$
+If $\varphi(X \setminus \{x\}) \cap U$ is empty, then since $X$ is irreducible, there exists a hyperplane $\{x_i = 0\}$ which contains $\varphi(X \setminus \{x\})$, so we may assume that $\varphi$ actually maps into $\PP^{n - 1}$.
+However if $n = 0$ then $\PP^{n - 1}$ is empty, so after decreasing $n$ finitely many times we may assume that $\varphi$ meets $U$.
+
+Let
+$$f_{ij} = \varphi^*(z_i/z_j),$$
+which is regular on an open subset of $X$ (since $z_i/z_j$ is regular on $U$) and hence $f_{ij} \in K$.
+Let $R$ be the local ring at $x$ and $v$ its discrete valuation.
+Let $r_i = v(f_{i0})$, so that
+$$v(f_{ij}) = r_i - r_j.$$
+Let $k$ be such that $r_k$ is minimal; then
+$$v(f_{ik}) = r_i - r_k \geq r_i - r_i = 0$$
+and hence $f_{ik} \in R$; that is, $f_{ik}$ is regular in a neighborhood of $x$.
+So we can extend $\varphi$ to $\overline \varphi$ by setting
+$$\overline \varphi(x) = [f_{0k}(x), \dots, f_{nk}(x)].$$
+Then $\overline \varphi$ is the unique continuous extension of $X$.
+
+To see that $\overline \varphi$ is a morphism of locally ringed spaces, it suffices to check this on a small open set $V \ni \overline \varphi(x)$.
+First, if
+$$V_0 = \Spec k[z_0/z_k, \dots, z_n/z_k],$$
+then $\overline \varphi(x) \in V_0$ since $f_{kk}(x) = 1$.
+Also we defined $\overline \varphi$ so that $\overline \varphi^*(z_i/z_k) = f_{ik}$ which is regular in a neighborhood of $x$.
+Any function on $V$ is a localization of a function on $V_0$ and hence pulls back to a function which is regular near $x$.
+\end{proof}
+
+\begin{lemma}
+The abstract curve $C_K$ is isomorphic in the category of schemes to a smooth projective curve.
+\end{lemma}
+\begin{proof}
+Since $C = C_K$ has the cofinite topology, it is quasicompact.
+So $C$ is a quasicompact scheme and hence can be covered by finitely many affine curves $V_i$, each of which has finite complement.
+Let
+$$\varphi_i: V_i \to Y_i$$
+be the projective completion of $V_i$\footnote{that is, embed $V_i$ in $\Aff^{n_i} \subseteq \PP^{n_i}$ and take the closure of $V_i$ in $\PP^{n_i}$}.
+Since $V_i$ has finite complement, the previous lemma allows us to extend $\varphi_i$ to a morphism $\overline \varphi_i: C \to Y_i$.
+Thus we obtain a product morphism
+$$\varphi: C \to \prod_{i=1}^n Y_i.$$
+Let $Y$ be the closure in $\prod_i Y_i$ of the image of $C$, so $Y$ is a projective variety and $\varphi: C \to Y$ is dominant.
+Therefore $Y$ is a curve.
+
+We claim that $\varphi$ is an isomorphism.
+Let $x \in C$, thus there is $i$ such that $x \in V_i$. Let $\Pi_i: Y \to Y_i$ be the projection map, so that pulling back along $\Pi_i$ and then along $\varphi$, we obtain morphisms of local rings
+$$\Olo_{Y_i, \varphi_i(x)} \to \Olo_{Y, \varphi(x)} \to \Olo_{C, x}.$$
+But $\Pi_i$ and $\varphi$ are dominant so these morphisms of local rings are monomorphisms.
+Their composition is an isomorphism by definition of $Y_i$, so they must all be isomorphisms.
+In particular,
+$${\varphi_x}^* : \Olo_{Y, \varphi(x)} \to \Olo_{C, x}$$
+is an isomorphism.
+
+Let $y \in Y$. Then the localization of the integral closure of $\Olo_{Y, y}$ at a maximal ideal is a discrete valuation ring $R$ of $K$.
+So $\Olo_{Y, y}$ is contained in a discrete valuation ring $R \in C$ such that the intersection of the maximal ideal of $R$ with $\Olo_{Y, y}$ is the maximal ideal of $\Olo_{Y, y}$\footnote{In the main lecture,
+I believe we said that having a structure sheaf whose stalk consisted of discrete valuation rings was equivalent to smoothness.
+In particular, passing from $\Olo_{Y, y}$ to the discrete valuation ring $R$ amounts to taking a resolution of singularities of $Y$ at $y$.}.
+By definition, $\Olo_{Y, \varphi(R)} = R$. So by injectivity of the map that sends points to their local rings, $y = \varphi(R)$.
+Therefore $\varphi$ is surjective, and is the map that sends a point to its local ring, hence is injective.
+
+Since $\varphi$ is a homeomorphism and is stalkwise an isomorphism, $\varphi$ is an isomorphism of schemes.
+\end{proof}
+
+\begin{theorem}
+The following categories are equivalent:
+\begin{enumerate}
+\item Smooth projective curves with dominant morphisms.
+\item Quasiprojective curves with dominant rational maps.
+\item The opposite category of abstract function fields of dimension $1$ with algebra homomorphisms.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+We have a forgetful functor from smooth projective curves to quasiprojective curves, and the contravariant functor that sends quasiprojective varieties to their function fields restricts to a contravariant functor on quasiprojective curves.
+The latter is an equivalence of categories.
+
+We have just shown that for every function field $K$, the curve $C$ of discrete valuation rings of $K$ is a smooth projective curve.
+Now let $F: K_2 \to K_1$ be an algebra homomorphism.
+Since quasiprojective curves are equivalent to the opposite of abstract function fields, $F$ induces a uniquely defined dominant rational map $C_1 \to C_2$.
+Let $\varphi: U \to C_2$ be a restriction of the rational map to a dominant morphism and let
+$$\overline \varphi: C_1 \to C_2$$
+by the extension of $\varphi$ to $C_1$.
+Then $\overline \varphi$ is dominant. The fact that this extension is unique means that this assignment is functorial; that is, $K \mapsto C$, $F \mapsto \overline \varphi$ defines a contravariant functor from the opposite of abstract function fields to smooth projective curves.
+\end{proof}
+
+\section{Rational and elliptic curves}
+In these examples we assume that $k$ does not have characteristic $2$ or $3$ to save myself a headache.
+
+Let $Y$ be a smooth rational curve, for example
+$$Y = \{(x, y) \in \Aff^2: xy = 1\}.$$
+According to our main theorem, $Y$ embeds in $\PP^1$ and $K(Y) = k(x)$ whenever $x$ is an affine parameter on $\PP^1$ (so $K(Y)$ is a pure transcendental extension of $k$).
+Let
+$$\iota: Y \to \PP^1$$
+be the emebdding.
+
+If $\iota$ is surjective then $Y$ is isomorphic to $\PP^1$.
+In that case, symmetries of $Y$ correspond by our theorem to symmetries of $k(x)$.
+In complex analysis we showed that the group of symmetries of $k(x)$ is $PGL(k^2)$, namely the matrix
+$$T = \begin{bmatrix}a & b\\c & d\end{bmatrix}$$
+acts on $k(x)$: identify points of $k(x)$ with rational functions $\PP^1 \to \PP^1$, and then identify those with homogeneous maps $k^2 \to k^2$, on which $PGL(k^2)$ acts by pullback.
+Thus the symmetry group of $Y$ is $PGL(k^2)$.
+
+If $Y$ is not isomorphic to $\PP^1$ then $Y$ embeds in a proper open subset of $\PP^1$.
+But $\PP^1 = \Aff^1 \cup \{\infty\}$, so $Y$ is a closed subset of an open subset $U$ of $\Aff^1$.
+Since $Y$ is clearly not finite it follows that $Y = U$.
+
+Now suppose that instead
+$$X = \{(x, y) \in \Aff^2: y^2 = x^3 - x\}.$$
+Writing $f(x, y) = y^2 - x^3 + x$,
+$$df = (1 - 3x^2) ~dx + 2y ~dy$$
+which is nonzero on $X$, so $X$ is smooth; by definition it is affine.
+On the other hand, one can show that $y$ is irreducible in $A = k[x, y]/(f(x, y))$.
+But $X \cap \{y = 0\}$ consists of the three points $\{-1, 0, 1\}$ and hence is reducible, so $y$ is not prime and hence $A$ cannot be a UFD.
+
+Since $Y$ is an open subset of $\Aff^1$, for every open $U \subseteq Y$, $\Olo_Y(U)$ is a localization of the UFD $k[x]$ and hence is itself a UFD.
+But $Y$ was an arbitrary smooth rational curve, so $X$ is not a rational curve.
+In addition, $K(Y) = k[x, y]/(xy - 1)$ is an extension field of $K(X)$, so we get a dominant rational map $X \to Y$.
+In fact, $X$ is an elliptic curve, but we haven't proven that.
+
+Irrationality has many consequences, including:
+\begin{enumerate}
+\item There exists a dominant rational function on $X$.
+\item $K(X) = k[x, y]/(f(x, y))$ is not a pure transcendental extension of $k$.
+\item When combined with the Hodge theorem: $H^1(X^{an}, \CC)$ is nontrivial.
+\end{enumerate}
+
+
+
+
+\printbibliography
+
+
+\end{document}
