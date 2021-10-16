@@ -302,7 +302,7 @@ By applying a partition of unity, we may work in coordinates $(x_1, x')$ such th
 One can then imitate the proof of \cite[Teorema 1]{Miranda67}, replacing any integrations by parts with its analogue
 \begin{equation}
 \label{Riemannian IBP}
-\int_U (du, X) ~dV + \int_U u ~\mathcal L_XdV = \int_{\partial U} ug(X, \nu) ~dA
+\int_U (du, X) ~\vol + \int_U u ~\mathcal L_X\vol = \int_{\partial U} ug(X, \nu) ~\vol_{\partial U}
 \end{equation}
 The construction in \cite[Teorema 1]{Miranda67} shows that only the values of $u$ near $N$ affect $v$.
 %
@@ -1326,21 +1326,34 @@ to emphasize that $\omega$ is an $F$-valued Radon measure, with total variation 
 
 At this stage we have only defined $f$ as a $\mu$-equivalence class of sections of $SF$, so the pointwise value $f(x)$ makes no sense.
 So we now use a form of the Lebesgue differentiation theorem to choose the ``correct" representative.
-To state it, $N(x)$ denote the set of all triples $(g, B, \varphi)$ where $g$ is a Riemannian metric on $M$, $B$ is an open ball centered at $x$ with respect to $g$, and $\varphi$ is a trivialization of $F$ over $B$.
-Then $N(x)$ is a directed system, where the order is given by
-$$(g, B, \varphi) \leq (g', B', \varphi')$$
-if $B' \subseteq B$ and $\varphi' = \varphi|B$.
-This follows because for every $g$, the set of balls with respect to $g$ forms a fundamental system of neighborhoods based at $x$.
-Given $(g, B, \varphi) \in N(x)$, we obtain a $\mu$-measurable function $f_\varphi: B \to \CC^r$ obtained by trivializing the section $f$.
+
+Recall that a \dfn{Besicovitch cover} $\mathcal U$ of a metric space $X$ is a set of open balls, so that every $x \in X$ is the center of an element of $\mathcal U$.
+We will need a result that easily follows from \cite[\S2.8]{federer2014geometric}.
+
+\begin{proposition}[Besicovitch covering theorem]
+For every Riemannian metric $g$ on $M$ and $U \Subset M$, there exists $N \in \NN$ such that for every $x \in U$ and Besicovitch cover $\mathcal U$ of $B(x, 1/N)$, there exist $\mathcal U_1, \dots \mathcal U_N \subset \mathcal U$ such that $\bigcup_{n=1}^N \mathcal U_n$ is an open cover of $B(x, 1/N)$ and $\mathcal U_n$ is disjoint.
+\end{proposition}
+
+We call the constant $N$ the \dfn{Besicovitch number} of $g$. Note that we must restrict to balls $B(x, 1/N)$ owing to \cite{Shi91}.
+
+For each $x \in M$, let $\mathcal A(x)$ denote the set of all pairs $(g, B, \varphi)$ where:
+\begin{enumerate}
+\item $g$ is a Riemannian metric on $M$,
+\item $B$ is an open ball centered at $x$ with respect to $g$, and
+\item $\varphi$ is a trivialization of $F$ over $B$.
+\end{enumerate}
+Then $\mathcal A(x)$ is a directed system, where the order is given by reverse inclusion of balls.
+Given $(g, B, \varphi) \in \mathcal A(x)$, we obtain a $\mu$-measurable function $f_\varphi: B \to \CC^r$ obtained by trivializing the section $f$.
 We define the average
 $$f(g, B, \varphi) = \varphi^{-1}\left(\frac{1}{\mu(B)} \int_B f_\varphi ~d\mu\right),$$
 which is a point in $F_x$.
 
 \begin{proposition}[Lebesgue differentiation theorem]
 Let $\mu$ be a Radon measure on $M$, let $f \in L^1_l(M, SF, \mu)$, and let
-$$f(x) = \lim_{(g, B, \varphi) \in N(x)} f(g, B, \varphi).$$
+$$f(x) = \lim_{(g, B, \varphi) \in \mathcal A(x)} f(g, B, \varphi).$$
 Then the limit defining $f(x)$ converges for $\mu$-almost every $x \in M$ to a point in the sphere $SF_x$.
 \end{proposition}
+If $f(x)$ exists and is $\in SF_x$, we call $x$ a \dfn{Lebesgue point} of the section $f$.
 \begin{proof}
 This is obvious if $f$ has a representative in $C_c(M, SF)$; besides, by a partition of unity argument, we may assume that $\mu$ has compact support.
 We can then select $(f_n)$ in $C_c(M, SF)$ converging in $L^1(M, SF, \mu)$ and almost everywhere to $f$.
@@ -1348,27 +1361,25 @@ Setting $h_n = |f_n - f|$, we can define the average
 $$h_n(g, B) = \frac{1}{\mu(B)} \int_B h_n ~d\mu,$$
 which converges to $0$ in $L^1(M, \mu)$.
 
-If we fix $g$, then we have the Hardy-Littlewood inequality
+Fix $N \in \NN$ and let $\mathcal B_N$ be the set of Riemannian metrics with Besicovitch number $\leq N$.
+This makes sense if we restrict to a neighborhood of the compact support of $\mu$.
+For each metric $g \in \mathcal B_N$, we have the Hardy-Littlewood inequality \cite[Lemma 4.1.1a]{Ledrappier85}
 \begin{equation}\label{HardyLittlewood}
-||\sup_{r > 0} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} \lesssim_d ||h_n||_{L^1(M, \mu)}.
+||\sup_{r \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} \leq N ||h_n||_{L^1(M, \mu)}.
 \end{equation}
-The implied constant in (\ref{HardyLittlewood}) only depends on the $d$th Besicovitch number and not on $g$.
-To see this, since we are only interested in the case of $r$ small, we can work in normal coordinates with respect to $g$, centered on $x$, and then apply the Besicovitch covering lemma as in \cite[Lemma 4.1.1a]{Ledrappier85}.
-
 By (\ref{HardyLittlewood}) and the convergence $h_n \to 0$ in $L^1$,
-$$\lim_{n \to \infty} \sup_{r > 0} h_n(g, B_g(\cdot, r)) = 0$$
-in $L^{1, \infty}(M, \mu)$ uniformly in $g$ and hence
-$$\lim_{n \to \infty} \sup_g \sup_{r > 0} h_n(g, B_g(x, r)) = 0$$
-for $\mu$-almost every $x$ along a subsequence. By the triangle inequality,
-$$\lim_{n \to \infty} \sup_{(g, \varphi, r)} |f_n(g, B_g(x, r), \varphi) - f(g, B_g(x, r), \varphi)| = 0$$
-along a subsequence, which implies that $f(g, B, \varphi)$ converges $\mu$-almost everywhere to a point in $SF_x$ (since the same is true for the $f_n(g, B, \varphi)$).
+$$\lim_{n \to \infty} ||\sup_{0 \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} = 0$$
+uniformly in $g \in \mathcal B_N$.
+Therefore we may pass to a subsequence along which, for $\mu$-almost every $x$,
+$$\lim_{n \to \infty} \sup_{(g, r) \in \mathcal B_N \times (0, 1/N)} h_n(g, B_g(x, r)) = 0.$$
+By the triangle inequality, if
+$$\mathcal A_N(x) = \{(g, B, \varphi) \in \mathcal A(x): g \in \mathcal B_N\},$$
+then (after passing to a subsequence again)
+$$\lim_{n \to \infty} \sup_{(g, B, \varphi) \in \mathcal A_N(x)} |f_n(g, B_g(x, r), \varphi) - f(g, B_g(x, r), \varphi)| = 0.$$
+But $f_n(g, B, \varphi) \to f(x)$ everywhere, $f(x) \in SF_x$, and $SF_x$ is closed, so there exists a $\mu$-null set $Z_N$ such that outside of $Z_N$,
+$$\lim_{(g, B, \varphi) \in \mathcal A_N(x)} f(g, B, \varphi) \in SF_x.$$
+Taking $Z = \bigcup_{N \in \NN} Z_N$, we see that $Z$ is $\mu$-null, which was to be shown.
 \end{proof}
-
-\begin{definition}
-If $f$ is a $\mu$-measurable section of $SF$, we call $x \in M$ a \dfn{Lebesgue point} if $f(x) \in SF_x$ exists.
-\end{definition}
-
-The theorem asserts thus that $\mu$-almost every point of $M$ is Lebesgue, and that the notion of a Lebsgue point does not depend on a choice of metric or trivialization.
 
 \subsection{Differentiation and boundary}
 Let $M = (M, g)$ be a Riemannian manifold.
@@ -1409,34 +1420,31 @@ The \dfn{tangent bundle} $T\partial^* U$ to $\partial^* U$ is the kernel bundle 
 
 We prefer to work with $\normal$, rather than the normal field $\normal^\sharp$, because the latter is not metric-independent.
 Since the reduced boundary and conormal $1$-form are metric-independent, we may import any known fact about them in the euclidean case.
-See \cite[Chapters 2-4]{Giusti77} for a discussion of the euclidean case, where it is shown that the reduced boundary is either empty or has Hausdorff dimension $d - 1$.
-
-\begin{notation}
-We write
-$$|\partial^* U \cap V| = \int_V |d1_U| ~\vol$$
-for the surface area of $\partial^* U \cap V$.
-This does not collide with the notation $|U|$ for the volume of $U$, since $U$ has Hausdorff dimension $d$.
-\end{notation}
+See \cite[Chapters 2-4]{Giusti77} for a discussion of the euclidean case.
 
 \begin{proposition}\label{regularity of reduced boundary}
 Let $U$ be a Caccioppoli set.
 Then:
 \begin{enumerate}
-\item $\partial^* U$ is rectifiable with respect to the measure $E \mapsto |\partial^* U \cap E|$.
-\item $\partial^* U$ is dense in $\partial U$.
+\item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is rectifiable with respect to $d-1$-dimensional Hausdorff measure.
+\item $\partial^* U$ is dense in the measure-theoretic boundary $\partial U$.
 \item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
 \item If $\normal$ extends to a continuous $1$-form on $\partial U$ and $U$ has least perimeter, then $\partial U$ is as smooth as possible.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 The claim is local, so we can work in a small ball in which we can find a flat metric.
-The first three claims then immediately follow from their euclidean counterparts, which are given in \cite[Chapter 4]{Giusti77} or \cite{deGiorgi55}.
+The first three claims then immediately follow from their euclidean counterparts, which are given in \cite[Chapters 2-4]{Giusti77} or \cite{deGiorgi55}.
 
 To complete the proof, suppose that $\normal$ extends to a continuous $1$-form on $\partial U$ and $U$ has least perimeter.
 Let $f: \RR^{d - 1} \to M$ be a local $C^1$ parametrization of $\partial U$, so that $f$ is a minimizer of the Lagrangian $\mathscr L$ defined by (\ref{Lagrangian density}).
 But $\mathscr L$ is a regular Lagrangian in the sense of Hilbert's 19th problem, so $f$ is analytic \cite{morrey2009multiple}.
 \end{proof}
 
+\begin{notation}
+We write $|\partial^* U|$ for $\int_M |d1_U| ~\vol$.
+This does not collide with the notation $|U|$ for the volume of $U$, since $U$ has Hausdorff dimension $d$.
+\end{notation}
 
 \subsection{The coarea formula} \label{coarea section}
 Let $M = (M, g)$ be a Riemannian manifold.
@@ -1543,7 +1551,34 @@ Therefore, by Fatou's lemma,
 \end{align*}
 \end{proof}
 
+\subsection{Devil's staircases}
+We will not this material in the paper proper, but it just serves to illustrate the above general theory.
 
+\begin{definition}
+By a \dfn{Devil's staircase} in a surface $M = (M, g)$ we shall mean a rectifiable curve $\gamma: [0, 1] \to M$ such that there exist local parameters $(x, y)$ and a Lebesgue null set $Z \subseteq [0, 1]$ so that, $\partial_y \gamma = 0$ on $Z$, but the $y$-coordinate of $\gamma(t)$ increases from $0$ to $1$ as $t$ increases from $0$ to $1$.
+\end{definition}
+
+The basic example of a Devil's staircase is of course the graph of the Cantor function $F: [0, 1] \to [0, 1]$, with $Z$ the null Cantor set.
+We refer to \cite{Dovgoshey0061} for basic facts about the Cantor function.
+Let $U$ be the undergraph of $F$, so $\partial U$ is parametrized by a Devil's staircase $\gamma$.
+Since $F$ has a rectifiable graph of arc length $2$, it follows from \cite[Theorem 4.4]{Giusti77} that $|\partial^* U| = 2$, and since $\gamma([0, 1] \setminus Z) = 1$, there exist points in $\partial^* U$ where $\partial^* U$ is highly singular.
+
+In fact, the above phemonenon holds in general.
+Suppose that $\gamma$ is a Devil's staircase, which bounds an open set $U$, say from above in our given coordinates $(x, y)$.
+Then, since $\gamma$ is rectifiable, $U$ is a Caccioppoli set, say $u = 1_U \in BV_l(M)$.
+There again must exist singular points in $\partial^* U$.
+In fact, we can partition almost all of $U$ into Caccioppoli sets $V \in \mathcal V$ so that $\partial V$ is piecewise smooth, by choosing the ``top" of each $V \in \mathcal V$ to be the portion of $\gamma$ which is flat.
+If $\mu = |du| ~\vol$ is the natural Radon measure on $\gamma([0, 1])$, then for every $X \in C_c(M, TM)$,
+$$\mu(M) \geq \int_M (du, X) ~\vol$$
+and in particular this is true if $X$ is the unit inwards normal field to $U$ on an arbitrarily large subset $A$ of the smooth part $A_0$ of $\gamma$ but points right on the singular part $B$.
+Thus
+$$\mu(M) \geq \int_A (du, X) ~\vol + \int_B (du, X) ~\vol,$$
+and clearly
+$$\int_A (du, X) ~\vol = |A|.$$
+Meanwhile, we can sum over the pieces of $B$ to see that $\int_B (du, X) ~\vol$ increases as we optimize in $X$ to be the amount that the $y$-coordinate of $\gamma$ increases, namely $1$.
+Thus $\mu(M) \geq |A| + 1$, and optimizing in $|A|$ we see that $\mu(M) > |A_0|$, which proves the claim.
+
+It would be interesting to explicitly compute $\normal$ for the standard middle-thirds Cantor set.
 
 \printbibliography
 
