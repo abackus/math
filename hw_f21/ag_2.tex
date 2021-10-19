@@ -24,6 +24,7 @@
 \newcommand{\RR}{\mathbb{R}}
 \newcommand{\CC}{\mathbb{C}}
 \newcommand{\PP}{\mathbb P}
+\newcommand{\Aff}{\mathbb A}
 \newcommand{\FF}{\mathbb F}
 \newcommand{\DD}{\mathbb D}
 \renewcommand{\epsilon}{\varepsilon}
@@ -127,6 +128,61 @@
 Show that every finite morphism is proper.
 \end{exer}
 
+Let $f: X \to Y$ be a finite morphism.
+By definition, $f$ is an affine morphism of finite type.
+Every affine morphism is separated.
+To complete the proof, we need to show that every base change of $f$ is closed.
+
+\begin{lemma}
+Every base change $f': X' \to Y'$ is finite.
+\end{lemma}
+\begin{proof}
+The property of being finite is local in $Y$, so we may assume that $Y, Y'$ are affine, say $Y = \Spec A$ and $Y' = \Spec A'$.
+Then, since $f$ is affine, $X$ is affine, say $X = \Spec B$; then, if $B' = B \otimes_A A'$, $X' = \Spec B'$.
+Then $B$ is a finitely generated $A$-module, so there exist $b_1, \dots, b_n \in B$ that $A$-span $B$.
+The natural map $\varphi: A \to A'$ given by the base change $Y' \to Y$ induces elements $b_i' = \varphi(1)b_i$ in $B'$.
+To see that $b_1', \dots, b_n'$ $A'$-span $B'$, let
+$$b' = x \otimes a' \in B \otimes_A A' = B',$$
+with $x \in B$ and $a' \in A'$.
+Since $b_1, \dots, b_n$ span $B$, there exist $a_1, \dots, a_n \in A$ with $x = \sum_j a_j b_j$.
+So
+$$b' = \sum_{j=1}^n a_j b_j \otimes a' = \sum_{j=1}^n b_j \otimes \varphi(a_j) a' = \sum_{j=1}^n b_j' \otimes a_j a'.$$
+Therefore $b_1, \dots, b_n'$ $A'$-span $B'$, so $B'$ is a finitely generated $A'$-module and hence $f'$ is finite.
+\end{proof}
+
+So, it suffices to show that $f$ is closed.
+(Then every base change of $f$ will be finite and hence closed, so $f$ will be universally closed.)
+
+\begin{lemma}
+We may assume that $f$ is a morphism of affine schemes $\Spec B \to \Spec A$.
+\end{lemma}
+\begin{proof}
+Let $\mathcal U$ be an affine open cover of $Y$; then the pullback $f^* \mathcal U = \{f^{-1}(U) \subseteq X: U \in \mathcal U\}$ is an affine open cover of $X$, since $f$ is affine.
+If $X_0 \subseteq X$ is closed, then for every $V = f^{-1}(U) \in f^* \mathcal U$, $X_0 \cap V$ is closed.
+If we can show that $f$ is closed if its codomain is affine, then it will follow that $Y_0 = f(X_0)$ satisfies that $Y_0 \cap U$ is closed in $U$.
+But then $Y \setminus Y_0 = \bigcup_{U \in \mathcal U} (Y \setminus Y_0) \cap U$ is a union of open sets and therefore is open, so $f$ is closed.
+\end{proof}
+
+Let $\varphi: A \to B$ be the induced morphism of rings; then $B$ is a finitely generated $A$-module.
+Here I got stuck and peeked at \S7.2 of Vakil's big book, which told me to show:
+
+\begin{lemma}
+$\varphi$ is integral.
+\end{lemma}
+\begin{proof}
+Let $b_1, \dots, b_n$ generate $B$ as an $A$-module and let $b \in B$.
+Multiplication by $b$ defines an $A$-linear map $S: B \to B$.
+By the Cayley-Hamilton theorem, the characteristic polynomial $\chi$ of $S$ satisfies $\chi(S) = 0$, and therefore $\chi(b) = 0$.
+So $b$ is integral over $A$.
+\end{proof}
+
+Let $X_0$ be a closed subset of $X = \Spec B$.
+We want to show that $f(X_0)$ is closed, and to this end we may assume that $X = X_0$.
+Let $Y_0 = V(\ker \varphi)$, which is manifestly closed in $Y$ and satisfies $f(X) \subseteq Y_0$.
+Since $\varphi$ is integral, the inclusion map $f(X) \to Y_0$ is surjective, so $f(X) = Y_0$ is closed, as desired.
+
+I wanted extra practice with the valuative criterion, so here is an alternative proof with stronger hypotheses.
+
 Let us assume that $X, Y$ are noetherian and $f: X \to Y$ is a finite morphism.
 Suppose that $x$ is a $K$-valued point of $X$, so $f \circ x$ is a $K$-valued point of $Y$ and so its image is contained in some open affine $U \subseteq Y$.
 So there exist rings $A, B$ such that $U = \Spec B$, $f^{-1}(U) = \Spec A$, and $A$ is a finitely generated $B$-module; and in particular, we can corestrict $x$ to a $K$-valued point of $f^{-1}(U)$ and $f \circ x$ to a $K$-valued point of $U$.
@@ -151,7 +207,7 @@ R \arrow[u] & B \arrow[l, "y^\sharp"] \arrow[u,"f^\sharp"]
 We claim that in fact, the image $A'$ of $x^\sharp$ is contained in $R$.
 To see this, suppose that $a_1, \dots, a_n$ generate $A$ as a $B$-module.
 Then $x^\sharp(a_1), \dots, x^\sharp(a_n)$ generate $A'$ of $A$ as a $B$-module and hence as an $R$-module.
-So $A'$ is a finitely generated $R$-module and hence every element of $A'$ satisfies an integral relation over $R$.
+So $f^\sharp$ is integral.
 Since valuation rings are integrally closed it follows that $A' \subseteq R$.
 Thus we obtain a map filling in the diagram
 $$\begin{tikzcd}
@@ -168,9 +224,35 @@ $$\begin{tikzcd}
 \Spec K \arrow[r,"x"] \arrow[d] & X \arrow[d,"f"] \\
 \Spec R \arrow[r,"y"] \arrow[ur,"\overline x"] & Y
 \end{tikzcd}$$
-It remains to show that $\overline x$ is unique.
-This amounts to showing that $f$ is separated, and that amounts to showing that $f$ is locally separated, thus we may assume $Y = \Spec B$.
-But $f$ is affine, so then $X = \Spec A$ and thus $f$ is the spectrum of a morphism of rings.
-Therefore $f$ is separated.
+Since $f$ is separated, this diagram uniquely defines $\overline x$.
+
+\begin{exer}[4.3]
+Let $X \to S$ be a separated scheme over an affine scheme.
+Let $U, V \subseteq X$ be open affine schemes.
+Show that $U \cap V$ is affine, but that this hypothesis requires $X$ to be separated.
+\end{exer}
+
+We first show that we need to assume $X$ separated.
+Let $Y$ be the disjoint union of two affine planes $U, V \cong \Aff^2$ over $\CC$.
+We put an equivalence relation $R$ on $Y$ by declaring $u \cong v$ if $u = v$ as an element of $\Aff^2$ and $u,v \neq 0$.
+Then $X = Y/R$ is a scheme, since every point of $X$ either is contained in $U$ or $V$, both of which are affine.
+But $U \cap V$ is a punctured plane.
+
+There's a cute way to see that punctured planes are not affine using complex analysis, but I suppose this could probably be translated into purely algebraic language.
+Suppose that there exists an affine punctured plane $Z$, so there exists a regular function $f: Z \to \Aff^1$ which does not extend to $\Aff^2$.
+Taking the restriction of $f$ to any affine open subset $W$ of $Z$ gives a regular function $f_W$ on $W$, but regular functions on open subsets of $\Aff^2$ are actually just rational functions in the complex-analytic sense, and so $f_W$ induces a holomorphic function $f^{an}_{W^{an}}$ on some open subset $W^{an}$ of $\CC^2$.
+The $W^{an}$ form an open cover of $\CC^2 \setminus \{(0, 0)\}$, so the $f^{an}$ glue to a holomorphic function
+$$f^{an}: \CC^2 \setminus \{(0, 0)\} \to \CC.$$
+Now $\{(0, 0)\}$ is compact and $\CC^2$ has complex dimension $\geq 2$, so $f^{an}$ has a Hartogs extension $f^{an}: \CC^2 \to \CC$, which must still be a polynomial since the $f^{an}_{W^{an}}$ were.
+Therefore $f$ both extends and does not extend to $\Aff^2$.
+
+Now assume that $X \to S$ is separated.
+Then the diagonal morphism over $U \times_S V$ is
+$$\delta: U \cap V \to U \times_S V.$$
+By assumption, $\delta$ is a closed immersion. Since $U,S,V$ are all affine,
+$$U \times_S V = \Spec(\Olo_U(U) \otimes_{\Olo_S(S)} \Olo_V(V))$$
+is affine. Therefore $U \cap V$ is affine.
+
+
 
 \end{document}

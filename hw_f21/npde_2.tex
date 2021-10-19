@@ -1,0 +1,390 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\TT}{\mathcal T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, HW 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $u$ be a solution to the heat equation on the circle.
+What function does $u$ tend to as $t \to \infty$?
+\end{exer}
+
+In fact, $u$ converges to the mean $\hat f(0)$ of $f$. To see this, we use the Fourier multiplier
+$$e^{t\Delta} = e^{-t\xi^2}$$
+to see that
+\begin{equation}\label{heat equation in Fourier space}
+\hat u(t, \xi) = e^{-t\xi^2} \hat f(\xi).
+\end{equation}
+Solutions to the heat equation are smooth for all positive time, so after replacing $f$ with $u(\varepsilon, \cdot)$ if necessary, we may assume that $f$ is smooth.
+Then
+$$||\hat f||_{\ell^\infty} \lesssim ||f||_{L^1} \lesssim ||f||_{L^\infty} < \infty$$
+since the circle is compact.
+Therefore
+$$|u(t, \xi)| \lesssim e^{-t\xi^2}$$
+whenever $\xi \neq 0$, so all the Fourier modes of $u$ except the zero mode vanish.
+Meanwhile,
+$$\hat u(t, 0) = \hat f(0).$$
+I could probably show that the convergence is in a particularly strong topology but the question is not asking that.
+
+\begin{exer}
+Show that $||\partial^k u(\cdot, t)||$ is bounded for every $k$ and $t > 0$.
+\end{exer}
+
+Using the Fourier multiplier (\ref{heat equation in Fourier space}) we see that
+$$|\widehat{\partial^k u}(\cdot, t)|(\xi) = e^{-t\xi^2} |\xi|^k |\hat f(\xi)|.$$
+Thus
+$$||\partial^k u(\cdot, t)||_{L^2}^2 = \sum_\xi e^{-2t\xi^2} |\xi|^{2k} |\partial f(\xi)|^2.$$
+I assume that this bound is not uniform as $k \to \infty$, since if $|\hat f(2)| \gg 1$ then $2^k \gg e^{-4t}$ for $t \ll 1$ and $k \gg 1$ (say).
+Alternatively it could be uniform in $k$ but not as $t \to 0$.
+Either way, the function $e^{-t\xi^2} |\xi|^k$ tends to $0$ as $\xi \to \infty$, so it has a maximum $M_k(t)$ (which can be taken uniform in $k$ or uniform in $t$, but not both).
+Then
+$$||\partial^k u(\cdot, t)||_{L^2} \leq M_k(t) ||f||_{L^2}$$
+as desired.
+
+\begin{exer}
+Consider the Crank-Nicholson method for the heat equation,
+\begin{equation}\label{CrankNicholson}
+(1 - \frac{k}{2}D_+D_-)v^{n+1} = (1 + \frac{k}{2}D_+ D_-) v^n.
+\end{equation}
+Prove that the method is unconditionally stable.
+Bound the truncation error.
+Is it better than the Euler method?
+\end{exer}
+
+Since $\partial_t - \Delta$ is a constant-coefficient operator, we may derive from the ansatz $f_j = e^{i\omega x_j}$ that for every $m \in \NN$,
+$$v^m_j = e^{i\omega x_j} \hat v^m(\omega)$$
+where $\hat v^m(\omega)$ is to be determined. That is,
+$$\hat v^{n + 1}(\omega) (1 - \frac{k}{2} D_+ D_-) e^{i\omega x_j} = \hat v^n(\omega) (1 + \frac{k}{2} D_+ D_-) e^{i\omega x_j}.$$
+Now
+$$D_+D_- e^{i\omega x_j} = D_+ \frac{e^{i\omega x_j} - e^{i\omega x_{j - 1}}}{h} = \frac{e^{i\omega x_{j + 1}} - 2e^{i\omega x_j} + e^{i\omega x_{j - 1}}}{h^2}$$
+and thus
+$$\hat v^{n+1}(\omega)(1 - \frac{k}{2h^2}(e^{i\omega h} + e^{-i\omega h} - 2)) = \hat v^n(\omega)(1 + \frac{k}{2h^2}(e^{i\omega h} + e^{-i\omega h} - 2)).$$
+But, if $\xi = \omega h$,
+$$e^{i\omega h} + e^{-i\omega h} - 2 = 2 \cos \xi - 2 = -4 \sin^2(\xi/2).$$
+This gives
+$$\hat v^{n+1}(\omega)(1 + \frac{2k}{h^2} \sin^2(\xi/2)) = \hat v^n(\omega)(1 - \frac{2k}{h^2} \sin^2(\xi/2)).$$
+Since $f$ was an arbitrary Fourier mode, it follows that if
+$$Q = (1 - \frac{k}{2} D_+ D_-)^{-1} (1 + \frac{k}{2} D_+ D_-),$$
+then, with $\alpha = 2k/h^2$,
+$$\hat Q(\omega) = \frac{1 - \alpha \sin^2(\xi/2)}{1 + \alpha \sin^2(\xi/2)}.$$
+Since $\alpha \sin^2(\xi/2) > 0$, $|\hat Q(\omega)| \leq 1$ as desired.
+
+We now investigate the truncation error.
+Suppose that $u$ actually solves the heat equation; then $u$ is smooth for all positive time.
+We can rewrite (\ref{CrankNicholson}) as
+$$\frac{v^{n + 1} - v^n}{k} = \frac{D_+ D_-}{2}(v^n + v^{n + 1}).$$
+Taylor expanding the left-hand side with $u = v$,
+$$\frac{u^{n + 1} - u^n}{k} = \partial_t u(t_n) + \frac{k}{2} \partial^2_t u(t_n) + O(k^2).$$
+Now we Taylor expand
+$$\frac{u^n + u^{n + 1}}{2} = \frac{u(t_n) + u(t_{n + 1})}{2} = u(t_n) + \frac{k\partial_t u(t_n) + O(k^2)}{2} = u^n - \frac{k}{2}\partial_x^2 u^n + O(k^2)$$
+since $u$ solves the heat equation.
+Applying $D_+ D_-$,
+$$\frac{D_+ D_-}{2}(u^n + u^{n + 1}) = D_+ D_- (u^n - \frac{k}{2}\partial_x^2 u^n + O(k^2))$$
+and
+$$D_+ D_- u^n = \partial^2_x u^n + 2h^2 \partial^4_x u^n + O(h^3)$$
+while
+$$D_+ D_- (-\frac{k}{2} \partial_x^2 u^n) = -\frac{k}{2} \partial_x^4 u^n + O(h^2k)$$
+Summing up,
+$$\frac{D_+ D_-}{2}(u^n + u^{n + 1}) = \partial_x^2 u^n + (2h^2 - \frac{k}{2}) \partial_x^4 u^n + O(h^2k + h^3)$$
+and hence
+$$\partial_t u^n + \frac{k}{2} \partial_t^2 u^n = \partial_x^2 u^n + (2h^2 - \frac{k}{2}) \partial_x^4 u^n + O(h^2k + h^3 + k^2).$$
+Applying the heat equation property again, lots of terms drop out and just leave the truncation error
+$$\tau^n = 2h^2 \partial_x^4 u^n + O(h^2k + h^3 + k^2) = O(h^2 + k^2).$$
+
+This method is clearly better than forwards Euler because it is unconditionally stable, and is comparable to backwards Euler, which has truncation error $O(h^2)$.
+
+\begin{exer}
+Write code for the backwards Euler, Crank-Nicholson, forward Euler, and Dufort-Frankel methods.
+Choose the initial condition $f(x) = x - \pi$.
+Fix $k/h = 1/3$, $k/h^{3/2} = 1/3$ and then $k/h^2 = 1/3$.
+
+First take the ``exact solution" obtained from the Crank-Nicholson method with $h = 1/500$, $k/h^2 = 1/3$.
+Compare to all four methods with $h = 1/100$ up to time $T = 2$.
+Compare the error at time $T = 2$ from these approximations to the ``exact solution".
+\end{exer}
+
+
+
+\begin{exer}
+Consider the viscid Burgers equation
+$$\partial_t + (u^2/2)_x = \eta u_{xx}$$
+on the circle.
+
+Consider the fully implicit method
+$$(1 - \eta k D_+ D_-) v_j^{n + 1} = v_j^n + \frac{\lambda}{2} v_j^n(v_{j+1}^{n+1} - v_{j-1}^{n+1})$$
+where $\lambda = k/h$, and the semi-implicit method
+$$(1 - \eta k D_+ D_-) v_j^{n + 1} = v_j^n + \frac{\lambda}{2} v_j^n(v_{j+1}^n - v_{j-1}^n).$$
+Test these methods with $\lambda = 1/3$, $h = 1/100$, $\eta = 1$, $T = 50$, $f(x) = x - \pi$.
+Now try again with $\eta = .005$.
+Which method was faster? Did either do good with $\eta = .005$?
+\end{exer}
+
+We can rewrite the fully implicit method as
+$$(1 - \eta k D_+ D_-) v^{n + 1} = v^n + k v^n D_0 v^{n+1}.$$
+and the semi-implicit method as
+$$(1 - \eta k D_+ D_-) v^{n + 1} = v^n + k v^n D_0 v^n.$$
+Inverting these quasilinear systems we get
+$$v^{n + 1} = (1 - \eta k D_+ D_- - k v^n D_0)^{-1} v^n$$
+in the implicit case and
+$$v^{n + 1} = (1 - \eta k D_+ D_-)^{-1}(1 + kv^n D_0) v^n$$
+in the semi-implicit case.
+This means that we can write the code:
+
+\begin{verbatim}
+% A script that runs a semiimplicit and an implicit method on the Burgers
+% equation.
+h = 1/100;
+T = 50;
+k = 1/300;
+eta = 1;
+x = transpose(0:h:2*pi);
+f = x - pi;
+D = center_diff(length(f));
+Laplace = right_diff(length(f)) * left_diff(length(f));
+
+% Comment the next line out when using the implicit method
+inverse = inv(eye(length(f)) - eta * k * Laplace);
+
+u = f;
+for i=1:round(T/k)
+    % u = (eye(length(f)) - eta * k * Laplace - k * diag(u) * Laplace) \ u; % Implicit
+    u = inverse * (eye(length(f)) + k * diag(u) * Laplace) * u; % Semi-implicit
+end
+\end{verbatim}
+
+Using the \texttt{tic} and \texttt{toc} features of MATLAB I was able to determine that with $\eta = 1$, the semi-implicit method took $257.7$ seconds while the implicit method took $243.6$ seconds.
+This might seem surprising until one realizes that the semi-implicit method requires us to multiply \texttt{inverse} by \texttt{eye(length(f)) + k * diag(u) * Laplace} every time.
+There might be some clever way to rewrite the equation to avoid this matrix multiplication but I don't see how to do it.
+Weirdly though, the implicit method seems to have introduced some nonsmoothness, even though numerically their answers are pretty much the same. See my attached graphs.
+
+For the case $\eta = .005$, the implicit method took $242.2$ seconds, but the semi-implicit method blew up after a few seconds.
+I guess the semi-implicit method is unstable somehow, maybe because of all the matrix multiplications it has to do.
+
+\begin{exer}
+For the transport equation, write the method of lines using $Q_6$.
+
+Write down a fully discrete scheme for the above using Runge-Kutta $4$.
+
+Implement the above scheme with $f(x) = x - \pi$.
+Choose $k/h = 1/3$ and $h = 1/100$ and plot the solution at $T = 1$.
+Repeat with $Q_4$ instead of $Q_6$.
+\end{exer}
+
+The method of lines with $Q_6$ is
+$$v'_j(t) = D_0 v_j(t) - \frac{h^2}{6} D_0 D_+ D_- v_j(t) + \frac{h^4}{30} D_0 (D_+ D_-)^2 v_j(t).$$
+In terms of Runge-Kutta $4$, we exploit the fact that this is a linear system of ODE to avoid the complicated Runge-Kutta formula and just use the exponential formula.
+That is,
+$$v^{n+1} = \sum_{\ell=0}^4 \frac{k^\ell}{\ell!} \left(D_0 - \frac{h^2}{6} D_0 D_+ D_- + \frac{h^4}{30} D_0 (D_+ D_-)^2\right)^\ell v^n.$$
+
+My code for this is:
+\begin{verbatim}
+% A script that runs the method of lines and RK4 on a transport equation.
+h = 1/100;
+T = 1;
+k = 1/300;
+x = transpose(0:h:2*pi);
+f = x - pi;
+D = center_diff(length(f));
+Laplace = right_diff(length(f)) * left_diff(length(f));
+% Q = D - (h^2/6) * D * Laplace + (h^4/30) * D * Laplace^2; % Q_6
+Q = D - (h^2/6) * D * Laplace; % Q_4
+
+% save time pre-doing all the matrix multiplication
+Q2 = Q^2;
+Q3 = Q^3;
+Q4 = Q^4;
+
+u = f;
+for i=1:round(T/k)
+    u = u + k * Q * u + (k^2/2) * Q2 * u + (k^3/6) * Q3 * u + (k^4/24) * Q4 * u;
+end
+
+plot(x, f, x, u);
+\end{verbatim}
+
+I have attached the plots. Note that they are pretty similar, and have some really bad Gibbs oscillation after the jump discontinuity.
+I guess this is because this higher-order method is not in general stable?
+
+\begin{exer}
+Consider the wave equation $(\partial_t^2 - c^2 \partial_x^2)u = 0$ with $u(0) = f$, $\partial_t u(0) = g$, on the circle.
+Implement the leapfrog method and the Newmark method
+\begin{align*}
+w^{n+1} &= w^n + \frac{kc^2}{2} D_+ D_-(u^{n + 1} + u^n)\\
+w^{n+1} + w^n &= \frac{2}{k}(u^{n + 1} - u^n)\\
+u^0 &= f\\
+w^0 &= g.
+\end{align*}
+Take $c = 1$, $f = \sin$, $g = \cos$, $T = 1$, $h = 1/100$.
+Suppose $k/h = 1/2$ or $k/h = 2$.
+Which method does better?
+\end{exer}
+
+My code for the leapfrog method is
+\begin{verbatim}
+function u = leapfrog(f, g, T, k, c)
+    P = 2 * eye(length(f)) + k^2 * c^2 * right_diff(length(f)) * left_diff(length(f));
+    prev = f;
+    curr = f + k * g;
+    for i=1:(round(T/k) - 1)
+        next = P * curr - prev;
+        prev = curr;
+        curr = next;
+    end
+    u = curr;
+end
+\end{verbatim}
+For the Newmark method, we introduce the ``weighted Laplacian"
+$$P = \frac{kc^2 D_+ D_-}{4}$$
+so it is easy to see that
+$$w^{n + 1} = P(u^{n + 1} + u^n) + \frac{u^{n + 1} - u^n}{k}.$$
+To extract $u^{n + 1}$ we plug the above into the equation
+$$w^{n + 1} = w^n + 2P(u^{n + 1} + u^n)$$
+to recover
+$$kP(u^{n + 1} + u^n) + u^{n + 1} - u^n = kw^n + 2kP(u^{n + 1} + u^n).$$
+Thus
+$$u^{n + 1} = u^n + kw^n + kP(u^{n + 1} + u^n)$$
+or in other words
+$$(1 - kP)u^{n + 1} = kw^n + (1 + kP)u^n$$
+which together gives the implicit scheme
+\begin{align*}
+(1 - kP)u^{n + 1} &= kw^n + (1 + kP)u^n \\
+w^{n + 1} &= P(u^{n + 1} + u^n) + \frac{u^{n + 1} - u^n}{k}\\
+u^0 &= f\\
+w^0 &= g.
+\end{align*}
+Thus we can code the Newmark method as
+\begin{verbatim}
+function u = newmark(f, g, T, k, c)
+    P = k * (c^2)/4 * right_diff(length(f)) * left_diff(length(f));
+    u = f;
+    w = g;
+    Q = k * inv(eye(length(f)) - k * P);
+    R = (eye(length(f)) - k * P) \ (eye(length(f)) + k * P);
+    for i=1:(round(T/k) - 1)
+        u_next = Q * w + R * u;
+        w = P * (u_next + u) + (1/k) * (u_next - u);
+        u = u_next;
+    end
+end
+\end{verbatim}
+
+\end{document}
