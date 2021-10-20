@@ -1,0 +1,211 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title[Geodesic laminations by minimal currents]{Geodesic laminations by minimal currents}
+\author{Aidan Backus}
+\date{July 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\Ric}{\mathrm{Ric}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+% style=alphabetic
+\usepackage[backend=bibtex,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{topics.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Measure theory}
+Fix a smooth manifold $M$.
+
+\begin{definition}
+Let $F$ be a normed complex vector bundle of finite rank over $M$.
+A \dfn{$F$-valued Radon measure} is a continuous linear functional on $C_c(M, F')$.
+The \dfn{sphere bundle} $SF$ is $\{(x, v) \in F: |v| = 1\}$, which we also identify with $(F \setminus \{0\})/\RR^+$.
+\end{definition}
+
+\begin{lemma}[Riesz-Markov representation theorem]
+Let $\omega$ be an $F$-vaulued Radon measure and $\mu$ the total variation of $\omega$.
+Then there exists a $\mu$-measurable section $f$ of $SF$ such that for every $X \in C_c(M, F')$,
+$$\langle \omega, X\rangle = \int_M (f, X) ~d\mu.$$
+Furthermore, $f$ does not depend on the norm of $F$, and is defined $\mu$-almost everywhere.
+\end{lemma}
+\begin{proof}
+Just use classical Riesz-Markov and check the transition functions.
+\end{proof}
+
+\begin{lemma}[Lebesgue differentiation theorem]
+Let $\mu$ be a Radon measure on $M$, $f \in L^1_{loc}(M, SF, \mu)$, and
+$$f(x) = \lim_{(g, B, \varphi)} \varphi^{-1}\left(\frac{1}{\mu(B)} \int_B f_\varphi ~d\mu\right)$$
+where $(g, B, \varphi)$ ranges over the directed system of Riemannian metrics $g$, $g$-balls $B$, and trivializations $\varphi$ over $B$ of $F$.
+Then $f(x)$ exists $\mu$-almost everywhere.
+\end{lemma}
+\begin{proof}
+Restrict to those metrics $g$ whose Besicovitch number is $\leq N$ on balls of radius $1/N$, and show that this is true for those metrics using the Hardy-Littlewood maximal inequality.
+Then take $N \to \infty$; since $\NN$ is countable, the exceptional set is still null.
+\end{proof}
+
+The point is that the choice of trivialization and the choice of metric don't affect $f$.
+
+For our next few results, choose a metric $g$.
+
+\begin{lemma}[trace theorem]
+Let $U$ be an open set, $N = \partial U$ Lipschitz.
+Then for every $u \in BV_{loc}(M)$ there exists $v \in L^1_{loc}(N)$ such that for every $X \in C_c(M, TM)$,
+$$\int_U (du, X) ~\vol + \int_U u ~\mathcal L_X\vol = \int_N vg(X, \normal) ~\vol_N.$$
+\end{lemma}
+\begin{proof}
+Diffeomorphism invariance, or copy the euclidean proof verbatim.
+\end{proof}
+
+\begin{definition}
+Let $U$ be a Caccioppoli set, $\omega = d1_U ~\vol$, and write $\omega = \normal \mu$ where $\mu$ is the total variation of $\omega$, since $\omega$ is a $T'M$-valued Radon measure.
+The \dfn{reduced boundary} $\partial^* U$ is the set of points $x$ with $|\normal(x)| = 1$.
+The \dfn{conormal $1$-form} to $\partial^* U$ is $\normal$.
+\end{definition}
+
+From the Lebesgue differentiation theorem it is obvious that $\normal$ and $\partial^* U$ are diffeomorphism-invariant.
+
+\begin{lemma}
+If $U$ is Caccioppoli then $\partial^* U$ is empty or $d-1$-dimensional, is $d-1$-rectifiable, and is dense in $\partial U$.
+If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial U = \partial^* U$ is $C^1$.
+\end{lemma}
+\begin{proof}
+Diffeomorphism invariance.
+\end{proof}
+
+\begin{lemma}[coarea formula]
+Let $u \in BV_{loc}(M)$, $E_y = \{u > y\}$, $\omega(y) = d1_{E_y} ~\vol$, $\mu$ the total variation of $du ~\vol$.
+Then
+$$\mu = \int_{-\infty}^\infty |\omega(y)| ~dy.$$
+Here the integral is meant in the Bochner sense on the space of $T'M$-valued Radon measures.
+\end{lemma}
+\begin{proof}
+Modify the proof of the euclidean case slightly.
+\end{proof}
+
+
+\end{document}
