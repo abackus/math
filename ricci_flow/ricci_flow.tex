@@ -1,0 +1,248 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{Ricci flow}
+\author{Aidan Backus}
+\date{December 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\Ric}{\mathrm{Ric}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+% style=alphabetic
+\usepackage[backend=bibtex,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{ricci_flow.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\begin{abstract}
+Notes on Ricci flow, based on Terry Tao's notes on the Poincar\'e conjecture
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Connections}
+Fix a smooth manifold $M$.
+
+\begin{definition}
+Let $V$ be a vector bundle. A \dfn{connection} on $V$ is the data of a \dfn{covariant derivative} $\nabla_X f$, a section of $V$,
+for every vector field $X$ on $M$ and every section $f$ of $V$, such that
+\begin{enumerate}
+\item $(X, f) \mapsto \nabla_X f$ is bilinear.
+\item If $\lambda$ is a scalar field then we have the \dfn{Leibniz rule}
+$$\nabla_X(\lambda f) = \lambda \nabla_X f + (X\lambda)f.$$
+\item If $\lambda$ is a scalar field then
+$$\nabla_{\lambda X + Y} f = \lambda \nabla_X f + \nabla_Y f.$$
+\end{enumerate}
+An \dfn{affine connection} is a connection on $TM$.
+\end{definition}
+
+Note that every connection on $V$ also acts on all tensor powers of $V$, simply by declaring that the Leibniz rule be true and observing that we have a natural multiplication map
+$$V^{\otimes k} times V^{\otimes \ell} \to V^{\otimes (k + \ell)}.$$
+In particular, since the trivial bundle is $V^{\otimes 0}$, every connection acts on scalar fields.
+
+If we have a fixed (possibly abstract) frame $\partial$, we write $\nabla_\beta = \nabla_{\partial_\beta}$.
+
+\begin{definition}
+Let $\nabla$ be an affine connection in a fixed frame $\partial$.
+The \dfn{Christoffel symbols} of $\nabla$ are defined by
+$$\Gamma^\alpha_{\beta\gamma} = \partial^\alpha \nabla_\beta \partial_\gamma.$$
+\end{definition}
+
+Since the Christoffel symbols depend on a choice of frame, they do not define a tensor field on $M$.
+On the other hand, the Christoffel symbols determine $\nabla$.
+It is clear that they are given by $d^3$ scalar fields, where $d$ is the dimension of $M$.
+
+If $\nabla$ is an affine connection, we have
+$$(\nabla_X Y)^\alpha = \nabla_X (Y^\alpha) + \Gamma^\alpha_{\beta\gamma} X^\beta Y^\gamma.$$
+
+\begin{definition}
+A connection $\nabla$ is \dfn{torsion-free} if
+$$[X, Y] = \nabla_X Y - \nabla_Y X.$$
+\end{definition}
+
+\begin{definition}
+Let $\nabla$ be a connection on $V$.
+If for every $X$, $\nabla_X f = 0$, then $f$ is \dfn{parallel} to $\nabla$.
+\end{definition}
+
+It follows from the definitions that $\nabla$ is torsion-free iff every scalar field is parallel to $[\nabla_\alpha, \nabla_\beta]$.
+However, it does not follow (thanks to the Leibniz rule) that this holds for tensor fields, so our next definition makes sense.
+
+\begin{definition}
+If $\nabla$ is a torsion-free affine connection, its \dfn{curvature} is the tensor field
+$$R(X, Y) = [\nabla_X, \nabla_Y] - \nabla_{[X, Y]}$$
+where $R(X, Y)$ is viewed as acting on vector fields; equivalently,
+$$R^\delta_{\alpha\beta\gamma} X^\gamma = [\nabla_\alpha, \nabla_\beta] X^\delta.$$
+The connection $\nabla$ is \dfn{flat} if its curvature vanishes.
+\end{definition}
+
+\begin{theorem}[Levi-Civita]
+For every Riemannian metric $g$ there exists a unique torsion-free affine connection $\nabla$ such that $g$ is parallel to $\nabla$.
+\end{theorem}
+\begin{proof}
+It suffices to specify the Christoffel symbols
+$$\nabla_i \partial_j = \Gamma^{\ell}_{ij} \partial_\ell$$
+and show they are uniquely defined.
+The torsion-free condition imposes $\nabla_{\partial_i} \partial_j = \nabla_{\partial_j} \partial_i$, and this imposes the symmetry
+$$\Gamma_{ij}^\ell = \Gamma_{ji}^\ell.$$
+Writing out the condition that $g$ is parallel gives
+$$\partial_k g_{ij} = \Gamma^\ell_{ki} g_{\ell j} + \Gamma^m_{kj} g_{im}.$$
+Solving these equations gives the unique solution
+$$2\Gamma^\ell_{ij} = (g_{jk,i} - g_{ij,k} + g_{ik,j})g^{k\ell}$$
+which was desired.
+\end{proof}
+
+If $\nabla$ is the above connection, we can define $\nabla^\alpha = g^{\alpha\beta} \nabla_\beta$, which causes no trouble since $\nabla$ commutes with $g$.
+
+\begin{definition}
+The \dfn{Levi-Civita connection} $\nabla$ on a Riemannian manifold $(M, g)$ is the unique torsion-free affine connection to which $g$ is parallel.
+The \dfn{Riemann curvature tensor} $\Riem$ of $g$ is the curvature of $\nabla$.
+The \dfn{Laplace-Beltrami operator} is the differential operator
+$$\Delta = \nabla_\alpha \nabla^\alpha.$$
+The metric $g$ is \dfn{flat} if $\nabla$ is flat.
+\end{definition}
+
+Since the Levi-Civita connection is the canonical connection to use on a Riemannian manifold we will just implicitly refer to it.
+In fact we write
+$$f_{;\alpha} = \nabla_\alpha f$$
+whenever $f$ is a tensor field.
+
+\begin{theorem}[Bianchi identities]
+One has
+$$\Riem^\gamma_{\alpha \beta \delta} + \Riem^\gamma_{\beta\delta\alpha} + \Riem^\gamma_{\delta\alpha\beta} = 0$$
+and
+$$\Riem^\mu_{\alpha\beta\delta;\mu} + \Riem^\gamma_{\mu\alpha\delta;\beta} + \Riem^\gamma_{\beta\mu\delta;\alpha} = 0.$$
+\end{theorem}
+
+
+
+
+\printbibliography
+
+
+\end{document}
