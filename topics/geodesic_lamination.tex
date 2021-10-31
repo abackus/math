@@ -956,7 +956,119 @@ One can show that just to show the existence of a (possibly singular) tangent co
 This just requires a slight modification of our argument to show that $(u_t)$ is bounded in $BV_l$, as in the proof of \cite[Theorem 9.3]{Giusti77}.
 However, we will never need this fact.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{de Giorgi's lemma}
+lalalala... impose coordinates...
+
+\subsection{Approximation by harmonic functions}
+Our goal in this subsection is to prove the following proposition.
+
+\begin{proposition}[bootstrapping $C^1$ minimal hypersurfaces]
+\label{bootstrap C1}
+Let $(L_n)$ be a sequence of Caccioppoli sets in $M$ with $C^1$ boundary, $(\beta_n) \subseteq \RR$, and suppose that
+$$\Lambda(L_n, B(x_n, \rho_n)) \leq \beta_n.$$
+If
+$$\lim_{n \to \infty} \inf_{\partial L_n \cap B(x_n, \rho_n)} (\normal_{L_n})_d(x_n) = 1,$$
+then
+$$\limsup_{n \to \infty} \Lambda(L_n, B(x_n, \rho_n/2)) \leq \frac{\beta_n}{2^{d + 1}}.$$
+\end{proposition}
+
+\subsection{Regularizing the boundary}
+Throughout this section we suppose that de Giorgi's lemma is false, and work towards constructing a counterexample to Proposition \ref{bootstrap C1}.
+From our contradiction assumption, we have:
+
+\begin{assumption} \label{contradict DGL}
+There exists a sequence of sets $(E_n)$ of least perimeter in $M$ and $\rho_n \to 0$ such that, if
+$$\gamma_n = \Lambda(E_n, B(x_n, \rho_n)),$$
+then
+\begin{equation}\label{contradict DGL bootstrap}
+\gamma_n \ll \rho_n^{d - 1},
+\end{equation}
+and for every $n \in \NN$,
+\begin{equation}\label{contradict DGL eqn}
+\Lambda(E_n, B(x_n, \rho_n/2)) \geq \frac{\gamma_n}{2^d}.
+\end{equation}
+\end{assumption}
+
+To violate Proposition \ref{bootstrap C1}, we need to mollify the singular hypersurfaces $\partial E_n$ in a neighborhood of $x_n$.
+Due to our uniform bound on $g$ and TODO: injectivity radius estimates... pass to a subsequence... ROTATE, to assume
+$$\int_{B(x_n, \rho_n)} d1_{E_n}~\vol = (0, 0, \dots, 0, c_d)$$
+TODO we may assume that $\rho_n$ is so small that we can find polar coordinates
+$$\varphi_n: B(x_n, \rho_n) \to \RR_+ \times S^{d - 1}$$
+which satisfy Gauss' lemma, and we write
+$$F_n(r, \Theta) ~dr ~d\Theta = (\varphi_n)_* \vol.$$
+We introduce the convolution measure
+$$d\mu_{n, \varepsilon} = C_{n, \varepsilon, d} \left(1 - \frac{r}{\varepsilon}\right)1_{r < \varepsilon} F_n(r, \theta) ~dr ~d\Theta,$$
+where $C_{n, \varepsilon, d}$ is chosen so $\mu_{n, \varepsilon}(\RR_+ \times S^{d - 1}) = 1$.
+Let $\psi_{n, \ell} = 1_{E_n} * d\mu_{n, \gamma_n^\ell \rho_n}$.
+
+\begin{lemma}\label{mollify props}
+Let $0 < \delta \lesssim 1$ and $x, y, \xi \in \{r < \varepsilon\}$. Then:
+\begin{enumerate}
+\item \label{conv in weak top} The measure $\mu_{n, \varepsilon}$ converges to a point mass at $\{0\}$ in the weak topology of measures as $\varepsilon \to 0$.
+\item \label{scale of normalizer} $C_{n, \varepsilon, d} \sim_d \varepsilon^{-d}$ as $\varepsilon \to 0$.
+\item \label{approximate y interior} If $d(y, \xi) < \delta\varepsilon$, then
+$$\varepsilon^{-d}\left(1 - \delta - \frac{d(x, \xi)}{\varepsilon}\right) \lesssim_d \frac{d\mu_{n, \varepsilon}}{d((\varphi_n)_* \vol)}(x - y) \lesssim_d \varepsilon^{-d}\left(1 + \delta - \frac{d(x, \xi)}{\varepsilon}\right).$$
+\item \label{approximate y boundary} If $y \in \{\varepsilon(1 - 2\delta) < r < \varepsilon\}$, then
+$$\frac{d\mu_{n, \varepsilon}}{d((\varphi_n)_*\vol)}(x - y) \lesssim_d \delta \varepsilon^{-d}.$$
+\item \label{mollified is W2} $\psi_{n, \ell} \in W^{2, \infty} \subseteq C^1$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+(\ref{conv in weak top}) follows because $\mu_{n, \varepsilon}$ is a Radon probability measure whose support shrinks down to $\{0\}$.
+(\ref{scale of normalizer}, \ref{approximate y interior}, \ref{approximate y boundary}) follow because $g$ is bounded, and hence is comparable (uniformly in $n$) to the euclidean metric; in the euclidean metric these topologies are clear.
+Finally, (\ref{mollified is W2}) can be proven by the estimate
+$$|d\psi_{n, \ell}(y_1) - d\psi_{n, \ell}(y_2)| \lesssim_{n, \ell} \mu_{n, \gamma_n^\ell \rho_n}((E_n - y_1) \Delta (E_n - y_2)),$$
+the fact that $d\mu_{n, \varepsilon}/d((\varphi_n)_*\vol) \in W^{1, \infty}$, and Sobolev embedding.
+\end{proof}
+
+\begin{lemma}
+There exist $\lambda_{n, \ell} > 0$ and open sets $I_{n, \ell} \subseteq \{r < \rho_n\}$ such that for every $\ell$,
+\begin{enumerate}
+\item \label{density of In} $\lim_{n \to \infty} \frac{|I_n|}{|\{r < \rho_n\}|} = 1$,
+\item $\lim_{n \to \infty} \lambda_{n, \ell} = 0$,
+\item and for every $r \in I_{n, \ell}$,
+$$\partial_d \psi_{n, \ell}(r, \Theta) > (1 - \lambda_{n, \ell})|d\psi_{n, \ell}(r, \Theta)|.$$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Let $\varepsilon = \gamma_n^\ell \rho_n$ and $\sigma = \gamma_n^{0.5/(d - 1)} \rho_n$.
+By (\ref{contradict DGL bootstrap}), $\gamma_n \to 0$, so after removing finitely many $n$ we may assume that $\varepsilon < \sigma$.
+We let
+$$I = I_{n, \ell} = \{r < \rho_n - 2\sigma\} \cap \psi_{n, \ell}^{-1}(J),$$
+$$J = (d^2 \gamma_n^2, 1 - d^2 \gamma_n^2).$$
+It follows from the definitions that $\sigma \to 0$ and $J \to (0, 1)$.
+Then, since $\psi_{n, \ell}$ is $C^1$, $\mu_{n, \ell}$ is an approximation to the identity, and $1_{E_n}$ is two-valued, $\psi_{n, \ell}^{-1}(J)$ must approximate $E_n$.
+This proves (\ref{density of In}).
+
+Let $f = |d1_{E_n}| - \partial_d 1_{E_n}$ and fix $x \in I$.
+We want to estimate $f * d\mu_{n, \varepsilon}(x)$, so we decompose $f = f_1 + f_2$ with $f_1 = f1_{\{r < \varepsilon(1 - 2\delta)\}}$, where $\delta \in (0, 0.5)$ is a parameter to be determined that may depend on $n, \ell$.
+
+\begin{claim}[control close to the boundary]
+If $n$ is large enough, then
+$$f_2 * d\mu_{n, \varepsilon}(x) \lesssim_d \delta \gamma_n^{1 - d} (|d1_{E_n}|~\vol * d\mu_{n, \varepsilon})(x).$$
+\end{claim}
+\begin{proof}[Proof of claim]
+Let $h = f_2 * d\mu_{n, \varepsilon}$ and $Z = \{\varepsilon(1 - 2\delta) < r < \varepsilon\}$.
+By Lemma \ref{mollify props},
+$$h(x) \leq 2 \int_Z |d1_{E_n}|(y) ~d\mu_{n, \varepsilon}(x - y) \lesssim_d \frac{\delta}{\varepsilon^d} |\partial^* E_n \cap B(x_n, \varepsilon)|.$$
+Since $E_n$ has least perimeter,
+$$|\partial^* E_n \cap B(x_n, \varepsilon)| \leq |E_n \cap \partial B(x_n, \varepsilon)| \lesssim_d \varepsilon^{d - 1}$$
+and hence
+$$h(x) \lesssim_d \frac{\delta}{\varepsilon}.$$
+We now bound
+$$\psi_{n, \ell}(x) = \int_{E_n \setminus B(x, d(x, E))} \lesssim \varepsilon^{-d}...$$
+\end{proof}
+
+
+\end{proof}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{de Giorgi's lemma}\label{DGL section}
 We now prove a variant of the de Giorgi lemma. Recall that $\Lambda(U, V)$ is defined to be the excess of $U$ in $V$, which is well-defined inside some coordinate chart.
