@@ -961,10 +961,159 @@ However, we will never need this fact.
 \section{de Giorgi's lemma}
 lalalala... impose coordinates...
 
-\subsection{Approximation by harmonic functions}
+\subsection{Estimates on approximate Laplacians}
+Fix a uniformly elliptic operator $P$, of second order, on $\RR^\ell$, with $\ell \geq 1$.
+In this subsection, we will study the behavior of functions in the kernel of $P$, defined in a ball $B_{3\rho} = B(0, 3\rho)$ where $\rho > 0$ is small.
+
+\begin{assumption}\label{nice elliptic operator}
+The operator $P$ has smooth coefficients and admits a divergence form
+$$P = -\Div A \nabla + b \cdot \nabla + c$$
+such that $A(0) = 1$, $A$ is symmetric, and $b(0) = c(0) = 0$.
+\end{assumption}
+
+By the spectral theorem, the assumption $A(0) = 1$ can always be achieved at the cost of a diffeomorphism.
+
+\begin{lemma}[estimates on the Laplace operator]\label{bootstrap Laplace}
+Suppose that $\Delta u = 0$ on $B_{2\rho}$.
+Then
+$$||du||_{L^2(B_\rho)}^2 \leq \frac{||du||_{L^2(B_{2\rho})}^2}{2^{d + 2}} + |du(0)|^2 \cdot |B_{2\rho} \setminus B_\rho|.$$
+\end{lemma}
+\begin{proof}
+Since the commutator $[\Delta, d] = 0$, $du$ is harmonic and thus satisfies the mean value property.
+Now the claim follows from \cite[Lemma 4.1]{Miranda66}.
+\end{proof}
+
+To prove an analogous result for $P$, we introduce the trace operator
+\begin{align*}
+T: H^s(B_{3\rho}) &\to H^{s-.5}(\partial B_{2.5\rho})
+\end{align*}
+whenever $s > .5$.
+Scaling considerations show that
+$$||T||_{H^s(B_{3\rho}) \to H^{s - .5}(\partial B_{2.5\rho})} \sim \rho^{-1/2}.$$
+Let
+$$G_P, G_{\Delta}: H^{s - .5}(\partial B_{2.5\rho}) \to H^{s + 1.5}(B_{2.5\rho})$$
+be the operators which solve the Dirichlet problems for $P,-\Delta$.
+Thus scaling considerations show that $G_P, G_{-\Delta} \sim \rho^{1/2}$ in $H^{s - .5} \to H^{s + 1.5}$.
+
+If $Pu = 0$, then $G_PTu = u|B_{2.5\rho}$, while $G_{-\Delta}Tu$ is a harmonic function on $B_{2.5\rho}$ which approximates $u$ in the following sense.
+
+\begin{lemma}[harmonic approximation]\label{approx harmonic}
+If $Pu = 0$, then for every $s, t \in \RR$,
+$$||G_{-\Delta}Tu - u||_{H^t(B_{2.5\rho})} \lesssim_{s, t} \rho ||u||_{H^s(B_\rho)}.$$
+\end{lemma}
+\begin{proof}
+We prove this by comparing the Green's functions of $-\Delta$ and $P$. Let
+$$P^* = \Div A \nabla - b \cdot \nabla + (c - \Div b)$$
+be the formal adjoint to $P$, so that
+\begin{equation}\label{formal adjoint equation}
+\int_{B_{2.5\rho}} uP^*v - vPu ~\vol = \int_{\partial B_{2.5\rho}} uv b \cdot A\normal + v\partial_{A\normal} u - u\partial_{A\normal} v ~\vol_{\partial B_{2.5\rho}}
+\end{equation}
+where $\normal$ is normal to $\partial B_{2.5\rho}$.
+If we define $F_P$ to solve the Dirichlet problem
+\begin{equation}\label{defining the Green function}
+\begin{cases}P^* F_P(\cdot, y) = \delta_y,\\
+F_P|\RR^\ell \times \partial B_{2.5\rho} = 0,
+\end{cases}
+\end{equation}
+then (\ref{formal adjoint equation}) simplifies to
+$$u(x) = \int_{\partial B_{2.5\rho}} F_P(x, y)u(y) b(y) \cdot \normal - u(y) (\partial_{A \normal} F(x, \cdot))(y) ~\vol_{\partial B_{2.5\rho}}(y).$$
+In particular,
+$$G_P(x, y) = F_P(x, y)b(y) \cdot \normal - (\partial_{A \normal} F_P(x, \cdot))(y).$$
+The solution to the Dirichlet problem (\ref{defining the Green function}) is
+$$F_P(x, y) = K_P(y - x) - K_P\left(2.5\rho \frac{y}{|y|} - |y| \frac{x}{2.5\rho}\right)$$
+where $K_P$ is the newtonian kernel associated to $P$.
+Thus, if $L = G_P - G_{-\Delta}$,
+\begin{align*}
+L(x, y) &= (b \cdot \normal(y) - \partial_{(A - 1)\normal})F_P(x, y) + \partial_\normal (F_P - F_{-\Delta})(x, y)
+\end{align*}
+where all normal derivatives are taken in $y$.
+
+According to Taylor's theorem and Assumption \ref{nice elliptic operator},
+\begin{equation}\label{Taylor coefficients are small}
+|A(x) - 1| + |b(x)| + |c(x)| \lesssim \rho.
+\end{equation}
+In order to use (\ref{Taylor coefficients are small}), we estimate, with $A_\rho = B_{2.5\rho} \times \partial B_{2.5\rho}$ and $w = (G_P - G_{-\Delta})v$,
+\begin{align*}
+||w||_{H^s(B_{2.5\rho})}^2 &\lesssim_s ||(1 + |\Delta|)^{s/2} \int_{\partial B_{2.5\rho}} L(\cdot, y) v(y) ~dy||_{L^2(B_{2.5\rho})}^2\\
+&\lesssim \rho^2 \left|\int_{B_{2.5\rho}} (1 + |\Delta|)^{(s+1)/2} \int_{\partial B_{2.5\rho}} F_{-\Delta}(x, y) v(y) ~dy ~dx\right|^2 \\
+&\qquad + \rho^2 \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx \\
+&\qquad + \iint_{A_\rho} |(1 + |\Delta|)^{s/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx \\
+&\lesssim \rho^2 ||G_{-\Delta}v(x)||_{H^{s+1}(B_{2.5\rho})}^2\\
+&\qquad + \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx\\
+&\lesssim: \rho ||v||_{H^{s + 2}(\partial B_{2.5\rho})}^2 + I.
+\end{align*}
+To control $I$, we apply Taylor's theorem to the map $Q \mapsto Q^{-1}$ centered on $-\Delta$ to conclude that
+\begin{equation}\label{linearized inversion}
+P^{-1} = -\Delta^{-1} - \Delta^{-1}(P + \Delta)\Delta^{-1} + \cdots.
+\end{equation}
+By (\ref{Taylor coefficients are small}),
+$$||P + \Delta||_{H^r(B_{2.5\rho}) \to H^{r+2}(B_{2.5\rho})} \lesssim \rho,$$
+so by (\ref{linearized inversion}),
+$$||(K_P - K_{-\Delta})(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})} \lesssim_s \rho ||\Delta^{-2} \delta_y||_{H^{s + 1}(B_{2.5\rho})} \lesssim \rho ||\delta_0||_{H^{s-3}}.$$
+Moreover, $\delta_0 \in H^{s - 3}$ provided that
+\begin{equation}\label{delta regularity}
+s < 3 - \frac{\ell}{2}.
+\end{equation}
+
+Assuming (\ref{delta regularity}),
+\begin{align*}
+I &\lesssim ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} F_P(x, y) - F_{-\Delta}(x, y)|^2 ~dy ~dx\\
+&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \sup_{y \in \partial B_{2.5\rho}} ||F_P(\cdot, y) - F_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})}^2\\
+&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \sup_{y \in \partial B_{2.5\rho}} ||K_P(\cdot, y) - K_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})}^2\\
+&\lesssim \rho^{\ell + 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2.
+\end{align*}
+By Sobolev embedding, there exists $s' > 0$ so large that
+$$||w||_{L^\infty(\partial B_{2.5\rho})}^2 \lesssim \rho^{1-\ell} ||v||_{H^{s'}(\partial B_{2.5\rho})}^2.$$
+Now if we assume that $s' > s + 2$, it follows that
+$$||w||_{H^s(B_{2.5\rho})} \lesssim \rho^{1/2} ||v||_{H^{s'}(\partial B_{2.5\rho})}.$$
+By elliptic regularity applied to $-\Delta$, we may replace $s$ with an arbitrarily large exponent and this inequality will still hold, so we can drop the assumption (\ref{delta regularity}).
+We can also take $s' > 0.5$ and write $v = Tu$, where $Pu = 0$ (so $G_PTu = u|\partial B_{2.5\rho}$) so that
+$$||w||_{H^s(B_{2.5\rho})} \lesssim \rho ||u||_{H^{s' + .5}(B_{3\rho})}.$$
+Now we can apply elliptic regularity to $P$ and replace $s'$ with an arbitrarily small exponent.
+\end{proof}
+
+\begin{lemma}[estimates on elliptic operators]
+If $Pu = 0$ on $B_{4\rho}$ and $0$ is a critical point of $u$, then
+$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{3\rho})}^2.$$
+\end{lemma}
+\begin{proof}
+After applying a translation, we may assume that $u(0) = 0$.
+Then by elliptic regularity and the Poincar\'e inequality, for every $s > 0$,
+\begin{equation}\label{poincare error}
+||u||_{H^s(B_\rho)}^2 \lesssim_s ||u||_{L^2(B_\rho)}^2 \lesssim \rho^2 ||du||_{L^2(B_\rho)}^2.
+\end{equation}
+Write $u = v + w$ where $v = G_{-\Delta}Tu$, so that by Lemma \ref{approx harmonic} and (\ref{poincare error}),
+$$||dw||_{L^2(B_{2.5\rho})}^2 \lesssim \rho^2 ||u||_{H^1(B_{2.6\rho})}^2 \lesssim \rho^4 ||du||_{L^2(B_{2.6\rho})}^2.$$
+Moreover, $\Delta v = 0$.
+By Sobolev embedding and (\ref{poincare error}), there exists $s > 0$ such that
+$$|dv(0)|^2 = |dw(0)|^2 \lesssim ||w||_{C^1(B_\rho)}^2 \lesssim \rho^2||u||_{H^s(B_\rho)}^2 \lesssim \rho^4||du||_{L^2(B_{2.6\rho})}^2.$$
+So by Lemma \ref{bootstrap Laplace},
+\begin{align*}
+||du||_{L^2(B_\rho)}^2 &\leq ||dv||_{L^2(B_\rho)}^2 + ||dw||_{L^2(B_\rho)}^2 \\
+&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + |dv(0)|^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2\\
+&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2.
+\end{align*}
+A similar argument shows
+\begin{align*}
+||dv||_{L^2(B_{2\rho})}^2 &\leq ||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2,
+\end{align*}
+so
+$$||du||_{L^2(B_\rho)}^2 \lesssim 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2.$$
+
+To control the error term, we observe that $du$ solves a PDE $Qdu = 0$ which is a perturbation of the Laplace equation (since if $v$ is harmonic then so is $dv$). TODO: Compute $Q$ and show that it is uniformly elliptic.
+So by Assumption \ref{nice elliptic operator}, if $\rho$ is small, then $Q$ is uniformly elliptic, so by boundary Schauder estimates and elliptic regularity,
+$$||du||_{L^2(B_{2.6\rho})}^2 \lesssim ||Tdu||_{L^2(\partial B_{2.6\rho})}^2 \leq ||Tdu||_{L^2(\partial(B_{3\rho} \setminus B_{2.6\rho}))}^2 \lesssim ||u||_{L^2(B_{3\rho} \setminus B_{2.6\rho})}^2.$$
+TODO: Fill in the details and add in the right scaling here.
+
+We have shown that TODO: Determine $N$
+$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^N) ||du||_{L^2(B_{3\rho} \setminus B_{2\rho})}^2$$
+which is sufficient if $\rho$ is chosen so small that $O(\rho^N) < 2^{-\ell-2}$.
+\end{proof}
+
+\subsection{Bootstrapping for $C^1$ minimal surfaces}
 Our goal in this subsection is to prove the following proposition.
 
-\begin{proposition}[bootstrapping $C^1$ minimal hypersurfaces]
+\begin{proposition}
 \label{bootstrap C1}
 Let $(L_n)$ be a sequence of Caccioppoli sets in $M$ with $C^1$ boundary, $(\beta_n) \subseteq \RR$, and suppose that
 $$\Lambda(L_n, B(x_n, \rho_n)) \leq \beta_n.$$
@@ -974,8 +1123,8 @@ then
 $$\limsup_{n \to \infty} \Lambda(L_n, B(x_n, \rho_n/2)) \leq \frac{\beta_n}{2^{d + 1}}.$$
 \end{proposition}
 
-\subsection{Regularizing the boundary}
-Throughout this section we suppose that de Giorgi's lemma is false, and work towards constructing a counterexample to Proposition \ref{bootstrap C1}.
+\subsection{Regularizing minimal surfaces}
+Throughout this subsection we suppose that de Giorgi's lemma is false, and work towards constructing a counterexample to Proposition \ref{bootstrap C1}.
 From our contradiction assumption, we have:
 
 \begin{assumption} \label{contradict DGL}
