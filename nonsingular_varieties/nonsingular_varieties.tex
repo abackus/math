@@ -58,7 +58,7 @@
 \renewcommand{\Im}{\operatorname{Im}}
 \newcommand{\Olo}{\mathscr O}
 \newcommand{\Mero}{\mathscr M}
-\newcommand{\Smooth}{\mathscr E}
+\newcommand{\nonsingular}{\mathscr E}
 \newcommand{\Test}{\mathscr D}
 
 
@@ -107,60 +107,86 @@ This follows Hartshorne, Chapter 1.
 
 
 \section{Introduction}
-In complex analysis last semester, we proved a weaker form of the following theorem:
+In complex analysis last semester (not the class with the ``quantum states" nonsense), we proved a weaker form of the following theorem:
 
 \begin{theorem}[classification of nonsingular projective curves]
-Let $X$ be a smooth projective curve over $k$.
+Let $X$ be a nonsingular projective curve over $k$.
 There is an invariant $g \in \NN$ of $X$, called the \emph{genus} of $X$, such that:
 \begin{enumerate}
-\item $g = \dim \Omega^1(X)$ where $\Omega^1$ is the sheaf of $1$-forms with coefficients in $\Olo_X$.
-\item $g = \dim H^1(X, \Olo_X)$ (in the sense of sheaf cohomology).
-\item If $k = \CC$, then $g = \dim H^1(X^{an}, \CC)/2$ (in the sense of singular cohomology).
-\end{enumerate}
-Moreover:
-\begin{enumerate}
 \item If $g = 0$, then $X$ is isomorphic to $\PP^1$.
-\item If $g = 1$, then $X$ is an elliptic curve. Moreover, the moduli space of elliptic curves is $k$.
+\item If $g = 1$, then $X$ is an elliptic curve $\{y^2 = f(x)\}$ where $f$ is cubic with nonzero discriminant. The moduli space of elliptic curves is $k$.
 \item There is an explicit threefold which is the moduli space of curves such that $g = 2$.
-\item And so on...
+\item etc...
 \end{enumerate}
+Moreover,
+$$g = \dim \Gamma(X, \Omega^1) = \dim H^1(X, \Olo_X) = \dim H^1_{sing}(X^{an}, \CC)/2.$$
 \end{theorem}
 
-See also Chapter IV of Hartshorne.
+We're going to define nonsingularity in a second.
+See Chapter IV of Hartshorne for a proof.
 
 The goal of this talk is to show:
 
 \begin{theorem}
-In every birational class $[X]$ of curves there exists a unique smooth projective curve $X$.
-In fact, every smooth curve $Y$ birational to $X$ embeds in $X$.
+In every birational class $[X]$ of curves there exists a unique nonsingular projective curve $X$.
+In fact, every nonsingular curve $Y$ birational to $X$ embeds in $X$.
 \end{theorem}
 
-Assuming this is true for a moment, the classification of smooth projective curves is actually a classification of all curves modulo birationality.
+Assuming this is true for a moment, the classification of nonsingular projective curves is actually a classification of all curves modulo birationality.
+Moreover, the classification of nonsingular projective curves is just countably many little classification problems, one for each genus.
 
-\begin{corollary}[resolution of singularities]
-For every curve $X$ there exists a smooth curve $X'$ and a proper birational map $X' \to X$.
-\end{corollary}
+\section{Nonsingular varieties}
+Here's some general facts about nonsingular varieties.
 
-\section{Abstract curves}
-The definition of a scheme was based on the idea that we can study varieties up to isomorphism by understanding the regular functions on them.
-To study varieties up to birationality we need a larger class of functions (so that the notion of isomorphism is weaker), namely the rational functions.
+Let $x_0$ be a point on a variety $X$ and let $A$ be its local ring, with maximal ideal $I$.
+Then $I$ is the space of functions on $X$ with a zero at $x_0$ and $I^2$ is the space of functions on $X$ with a double zero at $x_0$.
+If $f \in I$ then we can write
+$$f(x) = df_{x_0} \cdot (x - x_0) + \frac{f''(x_0)}{2}(x - x_0)^2 + \cdots$$
+(where $f''(x)$ is the Hessian tensor)
+but the quadratic and up terms are elements of $I/I^2$, so the image of $f$ in $I^2$ is $df_{x_0}$. That is:
+
+\begin{definition}
+The \dfn{cotangent space} to $X$ at $x_0$ is the vector space $I/I^2$ defined above.
+\end{definition}
+
+So elements of $I/I^2$ are covectors based at $x_0$, thus $I/I^2$ is the cotangent space to $X$ at $x_0$.
+According to commutative algebra,
+$$\dim \frac{I}{I^2} \geq \dim A$$
+where the left-hand side is in the sense of vector spaces and the right hand is in the sense of Krull.
+
+\begin{example}
+Suppose we have a self-intersecting curve, such as $\{y^2 = x^2(x + 1)\}$.
+Any point has codimension $1$, so every local ring has dimension $1$.
+But at the intersection point $(0, 0)$, we get $I = (x, y)/(y^2 - x^2(x + 1))$ and $I^2 = (x^2, xy, y^2)/(y^2 - x^2(x + 1)) = (x^2, xy, x^2(x + 1))$.
+Thus $I/I^2$ is spanned by $x, y$ and so has dimension $2$!
+Intuitively this means that the tangent space to $(0, 0)$ is the entire plane, which doesn't seem right.
+\end{example}
+
+In order to avoid singularities like this, we declare that the cotangent space to a variety should have the same dimension as a variety itself, or in other words:
+
+\begin{definition}
+A variety is \dfn{nonsingular} if every local ring is a regular local ring.
+\end{definition}
+
+A variety is nonsingular iff it is cut out by a regular map whose Jacobian matrix has maximal rank.
+
+\section{Curves of DVRs}
+Let $K$ be the function field of a nonsingular curve $Y$.
+Then for every $y \in Y$ there is a natural discrete valuation
+$$v(y): K \to \ZZ$$
+where $v(y)(f)$ is the order of vanishing of $f$ at $y$ and with discrete valuation ring $\Olo_{Y, y}$.
+This is because $y$ has codimension $1$ and $Y$ is nonsingular, so $\Olo_{Y, y}$ is a regular local ring of dimension $1$, that is, a DVR.
+We always view this ring $\Olo_{Y, y}$ as a subring of the function field $K$.
+
+Let us now make the identification between points and DVRs intrinsic.
 
 \begin{definition}
 An (abstract) \dfn{function field} $K$ (of dimension $1$) is a finitely generated field extension $k \to K$ with transcendence degree $1$.
-\end{definition}
-
-Let $K$ be the function field of a smooth curve $Y$.
-Recall from the main lecture: for every $y \in Y$ there is a natural discrete valuation
-$$v(y): K \to \ZZ$$
-where $v(y)(f)$ is the order of vanishing of $f$ at $y$ and with discrete valuation ring $\Olo_{Y, y}$.
-We always view this ring $\Olo_{Y, y}$ as a subring of the function field $K$.
-
-\begin{definition}
 If $K$ is a function field of dimension $1$, then the \dfn{projective curve of DVRs} $C_K$ is, as a set, the set of all discrete valuation subrings of $K$.
 \end{definition}
 
 \begin{lemma}
-Let $X$ be a smooth curve.
+Let $X$ be a nonsingular curve.
 Then the map $x \mapsto \Olo_{X, x}$ is an injective map $X \to C_{K(X)}$.
 \end{lemma}
 \begin{proof}
@@ -181,7 +207,7 @@ Let $K$ be a function field.
 Then:
 \begin{enumerate}
 \item For every $f \in K$, $Z_f$ is a finite set.
-\item For every discrete valuation ring $R$ in $K$ there is a smooth affine curve $X$ such that $R$ is isomorphic to a local ring of $X$.
+\item For every discrete valuation ring $R$ in $K$ there is a nonsingular affine curve $X$ such that $R$ is isomorphic to a local ring of $X$.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
@@ -197,11 +223,11 @@ By a \dfn{curve of DVRs} we mean an open subset of $C_K$ for some function field
 The \dfn{category of curves of DVRs} is the relevant full subcategory of the category of locally ringed spaces.
 \end{definition}
 
-At this point we have three (four over $\CC$) different notions of smooth curve:
+At this point we have three (four over $\CC$) different notions of nonsingular curve:
 \begin{enumerate}
-\item Smooth quasiprojective varieties with Krull dimension $1$.
+\item Nonsingular quasiprojective varieties with Krull dimension $1$.
 \item Curves of DVRs.
-\item Smooth, integral separated schemes of finite type and Krull dimension $1$.
+\item Nonsingular, integral separated schemes of finite type and Krull dimension $1$.
 \item Cofinite subsets of closed Riemann surfaces (if we're over $\CC$).
 \end{enumerate}
 We have $1 \leftrightarrow 3$ by Hartshorne, Chapter 2.
@@ -209,10 +235,10 @@ $1 \leftrightarrow 4$ was argued in complex analysis last semester.
 It remains to show $1 \leftrightarrow 2$.
 
 \begin{proposition}
-Every smooth quasiprojective curve is isomorphic to a curve of DVRs according to the embedding that sends a point to its local ring.
+Every nonsingular quasiprojective curve is isomorphic to a curve of DVRs according to the embedding that sends a point to its local ring.
 \end{proposition}
 \begin{proof}
-Let $K$ be the function field of the smooth quasiprojective curve $Y$ and let $U$ be the set of local rings of $Y$.
+Let $K$ be the function field of the nonsingular quasiprojective curve $Y$ and let $U$ be the set of local rings of $Y$.
 We already showed that we have an isomorphism
 $$\varphi: Y \to U$$
 in the category of sets and we just need to show that $U$ is a curve of DVRs and upgrade $\varphi$ to a morphism of locally ringed spaces.
@@ -237,14 +263,14 @@ For any $V \subseteq Y$ open, $\Olo_Y(V) = \bigcap_{y \in Y} \Olo_{Y,y}$ which i
 Every curve of DVRs is a scheme.
 \end{corollary}
 \begin{proof}
-Every point $x \in C_K$ is the local ring of a point $y$ in a smooth affine curve $Y$.
+Every point $x \in C_K$ is the local ring of a point $y$ in a nonsingular affine curve $Y$.
 The above construction shows that an open neighborhood of $y$ in $Y$ is isomorphic to an open neighborhood of $x$.
 \end{proof}
 
 Of course, Hartshorne Chapter I just states this result by saying that a curve of DVRs can be covered by affine varieties.
 
 \begin{lemma}
-Let $X$ be an abstract smooth curve, $x \in X$, $Y$ a projective variety, and $\varphi: X \setminus \{x\} \to Y$ a morphism.
+Let $X$ be an abstract nonsingular curve, $x \in X$, $Y$ a projective variety, and $\varphi: X \setminus \{x\} \to Y$ a morphism.
 Then $\varphi$ extends uniquely to $\overline \varphi: X \to Y$.
 \end{lemma}
 \begin{proof}
@@ -281,7 +307,7 @@ Note that the above proof is essentially the same proof that projective morphism
 You can actually prove the above result using the valuative criterion of properness (see the appendix).
 
 \begin{lemma}
-The curve of DVRs $C_K$ is isomorphic to a smooth projective curve.
+The curve of DVRs $C_K$ is isomorphic to a nonsingular projective curve.
 \end{lemma}
 \begin{proof}
 Since $C = C_K$ has the cofinite topology, it is quasicompact.
@@ -306,7 +332,7 @@ is an isomorphism.
 
 Let $y \in Y$. Then the localization of the integral closure of $\Olo_{Y, y}$ at a maximal ideal is a discrete valuation ring $R$ of $K$.
 So $\Olo_{Y, y}$ is contained in a discrete valuation ring $R \in C$ such that the intersection of the maximal ideal of $R$ with $\Olo_{Y, y}$ is the maximal ideal of $\Olo_{Y, y}$\footnote{In the main lecture,
-I believe we said that having a structure sheaf whose stalk consisted of discrete valuation rings was equivalent to smoothness.
+I believe we said that having a structure sheaf whose stalk consisted of discrete valuation rings was equivalent to nonsingularness.
 In particular, passing from $\Olo_{Y, y}$ to the discrete valuation ring $R$ amounts to taking a resolution of singularities of $Y$ at $y$.}.
 By definition, $\Olo_{Y, \varphi(R)} = R$. So by injectivity of the map that sends points to their local rings, $y = \varphi(R)$.
 Therefore $\varphi$ is surjective, and is the map that sends a point to its local ring, hence is injective.
@@ -317,28 +343,28 @@ Since $\varphi$ is a homeomorphism and is stalkwise an isomorphism, $\varphi$ is
 \begin{theorem}
 The following categories are equivalent:
 \begin{enumerate}
-\item Smooth projective curves with dominant morphisms.
+\item nonsingular projective curves with dominant morphisms.
 \item Quasiprojective curves with dominant rational maps.
 \item The opposite category of abstract function fields of dimension $1$ with algebra homomorphisms.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
-We have a forgetful functor from smooth projective curves to quasiprojective curves, and the contravariant functor that sends quasiprojective varieties to their function fields restricts to a contravariant functor on quasiprojective curves.
+We have a forgetful functor from nonsingular projective curves to quasiprojective curves, and the contravariant functor that sends quasiprojective varieties to their function fields restricts to a contravariant functor on quasiprojective curves.
 The latter is an equivalence of categories.
 
-We have just shown that for every function field $K$, the curve $C$ of discrete valuation rings of $K$ is a smooth projective curve.
+We have just shown that for every function field $K$, the curve $C$ of discrete valuation rings of $K$ is a nonsingular projective curve.
 Now let $F: K_2 \to K_1$ be an algebra homomorphism.
 Since quasiprojective curves are equivalent to the opposite of abstract function fields, $F$ induces a uniquely defined dominant rational map $C_1 \to C_2$.
 Let $\varphi: U \to C_2$ be a restriction of the rational map to a dominant morphism and let
 $$\overline \varphi: C_1 \to C_2$$
 by the extension of $\varphi$ to $C_1$.
-Then $\overline \varphi$ is dominant. The fact that this extension is unique means that this assignment is functorial; that is, $K \mapsto C$, $F \mapsto \overline \varphi$ defines a contravariant functor from the opposite of abstract function fields to smooth projective curves.
+Then $\overline \varphi$ is dominant. The fact that this extension is unique means that this assignment is functorial; that is, $K \mapsto C$, $F \mapsto \overline \varphi$ defines a contravariant functor from the opposite of abstract function fields to nonsingular projective curves.
 \end{proof}
 
 \section{Rational and elliptic curves}
 In these examples we assume that $k$ does not have characteristic $2$ or $3$ to save myself a headache.
 
-Let $Y$ be a smooth rational curve, for example
+Let $Y$ be a nonsingular rational curve, for example
 $$Y = \{(x, y) \in \Aff^2: xy = 1\}.$$
 According to our main theorem, $Y$ embeds in $\PP^1$ and $K(Y) = k(x)$ whenever $x$ is an affine parameter on $\PP^1$ (so $K(Y)$ is a pure transcendental extension of $k$).
 If $Y$ is not isomorphic to $\PP^1$ then $Y$ embeds in a proper open subset of $\PP^1$.
@@ -351,15 +377,15 @@ $$X = \{(x, y) \in \Aff^2: y^2 = x(x - 1)(x - \lambda)\}.$$
 If $\lambda = 1$ then the curve has a self-intersection at $(1, 0)$ and therefore is singular. In that case the coordinate ring $A$ is
 $$\frac{k[x, y]}{(y^2 - x(x-1)^2)} = k[\sqrt x]$$
 so $K(X) = k(\sqrt x)$ is purely transcendental, and thus $X$ is rational. Similarly if $\lambda = 0$.
-On the other hand, if $\lambda \neq 0$, then $X$ is smooth (since the differential of its defining ideal is nonvanishing) and one can show that $A$ is not a localization of $k[x]$.
+On the other hand, if $\lambda \neq 0$, then $X$ is nonsingular (since the differential of its defining ideal is nonvanishing) and one can show that $A$ is not a localization of $k[x]$.
 At least when $\lambda = -1$, you can do this by showing that $y$ is irreducible, and noting that $X \cap \{y = 0\}$ is $\{\pm 1, 0\}$ and hence $y$ is not prime, therefore $A$ is not a UFD. I'm not sure if this is true in general.
-Anyways, since $X$ is smooth and $A$ is not a UFD, $X$ is irrational.
+Anyways, since $X$ is nonsingular and $A$ is not a UFD, $X$ is irrational.
 In particular, $K(X)$ is not a purely transcendental extension and $X^{an}$ is not simply connected.
 
 \appendix
 \section{Alternative proofs}
 \begin{lemma}
-Let $X$ be an abstract smooth curve, $x \in X$, $Y$ a projective variety, and $\varphi: X \setminus \{x\} \to Y$ a morphism.
+Let $X$ be an abstract nonsingular curve, $x \in X$, $Y$ a projective variety, and $\varphi: X \setminus \{x\} \to Y$ a morphism.
 Then $\varphi$ extends uniquely to $\overline \varphi: X \to Y$.
 \end{lemma}
 \begin{proof}

@@ -961,17 +961,25 @@ However, we will never need this fact.
 \section{de Giorgi's lemma}
 lalalala... impose coordinates...
 
-\subsection{Estimates on approximate Laplacians}
+\subsection{Estimates on elliptic equations}
 Fix a uniformly elliptic operator $P$, of second order, on $\RR^\ell$, with $\ell \geq 1$.
 In this subsection, we will study the behavior of functions in the kernel of $P$, defined in a ball $B_{3\rho} = B(0, 3\rho)$ where $\rho > 0$ is small.
 
 \begin{assumption}\label{nice elliptic operator}
 The operator $P$ has smooth coefficients and admits a divergence form
 $$P = -\Div A \nabla + b \cdot \nabla + c$$
-such that $A(0) = 1$, $A$ is symmetric, and $b(0) = c(0) = 0$.
+such that $A(0) = 1$, $A$ is symmetric and has a critical point at $0$, and $b(0) = c(0) = 0$.
 \end{assumption}
 
-By the spectral theorem, the assumption $A(0) = 1$ can always be achieved at the cost of a diffeomorphism.
+If $P$ denotes the Laplace-Beltrami operator for some Riemannian metric $g$ written in normal coordinates centered on $0$, and hence
+$$g^{ij} = \delta^{ij} + O(|x|^2),$$
+then
+\begin{align*}
+A^{ij} &= g^{ij},\\
+b^j &= \partial_i \log \sqrt{|\det g|} g^{ij},\\
+c &= 0,
+\end{align*}
+so $P$ satisfies Assumption \ref{nice elliptic operator}.
 
 \begin{lemma}[estimates on the Laplace operator]\label{bootstrap Laplace}
 Suppose that $\Delta u = 0$ on $B_{2\rho}$.
@@ -1100,14 +1108,21 @@ A similar argument shows
 so
 $$||du||_{L^2(B_\rho)}^2 \lesssim 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2.$$
 
-To control the error term, we observe that $du$ solves a PDE $Qdu = 0$ which is a perturbation of the Laplace equation (since if $v$ is harmonic then so is $dv$). TODO: Compute $Q$ and show that it is uniformly elliptic.
-So by Assumption \ref{nice elliptic operator}, if $\rho$ is small, then $Q$ is uniformly elliptic, so by boundary Schauder estimates and elliptic regularity,
-$$||du||_{L^2(B_{2.6\rho})}^2 \lesssim ||Tdu||_{L^2(\partial B_{2.6\rho})}^2 \leq ||Tdu||_{L^2(\partial(B_{3\rho} \setminus B_{2.6\rho}))}^2 \lesssim ||u||_{L^2(B_{3\rho} \setminus B_{2.6\rho})}^2.$$
-TODO: Fill in the details and add in the right scaling here.
+To control the error term, we observe that if we set
+\begin{align*}
+R_k &= \partial_i [a^{ij}, \partial_k] \partial_j + [b^i, \partial_k] \partial_i + [c, \partial_k]\\
+&= \partial_i a^{ij}_{,k} \partial_j + b^i_{,k} \partial_i + c_{,k}
+\end{align*}
+then $R_k$ degenerates to a first-order operator at the origin by Assumption \ref{nice elliptic operator}.
+Setting $Ru = R_ku ~dx^k$, $\omega = du$, and choosing a solution operator $d^{-1}$, we see that if $\rho$ is small enough, then the PDE
+$$P\omega = dPd^{-1}\omega + Rd^{-1}\omega$$
+is uniformly elliptic from the space of closed $1$-forms in $H^2(B_{2.6\rho})$ to the space of closed $1$-forms in $L^2(B_{2.6\rho})$.
+So by boundary Schauder estimates and elliptic regularity,
+$$||\omega||_{L^2(B_{2.6\rho})}^2 \lesssim \rho^2 ||Tdu||_{L^2(\partial B_{2.6\rho})}^2 \leq \rho^2 ||Tdu||_{L^2(\partial(B_{3\rho} \setminus B_{2.6\rho}))}^2 \lesssim ||u||_{L^2(B_{3\rho} \setminus B_{2.6\rho})}^2.$$
 
 We have shown that TODO: Determine $N$
-$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^N) ||du||_{L^2(B_{3\rho} \setminus B_{2\rho})}^2$$
-which is sufficient if $\rho$ is chosen so small that $O(\rho^N) < 2^{-\ell-2}$.
+$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{3\rho} \setminus B_{2\rho})}^2$$
+which is sufficient if $\rho$ is chosen so small that $O(\rho^4) < 2^{-\ell-2}$.
 \end{proof}
 
 \subsection{Bootstrapping for $C^1$ minimal surfaces}
