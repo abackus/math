@@ -1,0 +1,271 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, HW 3} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $d = m = 1$. Consider
+$$\partial_t u(t, x) = a \partial^s_x u(t, x)$$
+where $s \in \NN$ and $a \in \CC$.
+What does $a$ have to be for the problem to be stable?
+\end{exer}
+
+We can solve this problem by taking the Fourier transform
+$$\partial_t \hat u(t, \xi) = a (-i\xi)^s \hat u(t, \xi).$$
+The solution to the PDE is
+$$\hat u(t, \xi) = \hat u(0, \xi) e^{(-i)^sa t \xi^s} \hat u(t, \xi)$$
+and in order that the problem be stable it is necessary and sufficient that $e^{(-i)^sat\xi^s}$ be uniformly bounded in $\xi$.
+Let $[n]$ be the residue class of $n \in \ZZ$ modulo $4$.
+
+First suppose that $[s] = [1]$ or $[s] = [3]$, thus $e^{(-i)^sat\xi^s} = e^{-iat \xi^s}$ and $\xi^s$ has the same sign as $\xi$.
+So $\xi^s$ admits both positive and negative signs and so it is necessary and sufficient that $a$ be real, so that $-iat \xi^s$ is imaginary.
+
+Now suppose that $[s] = [2]$, thus $e^{(-i)^sat\xi^s} = e^{-at \xi^s}$ and $\xi^s \geq 0$.
+So it is necessary and sufficient that $\Re a \geq 0$.
+
+Finally suppose that $[s] = [4]$, thus $e^{(-i)^sat\xi^s} = e^{at\xi^s}$ and $\xi^s \geq 0$.
+So it is necessary and sufficient that $\Re a \leq 0$.
+
+\begin{exer}
+Let $P = \sum_{\ell,j} \partial_\ell a_{\ell j} \partial_j$.
+Let $A$ be symmetric and uniformly positive-definite. Show that $P$ is semibounded.
+
+Now consider the problem $\partial_t u = Pu + \sum_j \beta_j \partial_j u$ where $\beta$ is uniformly bounded.
+Show that this problem is stable.
+\end{exer}
+
+To see that $P$ is semibounded we recall that $v^tw = \langle v, w\rangle$, so there exists $\theta$ such that
+$$\langle v, Av\rangle \geq \theta \langle v, v\rangle.$$
+We now claim that $P$ is symmetric, ie $(\psi, P\omega) = (P\psi, \omega)$. To see this we integrate by parts
+\begin{align*}
+(\psi, P\omega) &= \int_{\Torus^d} \langle\psi(x) \overline{P\omega(x)} ~dx = \int_{\Torus^d} \psi(x) \sum_{j,\ell} \overline{\partial_\ell a_{\ell j} \partial_j \omega(x)} ~dx \\
+&= -\sum_{j, \ell} \int_{\Torus^d} a_{\ell j} (\partial_\ell \psi(x)) \overline{(\partial_j \omega(x))} ~dx \\
+&= \sum_{j, \ell} \int_{\Torus^d} \overline{\omega(x)} \partial_j (a_{\ell j} \partial_\ell \psi(x)) ~dx \\
+&= (P \psi, \omega).
+\end{align*}
+So to see that $P$ is semibounded it suffices to show that there exists $\alpha > 0$ such that for every $\omega \in L^2$,
+$$(\omega, P\omega) \leq \alpha ||\omega||^2.$$
+But the symmetry of $A$ implies that
+\begin{align*}
+(\omega, P\omega) &= \int_{\Torus^d} \omega(x) P\omega(x) ~dx\\
+&= \int_{\Torus^d} \omega(x) \sum_{\ell, j}\partial_\ell a_{\ell j}(x) \partial_j \overline{u(x)} ~dx\\
+&= -\int_{\Torus^d} \sum_{\ell, j} (\partial_\ell \omega(x)), a_{\ell j}(x) \partial_j \overline{u(x)} ~dx \\
+&= -\int_{\Torus^d} (\nabla \omega(x), A(x) \nabla \omega(x)) ~dx \\
+&\leq -\theta ||\nabla \omega||^2 \leq 0.
+\end{align*}
+In particular $0 \leq ||\omega||^2$ so $P$ is semibounded.
+
+Now to prove stability, we let $Q\omega = (\beta, \nabla \omega)$ and observe that
+\begin{align*}
+(\omega, Q\omega) + (Q\omega, \omega) &= \int_{\Torus^d} \omega(x) \overline{(\beta, \nabla \omega(x))} + (\beta, \nabla \omega(x)) \overline{\omega(x)} ~dx \\
+&\leq C\int_{\Torus^d} \omega(x) |\nabla \omega(x)| + |\nabla \omega(x)| \overline{\omega(x)} ~dx \\
+&\leq 2C |(\omega, \nabla \omega)|.
+\end{align*}
+Thus, using the bound $(\omega, P\omega) \leq 0$ and the symmetry of $P$, as well as the above bound on $Q$,
+\begin{align*}
+\partial_t ||u(t)||^2 &= \partial_t \int_{\Torus^d} (u(x, t), u(x, t)) ~dx \\
+&= \int_{\Torus^d} (Pu(x, t) + Qu(x, t), u(x, t)) + (u(x, t), Pu(x, t) + Qu(x, t)) ~dx \\
+&= \int_{\Torus^d} (Pu(x, t), u(x, t)) + (u(x, t), Pu(x, t)) + (Qu(x, t), u(x, t)) + (u(x, t), Qu(x, t)) ~dx\\
+&\leq -\theta ||\nabla u(t)||^2 + 2C |(\omega, \nabla \omega)|.
+\end{align*}
+By the Cauchy-Schwarz and Cauchy inequalities,
+$$2C|(u(t), \nabla u(t))| \leq \theta ||\nabla u(t)||^2 + \frac{||u(t)||^2}{\theta}.$$
+This implies that
+$$\partial_t ||u(t)||^2 \leq \frac{||u(t)||^2}{\theta}$$
+so by Gr\"onwall's inequality,
+$$||u(t)||^2 \leq e^{t/\theta} ||f||^2.$$
+
+\begin{exer}
+Show that $(\Delta u, w) = -\sum_j (\partial_j u, \partial_j w) = (u, \Delta w)$.
+
+Let $s \in \NN$. For which $r$ is $(-1)^r \Delta^s$ semibounded?
+
+Can you find $\hat P(i\omega)$ if $P = (-1)^r \Delta^s$?
+\end{exer}
+
+From integration by parts,
+\begin{align*}
+(\Delta u, w) &= \int_{\Torus^d} \sum_j \partial_j^2 u(x) \overline{w(x)} ~dx = -\int_{\Torus^d} \sum_j \partial_j u(x) \overline{\partial_j w(x)} ~dx\\
+&= \int_{\Torus^d} \sum_j u(x) \overline{\partial_j^2 w(x)} ~dx \\
+&= (u, \Delta w).
+\end{align*}
+
+To solve the second part, let $[n]$ be the residue class of $n \in \ZZ$ modulo $2$, and observe that
+$$(\Delta^s u, w) = (u, \Delta^s w)$$
+for every $s$ by induction.
+Also observe that $\Delta$ is negative-definite in the sense that $(u, \Delta u) \leq 0$ for every $u$.
+To see this, we just need to compute
+$$(u, \Delta u) = -(\nabla u, \nabla u) = -||\nabla u||^2 \leq 0.$$
+The product of two negative-definite operators is positive-definite, so $\Delta^2$ is positive-definite, and hence $\Delta^s u$ is positive-definite as long as $[s] = [0]$, by induction.
+The product of positive-definite and negative-definite operators is negative-definite, so $\Delta^s u$ is negative-definite as long as $[s] = [1]$.
+
+If $[s] = [0]$ then it is necessary and sufficient for $P = (-1)^r \Delta^s$ to be semibounded that $[r] = [1]$.
+In fact, if $[r] = [1]$, then $P = -\Delta^s$ is negative-definite (since $\Delta^s$ is positive-definite) and therefore semibounded.
+If $[r] = [0]$ then $P = \Delta^s$, so if $u(x) = e^{i(x, \omega)}$ then $(Pu, u) + (u, Pu)$ blows up as $|\omega| \to \infty$.
+(This can be checked the old-fashioned way, but is also obvious if we write out $\hat u$ as a point mass at $\omega$, and multiply by the Fourier multiplier that we define below.)
+This blowup implies that $P$ is not semibounded.
+
+If $[s] = [1]$ then it is necessary and sufficient that $[r] = [0]$.
+The argument is similar to the other case.
+
+Finally we realize $P$ as a Fourier multiplier.
+It is
+$$\hat P(i\omega) = (-1)^{r + s} |\omega|^{2s}.$$
+To see this we write
+\begin{align*}
+\hat P(i\omega) &= (-1)^r \left(\sum_j \widehat{\partial_j^2}\right)^s = (-1)^r \left(\sum_j (-i\omega_j)^2 \right)^s\\
+&= (-1)^r (-1)^s (|\omega|^2)^s = (-1)^{r + s} |\omega|^{2s}.
+\end{align*}
+
+\begin{exer}
+Let $d = 1$ and consider the problem
+$$\partial_t u(x, t) = A\partial_x u(x, t)$$
+where $A = \Psi \Lambda \Psi^{-1}$ is a constant matrix and $\Lambda$ is a diagonal matrix.
+
+Compute the solution operator $S$ if $\Psi = I$.
+
+Consider the inhomogeneous problem with forcing term $F$ and $\Psi = I$.
+Use Duhamel's principle to find the solution. What is the representation formula for $u_1$?
+
+Find $S$ in the more general case.
+\end{exer}
+
+In case $F = 0$ and $\Psi = I$, the system decouples into a system of noninteracting transport equations with velocity $\lambda_j$, where $(\lambda_j)$ is the spectrum of $A$.
+Thus we have
+$$S(t, \tau)f(x, t)_j = f_j(x - (t - \tau)\lambda_j)$$
+since this is nothing more than the usual solution operator for the transport equation on the circle.
+
+Now if we have a forcing term $F$, but $\Psi = I$, then Duhamel's principle and the above computation says
+$$u(x, t)_j = f(x - \tau \lambda_j)_j + \int_0^t F_j(x - (t - \tau)\lambda_j) ~d\tau.$$
+The representation formula for $u_1$ follows from plugging in $j = 1$.
+
+Finally, if $\Psi$ is general, we can diagonalize the system by setting $v = \Psi^{-1} u$.
+Then $\partial_t v = \Lambda \partial_x v$ so if we let $\tilde S$ be the solution operator in case $\Psi = I$,
+$$v(x, t) = \tilde S(t, 0) f(x, t).$$
+Thus
+$$u(x, t) = \Psi \tilde S(t, 0) f(x, t)$$
+or
+$$S(t, \tau) = \Psi \tilde S(t, \tau).$$
+
+
+\end{document}

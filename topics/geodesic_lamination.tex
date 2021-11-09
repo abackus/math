@@ -69,6 +69,7 @@
 \DeclareMathOperator{\WF}{WF}
 
 \newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H_{\mathrm{dR}}}
 \newcommand{\normal}{\mathbf n}
 \newcommand{\vol}{\mathrm{vol}}
 
@@ -563,10 +564,6 @@ Functions of least gradient can be viewed as the correct notion of weak solution
 \begin{equation}\label{EulerLagrange}
 \Div \frac{\grad u}{|\grad u|} = 0.
 \end{equation}
-In particular, if $U$ has least perimeter and can be expressed as the graph of a $C^1$ function $f$, then $f$ solves the minimal surface equation (MSE), which is by definition the Euler-Lagrange equation with Lagrangian density
-\begin{equation}\label{Lagrangian density}
-\mathscr L = \sqrt{1 + |df|^2} ~\vol.
-\end{equation}
 
 Our next few results follow from Proposition \ref{traces} and the proofs of \cite[Teorema 2]{Miranda67} and \cite[Lemma 5.6]{Giusti77}.
 
@@ -597,15 +594,6 @@ In particular
 \end{equation}
 \end{lemma}
 
-\begin{proposition}[Hilbert's 19th problem]\label{regularity of reduced boundary}
-Let $U$ be a set of least perimeter with conormal $1$-form $\normal$.
-If $\normal$ is continuous, then $\partial U$ is as smooth as possible.
-\end{proposition}
-\begin{proof}
-According to Proposition \ref{locality of Caccioppoli}, there exists a local $C^1$ parametrization $f: \RR^{d - 1} \to M$ of $\partial U$, so that $f$ is a minimizer of the Lagrangian $\mathscr L$ defined by (\ref{Lagrangian density}).
-Since $\mathscr L$ is a regular Lagrangian in the sense of Hilbert's 19th problem, $f$ is analytic \cite{morrey2009multiple}.
-\end{proof}
-
 We will need the following theorem \cite[Theorem 6.2.2]{Simons68} \cite[Theorem A]{BOMBIERI1969}, which in particular shows that the assumption $d \leq 7$ in Theorem \ref{main thm} is sharp.
 Recall that a \dfn{minimal cone} $C$ is a cone of least perimeter with vertex at the origin.
 
@@ -629,7 +617,7 @@ $$\limsup_{n \to \infty} \int_U |du_n| ~\vol \leq \liminf_{n \to \infty} \eta(u_
 uniformly as $U$ ranges over open sets $\Subset M$.
 \end{definition}
 
-To study sequences of approximately least gradient, we need a semicontinuity theorem for the Lagrangian (\ref{Lagrangian density}), which in the euclidean case was shown by Miranda \cite[Teorema 3]{Miranda67}.
+To study sequences of approximately least gradient, we need a semicontinuity theorem for the total variation, which in the euclidean case was shown by Miranda \cite[Teorema 3]{Miranda67}.
 
 \begin{definition}
 Let $(u_n)$ be a sequence in $BV_l(M)$ which converges in $L^1_l$ to $u$.
@@ -958,28 +946,192 @@ However, we will never need this fact.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section{The minimal surface equation}
+TODO: Exposit
+
+\subsection{Tubular trivializations}
+Up to this point we have carefully carried out constructions which are diffeomorphism invariant; this led to easy proofs of any relevant fact that could be reduced to its euclidean case.
+At this point in the proof, however, we break diffeomorphism invariance.
+We have three reasons to do this:
+\begin{enumerate}
+\item We need to analyze the minimal surface equation, and to do this we ust write a hypersurface as a graph. Thus we need to put a local product structure on $M$.
+\item We need a well-defined notion of hyperplane, at least locally, on $M$, so that we can compare minimal surfaces to hyperplanes; this is the essence of our bootstrapping argument.
+\item In the course of the above analysis, we will obtain certain linear elliptic operators $P$ which depend on the curvature tensor $\Riem$, and so we want to choose coordinates in which $\Riem$ is so close to vanishing that $P$ can be well-approximated by the classical Laplacian.
+\end{enumerate}
+So, we now need to choose a suitable atlas on $M$ and suitable local trivializations of $TM$.
+We call these coordinates ``tubular trivializations".
+
+Let $\DD^{d - 1}$ denote the unit ball in $\RR^{d - 1}$ and let $e_j$ be the $j$th coordinate vector in $\RR^d$.
+
+\begin{definition}
+A tuple $V = (V, y, z, \psi)$ is called a \dfn{tubular trivialization} of $TM$ based at $(x, v) \in STM$ if $V$ is an open neighborhood of $x$ with the following properties.
+Let $\gamma: J \to M$ be an injective geodesic such that $\gamma(0) = x$ and $\gamma'(0) = v$.
+\begin{enumerate}
+\item (Coordinates) We have a diffeomorphism
+$$(y, z): V \to \DD^{d - 1} \times J.$$
+\item (Centering) $\{y = 0\}$ is the image of $\gamma$ and $\{z = 0\}$ contains $x$.
+\item (Orthogonality) The exponential pullback of $\{z = 0\}$ is the orthocomplement of $v$ in $T_x V$.
+\item (Trivial tangent bundle) We have a trivialization
+$$(y, z, \psi): TV \to \DD^{d - 1} \times J \times \RR^d$$
+such that $\gamma'(z) \mapsto e_1$.
+\item (Isometry) $\psi$ is an isometry on $T_xV$.
+\item (Approximately euclidean) The metric $g$ takes the form $g = I + O(|y|^2 + |z|^2)$ when written out in the above coordinate frame.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+For every $(x, v) \in STM$ there exists a tubular trivialization of $TM$ based at $(x, v)$.
+\end{lemma}
+\begin{proof}
+Let $\gamma: J \to M$ be an injective geodesic such that $\gamma(0) = x$ and $\gamma'(0) = v$.
+By definition of normal coordinates, we can choose normal coordinates $(y, z): V \to \RR^{d - 1} \times J$ based at $x$ so that $\gamma$ is the image of $\{y = 0\}$ and $z(x) = 0$.
+By restricting the codomain of $z$ we can then impose that $(y, z)$ is a diffeomorphism $V \to J \times \DD^{d - 1}$.
+The isometry, orthogonality, and approximately euclidean properties follow from the fact that the normal coordinates are based at $x$.
+Finally, we can smoothly perturb the coordinate basis vectors in $T_xM$ to coordinate basis vectors in $T_{x'}M$, $x' \in V$, so that $\gamma'(z) \mapsto e_1$.
+\end{proof}
+
+If $F$ is any Borel subset of $V$ and $\omega$ is a $1$-form-valued Radon measure on $F$ such that $\int_F |\omega| < \infty$, we can make sense of the integral $\int_F \omega$ as a covector based at $x$.
+Indeed, $\psi$ induces coordinate vector fields $X_j = \psi^* e_j$ on $V$, and we can define
+$$\int_F \omega = \langle \omega, X_j\rangle ~d\xi^j$$
+where $\xi^j$ is dual to $X_j$.
+The reader should note carefully that while we do have the triangle inequality
+\begin{equation}\label{excess triangle inequality}
+\left|\int_F \omega\right| \leq \int_F |\omega|,
+\end{equation}
+the quantity $\int_F \omega$ depends strongly on the choice of trivialization.
+
+\subsection{The surface area Lagrangian}
+Let $U$ be a set of locally finite perimeter, and suppose that $N = \partial^* U$ is $C^1$.
+If $I$ is chosen small enough, the implicit function theorem and the fact that $\normal_U(x)^\sharp = X_1$ implies that there exists a $C^1$ function $f: \DD^{d - 1} \to J$ with $N = \{z = f(y)\}$, hence $U = \{z < f(y)\}$, and $df(0) = 0$.
+Thus $\Lambda(U, x, \rho) = 0$ is equivalent to $df = 0$ on a suitable neighborhood of $0$, and we have a diffeomorphism $\tilde f: \DD^{d - 1} \to N$.
+After extending $\normal_U^\sharp$ to a unit vector field $X$ on $V$ by $X(y, z) = \normal^\sharp(y, 0)$, let $\mathscr L = \tilde f^* \iota_X \vol$, so that $\int_{\DD^{d - 1}} \mathscr L$ is the surface area of $N$.
+To simplify $\mathscr L$, we note that along $N$,
+$$X = \frac{*\bigwedge_{i < d} \partial_i \tilde f}{|*\bigwedge_{i < d} \partial_i \tilde f|}.$$
+
+\begin{lemma}
+Let $(Y_i)$ be the orthonormal frame on $V = \DD^{d - 1} \times J$, with $Y_i = \nabla y_i$ if $i < d$ and $Y_d = \nabla z$.
+Then
+$$*\bigwedge_{i<d} \partial^i \tilde f = Y_d - \sum_{i<d} \partial^i fY_i.$$
+\end{lemma}
+\begin{proof}
+Since $Y$ is an orthonormal frame, the Hodge star can be computed from the formal determinant
+\begin{align*}
+*\bigwedge_{i < d} \partial^i \tilde f &=
+\begin{vmatrix} \partial^1 \tilde f^1 & \cdots & \partial^1 \tilde f^d \\
+& \vdots \\
+\partial^{d - 1} \tilde f^1 & \cdots & \partial^{d - 1} \tilde f^d \\
+Y_1 & \cdots & Y_d
+\end{vmatrix} = \begin{vmatrix} 1 & 0 & \cdots & 0 & \partial^1 f \\
+0 & 1 & \cdots & 0 & \partial^2 f \\
+& & \vdots \\
+0 & 0 & \cdots & 1 & \partial^{d - 1} f \\
+Y_1 & Y_2 & \cdots & Y_{d - 1} & Y_d
+\end{vmatrix}
+\end{align*}
+which can be simplified by induction. If $d = 2$ then we get
+$$*\bigwedge_{i < d} \partial^i \tilde f = Y_2 - \partial^1 f Y_1.$$
+Otherwise, we can write
+\begin{align*}
+*\bigwedge_{i < d} \partial^i \tilde f &= \begin{vmatrix}  1 & 0 & \cdots & 0 & \partial_2 f \\
+0 & 1 & \cdots & 0 & \partial^3 f \\
+& & \vdots \\
+0 & 0 & \cdots & 1 & \partial^{d - 1} f \\
+Y_2 & Y_3 & \cdots & Y_{d - 1} & Y_d
+\end{vmatrix} + (-1)^{d - 1} \partial^1 f
+\begin{vmatrix}
+0 & 1 & \cdots & 0 & 0 \\
+& & \vdots \\
+0 & 0 & \cdots & 1 & 0 \\
+0 & 0 & \cdots & 0 & 1 \\
+Y_1 & Y_2 & \cdots & Y_{d - 2} & Y_{d - 1}
+\end{vmatrix}\\
+& q= Y_d - \sum_{1 < i < d} \partial_if Y_i + (-1)^{d - 1} (-1)^d \partial_1 f Y_1 \\
+&= Y_d - \partial_if Y_i. \qedhere
+\end{align*}
+\end{proof}
+
+From the above computation we obtain
+$$X = \frac{Y_d - \partial^i f Y_i}{\sqrt{1 + |\nabla f|_{\tilde g}^2}},$$
+where $\tilde g_{ij} = g(Y^i, Y^j)$.
+Thus
+\begin{align*}
+\mathscr L &= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} \tilde f^* \left(\iota_{Y_d}(dz \wedge dy) - \partial^i f \iota_{Y_i}(dz \wedge dy) \right)\\
+&= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} \tilde f^* \left(dy + (-1)^i \partial^i f ~dz \wedge dy^1 \wedge \cdots \wedge \widehat{dy^i} \wedge \cdots dy^{d - 1}\right).
+\end{align*}
+Since $dz = \partial_i f(y) ~dy^i$, we conclude
+\begin{align*}
+\mathscr L &= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} (1 + |\nabla f|_{\tilde g}^2) ~dy\\
+&= \sqrt{\det(\tilde g))(1 + |\nabla f|_{\tilde g}^2)} ~dy.
+\end{align*}
+TODO: Check this computation, this is important.
+
+Since $\mathscr L$ is the Lagrangian for the minimal surface equation on $V$, we can now read off some properties of sets of least perimeter from $\mathscr L$.
+
+\begin{proposition}[de Giorgi-Nash-Moser theory]\label{regularity of reduced boundary}
+Let $U$ be a set of least perimeter with conormal $1$-form $\normal$.
+If $\normal$ is continuous, then $\partial U$ is as smooth as possible.
+\end{proposition}
+\begin{proof}
+According to Proposition \ref{locality of Caccioppoli}, $\partial U$ is $C^1$, so we can cover $\partial U$ by tubular trivializations of $TM$.
+In each such trivialization, $\partial U$ is the graph of a $C^1$ function which minimizes $\int_{\DD^{d - 1}} \mathscr L$.
+Since $\mathscr L$ is uniformly convex and as smooth as possible, de Giorgi-Nash-Moser theory implies that $f$ is as smooth as possible \cite{morrey2009multiple}.
+\end{proof}
+
+\subsection{Linearized elliptic equations}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{de Giorgi's lemma}
-lalalala... impose coordinates...
+In this section we prove a bootstrapping lemma... history...
+it is necessary to break diffeomorphism-invariance so that we have a well-defined notion of coordinate hyperplane, and so we will need to construct a suitable atlas on a neighborhood of $\partial^* U$ before we can even state the de Giorgi lemma... TODO: Move this exposition to the previous section...
+
+\begin{definition}
+Let $U$ be a set of locally finite perimeter, let $x \in \partial^* U$, and choose a tubular trivialization $V$ of $TM$ based at $(x, \normal_U(x)^\sharp)$ such that $|\partial^* U \cap V| < \infty$.
+If $\rho > 0$ and $B(x, \rho) \subseteq V$, we define the \dfn{excess} of $U$ at $\rho$ with respect to $V$ to be
+$$\Lambda(U, x, \rho) = \rho^{1 - d}\int_{B(x, \rho)} |d1_U| ~\vol - \rho^{1 - d}\left|\int_{B(x, \rho)} d1_U ~\vol\right|.$$
+\end{definition}
+
+By (\ref{excess triangle inequality}), $\Lambda(U, x, \rho)$ is nonnegative.
+Intuitively, $\Lambda(U, x, \rho)$ measures how badly $\partial^*U \cap B(x, \rho)$ fails to be the hypersurface $\{z = 0\} \cap \{|y| < \rho\}$, which pulls back by the exponential map to a disc in a hyperplane.
+Indeed, if $U = \{z < 0\}$ then the coordinate vector field $X_1 = \psi^* e_1$ is always perpendicular to $\partial^* U$ and hence $X_1 = \normal_U^\sharp$. This implies $|\int_{B(x, \rho)} d1_U ~\vol| = \int_{B(x, \rho)} |d1_U| ~\vol$.
+Conversely, if $U \neq \{z < 0\}$, then since $\normal_U(x)^\sharp = X_1$, $\normal_U$ cannot be constant and so must, when integrated against $X$, experience some cancellation; this forces $\Lambda(U, x, \rho) > 0$ for $\rho$ small enough.
+
+\begin{proposition}\label{bootstrap minimal surfaces}
+Let $U$ be a set of least perimeter, let $x \in \partial^* U$, and choose a tubular trivialization of $TM$ based at $(x, \normal_U(x)^\sharp)$.
+Then for every $\varepsilon > 0$ there exist $\sigma, \rho_0 > 0$, such that for every $\rho \in (0, \rho_0)$ such that $\Lambda(U, x, \rho) < \sigma$,
+$$\Lambda\left(U, x, \frac{\rho}{2 + \varepsilon}\right) < \frac{\Lambda(U, x, \rho)}{2}.$$
+\end{proposition}
 
 \subsection{Estimates on elliptic equations}
-Fix a uniformly elliptic operator $P$, of second order, on $\RR^\ell$, with $\ell \geq 1$.
-In this subsection, we will study the behavior of functions in the kernel of $P$, defined in a ball $B_{3\rho} = B(0, 3\rho)$ where $\rho > 0$ is small.
+In this subsection, we fix $\ell \geq 1$, not necessarily equal to $d$, and prove the following proposition.
 
-\begin{assumption}\label{nice elliptic operator}
-The operator $P$ has smooth coefficients and admits a divergence form
+\begin{proposition}\label{bootstrap elliptic}
+Let $\varepsilon > 0$, let $P$ be a uniformly elliptic operator with smooth coefficients on $B_{2(1 + \varepsilon)}\rho$, a ball centered on the origin in $\RR^\ell$, such that $P$ admits a divergence form
 $$P = -\Div A \nabla + b \cdot \nabla + c$$
 such that $A(0) = 1$, $A$ is symmetric and has a critical point at $0$, and $b(0) = c(0) = 0$.
-\end{assumption}
+If $\rho > 0$ is small enough depending on $P, \varepsilon$, $Pu = 0$ on $B_{2(1 + \varepsilon)}\rho$, and $0$ is a critical point of $u$, then
+$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2(1 + \varepsilon)\rho})}^2.$$
+\end{proposition}
 
-If $P$ denotes the Laplace-Beltrami operator for some Riemannian metric $g$ written in normal coordinates centered on $0$, and hence
-$$g^{ij} = \delta^{ij} + O(|x|^2),$$
-then
-\begin{align*}
-A^{ij} &= g^{ij},\\
-b^j &= \partial_i \log \sqrt{|\det g|} g^{ij},\\
-c &= 0,
-\end{align*}
-so $P$ satisfies Assumption \ref{nice elliptic operator}.
+Before proving Proposition \ref{bootstrap elliptic} we note how it will be used in our application:
+
+\begin{corollary}\label{bootstrap Laplace-Beltrami}
+Let $N$ be a $\ell$-dimensional Riemannian manifold.
+Let $\varepsilon > 0$, and suppose that $x \in N$, and let $\rho > 0$ be small enough depending on $x, \varepsilon$.
+For every harmonic function $u$ with a critical point at $x$,
+$$||du||_{L^2(B(x, \rho))}^2 \leq 2^{-\ell-2} ||du||_{L^2(B(x, 2(1 + \varepsilon)\rho))}.$$
+\end{corollary}
+\begin{proof}
+By working in normal coordinates centered on $x$, we may assume that $x = 0$ in $N = \RR^\ell$ and $g^{ij} = \delta^{ij} + O(|x|^2)$ is symmetric.
+Since the Laplace-Beltrami operator is defined by
+$$\Delta = \frac{1}{\sqrt{\det g}} \partial_i \sqrt{\det g} g^{ij} \partial_j,$$
+if we set $P = -\Delta$, then $A^{ij} = -g^{ij}$, $c = 0$, and
+$$b^j(0) = \partial_i \log \sqrt{|\det g(0)|} g^{ij}(0) = 0,$$
+so the claim follows from Proposition \ref{bootstrap elliptic}.
+\end{proof}
+
+We begin the proof of Proposition \ref{bootstrap elliptic} by first demonstrating it in a special case: the Laplacian on $\RR^\ell$.
 
 \begin{lemma}[estimates on the Laplace operator]\label{bootstrap Laplace}
 Suppose that $\Delta u = 0$ on $B_{2\rho}$.
@@ -991,44 +1143,49 @@ Since the commutator $[\Delta, d] = 0$, $du$ is harmonic and thus satisfies the 
 Now the claim follows from \cite[Lemma 4.1]{Miranda66}.
 \end{proof}
 
-To prove an analogous result for $P$, we introduce the trace operator
+To prove an analogous result for $P$, we apply Taylor's theorem to the hypotheses on $P$ to deduce that
+\begin{equation}\label{Taylor coefficients are small}
+|A(x) - 1| + |b(x)| + |c(x)| \lesssim \rho.
+\end{equation}
+This suggests that we should approximate $P$ by the Laplace operator.
+To accomplish this, we introduce the trace operator
 \begin{align*}
-T: H^s(B_{3\rho}) &\to H^{s-.5}(\partial B_{2.5\rho})
+T: H^s(B_{2(1 + \varepsilon)\rho}) &\to H^{s-.5}(\partial B_{2(1 + \varepsilon/2)\rho})
 \end{align*}
 whenever $s > .5$.
 Scaling considerations show that
-$$||T||_{H^s(B_{3\rho}) \to H^{s - .5}(\partial B_{2.5\rho})} \sim \rho^{-1/2}.$$
+$$||T||_{H^s(B_{2(1 + \varepsilon)\rho}) \to H^{s - .5}(\partial B_{2(1 + \varepsilon/2)\rho})} \sim \rho^{-1/2}.$$
 Let
-$$G_P, G_{\Delta}: H^{s - .5}(\partial B_{2.5\rho}) \to H^{s + 1.5}(B_{2.5\rho})$$
+$$G_P, G_{-\Delta}: H^{s - .5}(\partial B_{2(1 + \varepsilon/2)\rho}) \to H^{s + 1.5}(B_{2(1 + \varepsilon/2)\rho})$$
 be the operators which solve the Dirichlet problems for $P,-\Delta$.
-Thus scaling considerations show that $G_P, G_{-\Delta} \sim \rho^{1/2}$ in $H^{s - .5} \to H^{s + 1.5}$.
+Scaling considerations show that $G_P, G_{-\Delta} \sim \rho^{1/2}$ in $H^{s - .5} \to H^{s + 1.5}$.
 
-If $Pu = 0$, then $G_PTu = u|B_{2.5\rho}$, while $G_{-\Delta}Tu$ is a harmonic function on $B_{2.5\rho}$ which approximates $u$ in the following sense.
+If $Pu = 0$, then $G_PTu = u|B_{2(1 + \varepsilon/2)\rho}$, while $G_{-\Delta}Tu$ is a harmonic function on $B_{2(1 + \varepsilon/2)\rho}$ which approximates $u$ in the following sense.
 
 \begin{lemma}[harmonic approximation]\label{approx harmonic}
 If $Pu = 0$, then for every $s, t \in \RR$,
-$$||G_{-\Delta}Tu - u||_{H^t(B_{2.5\rho})} \lesssim_{s, t} \rho ||u||_{H^s(B_\rho)}.$$
+$$||G_{-\Delta}Tu - u||_{H^t(B_{2(1 + \varepsilon/2)})} \lesssim_{s, t} \rho ||u||_{H^s(B_\rho)}.$$
 \end{lemma}
 \begin{proof}
 We prove this by comparing the Green's functions of $-\Delta$ and $P$. Let
-$$P^* = \Div A \nabla - b \cdot \nabla + (c - \Div b)$$
+$$P^* = -\Div A \nabla - b \cdot \nabla + (c - \Div b)$$
 be the formal adjoint to $P$, so that
 \begin{equation}\label{formal adjoint equation}
-\int_{B_{2.5\rho}} uP^*v - vPu ~\vol = \int_{\partial B_{2.5\rho}} uv b \cdot A\normal + v\partial_{A\normal} u - u\partial_{A\normal} v ~\vol_{\partial B_{2.5\rho}}
+\int_{B_{2(1 + \varepsilon/2)\rho}} uP^*v - vPu ~\vol = \int_{\partial B_{2(1 + \varepsilon/2)\rho}} uv b \cdot A\normal + v\partial_{A\normal} u - u\partial_{A\normal} v ~\vol_{\partial B_{2(1 + \varepsilon/2)\rho}}
 \end{equation}
-where $\normal$ is normal to $\partial B_{2.5\rho}$.
+where $\normal$ is normal to $\partial B_{2(1 + \varepsilon/2)\rho}$.
 If we define $F_P$ to solve the Dirichlet problem
 \begin{equation}\label{defining the Green function}
 \begin{cases}P^* F_P(\cdot, y) = \delta_y,\\
-F_P|\RR^\ell \times \partial B_{2.5\rho} = 0,
+F_P|\RR^\ell \times \partial B_{2(1 + \varepsilon/2)\rho} = 0,
 \end{cases}
 \end{equation}
 then (\ref{formal adjoint equation}) simplifies to
-$$u(x) = \int_{\partial B_{2.5\rho}} F_P(x, y)u(y) b(y) \cdot \normal - u(y) (\partial_{A \normal} F(x, \cdot))(y) ~\vol_{\partial B_{2.5\rho}}(y).$$
+$$u(x) = \int_{\partial B_{2(1 + \varepsilon/2)\rho}} F_P(x, y)u(y) b(y) \cdot \normal - u(y) (\partial_{A \normal} F(x, \cdot))(y) ~\vol_{\partial B_{2(1 + \varepsilon/2)\rho}}(y).$$
 In particular,
 $$G_P(x, y) = F_P(x, y)b(y) \cdot \normal - (\partial_{A \normal} F_P(x, \cdot))(y).$$
 The solution to the Dirichlet problem (\ref{defining the Green function}) is
-$$F_P(x, y) = K_P(y - x) - K_P\left(2.5\rho \frac{y}{|y|} - |y| \frac{x}{2.5\rho}\right)$$
+$$F_P(x, y) = K_P(y - x) - K_P\left(2(1 + \varepsilon/2)\rho \frac{y}{|y|} - |y| \frac{x}{2(1 + \varepsilon/2)\rho}\right)$$
 where $K_P$ is the newtonian kernel associated to $P$.
 Thus, if $L = G_P - G_{-\Delta}$,
 \begin{align*}
@@ -1036,28 +1193,24 @@ L(x, y) &= (b \cdot \normal(y) - \partial_{(A - 1)\normal})F_P(x, y) + \partial_
 \end{align*}
 where all normal derivatives are taken in $y$.
 
-According to Taylor's theorem and Assumption \ref{nice elliptic operator},
-\begin{equation}\label{Taylor coefficients are small}
-|A(x) - 1| + |b(x)| + |c(x)| \lesssim \rho.
-\end{equation}
-In order to use (\ref{Taylor coefficients are small}), we estimate, with $A_\rho = B_{2.5\rho} \times \partial B_{2.5\rho}$ and $w = (G_P - G_{-\Delta})v$,
+In order to use (\ref{Taylor coefficients are small}), we estimate, with $A_\rho = B_{2(1 + \varepsilon/2)\rho} \times \partial B_{2(1 + \varepsilon/2)\rho}$ and $w = (G_P - G_{-\Delta})v$,
 \begin{align*}
-||w||_{H^s(B_{2.5\rho})}^2 &\lesssim_s ||(1 + |\Delta|)^{s/2} \int_{\partial B_{2.5\rho}} L(\cdot, y) v(y) ~dy||_{L^2(B_{2.5\rho})}^2\\
-&\lesssim \rho^2 \left|\int_{B_{2.5\rho}} (1 + |\Delta|)^{(s+1)/2} \int_{\partial B_{2.5\rho}} F_{-\Delta}(x, y) v(y) ~dy ~dx\right|^2 \\
+||w||_{H^s(B_{2(1 + \varepsilon/2)\rho})}^2 &\lesssim_s ||(1 + |\Delta|)^{s/2} \int_{\partial B_{2(1 + \varepsilon/2)\rho}} L(\cdot, y) v(y) ~dy||_{L^2(B_{2(1 + \varepsilon/2)\rho})}^2\\
+&\lesssim \rho^2 \left|\int_{B_{2(1 + \varepsilon/2)\rho}} (1 + |\Delta|)^{(s+1)/2} \int_{\partial B_{2(1 + \varepsilon/2)\rho}} F_{-\Delta}(x, y) v(y) ~dy ~dx\right|^2 \\
 &\qquad + \rho^2 \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx \\
 &\qquad + \iint_{A_\rho} |(1 + |\Delta|)^{s/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx \\
-&\lesssim \rho^2 ||G_{-\Delta}v(x)||_{H^{s+1}(B_{2.5\rho})}^2\\
+&\lesssim \rho^2 ||G_{-\Delta}v(x)||_{H^{s+1}(B_{2(1 + \varepsilon/2)\rho})}^2\\
 &\qquad + \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} (F_P(x, y) - F_{-\Delta}(x, y)) v(y)|^2 ~dy ~dx\\
-&\lesssim: \rho ||v||_{H^{s + 2}(\partial B_{2.5\rho})}^2 + I.
+&\lesssim: \rho ||v||_{H^{s + 2}(\partial B_{2(1 + \varepsilon/2)\rho})}^2 + I.
 \end{align*}
 To control $I$, we apply Taylor's theorem to the map $Q \mapsto Q^{-1}$ centered on $-\Delta$ to conclude that
 \begin{equation}\label{linearized inversion}
 P^{-1} = -\Delta^{-1} - \Delta^{-1}(P + \Delta)\Delta^{-1} + \cdots.
 \end{equation}
 By (\ref{Taylor coefficients are small}),
-$$||P + \Delta||_{H^r(B_{2.5\rho}) \to H^{r+2}(B_{2.5\rho})} \lesssim \rho,$$
+$$||P + \Delta||_{H^r(B_{2(1 + \varepsilon/2)\rho}) \to H^{r+2}(B_{2(1 + \varepsilon/2)\rho})} \lesssim \rho,$$
 so by (\ref{linearized inversion}),
-$$||(K_P - K_{-\Delta})(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})} \lesssim_s \rho ||\Delta^{-2} \delta_y||_{H^{s + 1}(B_{2.5\rho})} \lesssim \rho ||\delta_0||_{H^{s-3}}.$$
+$$||(K_P - K_{-\Delta})(\cdot, y)||_{H^{s + 1}(B_{2(1 + \varepsilon/2)\rho})} \lesssim_s \rho ||\Delta^{-2} \delta_y||_{H^{s + 1}(B_{2(1 + \varepsilon/2)\rho})} \lesssim \rho ||\delta_0||_{H^{s-3}}.$$
 Moreover, $\delta_0 \in H^{s - 3}$ provided that
 \begin{equation}\label{delta regularity}
 s < 3 - \frac{\ell}{2}.
@@ -1065,72 +1218,81 @@ s < 3 - \frac{\ell}{2}.
 
 Assuming (\ref{delta regularity}),
 \begin{align*}
-I &\lesssim ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} F_P(x, y) - F_{-\Delta}(x, y)|^2 ~dy ~dx\\
-&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \sup_{y \in \partial B_{2.5\rho}} ||F_P(\cdot, y) - F_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})}^2\\
-&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2 \sup_{y \in \partial B_{2.5\rho}} ||K_P(\cdot, y) - K_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2.5\rho})}^2\\
-&\lesssim \rho^{\ell + 1} ||v||_{L^\infty(\partial B_{2.5\rho})}^2.
+I &\lesssim ||v||_{L^\infty(\partial B_{2(1 + \varepsilon/2)\rho})}^2 \iint_{A_\rho} |(1 + |\Delta|)^{(s+1)/2} F_P(x, y) - F_{-\Delta}(x, y)|^2 ~dy ~dx\\
+&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2(1 + \varepsilon/2)\rho})}^2 \sup_{y \in \partial B_{2(1 + \varepsilon/2)\rho}} ||F_P(\cdot, y) - F_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2(1 + \varepsilon/2)\rho})}^2\\
+&\lesssim \rho^{\ell - 1} ||v||_{L^\infty(\partial B_{2(1 + \varepsilon/2)\rho})}^2 \sup_{y \in \partial B_{2(1 + \varepsilon/2)\rho}} ||K_P(\cdot, y) - K_{-\Delta}(\cdot, y)||_{H^{s + 1}(B_{2(1 + \varepsilon/2)\rho})}^2\\
+&\lesssim \rho^{\ell + 1} ||v||_{L^\infty(\partial B_{2(1 + \varepsilon/2)\rho})}^2.
 \end{align*}
 By Sobolev embedding, there exists $s' > 0$ so large that
-$$||w||_{L^\infty(\partial B_{2.5\rho})}^2 \lesssim \rho^{1-\ell} ||v||_{H^{s'}(\partial B_{2.5\rho})}^2.$$
+$$||w||_{L^\infty(\partial B_{2(1 + \varepsilon/2)\rho})}^2 \lesssim \rho^{1-\ell} ||v||_{H^{s'}(\partial B_{2(1 + \varepsilon/2)\rho})}^2.$$
 Now if we assume that $s' > s + 2$, it follows that
-$$||w||_{H^s(B_{2.5\rho})} \lesssim \rho^{1/2} ||v||_{H^{s'}(\partial B_{2.5\rho})}.$$
+$$||w||_{H^s(B_{2(1 + \varepsilon/2)\rho})} \lesssim \rho^{1/2} ||v||_{H^{s'}(\partial B_{2(1 + \varepsilon/2)\rho})}.$$
 By elliptic regularity applied to $-\Delta$, we may replace $s$ with an arbitrarily large exponent and this inequality will still hold, so we can drop the assumption (\ref{delta regularity}).
-We can also take $s' > 0.5$ and write $v = Tu$, where $Pu = 0$ (so $G_PTu = u|\partial B_{2.5\rho}$) so that
-$$||w||_{H^s(B_{2.5\rho})} \lesssim \rho ||u||_{H^{s' + .5}(B_{3\rho})}.$$
+We can also take $s' > 0.5$ and write $v = Tu$, where $Pu = 0$ (so $G_PTu = u|\partial B_{2(1 + \varepsilon/2)\rho}$) so that
+$$||w||_{H^s(B_{2(1 + \varepsilon/2)\rho})} \lesssim \rho ||u||_{H^{s' + .5}(B_{2(1 + \varepsilon)\rho})}.$$
 Now we can apply elliptic regularity to $P$ and replace $s'$ with an arbitrarily small exponent.
 \end{proof}
 
-\begin{lemma}[estimates on elliptic operators]
-If $Pu = 0$ on $B_{4\rho}$ and $0$ is a critical point of $u$, then
-$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{3\rho})}^2.$$
-\end{lemma}
-\begin{proof}
-After applying a translation, we may assume that $u(0) = 0$.
+Now let $u$ meet the hypotheses of Proposition \ref{boostrap elliptic}.
+After applying a translation, we may assume that $\int_{B_\rho} u~\vol = 0$.
 Then by elliptic regularity and the Poincar\'e inequality, for every $s > 0$,
 \begin{equation}\label{poincare error}
 ||u||_{H^s(B_\rho)}^2 \lesssim_s ||u||_{L^2(B_\rho)}^2 \lesssim \rho^2 ||du||_{L^2(B_\rho)}^2.
 \end{equation}
 Write $u = v + w$ where $v = G_{-\Delta}Tu$, so that by Lemma \ref{approx harmonic} and (\ref{poincare error}),
-$$||dw||_{L^2(B_{2.5\rho})}^2 \lesssim \rho^2 ||u||_{H^1(B_{2.6\rho})}^2 \lesssim \rho^4 ||du||_{L^2(B_{2.6\rho})}^2.$$
+$$||dw||_{L^2(B_{2(1 + \varepsilon/2)\rho})}^2 \lesssim \rho^2 ||u||_{H^1(B_{2(1 + 3\varepsilon/4)\rho})}^2 \lesssim \rho^4 ||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2.$$
 Moreover, $\Delta v = 0$.
 By Sobolev embedding and (\ref{poincare error}), there exists $s > 0$ such that
-$$|dv(0)|^2 = |dw(0)|^2 \lesssim ||w||_{C^1(B_\rho)}^2 \lesssim \rho^2||u||_{H^s(B_\rho)}^2 \lesssim \rho^4||du||_{L^2(B_{2.6\rho})}^2.$$
+$$|dv(0)|^2 = |dw(0)|^2 \lesssim ||w||_{C^1(B_\rho)}^2 \lesssim \rho^2||u||_{H^s(B_\rho)}^2 \lesssim \rho^4||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2.$$
 So by Lemma \ref{bootstrap Laplace},
 \begin{align*}
 ||du||_{L^2(B_\rho)}^2 &\leq ||dv||_{L^2(B_\rho)}^2 + ||dw||_{L^2(B_\rho)}^2 \\
-&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + |dv(0)|^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2\\
-&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2.
+&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + |dv(0)|^2 + O(\rho^4) ||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2\\
+&\leq 2^{-\ell-2} ||dv||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2.
 \end{align*}
 A similar argument shows
 \begin{align*}
-||dv||_{L^2(B_{2\rho})}^2 &\leq ||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2,
+||dv||_{L^2(B_{2\rho})}^2 &\leq ||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2,
 \end{align*}
 so
-$$||du||_{L^2(B_\rho)}^2 \lesssim 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2.6\rho})}^2.$$
+$$||du||_{L^2(B_\rho)}^2 \lesssim 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})}^2.$$
+To control the error term, we need a topological lemma.
 
-To control the error term, we observe that if we set
+\begin{lemma}\label{Poincare lemma}
+Let $A$ be the image under $d$ of $\ker P$, where $P$ is viewed as having domain $H^2(B_{2(1 + 3\varepsilon/4)\rho})$.
+Then for every $1$-form $\omega \in A$,
+$$||\omega||_{L^2(B_{(1 + 3\varepsilon/4)})} \lesssim \rho^{1/2} ||T\omega||_{L^2(\partial B_{1 + 3\varepsilon/4})}.$$
+\end{lemma}
+\begin{proof}
+Let
 \begin{align*}
 R_k &= \partial_i [a^{ij}, \partial_k] \partial_j + [b^i, \partial_k] \partial_i + [c, \partial_k]\\
-&= \partial_i a^{ij}_{,k} \partial_j + b^i_{,k} \partial_i + c_{,k}
+&= \partial_i a^{ij}_{,k} \partial_j + b^i_{,k} \partial_i + c_{,k}.
 \end{align*}
-then $R_k$ degenerates to a first-order operator at the origin by Assumption \ref{nice elliptic operator}.
-Setting $Ru = R_ku ~dx^k$, $\omega = du$, and choosing a solution operator $d^{-1}$, we see that if $\rho$ is small enough, then the PDE
-$$P\omega = dPd^{-1}\omega + Rd^{-1}\omega$$
-is uniformly elliptic from the space of closed $1$-forms in $H^2(B_{2.6\rho})$ to the space of closed $1$-forms in $L^2(B_{2.6\rho})$.
-So by boundary Schauder estimates and elliptic regularity,
-$$||\omega||_{L^2(B_{2.6\rho})}^2 \lesssim \rho^2 ||Tdu||_{L^2(\partial B_{2.6\rho})}^2 \leq \rho^2 ||Tdu||_{L^2(\partial(B_{3\rho} \setminus B_{2.6\rho}))}^2 \lesssim ||u||_{L^2(B_{3\rho} \setminus B_{2.6\rho})}^2.$$
-
-We have shown that TODO: Determine $N$
-$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{3\rho} \setminus B_{2\rho})}^2$$
-which is sufficient if $\rho$ is chosen so small that $O(\rho^4) < 2^{-\ell-2}$.
+Then $R_k$ degenerates to a first-order operator at the origin by (\ref{Taylor coefficients are small}).
+Setting $Ru = R_ku ~dx^k$, and choosing a solution operator $d^{-1}$, which is possible since
+$$\Homology^1(B_{2(1 + 3\varepsilon/4)\rho}) = 0,$$
+we see that if $\rho$ is small enough, then the pseudodifferential operator
+$$Q = dPd^{-1} + Rd^{-1}$$
+is uniformly elliptic of second order.
+Since $Q$ annihilates $A$, the ellipticity of $Q$ implies the claim.
 \end{proof}
 
-\subsection{Bootstrapping for $C^1$ minimal surfaces}
-Our goal in this subsection is to prove the following proposition.
+Lemma \ref{Poincare lemma} holds for $\omega = du$, so
+\begin{align*}
+||du||_{L^2(B_{2(1 + 3\varepsilon/4)\rho})} &\lesssim \rho^{1/2} ||Tdu||_{L^2(\partial B_{2(1 + 3\varepsilon/4)\rho})}
+ \leq \rho^{1/2} ||Tdu||_{L^2(\partial(B_{2(1 + \varepsilon)\rho} \setminus B_{2(1 + 3\varepsilon/4)\rho}))} \\
+&\lesssim ||u||_{L^2(B_{2(1 + \varepsilon)\rho} \setminus B_{2(1 + 3\varepsilon/4)\rho})}.
+\end{align*}
+Thus we have shown that
+$$||du||_{L^2(B_\rho)}^2 \leq 2^{-\ell-2}||du||_{L^2(B_{2\rho})}^2 + O(\rho^4) ||du||_{L^2(B_{2(1 + \varepsilon)\rho} \setminus B_{2\rho})}^2$$
+which is sufficient if $\rho$ is chosen so small that $O(\rho^4) < 2^{-\ell-2}$.
+This completes the proof of Proposition \ref{bootstrap elliptic}.
 
+\subsection{Estimates on $C^1$ hypersurfaces}
 \begin{proposition}
 \label{bootstrap C1}
-Let $(L_n)$ be a sequence of Caccioppoli sets in $M$ with $C^1$ boundary, $(\beta_n) \subseteq \RR$, and suppose that
+Let $(L_n)$ be a sequence of Caccioppoli sets in $M$ with $C^1$ boundary, $\varepsilon > 0$, and $(\beta_n) \subseteq \RR^+$ such that
 $$\Lambda(L_n, B(x_n, \rho_n)) \leq \beta_n.$$
 If
 $$\lim_{n \to \infty} \inf_{\partial L_n \cap B(x_n, \rho_n)} (\normal_{L_n})_d(x_n) = 1,$$
