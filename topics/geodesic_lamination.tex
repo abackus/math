@@ -6,14 +6,14 @@
 \usepackage{cancel}
 \usepackage{tikz-cd}
 
-\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
-\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
-\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\textheight}{9in} \setlength{\oddsidemargin}{-0.25in}
+\setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+\setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
 \setlength{\marginparwidth}{1.0in}
 \setlength{\abovedisplayskip}{0.2in}
 \setlength{\belowdisplayskip}{0.2in}
 \setlength{\parskip}{0.05in}
-\renewcommand{\baselinestretch}{1.10}
+\renewcommand{\baselinestretch}{1.05}
 
 \title[Geodesic laminations by minimal currents]{Geodesic laminations by minimal currents}
 \author{Aidan Backus}
@@ -956,7 +956,7 @@ We have three reasons to do this:
 \begin{enumerate}
 \item We need to analyze the minimal surface equation, and to do this we ust write a hypersurface as a graph. Thus we need to put a local product structure on $M$.
 \item We need a well-defined notion of hyperplane, at least locally, on $M$, so that we can compare minimal surfaces to hyperplanes; this is the essence of our bootstrapping argument.
-\item In the course of the above analysis, we will obtain certain linear elliptic operators $P$ which depend on the curvature tensor $\Riem$, and so we want to choose coordinates in which $\Riem$ is so close to vanishing that $P$ can be well-approximated by the classical Laplacian.
+\item In the course of the above analysis, we will obtain certain linear elliptic operators $P$ which depend on the metric $g$, and we need to write $g$ in such a way that $P$ can be well-approximated by the classical Laplacian.
 \end{enumerate}
 So, we now need to choose a suitable atlas on $M$ and suitable local trivializations of $TM$.
 We call these coordinates ``tubular trivializations".
@@ -964,22 +964,21 @@ We call these coordinates ``tubular trivializations".
 Let $\DD^{d - 1}$ denote the unit ball in $\RR^{d - 1}$ and let $e_j$ be the $j$th coordinate vector in $\RR^d$.
 
 \begin{definition}
-A tuple $V = (V, y, z, \psi)$ is called a \dfn{tubular trivialization} of $TM$ based at $(x, v) \in STM$ if $V$ is an open neighborhood of $x$ with the following properties.
-Let $\gamma: J \to M$ be an injective geodesic such that $\gamma(0) = x$ and $\gamma'(0) = v$.
+A tuple $V = (V, y, z, \psi)$ is called a \dfn{tubular trivialization} of $TM$ based at $(x, v) \in STM$ if $V$ is an open neighborhood of $x$ such that there exists an injective geodesic $\gamma: J \to V$ with the following properties:
 \begin{enumerate}
 \item (Coordinates) We have a diffeomorphism
 $$(y, z): V \to \DD^{d - 1} \times J.$$
-\item (Centering) $\{y = 0\}$ is the image of $\gamma$ and $\{z = 0\}$ contains $x$.
+\item (Centering) $\{y = 0\}$ is the image of $\gamma$, $\{z = 0\}$ contains $x$, $\gamma(0) = x$, and $\gamma'(0) = v$.
 \item (Orthogonality) The exponential pullback of $\{z = 0\}$ is the orthocomplement of $v$ in $T_x V$.
 \item (Trivial tangent bundle) We have a trivialization
 $$(y, z, \psi): TV \to \DD^{d - 1} \times J \times \RR^d$$
-such that $\gamma'(z) \mapsto e_1$.
+such that $\gamma'(z) \mapsto e_d$.
 \item (Isometry) $\psi$ is an isometry on $T_xV$.
 \item (Approximately euclidean) The metric $g$ takes the form $g = I + O(|y|^2 + |z|^2)$ when written out in the above coordinate frame.
 \end{enumerate}
 \end{definition}
 
-\begin{lemma}
+\begin{lemma}\label{existence of trivializations}
 For every $(x, v) \in STM$ there exists a tubular trivialization of $TM$ based at $(x, v)$.
 \end{lemma}
 \begin{proof}
@@ -1000,84 +999,64 @@ The reader should note carefully that while we do have the triangle inequality
 \end{equation}
 the quantity $\int_F \omega$ depends strongly on the choice of trivialization.
 
-\subsection{The surface area Lagrangian}
-Let $U$ be a set of locally finite perimeter, and suppose that $N = \partial^* U$ is $C^1$.
-If $I$ is chosen small enough, the implicit function theorem and the fact that $\normal_U(x)^\sharp = X_1$ implies that there exists a $C^1$ function $f: \DD^{d - 1} \to J$ with $N = \{z = f(y)\}$, hence $U = \{z < f(y)\}$, and $df(0) = 0$.
-Thus $\Lambda(U, x, \rho) = 0$ is equivalent to $df = 0$ on a suitable neighborhood of $0$, and we have a diffeomorphism $\tilde f: \DD^{d - 1} \to N$.
-After extending $\normal_U^\sharp$ to a unit vector field $X$ on $V$ by $X(y, z) = \normal^\sharp(y, 0)$, let $\mathscr L = \tilde f^* \iota_X \vol$, so that $\int_{\DD^{d - 1}} \mathscr L$ is the surface area of $N$.
-To simplify $\mathscr L$, we note that along $N$,
-$$X = \frac{*\bigwedge_{i < d} \partial_i \tilde f}{|*\bigwedge_{i < d} \partial_i \tilde f|}.$$
+\subsection{The minimal surface Lagrangian}
+Let $U$ be a set of locally finite perimeter, and suppose that $N = \partial U$ is $C^1$.
+Fix $x \in N$ and let $v = \normal_U(x)^\sharp$ be the normal vector to $N$ at $x$.
+Then by Lemma \ref{existence of trivializations}, we can choose a tubular trivialization $(V, y, z, \psi)$ of $TM$ based at $(x, v)$.
+We now identify $V$ with $J \times \DD^{d - 1}$, so that the tangent plane to $N$ at $x$ is $\{z = 0\}$.
+
+If $V$ is chosen small enough, the implicit function theorem and the fact that $\normal_U(x)^\sharp \mapsto e_d$ implies that there exists a $C^1$ function $f: \DD^{d - 1} \to J$ whose graph is $N$.
+In particular:
+\begin{enumerate}
+\item $f(0) = x$.
+\item $0$ is a critical point of $f$.
+\item $\Lambda(U, x, \rho) = 0$ iff $df = 0$ identically.
+\item The map $\tilde f: \DD^{d - 1} \to \DD^{d - 1} \times J$ given by $\tilde f(y) = (y, f(y))$ realizes $N$ as an embedding of $\DD^{d - 1}$.
+\end{enumerate}
 
 \begin{lemma}
-Let $(Y_i)$ be the orthonormal frame on $V = \DD^{d - 1} \times J$, with $Y_i = \nabla y_i$ if $i < d$ and $Y_d = \nabla z$.
-Then
-$$*\bigwedge_{i<d} \partial^i \tilde f = Y_d - \sum_{i<d} \partial^i fY_i.$$
+Assume that $f,N$ are related as above.
+There exists $\delta > 0$ and a Lagrangian density $\mathscr L$ on $\DD^{d - 1}$ which is as smooth as possible, such that if $||df||_{L^\infty} < \delta$, then $|N \cap V| = \int_{\DD^{d - 1}} \mathscr L$
+and
+$$\mathscr L = (1 + O(|y|^2))\sqrt{1 + \sum_{i < d} f_{,i}^2(y)} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
+where $y$ is the usual coordinate on $\DD^{d - 1}$.
 \end{lemma}
 \begin{proof}
-Since $Y$ is an orthonormal frame, the Hodge star can be computed from the formal determinant
+Write $\tilde g(f)$ for the metric tensor on $N$, so in the coordinates induced by $\tilde f$ we get
+$$\tilde g_{ij}(f) = g(d\tilde f(\partial_i), d\tilde f(\partial_j)) = g_{ij} + f_{,i}g_{jd} + f_{,j}g_{id} + f_{,i}f_{,j} g_{dd}.$$
+Using the approximately euclidean nature of $(y, z)$ and the fact that the coordinates on $N$ induced by $\tilde f$ are comparable to $(y, z)$ (which follows because $df \in L^\infty$), we see that the coordinates induced by $\tilde f$ are approximately euclidean and hence
+$$\tilde g_{ij}(f) = \delta_{ij} + f_{,i}f_{,j} + O(|y|^2(1 + ||df||_{L^\infty} + ||df||_{L^\infty}^2)).$$
+We can thus introduce the Lagrangian density
+$$\mathscr L = \sqrt{|\det \tilde g(f)_y|} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
+which satisfies $|N \cap V| = \int_{\DD^{d - 1}} \mathscr L$.
+
+If we set $a_{ij} = \delta_{ij} + f_{,i}f_{,j}$ then $a$ is invertible if $||df||_{L^\infty}$ is small, in which case the formula
+$$\det \tilde g(f) = \det (I + O(|y|^2)B^{-1}) \det B$$
+induces the Taylor expansion
+$$\det \tilde g(f) = (1 + O(|y|^2 \tr B^{-1})) \det B.$$
+But $\sqrt{\det B}$ is exactly what the volume form on $N$ would be if $g_{ij} = \delta_{ij}$, thus $\det B = 1 + \sum_i f_{,i}^2$.
+
+To bound the error term, we assume that $||df||_{L^\infty}$ is so small that $\tr B^{-1} \leq 2$, and then Taylor expand $\sqrt\cdot$ about $1$ to get
 \begin{align*}
-*\bigwedge_{i < d} \partial^i \tilde f &=
-\begin{vmatrix} \partial^1 \tilde f^1 & \cdots & \partial^1 \tilde f^d \\
-& \vdots \\
-\partial^{d - 1} \tilde f^1 & \cdots & \partial^{d - 1} \tilde f^d \\
-Y_1 & \cdots & Y_d
-\end{vmatrix} = \begin{vmatrix} 1 & 0 & \cdots & 0 & \partial^1 f \\
-0 & 1 & \cdots & 0 & \partial^2 f \\
-& & \vdots \\
-0 & 0 & \cdots & 1 & \partial^{d - 1} f \\
-Y_1 & Y_2 & \cdots & Y_{d - 1} & Y_d
-\end{vmatrix}
-\end{align*}
-which can be simplified by induction. If $d = 2$ then we get
-$$*\bigwedge_{i < d} \partial^i \tilde f = Y_2 - \partial^1 f Y_1.$$
-Otherwise, we can write
-\begin{align*}
-*\bigwedge_{i < d} \partial^i \tilde f &= \begin{vmatrix}  1 & 0 & \cdots & 0 & \partial_2 f \\
-0 & 1 & \cdots & 0 & \partial^3 f \\
-& & \vdots \\
-0 & 0 & \cdots & 1 & \partial^{d - 1} f \\
-Y_2 & Y_3 & \cdots & Y_{d - 1} & Y_d
-\end{vmatrix} + (-1)^{d - 1} \partial^1 f
-\begin{vmatrix}
-0 & 1 & \cdots & 0 & 0 \\
-& & \vdots \\
-0 & 0 & \cdots & 1 & 0 \\
-0 & 0 & \cdots & 0 & 1 \\
-Y_1 & Y_2 & \cdots & Y_{d - 2} & Y_{d - 1}
-\end{vmatrix}\\
-& q= Y_d - \sum_{1 < i < d} \partial_if Y_i + (-1)^{d - 1} (-1)^d \partial_1 f Y_1 \\
-&= Y_d - \partial_if Y_i. \qedhere
+\sqrt{\det \tilde g(f)} &= \sqrt{\det B}(1 + O(|y|^2)). \qedhere
 \end{align*}
 \end{proof}
 
-From the above computation we obtain
-$$X = \frac{Y_d - \partial^i f Y_i}{\sqrt{1 + |\nabla f|_{\tilde g}^2}},$$
-where $\tilde g_{ij} = g(Y^i, Y^j)$.
-Thus
-\begin{align*}
-\mathscr L &= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} \tilde f^* \left(\iota_{Y_d}(dz \wedge dy) - \partial^i f \iota_{Y_i}(dz \wedge dy) \right)\\
-&= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} \tilde f^* \left(dy + (-1)^i \partial^i f ~dz \wedge dy^1 \wedge \cdots \wedge \widehat{dy^i} \wedge \cdots dy^{d - 1}\right).
-\end{align*}
-Since $dz = \partial_i f(y) ~dy^i$, we conclude
-\begin{align*}
-\mathscr L &= \sqrt{\frac{\det \tilde g}{1 + |\nabla f|_{\tilde g}^2}} (1 + |\nabla f|_{\tilde g}^2) ~dy\\
-&= \sqrt{\det(\tilde g))(1 + |\nabla f|_{\tilde g}^2)} ~dy.
-\end{align*}
-TODO: Check this computation, this is important.
+We can always impose $||df||_{L^\infty} < \delta$ by shrinking $V$, since $f \in C^1$ has a critical point at the origin.
+Linearizing $\mathscr L$ about $||df||_{L^\infty} = y = 0$, then $\mathscr L$ is approximated by the Dirichlet energy
+$$\mathscr I = \left(1 + \frac{|df_y|^2}{2}\right) ~dy_1 \wedge \cdots dy_{d - 1}$$
+of $f$. Here the norm $|\cdot|$ is meant in the sense of the euclidean norms on $\DD^{d - 1}$ and $J$.
+In particular, the Euler-Lagrange equation for $\mathscr L$ is a uniformly elliptic quasilinear equation, and we have:
 
-Since $\mathscr L$ is the Lagrangian for the minimal surface equation on $V$, we can now read off some properties of sets of least perimeter from $\mathscr L$.
-
-\begin{proposition}[de Giorgi-Nash-Moser theory]\label{regularity of reduced boundary}
+\begin{proposition}\label{regularity of reduced boundary}
 Let $U$ be a set of least perimeter with conormal $1$-form $\normal$.
 If $\normal$ is continuous, then $\partial U$ is as smooth as possible.
 \end{proposition}
 \begin{proof}
 According to Proposition \ref{locality of Caccioppoli}, $\partial U$ is $C^1$, so we can cover $\partial U$ by tubular trivializations of $TM$.
-In each such trivialization, $\partial U$ is the graph of a $C^1$ function which minimizes $\int_{\DD^{d - 1}} \mathscr L$.
-Since $\mathscr L$ is uniformly convex and as smooth as possible, de Giorgi-Nash-Moser theory implies that $f$ is as smooth as possible \cite{morrey2009multiple}.
+In each such trivialization, $\partial U$ is the graph of a $C^1$ function which solves the Euler-Lagrange equation $Pf = 0$ for $\mathscr L$.
+After shrinking the trivialization suitably, the quasilinear operator $P$ becomes uniformly elliptic with coefficients which are as smooth as possible, so de Giorgi--Nash--Moser theory implies that $f$ is as smooth as possible \cite{morrey2009multiple}.
 \end{proof}
-
-\subsection{Linearized elliptic equations}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
