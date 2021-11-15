@@ -947,9 +947,6 @@ However, we will never need this fact.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{The minimal surface equation}
-TODO: Exposit
-
-\subsection{Tubular trivializations}
 Up to this point we have carefully carried out constructions which are diffeomorphism invariant; this led to easy proofs of any relevant fact that could be reduced to its euclidean case.
 At this point in the proof, however, we break diffeomorphism invariance.
 We have three reasons to do this:
@@ -961,6 +958,7 @@ We have three reasons to do this:
 So, we now need to choose a suitable atlas on $M$ and suitable local trivializations of $TM$.
 We call these coordinates ``tubular trivializations".
 
+\subsection{Tubular trivializations}
 Let $\DD^{d - 1}$ denote the unit ball in $\RR^{d - 1}$ and let $e_j$ be the $j$th coordinate vector in $\RR^d$.
 
 \begin{definition}
@@ -1010,53 +1008,206 @@ In particular:
 \begin{enumerate}
 \item $f(0) = x$.
 \item $0$ is a critical point of $f$.
-\item $\Lambda(U, x, \rho) = 0$ iff $df = 0$ identically.
+\item $\Lambda(U, x, \rho) = 0$ iff $df = 0$ on $B_\rho$.
 \item The map $\tilde f: \DD^{d - 1} \to \DD^{d - 1} \times J$ given by $\tilde f(y) = (y, f(y))$ realizes $N$ as an embedding of $\DD^{d - 1}$.
 \end{enumerate}
 
+In general, if $f$ is a smooth function $\DD^{d - 1} \to J$, and we endow $\DD^{d - 1} \times J$ with the metric tensor induced by $g$, we write $\tilde g[f]$ for the pullback of the metric tensor on its graph to $\DD^{d - 1}$.
+Thus
+\begin{equation}\label{induced metric}
+\tilde g[f]_{ij} = g(d\tilde f(\partial_i), d\tilde f(\partial_j)) = g_{ij} + f_{,i}g_{jd} + f_{,j}g_{id} + f_{,i}f_{,j} g_{dd}.
+\end{equation}
+We let $\mathscr L[f]$ denote the volume form on $\DD^{d - 1}$ induced by $\tilde g[f]$, and view $\mathscr L$ as the minimal surface Lagrangian.
+To compute $\mathscr L[f]$ we exploit the Taylor expansion
+\begin{equation}\label{metric taylor}
+g_{ij} = \delta_{ij} - \frac{1}{3} R_{i\mu\nu j} y^\mu y^\nu - \frac{1}{6} R_{i\mu\nu j;\lambda} y^\mu y^\nu y^\lambda + \cdots.
+\end{equation}
+Here we adopt the convention of summing over raised and lowered indices, and that the indices $i,j,k, \dots$ range over $1, 2, \dots, d - 1$ while $\mu, \nu, \lambda, \dots$ range over $1, 2, \dots, d$, and $y^d = f(y)$.
+
+We now estimate the cubic terms of (\ref{metric taylor}).
+We denote the sum of the cubic and higher terms by $\varepsilon_1$.
+By the differential Bianchi identity,
+$$R_{iddj;d} = R_{iddj;d} + R_{iddd;j} + R_{ijdd;d} = 0$$
+so in each nonzero cubic term, at least one of the $\mu,\nu,\lambda$ must not be $d$.
+Thus, by Young's inequality,
+\begin{equation}\label{first error}
+|\varepsilon_1| = \frac{1}{6} |R_{i\mu\nu j;\lambda} y^\mu y^\nu y^\lambda| \lesssim |y|^3 + |y|^2 |f(y)| + |y| |f(y)|^2 \lesssim |y|^3 + |f(y)|^3.
+\end{equation}
+
+Plugging (\ref{metric taylor}) into (\ref{induced metric}), we obtain
+\begin{equation}\label{induced metric in tensor}
+\tilde g = 1 + df \otimes df - \frac{1}{3}(R_{\bullet \mu \nu \bullet} + 2df \otimes R_{\bullet \mu \nu d} + R_{d \mu \nu d} df \otimes df) y^\mu y^\nu + \varepsilon_2
+\end{equation}
+where, by (\ref{first error}), the error term $\varepsilon_2$ satisfies
+\begin{equation}\label{second error}
+|\varepsilon_2| \leq (1 + |df_y| + |df_y|^2) |\varepsilon_1| \lesssim (|y|^3 + |f(y)|^3)(1 + |df_y| + |df_y|^2).
+\end{equation}
+As long as $|df \otimes df| < 1$, we can rewrite (\ref{induced metric in tensor}) as
+\begin{equation}\label{induced metric in tensor 2}
+\tilde g = (1 + df \otimes df)\left(1 + -\frac{1}{3}(1 + df \otimes df)^{-1}(R_{\bullet \mu \nu \bullet} + 2df \otimes R_{\bullet \mu \nu d} + R_{d \mu \nu d} df \otimes df) y^\mu y^\nu + \varepsilon_3\right)
+\end{equation}
+where by (\ref{second error}) and our assumption on $|df \otimes df|$,
+\begin{equation}\label{third error}
+|\varepsilon_3| \lesssim (1 + |df_y|)\varepsilon_2 \lesssim (1 + |df_y|)(|y|^3 + |f(y)|^3).
+\end{equation}
+By the Weinstein-Aronszajn identity, the Taylor expansion of the determinant map, and (\ref{induced metric in tensor 2}),
+\begin{align}\label{sylvester}
+\det \tilde g &= (1 + |df|^2)\left(1 - \frac{1}{3} \tr ((1 + df \otimes df)^{-1} (R_{\bullet\mu\nu \bullet} + 2df \otimes R_{\bullet \mu \nu d} + R_{d \mu \nu d} df \otimes df)) y^\mu y^\nu + \varepsilon_4\right),\\
+\label{error 4}
+|\varepsilon_4| &= |\tr \varepsilon_3| \lesssim |y|^3 + |f(y)|^3.
+\end{align}
+Employing the identities
+\begin{align*}
+(1 + df \otimes df)^{-1} &= \sum_{\ell=0}^\infty (-1)^\ell df^{\otimes 2\ell} \\
+(df \otimes df)(v \otimes w) &= (df, w)(v \otimes df),
+\end{align*}
+we conclude that the trace in (\ref{sylvester}) is
+$$R_{i\mu \nu i} + 2f_{,i} R_{i\mu \nu d} + |df|^2 R_{d\mu \nu d} - f_{,i} f_{,j} R_{i\mu \nu j} + \varepsilon_5 R_{\bullet \mu \nu \bullet}$$
+where $|\varepsilon_5| \lesssim |df|^4$.
+Plugging everything into (\ref{sylvester}) and employing the identity $\mathscr L[f] = \sqrt{\det \tilde g(y)} ~dy$, (\ref{error 4}), and Young's inequality,
+\begin{align}\label{minimal surface lagrangian}
+\mathscr L[f] &= \sqrt{1 + S_{ii} + 2 f_{,i} S_{id} + |df|^2 + |df|^2 S_{dd} + f_{,i} f_{,j} S_{ij} + \varepsilon_6} ~dy, \\
+S_{ij} &= -\frac{1}{3} R_{i \mu \nu j} y^\mu y^\nu, \\
+\label{error 6}
+|\varepsilon_6| &\lesssim |y|^3 + |f(y)|^3 + |df_y|^6.
+\end{align}
+We now linearize $\mathscr L$ about $df = 0$. Since $S$ depends on $f$ but not $df$, we employ (\ref{error 6}) to compute
+\begin{align}\label{linear lagrangian}
+\mathscr L[f] &= \left(\sqrt{1 + S_{ii}} + \frac{f_{,i} S_{id} + |df|^2 + |df|^2 S_{dd} + f_{,i} f_{,j} S_{ij}}{2 \sqrt{1 + S_{ii}}} + \varepsilon_7\right) ~dy\\
+|\varepsilon_7| &\lesssim |y|^3 + |f(y)|^3 + |df_y|^4.
+\end{align}
+We call the principal part
+$$\mathscr I[f] = \left(\sqrt{1 + S_{ii}} + \frac{f_{,i} S_{id} + |df|^2 + |df|^2 S_{dd} + f_{,i} f_{,j} S_{ij}}{2 \sqrt{1 + S_{ii}}}\right) ~dy$$
+the \dfn{modified Dirichlet energy} of $f$. Indeed, if $R_{i \mu \nu j} = 0$, then $\mathscr I[f]$ is minimized exactly by the harmonic functions.
+
+
+
+\section{this stuff sucks}
 \begin{lemma}
-Assume that $f,N$ are related as above.
-There exists $\delta > 0$ and a Lagrangian density $\mathscr L$ on $\DD^{d - 1}$ which is as smooth as possible, such that if $||df||_{L^\infty} < \delta$, then $|N \cap V| = \int_{\DD^{d - 1}} \mathscr L$
-and
-$$\mathscr L = (1 + O(|y|^2))\sqrt{1 + \sum_{i < d} f_{,i}^2(y)} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
-where $y$ is the usual coordinate on $\DD^{d - 1}$.
+Let $N$ be the graph of a $C^1$ function $f: \DD^{d - 1} \to J$ with $f(0) = 0$.
+There exists a volume form $\mathscr L[f]$ on $\DD^{d - 1}$ which is as smooth as possible, such that for every $0 < \rho < 1$,
+$$|N \cap (B_\rho \times J)| = \int_{B_\rho} \mathscr L[f],$$
+where the volume is meant in the sense of the metric $g$ on $V$, not the euclidean metric on $\DD^{d - 1} \times J$,
+and as $f \to 0$ in $W^{1, \infty}$ we have the approximation
+\begin{equation}\label{Lagrangian with error}
+\mathscr L[f] = \sqrt{1 + O(|y|^2 + |f(y)|^2)(1 + |df_y|)} \sqrt{1 + |df_y|^2} ~dy_1 \wedge \dots \wedge dy_{d - 1},
+\end{equation}
+where $y$ is the usual coordinate on $\DD^{d - 1}$ and $|\cdot|$ is in the sense of the euclidean norm on $J$.
 \end{lemma}
 \begin{proof}
 Write $\tilde g(f)$ for the metric tensor on $N$, so in the coordinates induced by $\tilde f$ we get
 $$\tilde g_{ij}(f) = g(d\tilde f(\partial_i), d\tilde f(\partial_j)) = g_{ij} + f_{,i}g_{jd} + f_{,j}g_{id} + f_{,i}f_{,j} g_{dd}.$$
-Using the approximately euclidean nature of $(y, z)$ and the fact that the coordinates on $N$ induced by $\tilde f$ are comparable to $(y, z)$ (which follows because $df \in L^\infty$), we see that the coordinates induced by $\tilde f$ are approximately euclidean and hence
-$$\tilde g_{ij}(f) = \delta_{ij} + f_{,i}f_{,j} + O(|y|^2(1 + ||df||_{L^\infty} + ||df||_{L^\infty}^2)).$$
-We can thus introduce the Lagrangian density
-$$\mathscr L = \sqrt{|\det \tilde g(f)_y|} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
-which satisfies $|N \cap V| = \int_{\DD^{d - 1}} \mathscr L$.
-
-If we set $a_{ij} = \delta_{ij} + f_{,i}f_{,j}$ then $a$ is invertible if $||df||_{L^\infty}$ is small, in which case the formula
-$$\det \tilde g(f) = \det (I + O(|y|^2)B^{-1}) \det B$$
-induces the Taylor expansion
-$$\det \tilde g(f) = (1 + O(|y|^2 \tr B^{-1})) \det B.$$
-But $\sqrt{\det B}$ is exactly what the volume form on $N$ would be if $g_{ij} = \delta_{ij}$, thus $\det B = 1 + \sum_i f_{,i}^2$.
-
-To bound the error term, we assume that $||df||_{L^\infty}$ is so small that $\tr B^{-1} \leq 2$, and then Taylor expand $\sqrt\cdot$ about $1$ to get
+We define $a_{ij} = \delta_{ij} + f_{,i}f_{,j}$ so that
+$$\tilde g_{ij}(f) = a_{ij} + (g_{ij} - \delta_{ij}) + f_{,i}g_{jd} + f_{,j}g_{id} + f_{,i}f_{,j}(g_{dd} - 1).$$
+Using the approximately euclidean nature of $(y, z)$, the assumption that $f \to 0$, and the mean value theorem,
 \begin{align*}
-\sqrt{\det \tilde g(f)} &= \sqrt{\det B}(1 + O(|y|^2)). \qedhere
+|\tilde g_{ij}(f)(y) - a_{ij}(y)| &\leq |g_{ij} - \delta_{ij}| + |df_y|(|g_{id}| + |g_{jd}|) + |df_y|^2 |g_{dd} - 1|\\
+&\lesssim (|y|^2 + |f(y)|^2)(1 + |df_y| + |df_y|^2)\\
+&\lesssim (|y|^2 + |f(y)|^2)(1 + |df_y|).
 \end{align*}
+The assumption that $f \to 0$ in $W^{1, \infty}$ allows us to assume that $b_{ij} = -f_{,i}f_{,j}$ satisfies that $||b_{ij}||_{L^\infty} < 1/(2d)$ is so small that the Neumann series
+\begin{equation}\label{inverting a}
+a^{-1} = \sum_{k=0}^\infty b^k
+\end{equation}
+converges almost everywhere and hence
+$$\tilde g(f) = (I + O(|y|^2 + |f(y)|^2)(1 + |df_y|)a^{-1})a.$$
+Thus
+$$\det \tilde g(f) = \det(I + O(|y|^2 + |f(y)|^2)(1 + |df_y|)a^{-1}) \det a.$$
+Moreover, $\sqrt{\det a(y)} ~dy$ would be the volume element of $N$ if $g$ was euclidean, thus
+\begin{equation}\label{classical Lagrangian}
+\det a = 1 + \delta^{ij} f_{,i} f_{,j}.
+\end{equation}
+Taylor expanding the error factor,
+\begin{equation}\label{Lagrangian error factor}
+\det(I + O(|y|^2 + |f(y)|^2)(1 + |df_y|)a^{-1}) = (1 + O(|y|^2 + |f(y)|^2)(1 + |df_y|) \tr a^{-1}).
+\end{equation}
+Summing the trace of (\ref{inverting a}),
+\begin{equation}\label{bounding the trace}
+|\tr a^{-1}| \leq \frac{1}{1 - |\delta^{ij} f_{,i}f_{,j}|} \lesssim 1
+\end{equation}
+so, since
+$$|N \cap V| = \int_{\DD^{d - 1}} \sqrt{|\det \tilde g(f)(y)|} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
+we deduce (\ref{Lagrangian with error}) from (\ref{classical Lagrangian}, \ref{Lagrangian error factor}, \ref{bounding the trace}).
 \end{proof}
 
-We can always impose $||df||_{L^\infty} < \delta$ by shrinking $V$, since $f \in C^1$ has a critical point at the origin.
-Linearizing $\mathscr L$ about $||df||_{L^\infty} = y = 0$, then $\mathscr L$ is approximated by the Dirichlet energy
-$$\mathscr I = \left(1 + \frac{|df_y|^2}{2}\right) ~dy_1 \wedge \cdots dy_{d - 1}$$
-of $f$. Here the norm $|\cdot|$ is meant in the sense of the euclidean norms on $\DD^{d - 1}$ and $J$.
-In particular, the Euler-Lagrange equation for $\mathscr L$ is a uniformly elliptic quasilinear equation, and we have:
+\subsection{Harmonic approximation}
+Using the Taylor expansion of $\sqrt \cdot$, we can approximate $\mathscr L[f]$ by the \dfn{modified Dirichlet energy}, which schematically of the form
+$$\mathscr I[f] = \left(1 + \frac{|df_y|^2}{2} + O(|y|^2 + |f(y)|^2)(1 + |df_y|)\right) ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
+whenever $f$ is small in $W^{1, \infty}$.
+Minimizers of $\mathscr I[f]$ solve a semilinear Euler-Lagrange equation which is of the form
+\begin{equation}\label{semilinear EL}
+\Delta f(y) + O(|f(y)|(1 + |df_y|)) + \Div O(|y|^2 + |f(y)|^2) = 0.
+\end{equation}
+To top order, (\ref{semilinear EL}) is just the Laplace equation, so (\ref{semilinear EL}) has a good regularity theory.
 
-\begin{proposition}\label{regularity of reduced boundary}
+\begin{lemma}\label{regularity of reduced boundary}
 Let $U$ be a set of least perimeter with conormal $1$-form $\normal$.
 If $\normal$ is continuous, then $\partial U$ is as smooth as possible.
-\end{proposition}
+\end{lemma}
 \begin{proof}
 According to Proposition \ref{locality of Caccioppoli}, $\partial U$ is $C^1$, so we can cover $\partial U$ by tubular trivializations of $TM$.
-In each such trivialization, $\partial U$ is the graph of a $C^1$ function which solves the Euler-Lagrange equation $Pf = 0$ for $\mathscr L$.
-After shrinking the trivialization suitably, the quasilinear operator $P$ becomes uniformly elliptic with coefficients which are as smooth as possible, so de Giorgi--Nash--Moser theory implies that $f$ is as smooth as possible \cite{morrey2009multiple}.
+In each such trivialization, $\partial U$ is the graph of a $C^1$ function $f$ with a double zero at $0$, which minimizes $\mathscr L[f]$, and we can make $||f||_{W^{1, \infty}}$ as small as we want by shrinking its domain to a small neighborhood of $0$.
+So de Giorgi--Nash--Moser theory implies that $f$ is as smooth as possible \cite{morrey2009multiple}.
 \end{proof}
+
+We are interested in the case that $\Lambda(U, x, \rho)$ and $\rho$ are small and $f(0) = 0$.
+In that case, the lower-order terms in (\ref{semilinear EL}) become vanishingly small, and so solutions to (\ref{semilinear EL}) should be approximated well by solutions to the Laplace equation.
+We now use this fact to prove a bootstrapping lemma for minimizers of $\mathscr L$.
+
+\begin{definition}
+Let $f \in C^1(B_\rho)$. The \dfn{harmonic approximant} $Hf$ to $f$ is the function which solves the Dirichlet problem
+\begin{align}
+\label{Hf is harmonic} \Delta Hf &= 0, \\
+\label{Hf boundary data} Hf|\partial B_\rho &= f|\partial B_\rho
+\end{align}
+on $B_\rho$.
+\end{definition}
+
+It is clear from (\ref{Hf boundary data}) that
+$$\eta(U, B_\rho \times J) \leq \int_{B_\rho} \mathscr L[Hf]$$
+and hence, if $N = \partial U$ is the graph of $f$,
+$$\int_{B_\rho} \mathscr L[f] - \mathscr L[Hf] \leq |N| - \eta(U, B_\rho \times J).$$
+
+We write
+$$\mathscr L_\rho[f] = \sqrt{1 + O(|y|^2 + |f(y)|^2)(1 + |\overline{df}|)} \sqrt{1 + |\overline{df}|^2} ~dy_1 \wedge \cdots \wedge dy_{d - 1}$$
+where $(\overline{df}_\rho)_i$ is the mean of $\partial_i f$ over $B_\rho$.
+Note carefully that $\mathscr L_\rho[f]$ is not constant: the averaging is only done in $df$ and not in $f$ or $y$.
+
+\begin{lemma}
+Let $(f_n)$ be a sequence in $C^1(B_\rho \to J)$, with undergraphs $U_n \subseteq B_\rho \times J$, and $(\beta_n)$ a sequence in $\RR^+$. Suppose that $f_n \to 0$ in $W^{1, \infty}$,
+$$|\partial U_n| - \eta(U_n, B_\rho \times J) \ll \beta_n,$$
+and
+$$\int_{B_\rho} \mathscr L[f_n] - \mathscr L_\rho[f_n] \leq \beta_n.$$
+Then
+$$\int_{B_{\rho/2}} \mathscr L[f_n] - \mathscr L_{\rho/2}[f_n] \ll \frac{\beta_n}{2^{d + 1}}.$$
+\end{lemma}
+\begin{proof}
+We write $\mathscr L[f_n] = F_n(y) ~dy_1 \wedge \cdots \wedge dy_{d - 1}$ and similarly $\mathscr L_\rho[f_n] = F_{n,\rho}(y) ~dy$.
+In the below proof we suppress the subscript $n$ on $f$ when no confusion can result.
+Using the inequality
+$$\sqrt{1 + \alpha} - \sqrt{1 + \beta} \leq \frac{\alpha - \beta}{2\sqrt{1 + \beta}}$$
+valid if $\alpha,\beta > -1$, and the equation
+$$F_n(y) = \sqrt{1 + |df_y|^2 + O(|y|^2 + |f(y)|^2)(1 + |df_y|)},$$
+we deduce for $n$ large that
+$$\int_{B_{\rho/2}} \mathscr L[f_n] - \mathscr L_{\rho/2}[f_n] \leq \frac{1}{2}\int_{B_{\rho/2}} \frac{|df_y|^2 - |\overline{df}_\rho|^2 + O(|y|^2 + |f(y)|^2)(1 + |df_y| + |\overline{df}_\rho|)}{\sqrt{1 + |\overline{df}_\rho|^2 + O(|y|^2 + |f(y)|^2)(1 + |\overline{df}_\rho|)}} ~dy.$$
+TODO: Those should be $\rho/2$'s
+
+For every $\varepsilon > 0$ we can use the convergence $f \to 0$ to find $n$ so large that
+$$\frac{1}{1 + |\overline{df}_\rho|^2 + O(|y|^2 + |f(y)|^2)(1 + |\overline{df}_p|)} \leq \frac{(1 + \varepsilon)^2}{1 - O(\rho)} \frac{1}{1 + |df_\rho|^2} \leq \frac{(1 + \varepsilon)^2}{1 - O(\rho)}.$$
+Therefore
+\begin{align*}
+&\int_{B_{\rho/2}} \mathscr L[f_n] - \mathscr L_{\rho/2}[f_n] \\
+&\qquad \leq \frac{1 + \varepsilon}{2\sqrt{1 - O(\rho)}} \left[\int_{B_{\rho/2}} |df_y|^2 - |\overline{df}_{\rho/2}|^2 ~dy + \int_{B_{\rho/2}} O(|y|^2 + |f(y)|^2)(1 + |df_y| + |\overline{df}_{\rho/2}|) ~dy\right]\\
+&\qquad =: \frac{1 + \varepsilon}{2\sqrt{1 - O(\rho)}}(I + J).
+\end{align*}
+TODO: Estimate $I$, we should get
+$$I \leq \frac{(1 + \varepsilon)^2}{2^{d + 1}} ||df - \overline{df}_\rho||_{L^2(B_\rho)}^2 + B(\varepsilon) ||df - dHf||_{L^2(B_\rho)}^2.$$
+TODO: Prove a lemma that makes the $df - dHf$ term go to $0$.
+To estimate $J$, we bound
+$$J \leq (1 + ||df||_{L^\infty}) \int_{B_{\rho/2}} O(|y|^2 + |f(y)|^2) ~dy \lesssim (1 + \varepsilon)(\rho^2 + ||f||_{L^\infty}^2) \lesssim \rho^2 + \varepsilon$$
+if $n$ is large enough.
+\end{proof}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
