@@ -1,0 +1,269 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{9in} \setlength{\oddsidemargin}{-0.25in}
+\setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+\setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.05}
+
+\title[Geodesic laminations by minimal currents]{Geodesic laminations by minimal currents}
+\author{Aidan Backus}
+\date{July 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\Ric}{\mathrm{Ric}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H_{\mathrm{dR}}}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+% style=alphabetic
+\usepackage[backend=bibtex,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{topics.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tableofcontents
+
+\section{De Giorgi lemma in conformal gauge}
+Let $g$ be a metric on $[-\rho, \rho] \times \RR$.
+Let
+$$\mathscr L(x, \omega, p) = \sqrt{g_{11}(x, \omega) + 2g_{12}(x, u)p + g_{22}(x, \omega) p^2}$$
+be the infinitesimal arc length of the graph of $u$ where $u' = p$.
+
+We always assume that
+$$g = f^2 \begin{bmatrix}1 & \\ & 1\end{bmatrix}$$
+for some real function $f: [-\rho, \rho] \times \RR \to \RR$.
+We say that $g$ is in \dfn{conformal gauge}.
+Clearly any metric on $\RR^2$ can be put in conformal gauge, but this is not true in higher dimensions, where we will need to find a better gauge.
+
+Thus
+$$\mathscr L(x, \omega, p) = f(x, \omega)\sqrt{1 + |p|^2}.$$
+This gives a metric $g_\omega$ on $[-\rho, \rho]$ by $f(x, \omega(x))^2$.
+We write $\Delta_\omega$ to mean the Laplace-Beltrami operator of $g_\omega$, that is,
+$$\Delta_\omega u = 3f(\partial_1f + \partial_2f \omega')u' + f^2 u''.$$
+
+Consider a sequence $(\omega_j)$, then $g_{\omega_j}$ thinks that $[-\rho, \rho]$ is a ball.
+(This is not true in higher dimensions.)
+Let its center be $x_j$.
+We write $A_ju(\delta)$ to mean the mean of $u$ with respect to $g_{\omega_j}$ on what $g_{\omega_j}$ thinks is the ball centered on $x_j$ of radius $r$, where $r$ is scaled so that if $\delta = \rho$ then $B_r = [-\rho, \rho]$ and if $\delta = \rho/2$ then $B_r$ has half the radius that $[-\rho, \rho]$ does.
+
+\begin{lemma}
+Let $(\omega_j)$ be a sequence in $C^1([-\rho, \rho])$ which tends to $0$ in $W^{1, \infty}$.
+Let $u_j$ be the function defined by
+\begin{align*}
+u_j(-\rho) &= \omega_j(-\rho) \\
+u_j(\rho) &= \omega_j(\rho) \\
+\Delta_{\omega_j} u_j &= 0.
+\end{align*}
+Let $a_j,b_j$ bound the ball that $g_{\omega_j}$ thinks is centered on $x_j$ of half-radius to $[-\rho, \rho]$.
+If
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx = 0$$
+and
+$$\int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_{\omega_j} \omega_j'(\rho))) ~dx \leq \beta_j,$$
+then
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{a_j}^{b_j} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_{\omega_j} \omega_j'(\rho/2))) ~dx \leq \frac{1}{8}.$$
+\end{lemma}
+\begin{proof}
+The integral we want to bound is
+\begin{align*}
+& \leq \frac{1}{2} \int_{a_j}^{b_j} (\omega_j'(x)^2 - A_j \omega_j'(\rho/2)^2 ) f(x, \omega_j(x)) ~dx \\
+&= \frac{1}{2} \int_{a_j}^{b_j} (\omega_j'(x) - A_j \omega_j'(\rho/2))^2 f(x, \omega_j(x)) ~dx \\
+&\leq \frac{1}{2} \int_{a_j}^{b_j} (\omega_j'(x) - A_j \omega_j'(\rho))^2 f(x, \omega_j(x)) ~dx\\
+&= I
+\end{align*}
+To see this you can use a change of variables
+$$dy = f(x, \omega_j(x)) ~dx$$
+and then painfully write everything out to get the first equality.
+The second inequality is basically Poincar\'e's inequality: for a function $h$, the integral of $(h - C)^p$ is minimized when $C$ is the mean of $h$.
+
+By Cauchy's inequality, for every $\varepsilon > 0$,
+$$2I \leq (1 + 1/\varepsilon) \int_{a_j}^{b_j} |\omega_j'(x) - u_j'(x)|^2 f(x, \omega_j(x)) ~dx + (1 + \varepsilon) \int_{a_j}^{b_j} |u_j'(x) - A_j \omega_j'(\rho)|^2 f(x, \omega_j(\rho)) ~dx.$$ Now the boundary data specifications of $u_j$ and the mean-value property for $u_j'$ imply that
+$$A_j u_j'(\rho/2) = u_j'(x_j) = A_j u_j'(\rho) = A_j\omega_j'(\rho).$$
+This is only true up to an error term in higher dimensions. We're using the fact that $\Delta_{\omega_j}$ really is the Laplace operator just written in funny coordinates.
+Therefore Miranda's lemma and Cauchy's inequality gives
+\begin{align*}
+\int_{a_j}^{b_j} |u_j'(x) - A_j \omega_j'(\rho)|^2 f(x, \omega_j(\rho)) ~dx &\leq \frac{1}{8} \int_{-\rho}^{\rho} |u_j'(x) - A_j \omega_j'(\rho)|^2 f(x, \omega_j(\rho)) ~dx\\
+&\leq \frac{1 + \varepsilon}{8} \int_{-\rho}^\rho |\omega_j'(x) - A_j \omega_j'(\rho)|^2 f(x, \omega_j(\rho)) ~dx \\
+&\qquad + \frac{1 + 1/\varepsilon}{8} \int_{-\rho}^\rho |\omega_j'(x) - u_j'(x)|^2 f(x, \omega_j(\rho)) ~dx.
+\end{align*}
+Note that Miranda's lemma applies here because we know that $\Delta_{\omega_j}$ really is the Laplace operator.
+Thus
+\begin{align*}
+I &\leq \frac{(1 + \varepsilon)^2}{16} \int_{-\rho}^\rho |\omega_j'(x) - A_j \omega_j(\rho)|^2 f(x, \omega_j(x)) ~dx + O(1) \int_{-\rho}^\rho |\omega_j'(x) - u_j'(x)|^2f(x, \omega_j(x)) ~dx\\
+&\leq \frac{(1 + \varepsilon)^2}{16} J + O(1) K.
+\end{align*}
+
+To bound $J$ we use the convergence in $W^{1, \infty}$ to get
+\begin{align*}
+J &= \int_{-\rho}^\rho \omega_j'(x)^2 - A_j \omega_j(\rho)^2f(x, \omega_j(x))  ~dx \\
+&\leq \int_{-\rho}^\rho |\omega_j'(x)^2 - A_j \omega_j'(\rho)^2|^2f(x, \omega_j(x))  ~dx \\
+&\qquad+ 2\sqrt{1 + \omega_j'(\rho)}\int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_j\omega_j'(\rho)) ~dx\\
+&\leq o(1) + 2(1 + o(1)) \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_j\omega_j'(\rho)) ~dx \\
+&\leq o(1) + 2\beta_j.\end{align*}
+Here the asymptotic notation is as $j \to \infty$.
+
+To bound $K$ we use the harmonicity of $u$ and the convergence in $W^{1, \infty}$ as above to get
+\begin{align*}
+K &= \int_{-\rho}^\rho (\omega_j'(x)^2 - u_j'(x)^2)f(x, u_j(x)) ~dx \\
+&\leq O(1) \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx \\
+&\qquad + O(1) \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), u_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) \\
+&\qquad + o(1) \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_j\omega_j'(\rho)) ~dx.
+\end{align*}
+The new thing that we have to bound, because of the presence of nontrivial geometry, is the $\omega_j - u_j$ term $L$ which satisfies
+\begin{align*}
+L &\lesssim \rho \sup_x \sqrt{1 + u_j'(x)^2} |f(x, u_j(x)) - f(x, \omega_j(x)))| \\
+&\lesssim \rho^2 ||f'||_{L^\infty} ||u_j - \omega_j||_{L^\infty} \\
+&\lesssim \rho^3 ||u_j' - \omega_j'||_{L^\infty} \\
+&\lesssim \rho^3 ||u_j'||_{L^\infty} + \rho^3 ||\omega_j'||_{L^\infty}.
+\end{align*}
+The convergence in $W^{1, \infty}$ kills one of these guys. For the other one, we observe that by the maximum principle and the boundary data, $||u_j'||_{L^\infty} \lesssim ||\omega_j'||_{L^\infty}$ and so the convergence in $W^{1, \infty}$ kills it too.
+Summing it all up we get
+$$K \lesssim \int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx + o(1).$$
+
+Therefore
+$$I \leq \frac{(1 + \varepsilon)^2\beta_j}{8} + O(1)\int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx + o(1).$$
+Dividing by $\beta_j$ and taking the limit as $j \to \infty$ we see the claim.
+\end{proof}
+
+This lemma is not quite the statement of Giusti Lma 6.2 because $[a_j, b_j]$ is not $[-\rho/2, \rho/2]$.
+We should be able to change this lemma so that it is $[-\rho/2, \rho/2]$ that is fixed and the bigger interval that varies.
+My only worry is if, back in the euclidean metric, the bigger interval will be so big that we won't be able to keep the induction going.
+But I think we can.
+
+\section{The higher-dimensional case}
+How should we generalize to higher dimensions?
+We cannot use conformal gauge. Instead we could assume
+$$g = \begin{bmatrix}1 \\ & G\end{bmatrix}$$
+in which I think determinant identities imply that the Lagrangian takes the form
+$$\mathscr L(x, \omega, p) = \sqrt{1 + G(x, \omega)(p, p)} ~dx.$$
+Unfortunately, the Laplace-Beltrami operator induced by $x \mapsto G(x, \omega(x))$ is nasty, as are the balls in question.
+However, we still have a lot of freedom in $g$ and we can impose
+$$G_{ij} = \delta_{ij} + O(|x|^2 + |\omega(x)|^2).$$
+This gauge condition already implies a weak form of Miranda's lemma on Laplace-Beltrami.
+
+If I want to suffer, I can use Bianchi and Young to impose an even stronger gauge condition, probably of the form
+$$G_{ij} = \delta_{ij} + S_{ij} + O(|x|^3 + |\omega(x)|^3)$$
+where $S$ is some explicit quadratic polynomial.
+Anyways, in this gauge we want to integrate
+$$\int_B \mathscr L(x, \omega, p) = \int_B \sqrt{1 + G(x, \omega)(p, p)} ~dx = \int_{B_\omega} \sqrt{\frac{1 + |p|_{G(x, \omega)}^2}{\det G(x, \omega)}} ~\widetilde{\vol_{G(x, \omega)}(x)}$$
+and we can probably throw away the denominator because it is so close to $1$.
+Here $B_\omega$ is $B$ equipped with the metric $x \mapsto G(x, \omega(x))$ rather than the euclidean metric.
+
+\printbibliography
+
+
+\end{document}
