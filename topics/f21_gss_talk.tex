@@ -1,0 +1,370 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{Nonlinear Laplace equations and Riemannian minimal surfaces}
+\author{Aidan Backus}
+\date{November 2021}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\Aff}{\mathbf A}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\vol}{vol}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Olo}{\mathscr O}
+\newcommand{\Mero}{\mathscr M}
+\newcommand{\nonsingular}{\mathscr E}
+\newcommand{\Test}{\mathscr D}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem*{ack}{Acknowledgements}
+\newtheorem*{notate}{Notation}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{f21_gss_talk.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+
+
+\section{$p$-Laplacians, $1 < p < \infty$}
+Let
+$$\overline M = M \cup \partial M$$
+be a manifold with boundary, and $g$ a Riemannian metric on $M$.
+What this means is that if $v, w$ are tangent to a point of $M$, then $g(v, w)$ is their inner product.
+
+\begin{example}
+Say $M = \RR^d$ and $g$ is the usual metric, thus $g(v, w)$ is just the usual inner product on $\RR^d$.
+Or, $M = S^d$, viewed as the unit sphere of $\RR^{d + 1}$, and $g(v, w)$ is the inner product on $\RR^{d + 1}$.
+\end{example}
+
+In this setting we can define the \dfn{Laplacian}
+$$\Delta u = \Div \grad u = 0$$
+which arises in a variety of contexts.
+The original motivation to study $\Delta$ came from the classical theories of electromagnetism and gravity.
+In those cases, the charge or mass density $f$ satisfies
+$$-\Delta u = f,$$
+where $u$ is the electric or gravitational potential. However, this does not uniquely specify $u$, as there could be some electromagnetic or gravitational field on the boundary.
+In fact, the boundary data
+$$u|\partial M = g,$$
+along with the Laplacian, does uniquely determine $u$. The problem of recovering $u$ from $f,g$ is called \dfn{Dirichlet's problem} for $\Delta$.
+
+By the way, if $\partial M$ is empty, sometimes it is correct to instead specify $u: M \to S^1$ by specifying its homotopy class.
+We'll ignore these issues and just assume that $u$ satisfies some constraint.
+
+One can think of the Laplacian in a number of ways, including cohomologically and combinatorially, but let's think about it in terms of optimization, as this turns out to be the right way to generalize it.
+
+\begin{theorem}
+$\Delta u = 0$, with $u|\partial M = g$, iff $u$ minimizes $||du||_{L^2}$ among all functions $v$ such that $v|\partial M = g$.
+\end{theorem}
+\begin{proof}
+We use the first and second derivative tests. One has
+$$||du||_{L^2}^2 = \int_M |du|^2 ~\vol$$
+which is convex in $u$, so $u$ is a minimizer iff $u$ is a critical point. If we fix $\varphi \in C^\infty_c(M)$ then integration by parts gives
+$$0 = \partial_t \int_M |d(u + t\varphi)|^2 ~\vol|_{t = 0} = 2\int_M g(du, d\varphi) ~\vol = 2 \int_M \varphi \Delta u ~\vol.$$
+Since this is true for every $\varphi$, it follows that $\Delta u = 0$.
+\end{proof}
+
+This raises an interesting question: why $L^p$, $p = 2$?
+It turns out, essentially by the first and second derivative tests, that $||du||_{L^p}$ is minimized exactly by functions which satisfy
+$$\Delta_p u = \Div (|\grad u|^{p - 2} \grad u) = 0.$$
+This works if $1 < p < \infty$, since then if $\grad u$ has a zero of order $k$ then $|\grad u|^{p - 2}$ has a pole of order $(2 - p)k < k$ and l'H\^opital's rule saves us.
+It kind of sucks because of the nonlinearity, so $p = 2$ is going to be the nicest case, but if $p$ is close to $2$ this still should be somewhat tractible.
+
+However, the above computation breaks down in the limiting cases $p \to 1$, $p \to \infty$ because the formula for $\Delta_p u$ we gave no longer makes sense.
+In addition, in PDE it's often useful to use Alaoglu's theorem, which is the fact that any closed ball in $L^p$ is weakly compact if $1 < p < \infty$.
+So the cases $p \to 1$, $p \to \infty$ are what we focus on from now on.
+This can be motivated in a number of ways.
+One is that Thurston (1998) conjectured that there should be a nice duality between minimizers of $||du||_{L^1}$ and $||du||_{L^\infty}$, which should have applications to Teichm\"uller theory.
+This is a current research focus of Daskalopoulos and Uhlenbeck (2021).
+
+\section{The $\infty$-Laplacian}
+Recall that the \dfn{Lipschitz constant} of a function $u$ is
+$$||du||_{L^\infty} = \sup |du|.$$
+It satisfies
+$$|u(x) - u(x + v)| \leq ||du||_{L^\infty} \cdot |v|,$$
+by the mean value theorem.
+Here and from now on we write $x + v$ to mean $\gamma(1)$ where $\gamma$ is the geodesic with initial data $(x, v)$.
+
+\begin{definition}
+A function $u$ is \dfn{best-Lipschitz} if $||du||_{L^\infty}$ is minimal subject to boundary data.
+\end{definition}
+
+It turns out that $u$ is best-Lipschitz iff
+$$\Delta_\infty u = \Hess u(\grad u, \grad u) = 0$$
+where the \dfn{Hessian tensor} $\Hess u$ is the quadratic form on the tangent space induced by the matrix of second partial derivatives:
+$$(\Hess u)_{ij} = \nabla_i \partial_j u.$$
+To study best-Lipschitz functions it turns out that we should give an \emph{economic} characterization of them:
+
+\begin{definition}
+\dfn{Tug of war} with step size $\varepsilon > 0$ is the following game.
+Fix initial data $x_0 \in M$ and payoff $f: \partial M \to \RR$.
+On round $k$, Alice and Bob are at some point $x_{k - 1} \in M$, flip a coin, and whoever wins the coin toss gets to choose a vector $v$ of length $\leq \varepsilon$ and set $x_k = x_{k - 1} + v$.
+If $x_k \in \partial M$, then the game ends, Alice receives $F(x_k)$ utility, and Bob recieves $-F(x_k)$ utility.
+\end{definition}
+
+This game is of economic and biological significance. A paper of Deck and Sheremeta (2015) discuss its applications in modeling the relationship between viruses and cells, or the president and the legislature.
+Naor and Sheffield (2012) have studied best-Lipschitz maps into metric trees and applied tug of war to study them.
+
+\begin{theorem}
+Consider tug of war in the limit as $\varepsilon \to 0$.
+Let $u(x)$ be Alice's expected winnings if the game is currently in state $x$, assuming that Alice and Bob play optimally.
+Then $\Delta_\infty u = 0$ with $u|\partial M = F$.
+\end{theorem}
+\begin{proof}
+Applying conditional probability to the coin toss,
+$$u(x) = \frac{u(x + v) + u(x + w)}{2}$$
+where $v$ is the vector Alice wants to choose and $w$ is the vector Bob wants to choose.
+Alice wants to maximize her winnings and Bob wants to maximize her losses, so
+$$2u(x) = \sup_{|v| \leq \varepsilon} u(x + v) + \inf_{|w| \leq \varepsilon} u(x + w) = \sup_{|v| \leq \varepsilon} \inf_{|w| \leq \varepsilon} u(x + v) + u(x + w).$$
+By Taylor's theorem,
+$$u(x + v) + u(x + w) = 2u(x) + (du_x, v + w) + \Hess u_x(v + w, v + w) - 2 \Hess u_x(v, w) + O(\varepsilon^3).$$
+Thus
+$$\sup_{|v| \leq \varepsilon} \inf_{|w| \leq \varepsilon} (du, v + w) + \Hess u(v + w, v + w) - 2 \Hess u(v, w) = O(\varepsilon^3)$$
+Moreover, Alice's optimal choice is Bob's pessimal choice and vice versa, so if $v$ is optimal for Alice, then $-v$ is optimal for Bob.
+This is going to kill any term with $v + w$ in it. Also, Alice wants to maximize $u$ so Alice is going to play $v = \varepsilon\grad u$. We're left with, if $v$ is Alice's optimal choice,
+$$-2\varepsilon^2 \Hess u(\grad u, -\grad u) = O(\varepsilon^3)$$
+and in the limit as $\varepsilon \to 0$ this means that
+$$\Delta_\infty u = \Hess u(\grad u, \grad u) = 0$$
+as desired.
+\end{proof}
+
+In spite of its importance, $\Delta_\infty$ is poorly understood.
+For example, it was proven by Evans, Savin, and Smart (2008, 2011) that if $M = \RR^2$ and $u$ is best-Lipschitz then $u \in C^{1 + \varepsilon}$ and if $M = \RR^d$, $d \geq 3$, then $u$ is differentiable.
+However, it is not known if $u \in C^{1 + \varepsilon}$ on $\RR^3$, let alone on more general Riemannian manifolds $M$.
+Oberman (2012) gave a numerical algorithm for solving $\Delta_\infty u = 0$ on $\RR^d$, $d \geq 2$, but not for general $M$.
+Daskalopoulos and Uhlenbeck (2021) conjecture that Evans, Savin, and Smart should generalize, and I guess Oberman should as well.
+
+One of my goals for 2022 is to work on some of these conjectures.
+I don't think that they should be hard, since the groundwork of Evans, Savin, Smart, and Oberman is already in place.
+I just think there's a lot of them and there's a lot of little things to check.
+So I'd love to collaborate with someone on them.
+
+\section{The $1$-Laplacian}
+Now we turn to the $1$-Laplacian. Unfortunately $\Delta_1 u$ makes no sense if $u$ has critical points, so we just think about $u$ in terms of $||du||_{L^1}$.
+This perspective also turns out to be wrong, because closed balls in $L^1$ are not weakly compact, and because we will want to consider minimizers $u$ which are not continuous, in which case it is definitely not true that $du \in L^1$.
+We need to move to a bigger space.
+Observe that
+$$||du||_{L^1} = \sup_X \int_M (du, X) ~\vol = \sup_X \int_M u \Div X ~\vol$$
+where $X$ ranges over all vector fields in $C^\infty_c(M)$ such that $||X||_{L^\infty} \leq 1$.
+This can be shown by using dominated convergence to move the supremum inside, and then $\sup_X (du, X) = |du|$ by definition of the dual norm, and then we use integration by parts.
+
+\begin{definition}
+A function $u \in L^1_l$ has \dfn{locally bounded variation} if for every vector field $X \in C^\infty_c(M)$ such that $||X||_{L^\infty} \leq 1$, $\int_M u \Div X ~\vol$ is finite.
+If $u$ is the indicator function of a set $U$, we say that $U$ has \dfn{locally finite perimeter}.
+If in fact,
+$$||u||_{BV} = ||u||_{L^1} + \sup_X \int_M u \Div X ~\vol$$
+is finite, we say that $u$ has \dfn{bounded variation}, or $U$ has \dfn{finite perimeter}, and call $||u||_{BV} - ||u||_{L^1}$ the \dfn{total variation} $||du||_{TV}$ of $du$.
+\end{definition}
+
+This is useful because we finally have some compactness: if $A$ is a closed ball in $BV$, then it is compact when given its $L^1$ topology.
+
+If $u = 1_U$, $du$ is sort of like the ``conormal $1$-form" to the boundary $\partial U$, and hence $||du||_{TV}$ is sort of like the surface area of $\partial U$, that is, the perimeter of $U$.
+Note that if $u$ is not smooth, I haven't defined $du$. I promise it can be defined, but this would require me to talk about the Hardy-Littlewood maximal inequality and sheaves, and I don't want to talk about either.
+
+\begin{definition}
+We say that $u$ has \dfn{least gradient} if $||du||_{TV}$ is minimal.
+If $u$ is the indicator function of $U$, we say that $U$ has \dfn{least perimeter}.
+\end{definition}
+
+If $U$ has least perimeter, then $\partial U$ has the least amount of surface area possible subject to some constraint.
+Let us study surfaces like that.
+
+\begin{definition}
+An $r$-cell $N$ in $M$ is said to be a \dfn{minimal surface} if its $r$-dimensional surface area is minimal among all $r$-cells whose boundary is the $r+1$-cycle $\partial N$.
+\end{definition}
+
+\begin{theorem}
+Every $d-1$-cycle in a sufficiently small ball in $M$ bounds a minimal surface.
+\end{theorem}
+\begin{proof}
+Let $Z$ be a $d-1$-cycle in the ball $B$, and let $A$ be the set of all $BV$ functions which indicate sets whose boundaries are $d$-cells bounded by $Z$.
+If $B$ is small enough, then $H^{d - 1}(B) = 0$, so $A$ is nonempty, and so if we intersect $A$ with a sufficiently large closed ball in $BV$, $A$ is compact in $L^1$.
+Now we can show that surface area is lower semicontinuous in a suitable sense in $A$, so there exists a minimizer of the surface area.
+\end{proof}
+
+In particular, $U$ has least perimeter iff $\partial U$ is a minimal surface.
+However, our assumptions on $u$ were very weak, and it's not obvious that $\partial U$ is smooth.
+In general, it is not.
+This could be really bad, because in principle $\partial U$ could possibly be some crazy fractalline space.
+
+\begin{theorem}[de Giorgi, Miranda, Guisti (1960s)]
+Suppose that $U \subseteq \RR^d$ has least perimeter and $d \leq 7$.
+Then $\partial U$ is smooth.
+\end{theorem}
+
+On the other hand we have the following result.
+
+\begin{theorem}[Miranda (1960s)]
+Suppose that $u$ has least gradient, and let $\{u > y\}$ be the superlevel sets of $u$.
+Then $\bigcup_y \{u > y\}$ laminates $M$ by minimal surfaces.
+\end{theorem}
+
+If $M$ is a closed hyperbolic manifold, for example, this would give us lots and lots of minimal (eg geodesic) laminations, except that possibly the boundaries could be horribly singular.
+So we really want to show that the boundaries are smooth.
+
+\section{Regularity of minimal surfaces}
+We now outline the proof of de Giorgi, Miranda, and Giusti, and indicate how one could modify it to Riemanian manifolds.
+
+The goal is to meet the hypotheses of the following theorem, which originally was proven to solve Hilbert's 19th problem.
+
+\begin{definition}
+A \dfn{Hilbert-regular Lagrangian} $\mathscr L$ is a family of volume forms $\mathscr L[f]$ on $M$, where $f$ ranges over functions on $M$, such that for every $x \in M$:
+\begin{enumerate}
+\item $\mathscr L[f]_x$ is smooth as a function of $(x, f(x), df_x)$,
+\item $\mathscr L[f]_x$ is convex as a function of $df_x$, and
+\item The Hessian of $df_x \mapsto \mathscr L[f]_x$ has positive determinant.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[de Giorgi, Nash, and Moser (1950s)]
+Let $\mathscr L$ be a Hilbert-regular Lagrangian.
+Any minimizer $f$ of $\mathscr L[f]$ is smooth.
+\end{theorem}
+
+\begin{example}
+If $\mathscr L[f] = |df|^2 ~\vol$, then $\mathscr L$ is Hilbert-regular, and $f$ minimizes $\mathscr L[f]$ iff $\Delta f = 0$.
+Thus the de Giorgi--Nash--Moser theorem is a sweeping generalization of the fact that harmonic functions are smooth.
+\end{example}
+
+In particular, it suffices to show that the tangent space to $\partial U$ is a continuous vector bundle.
+(In practice, we work with the conormal $1$-form, but these notions are equivalent.)
+This is because, if this is true, we can locally write $\partial U$ as the graph of a function $f$.
+Moreover, if we define $\mathscr L[f]$ to be the area of the graph of $f$, one can show that $\mathscr L[f]$ is approximately $\sqrt{1 + |df|^2}$ and therefore $\mathscr L$ is Hilbert-regular.
+So $\partial U$ is locally the graph of a smooth function and we deduce the claim.
+
+We now study the regularity of the boundary $\partial U$ at a single point.
+Consider the tangent space $E$ to $M$ at that point, which is isometric to euclidean space.
+Setting $u_t(v)$ to be $1$ if $\exp(tx) \in U$ and $0$ otherwise, we obtain a bounded set of functions $\{u_t: t > 0\}$ in $BV(E)$.
+Using compactness, one can show that they converge to a function $u_0$ which is the boundary of a set $U_0 \subseteq E$.
+
+One thing that could go wrong is that $\partial U_0$ has a cusp at $0$.
+If this is true, then $\partial U$ also has a cusp. However, in the euclidean case one can use the Sobolev and Gr\"onwall inequalities to show that
+$$|\partial U \cap B_r| \gtrsim r^d$$
+which rules out the existence of cusps.
+This is presumably also true in the noneuclidean case, with minor modifications.
+
+It follows that $\partial U_0$ is a minimal cone.
+Minimal cones have been totally classified, and the only $r$-dimensional minimal cones, where $r \leq 6$, are hyperplanes.
+Therefore if $d \leq 7$, $\partial U_0$ is the tangent space to $\partial U$.
+So at least $\partial U$ has a (possibly just measurable) tangent bundle when $d \leq 7$.
+Furthermore, we can possibly replace $U$ with a ``zoomed in" version of itself, and so in a technical sense assume that $\partial U_0$ approximates $\partial U$ as well as we want.
+
+Clearly $\partial U_0$ has a continuous tangent bundle.
+We need to somehow transfer this fact to $\partial U$.
+
+\begin{definition}
+In euclidean space, the \dfn{excess} of $\partial U$ in $B(x, r)$ is
+$$\Lambda(\partial U, B(x, r)) = r^{1 - d}\int_{B(x, r)} |d1_U| - r^{1 - d} \left|\int_{B(x, r)} d1_U\right|.$$
+\end{definition}
+
+The excess measures how far $\partial U \cap B(x, r)$ is from a hyperplane.
+More precisely it measures the twist in the normal vector to $\partial U \cap B(x, r)$.
+Defining something like the excess on a Riemannian manifold is one of the main obstructions to the proof in that case.
+
+\begin{theorem}[de Giorgi's lemma]
+There exists $\sigma > 0$ such that for every minimal surface $\partial U$ in euclidean space, if $\Lambda(\partial U, B(x, r)) < \sigma$, then
+$$\Lambda(\partial U, B(x, r/2)) < 0.5 \Lambda(\partial U, B(x, r)).$$
+\end{theorem}
+
+Notice that we get a gain by a factor of two!
+On the other hand, we already said that $\partial U_0$ approximates $\partial U$ well, so $\partial U$ is approximately a hyperplane in some sense.
+This is made precise by saying that for every $x \in \partial U$ there exists $r > 0$ such that
+$$\Lambda(\partial U, B(x, r)) < \sigma.$$
+Once this is true, as we make $r$ smaller and smaller, the tangent vectors to $\partial U$ all converge to tangent vectors to $\partial U_0$ in such a fast sense that it follows that the tangent vectors to $\partial U$ are continuous and hence $\partial U$ has continuous tangent bundle.
+
+How should we prove de Giorgi's lemma?
+It's not an easy task.
+The first step is to observe that an analogous statement holds for solutions to the Laplace equation (and, in the Riemannian case, we will need that it is true for general second-order linear elliptic PDE.)
+But $\mathscr L[f] = \sqrt{1 + |df|^2}$ linearizes to $1 + |df|^2/2$ as $df \to 0$ in $W^{1, \infty}$.
+So if we knew a priori that $\partial U$ had continuous tangent bundle, we could choose $f$ to have graph $\partial U$ and then $f$ would be approximately harmonic, and after a long computation we would deduce de Giorgi's lemma for $\partial U$.
+Finally, one can carry out a mollification argument to show that $\partial U$ is approximated arbitrarily well by approximately minimal surfaces with continuous tangent bundle, and so we conclude de Giorgi's lemma in general.
+
+Unfortunately, in addition to the trouble with the definition of the excess itself, my experience is that error term in the mollification created by the Riemann curvature tensor seems to totally dominate the de Giorgi term.
+One needs to very carefully control the error, perhaps by cleverly using the Bianchi identities or similar to keep the error dominated by the important terms.
+This is where I'm stumped, though I am optimistic that I'll get it in a month or two.
+I've been saying that since August though.
+
+
+
+\printbibliography
+
+
+\end{document}

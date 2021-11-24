@@ -1,0 +1,239 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, Midterm} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\begin{exer}
+Consider $\partial_t u = (-1)^{m + 1} \partial_x^{(2m)} u$ on $\Torus^1$.
+We use the method
+$$v^{n+1} = v^n + k(-1)^{m + 1}(D_+ D_-)^m v^n.$$
+
+Compute $\hat Q(\omega)$.
+
+Suppose that $f(x) = \hat f(\omega) e^{i\omega x}$ for some $\omega$.
+Write an explicit solution for $v^n$ in terms of $\omega$ and $\hat Q$.
+
+Find a CFL condition so that $|\hat Q| \leq 1$.
+\end{exer}
+
+Recall that, with $\xi = h\omega$,
+$$\widehat{D_+ D_-}(\omega) = \frac{\cos \xi - 2}{h^2}.$$
+Therefore
+$$\widehat{(D_+ D_-)^m}(\omega) = \frac{(\cos \xi - 2)^m}{h^{2m}}$$
+and so
+$$\hat Q(\omega) = 1 + \frac{(-1)^{m + 1}k}{h^{2m}} (\cos \xi - 2)^m.$$
+
+We know that the original PDE is constant-coefficient, so is diagonalized by the Fourier transform. That is, if $f$ is a single wave,
+$$v^n_j = e^{i\omega x_j} \hat v^n(\omega)$$
+where $\hat v^n(\omega)$ is to be determined. In fact,
+$$\hat v^n(\omega) = \hat Q(\omega)^n \hat f(\omega)$$
+and hence
+$$v^n_j = e^{i\omega x_j} \hat Q(\omega)^n \hat f(\omega).$$
+
+Now we need to get $|\hat Q| \leq 1$.
+We know that
+$$|\hat Q(\omega)| = \left|1 + \frac{(-1)^{m + 1}k}{h^{2m}}(\cos \xi - 2)^m\right|$$
+and it is clear that
+$$\sup_\xi \frac{(-1)^{m + 1}k}{h^{2m}}(\cos \xi - 2)^m \leq 0$$
+so what we need to show is to find a condition which imposes
+$$\inf_\xi \frac{(-1)^{m + 1}k}{h^{2m}}(\cos \xi - 2)^m \geq -2.$$
+This is equivalent to imposing
+$$\sup_\xi (2 - \cos \xi)^m \leq \frac{2h^{2m}}{k}.$$
+The left-hand side is maximized when $\cos \xi = -1$, thus what we need is
+$$3^m \leq \frac{2h^{2m}}{k}$$
+or equivalently
+$$k \leq \left(\frac{2h^2}{3}\right)^m.$$
+This is the claimed CFL condition.
+
+\begin{exer}
+Consider $\partial_t u = \partial_x^3 u$ and the method
+$$v^{n + 1} = v^n + kD_- D_+ D_- v^n.$$
+Compute $\hat Q$ and try to find a CFL condition.
+\end{exer}
+
+We first compute
+$$D_- D_+ D_- e^{i\omega x} = \frac{\cos \xi - 2}{h^2} D_- e^{i\omega x} = \frac{\cos \xi - 2}{h^2e^{i\xi}} e^{i\omega x}$$
+where as usual $\xi = h\omega$.
+This immediately gives
+$$\hat Q(\omega) = 1 + \frac{k \cos \xi - 2k}{h^2 e^{i\xi}}.$$
+Unfortunately,
+$$\hat Q(\pi/h) = 1 - 3 \frac{k}{h^2e^{i\pi}} = 1 + 3\frac{k}{h^2} > 0,$$
+so there is no CFL condition here.
+(Intuitively this makes sense: if we write out $|\hat Q(\omega)|^2$ we get a complicated formula in terms of $\sigma = k/h^2$, which is not the correct scaling for a third-order PDE.)
+
+\begin{exer}
+Use the method of lines to solve the transport equation, with
+$$Q = h^{-1}(-E^2/2 + 2E + a).$$
+Try to find $a$ so that
+$$|(Q - \partial_x)(e^{i\omega x})| \leq O(\omega^3 h^2).$$
+\end{exer}
+
+We claim that $a = -1.5$ works. Indeed, if we set $\xi = h\omega$, then
+$$\hat Q(\omega) = h^{-1}(-.5e^{2i\xi} + 2e^{i\xi} - 1.5)$$
+On the other hand
+$$\widehat{\partial_x}(\omega) = i\omega.$$
+So we want to show
+$$|i\omega - h^{-1}(-.5e^{2i\xi} + 2e^{i\xi} - 1.5)| \lesssim \xi^2 \omega$$
+and if we multiply both sides by $h$ this is equivalent to showing
+$$|I| = |i\xi - (-.5e^{2i\xi} + 2e^{i\xi} - 1.5)| \lesssim \xi^3.$$
+Now we Taylor expand the left-hand side $I$ to third order to get
+\begin{align*}I &= i\xi - .5(1 + 2i\xi - 4\xi^2) + 2(1 + i\xi - \xi^2) - 1.5 + O(\xi^3) \\
+&= -1.5 - .5 + 2 + O(\xi^3) = O(\xi^3)
+\end{align*}
+as desired.
+
+\begin{exer}
+Suppose that $P = \Delta a \Delta$ where $\Re a \leq 0$, on $\Torus^2$. Show that $P$ is semibounded.
+\end{exer}
+
+Using the self-adjointness of $\Delta$, if we write $a = f + ig$ where $f \leq 0$ and $g$ is real,
+\begin{align*}
+(Pu, u) + (u, Pu) &= (\Delta a \Delta u, u) + (u, \Delta a \Delta u) = (a \Delta u, \Delta u) + (\Delta u, a \Delta u)\\
+&= \int_{\Torus^2} (f + ig) \Delta u \overline{\Delta u} + \Delta u (f - ig) \overline{\Delta u} \\
+&= 2\int_{\Torus^2} f \Delta u \overline{\Delta u} = 2(f \Delta u, \Delta u).
+\end{align*}
+Multiplication by $f$ is a negative-semidefinite operator on $L^2(\Torus^2)$, since $f \leq 0$.
+In general, if $H$ is a Hilbert space, $v \in H$, and $T$ is a negative-semidefinite operator on $H$, $(Tv, v) \leq 0$.
+Therefore
+$$(Pu, u) + (u, Pu) \leq 0 \leq ||u||^2$$
+which shows that $P$ is semibounded.
+
+\begin{exer}
+Suppose $m = 2$ and consider the problem on $\Torus^1$, $\partial_t u = A \partial_x^6 u$ where $A = \begin{bmatrix}2 & 8 \\  4 & 8\end{bmatrix}$.
+Is this problem stable?
+\end{exer}
+
+We first diagonalize $A = R^{-1}DR$ where $D$ is a diagonal matrix with entries $5 \pm \sqrt{41}$.
+If we set $v = Ru$ and multiply both sides of the PDE by $R$, then commute $R$ with $\partial_t$ and $\partial_x$, we conclude that
+$$\partial_t v = D\partial_x^6 v.$$
+We further diagonalize the system by taking the Fourier transform to get
+$$\partial_t \widehat{v_j}(t, \xi) = ((-1)^j \sqrt{41} - 5)\xi^6 \widehat{v_j}(t, \xi).$$
+Solving this ordinary differential equation we get
+$$\widehat{v_j}(t, \xi) = e^{t((-1)^j \sqrt{41} - 5)\xi^6} \widehat{v_j}(0, \xi).$$
+Taking $|\xi| \to \infty$ we see that the blowup speed becomes arbitrarily fast at high frequencies, if in fact $(-1)^j\sqrt{41} - 5 > 0$.
+This happens if $j = 2$.
+Therefore $v_2(t, \cdot)$ blows up in $L^2$ as $t \to \infty$ and the blowup speed becomes arbitrarily fast as the frequency of $v_2$ goes to infinity.
+Therefore $v$ also blows up, and $u = R^{-1}v$ must also blow up as well.
+So the problem is not stable.
+
+\end{document}

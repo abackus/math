@@ -1,0 +1,267 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, HW 2, take 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+To solve Problem 4, fix parameters $h, \alpha$ (chosen so that $k = h^\alpha/3$), let $\sigma = h^{\alpha - 2}/3$, let $N$ be an integer approximation to $2\pi/h$, and let $K = 6/h^\alpha$ be the number of iterates needed to compute the solution to the heat equation at time $2$.
+Let $v$ be the ``exact solution" obtained from the Crank-Nicholson algorithm with $h = .002$, $\alpha = 2$.
+
+Let $u$ be the approximate solution of the heat equation, with $\alpha$ varying and $h = .01$.
+I attached a function \verb+l2_norm+ in the appendix which computes the $L^2$ norm of a function. Computing the $L^2$ norm of the error $u - v$ we get:
+\begin{center}\begin{tabular}{c | c | c}
+Method & $\alpha$ & $||u - v||_{L^2}$ \\
+\hline
+Crank-Nicholson & $1$ & $5.3842 \cdot 10^{-4}$ \\
+Crank-Nicholson & $1.5$ & $5.3821 \cdot 10^{-4}$ \\
+Crank-Nicholson & $2$ & $5.3821 \cdot 10^{-4}$ \\
+Forwards Euler & $1$ & $\infty$ \\
+Forwards Euler & $1.5$ & $\infty$ \\
+Forwards Euler & $2$ & $5.4183 \cdot 10^{-4}$ \\
+Backwards Euler & $1$ & $5.5785 \cdot 10^{-4}$ \\
+Backwards Euler & $1.5$ & $5.507 \cdot 10^{-4}$ \\
+Backwards Euler & $2$ & $5.3464 \cdot 10^{-4}$ \\
+Dufort-Frankel & $1$ & $0.1750$ \\
+Dufort-Frankel & $1.5$ & $0.0158$ \\
+Dufort-Frankel & $2$ & $0.011$
+\end{tabular}\end{center}
+We see that we don't seem to be able to beat $5 \cdot 10^{-4}$ as an error term. I'm not sure how much of that follows from the fact that $h = .01$, numerical error in the matrix returned by the function \verb+dftmtx+, the fact that our exact solution isn't exact, and how much of it follows from the way that I compute $||u - v||_{L^2}$.
+
+I have attached graphs of the solutions to Dufort-Frankel when $\alpha = 1$ and when $\alpha = 1.5$. I didn't bother for any of the others because they look exactly the same as the exact solution.
+
+My assessment of the different methods is as follows:
+\begin{enumerate}
+\item Crank-Nicholson and backwards Euler algorithms seem to be good regardless of $\alpha$.
+\item Forwards Euler fails completely if $\alpha < 2$, which is not surprising given that it is only stable if $\alpha = 2$. This means forward Euler is probably becomes totally useless as $T \to \infty$ or as $h \to 0$, because of the quadratic growth of the number of iterates $K$, but for small $T$ and $h = .01$, our efficient implementation can handle forward Euler.
+\item Dufort-Frankel is really weird. I understand that it is only consistent if $\alpha > 1$, so it makes sense that if $\alpha = 1$ the solution is just garbage. We get a lot of oscillations when $\alpha > 1$, especially when $\alpha = 1.5$. I guess the point is that though the method is consistent, it loses consistency as $\alpha \to 1$. So we would really need to take $h$ smaller than $.01$, or take $\alpha$ larger than $2$, to get a good solution. Another issue is that the initial data is not continuous, so that the first time step destroys some of the properties of the zeroth time step. Since Dufort-Frankel is a two-step method, this is really bad!
+\end{enumerate}
+
+Here's my implementations of each method and some comments on how the implementation works.
+I have attached the auxiliary functions \verb+circulant+ and \verb+pow+ in an appendix.
+
+For all of the methods except Dufort-Frankel, we use the discrete Fourier transform to rewrite everything in a diagonal matrix $D$.
+The point is that since $D$ is diagonal, \verb+D.^K+ actually returns $D^K$.
+Using \verb+tic+ and \verb+toc+, I was able to determine that computing \verb+D.^K+ for Crank-Nicholson with $h = .002$ takes $10.491$ seconds on my laptop, as opposed to more clunky ways of computing the exact solution which sounded like they were about to burn out my computer fan.
+At the end, we apply \verb+real+ to get rid of the imaginary part that results from using the discrete Fourier transform.
+This is harmless because the imaginary part is always equal to $0$ anyways, but it causes MATLAB to throw an error when you try to graph it.
+
+For Dufort-Frankel, one can do a similar trick using tensor products of \verb+dftmtx+, if we view the quantities \verb+prev+ and \verb+curr+ as part of a vector of length $2N$, but I didn't want to go to the hassle of working out the details.
+This may be where some of my error comes from -- we would probably accrue somewhat less roundoff error if we just did the diagonalization trick rather than going through this painfully long \verb+for+ loop.
+We use backwards Euler to get the first time step, because forwards Euler seems to give too much error already.
+
+\begin{verbatim}
+%%% CRANK-NICHOLSON %%%
+right_cn_vect = zeros(N, 1);
+right_cn_vect(1) = 1 - sigma;
+right_cn_vect(2) = sigma / 2;
+right_cn_vect(N) = sigma / 2;
+right_cn = circulant(right_cn_vect);
+left_cn_vect = zeros(N, 1);
+left_cn_vect(1) = 1 + sigma;
+left_cn_vect(2) = -sigma / 2;
+left_cn_vect(N) = -sigma / 2;
+left_cn = circulant(left_cn_vect);
+time_advance = left_cn \ right_cn;
+D = dftmtx(N)' * time_advance * dftmtx(N) / N;
+solution_op = dftmtx(N) * pow(D, K) * dftmtx(N)' / N;
+u = real(solution_op * f);
+
+%%% FORWARDS EULER %%%
+f_euler_vect = zeros(N,1);
+f_euler_vect(1) = 1 - 2 * sigma;
+f_euler_vect(2) = sigma;
+f_euler_vect(N) = sigma;
+f_euler = circulant(f_euler_vect);
+D = dftmtx(N)' * f_euler * dftmtx(N) / N;
+solution_op = dftmtx(N) * pow(D, K) * dftmtx(N)' / N;
+u = real(solution_op * f);
+
+%%% BACKWARDS EULER %%%
+b_euler_vect = zeros(N,1);
+b_euler_vect(1) = 1 + 2 * sigma;
+b_euler_vect(2) = -sigma;
+b_euler_vect(N) = -sigma;
+b_euler = circulant(b_euler_vect);
+D = dftmtx(N)' * b_euler * dftmtx(N) / N;
+solution_op = dftmtx(N) * pow(D, -K) * dftmtx(N)' / N;
+u = real(solution_op * f);
+
+%%% DUFORT-FRANKEL %%%
+b_euler_vect = zeros(N,1);
+b_euler_vect(1) = 1 + 2 * sigma;
+b_euler_vect(2) = -sigma;
+b_euler_vect(N) = -sigma;
+prev = f;
+curr = circulant(b_euler_vect) \ prev;
+next = zeros(N,1);
+A = (1 - 2 * sigma)/(1 + 2 * sigma);
+B = 2 * sigma/(1 + 2 * sigma);
+for n=1:K
+    for j=1:N
+        if j==1
+            next(j) = A * prev(1) + B * (curr(N) + curr(2));
+        elseif j==N
+            next(j) = A * prev(N) + B * (curr(N - 1) + curr(1));
+        else
+            next(j) = A * prev(j) + B * (curr(j - 1) + curr(j + 1));
+        end
+    end
+    prev = curr;
+    curr = next;
+end
+u = curr;
+\end{verbatim}
+
+Here are our auxiliary functions. We already gave code for \verb+circulant+ last time so this time we omit it.
+When $h = .01$ we get $N = 628$ and when $h = .002$ we get $N = 3142$.
+This justifies our use of these parameters in \verb+l2_norm+.
+
+\begin{verbatim}
+% A function that takes in a vector x and returns the circulant matrix
+% whose first row is x.
+function A = circulant(x)
+
+% A function which takes a diagonal matrix to a high, possibly negative, power.
+function A = pow(D, K)
+    N = size(D);
+    A = zeros(N);
+    for i=1:N
+        A(i)(i) = D(i)(i)^K
+    end
+end
+
+% A function that computes the L^2 error of a vector u of length 628 to a
+% vector v of length 3142
+function m = l2_norm(u, v)
+    m = 0;
+    for i=1:628
+        j = 5 * (i - 1) + 1;
+        avg = mean([v(j) v(j + 1) v(j + 2) v(j + 3) v(j + 4)]);
+        m = m + (u(i) - avg)^2/628;
+    end
+    m = sqrt(m);
+end
+\end{verbatim}
+
+
+
+\end{document}
