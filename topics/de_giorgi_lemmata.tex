@@ -29,6 +29,8 @@
 \newcommand{\MM}{\mathbf M}
 \newcommand{\II}{\mathbf I}
 \newcommand{\Hyp}{\mathbf H}
+\newcommand{\SL}{\mathrm{SL}}
+\newcommand{\evect}{\mathbf e}
 
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\cent}{center}
@@ -60,6 +62,7 @@
 \newcommand{\dbar}{\overline \partial}
 
 \DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\arcosh}{arcosh}
 \DeclareMathOperator{\csch}{csch}
 \DeclareMathOperator{\sech}{sech}
 
@@ -138,6 +141,44 @@
 
 % \tableofcontents
 
+\section{Structuring the proof}
+The way that the proof of regularity in Miranda's 1966 paper, or in Giusti's book, is structured does not quite work for our purposes.
+The reason is that in the way they structure the proof they lose a certain inequality that they never use but that we need.
+
+Let $U$ be a set of least perimeter in a ball $B$ which is centered on a point $P \in M$.
+Let $u$ be the indicator of $U$ and let $\normal$ be the normal vector to $\partial U$.
+Let
+$$\gamma(\rho) = \frac{1}{\rho^{d - 1}} \left(\int_B |du| ~\vol - \left|\int_B du ~\vol\right|\right).$$
+We break into cases based on the decay rate of $\gamma$:
+
+\begin{itemize}
+\item[Base] There exists $\sigma > 0$ such that $\gamma \geq \sigma$ for every $\rho$ small.
+\item[Inductive] There exists $\sigma' > 0$ such that $\gamma \geq \sigma' \rho$ for every $\rho$ small, but
+$$\lim_{\rho \to 0} \gamma(\rho) = 0.$$
+\item[Good] $\gamma(\rho) \lesssim \rho$ for every $\rho$ small.
+\item[Misc] None of the above.
+\end{itemize}
+
+We can always break out of the miscellaneous case by taking subsequences.
+If we are in the good case, then one can easily modify Miranda's main theorem (Chapter 8 in Giusti) to show that $\normal$ is continuous at $P$.
+In this case, $\partial U$ meets the hypotheses of de Giorgi--Nash--Moser theory and we're done.
+
+If we are in the base case, then the tangent cone $C$ to $U$ at $P$ is a singular minimal cone.
+In particular, $\partial U$ has a singularity of codimension $\geq 7$.
+Obviously this does not happen on $\Hyp^2$ or $\Hyp^3$, so we can rule out that case.
+
+The interesting case is the inductive case.
+In that case we can apply the de Giorgi lemma:
+
+\begin{conjecture}
+If $\gamma(\rho^*)$ is small enough and there exists $\sigma' > 0$ such that for every $\rho$, $\gamma(\rho) \geq \sigma' \rho$, then $\gamma(\rho^*/2) \leq \gamma(\rho^*)/4$.
+\end{conjecture}
+
+This conjecture clearly contradicts the inductive case, putting us in the good case.
+
+To discuss how we might prove the conjecture, suppose that we have $\rho_n \to 0$, thus $\gamma(\rho_n) \to 0$, but $\gamma(\rho_n/2) > \gamma(\rho_n)/4$.
+Then these $\rho_n$ are going to break the below stuff:
+
 \section{De Giorgi lemma in hyperbolic space}
 Let $g$ be the hyperbolic metric on $(-R, R) \times (0, \infty)$ given by
 $$g = \begin{bmatrix}y^{-2} \\ & y^{-2}\end{bmatrix}.$$
@@ -147,28 +188,30 @@ be the infinitesimal arc length of the graph of $\omega$ where $\omega' = p$.
 Thus
 $$\mathscr L(\omega, p) = \omega \sqrt{1 + |p|^2}.$$
 This gives a metric $g_\omega$ on $(-\rho, \rho)$ by $\omega(x)^2 ~dx$.
-We write $\Delta_\omega$ to mean the Laplace-Beltrami operator of $g_\omega$, that is,
-$$\Delta_\omega = \partial^2 - 2(\partial \log \omega) \partial.$$
+We write $\Delta_\omega$ to mean the Laplace-Beltrami operator of $g_\omega$, which after a normalization is
+$$\Delta_\omega = \partial^2 + 3(\log \omega)' \partial.$$
 This operator is locally uniformly elliptic on $(-R, R)$.
 
-Consider a sequence $(\omega_j)$ in $C^1((-R, R))$.
-Fix $\rho > 0$ and let $B_{1/2,j} = (a_j, b_j)$ be the ball of radius $\rho/2$ with respect to $g_{\omega_j}$ centered at $0$, and $B_{1,j} = (\alpha_j, \beta_j)$ be the ball of radius $\rho$.
+Consider a sequence $(\omega_j)$ in $C^1((-R, R))$ and let $g_j = g_{\omega_j}$.
+Fix $\rho_j > 0$ and let $B_{\delta,j}$ be the ball $B_{g_j}(0, \delta \rho_j)$.
 We define the averaging operator $A_j$ by letting
-$$A_jf(\delta) = \dashint_{B_{g_{\omega_j}}(0, \delta)} f(x) ~dx.$$
+$$A_jf(\delta) = \dashint_{B_{\delta,j}} f ~\vol_{g_j}.$$
 
 \begin{lemma}
-Suppose that $\omega_j \to 0$ in $W^{1, \infty}$ and $B_{1,j} \Subset (-R, R)$.
+Suppose that $\omega_j' \to 0$ in $L^\infty(B_{1,j})$, $B_{1,j} \subseteq (-R, R)$, and the images of the $\omega_j$ lie in a uniform compact subset of $(0, \infty)$.
 Let $u_j$ be the function defined by
 \begin{align*}
-\Delta_{\omega_j} u_j &= 0 \\
-u_j|\partial B_1 &= \omega_j|\partial B_1.
+\Delta_j u_j &= 0 \\
+u_j|\partial B_{1, j} &= \omega_j|\partial B_{1, j}.
 \end{align*}
+Furthermore, suppose that there exists a small $\delta > 0$ such that
+$$\rho_j^{3 - 2\delta} \lesssim \beta_j \ll 1.$$
 If
-$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx = 0$$
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx \leq 0$$
 and
-$$\int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_j \omega_j'(\rho))) ~dx \leq \beta_j,$$
+$$\int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x),  A_j \omega_j'(\rho_j))) ~dx \leq \beta_j,$$
 then
-$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1/2,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x), A_j \omega_j'(\rho/2))) ~dx \leq \frac{1}{8}.$$
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1/2,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x),  A_j \omega_j'(\rho_j/2))) ~dx \leq \frac{1}{8}.$$
 \end{lemma}
 \begin{proof}
 We first bound for any $p, q \in \RR$
@@ -178,81 +221,148 @@ We first bound for any $p, q \in \RR$
 \end{align*}
 Therefore
 \begin{align*}
-\int_{B_{1/2,j}} \mathscr L(\omega_j(x), \omega_j'(x)) - \mathscr L(\omega_j(x), A_j \omega_j'(\rho/2))) ~dx &\leq \frac{1}{2} \int_{B_{1/2,j}} (\omega_j'(x)^2 - A_j \omega_j'(\rho/2)^2 ) \omega_j(x) ~dx.
+\int_{B_{1/2,j}} \mathscr L(\omega_j(x), \omega_j'(x)) - \mathscr L(\omega_j(x),  A_j \omega_j'(\rho_j/2))) ~dx &\leq \frac{1}{2} \int_{B_{1/2,j}} (\omega_j'(x)^2 -  A_j \omega_j'(\rho_j/2)^2 ) \omega_j(x) ~dx.
 \end{align*}
 We call the right-hand side $I$ and we seek to bound it.
 First we set $dX = \omega_j(x) ~dx$, a transformation which maps $B_{\delta,j} = B_{g_{\omega_j}}(0, \delta\rho)$ to $(-\delta\rho, \delta\rho)$ and maps $\Delta_j$ to $\partial^2$.
 Thus
-$$2I = \int_{-\rho/2}^{\rho/2} \omega_j'(X)^2 - A_j \omega_j'(\rho/2)^2 ~dX.$$
-Since $A_j \omega_j'$ is the mean of $\omega_j$ over this domain, the integral of $\omega_j'(X) A_j\omega'(\rho/2) + 2A_j \omega_j'(\rho/2)^2$ is zero.
+$$2I = \int_{-\rho_j/2}^{\rho_j/2} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j/2)^2 ~dX.$$
+Since $A_j \omega_j'$ is the mean of $\omega_j$ over this domain, the integral of $\omega_j'(X) A_j\omega'(\rho/2) + 2 A_j \omega_j'(\rho_j/2)^2$ is zero.
 This implies
-$$2I = \int_{-\rho/2}^{\rho/2} (\omega_j'(X) - A_j \omega_j'(\rho/2))^2 ~dX.$$
+$$2I = \int_{-\rho_j/2}^{\rho_j/2} (\omega_j'(X) -  A_j \omega_j'(\rho_j/2))^2 ~dX.$$
 For any function $f$, $||f - y||_{L^2}$ is minimized exactly when $y$ is the mean of $f$ (just differentiate the square of that norm in $y$ and look for critical points) so
-$$2I \leq \int_{-\rho/2}^{\rho/2} (\omega_j'(X) - A_j \omega_j'(\rho))^2 ~dX.$$
+$$2I \leq \int_{-\rho_j/2}^{\rho_j/2} (\omega_j'(X) -  A_j \omega_j'(\rho_j))^2 ~dX.$$
 
 Let $\varepsilon > 0$.
 By Cauchy's inequality
 $$|\alpha - \gamma|^2 \leq (1 + \varepsilon) |\alpha - \beta|^2 + (1 + 1/\varepsilon) |\beta - \gamma|^2$$
 we have
-$$2I \leq (1 + 1/\varepsilon) \int_{B_{1/2,j}} |\omega_j'(X) - u_j'(X)|^2 ~dX + (1 + \varepsilon) \int_{B_{1/2,j}} |u_j'(X) - A_j \omega_j'(\rho)|^2 ~dX.$$
+$$2I \leq (1 + 1/\varepsilon) \int_{B_{1/2,j}} |\omega_j'(X) - u_j'(X)|^2 ~dX + (1 + \varepsilon) \int_{B_{1/2,j}} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX.$$
 Our boundary condition on $u_j$ says
-$$A_j u_j'(\rho) = A_j\omega_j'(\rho).$$
+$$A_j u_j'(\rho_j) = A_j\omega_j'(\rho_j).$$
 and in the coordinates $X$, $\Delta_j$ becomes $\partial^2$, thus $u_j'' = 0$.
 So by the mean-value property and Cauchy's inequality,
 \begin{align*}
-\int_{-\rho/2}^{\rho/2} |u_j'(X) - A_j \omega_j'(\rho)|^2 ~dX &\leq \frac{1}{8} \int_{-\rho}^{\rho} |u_j'(X) - A_j \omega_j'(\rho)|^2 ~dX\\
-&\leq \frac{1 + \varepsilon}{8} \int_{-\rho}^\rho |\omega_j'(X) - A_j \omega_j'(\rho)|^2 ~dX \\
-&\qquad + \frac{1 + 1/\varepsilon}{8} \int_{-\rho}^\rho |\omega_j'(X) - u_j'(X)|^2 ~dX
+\int_{-\rho_j/2}^{\rho_j/2} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX &\leq \frac{1}{8} \int_{-\rho}^{\rho} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX\\
+&\leq \frac{1 + \varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX \\
+&\qquad + \frac{1 + 1/\varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) - u_j'(X)|^2 ~dX
 \end{align*}
 Thus
 \begin{align*}
-I &\leq \frac{(1 + \varepsilon)^2}{16} \int_{-\rho}^\rho |\omega_j'(X) - A_j \omega_j'(\rho)|^2 ~dX + O(1) \int_{-\rho}^\rho |\omega_j'(X) - u_j'(X)|^2 ~dX\\
+I &\leq \frac{(1 + \varepsilon)^2}{16} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX + O(1) \int_{-\rho_j}^{\rho_j} |\omega_j'(X) - u_j'(X)|^2 ~dX\\
 &= \frac{(1 + \varepsilon)^2}{16} J + O(1) K.
 \end{align*}
 Here $O(1)$ denotes a constant that is allowed to depend on $\varepsilon$ but not on $j$.
 
-To bound $J$, we write
+\begin{claim}
+One has
+$$J \leq \frac{2\beta_j}{1 + o(1)}.$$
+\end{claim}
+\begin{proof}[Proof of claim]
+One has
 \begin{align*}
-J &= \int_{-\rho}^\rho \omega_j'(X)^2 - A_j \omega_j'(\rho)^2 ~dX \\
-&= \int_{B_{1, j}} \omega_j'(x)^2 \omega_j(x) - A_j \omega_j'(\rho)^2 \omega_j(x) ~dx \\
-&\leq \int_{B_{1, j}} (\omega_j'(x)^2 - A_j \omega_j'(\rho)^2)^2 \omega_j(x)^2 ~dx \\
-&\qquad + 2\sqrt{1 + A_j \omega_j'(\rho)^2} \int_{B_{1,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, A_j \omega_j'(\rho)) \\
-&\leq 2 ||\omega_j' ||_{L^\infty}^2 ||\omega_j||_{L^\infty}^2 \int_{-\rho}^\rho \omega_j'(X)^2 - A_j \omega_j'(\rho)^2 ~dX + 2 \beta_j\\
-&\leq 2\beta_j + o(1) J.
+J &= \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j)^2 ~dX \\
+&= \int_{B_{1, j}} \omega_j'(x)^2 \omega_j(x) -  A_j \omega_j'(\rho_j)^2 \omega_j(x) ~dx \\
+&\leq \int_{B_{1, j}} (\omega_j'(x)^2 -  A_j \omega_j'(\rho_j)^2)^2 \omega_j(x)^2 ~dx \\
+&\qquad + 2\sqrt{1 +  A_j \omega_j'(\rho_j)^2} \int_{B_{1,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j,  A_j \omega_j'(\rho_j)) \\
+&\leq 2 ||\omega_j' ||_{L^\infty}^2 ||\omega_j||_{L^\infty}^2 \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j)^2 ~dX + 2 \beta_j\\
+&\leq 2\beta_j + o(1) J. \qedhere
 \end{align*}
-That is,
-$$J \leq \frac{2\beta_j}{1 + o(1)},$$
-which is suitable.
+\end{proof}
 
+\begin{claim}
+One has $K \leq o(\beta_j)$.
+\end{claim}
+\begin{proof}[Proof of claim]
 Since $u_j$ is harmonic,
 \begin{align*}
-K &= \int_{-\rho}^\rho \omega_j'(X)^2 - u_j'(X)^2 ~dX \\
+K &= \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 - u_j'(X)^2 ~dX \\
 &\leq 2 \sqrt{1 + ||u_j'||_{L^\infty}^2} \int_{B_{1,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, u_j')\\
 &\lesssim \int_{B_{1, j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(u_j, u_j') + \int_{B_{1, j}} \mathscr L(u_j, u_j') - \mathscr L(\omega_j, u_j') \\
 &\leq o(\beta_j) + 2||\omega_j - u_j||_{L^1(B_{1,j})}
 \end{align*}
 for all $j$ large enough.
 The second term is the only interesting new term created by the presence of geometry.
-To bound it, we observe that $\omega_j - u_j$ is trace-free, so by the Poincar\'e, H\"older, and Cauchy inequalities, for every $\delta \in (0, 1)$,
+To bound it, we observe that $\omega_j - u_j$ is trace-free, so by the Poincar\'e, H\"older, and Cauchy inequalities,
 $$||\omega_j - u_j||_{L^1} \lesssim \rho ||\omega_j' - u_j'||_{L^1} \leq \rho^{3/2} ||\omega_j' - u_j'||_{L^2} \leq \rho^{3 - \delta} + \rho^\delta ||\omega_j' - u_j'||_{L^2}^2.$$
 Moreover
-$$||\omega_j' - u_j'||_{L^2}^2 \lesssim \int_{-\rho}^\rho (\omega_j'(X) - u_j'(X))^2 ~dX = K$$
-owing to the uniform boundedness of the $\omega_j$. (TODO Add this hypothesis)
+$$||\omega_j' - u_j'||_{L^2}^2 \lesssim \int_{-\rho_j}^{\rho_j} (\omega_j'(X) - u_j'(X))^2 ~dX = K$$
+owing to the uniform boundedness of the $\omega_j$.
 Thus
 $$K \leq o(\beta_j) + \rho^{3 - \delta} + O(\rho^\delta K)$$
 or in other words
-$$K \leq \frac{o(\beta_j) + \rho^{3 - \delta}}{1 - O(\rho^\delta)}.$$
-TODO add a hypothesis to relate $\rho_j$ and $\beta_j$
+\begin{align*}
+K &\leq \frac{o(\beta_j) + \rho^{3 - \delta}}{1 - O(\rho^\delta)} \leq \frac{o(\beta_j)}{1 + o(1)}. \qedhere
+\end{align*}
+\end{proof}
 
 Therefore
-$$I \leq \frac{(1 + \varepsilon)^2\beta_j}{8} + O(1)\int_{-\rho}^\rho \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx + o(1).$$
+$$I \leq \frac{(1 + \varepsilon)^2\beta_j}{8} + o(\beta_j).$$
 Dividing by $\beta_j$ and taking the limit as $j \to \infty$ we see the claim.
 \end{proof}
 
-This lemma is not quite the statement of Giusti Lma 6.2 because $[a_j, b_j]$ is not $[-\rho/2, \rho/2]$.
-We should be able to change this lemma so that it is $[-\rho/2, \rho/2]$ that is fixed and the bigger interval that varies.
-My only worry is if, back in the euclidean metric, the bigger interval will be so big that we won't be able to keep the induction going.
-But I think we can.
+In what follows we let $\evect_1, \evect_2 \in S^1$ be the standard basis of $\RR^2$, and let $B_r$ be the hyperbolic ball centered on $\evect_2$ of radius $r > 0$, where we view $\Hyp^2$ as the upper half-plane in $\RR^2$.
+
+\begin{lemma}
+Let $(U_j)$ be a sequence of open sets in $\Hyp^2$ with $C^1$ boundary.
+Let $u_j = 1_{U_j}$ and let $\normal_j: \partial U_j \to S^1$ be the Gauss map.
+Fix $\delta > 0$ and $\rho_j, \beta_j$ such that
+$$0 < \rho_j^{3 - 2\delta} \lesssim \beta_j \ll 1.$$
+If
+$$\int_{B_{\rho_j}} |du_j| ~\vol \leq \left|\int_{B_{\rho_j}} du_j ~\vol\right| \leq \beta_j,$$
+$$\lim_{j \to \infty} \frac{|\partial U_j \cap B_{\rho_j}| - \eta(U_j, B_{\rho_j})}{\beta_j} = 0,$$
+and $\normal_j|\partial B_{\rho_j} \to \evect_2$ uniformly,
+then
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{\rho_j/2}} |du_j| ~\vol - \frac{1}{\beta_j}\left|\int_{B_{\rho_j/2}} du_j ~\vol\right| \leq \frac{1}{8}.$$
+\end{lemma}
+\begin{proof}
+Suppose that the lemma is false, thus:
+
+\begin{claim}
+There exists a sequence $(U_j)$ meeting the hypotheses of the lemma such that
+$$\lim_{j \to \infty} \frac{1}{\beta_j} \int_{B_{r_j/2}} |du_j| ~\vol - \frac{1}{\beta_j}\left|\int_{B_{r_j/2}} du_j ~\vol\right| > \frac{1}{8}.$$
+Moreover, there exist nonempty open sets $I_j \subseteq \RR$ and $C^1$ functions $\omega_j: I_j \to (1/2, 3/2)$ such that the graph of $\omega_j$ is $\partial U_j$ and $\omega_j \to 1$ in $C^1$.
+\end{claim}
+\begin{proof}[Proof of claim]
+Let $(U_j)$ be a sequence which contradicts the lemma, and let $\varepsilon > 0$.
+By taking subsequences and using the uniform convergence of $\normal_j$ we may assume that
+$$\normal_j|B_{\rho_j} \cdot \evect_2 > 1 - \varepsilon.$$
+(Here we use the euclidean dot product.)
+If $\varepsilon$ is chosen small enough, there exist open sets $I_j \subseteq \RR$ and $C^1$ functions $\omega_j: I_j \to (0, \infty)$ such that the graph of $\omega_j$ is $\partial U_j$.
+
+If $I_j$ is empty, then $u_j$ is constant and so $du_j = 0$ identically.
+Therefore $u_j$ does not contribute to the claimed limit being $> 1/8$ and so by taking subsequences we may discard all empty $I_j$.
+
+Since $\normal_j \to 0$ uniformly, the same holds for $\omega_j'$.
+Therefore, by taking subsequences, we may assume that $\omega_j$ tends to a constant function.
+Since $I_j$ is nonempty, there always exists $x_j \in I_j$ such that $\omega_j(x_j) \in (1 - O(\rho_j), 1 + O(\rho_j))$ and yet $\rho_j \to 0$.
+This gives the desired convergence in $C^1$.
+\end{proof}
+
+One has
+\begin{align*}
+\int_I \mathscr L(\omega_j, \omega_j') &= \int_{I \times \RR_+} |du_j| ~\vol,
+\end{align*}
+since both sides are the hyperbolic length of $\partial U_j$ in $I \times \RR_+$.
+Similarly, if $I$ is the $g_j$-ball of radius $r < \rho_j$ then
+$$\mathscr L(\omega_j, A_j \omega_j'(r)) = \frac{1}{2r} \left|\int_{(I \times \RR_+) \cap B_{\rho_j}} du_j ~\vol\right|$$
+so
+$$\int_I \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, A_j \omega_j'(r)) \leq \int_{B_{\rho_j}} |du_j| ~\vol - \left|\int_{B_{\rho_j}} du_j ~\vol\right| \leq \beta_j.$$
+Since $I \subset B_{1, j}$ we can take the limit as $I$ grows to $B_{1, j}$, and
+$$\int_{B_{1, j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, A_j \omega_j'(\rho_j)) \leq \beta_j.$$
+
+Let $u_j$ be the harmonic function on $B_{1, j}$ such that $u_j - \omega_j$ is trace-free. Then
+$$\eta(\partial U_j, B_{\rho_j}) \leq \int_{B_{1, j}} \mathscr L(u_j, u_j')$$
+since the right-hand side is the arc length of the graph of $u_j$, which is necessarily longer than the length of the geodesic with the same endpoints.
+Therefore
+$$\lim_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1, j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(u_j, u_j') \leq \lim_{j \to \infty} \frac{|\partial U_j \cap B_{\rho_j}| - \eta(U_j, B_{\rho_j})}{\beta_j} = 0$$
+so by the previous lemma,
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1/2,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, A_j \omega_j'(\rho/2)) \leq \frac{1}{8}.$$
+This contradicts the claim when we take $I = B_{1/2,j}$.
+\end{proof}
+
+
+
 
 \section{The higher-dimensional case}
 How should we generalize to higher dimensions?
