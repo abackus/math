@@ -141,44 +141,6 @@
 
 % \tableofcontents
 
-\section{Structuring the proof}
-The way that the proof of regularity in Miranda's 1966 paper, or in Giusti's book, is structured does not quite work for our purposes.
-The reason is that in the way they structure the proof they lose a certain inequality that they never use but that we need.
-
-Let $U$ be a set of least perimeter in a ball $B$ which is centered on a point $P \in M$.
-Let $u$ be the indicator of $U$ and let $\normal$ be the normal vector to $\partial U$.
-Let
-$$\gamma(\rho) = \frac{1}{\rho^{d - 1}} \left(\int_B |du| ~\vol - \left|\int_B du ~\vol\right|\right).$$
-We break into cases based on the decay rate of $\gamma$:
-
-\begin{itemize}
-\item[Base] There exists $\sigma > 0$ such that $\gamma \geq \sigma$ for every $\rho$ small.
-\item[Inductive] There exists $\sigma' > 0$ such that $\gamma \geq \sigma' \rho$ for every $\rho$ small, but
-$$\lim_{\rho \to 0} \gamma(\rho) = 0.$$
-\item[Good] $\gamma(\rho) \lesssim \rho$ for every $\rho$ small.
-\item[Misc] None of the above.
-\end{itemize}
-
-We can always break out of the miscellaneous case by taking subsequences.
-If we are in the good case, then one can easily modify Miranda's main theorem (Chapter 8 in Giusti) to show that $\normal$ is continuous at $P$.
-In this case, $\partial U$ meets the hypotheses of de Giorgi--Nash--Moser theory and we're done.
-
-If we are in the base case, then the tangent cone $C$ to $U$ at $P$ is a singular minimal cone.
-In particular, $\partial U$ has a singularity of codimension $\geq 7$.
-Obviously this does not happen on $\Hyp^2$ or $\Hyp^3$, so we can rule out that case.
-
-The interesting case is the inductive case.
-In that case we can apply the de Giorgi lemma:
-
-\begin{conjecture}
-If $\gamma(\rho^*)$ is small enough and there exists $\sigma' > 0$ such that for every $\rho$, $\gamma(\rho) \geq \sigma' \rho$, then $\gamma(\rho^*/2) \leq \gamma(\rho^*)/4$.
-\end{conjecture}
-
-This conjecture clearly contradicts the inductive case, putting us in the good case.
-
-To discuss how we might prove the conjecture, suppose that we have $\rho_n \to 0$, thus $\gamma(\rho_n) \to 0$, but $\gamma(\rho_n/2) > \gamma(\rho_n)/4$.
-Then these $\rho_n$ are going to break the below stuff:
-
 \section{De Giorgi lemma in hyperbolic space}
 Let $g$ be the hyperbolic metric on $(-R, R) \times (0, \infty)$ given by
 $$g = \begin{bmatrix}y^{-2} \\ & y^{-2}\end{bmatrix}.$$
@@ -385,28 +347,34 @@ $$\limsup_{j \to \infty} \gamma_j^{-1}\left[\int_{B_j/2} |du_j| ~\vol - \left|\i
 
 \section{Continuity of the conormal}
 Fix $P \in \Hyp^2$ and write
-$$\Lambda(U, \rho) = \frac{1}{\rho}\left[\int_{B(P, \rho)} |du| ~\vol - \left|\int_{B(P, \rho)} du ~\vol\right|\right].$$
-
-\begin{lemma}
-There exists $\sigma > 0$ and $r > 0$ such that for every set of hyperbolic least perimeter $U \subseteq \Hyp^2$ of indicator $u$ such that
-$$\Lambda(U, \rho) < \sigma,$$
-where $\rho < r$,
-it follows that
-$$\Lambda(U, \delta \rho) \lesssim \delta^2.$$
-\end{lemma}
-\begin{proof}
-Suppose not, so there exist $U_j$, $\rho_j$, $\gamma_j$, $\delta_j$ such that
-\end{proof}
-
+$$\Lambda(U, \rho) = \frac{1}{\rho}\left[\int_{B(P, \rho)} |du| ~\vol - \left|\int_{B(P, \rho)} du ~\vol\right|\right]$$
+whenever $u = 1_U$.
 We write
 $$\normal_s(P) = \frac{\int_{B(P, s)} du ~\vol}{\int_{B(P, s)} |du| ~\vol}.$$
-Then, the Hardy-Littlewood maximal inequality theory I already developed shows that $\normal_s(P)$ is Cauchy as $s \to 0$ iff $P \in \partial^* U$.
+This $1$-form is clearly continuous.
 
 \begin{lemma}
-Let $P \in \Hyp^2$ and let $U$ meet the hypotheses of the previous lemma, $P \in \partial U$.
-Let $\normal_s(P)$ be the $|du|~\vol$-mean of $du~\vol$ on $B(P, s)$. Then if $0 < s < t < \rho$,
-$$|\normal_s(P) - \normal_t(P)| \lesssim \sqrt t.$$
+For every set of hyperbolic least perimeter $U \subseteq \Hyp^2$ such that $P \in \partial U$ and for every sufficiently small dyadic $\rho > 0$, $\Lambda(U, \rho) \ll \rho$, $\normal_s(P) \to \normal(P)$ for dyadic $s$.
 \end{lemma}
+\begin{proof}
+Using the blowup theorem, if the sequence $(\normal_s(P))$, $s$ a subsequence of the dyadics, is Cauchy, then it converges to the desired covector.
+Pass to a subsequence of the dyadics; we claim there is a further subsequence $(k_j)$ along which $(\normal_{t_j}(P))$ is Cauchy, so the main subsequence converges to what it should.
+Using Giusti--Miranda and the no-cusp lemma, we have
+$$|\normal_s(P) - \normal_t(P)|^2 \lesssim 2^k \Lambda(U, 2^{-k})$$
+so it suffices to show that there exists a further subsequence $(k_j)$ such that
+$$\Lambda(U, 2^{-k_j}) \lesssim 4^{-{k_j}}.$$
+If this is not true, then for every $k$,
+$$4^k \Lambda(U, 2^k) \geq 1.$$
+
+Either $8^{-k} \ll \gamma_k$, where $\gamma_k = 2^k\Lambda(U, 2^{-k})$ or there are infinitely many $k$ such that
+$$\Lambda(U, 2^{-k}) \lesssim 4^{-k}.$$
+They then define a Cauchy subsequence. So suppose that $8^{-k} \ll \gamma_k$.
+Using the action of $\SL(2, \RR)$ on $\Hyp^2$ we can assume that $P = \evect_2$ and select $U_k$ rotations of $U$ so that
+$$\int_{B(P, 2^{-k})} du_k ~\vol = \evect_2 \cdot \int_{B(P, 2^{-k})} |du_k| ~\vol.$$
+The hypothesis $\Lambda(U, \rho) \ll \rho$ shows that $\gamma_k \ll 1$, so by the previous lemma, $1 \ll 1$, and everything breaks.
+\end{proof}
+
+By fiddling with the above lemma and local compactness it should follow that $\normal_s \to \normal$ is uniformly Cauchy on a subsequence and hence $\normal$ is continuous at $P$.
 
 
 
