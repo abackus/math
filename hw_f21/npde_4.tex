@@ -1,0 +1,370 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Numerical analysis of PDE, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Consider a matrix $M$ such that $M$ is symmetric and invertible, $M_{ij} \leq 0$ if $i \neq j$, $M_{ii} > 0$, $M_{ii} \geq -\sum_{i\neq j} M_{ij}$, and for every $i,j$, there exist $i = i_1, \dots, i_\ell = j$ such that $M_{i_k i_{k+1}} \neq 0$.
+
+Show that the matrix for the finite difference method for Poisson's problem satisfies these conditions.
+
+Show that if $M$ satisfies the above conditions and $MU = F$ where $F \geq 0$ entrywise, then $U \geq 0$ entrywise.
+\end{exer}
+
+Let $G \subset \NN$ be (an enumeration of) the set of interior vertices of $\Omega$ and let $G^* \subset G$ be the set of those vertices which are not adjacent to the boundary vertices.
+Let $M = (M_{ij})_{i,j \in G}$ be the desired matrix and consider the Poisson problem
+$$-\Delta u = f, \qquad u|\partial \Omega = g.$$
+Let $\sim$ be the edge relation among interior vertices, and let $\partial G_i$ be the set of boundary vertices adjacent to $i$.
+
+If $i \in G$, then the linear equation for $u_i$ is
+$$4u_i - \sum_{j \sim i} u_j = f_i + \sum_{j \in \partial G_i} g_j.$$
+Thus $u$ solves the equation
+$$Mu = h$$
+where $h_i = f_i + \sum_{j \in \partial G_i} g_j$, and $M$ is characterized by the facts that:
+\begin{enumerate}
+\item $M_{ii} = 4$,
+\item $M_{ij} = -1$ iff $i \sim j$,
+\item and otherwise $M_{ij} = 0$.
+\end{enumerate}
+Moreover, the fact that $G$ was constructed by a five-point stencil implies that
+$$|\{j: j \sim i\}| = 4 - |\partial G_i| \leq 4.$$
+The symmetry of $\sim$ implies that $M_{ij} = -1$ iff $M_{ji} = -1$ and therefore $M$ is symmetric. The positivity conditions $M_{ii} > 0$, $M_{ij} \leq 0$, and $M_{ii} \geq -\sum_{i \neq j} M_{ij}$ are now also obvious from the estimate on $|\{j: j \sim i\}|$.
+
+Now let $i,j$ be given. Obviously if $i = j$ we can take $\ell = 2$, and then $M_{i_1i_2} = 4$.
+Otherwise, let $i_2, \dots, i_{\ell - 1}$ be the vertices interior to a path from $i$ to $j$.
+Then $M_{i_ki_{k + 1}} = -1$ whenever $k < \ell$.
+
+To see that $M$ is invertible, let $v = (v_i)_{i \in G}$ be in the kernel of $M$ (which means that $v$ is harmonic and trace-free), thus
+\begin{equation}
+\label{MVP}
+v_i = \frac{1}{4} \sum_{j \sim i} v_j.
+\end{equation}
+Since $G$ was the set of vertices of $\Omega \subset \RR^2$, we can embed $G$ in $\ZZ^2$ by identifying $\ZZ^2$ with all the vertices of $\RR^2$.
+We extend $v$ to this lattice by setting $v_i = 0$ for every $i \notin G$, and extend $M$ to the graph Laplacian of $\ZZ^2$.
+Then (\ref{MVP}) implies that $v$ satisfies the mean-value property at every vertex of $\ZZ^2$.
+If $i \in G$, then $v_i$ is the mean of $v$ over vertices distance $1$ to $i$, but by induction, it follows that $v_i$ is the mean of $v$ over vertices distance $d$ to $i$, whenever $d \in \NN$.
+But $G$ is a finite graph while $\ZZ^2$ is infinite in every direction, so there exists $d \in \NN$ such that for every vertex $j$ of distance $d$ to $i$, $j \notin G$, and hence $v_j = 0$.
+It follows that $v_i = 0$, so the kernel of $M$ vanishes, as we aimed to show.
+
+Finally, let $F$ be entrywise positive and $MU = F$.
+If $U$ is not entrywise positive, we can find $\ell$ such that $U_\ell < 0$ is minimal possible.
+Since $M_{\ell\ell} \geq -\sum_{i \neq \ell} M_{i\ell}$, it follows that
+$$M_{\ell\ell} U_\ell \leq -\sum_{i \neq \ell} M_{i\ell} U_\ell \leq -\sum_{i \neq \ell} M_{i\ell} U_i.$$
+But
+$$M_{\ell\ell} U_\ell + \sum_{i \neq \ell} M_{i\ell} U_i = \sum_i M_{i\ell} U_i = F_\ell \geq 0,$$
+so the inequalities collapse and we get
+$$ M_{\ell\ell} U_\ell = -\sum_{i \neq \ell} M_{i\ell} U_i.$$
+
+We claim that in fact, $U_i = U_\ell$ whenever $i \neq \ell$.
+If not, then there exists $j$ such that $U_j > U_\ell$, so
+$$-\sum_{i \neq \ell} M_{i\ell} U_i < M_{\ell \ell} U_\ell$$
+which is a contradiction.
+
+Therefore there exists $\alpha > 0$ such that for every $i$, $U_i = -\alpha$.
+So
+$$F_i = -\alpha\left(M_{ii} - \sum_{j \neq i} M_{ij}\right) \leq 0$$
+which is a contradiction unless $F = 0$. But then $U = 0$ since the kernel of $M$ is trivial, which is a contradiction since $U_\ell < 0$.
+
+\begin{exer}
+Show that the Crank-Nicholson method
+$$v^{n+1} = v^n + \frac{k}{2} \Delta_h (v^{n + 1} + v^n)$$
+is unconditionally stable.
+\end{exer}
+
+Recall that $\Delta_h$ is negative-definite, and in particular orthogonally diagonalizable.
+Thus the matrix
+$$P = 1 - \frac{k\Delta_h}{2}$$
+is positive-definite and diagonalizes to the spectrum
+$$0 < \lambda_1 \leq \lambda_2 \leq \cdots \leq \lambda_L.$$
+If we write $v^n = \sum_{\ell=1}^L v^n_\ell$, where $v^n_\ell$ is an eigenvector of $P$,
+\begin{align*}
+||v^{n+1}||_h^2 &= ||(1 + P)^{-1} (1 - P) v^n||_h^2 = \sum_{\ell=1}^L ||(1 + P)^{-1} (1 - P) v^n_\ell||_h^2\\
+&\leq \frac{1 - \lambda_1}{1 + \lambda_1} \sum_{\ell=1}^L ||v^n_\ell||_h^2 \leq ||v^n||_h^2
+\end{align*}
+which was to be shown.
+
+\begin{exer}
+Implement the five-point stencil for the Poisson problem on $(0, 1)^2$, with exact solution
+$$u(x) = \sin x_1 \cos x_1 + x_2^2$$
+and $h = 2^{-j}$ where $j \in \{3, \dots, 6\}$. Make a table of errors.
+Does it agree with the theory from class?
+\end{exer}
+
+The Laplacian of $u$ is
+$$f(x) = -\Delta u(x) = 4 \sin x_1 \cos x_2 - 2.$$
+
+So we use the following code (using several auxiliary functions we define after the last problem):
+\begin{verbatim}
+% Create the data used to solve Poisson's problem
+% Trace is top, left, bottom, right
+function F = poisson_data(RHS, trace, N)
+    F = RHS;
+    for i = 1:N
+        F(1, i) = F(1, i) + N^2 * trace(1, i);
+    end
+    for i = 1:N
+        F(i, 1) = F(i, 1) + N^2 * trace(2, i);
+    end
+    for i = 1:N
+        F(N, i) = F(N, i) + N^2 * trace(3, i);
+    end
+    for i = 1:N
+        F(i, N) = F(i, N) + N^2 * trace(4, i);
+    end
+    F = F .* N^(-2);
+end
+
+% Generate the Poisson data for Problem 3
+function F = pr3_poisson_data(N)
+    x = [1/(N+2):1/(N+1):1-1/(N+2)];
+    row = 4 .* sin(x) .* cos(x) - 2;
+    RHS = zeros(N);
+    for i=1:N
+        for j=1:N
+            RHS(j,i) = row(i);
+        end
+    end
+    trace = zeros([4 N]);
+    trig = sin(x) .* cos(x);
+    square = (1 - x) .^ 2;
+    for i=1:N
+        trace(1, i) = trig(i) + 1;
+        trace(2, i) = square(i);
+        trace(3, i) = trig(i);
+        trace(4, i) = sin(1) * cos(1) + square(i);
+    end
+    F = poisson_data(RHS, trace, N);
+end
+
+f = grid2list(pr3_poisson_data(N), N);
+u = list2grid(f / graph_laplacian(N), N);
+\end{verbatim}
+
+Here is a table of errors:
+\begin{center}\begin{tabular}{c | c}
+$\log_2 N$ & $||u - v||_{L^\infty}$ \\
+\hline
+ $3$ & $0.0181$ \\
+$4$ & $0.0069$ \\
+$5$ & $0.0028$ \\
+$6$ & $0.0014$
+\end{tabular}\end{center}
+I also attach plots of the cases $N = 2^3$ and $N = 2^6$.
+
+In class we learned that $||u - v||_{L^\infty} \lesssim N^{-2}$, and indeed, doubling $N$ causes the error to decrease by a factor of four... until we hit $N = 2^6$ and we only get half the desired gain. I think what's going on here is that we're running up against the limitations of roundoff errors, which are going to be an issue because on the right-hand side of the linear system we're trying to solve, we have terms from $f$ that are extremely small compared to the terms coming from the trace of $u$.
+
+\begin{exer}
+Implement the forwards and backwards Euler methods for the heat equation on $(0, 1)^2$, with initial data
+$$u(0, x) = x_1(x_1 - 1)x_2(x_2 - 1)$$
+and no boundary data, $h = 1/20$ and $k = 1/20$, $k = 1/(4 \cdot 20^2)$.
+Give $||u(t, \cdot)||_h$.
+\end{exer}
+
+For both Euler methods, we started with the code
+
+\begin{verbatim}
+Laplace = graph_laplacian(N);
+x = [0:1/(N+2):1];
+x = x([2:N+1]);
+u = zeros(N);
+for i=1:N
+    for j=1:N
+        u(i, j) = x(i) * (x(i) - 1) * x(j) * (x(j) - 1);
+    end
+end
+v = grid2list(u, N);
+\end{verbatim}
+
+For forwards Euler, we ran the code
+\begin{verbatim}
+TimeAdvance = eye(N^2) - k * N^2 .* Laplace;
+v = v * (TimeAdvance^(1/k));
+u = list2grid(v, N);
+\end{verbatim}
+and for backwards Euler, we ran
+\begin{verbatim}
+TimeAdvance = inv(eye(N^2) + k * N^2 .* Laplace);
+v = v * (TimeAdvance^(1/k));
+u = list2grid(v, N);
+\end{verbatim}
+
+Here's a table of norms:
+\begin{center}\begin{tabular}{c | c | c}
+Method & $1/k$ & $||u(1, \cdot)||_{L^2}$ \\
+\hline
+Forwards Euler & $20$ & $3.314 \cdot 10^{16}$ \\
+Forwards Euler & $1600$ & $2.3188 \cdot 10^{-6}$ \\
+Backwards Euler & $20$ & $3.1256 \cdot 10^{-5}$ \\
+Backwards Euler & $1600$ & $2.5622 \cdot 10^{-6}$ \\
+\end{tabular}\end{center}
+We also attach plots of the forward Euler solution at $T = 1$.
+It's interesting that the singularity caused by instability of forwards Euler concentrates at $1$, and I don't have an explanation for why that should happen.
+I didn't bother including the backwards Euler plots because they look exactly same as the stable forwards Euler.
+Both the backwards and forwards Euler methods with $1/k = 1600$ take under a second to run, so there's no reason to favor one over the other.
+
+Now we show the auxiliary methods that we use throughout this assignment:
+
+\begin{verbatim}
+% Returns true iff two indices refer to adjacent vertices in a NxN grid.
+function bool = is_adjacent(i, j, N)
+    bool = (i == j);
+    if (j < i) % Enforce that i < j
+        jtmp = i; i = j; j = jtmp;
+    end
+    bool = bool || (j == i + N) || ((j == i + 1) && ~(mod(i, N) == 0));
+end
+
+% Returns a graph Laplacian.
+% Our convention is that this Laplacian is positive-definite!
+function Laplace = graph_laplacian(N)
+    Laplace = 4 .* eye(N^2);
+    for i = 1:N^2
+        for j = (i+1):N^2
+            if is_adjacent(i, j, N)
+                Laplace(i, j) = -1;
+                Laplace(j, i) = -1;
+            end
+        end
+    end
+end
+
+% Converts between functions on 2-space and lists
+function v = grid2list(u, N)
+    v = zeros([1 N^2]);
+    for i = 1:N
+        for j = 1:N
+            v((i - 1) * N + j) = u(i, j);
+        end
+    end
+end
+function u = list2grid(v, N)
+    u = zeros(N);
+    for i=1:N
+        for j = 1:N
+            u(i, j) = v((i-1)*N + j);
+        end
+    end
+end
+\end{verbatim}
+
+\end{document}
