@@ -1,5 +1,5 @@
 \documentclass[reqno,12pt,letterpaper]{amsart}
-\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,mathtools}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,mathtools,slashed}
 \RequirePackage[usenames,dvipsnames]{color}
 \RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
 \RequirePackage{amsxtra}
@@ -145,42 +145,89 @@
 % \tableofcontents
 
 \section{Intrinsic Dirichlet energy}
-Let $N$ be a $C^1$ submanifold of the Riemannian manifold $M$.
-Then we have an orthogonal splitting
-$$T_PM = T_PN \oplus T_PN^\perp.$$
-Now $T_PN^\perp$ is isomorphic as a Hilbert space to $\RR$, and up to a choice of sign, $T_PN^\perp$ is canonically identified with $\RR$.
-Pushing this splitting forward along the exponential map, we get a favored local product structure $(x, y)$ where $\{y = 0\}$ is a smooth hypersurface $H_P = \exp_P(T_PN)$.
-By the implicit function theorem, $N$ is cut out by a function $\{y = f(x)\}$, with
-$$f: T_PN \to \RR$$
-(using the identification of $T_PN^\perp$ with $\RR$).
-As long as we have a fixed orientation on $M$, we made no arbitrary choices in this construction.
-
-In the coordinates $(x, y)$, the metric has the block form
-$$g = \begin{bmatrix}1 & g_{12} \\ g_{21} & g_{22}\end{bmatrix} \in \begin{bmatrix} \RR & T_PN' \\ T_PN' & T_PN' \otimes T_PN'\end{bmatrix}.$$
-This implies that the area element of $N$ is
+Let $N$ be a $C^1$ submanifold of the Riemannian manifold $M$, and let $P \in N$.
+We have a smooth hypersurface
+$$H = \exp_P(T_PM)$$
+and we consider the normal bundle $T^\perp H$.
+According to the tubular neighborhood theorem, the exponential map
 \begin{align*}
-|ds| &= \sqrt{dx^2 + 2g_{12}(x, y) ~dxdy + g_{22}(x, y) ~dy^2} \\
-&= \sqrt{1 + 2(g_{12}(x, f(x)), \nabla f) + (g_{22}(x, f(x)), \nabla f(x) \otimes \nabla f(x))} ~|dx|
+T^\perp H &\to M \\
+(x, v) &\mapsto \exp_x(v)
 \end{align*}
-where $dx$ is the euclidean area form on $T_PN$.
-More generally, we define a Lagrangian density
-$$\Lagrange(z, p, x) = \sqrt{1 + 2(g_{12}(x, z), p) + (g_{22}(x, z), p \otimes p)} ~|dx|$$
-for $x, p \in T_PN$ and $z \in \RR$.
-Taylor expanding $\Lagrange(f, p, x)$ about $p = 0$ we get
-$$\Lagrange(z, p, x) \approx (1 + ((g_{12}(x, z), p) + \frac{1}{2}(g_{22}(x, z), p \otimes p))) ~|dx|.$$
-We therefore let
-$$\Dir(z, p, x) = (2(g_{12}(x, z), p) + (g_{22}(x, z), p \otimes p)) ~|dx|.$$
+is a local diffeomorphism along $H$, say into an open set $U \subseteq M$ which contains an open neighborhood (which we henceforth also denote $H$) of $P$ and is foliated by normal translates of $H$.
+In particular, the unit vector field $X$ which is normal to each leaf of the foliation of $U$ induces geodesics $\gamma_x$, $x \in H$, defined by
+$$\begin{cases}
+\gamma_x(0) = x\\
+\gamma_x'(0) = X_x
+\end{cases}$$
+and hence natural coordinates
+$$H \times I \ni (x, y) \mapsto \gamma_x(y) \in U.$$
+The key features of these coordinates are:
+\begin{enumerate}
+\item No arbitrary choices were made in their construction (except possibly the size of $H$ and $I$).
+\item $H = \{y = 0\}$.
+\item By the implicit function theorem (possibly after shrinking $H$ and $I$) there exists a $C^1$ function $f: H \to I$ such that $N = \{y = f(x)\}$.
+\item The function $f$ has a double zero at $P$ (essentially because $H$ was constructed to be tangent to $N$).
+\item The metric takes the form
+\begin{equation}\label{orthometric}
+g = \slashed g(x, y) ~dx^2 + dy^2.
+\end{equation}
+\end{enumerate}
+
+The surface area of $N$ defines the Lagrangian
+$$\Lagrange (x, y, p) = \sqrt{|p|_{\slashed g(x, y)}^2 + 1} \sqrt{\det \slashed g(x, 0)} ~|dx|$$
+where $\sqrt{\det \slashed g(x, y)} ~|dx|$ is the area element on $H$.
+Indeed,
+\begin{align*}
+\Lagrange(x, f(x), \nabla f(x))
+&= \sqrt{|\nabla f(x)|_{\slashed g(x, f(x))}^2 + 1}  \sqrt{\det \slashed g(x, 0)} ~|dx|\\
+&= \sqrt{|(1, \nabla f(x))|_{g(x, f(x))}^2 \cdot \det \slashed g(x, 0)} ~|dx|
+\end{align*}
+is the area element on $N$. Here we used the formula (\ref{orthometric}).
+Taylor expanding in $p$, we get
+$$\Lagrange (x, y, p) \approx \left(1 + \frac{|p|_{\slashed g(x, y)}^2}{2} \right) \sqrt{\det \slashed g(x, 0)} ~|dx|.$$
+We introduce the semilinearized Lagrangian
+$$\Dir (x, y, p) = |p|_{\slashed g(x, y)}^2 \sqrt{\det \slashed g(x, 0)} ~|dx|.$$
 
 \begin{definition}
-The \dfn{intrinsic Dirichlet energy} of $N$ at $P$ is the Lagrangian density
-$$\Dir N(x) = \Dir(f(x), \nabla f(x), x).$$
-If $z,p = f, \nabla f$ is a local minimizer of $\Dir$, we call $N$ a \dfn{harmonic hypersurface} in a neighborhood of $P$.
+The \dfn{Dirichlet energy} of $N$ is
+$$\Dir N = \Dir(x, f(x), \nabla f(x)).$$
 \end{definition}
+The idea is that, because $N$ is tangent to $H$, the part of the Dirichlet energy that arises from the ``slope" of $N$ at $H$ is ignored by this definition.
+Thus, the only terms in $\nabla f$ that honestly contribute to $\Dir N$ are those that are caused by the ``twisting" of $N$.
 
-The idea here is that, while we could view $N$ as a graph in uncountably many ways, the Dirichlet energy of such a graph consists of both the intrinsic Dirichlet energy, which by definition is intrinsic to the embedding $N \xhookrightarrow{} M$ and a term accounting for the ``slope" of $N$, which is extrinsic to the embedding in that it also depends on the choice of a local product structure on $M$.
-By imposing that the slope of the graph be $0$ at $P$, we remove the extrinsic content from the definition of the Dirichlet energy.
-
-Our next task is to deduce a mean-value property for the intrinsic Dirichlet energy.
+Now we compute the Euler-Lagrange operator of $\Dir$.
+We use Einstein notation, with Latin symbols ranging over $1, \dots, d - 1$ and Greek symbols ranging over $0, \dots, d - 1$, with the $0$th index referring to the $y$-direction.
+The Euler-Lagrange equation is
+$$\Dir_{,0}|_{(y, p) = (f, \nabla f)} = \partial^k \left(\frac{\partial \Dir}{\partial p_k}|_{(y, p) = (f, \nabla f)}\right).$$
+Also
+$$\Dir_{,0} = \slashed g_{ij,0} p^i p^j \sqrt{\slashed g}$$
+while
+$$\frac{\partial \Dir}{\partial p_k} = 2\slashed g_{jk} p^j \sqrt{\slashed g}$$
+so if we denote $\tilde f(x) = (x, f(x))$,
+$$\frac{\partial \Dir}{\partial p_k}|_{(y, p) = (f, \nabla f)} = 2\slashed g_{jk}(\tilde f) f^{,j} \sqrt{\slashed g}$$
+and hence
+\begin{align*}
+\partial^k \frac{\partial \Dir}{\partial p_k}|_{(y, p) = (f, \nabla f)}
+&= 2\partial^k(\slashed g_{jk}(\tilde f)) f^{,j} \sqrt{\slashed g} + 2\slashed g_{jk}(\tilde f) f^{,jk} \sqrt{\slashed g} + 2\slashed g_{jk}(\tilde f) f^{,j} \partial^k \sqrt{\slashed g}\\
+&= 2(\slashed g_{jk}^{,\mu} (\tilde f) \tilde f_\mu^{,k} f^{,j} + \slashed g_{jk}(\tilde f) f^{,jk} + \slashed g_{jk}(\tilde f) f^{,j} \partial^k) \sqrt{\slashed g}.
+\end{align*}
+Thus the Euler-Lagrange equation is
+$$\slashed g_{ij}(\tilde f) f^{,ij} = \frac{\slashed g_{ij,0}(\tilde f)}{2} f^{,i} f^{,j} - \slashed g_{ij}^{,\mu} (\tilde f) \tilde f_\mu^{,i} f^{,j} - \slashed g_{ij}(\tilde f) f^{,j} \partial^i (\log \sqrt{\slashed g}).$$
+Breaking up the sum over $\mu$ we get
+\begin{align*}
+\slashed g_{ij}^{,\mu} (\tilde f) \tilde f_\mu^{,i} f^{,j}
+&= \slashed g_{ij}^{,k} (\tilde f) x_k^{,i} f^{,j} + \slashed g_{ij}^{,0} (\tilde f) f^{,i} f^{,j} \\
+&= \slashed g_{ij}^{,i} (\tilde f) f^{,j} + \slashed g_{ij}^{,0} (\tilde f) f^{,i} f^{,j}
+\end{align*}
+whence the Euler-Lagrange equation simplifies to
+$$\slashed g_{ij}(\tilde f) f^{,ij} + \frac{\slashed g_{ij, 0} (\tilde f)}{2} f^{,i} f^{,j} + \slashed g^{,i}_{ij}(\tilde f) f^{,j} + \slashed g_{ij}(\tilde f) (\log \sqrt{\slashed g})^{,i} f^{,j} = 0$$
+which is a quasilinear elliptic PDE for the function $f$.
+In an interial frame we can write this in the partially coordinate-free notation
+$$(\slashed g(\tilde f), \nabla^2 f) + \frac{1}{2} (\slashed g_{,0}(\tilde f), \nabla f \otimes \nabla f) + (\slashed g^{,i}_{i\bullet}(\tilde f), \nabla f) + (\slashed g(\tilde f), \nabla \log \sqrt{\slashed g} \otimes \nabla f) = 0.$$
+It is not quite the self-referential Laplace-Beltrami equation $\Delta_{\slashed g(\tilde f)} f = 0$, because $\log \sqrt{\slashed g(\tilde f)}$ has been replaced with $\log \sqrt{\slashed g}$.
+If it was, we would have a partial mean-value property (which I believe is strong enough in suitably low dimensions).
+The good news is that $f$ should be \emph{approximately} $\slashed g(\tilde f)$-harmonic in some sense, at least when $f$ is small (say, in $L^\infty$) and so we should still have something like a partial mean-value property.
 
 \printbibliography
 
