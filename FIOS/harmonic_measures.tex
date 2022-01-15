@@ -1,0 +1,271 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url}
+\RequirePackage[usenames,dvipsnames]{color}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{Harmonic measures}
+\author{Aidan Backus}
+\date{January 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Expect}{\mathbf E}
+\newcommand{\Hyp}{\mathbf H}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\DeclareMathOperator{\vol}{vol}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Hilb}{\mathcal H}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+\newtheorem{notate}{Notation}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage{color}
+%\hypersetup{%
+%    colorlinks=true, % make the links colored%
+%    linkcolor=blue, % color TOC links in blue
+%    urlcolor=red, % color URLs in red
+%    linktoc=all % 'all' will create links for everything in the TOC
+%Ning added hyperlinks to the table of contents 6/17/19
+%}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+%\addbibresource{linear_phase.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+
+\section{Harmonic measures}
+Let $\Omega \subseteq \RR^d$ be an open set with nonempty smooth boundary.
+If $u$ is the harmonic function on $\Omega$ with trace $f$, then
+$$u(x) = \int_{\partial \Omega} G(x, y) f(y) ~dy$$
+for some integral kernel
+$$G: \Omega \times \partial \Omega \to \RR.$$
+
+\begin{definition}
+The \dfn{harmonic measure} of $\Omega$ at $x \in \Omega$ is the measure $\mu_x$ such that
+$$d\mu_x(y) = G(x, y) ~dy.$$
+\end{definition}
+
+So we have $u(x) = \int_{\partial \Omega} f ~d\mu_x$.
+To study harmonic measures it is convenient to reinterpret $\Delta$ as the ``infinitesimal generator" of Brownian motion.
+
+If $W$ is a Brownian motion then $W_t$ denotes the position of $W$ at time $t \geq 0$, which is a random variable.
+The only properties of Brownian motion that we shall need are the following.
+
+\begin{theorem}
+Let $W$ be a Brownian motion.
+Then (almost surely):
+\begin{enumerate}
+\item $t \mapsto W_t$ is continuous.
+\item (Markov's strong property) For every finite stopping time $\tau$ and deterministic time $t \geq 0$, $W_{\tau + t} - W_\tau$ is independent of $(W_s)_{s \in [0, \tau]}$.
+\item (Equidistribution) If $W_0 = x$ and $S_x$ is a small sphere centered at $x$, $W_\tau$ the first time that $W_\tau \in S_x$, then the distribution of $W_x$ is the usual probability measure on the sphere.
+\end{enumerate}
+\end{theorem}
+
+\begin{definition}
+Let $W$ be a Brownian motion such that $W_0 \in \Omega$.
+The \dfn{escape time} of $W$ is the first time $\tau$ such that $W_\tau \in \partial \Omega$.
+\end{definition}
+
+\begin{lemma}
+Let $W$ be a Brownian motion such that $W_0 = x \in \Omega$ and let $\tau$ be its escape time.
+Then $\mu_x$ is the distribution of $W_\tau$.
+\end{lemma}
+\begin{proof}
+I follow \S3.1 of M\"orters--Peres loosely.
+Given a trace $f$, let
+$$u(x) = \Expect(f(W_\tau)|W_0 = x)$$
+and let $S_x$ be a small sphere centered on $x$ and $X$ a random point on $S_x$.
+Then by Markov's strong property and equidistribution
+$$u(x) = \Expect(\Expect(f(W_\tau)|W_0 \in X)) = \Expect(u(X)) = \dashint_{S_x} u(y) ~dy$$
+which means that $u(x)$ satisfies the mean-value property.
+Also $f(W_0) = f(x)$ clearly, if $x \in \partial \Omega$.
+So
+\begin{align*}
+\Expect(f(W_\tau)|W_0 = x) &= \int_{\partial \Omega} f ~d\mu_x. \qedhere
+\end{align*}
+\end{proof}
+
+This obviously implies that $\mu_x$ is a probability measure.
+Similar results hold for more general stochastic processes, and in fact for the $p$-Laplace equation, $p \in [2, \infty]$.
+In case $p = \infty$ this is relevant to my research.
+
+\section{Slit domains}
+We identify $\CC = \RR^2$ and let $\Sigma = \{|y| < r\} \setminus I_0$ where $I_0$ is an interval in $\RR$ of length $\leq 1$.
+This does not have a smooth boundary but by applying a conformal transformation we can transform it into $\DD \setminus I_0$ and then approximate this new open set by annuli with increasingly eccentric inner circles.
+We suppress this approximation in the below lemmata, even though Bourgain--Dyatlov keep it.
+So the boundary of $\partial \Sigma$ admits harmonic measures.
+
+\begin{lemma}
+If $F: \overline \Sigma \to \CC$ is holomorphic then for every $z \in \Sigma$,
+$$\log |F(z)| \leq \int_{\partial \Sigma} \log |F| ~d\mu_z.$$
+\end{lemma}
+\begin{proof}
+Let $u(z) = \int_{\partial \Sigma} \log |F| ~d\mu_z$. Then $u$ is harmonic and has the same trace as the subharmonic function $\log |F|$.
+So by the maximum principle, $u$ dominates $\log |F|$.
+\end{proof}
+
+The next lemma says that if we start a Brownian motion close, but not too close, to $I_0$, then the Brownian motion will probably hit the slit before it escapes $\Sigma$.
+
+\begin{lemma}
+Suppose that $t \in \Sigma \cap \RR$ and let $G = G(t, \cdot)$ be the Radon-Nikod\'ym derivative of $\mu_t$ with respect to the $1$-dimensional measure on $\partial \Sigma$. Then:
+\begin{enumerate}
+\item If $d(t, I_0) \geq |I_0|/10$ then
+$$||G||_{L^p(I_0)} \lesssim_{|I_0|, p} 1.$$
+\item If $d(t, I_0) \leq 1$ then for $x \in \RR$,
+$$G(x \pm ir) \leq \frac{2}{re^{d(x, I_0)}}.$$
+\item If $d(t, I_0) \leq 1$ then
+$$\mu_t(I_0) \geq \frac{|I_0|}{8e^{2/r}}.$$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The proofs are all similar so let's do the last one.
+Without loss of generality, $I_0 = [-\ell, 0]$ where $0 < \ell \leq 1$ and $0 < t \leq 1$.
+Let $\Sigma' = \{|y| < r\} \setminus (-\infty, 0]$. Then $\Sigma \subset \Sigma'$.
+If $W$ is a Brownian motion such that $W_0 = t$ and $W$ escapes $\Sigma'$ via $I_0$ then $W$ also escapes $\Sigma$ via $I_0$.
+So
+$$\mu_t^\Sigma(I_0) \geq \mu_t^{\Sigma'}(I_0).$$
+Also there is a conformal isomorphism
+$$\kappa: (\Sigma', t) \to (\Hyp^2, i)$$
+such that $[0, a] = [0, \sqrt \ell/2 e^{-\pi/2r}] \subseteq \kappa(I_0)$.
+Therefore
+$$\mu_t^{\Sigma'}(I_0) = \int_{\kappa(I_0)} P(i, y) ~dy \geq \int_0^a P(i, y) ~dy$$
+where $P$ is the Poisson kernel of $\Hyp^2$. One can explicitly compute that this is $\geq \ell/8 e^{-2/r}$.
+\end{proof}
+
+\section{Application to fractal uncertainty}
+We need to show the following lemma.
+
+\begin{lemma}
+Let $\mathcal I$ be a set of nonoverlapping intervals of length $1$, $c_0 > 0$, and for each $I \in \mathcal I$ select $I'' \subset I$ of length $c_0$.
+Then for every $r \in (0, 1)$, $\kappa \in (0, e^{-O(r^{-1})}]$, and $f \in L^2(\RR)$, if $\supp f$ is compact, then
+$$\sum_{I \in \mathcal I} ||f||_{L^2(I)}^2 \lesssim_{c_0} r^{-1} \left(\sum_{I \in \mathcal I} ||f||_{L^2(I'')}^2 \right)^\kappa \left(\int_{-\infty}^\infty e^{4\pi r|\xi|} |\hat f(\xi)|^2 ~d\xi \right)^{1 - \kappa}.$$
+\end{lemma}
+\begin{proof}
+The function
+$$F(z) = \int_{-\infty}^\infty e^{2\pi iz\xi} \hat f(\xi) ~d\xi$$
+is entire with $F|\RR = f$, by the Paley-Wiener-Schwartz theorem, and satisfies the growth condition
+$$\int_{-\infty}^\infty |F(x \pm ir)|^2 ~dx \leq \int_{-\infty}^\infty e^{4\pi r\xi} |\hat f(\xi)|^2 ~d\xi.$$
+Let $I_0$ satisfy $|I_0| = c_0/2$ and have the same center as $I''$ and $\Sigma_I = \{|y| < r\} \setminus I_0$.
+
+If $t \in I \setminus I''$, let $\mu_t$ be its harmonic measure with respect to $\Sigma_I$ and let $\kappa_I = \mu_t(I_0)$.
+By (3),
+$$\kappa_I \gtrsim c_0 e^{-2/r} \geq \kappa.$$
+We also have
+\begin{align*}
+2 \log |f(t)| &\leq \int_{\partial \Sigma_I} 2 \log |F| ~d\mu_t \\
+&= 4\kappa_I \int_{I_0} \frac{\log |f|}{2} \frac{d\mu_t}{\kappa_I} + (1 - \kappa_I) \int_{\partial \Sigma_I \setminus I_0} 2 \log |F| \frac{d\mu_t}{1 - \kappa_I}.
+\end{align*}
+Notice that $\mu_t/\kappa_I$ is a probability measure on $I_0$ and similarly for the measure on its complement.
+So by Jensen's inequality,
+\begin{align*}
+|f(t)|^2 &\leq \left(\int_{I_0} \sqrt{|f|} \frac{d\mu_t}{\kappa_I}\right)^{4\kappa_I} \left(\int_{\partial \Sigma_I \setminus I_0} |F|^2 \frac{d\mu_t}{1 - \kappa_I}\right)^{1 - \kappa_I}\\
+&\lesssim \left(\int_{I_0} \sqrt{|f|} ~d\mu_t\right)^{4\kappa}\left(\int_{I_0} \sqrt{|f|} ~d\mu_t + \int_{\partial \Sigma_I \setminus I_0} |F|^2 ~d\mu_t\right)^{1 - \kappa}.
+\end{align*}
+By H\"older's inequality with $p = 4/3$ and (1),
+$$\int_{I_0} \sqrt{|f|} ~d\mu_t \leq ||f||_{L^2(I_0)}^{1/2}$$
+and by (2),
+$$\int_{\partial \Sigma_I \setminus I_0} |F|^2 ~d\mu_t \lesssim r^{-1} \int_{|\Im z| = r} e^{-d(\Re z, I)} |F(z)|^2 ~dz.$$
+From this and more H\"older we get
+$$\sum_{I \in \mathcal I} ||f||_{L^2(I \setminus I'')}^2 \lesssim r^{-1} \left(\sum_{I \in \mathcal I} ||f||_{L^2(I'')}^2\right)^\kappa \left(\int_{|\Im z| = r} |F(z)|^2 ~dz\right)^{1 - \kappa}$$
+and
+$$\int_{|\Im z| = r} |F(z)|^2 ~dz \leq \int_{-\infty}^\infty e^{4\pi r|\xi|} |\hat f(\xi)|^2 ~d\xi$$
+and since $e^{2\pi r|\xi|} \geq 1$ another H\"older gives
+\begin{align*}
+\sum_{I \in \mathcal I} ||f||_{L^2(I'')}^2 &\leq \left(\sum_{I \in \mathcal I} ||f||_{L^2(I'')}^2\right)^\kappa \left(\int_{-\infty}^\infty e^{4\pi r|\xi|} |\hat f(\xi)|^2 ~d\xi \right)^{1 - \kappa}.
+\qedhere \end{align*}
+\end{proof}
+
+
+\end{document}

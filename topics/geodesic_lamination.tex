@@ -67,13 +67,14 @@
 \DeclareMathOperator{\sech}{sech}
 
 \DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Gram}{Gram}
 \DeclareMathOperator{\grad}{grad}
 \DeclareMathOperator{\Ell}{Ell}
 \DeclareMathOperator{\WF}{WF}
 
 \newcommand{\Lagrange}{\mathscr L}
 \newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
-\newcommand{\DirL}{\mathscr D^{\mathrm{lin}}}
+\newcommand{\DirL}{\mathscr D}
 
 \newcommand{\Hilb}{\mathcal H}
 \newcommand{\Homology}{\mathrm H}
@@ -240,6 +241,7 @@ In \S\ref{duality}, we use Theorem \ref{main thm} to use certain conjectures of 
 
 \subsection{Acknowledgements}
 I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions.
+I would also like to thank Joshua Lin for helpful discussions and in particular for suggesting the proof of Lemma \ref{cross product formula}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -443,15 +445,18 @@ To construct it, let $\omega = d1_U ~\vol$, which by Proposition \ref{HanhJordan
 Let $U,\normal$ be as above.
 The \dfn{reduced boundary} $\partial^* U$ of a set $U$ of locally finite perimeter is the set of Lebesgue points of $\normal$.
 The \dfn{conormal $1$-form} to $\partial^* U$ is $\normal$.
-The \dfn{tangent bundle} $T\partial^* U$ to $\partial^* U$ is the kernel bundle of $\normal$.
 \end{definition}
 
-The tangent bundle is well-defined and gives a measurable vector bundle of rank $d-1$ over $\partial^* U$, because $\normal$ is nonzero almost everywhere, and so has constant rank $1$.
-We prefer to work with $\normal$ than $\normal^\sharp$, to obtain metric-independence.
-In fact, metric-independence and well-known facts about the euclidean case \cite[Chapters 2-4]{Giusti77} \cite{deGiorgi55} imply:
+\begin{proposition}\label{metric-independence theorem}
+Let $U$ be a set of locally finite perimeter and let $\normal$ be its conormal $1$-form.
+Then $\normal$ and $\partial^* U$ do not depend on the metric.
+\end{proposition}
+\begin{proof}
+Immediate from the fact that Propositions \ref{HanhJordan} and \ref{LebDiff} did not assume that $M$ was a Riemannian manifold.
+\end{proof}
 
 \begin{proposition}\label{locality of Caccioppoli}
-Let $U$ be a set of locally finite perimeter.
+Let $U$ be a set of locally finite perimeter with conormal $1$-form $\normal$.
 Then:
 \begin{enumerate}
 \item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is rectifiable with respect to $d-1$-dimensional Hausdorff measure.
@@ -459,6 +464,9 @@ Then:
 \item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+Immediate from Proposition \ref{metric-independence theorem} and well-known facts about the euclidean case \cite[Chapters 2-4]{Giusti77} \cite{deGiorgi55}.
+\end{proof}
 
 \begin{notation}
 We write $|\partial^* U|$ for $\int_M |d1_U| ~\vol$.
@@ -605,7 +613,31 @@ Immediate from \cite[Theorem 6.2.2]{Simons68} and \cite[Theorem A]{BOMBIERI1969}
 
 Therefore we cannot sharpen Theorem \ref{main thm} to include the case $d \geq 8$.
 
-\subsection{The Miranda stability theorem}\label{MirandaStability}
+\subsection{A priori and Miranda estimates}\label{MirandaStability}
+We omit the proofs of our next few results, as they follow easily from Proposition \ref{traces} and the proofs of \cite[Teorema 2]{Miranda67} and \cite[Lemma 5.6, Remark 5.7]{Giusti77}.
+
+\begin{proposition}[gluing]\label{gluing}
+Let $N$ be a Lipschitz hypersurface which separates $M$ into $U_1,U_2$.
+If $u_j \in BV(U_j)$ and $u \in L^1_l(M)$ is the function such that $u|U_j = u_j$, then $u \in BV(M)$.
+Moreover,
+\begin{equation}
+\label{glued BV norm}
+\int_N |du| ~\vol = \int_N |u_1 - u_2| ~\vol_N.
+\end{equation}
+\end{proposition}
+
+\begin{proposition}[a priori estimates]\label{estimates on good set}
+Let $u, v \in BV(M)$, let $U \Subset M$ have a Lipschitz boundary $N$. Then
+\begin{align}
+|\eta(u, U) - \eta(v, U)| &\leq \int_N |u - v| ~\vol_N, \label{a priori estimate 1}\\
+\eta(u, U) &\leq \int_N |u| ~\vol_N, \label{a priori estimate 2}
+\end{align}
+and if $u$ has least gradient then
+\begin{equation}
+\int_U |du| ~\vol \leq \int_U |dv| + \int_{\partial U} |u - v| ~\vol_N. \label{a priori estimate 3}
+\end{equation}
+\end{proposition}
+
 The exponential pullback $\exp_p^* u$ of a function $u$ of least gradient defined near $p \in M$ need not have least gradient.
 However, in a small ball $B$ around $p$, we will be able to show that $\eta(u, B) \approx |du|_{TV}(B)$ in a sense to be made precise later.
 This observation motivates the following definition.
@@ -673,35 +705,12 @@ A sequence of functions $(u_n)$ in $BV_l(M)$ converges \dfn{in total variation o
 \end{equation}
 \end{definition}
 
-We omit the proofs of our next few results, as they follow easily from Proposition \ref{traces} and the proofs of \cite[Teorema 2]{Miranda67} and \cite[Lemma 5.6]{Giusti77}.
-
-\begin{proposition}[gluing]\label{gluing}
-Let $N$ be a Lipschitz hypersurface which separates $M$ into $U_1,U_2$.
-If $u_j \in BV(U_j)$ and $u \in L^1_l(M)$ is the function such that $u|U_j = u_j$, then $u \in BV(M)$.
-Moreover,
-\begin{equation}
-\label{glued BV norm}
-\int_N |du| ~\vol = \int_N |u_1 - u_2| ~\vol_N.
-\end{equation}
-\end{proposition}
-
-\begin{lemma}\label{estimates on good set}
-Let $u, v \in BV(M)$, let $U \Subset M$ have a Lipschitz boundary $N$. Then
-\begin{equation}\label{a priori estimate 1}
-|\eta(u, U) - \eta(v, U)| \leq \int_N |u - v| ~\vol_N.
-\end{equation}
-In particular
-\begin{equation}\label{a priori estimate 2}
-\eta(u, U) \leq \int_N |u| ~\vol_N.
-\end{equation}
-\end{lemma}
-
 \begin{proposition}[Miranda stability theorem]\label{Miranda convergence}
 If a sequence of functions $(u_n)$ has approximately least gradient and converges in $L^1_l$, then its limit $u$ has least gradient, and $u_n \to u$ in total variation on sets with no singularities.
 \end{proposition}
 \begin{proof}
 By Lemma \ref{probabilistic method} for every $U$ open $\Subset M$ we can find $U \subseteq V \Subset M$ such that $V$ is open and $\partial V$ has no singularities.
-Now the proof is identical to that of \cite[Teorema 3]{Miranda67}, using Proposition \ref{gluing} and Lemma \ref{estimates on good set} whenever the proof of \cite[Teorema 3]{Miranda67} calls for their euclidean counterparts.
+Now the proof is identical to that of \cite[Teorema 3]{Miranda67}, using Propositions \ref{gluing} and \ref{estimates on good set} whenever the proof of \cite[Teorema 3]{Miranda67} calls for their euclidean counterparts.
 \end{proof}
 
 \begin{corollary}\label{level sets are minimal}
@@ -735,7 +744,16 @@ Fix $N$, a smooth minimal hypersurface in $M$, and $P \in N$. Then one has
 for some $A \in \RR$, where as usual $B_r = B(P, r)$ \cite[\S7]{MarquesXX}.
 This is not quite good enough for our purposes because we need sharper lower bound than $0$ and because we cannot assume that $N$ is smooth.
 However, sharper monotonicity formulae are available on euclidean space \cite[Proposition 5.12]{Giusti77}, and so in this section, we provide a highly streamlined version of the argument of \cite[Chapter 5]{Giusti77}, suitably modified to account for the presence of a nonzero Ricci tensor, which is the source of the constant $A$ in (\ref{classic monotonicity}).
-We begin by considering some general facts about polar coordinates:
+We begin by considering some general facts about polar coordinates.
+
+\begin{lemma}\label{taylor metric det}
+In normal coordinates $x$ based at $P$, one has
+$$\vol = \left(1 - \frac{R_{\mu\nu}}{6} x^\mu x^\nu - \frac{R_{\mu\nu;\lambda}}{12} x^\mu x^\nu x^\lambda + O(|x|^4)\right) ~\vol^{\mathrm{euc}}$$
+where $R_\bullet$ is $\Ric_P$ and $\vol^{\mathrm{euc}}$ is the euclidean volume form on $T_PM$.
+\end{lemma}
+\begin{proof}
+This follows from \cite[Lemma 3.4]{schoen1994lectures} and the Taylor expansion of $\sqrt \cdot$.
+\end{proof}
 
 \begin{lemma}\label{rescale the sphere form}
 Let $s < r$ and view $\vol_{\partial B_r}$ as a volume form on $\Sph^{d - 1}$.
@@ -743,7 +761,7 @@ Then as $r \to 0$,
 $$\frac{\vol_{\partial B_r}}{\vol_{\partial B_s}}(\Theta) = \frac{r^{d - 1}}{s^{d - 1}} \frac{1 - r^2 \Ric_P(\Theta, \Theta)/6 + O(r^3)}{1 - s^2 \Ric_P(\Theta, \Theta) + O(s^3)}.$$
 \end{lemma}
 \begin{proof}
-Writing $dx$ for the usual euclidean volume form, expanding $\vol$ in polar coordinates gives
+Writing $dx$ for the usual euclidean volume form, expanding $\vol$ in polar coordinates and applying Lemma \ref{taylor metric det} gives
 $$\vol_{\partial B_r} = \iota_{\partial r} \vol = (1 - \Ric_P(r\Theta, r\Theta)/6 + O(r^3)) ~\iota_{\partial r} dx.$$
 But $\iota_{\partial r} dx = r^{d - 1} \vol_{\Sph^{d - 1}}(\Theta)$ whence
 \begin{align*}
@@ -897,7 +915,9 @@ Equivalently, $\dim_P \mu = \ell$ iff $\mu(B(P, r)) \sim r^\ell$ as $r \to 0$.
 
 \begin{proposition}\label{doubling dimension}
 Let $U$ be a set of least perimeter and $P \in \partial^* U$. Then
-$$\dim_P |d1_U|~\vol = d - 1.$$
+$$\dim_P |d1_U|~\vol = d - 1$$
+and
+$$|\partial^* U \cap B_r| \leq |U \cap \partial B_r|.$$
 \end{proposition}
 \begin{proof}
 Since $u = 1_U$ has least gradient, in particular its gradient in $1_{\overline U}$ is less than that of $1_{B_r}$, so if we set $\mu =|d1_U| ~\vol$, then
@@ -979,132 +999,112 @@ The fact that $0 \in \partial C$ follows from the fact that $P \in \partial^* U$
 The hyperplane $T_P \partial^* U$ given by Proposition \ref{blowup theorem} is a \dfn{tangent space} to $\partial^* U$ at $P$.
 \end{definition}
 
-We stress that, until we show that that $\partial^* U$ is a smooth hypersurface, it is far from obvious from that the tangent hyperplane is unique.
-Moreover, if $d \geq 8$, Theorem \ref{minimal cones in R8} precludes that we can even show \emph{existence} of a tangent hyperplane.
+It does \emph{not} follow from Proposition \ref{blowup theorem} that the tangent spaces to $\partial^* U$ define a continuous vector bundle, or even that they are uniquely defined. To accomplish that, we will need the results of the next few sections.
+Moreover, if $d \geq 8$, Theorem \ref{minimal cones in R8} precludes that we can even show existence of a tangent space, but only a tangent cone.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Mollification of sets of least perimeter}\label{MollifierSection}
-In this section our goal is to show that given a set $U$ of least perimeter, we can find a $C^1$ hypersurface $N$ which approximates $\partial^* U$ arbitrarily well, in the following precise sense.
+In this section our goal is to show that given a set $U$ of least perimeter, we can find a $C^1$ hypersurface $N$ which approximates $\partial^* U$ arbitrarily well.
 
 \begin{definition}
-By a \dfn{quasieuclidean frame} at $P$ we mean a tuple of vector fields $(\partial_0, \dots, \partial_{d - 1})$ of unit length defined near $P$ which induce an orthonormal basis on $T_PM$.
+Let $P \in M$.
+By a \dfn{quasieuclidean frame} (or $g$-quasieuclidean frame, if we must emphasize the metric) on $(M, P)$ we mean a tuple of smooth vector fields $(\partial_0, \dots, \partial_{d - 1})$ on $M$ such that:
+\begin{enumerate}
+\item (Euclidean at $P$) $(\partial_0, \dots, \partial_{d - 1})$ forms an orthonormal basis of $T_PM$.
+\item (Commutator-free) $\mathcal L_\mu \partial_\nu = 0$.
+\item (Divergence-free) $\mathcal L_\mu \vol = 0$.
+\item (Almost orthonormal) If $\mu \neq \nu$ then $g_{\mu\nu} \leq 1/(4d)$, while $1/2 \leq g_{\mu\mu} \leq 2$.
+\end{enumerate}
 \end{definition}
 
 \begin{proposition}\label{mollifier proposition}
-Let $(U_n)$ be a sequence of sets of least perimeter with indicator $u_n$, let $(\partial_0, \dots, \partial_{d - 1})$ be a quasieuclidean frame at $P$, let
-$$\gamma_n = \int_{B_1} |du_n| - \partial_0u_n ~\vol,$$
-where we write $B_t = B(P, t)$, and suppose that $(\gamma_n) \in \ell^1$.
+Let $(U_n)$ be a sequence of sets with indicator functions $u_n$, let $(\partial_0, \dots, \partial_{d - 1})$ be a quasieuclidean frame on $(B(P, 1), P)$, and let
+$$\gamma_n = \int_{B(P, 1)} |du_n| - \partial_0u_n ~\vol.$$
+Suppose that in addition:
+\begin{enumerate}
+\item $(u_n)$ has least gradient.
+\item $(\gamma_n) \in \ell^1$.
+\item The exponential map $\exp_P$ is injective on $\{v \in T_PM: g(v, v) < 1\}$.
+\end{enumerate}
 
-Then for almost every $t \in (0, 1)$ there exist open sets $V_n$ with $C^1$ boundary and indicator $v_n$, such that
-$$|\partial V_n \cap B_t| \leq \eta(V_n, B_t) + o(\gamma_n),$$
-$$\int_{B_t} |du_n| - |dv_n| ~\vol \ll \gamma_n,$$
-$$\left|\int_{B_t} \partial_j(u_n - v_n)~\vol\right| \ll \gamma_n,$$
-and $\normal_{L_n}$ converges to $1$ uniformly near $P$.
+Then for almost every $t \in (0, 1)$ there exist open sets $V_n$ with $C^1$ boundary and indicator $v_n$, such that for every $j \in \{0, \dots, d - 1\}$,
+\begin{align}
+|\partial V_n \cap B_t| &\leq \eta(V_n, B_t) + o(\gamma_n), \label{mollifier prop1}\\
+\left|\int_{B_t} |du_n| - |dv_n| ~\vol\right| &\ll \gamma_n, \label{mollifier prop2}\\
+\left|\int_{B_t} \partial_j(u_n - v_n)~\vol\right| &\lesssim \gamma_n^2, \label{mollifier prop3}\\
+\lim_{n \to \infty} g(\normal_{L_n}, \partial_0) &= 1, \label{mollifier prop4}
+\end{align}
+and the limit in (\ref{mollifier prop4}) is locally uniform.
 \end{proposition}
 
-Our proof shall be similar to the euclidean proof \cite[Lemma 5.5]{Miranda66}, but with some care taken to control the error terms arising from the nonvanishing of the Ricci tensor of $g$.
-Once said control is established, the proof is essentially the same.
+The euclidean analogue of this proposition is \cite[Lemma 5.5]{Miranda66}.
+For an exposition of the euclidean proof, we recommend \cite[Chapter 7]{Giusti77}.
+We use the same integral kernel as \cite[Chapter 7]{Giusti77}, and much of our argument is the same, but we must take care to control the error terms arising from $\Ric_g$ and the fact that $g(\partial_i, \partial_j) \neq \delta_{ij}$.
+
+Before proving Proposition \ref{mollifier proposition}, we check that it is not vacuous in that one can always find a suitable coordinate system, possibly after rescaling the metric:
+
+\begin{lemma}\label{extend to quasieuclid}
+Quasieuclidean frames have the following properties:
+\begin{enumerate}
+\item For every $P \in M$ there exists a quasieuclidean frame near $P$, which can be taken to include any particular vector field $X$ which is nonzero near $P$ with $\mathcal L_X\vol = 0$.
+\item If there is a quasieuclidean frame on $(A, P)$ and $\tilde g(v, w) = g(\lambda v, \lambda w)$ is a rescaling of $g$, $\lambda > 0$, then there still exists a $\tilde g$-quasieuclidean frame on $(A, P)$.
+\item If $U$ is a set of $g$-least perimeter then there exists $\lambda > 0$, $\tilde g(v, w) = g(\lambda v, \lambda w)$, such that $U$ has $\tilde g$-least perimeter and there exists a $\tilde g$-quasieuclidean frame on $(B_{\tilde g}(P, 1), P)$.
+\item If $(\partial_0, \dots, \partial_{d - 1})$ is quasieuclidean, then it defines a basis of each tangent space.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+To construct a quasieuclidean frame we begin by choosing coordinates $x_0, \dots, x_{d - 1}$ for which
+$$\vol = dx_0 \wedge \cdots \wedge dx_{d - 1}.$$
+Then we set $\partial_\mu = \partial_{x_\mu}$ so
+$$\mathcal L_\mu\vol = \sum_\mu dx_0 \wedge \cdots \wedge d\frac{dx_\mu}{dx_\mu} \wedge \cdots \wedge dx_{d - 1} = 0.$$
+Clearly this construction can be done with $x_0$ chosen to be a primitive of a given divergence-free vector field.
+It is also clear that $\mathcal L_\mu \partial_\nu = 0$ since this is true in the euclidean case.
+We can then apply the Gram-Schmidt algorithm to modify this basis to obtain $g_{\mu\nu} = \delta_{\mu\nu}$ at $P$, and the vector fields produced by this algorithm are a linear combination of those input, and therefore must also be free of divergence and commutators.
+The almost orthonormality follows on a small open subset of $P$ by continuity.
+We can also repeat this construction, but with the Gram-Schmidt condition replaced by $g_{\mu\nu} = \lambda^{-2} \delta_{\mu\nu}$, to get a $\tilde g$-quasieuclidean frame.
+
+Now we can select $\lambda$ so small that we obtain a $\tilde g$-quasieuclidean frame on $(B_{\tilde g}(P, 1), P)$.
+Then if $u = 1_U$ has $g$-least gradient, $p = (d - 1)/2$, and $B$ is a small open set,
+$$\int_B |du| ~\vol_{\tilde g} = \lambda^p \int_B |du| ~\vol_g \leq \lambda^p \int_B |du + dv| ~\vol_g = \int_B |du + dv| ~\vol_{\tilde g}$$
+whenever $v \in BV_c(B)$.
+It follows that $u$ has $\tilde g$-least gradient.
+
+Finally, if $(\partial_0, \dots, \partial_{d - 1})$ is quasieuclidean, but we have
+$$0 = c_0 \partial_0, \dots, c_{d - 1} \partial_{d - 1},$$
+where there exists $i$ such that $c_i \neq 0$, we set $g_{ij} = g(\partial_i, \partial_j)$, and estimate
+\begin{align*}
+0 &= \sum_{ij} c_ic_j g_{ij} \gtrsim \sum_i g_{ii} - \sum_{i \neq j} |g_{ij}| \geq \frac{d}{2} - \frac{d^2}{4d} = \frac{d}{4}
+\end{align*}
+which is a contradiction.
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{The Lipschitz mollifier}
-Fix a point $P \in M$ and a radius $R > 0$, so that $B_R = B(P, R)$ satisfies Gauss' polar coordinates lemma.
-We begin by rescaling the metric $g$, so that $R \geq 1$.
-We then introduce the polar coordinates
-$$(r, \Theta): B_1 \setminus P \to (0, 1) \times \Sph^{d - 1}.$$
-In these coordinates, we will frequently have occasion to estimate $|\partial B_r|$; it is given by
-\begin{align}\label{area of sphere form}
-|\partial B_r| &= |\Sph^{d - 1}|r^{d - 1} + \kappa r^{d + 1} + O(r^{d + 3})\\
-\label{normalized scalar curvature}
-\kappa &:= -\frac{R(P)|\Sph^{d - 1}|}{6d},
-\end{align}
+\subsection{Polar coordinates}
+Suppose that we are in the situation of Proposition \ref{mollifier proposition}, namely we are given a point $P \in M$ such that the exponential map is a diffeomorphism
+\begin{equation}\label{exp map mollify}
+\exp_P: \{v \in T_PM: g(v, v) < 1\} \to B_1,
+\end{equation}
+and we have a quasieuclidean frame $(\partial_0, \dots, \partial_{d - 1})$ on $B_1$ based at $P$.
+Under these assumptions we may introduce polar coordinates
+\begin{equation}\label{polar coordinates mollify}
+(r, \Theta): B_1 \setminus \{P\} \to (0, 1) \times \Sph^{d - 1},
+\end{equation}
+where $\Theta = (\theta_1, \dots, \theta_{d - 1})$,
+for which $g(\partial_r, \partial_{\theta_i}) = 0$ and $g(\partial_r, \partial_r) = 1$.
+We also define
+$$\kappa = -\frac{R(P)|\Sph^{d - 1}|}{6d}$$
 where $R$ is the scalar curvature field of $g$.
-We will frequently use without mention that $\kappa$ is uniformly bounded on compact sets.
-
-By assumption, $1$ is smaller than the injectivity radius of $P$, so we can identify $B_1$ with a ball in the tangent space $T_PM$.
-Thus we define the addition and subtraction of two points in $M$.
-If $f \in C_c(B_1, TM^{\wedge d})$ is a compactly supported volume form, $u \in L^1_l(B_1)$, we may define the convolution $f * u$ by extending $f$ to a volume form on $M$ with compact support in $B_1$, so $f(x - y)$ is well-defined even if $x - y \notin B_1$.
-
-\begin{definition}
-We will use the \dfn{Lipschitz mollifier}
-$$\chi_\varepsilon(r, \Theta) = \frac{C_\varepsilon}{\varepsilon^d}\left(1 - \frac{r}{\varepsilon}\right)1_{r < \varepsilon}\vol(r, \Theta).$$
-Here $C_\varepsilon > 0$ is chosen so that $\int_{B_\varepsilon} \chi_\varepsilon = 1$.
-For a function $u \in L^1_l$, we define its \dfn{mollification} $u_\varepsilon = \chi_\varepsilon * u$.
-\end{definition}
-
-This mollifier was essentially introduced by \cite[Lemma 7.1]{Giusti77} for use with sets of least perimeter.
-The point is that, for the purposes of our later arguments, we will only need $u_\varepsilon \in C^1$, and so the fact that $\partial_r \chi_\varepsilon$ is constant almost everywhere will be both convenient and harmless.
-
-\begin{lemma}\label{approximation of mollifier}
-Let $\chi_\varepsilon^{\mathrm{euc}}$ be the euclidean Lipschitz mollifier
-$$\chi_\varepsilon^{\mathrm{euc}}(r, \Theta) = \frac{C^{\mathrm{euc}}}{\varepsilon^d}\left(1 - \frac{r}{\varepsilon}\right)1_{r < \varepsilon}r^{d - 1}~ \vol_{\Sph^{d - 1}}(\Theta)dr$$
-where $C^{\mathrm{euc}}$ normalizes the mollifier to have integral $1$ (and in particular does not depend on $\varepsilon$).
-The Radon-Nikod\'ym derivative $f_\varepsilon = \chi_\varepsilon/\chi_\varepsilon^{\mathrm{euc}}$ tends to $1$ on $B_\varepsilon$ as $\varepsilon \to 0$.
-\end{lemma}
-\begin{proof}
-One easily has
-$$|\log f_\varepsilon| = |\log(C_\varepsilon\sqrt{\det g}) - \log C^{\mathrm{euc}} | \lesssim \left|\frac{1}{C_\varepsilon \sqrt{\det g}} - \frac{1}{C^{\mathrm{euc}}}\right|$$
-on $B_\varepsilon$.
-In polar coordinates, $\sqrt{\det g} = 1 - O(r^2)$,
-so $1/\sqrt{\det g} \sim 1$ and
-\begin{align*}
-\frac{1}{C_\varepsilon} = \int_{B_\varepsilon} \varepsilon^{-d}(1 - r/\varepsilon)(1 + O(\varepsilon^2)) ~dr &\sim \frac{1}{C^{\mathrm{euc}}}. \qedhere
-\end{align*}
-\end{proof}
-
-It follows from Lemma \ref{approximation of mollifier} that $C_\varepsilon \sim 1$ as $\varepsilon \to 0$.
-Moreover, if $d(Q, y) < \delta$, then
-\begin{equation}\label{approximation of mollifier 2}
-\frac{\chi_\varepsilon(x - y)}{\vol(x - y)} \sim_{\delta,\varepsilon} \frac{1}{\varepsilon^d}\left(1 - \frac{d(x, Q)}{\varepsilon}\right),
+With this notation we have
+\begin{equation}\label{area of sphere form}
+|\partial B_\rho| = |\Sph^{d - 1}|\rho^{d - 1} + \kappa \rho^{d + 1} + O(\rho^{d + 3}),
 \end{equation}
-with implied constant $C_{\delta,\varepsilon}$ such that $C_{\delta,\varepsilon}/C_\varepsilon \to 1$ as $\delta,\varepsilon \to 0$.
-This follows from Lemma \ref{approximation of mollifier} because it is true if $g$ is the euclidean metric.
-We also have the estimate
-$$|du_\varepsilon(x) - du_\varepsilon(x + v)| \leq ||d(\chi_\varepsilon/\vol)||_{L^\infty} \int_{B_\varepsilon} |u(x - y) - u(x + v - y)| ~\vol(y),$$
-so if $u$ is an indicator function, then $d(u_\varepsilon) = (du)_\varepsilon$ is a continuous $1$-form.
-
-Having established the basic properties of $\chi_\varepsilon$, we now prove the generalization of \cite[Lemma 7.1]{Giusti77} that we will need.
-
-\begin{lemma}\label{Giusti71}
-For every indicator function $u = 1_U$, there exists $f$ such that $f(\rho, \varepsilon) \to 0$ as $\rho,\varepsilon \to 0$ and if $f(\rho, \varepsilon) < u_\varepsilon(x) < 1 - f(\rho, \varepsilon)$,
-then
-\begin{equation}\label{Giusti71 claim}
-d(x, \partial U) < \varepsilon(1 - \rho).
-\end{equation}
-\end{lemma}
-\begin{proof}
-Suppose that (\ref{Giusti71 claim}) fails for some $x \in M$. Then either $d(x, U) \geq \varepsilon(1 - \rho)$ or $d(x, M \setminus U) \geq \varepsilon(1 - \rho)$.
-Setting $\omega(y) = \chi_\varepsilon(x - y)$, $\omega$ is a volume form such that
-$$u_\varepsilon(x) = \int_U \omega.$$
-By Lemma \ref{approximation of mollifier}, we can write $C_\varepsilon = C^{\mathrm{euc}} + \delta$ for some $\delta = \delta(\varepsilon) > 0$ such that $\delta \to 0$ as $\varepsilon \to 0$.
-Moreover, $C^{\mathrm{euc}} = d(d + 1)|\Sph^{d - 1}|$ \cite[Lemma 7.1]{Giusti77}, thus
-\begin{equation}\label{estimating the constant}
-C_\varepsilon = \frac{d(d + 1)}{|\Sph^{d - 1}|} + \delta.
-\end{equation}
-This allows us to estimate $\omega$ on the annulus $A = B(x, \varepsilon) \setminus B(x, \varepsilon(1 - \rho))$.
-In fact, by (\ref{area of sphere form}, \ref{estimating the constant}) and the fundamental theorem of calculus,
-\begin{align*}
-\int_A \omega &\leq \frac{C_\varepsilon}{\varepsilon^d}\int_{\varepsilon(1 - \rho)}^\varepsilon |\partial B_r| \left(1 - \frac{r}{\varepsilon}\right) ~dr\\
-&= \frac{C_\varepsilon}{\varepsilon^d} \int_{\varepsilon(1 - \rho)}^\varepsilon (|\Sph^{d - 1}|r^{d - 1} + \kappa(x) r^{d + 1} + O(r^{d + 3}))(1 + r\varepsilon^{-1}) ~dr \\
-&= C_\varepsilon|\Sph^{d - 1}|\left[\frac{1}{d(d + 1)} - \frac{(1 - \rho)^d}{d(d + 1)} + O(\varepsilon^2)\right] \\
-&= \frac{C_\varepsilon + O(\delta)}{C_\varepsilon}(1 - (1 - \rho)^d) + O(\varepsilon^2) \\
-&:= f(\varepsilon, \rho)
-\end{align*}
-which $\to 0$ as $\varepsilon, \rho \to 0$.
-
-If $d(x, U) \geq \varepsilon(1 - \rho)$, then $u\omega$ is supported inside $A$, thus $u_\varepsilon(x) \leq f(\varepsilon, \rho)$.
-Conversely, if $d(x, M \setminus U) \geq \varepsilon(1 - \rho)$, then $(1 - u)\omega$ is supported inside $A$, thus $1 - u_\varepsilon(x) \leq f(\varepsilon, \rho)$.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Estimates on the conormal}
-We need an analogue of \cite[Theorem 7.3]{Giusti77}.
-Before we prove it, we prove the following estimate.
+and $\kappa$ and the above implied constant depend continuously on $P$; see \cite{gray1974volume} for a proof.
+We use this fact to estimate the normal vector of a set of least perimeter, as follows.
 
 \begin{lemma}\label{scalar curvature monotonicity}
-If $r_1 < r_2$, $U$ is a set of least perimeter, $u$ is an indicator function, and $Q \in \partial^* U$,
+If $r_1 < r_2$, $U$ is a set of least perimeter, $u = 1_U$, and $Q \in \partial^* U$,
 $$r_2^{1 - d}\int_{B(Q, r_2)} \partial_0u ~\vol - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)| \leq (r_2^2 - r_1^2)\kappa(Q) + O(r_2^4).$$
 \end{lemma}
 \begin{proof}
@@ -1120,30 +1120,108 @@ r_2^{1 - d}|\partial B(Q, r_2)| - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)|
 \end{align*}
 \end{proof}
 
-\begin{proposition}\label{main mollifier lemma}
+We now construct the integral kernel that we will use in the proof of Proposition \ref{mollifier proposition}.
+Using the identification (\ref{exp map mollify}), we can define the difference of two points in $B_1$ and so can define the convolution $\omega * u$ of a function $u \in L^1_l(B_1)$ with any volume form $\omega$ with compact support in $B_1$.
+
+\begin{definition}
+Define the volume form
+$$\chi_\varepsilon = \frac{r^{d - 1}}{\varepsilon^d}\left(1 - \frac{r}{\varepsilon}\right)1_{r < \varepsilon} ~dr \wedge d\mu(\Theta)$$
+where $\mu$ is the usual measure on $\Sph^{d - 1}$, but normalized so that $\mu(\Sph^{d - 1}) = d(d + 1)$.
+For a function $u \in L^1_l$, we define $u_\varepsilon = \chi_\varepsilon * u$.
+\end{definition}
+
+The integration kernel $\chi_\varepsilon$ was introduced in \cite[Chapter 7]{Giusti77} in order to mollify sets of least perimeter on euclidean space.
+The point is that, for the purposes of our later arguments, we will only need $u_\varepsilon \in C^1$, and so we can use a Lipschitz kernel which satisfies certain convenient estimates \cite[Lemmata 7.1--7.2]{Giusti77}.
+Our purpose is now to prove an analogue of such estimates in our setting, but before we do so, we record the basic properties of $\chi_\varepsilon$:
+
+\begin{lemma}\label{mollifier props}
+$\chi_\varepsilon$ has the following properties:
+\begin{enumerate}
+\item $\chi_\varepsilon$ is supported on $B_\varepsilon$.
+\item The Radon-Nikod\'ym derivative $F = \chi_\varepsilon/\vol$ is Lipschitz continuous and has the Taylor expansion
+\begin{equation}\label{RN mollify}
+F(r, \Theta) = \frac{d(d + 1)}{\varepsilon^d} \left(1 - \frac{r}{\varepsilon}\right) 1_{r < \varepsilon}(1 - \kappa r^2 + O(r^4)).
+\end{equation}
+\item If $u$ is an indicator function then $(du_\varepsilon) = (du)_\varepsilon$ is a continuous $1$-form.
+\item $\chi_\varepsilon$ converges in the weakstar topology to the Dirac measure at $Q$.
+\item On $B_\varepsilon \setminus \{P\}$, $\partial_{\theta_i} F = 0$ and $\partial_r F = O(r)$.
+\item For every $Q \in B_1$, $\delta > 0$, $x \in B_1$, and $y \in B(Q, \delta)$,
+\begin{equation}\label{approximation of mollifier 2}
+F(x - y) \sim \frac{1}{\varepsilon^d}\left(1 - \frac{d(x, Q)}{\varepsilon}\right)
+\end{equation}
+where the implied constant remains bounded as $\varepsilon,\delta \to 0$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+These assertions follow from the definitions and (\ref{area of sphere form}).
+\end{proof}
+
+\begin{lemma}\label{Giusti71}
+There exists $c > 0$ such that for every indicator function $u = 1_U$, if
+$$c\varepsilon^2 + c\rho^2 \leq u_\varepsilon(x) \leq 1 - c\varepsilon^2 - c\rho^2,$$
+then
+\begin{equation}\label{Giusti71 claim}
+d(x, \partial U) < \varepsilon(1 - \rho).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Suppose that (\ref{Giusti71 claim}) fails for some $x \in M$. Then either $d(x, U) \geq \varepsilon(1 - \rho)$ or $d(x, M \setminus U) \geq \varepsilon(1 - \rho)$.
+We estimate $\omega(y) = u(y)\chi_\varepsilon(x - y)$ on the annulus $A = B(x, \varepsilon) \setminus B(x, \varepsilon(1 - \rho))$ using (\ref{RN mollify}) and Taylor's theorem, as follows:
+\begin{align*}
+\int_A \omega &= \int_A F ~\vol \\
+&= \frac{d(d + 1)}{\varepsilon^d} \int_{\varepsilon(1 - \rho)}^\varepsilon r^{d - 1}\left(1 - \frac{r}{\varepsilon}\right)(1 + O(r^2)) ~dr \\
+&= \frac{d(d + 1)}{\varepsilon^d} \int_{\varepsilon(1 - \rho)}^\varepsilon r^{d - 1} - \frac{r^d}{\varepsilon} + O(r^{d + 1}) ~dr\\
+&= \frac{d(d + 1)}{\varepsilon^d} \left[\frac{\varepsilon^d}{d}(1 - (1 - \rho)^d) - \frac{\varepsilon^d}{d + 1}(1 - (1 - \rho)^{d + 1}) + O(\varepsilon^{d + 2})\right]\\
+&= 1 - (d + 1)(1 - d\rho + O(\rho^2)) + d(1 - (d + 1)\rho + O(\rho^2)) + O(\varepsilon^2) \\
+&= O(\rho^2 + \varepsilon^2).
+\end{align*}
+If $d(x, U) \geq \varepsilon(1 - \rho)$, then $u\omega$ is supported inside $A$, thus $u_\varepsilon(x) \gtrsim \rho^2 + \varepsilon^2$.
+Conversely, if $d(x, M \setminus U) \geq \varepsilon(1 - \rho)$, then $(1 - u)\omega$ is supported inside $A$, thus $1 - u_\varepsilon(x) \lesssim \rho^2 + \varepsilon^2$.
+\end{proof}
+
+\begin{lemma}\label{Giusti72}
+Let $u \in BV(B_1)$ and $\tau, \varepsilon > 0$. If $\tau + \varepsilon \leq 1$, then
+$$\int_{B_\tau} |u_\varepsilon - u| ~\vol \lesssim \varepsilon \int_{B_{\tau + \varepsilon}} |du| ~\vol$$
+$$\int_{B_\tau} |du_\varepsilon| - |du| ~\vol \lesssim \int_{B_{\tau + \varepsilon} \setminus B_\tau} |du| ~\vol.$$
+\end{lemma}
+\begin{proof}
+If we suppose that
+$$c^{-1} \vol^{\mathrm{euc}} \leq \vol \leq c\vol^{\mathrm{euc}}$$
+where $\vol^{\mathrm{euc}}$ is the pushforward by $\exp_P$ of the euclidean volume form on $T_PM$ (as given by (\ref{exp map mollify})), then the assertions are immediate from \cite[Lemma 7.2]{Giusti77} with implied constant $c^2$.
+Such a constant $c > 0$ must exist, since $\sqrt{\det g}$ is bounded on the compact set $B_1$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{$C^1$ level sets}
+The main step in the proof of Proposition \ref{mollifier proposition} is to generalize \cite[Theorem 7.3, Remark 7.4]{Giusti77}:
+
+\begin{lemma}\label{main mollifier lemma}
 Let $\gamma, p > 0$, let $U$ be a set of least perimeter, $u = 1_U$, and suppose that
 \begin{equation}\label{hypothesis on main mollifier lemma}
 \int_{B_1} (|du| - \partial_0 u) ~\vol \leq \gamma.
 \end{equation}
-Let $\varepsilon = \gamma^p$, $\sigma = \gamma^{1/(2(d - 1))}$, and $\varphi = u_\varepsilon$. Then
+Let $\varepsilon = \gamma^p$, $\sigma = \gamma^{1/(2(d - 1))}$, and $\varphi = u_\varepsilon$. Then there exists $c > 0$ such that
 \begin{equation}\label{claim on main mollifier lemma}
-\inf_{\substack{r < \sigma\\\varphi \in (f(\gamma), 1 - f(\gamma))}} \frac{\partial_0 \varphi}{|d\varphi|} > 1 - O(\gamma^{O(1)})
+\inf_{\substack{r < \sigma\\\varphi \in (c\gamma^2, 1 - c\gamma^2)}} \frac{\partial_0 \varphi}{|d\varphi|} > 1 - O(\gamma^{O(1)})
 \end{equation}
-where $f(\gamma) \to 0$ as $\gamma \to 0$.
-Moreover, for every $y \in (f(\gamma), 1 - f(\gamma))$, the level set $\partial \{\varphi > y\} \cap \{r < \sigma\}$ is a $C^1$ hypersurface.
-\end{proposition}
+and for every $y \in (c\gamma^2, 1 - c\gamma^2)$ the level set $\partial \{\varphi > y\} \cap \{r < \sigma\}$ is a $C^1$ hypersurface.
+\end{lemma}
 
-The proof of Proposition \ref{main mollifier lemma} is long, but quite similar to the proof of \cite[Theorem 7.3]{Giusti77}.
-We break it up into several steps covering the rest of the section.
-Here is the main idea. We define a small parameter $\delta$, and observe that $|du| ~\vol$ is a Radon measure of doubling dimension $d - 1$.
-We thus cover the domain with open sets of volume $\sim \delta^d\varepsilon^d$ where $\delta > 0$ is a small parameter that determines the cardinality of the cover.
-Then $|du| - \partial_0u ~\vol$ assigns a slightly shrunken version of each such set a measure $\sim \delta^{d - 1} \varepsilon^{d - 1}$, while $|du|~\vol$ assigns the set in the cover a comparable measure.
+The proof of Lemma \ref{main mollifier lemma} is analogous to the proof of \cite[Theorem 7.3]{Giusti77}, using the results of \S\ref{LeastGradientFunctions} as a substitute for \cite[Chapter 5]{Giusti77}.
+Here is the main idea: $|du| ~\vol$ is a Radon measure of dimension $d - 1$ (c.f. Proposition \ref{doubling dimension}), so we may cover the domain of integration with open sets of volume $\sim \delta^d\varepsilon^d$ where $\delta > 0$ is a small parameter that determines the cardinality of the cover.
+Then $|du| - \partial_0u ~\vol$ assigns a slightly shrunken version of each such set a measure $\sim \delta^{d - 1} \varepsilon^{d - 1}$, while $|du|~\vol$ assigns the set in the cover a comparable measure, by the monotonicity formula, Proposition \ref{Monotonicity Formula}.
 Thus $|du| - \partial_0u ~\vol$ is controlled by $|du|~\vol$.
 
-\subsubsection{Covering the domain of integration}
+\begin{proof}[Proof of Lemma \ref{main mollifier lemma}, assuming (\ref{bound on balls}, \ref{bound on balls 2})]
 Let $\delta = \gamma^d > 0$ and select disjoint balls $V_1, \dots, V_N$, centered on $Q_n$, in $\partial^* U \cap B_{\varepsilon(1 - 2\delta)}$ of radius $\delta\varepsilon$ so that the dilates $2V_n$ cover $\partial^* U \cap B_{\varepsilon(1 - 2\delta)}$.
 It is easy to show that such a cover exists, because $\overline{\partial^* U \cap B_{\varepsilon(1 - 2\delta)}}$ is compact if $\gamma$ is small enough, so for such a $\gamma$ we can greedily select $Q_n \in \overline{\partial^* U \cap B_{\varepsilon(1 - 2\delta)}}$ to maximize $\min(d(Q_1, Q_n), \dots, d(Q_{n - 1}, Q_n))$.
 We set $V_0 = B_\varepsilon \setminus B_{\varepsilon(1 - 2\delta)}$.
+
+\begin{figure}[h]
+\caption{The sets $V_0, \dots, V_n$ (in dark grey) are an annulus and several small balls of radius $\delta$, which approximately cover the boundary of the set $U$ (in light grey).}
+\includegraphics[width=0.4\textwidth]{covering lemma}
+\end{figure}
 
 Since $du$ is supported in $\bigcup_n 2V_n$,
 $$|d\varphi|(x) - \partial_0\varphi(x) = \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot)(|du| - \partial_0 u) \leq \sum_{n=0}^N \int_{2V_n} \chi_\varepsilon(x - \cdot)(|du| - \partial_0 u).$$
@@ -1156,37 +1234,18 @@ for $n \geq 1$ and
 \int_{V_0} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) \lesssim_{g, p, P} \gamma^{O(1)} \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot)|du|,
 \end{equation}
 provided that $x = (r, \Theta)$ satisfies $r < \sigma$ and $\varphi \in (o(\gamma), 1 - o(\gamma))$.
-If (\ref{bound on balls}) is true, then since the balls $V_n$ are disjoint, we can sum over $n$ to obtain
+If (\ref{bound on balls}, \ref{bound on balls 2}) are true, then since the balls $V_n$ are disjoint, we can sum over $n$ to obtain
 \begin{equation}\label{claim on main mollifier lemma 2}|d\varphi|(x) - \partial_0\varphi(x) \lesssim_{g, p, P} \gamma^{O(1)} \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot)|du| \leq \gamma^{O(1)} |d\varphi|(x),
 \end{equation}
-which implies (\ref{claim on main mollifier lemma}).
-In the proof of (\ref{bound on balls}), all constants will be allowed to depend on $p,g,P$, so we suppress the explicit dependence.
+which implies (\ref{claim on main mollifier lemma}). Thus we may fix
+$$x \in \partial^* U \cap \{r < \sigma\} \cap \{\varphi \in (f(\gamma), 1 - f(\gamma)),$$
+and choose $\gamma$ so small that (\ref{claim on main mollifier lemma 2}) simplifies to $\partial_0 \varphi(x) \gtrsim |d\varphi(x)|$.
+Thus, in particular,
+$$\partial_0 \varphi(x) \gtrsim \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot) |du| > 0.$$
+By Lemma \ref{mollifier props}, $d\varphi$ is continuous, so the level sets of $\varphi$ must be $C^1$.
+\end{proof}
 
-TODO Make a picture of the covering
-
-\subsubsection{Estimating on the outer annulus}
-We now prove (\ref{bound on balls 2}).
-From (\ref{approximation of mollifier 2}) it easily follows that for $y \in V_0$, $\chi_\varepsilon(x - y)/\vol(x - y) \lesssim \frac{\delta}{\varepsilon^d}$,
-whence, by minimality of $\partial^* U$,
-\begin{align*}
-\int_{V_0} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) &\lesssim \frac{\delta}{\varepsilon^d} \int_{B_\varepsilon} |du| ~\vol \lesssim \frac{\delta}{\varepsilon^d} |\partial B_\varepsilon| \lesssim \frac{\delta}{\varepsilon}.
-\end{align*}
-By Lemma \ref{Giusti71}, since $\varphi \in (f(\gamma), 1 - f(\gamma))$, $d(x, \partial U) < \varepsilon(1 - \gamma)$, so in particular we can find $Q \in \partial^* U$ such that $d(x, Q) < \varepsilon(1 - \gamma)$.
-If $d(y, Q) < \gamma\varepsilon/2$, then
-$$d(x, y) \leq \varepsilon - \gamma\varepsilon + \frac{\gamma\varepsilon}{2} \leq \varepsilon - \frac{\gamma\varepsilon}{2},$$
-so by (\ref{approximation of mollifier 2}), $\chi_\varepsilon(x - y)/\vol(x - y) \gtrsim \frac{\gamma}{\varepsilon^d}$
-for every $y \in B(Q, \gamma\varepsilon/2)$.
-In particular, since $\delta = \gamma^d$, minimality of $\partial^* U$ gives
-\begin{align*}
-\int_{V_0} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) &\lesssim \frac{\delta}{\gamma^{d - 1}} \frac{\gamma^{d - 1}}{\varepsilon}\\
-&\lesssim \gamma |\partial B(Q, \gamma\varepsilon/2)| \int_{B(Q, \gamma\varepsilon/2)} \chi_\varepsilon(x - \cdot) \\
-&\lesssim \gamma \int_{B(Q, \gamma\varepsilon/2)} \chi_\varepsilon(x - \cdot) |du|\\
-&\lesssim \gamma \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot) |du|
-\end{align*}
-which implies (\ref{bound on balls 2}).
-
-\subsubsection{Estimating on inner balls}
-We complete the proof of Proposition \ref{main mollifier lemma} by showing (\ref{bound on balls}) for each fixed $n \geq 1$.
+\begin{proof}[Proof of (\ref{bound on balls})]
 By (\ref{approximation of mollifier 2}), if $\gamma$ is small enough depending on $g$\footnote{One might worry that we frequently rescale $g$ in this paper.
 However, in all of our rescalings, the curvature tensor remains in some bounded set, so these rescalings will never send $\gamma$ to $0$.}, then for every $y \in 2V_n$,
 \begin{align*}
@@ -1228,62 +1287,98 @@ Summing up everything in this step of the proof thus far,
 Since $U$ has least perimeter, Proposition \ref{doubling dimension} implies that
 $$\delta^{d - 1} \varepsilon^{d - 1} \lesssim \int_{V_n} |du| ~\vol,$$
 so by (\ref{approximation of mollifier 2}, \ref{big bound 1}),
-$$\int_{2V_n} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) ~\vol \lesssim \gamma^{1/3(d - 1)} \int_{V_n} \chi_\varepsilon(x - \cdot)|du|$$
-which implies (\ref{bound on balls}).
+\begin{align*}
+\int_{2V_n} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) ~\vol
+&\lesssim \gamma^{1/3(d - 1)} \int_{V_n} \chi_\varepsilon(x - \cdot)|du|.
+\qedhere \end{align*}
+\end{proof}
 
-\subsubsection{Regularity of level sets}
-We now fix
-$$x \in \partial^* U \cap \{r < \sigma\} \cap \{\varphi \in (f(\gamma), 1 - f(\gamma)),$$
-and choose $\gamma$ so small that (\ref{claim on main mollifier lemma 2}) simplifies to $\partial_0 \varphi(x) \gtrsim |d\varphi(x)|$.
-Thus, in particular,
-$$\partial_0 \varphi(x) \gtrsim \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot) |du| > 0.$$
-We already showed that $d\varphi$ is continuous, so the level sets of $\varphi$ must be $C^1$.
-This completes the proof of Proposition \ref{Giusti71}.
+\begin{proof}[Proof of (\ref{bound on balls 2})]
+From (\ref{approximation of mollifier 2}) it easily follows that for $y \in V_0$, $\chi_\varepsilon(x - y)/\vol(x - y) \lesssim \frac{\delta}{\varepsilon^d}$,
+whence, by minimality of $\partial^* U$,
+\begin{align*}
+\int_{V_0} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) &\lesssim \frac{\delta}{\varepsilon^d} \int_{B_\varepsilon} |du| ~\vol \lesssim \frac{\delta}{\varepsilon^d} |\partial B_\varepsilon| \lesssim \frac{\delta}{\varepsilon}.
+\end{align*}
+By Lemma \ref{Giusti71}, there exists $c > 0$ such that if $\varphi \in (c\gamma^2, 1 - c\gamma^2)$, then $d(x, \partial U) < \varepsilon(1 - \gamma)$, so in particular we can find $Q \in \partial^* U$ such that $d(x, Q) < \varepsilon(1 - \gamma)$.
+If $d(y, Q) < \gamma\varepsilon/2$, then
+$$d(x, y) \leq \varepsilon - \gamma\varepsilon + \frac{\gamma\varepsilon}{2} \leq \varepsilon - \frac{\gamma\varepsilon}{2},$$
+so by (\ref{approximation of mollifier 2}), $\chi_\varepsilon(x - y)/\vol(x - y) \gtrsim \frac{\gamma}{\varepsilon^d}$
+for every $y \in B(Q, \gamma\varepsilon/2)$.
+In particular, since $\delta = \gamma^d$, minimality of $\partial^* U$ gives
+\begin{align*}
+\int_{V_0} \chi_\varepsilon(x - \cdot)(|du| - \partial_0u) &\lesssim \frac{\delta}{\gamma^{d - 1}} \frac{\gamma^{d - 1}}{\varepsilon}\\
+&\lesssim \gamma |\partial B(Q, \gamma\varepsilon/2)| \int_{B(Q, \gamma\varepsilon/2)} \chi_\varepsilon(x - \cdot) \\
+&\lesssim \gamma \int_{B(Q, \gamma\varepsilon/2)} \chi_\varepsilon(x - \cdot) |du|\\
+&\lesssim \gamma \int_{B_\varepsilon} \chi_\varepsilon(x - \cdot) |du|. \qedhere
+\end{align*}
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Proof of Proposition \ref{mollifier proposition}}
 Select $t \in (0, 1)$ uniformly at random.
-Let $w_n = (u_n)_{\gamma_n^4}$, let $f$ be as in Proposition \ref{main mollifier lemma}, and let $a_n = f(\gamma_n)$, $b_n = 1 - f(\gamma_n)$.
-By Proposition \ref{Coarea2},
-$$\int_{B_t} |dv_n| ~\vol = \int_0^1 |\partial^* \{w_n > y\} \cap B_t| ~dy \geq \int_{a_n}^{b_n} |\partial^* \{w_n > y\} \cap B_t| ~dy.$$
+Let $w_n = (u_n)_{\gamma_n^4}$, let $c$ be the constant given by Lemma \ref{main mollifier lemma}, and let $a_n = c\gamma_n$, $b_n = 1 - c\gamma_n$.
+0By Proposition \ref{Coarea2},
+$$\int_{B_t} |dw_n| ~\vol = \int_0^1 |\partial^* \{w_n > y\} \cap B_t| ~dy \geq \int_{a_n}^{b_n} |\partial^* \{w_n > y\} \cap B_t| ~dy.$$
 By the mean value theorem, there exists $y_n \in (a_n, b_n)$ such that
 \begin{equation}\label{MVT mollifier}
 |\partial^* \{w_n > y_n\} \cap B_t| \leq \frac{1}{b_n - a_n} \int_{B_t} |dw_n| ~\vol.
 \end{equation}
-If set $V_n = \{w_n > y_n\}$, $v_n = 1_{V_n}$, then $V_n$ has $C^1$ boundary in $B_t$ by definition of $a_n, b_n$.
-It remains to show that $v_n$ has the desired properties.
+If set $V_n = \{w_n > y_n\}$, $v_n = 1_{V_n}$, then $V_n$ has $C^1$ boundary in $B_t$ by definition of $a_n, b_n$, and from (\ref{claim on main mollifier lemma}), the locally uniform convergence (\ref{mollifier prop4}) holds.
 
-\subsubsection{Estimates on surface area}
-Let $M = (\gamma_n)_{\ell^1} < \infty$ and
-$$\mu(E) = \sum_{n=1}^\infty \gamma_n \int_E |du_n| ~\vol;$$
-then
-$$\mu(B_1) \leq M\sup_{n \in \NN} \int_{B_1} |du_n| ~\vol \leq M |\partial B_1| < \infty$$
-since $U_n$ has least perimeter in $B_1$.
-So $\mu$ is a finite Radon measure on $B_1$, and hence almost surely,
-\begin{equation}\label{partial approximation to surface area}
-\limsup_{n \to \infty} \gamma_n^{-3} \int_{B_{t + \gamma_n^4} \setminus B_t} |du_n| \leq \limsup_{n \to \infty} \gamma_n^{-4} \mu(B_{t + \gamma_n^4} \setminus B_t) < \infty.
-\end{equation}
-By \cite[Lemma 7.2]{Giusti77} and Lemma \ref{approximation of mollifier}, one has
-$$\limsup_{n \to \infty} \int_{B_t} |du_n| - |dw_n| ~\vol \leq \limsup_{n \to \infty} \int_{B_{t + \gamma_n^4} \setminus B_t} |du_n| ~\vol,$$
-so from the fact that $\gamma_n \to 0$, and (\ref{partial approximation to surface area}),
-$$\limsup_{n \to \infty} \gamma_n^{-2} \int_{B_t} |du_n| - |dw_n| ~\vol \leq 0.$$
-From (\ref{MVT mollifier}) and the fact that $a_n \to 0$, $b_n \to 1$, we conclude that almost surely,
-\begin{equation}\label{approximation of surface area}
-|\partial V_n \cap B_t| \leq |\partial^* U_n \cap B_t| + o(\gamma_n).
-\end{equation}
+So it remains to show that (\ref{mollifier prop1}--\ref{mollifier prop3}) hold almost surely.
+Towards this end we will later show that
+\begin{align}
+|\partial V_n \cap B_t| &\leq |\partial^* U_n \cap B_t| + o(\gamma_n), \label{approximation of surface area} \\
+\int_{\partial B_t} |u_n - v_n| ~\vol_{\partial B_t} &\lesssim \gamma_n^2. \label{approximation of volume}
+\end{align}
+If (\ref{approximation of surface area}, \ref{approximation of volume}) are true,
+then by (\ref{a priori estimate 3}, \ref{approximation of volume}),
+$$|\partial^* U_n \cap B_t| \leq |\partial V_n \cap B_t| + o(\gamma_n)$$
+so by (\ref{approximation of surface area}), (\ref{mollifier prop2}) holds.
+From an integration by parts using the fact that $\partial_j$ is a component of a quasieuclidean frame, and (\ref{approximation of volume}),
+\begin{align*}
+\left|\int_\Omega \partial_j(u_j - v_j) ~\vol\right|
+&\leq \left|\int_{\partial \Omega} (u_j - v_j)g(\partial_j, \normal) ~\vol_{\partial \Omega}\right| \\
+&\lesssim \int_{\partial \Omega} |u_j - v_j| ~\vol_{\partial \Omega} \lesssim \gamma_n^2
+\end{align*}
+which gives (\ref{mollifier prop3}).
+By the fact that $U_n$ has least perimeter, and (\ref{a priori estimate 1}, \ref{mollifier prop2}),
+\begin{align*}
+|\partial V_n \cap B_t| &\leq |\partial U_n \cap B_t| + o(\gamma_n) \\
+&= \eta(U_n, B_t) + o(\gamma_n)\\
+&\leq \eta(V_n, B_t) + \int_{\partial B_t} |u_n - v_n| ~\vol_{\partial B_t} + o(\gamma_n),
+\end{align*}
+so by (\ref{approximation of volume}), (\ref{mollifier prop1}) holds.
 
-\subsubsection{Estimates on spheres}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{proof}[Proof of (\ref{approximation of surface area})]
+By Lemma \ref{Giusti72}, one has
+\begin{equation}\label{Giusti 720a}
+\limsup_{n \to \infty} \int_{B_t} |du_n| - |dw_n| ~\vol \leq \limsup_{n \to \infty} \int_{B_{t + \gamma_n^4} \setminus B_t} |du_n| ~\vol.
+\end{equation}
+If we define $\mu = \sum_n \gamma_n|du_n| ~\vol$, then $\mu(B_1) < \infty$, since $(\gamma_n) \in \ell^1$ and $|\partial^* U_n \cap B_1|$ is uniformly bounded (c.f. Proposition \ref{doubling dimension}).
+The hypotheses of \cite[(7.20)]{Giusti77} are (\ref{Giusti 720a}) and the fact that $\mu$ is a finite Borel measure on $B_1$, and the conclusion is that almost surely,
+\begin{equation}\label{Giusti 720b}
+\limsup_{n \to \infty} \gamma_n^{-2} \int_{B_t} |dw_n| - |du_n| ~\vol \leq 0.
+\end{equation}
+From (\ref{MVT mollifier}, \ref{Giusti 720b}), one has (\ref{approximation of surface area}).
+\end{proof}
+
+\begin{proof}[Proof of (\ref{approximation of volume})]
 Let
 $$f_n(t) = \gamma_n^{-4} \int_{B_t} |u_n - w_n| ~\vol.$$
-By \cite[Lemma 7.2]{Giusti77}, Lemma \ref{approximation of mollifier}, and the fact that $U_j$ has least perimeter in $B_1$,
+By Lemma \ref{Giusti72} and the fact that $U_j$ has least perimeter in $B_1$,
 $$\limsup_{n \to \infty} f_n(t) \leq \limsup_{n \to \infty} \int_{B_1} |du_n| ~\vol \leq |\partial B_1|.$$
 Moreover, $f_n$ is monotone.
 This implies that almost surely, $f_n'(t)$ is uniformly bounded in $n$.
 But
 $$f_n'(t) = \gamma_n^{-4} \int_{\partial B_t} |u_n - w_n| ~\vol_{\partial B_t},$$
 so
-$$\int_{\partial B_t} |u_n - w_n| ~\vol_{\partial B_t} \ll \gamma_n^3.$$
+\begin{equation}\label{mollify cubic gamma}
+\int_{\partial B_t} |u_n - w_n| ~\vol_{\partial B_t} \lesssim \gamma_n^4.
+\end{equation}
 We now set $z_n = \min(y_n, 1 - y_n)$ and estimate
 \begin{align*}
 \int_{\partial B_t} |u_n - v_n| ~\vol_{\partial B_t} &= |\partial B_t \cap U_n \Delta V_n| \\
@@ -1296,11 +1391,11 @@ From definition of $V_n$, $w_n - u_n > y_n$ on $V_n \setminus U_n$ and $u_n - w_
 &\leq z_n^{-1} \int_{\partial B_t} |u_n - w_n| ~\vol_{\partial B_t}.
 \end{align*}
 But
-$$z_n^{-1} \leq \max(y_n^{-1}, (1 - y_n)^{-1}) \leq \max(a_n^{-1}, b_n^{-1})$$
-
-$$\lim_{n \to \infty} \gamma_n^{-1} \int_{\partial B_t} |u_n - v_n| ~\vol_{\partial B_t} = 0.$$
-
-\subsubsection{etc}
+$$z_n^{-1} \leq \max(y_n^{-1}, (1 - y_n)^{-1}) \leq \max(a_n^{-1}, b_n^{-1}) \lesssim \gamma_n^{-2}$$
+whence
+$$\int_{\partial B_t} |u_n - v_n| ~\vol_{\partial B_t} \lesssim \gamma_n^{-2} \int_{\partial B_t} |u_n - w_n| ~\vol_{\partial B_t},$$
+so by (\ref{mollify cubic gamma}), (\ref{approximation of volume}) holds.
+\end{proof}
 
 
 
@@ -1308,187 +1403,350 @@ $$\lim_{n \to \infty} \gamma_n^{-1} \int_{\partial B_t} |u_n - v_n| ~\vol_{\part
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{de Giorgi lemma}\label{DeGiorgiSection}
+TODO: Put all this in context...
 
-Let $N = \partial U$ be a $C^1$ hypersurface in $M$ and let $P \in N$.
+\subsection{Multilinear computations}
+Before formulating de Giorgi's lemma we begin by carrying out some computations in multilinear algebra which we will use to estimate the surface area Lagrangian.
+We remind the reader of our conventions for Einstein summation, Notation \ref{EinsteinNotation}.
 
-\subsection{Killing fields on space forms}
-In euclidean space, one can view a $C^1$ hypersurface as a graph using the usual coordinates, possibly rotated.
-We would like to view $C^1$ hypersurfaces in $M$ as graphs, and to do so in a way which is favorable for our later work, we will need assume that the coordinate system of $M$ is foliated by hypersurfaces which are all isometric to each other.
+Suppose that we are given a $d$-dimensional oriented real Hilbert space $(\Hilb, g)$, and an oriented basis $(\partial_0, \dots, \partial_{d - 1})$ which may not be orthonormal but which satisfies for every $i$
+\begin{equation}\label{0th coordinate orthogonal}
+g_{0i} = 0
+\end{equation}
+where $g_{\mu\nu} = g(\partial_\mu, \partial_\nu)$.
+We write $g_{\hat 0 \hat 0}$ for the inner product on the span $\Hilb_0^\perp$ of $\partial_1, \dots, \partial_{d - 1}$ defined by $(g_{\hat 0 \hat 0})_{ij} = g_{ij}$.
+We as usual write $g^{\mu\nu}$, $(g^{\hat 0 \hat 0})^{ij}$ for the components of the dual metric, and $\delta_\mu^\nu$ for the components of the identity matrix.
 
 \begin{definition}
-Let $H$ be a hypersurface in some open subset of $M$ which is normal to a Killing field $X$.
-We define a scalar field $\lambda$ on $H$, the \dfn{lapse} of $(H, X)$, and a metric $h$ on $H$, the \dfn{leaf metric} of $(H, X)$, by $\lambda = g(X, X)^{(d - 1)/2}$ and $h(v, w) = g(X, X)^{-1} g(v, w)$.
+The \dfn{Gramian matrix} of $v_1, \dots, v_{d - 1}$ is
+$$\Gram(v_1, \dots, v_{d - 1})_{ij} = g_{\mu \nu} v_i^\mu v_j^\nu.$$
+The \dfn{cross product} $v_1 \times \cdots \times v_{d - 1}$ of vectors $v_1, \dots, v_{d - 1} \in \Hilb$ is defined to be the vector $v_0$
+such that:
+\begin{enumerate}
+\item $g(v_0, v_i) = 0$,
+\item $((-1)^{d - 1} v_0, v_1, \dots, v_{d - 1})$ is positively oriented, and
+\item the length is
+$$|v_0|_g^2 = |\det \Gram(v_1, \dots, v_{d - 1})|.$$
+\end{enumerate}
 \end{definition}
 
-\begin{lemma}\label{hopfKilling}
-Assume that $M$ is a space form with curvature $\kappa$, and either $d = 2$ or $\kappa \leq 0$.
-Then for every pointed $C^1$ hypersurface $(N, P)$ in $M$ there exists a hypersurface $H \ni P$ in some neighborhood of $P$ and a Killing field $X$ such that:
+Here the orientation convention is chosen so that if $\partial_0, \dots, \partial_{d - 1}$ is an orthonormal basis, thus $g_{\mu\nu} = \delta_{\mu\nu}$, then the cross product is computed by the formal determinant
+\begin{equation}\label{formal determinant}
+v_1 \times \cdots \times v_{d - 1} = \begin{vmatrix}\partial_0 & \cdots & \partial_{d - 1} \\
+v_1^0 & \cdots & v_1^{d - 1}\\
+& \vdots \\
+v_{d - 1}^0 & \cdots & v_{d - 1}^{d - 1}\end{vmatrix}
+\end{equation}
+which of course agrees with the orientation convention of the cross product on $\RR^3$.
+
+\begin{lemma} \label{cross product formula}
+Suppose that $\phi_1, \dots, \phi_{d - 1} \in \Hilb$ satisfy $\phi_i^0 = \psi_i$, $\phi_i^j = \delta_i^j$ for some $\psi \in (\Hilb_0^\perp)'$.
+Let $h_{ij} = (g_{00})^{-1} g_{ij}$, and let $\normal \in \Hilb'$ be the unit covector which annihilates $\phi_1, \dots, \phi_{d - 1}$ with $((-1)^{d - 1}\normal^\sharp, \phi_1, \dots, \phi_{d - 1})$ positively oriented.
+Then
+\begin{align}
+|\det \Gram(\phi_1, \dots, \phi_{d - 1})| &= (g_{00})^{d - 1} (1 + |\psi|_{h^{-1}}^2) \det h, \label{WeinsteinAronszajn} \\
+(\phi_1 \times \cdots \times \phi_{d - 1})^\mu &= (g_{00})^{d/2} g^{\mu \nu}(\delta_\nu^0 - \delta^i_\nu \psi_i) \sqrt{\det h}, \label{CrossProduct} \\
+\normal_\mu &= \sqrt{\frac{g_{00}}{1 + |\psi|_{h^{-1}}^2}} (\delta^0_\mu - \delta^i_\mu \psi_i) \label{conormal crossproduct}.
+\end{align}
+\end{lemma}
+\begin{proof}
+We begin by computing
+$$\Gram(\phi_1, \dots, \phi_{d - 1})_{ij} = g_{\mu \nu} \phi_i^\mu \phi_j^\nu = g_{00} \psi_i \psi_j + g_{ij}$$
+which are the components of $g_{00}\psi \otimes \psi + g_{\hat 0 \hat 0} \in (\Hilb_0^\perp \otimes \Hilb_0^\perp)'$.
+By the Weinstein-Aronszajn theorem \cite{Tao13}, $\det(1 + h^{-1}(\psi \otimes \psi)) = 1 + |\psi|_{h^{-1}}^2$, so
+\begin{align*}
+\det(g_{00}\psi \otimes \psi + g_{\hat 0 \hat 0})
+&= (g_{00})^{d - 1} \det(\psi \otimes \psi + h) = (g_{00})^{d - 1} \det(h^{-1}(\psi \otimes \psi) + 1) \det h \\
+&= (g_{00})^{d - 1} (1 + |\psi|_{h^{-1}}^2) \det h.
+\end{align*}
+Since $h$ is a quadratic form of signature $(+, \cdots, +)$, its determinant is positive and so (\ref{WeinsteinAronszajn}) holds.
+
+We begin the proof of (\ref{CrossProduct}) by checking orthogonality:
+\begin{align*}
+g_{\mu\nu} g^{\mu \lambda} (\delta^0_\lambda - \delta^i_\lambda \psi_i)(\delta^\nu_0 \psi_i + \delta^\nu_i)
+&= \delta^\lambda_\nu (\delta^0_\lambda - \delta^i_\lambda \psi_i)(\delta^\nu_0 \psi_i + \delta_i^\nu)
+= \psi_i - \psi_i = 0.
+\end{align*}
+To check orientation we may assume that $g_{\mu\nu} = \delta_{\mu\nu}$ in which case we just need to check agreement with (\ref{formal determinant}):
+$$\begin{vmatrix} \partial_0 && \cdots && \partial_{d - 1} \\
+\psi_1 & 1 & 0 & \cdots & 0 \\
+\psi_2 & 0 & 1 & \cdots & 0\\
+&& \vdots \\
+\psi_{d - 1} & 0 & \cdots & 0 & 1
+\end{vmatrix} = \partial_0 - \sum_i \psi_i \partial_i.$$
+To see that its length is $\det \Gram(\phi_1, \dots, \phi_{d - 1})$ we compute
+\begin{align*}
+g_{\mu \nu} g^{\mu \lambda}(\delta^0_\lambda - \delta^i_\lambda \psi_i) g^{\nu \kappa}(\delta_\kappa^0 - \delta_\kappa^j \psi_j)
+&= (\delta_\mu^0 - \delta_\nu^i \psi_i)(g^{0 \nu} - g^{j \nu} \psi_j)\\
+&= g^{00} - g^{0j} \psi_j - g^{0i} \psi_i + g^{ij} \psi_i \psi_j.
+\end{align*}
+Recalling (\ref{0th coordinate orthogonal}) we can rewrite this as
+$$g_{\mu \nu} g^{\mu \lambda}(\delta^0_\lambda - \delta^i_\lambda \psi_i) g^{\nu \kappa}(\delta_\kappa^0 - \delta_\kappa^j \psi_j) = (g_{00})^{-1} + (g_{\hat 0 \hat 0})^{-1}(\psi \otimes \psi).$$
+But $g_{00} (g_{\hat 0 \hat 0})^{-1} = h^{-1}$ so we deduce from (\ref{WeinsteinAronszajn})
+$$g_{\mu \nu} g^{\mu \lambda}(\delta^0_\lambda - \delta^i_\lambda \psi_i) g^{\nu \kappa}(\delta_\kappa^0 - \delta_\kappa^j \psi_j) = (g_{00})^{-1} (1 + |\psi|_{h^{-1}}^2)
+= \frac{|\det \Gram(\phi_1, \dots, \phi_{d - 1})|}{(g_{00})^d \det h}$$
+which gives (\ref{CrossProduct}).
+From (\ref{WeinsteinAronszajn}, \ref{CrossProduct}), (\ref{conormal crossproduct}) is immediate.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The Killing foliation}
+In euclidean space, one can view a $C^1$ hypersurface as a graph using the usual coordinates, possibly up to a rotation.
+We would like to view $C^1$ hypersurfaces in $M$ as graphs, and to do so in a way which is favorable for our later work, we will need assume that the coordinate system of $M$ is foliated by hypersurfaces which are all isometric to each other.
+
+\begin{definition}\label{Killing setup}
+Let $H$ be a hypersurface in some open subset of $M$ which is normal to a Killing field $X$, and $P \in H$.
+We associate the following data to $(H, X, P)$:
 \begin{enumerate}
-\item $H$ is tangent to $N$ at $P$, and $H$ is normal to $X$.
-\item $g(X(P), X(P)) = 1$.
-\item The Riemann curvature of the leaf metric $h$ of $(H, X)$ is $0$.
+\item The \dfn{Killing weight}: A scalar field $\lambda = g(X, X)^{(d - 1)/2}$ on $H$.
+\item The \dfn{weighted metric}: A metric $h(v, w) = g(X, X)^{-1} g(v, w)$ on $H$.
+\item The \dfn{Killing foliation}: An open immersion $\chi: H \times I \to M$ defined by making $\chi(x, \cdot)$ the integral curve of $X$ centered on $x \in H$.
+\item The \dfn{area Lagrangian}: A family of $d-1$-forms on $H$ parametrized by $1$-forms $\psi$ on H, and defined by
+\begin{equation}\label{area Lagrangian}
+\Lagrange(\psi) = \lambda \sqrt{1 + |\psi|_{h^{-1}}^2} \vol_h.
+\end{equation}
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{Giusti46}
+Let $U \subseteq M$ be a set of $C^1$ boundary, let $X$ be a vector field such that $(\normal_U, X) > 0$, and let $T > 0$.
+If $x: [-T, T] \to M$ is an integral curve of $X$ such that $x(0) \in \partial U$, then for every $t \in (0, T)$, $x(t) \in U$ and $x(-t) \in U$.
+\end{lemma}
+\begin{proof}
+The claimed assertions are all local, so we may assume that $M$ is diffeomorphic to an open subset of $\RR^d$.
+By Proposition \ref{metric-independence theorem}, we may without loss of generality assume that $M$ is actually isometric to an open subset of $\RR^d$ with its usual metric, $X$ is a coordinate field on $\RR^d$, and $x$ is a line segment.
+By taking a compact exhaustion of $M$ and applying the fact that $\partial U$ is $C^1$, we may also assume that there exists $\delta > 0$ such that $(\normal_U, X) \geq \delta$ almost everywhere.
+This reduces the claimed assertions to \cite[Lemma 4.6, Remark 4.7]{Giusti77}.
+\end{proof}
+
+\begin{lemma}\label{hopfKilling}
+Assume that $M$ is a locally homogeneous Riemannian manifold.
+Then for every pointed $C^1$ hypersurface $(N, P)$ in $M$ there exists a hypersurface $H \ni P$ in some neighborhood of $P$ and a Killing field $X$, of unit length at $P$, such that $H$ is tangent to $N$ at $P$ and $H$ is normal to $X$, and for which $N$ is a graph in the following quantitative sense:
+
+Let $\chi$ be the Killing foliation associated to $(H, X, P)$.
+Then there exists a $C^1$ function $\omega: H \to \RR$ such that in some neighborhood $M'$ of $P$,
+\begin{align}
+N \cap M' &= \{\chi(x, \omega(x)): x \in H \cap M'\} \label{N is a graph}\\
+||d\omega||_{L^\infty(M')} &\lesssim \sup \frac{1}{(\normal, X)} < \infty \label{derivative bounds}
+\end{align}
+where $\normal = \normal_N$ is taken so that $\normal^\sharp$ and $X$ both point into the same open set.
+\end{lemma}
+\begin{proof}
+Let $X$ be an infinitesimal generator of the local Lie group of $M$ in a neighborhood of $P$, chosen to be normal to $N$ at $P$ and rescaled so that $g(X, X) = 1$ at $P$.
+Let $E = X^\perp$ be its orthocomplement bundle. Then $E$ is involutive, so by the Frobenius theorem, there exists $H$ which is normal to $X$ and $P \in H$.
+Since $X$ is normal to $H$ and is normal to $N$ at $P$, $H$ is tangent to $N$ at $P$.
+
+Since $X$ is normal to $H$, $\normal = \normal_N$ satisfies $\inf (\normal, X) > 0$ if we select $M'$ small enough, say $(\normal, X) \geq \delta > 0$.
+The existence of a function $\omega$ which satisfies (\ref{N is a graph}) is now clear from the implicit function theorem.
+Given a unit vector field $Y$, we can estimate
+\begin{align*}
+(\normal, Y)
+&\geq (\normal, X) \frac{g(Y, X)}{g(X, X)} - \sqrt{1 - \frac{(\normal, X)^2}{g(X, X)^2}}\sqrt{1 - \frac{g(Y, X)^2}{g(X, X)^2}}\\
+&\geq \delta \frac{g(Y, X)}{g(X, X)} - \sqrt{1 - \frac{\delta^2}{g(X, X)^2}} \sqrt{1 - \frac{g(Y, X)^2}{g(X, X)^2}}
+\end{align*}
+and hence if
+\begin{equation}\label{estimate on vector field}
+\frac{g(Y, X)}{g(X, X)} \left(1 - \frac{g(Y, X)^2}{g(X, X)^2}\right)^{-1/2} > \frac{\sqrt{1 - \delta^2 g(X, X)^{-2}}}{\delta},
+\end{equation}
+on $N$, Lemma \ref{Giusti46} implies that for every integral curve $y$ of $Y$ with $y(0) = (x, \omega(x))$, $x \in H$, then $y(t) = (x', \omega(x'))$ implies $x' = x$, $t = 0$.
+In particular this is the case when $y$ is a geodesic through $(x, \omega(x))$ for which $Y = y'(x, \omega(x))$ satisfies (\ref{estimate on vector field}).
+
+\begin{figure}[h]
+\caption{The geodesic (blue) passes through $N$ (pink) repeatedly, and therefore must miss the cone of integral curves which satisfy (\ref{estimate on vector field}).}
+\includegraphics[width=0.4\textwidth]{graph_cone}
+\end{figure}
+
+If $x'$ is close to $x$, then there must be a geodesic $y$ connecting $(x, \omega(x))$ to $(x', \omega(x'))$ and such a geodesic must satisfy the negation of (\ref{estimate on vector field}).
+In that case we therefore have
+$$\frac{d(\omega(x), \omega(x'))}{d(x, x')} \lesssim g(Y, X) \lesssim \delta^{-1}$$
+since $y$ is a geodesic and the claim follows when we take $x' \to 0$.
+\end{proof}
+
+\begin{lemma}\label{volume form is Lagrangian}
+Let $N$ be a $C^1$ hypersurface in $M$, such that there exists a Killing foliation $\chi$ associated to a triple $(H, \partial_0, P)$ and a $C^1$ function $\omega$ whose graph is $N$, c.f. (\ref{N is a graph}).
+Let $\vol_N$ be the volume form induced on $N$ by $g$, and let $\varphi(x) = (x, \omega(x))$ be the induced diffeomorphism $H \to N$.
+Then:
+\begin{enumerate}
+\item The area Lagrangian $\Lagrange$ associated to $(H, X, P)$ satisfies
+\begin{equation}\label{volume form pullback}
+\varphi^* \vol_N = \Lagrange(d\omega).
+\end{equation}
+\item Let $\partial_1, \dots, \partial_{d - 1}$ be (the translates by $\partial_0$ of) a quasieuclidean frame on $H$ and let $S$ be a small open subset of $M$. Then
+$$\int_S u_{,\mu} ~\vol = \int_{\varphi^{-1}(S \cap N)} \sqrt{g_{00}} (\delta_\mu^0 - \delta^i_\mu \omega_{,i}) ~\vol_H.$$
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-By rescaling $g$ we may assume that $\kappa \in \{ -1, 0, 1\}$.
-Then by the Hopf-Killing theorem we may assume that either $M = \RR^d$, $M = \Hyp^d$, or $M = \Sph^2$.
-The case $M = \RR^d$ is obvious.
-
-If $M = \Hyp^d$, we equip $M$ with upper half-plane coordinates $(x, y) \in \RR^{d - 1} \times \RR_+$, chosen so that $P = (0, 0, \dots, 0, 1)$ and $N$ is tangent to $H = \{x_1 = 0\}$ at $P$.
-Then we can take $X = \partial_{x_1}$, since the upper half-plane coordinates are conformal (so $X$ is normal to $H$), and since $g(X, X) = y^{-2}$, so that $g(X(P), X(P)) = 1$ and
-$$h = y^2y^{-2}(dx_2^2 + \cdots + dx_{d - 1}^2 + dy^2) = dx_2^2 + \cdots + dx_{d-1}^2 + dy^2$$
-is the euclidean metric on $H$.
-
-If $M = \Sph^2$, we equip almost all of $M$ with spherical coordinates $(\theta, \varphi) \in (0, \pi) \times (-\pi, \pi)$, chosen so that $P = (\pi/2, 0)$ and $N$ is tangent to $H = \{\theta = \pi/2\}$ at $P$.
-Then we can take $X = \partial_\theta$, since $g(X, \partial_\varphi) = 0$ and
-$$h = 1^{-1} \sin^2(\pi/2) ~d\varphi^2 = d\varphi^2$$
-is the euclidean metric on $H$.
-\end{proof}
-
-Assume that $M$ is as in Lemma \ref{hopfKilling}, and let $x$ be a coordinate system on $H$ so that $h = dx^2$ and $P = 0$.
-We write $(x, y) = e^{yX}x$, which defines a coordinate system near $H$ such that the hypersurfaces $\{y = \text{const}\}$ are all isometric by the action of $X$.
-We abuse notation and call the domain of this coordinate system $M$.
-By the implict function theorem, we can find $\omega: H \to \RR$ whose graph $\{y = \omega(x)\}$ is $H$, and we have a $C^1$ diffeomorphism $\varphi: H \to N$ by $\varphi(x) = (x, \omega(x))$.
-
-\begin{definition}
-The \dfn{area Lagrangian} is the volume form on $H$ defined for $p$ tangent to $H$ by
-$$\Lagrange(p) = \lambda \sqrt{1 + |p|_h^2} \vol_h,$$
-where $\lambda,h$ are the lapse and leaf metric on $H$.
-\end{definition}
-
-Before we prove our next lemma, we pause to remind the reader of our conventions for Einstein summation, Notation \ref{EinsteinNotation}.
-
-\begin{lemma}
-The natural area form on $N$ is given by
-$$\varphi^* \vol_N = \Lagrange(\nabla \omega).$$
-\end{lemma}
-\begin{proof}
-If we write $\slashed g$ for the metric on $N$, then
-$$\varphi^* \vol_N = \varphi^* \sqrt{\det \slashed g} = \sqrt{\varphi^* \det \slashed g}.$$
-To compute $\det \slashed g$ we put $\phi_i^\mu = (\varphi_* \partial_i)^\mu$, thus
-$$\varphi^* \slashed g_{ij}(x) = g_{\mu\nu}(\varphi(x))\phi^\mu_i(x) \phi^\nu_j(x).$$
-Since $X$ is a Killing field and $\varphi(x) = e^{\omega(x)X}x$,
-$$g(\varphi(x)) = g(x) + \int_0^{\omega(x)} \mathcal L_X g(e^{tX}x) ~dt = g(x).$$
-Moreover, $\phi_i^0 = \omega_{,i}$ while $\phi_i^j = \delta_i^j$, and $g_{0i}(x) = 0$ since $X$ is normal to $H$.
-So
-$$\varphi^* \slashed g_{ij} = g_{\mu\nu} \varphi_i^\mu \varphi_j^\nu = g_{00} \omega_{,i} \omega_{,j} + g_{ij} = (g_{00}d\omega \otimes d\omega + g_{\hat 0 \hat 0})_{ij}.$$
-Now by the Weinstein-Aronszajn theorem,
+Since $\partial_0$ is a Killing field,
+\begin{equation}\label{preservation of scalar field}
+0 = \delta^\lambda_0 g_{\mu \nu,\lambda} + \delta^\lambda_{0,\mu} g_{\nu\lambda} + \delta^\lambda_{0,\nu} g_{\mu \lambda} = g_{\mu\nu,0},
+\end{equation}
+so the scalar field $g_{\mu\nu}$ is preserved by $\varphi^*$.
+Moreover, since $\partial_0$ is assumed normal to $H$, $g_{0i} = 0$.
+If we write $\slashed g$ for the metric induced by $g$ on $N$, then
+$$\varphi^* \vol_N = \varphi^* \sqrt{\det \slashed g} ~dx = \sqrt{\varphi^* \det \slashed g} ~dx.$$
+From Lemma \ref{cross product formula} with $\psi = d\omega$, we obtain
 \begin{align*}
-\det(g_{00}d\omega \otimes d\omega + g_{\hat 0 \hat 0})
-&= \lambda^2 \det(d\omega \otimes d\omega + h)\\
-&= \lambda^2 (1 + h^{-1}(d \omega \otimes d\omega)) \det h \\
-&= \lambda^2 (1 + |\nabla \omega|_h^2) \det h. \qedhere
+\varphi^* \vol_N &= \lambda\sqrt{1 + |d\omega|_{h^{-1}}^2} \sqrt{\det h} ~dx = \Lagrange(d\omega)
+\end{align*}
+which proves (\ref{volume form pullback}).
+Using (\ref{volume form pullback}, \ref{preservation of scalar field}) and the fact that $N$ is $C^1$, we also compute
+\begin{align*}
+\int_S u_{,\mu} ~\vol &= \int_{S \cap N} \normal_\mu ~\vol_N \\
+&= \int_{\varphi^{-1}(S \cap N)} \sqrt{\frac{g_{00}}{1 + |\psi|_{h^{-1}}^2}} (\delta_\mu^0 - \delta_\mu^i \omega_{,i})\Lagrange(d\omega) \\
+&= \int_{\varphi^{-1}(S \cap N)} (g_{00})^{d/2} (\delta_\mu^0 - \delta_\mu^i \omega_{,i}) \vol_h \\
+&= \int_{\varphi^{-1}(S \cap N)} \sqrt{g_{00}} (\delta_\mu^0 - \delta_\mu^i \omega_{,i}) ~\vol_H \qedhere.
 \end{align*}
 \end{proof}
 
-We write
-$$\DirL(p) = \frac{|p|_h^2}{2}\vol_h$$
-for the Dirichlet energy of $p$ with respect to $h$.
-To control the lapse, we assume that there exists a constant $0 < c < 1$ such that
-$$(1 + c)^{-1} \leq |\lambda|, |\lambda|^{-1} \leq 1 + c.$$
-This assumption essentially has no content, since $\omega$ was only defined in a small ball around $P$ anyways.
-We regard $c$ as an error term that we will hold on until the end, when we show that that we can pay for it by decreasing the speed of convergence of the approximation to the conormal.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We also abuse notation and write $f\vol_h$ as just $f$, as the only metric on $H$ that we will use from now on is the leaf metric $h$.
+\subsection{Deforming the mean-value property}
+Our next task is to show that the area Lagrangian (\ref{area Lagrangian}) satisfies an approximate mean-value property, which gives an improvement on \cite[Teorema 4.3]{Miranda66}.
+
+\begin{notation}
+Let $(H, h, P)$ be a pointed Riemannian manifold of dimension $d - 1$.
+We define a metric $\tilde h$ with vanishing curvature by considering normal coordinates $x_1, \dots, x_{d - 1}$ with respect to $h$ and setting $\tilde h_{ij} = \delta_{ij}$, thus
+$$h_{ij} = \tilde h_{ij} + O(x^2)$$
+where the implied constant depends continuously on $h$ and its derivatives at $P$.
+We then define the $\tilde h$-Dirichlet energy
+$$\DirL(\psi) = \frac{\tilde h^{ij} \psi_i \psi_j}{2}\vol_{\tilde h}.$$
+Let $B_r$ denote a ball centered on $P$ in the euclidean space $(H, \tilde h)$, not in $M$.
+Let $A(r)f$ denote the $\tilde h$-mean of $f$ over $B_r$.
+Note that we can take means of $1$-forms as well as functions, since $\tilde h$ is flat.
+\end{notation}
 
 \begin{lemma}\label{Taylor lemma}
-If $|q|_h \lesssim 1$ then $\Lagrange(p) - \Lagrange(q)$ lies in the closed interval
-$$\left[\frac{(1 + c)^{-1}}{\Lagrange(q)}(\DirL(p) - \DirL(q)) - \frac{2(1 + c)^{-2}}{\Lagrange(q)}(\DirL(p) - \DirL(q))^2, (1 + c)(\DirL(p) - \DirL(q))\right].$$
+Let $(H, h, P)$ be a pointed Riemannian manifold of dimension $d - 1$, let $\lambda$ be a scalar field on $H$, let $\Lagrange$ satisfy (\ref{area Lagrangian}), and suppose that there exists $c \in (0, 1)$ such that for every $1$-form $\psi$,
+\begin{align}
+1 - c \leq |\lambda|, g_{00} \leq 1 + c, \label{estimate on Killing weight} \\
+1 - c \leq \frac{|\psi|^2_{h^{-1}}}{|\psi|^2_{\tilde h^{-1}}} \leq 1 + c, \label{estimate on normal coordinates}\\
+1 - c \leq \sqrt{\frac{\det h}{\det \tilde h}} \leq 1 + c, \label{estimate on normal volume form}
+\end{align}
+If $p,q$ are $1$-form on $H$ such that $|q|^2_{h^{-1}} \lesssim 1$, then $\Lagrange(p) - \Lagrange(q)$ lies in the closed interval
+$$\left[\frac{1 - O(c)}{\Lagrange(q)}(\DirL(p) - \DirL(q)) - O(\DirL(p) - \DirL(q))^2, (1 + O(c))(\DirL(p) - \DirL(q))\right]$$
+where all implied constants are absolute.
 \end{lemma}
 \begin{proof}
+Let $\DirL_h(Y) = \sqrt{1 + h_{ij} Y^i Y^j}/2 ~\vol_h$ be the Dirichlet energy with respect to $h$.
+Applying (\ref{estimate on normal coordinates}, \ref{estimate on normal volume form}),
+\begin{equation}\label{estimate on normal coordinates 2}
+1 - O(c) \leq \frac{\DirL(p) - \DirL(q)}{\DirL_h(p) - \DirL_h(q)} \leq 1 + O(c).
+\end{equation}
 By Taylor's theorem, there exists $\xi \geq 0$ between $|p|$ and $|q|$ such that
 \begin{align*}
 \lambda^{-1}(\Lagrange(p) - \Lagrange(q)) &= \sqrt{1 + |p|^2} - \sqrt{1 + |q|^2}\\
-&= \frac{1}{2 \sqrt{1 + |q|^2}(|p|^2 - |q|^2)} - \frac{1}{8(1 + \xi^2)^{3/2}}(|p|^2 - |q|^2)^2 \\
-&= \frac{\DirL(p) - \DirL(q)}{\sqrt{1 + |q|^2}} - \frac{(\DirL(p) - \DirL(q))^2}{2(1 + \xi^2)^{3/2}}.
+&= \frac{|p|^2 - |q|^2}{2 \sqrt{1 + |q|^2}} - \frac{(|p|^2 - |q|^2)^2}{8(1 + \xi^2)^{3/2}} \\
+&= \frac{\DirL_h(p) - \DirL_h(q)}{\sqrt{1 + |q|^2}} - \frac{(\DirL_h(p) - \DirL_h(q))^2}{2(1 + \xi^2)^{3/2}}.
 \end{align*}
-Since $|q|^2 \geq 0$ and the second term is nonpositive, it follows that
-$$\Lagrange(p) - \Lagrange(q) \leq (1 + c)(\DirL(p) - \DirL(q)).$$
-and, since $|q|^2 \leq 15$,
+Since $|q|^2 \geq 0$ and the second term is nonpositive, it follows from (\ref{estimate on Killing weight}, \ref{estimate on normal coordinates 2}) that
+$$\Lagrange(p) - \Lagrange(q) \leq (1 + c)(\DirL_h(p) - \DirL_h(q)) \leq (1 + O(c))(\DirL(p) - \DirL(q)).$$
+If $|q|^2_h$ is small enough,
 $$2\Lagrange(q) \leq 8 \leq 8(1 + \xi^2)^{3/2},$$
 whence
 \begin{align*}
-\frac{(1 + c)^{-1}\DirL(p) - \DirL(q)}{\Lagrange(q)} - \frac{2(1 + c)^{-2}(\DirL(p) - \DirL(q))^2}{\Lagrange(q)} &\leq \Lagrange(p) - \Lagrange(q).\qedhere
+\frac{(1 + c)^{-1}(\DirL(p) - \DirL(q))}{\Lagrange(q)} - \frac{2(1 + c)^{-2}(\DirL(p) - \DirL(q))^2}{\Lagrange(q)} &\leq \Lagrange(p) - \Lagrange(q).
 \end{align*}
+Another application of (\ref{estimate on normal coordinates 2}) completes the proof.
 \end{proof}
 
-\subsection{Applying the mean-value property}
-Assume that we are in the situation of Lemma \ref{hopfKilling} with leaf metric $h = dx^2$.
-Let $B_r$ denote a ball in the euclidean space $H$, not in $M$.
-Let $A(r)f$ denote the mean of $f$ over $B_r$.
-Fix $\rho > 0$, and parameters $\beta, \kappa > 0$.
-In this situation, we have the following generalization of \cite[Teorema 4.3]{Miranda66}, with essentially the same proof:
-
 \begin{lemma}
-Assume that $||\nabla \omega||_{L^\infty(B_\rho)} \leq \kappa$,
-$$\int_{B_\rho} \Lagrange(\nabla \omega) - \Lagrange(A(\rho)\nabla \omega) \leq \beta,$$
-and $N$ is approximately minimal in the sense that
-$$\int_{B_\rho} \Lagrange(\nabla \omega) \leq \eta(U, \rho) + \beta \kappa.$$
-Then
-$$\int_{B_{\rho/2}} \Lagrange(\nabla \omega) - \Lagrange(A(\rho/2)\nabla \omega) \leq \frac{(1 + c)^2}{2^{d + 1}}\beta + O(\beta \kappa^{1/2}).$$
+For every $c \in (0, 1)$ there exists $\rho^* = \rho^*(c, g, P) > 0$ which depends continuously on $P$ and with the following property.
+
+Let $H$ be a hypersurface which is normal to a Killing field, and for which $\chi,\Lagrange$ are given by Definition \ref{Killing setup}.
+Let $\omega: H \to \RR$ be $C^1$, and suppose that $U \subseteq M$ is an open set such that
+$$\partial U = \{\chi(x, \omega(x)): x \in H\}.$$
+Then for every $\rho \in (0, \rho^*)$ and $\alpha, \kappa, \beta \in (0, 1)$ such that
+\begin{align}
+||d\omega||_{L^\infty(B_\rho)} &\leq \kappa, \label{Dirichlet small derivative}\\
+\int_{B_\rho} \Lagrange(d\omega) - \Lagrange(A(\rho)d\omega) &\leq \beta, \label{Dirichlet close to mean} \\
+\int_{B_\rho} \Lagrange(d\omega) &\leq \eta(U, \rho) + \beta \kappa, \label{Dirichlet close to minimal}
+\end{align}
+it follows that
+\begin{equation}\label{Dirichlet gain}
+\int_{B_{\alpha\rho}} \Lagrange(d\omega) - \Lagrange(A(\alpha\rho)d\omega) \leq (1 + O(c))\alpha^{d + 1}\beta + O(\beta \kappa^{1/2})
+\end{equation}
+where all implied constants are absolute.
 \end{lemma}
+The role of these parameters is as follows: we will take $\beta,\kappa \to 0$ in a proof by compactness and contradiction, and when we apply Proposition \ref{mollifier proposition}, we will take $\alpha \to 1/2$. One should think of $\beta$ as much smaller than $\kappa$, which in turn is much smaller than $c,\alpha,\rho^*$.
+Indeed, $c$ will later be chosen absolutely, so $\rho^*$ only depends on $P,g$.
+Once we have fixed $\rho^*$, we will iteratively halve the scale $\rho$ so that we can capitalize on (\ref{Dirichlet gain}).
 \begin{proof}
-Let $u$ be the harmonic function on $B_\rho$ with trace $\omega$.
-By definition of $\eta(U, \rho)$,
-$$\int_{B_\rho} \Lagrange(\nabla \omega) - \Lagrange(\nabla u) \leq \int_{B_\rho} \Lagrange(\nabla \omega) - \eta(N, \rho) \leq \beta\kappa.$$
-By Lemma \ref{Taylor lemma},
+Let $h,\lambda$ be as in Definition \ref{Killing setup}.
+Then $\lambda(P) = 1$ and $\lambda$ depends only on $g,P$.
+So we can use (\ref{Dirichlet small derivative}) and the fact that $\kappa < 1$ to select $\rho^*$ independently of $\omega$, so that such that
+if $\rho < \rho^*$, then $\lambda$ is controlled by (\ref{estimate on Killing weight}),
+$h$ is controlled by (\ref{estimate on normal coordinates}, \ref{estimate on normal volume form}), and
+$$||d\omega||_{L^\infty(B_\rho)} \cdot |B_\rho| \lesssim 1.$$
+Thus we will be able to apply Lemma \ref{Taylor lemma}.
+Since $h$ is of the form $h(v, w) = g(X, X)^{-1} g(v, w)$ for a Killing field $X$, and the space of Killing fields defined near $P$ is finite-dimensional, $h$ and its derivatives are all controlled by $g,P$ and so $\rho^*$ is determined by $c,P,g$.
+
+Let $u$ be the $\tilde h$-harmonic function on $B_\rho$ such that $u|\partial B_\rho = \omega|\partial B_\rho$.
+By definition of $\eta(U, \rho)$ and (\ref{Dirichlet close to minimal}),
+\begin{equation}\label{Dirichlet close to harmonic}
+\int_{B_\rho} \Lagrange(d\omega) - \Lagrange(\nabla u) \leq \int_{B_\rho} \Lagrange(d\omega) - \eta(U, \rho) \leq \beta\kappa.
+\end{equation}
+We now proceed analogously to the proof of \cite[Lemma 4.2]{Miranda66}. By Lemma \ref{Taylor lemma},
 \begin{align*}
-\int_{B_{\rho/2}} \Lagrange(\nabla \omega) - \Lagrange(A(\rho/2)\nabla \omega) &\leq (1 + c)\int_{B_{\rho/2}} \DirL(\nabla \omega) - \DirL(A(\rho/2)\nabla \omega) \\
-&= \frac{1 + c}{2} \int_{B_{\rho/2}} |\nabla \omega|^2 - |A(\rho/2)\nabla\omega|^2.
+\int_{B_{\alpha\rho}} \Lagrange(d\omega) - \Lagrange(A(\alpha\rho)d\omega) &\leq (1 + c)\int_{B_{\alpha\rho}} \DirL(d\omega) - \DirL(A(\alpha\rho)d\omega) \\
+&= \frac{1 + c}{2} \int_{B_{\alpha\rho}} |d\omega|^2 - |A(\alpha\rho)d\omega|^2.
 \end{align*}
-Since $A(\rho/2)\nabla \omega$ is the mean of $\nabla \omega$, we have for every $\varepsilon > 0$
+Since $A(\alpha\rho)d\omega$ is the mean of $d\omega$, we have for every $\varepsilon > 0$
 \begin{align*}
-\int_{B_{\rho/2}} |\nabla \omega|^2 - |A(\rho/2)\nabla \omega|^2 &\leq \int_{B_{\rho/2}} (\nabla \omega - A(\rho)\nabla \omega)^2 ~dx \\
-&\leq (1 + \varepsilon^{-1})\int_{B_\rho} |\nabla \omega - \nabla u|^2 ~dx\\
-&\qquad + (1 + \varepsilon) \int_{B_{\rho/2}} |\nabla u - A(\rho)\nabla \omega|^2 ~dx\\
+\int_{B_{\alpha\rho}} |d\omega|^2 - |A(\alpha\rho)d\omega|^2 &\leq \int_{B_{\alpha\rho}} (d\omega - A(\rho)d\omega)^2 ~dx \\
+&\leq (1 + \varepsilon^{-1})\int_{B_\rho} |d\omega - \nabla u|^2 ~dx\\
+&\qquad + (1 + \varepsilon) \int_{B_{\alpha\rho}} |\nabla u - A(\rho)d\omega|^2 ~dx\\
 &=: O(\varepsilon^{-1})I + (1 + \varepsilon)J.
 \end{align*}
-To estimate $I$, we use the mean-value property to show
+To estimate $I$, we use the mean-value property, Lemma \ref{Taylor lemma}, and (\ref{Dirichlet close to harmonic}):
 \begin{align*}
-I &= \int_{B_\rho} |\nabla \omega - \nabla u|^2 = \int_{B_\rho} |\nabla \omega|^2 - |\nabla u|^2 \\
-&\lesssim \int_{B_\rho} \int_{B_\rho} \Lagrange(\nabla \omega) - \Lagrange(\nabla u) \leq \beta \kappa.
+I &= \int_{B_\rho} |d\omega - \nabla u|^2 = \int_{B_\rho} |d\omega|^2 - |\nabla u|^2 \lesssim \int_{B_\rho} \Lagrange(d\omega) - \Lagrange(\nabla u) \leq \beta \kappa.
 \end{align*}
-To estimate $J$, we bound
+To estimate $J$, we apply \cite[Lemma 4.1]{Miranda66}:
 \begin{align*}
-J &= \int_{B_\rho} |\nabla u|^2 - |A(\rho)\nabla \omega|^2 = \int_{B_\rho} |\nabla u|^2 - |A(\rho)\nabla u|^2 \\
-&\leq \frac{1}{2^{d + 1}} \int_{B_\rho} |\nabla u|^2 - |A(\rho)\nabla u|^2 \leq \frac{1}{2^{d + 1}} \int_{B_\rho} |\nabla \omega|^2 - |A(\rho)\nabla \omega|^2 \\
-&\leq \frac{1}{2^{d + 1}} \int_{B_\rho} |\nabla \omega - A(\rho)\nabla \omega|^2 ~dx \\
-&\leq \frac{1 + \varepsilon}{2^{d + 1}} \int_{B_\rho} |\nabla \omega - A(\rho)\nabla \omega|^2  + O(\varepsilon^{-1})\int_{B_\rho} |\nabla \omega - \nabla u|^2\\
-&=: \frac{1 + \varepsilon}{2^{d + 1}}K + O(\varepsilon^{-1})I.
+J &= \int_{B_\rho} |\nabla u|^2 - |A(\rho)d\omega|^2 = \int_{B_\rho} |\nabla u|^2 - |A(\rho)\nabla u|^2 \\
+&\leq \alpha^{d + 1} \int_{B_\rho} |\nabla u|^2 - |A(\rho)\nabla u|^2 \leq \alpha^{d + 1} \int_{B_\rho} |d\omega|^2 - |A(\rho)d\omega|^2 \\
+&\leq \alpha^{d + 1} \int_{B_\rho} |d\omega - A(\rho)d\omega|^2 ~dx \\
+&\leq (1 + \varepsilon)\alpha^{d + 1} \int_{B_\rho} |d\omega - A(\rho)d\omega|^2  + O(\varepsilon^{-1})\int_{B_\rho} |d\omega - \nabla u|^2\\
+&=: (1 + \varepsilon)\alpha^{d + 1}K + O(\varepsilon^{-1})I.
 \end{align*}
-We already estimated $I \lesssim \beta \kappa$, and now we estimate $K$: by Lemma \ref{Taylor lemma},
+We already estimated $I \lesssim \beta \kappa$, and now we estimate $K$: by Lemma \ref{Taylor lemma} and (\ref{Dirichlet small derivative}, \ref{Dirichlet close to mean}),
 \begin{align*}
-K &= \int_{B_\rho} |\nabla \omega|^2 - |A(\rho)\nabla \omega|^2\\
-&\leq 2\int_{B_\rho} \DirL(\nabla \omega) - \DirL(A(\rho)\nabla \omega)\\
-&\leq 2(1 + c)\int_{B_\rho} \Lagrange(\nabla \omega) - \Lagrange(A(\rho)\nabla\omega) + O(1) \int_{B_\rho} (\DirL(\nabla \omega) - \DirL(A(\rho)\nabla \omega))^2\\
-&\leq 2(1 + c)\beta + O(1) ||\nabla \omega||_{L^\infty(B_\rho)} \int_{B_\rho} \DirL(\nabla \omega) - \DirL(A(\rho)\nabla \omega) \\
-&\leq 2(1 + c + O(\kappa))\beta.
+K &= \int_{B_\rho} |d\omega|^2 - |A(\rho)d\omega|^2\\
+&\leq 2\int_{B_\rho} \DirL(d\omega) - \DirL(A(\rho)d\omega)\\
+&\leq 2(1 + O(c))\int_{B_\rho} \Lagrange(d\omega) - \Lagrange(A(\rho)d\omega) + O(1) \int_{B_\rho} (\DirL(d\omega) - \DirL(A(\rho)d\omega))^2\\
+&\leq 2(1 + O(c))\beta + O(1) ||d\omega||_{L^\infty(B_\rho)} \int_{B_\rho} \DirL(d\omega) - \DirL(A(\rho)d\omega) \\
+&\leq 2\beta(1 + O(c + \kappa)).
 \end{align*}
 If we set $\varepsilon = \kappa^{1/2}$ then we conclude
 \begin{align*}
-\int_{B_{\rho/2}} \Lagrange(\nabla \omega) - \Lagrange(A(\rho/2)\nabla \omega)
-&\leq \frac{(1 + c)^2(1 + \varepsilon)^2}{2^{d + 1}}\beta + O(\beta \kappa \varepsilon^{-1})\\
-&\leq \frac{(1 + c)^2}{2^{d + 1}}\beta + O(\beta \kappa^{1/2}). \qedhere
+\int_{B_{\alpha\rho}} \Lagrange(d\omega) - \Lagrange(A(\alpha\rho)d\omega)
+&\leq (1 + O(c + \varepsilon)) \alpha^{d + 1}\beta + O(\beta \kappa \varepsilon^{-1})\\
+&\leq (1 + O(c))\alpha^{d + 1} \beta + O(\beta \kappa^{1/2}). \qedhere
 \end{align*}
 \end{proof}
 
-\subsection{de Giorgi's lemma, $C^1$ case}
+\subsection{$C^1$ case}
 With the above setup, we now are ready to show the $C^1$ case of de Giorgi's lemma \cite[Teorema 4.4]{Miranda66}.
-We again let $B_r$ denote a ball in $M$, not in $H$.
+We again let $B_r$ denote a ball in $(M, g)$, not in some euclidean hypersurface $(H, h)$.
 
 \begin{definition}
 The (unnormalized) \dfn{excess} of a set $U$ of locally finite perimeter with respect to a quasieuclidean frame $(\partial_0, \dots, \partial_{d - 1})$ at $P$ is defined by
 $$\Lambda_U(\rho) = \int_{B_\rho} |du| ~\vol - \sqrt{\sum_{j=0}^{d - 1} \int_{B_\rho} \partial_ju ~\vol}.$$
 \end{definition}
 
-\begin{lemma}
-Let $(U_n)$ be a sequence of open sets with $C^1$ boundary, and fix a quasieuclidean frame $(\partial_0, \dots, \partial_{d - 1})$ at $P$.
-If
-$$\Lambda(U_n, \rho) \leq \beta_n,$$
-$$\lim_{n \to \infty} ||g(\normal_{U_n}, \partial_0) - 1||_{L^\infty(B_\rho)} = 0,$$
-$$\eta(U_n, \rho) \ll \beta_n,$$
+\begin{lemma}\label{DGLC1}
+Suppose that $M$ is a space form of dimension $2$ or nonpositive curvature, and let $(\partial_0, \dots, \partial_{d - 1})$ be a quasieuclidean frame defined near $P \in M$.
+Let $(U_n)$ be a sequence of open sets with $C^1$ boundary.
+
+Then for every $c \in (0, 1)$ there exists $\rho^* = \rho^*(c, g) > 0$ such that for every $\rho \in (0, \rho^*)$, if $\beta_n > 0$ satisfy
+\begin{align}
+\Lambda_{U_n}(\rho) &\leq \beta_n, \label{DGLC1 small excess}\\
+\lim_{n \to \infty} ||g(\normal_{U_n}, \partial_0) - 1||_{L^\infty(B_\rho)} &= 0, \label{DGLC1 up normals}\\
+|\partial U_n \cap B_\rho| &\leq \eta(U_n, B_\rho) + o(\beta_n), \label{DGLC1 almost minimal}
+\end{align}
 then
-$$\limsup_{n \to \infty} \frac{\Lambda(U_n, \rho/2)}{\beta_n} \leq \frac{(1 + c)^2}{2^{d + 1}}.$$
+$$\limsup_{n \to \infty} \frac{\Lambda_{U_n}(\rho/2)}{\beta_n} \leq \frac{(1 + c)^2}{2^{d + 1}}.$$
 \end{lemma}
 
 \subsection{Mollification}
@@ -1548,14 +1806,11 @@ then $\normal$ is continuous in a neighborhood of $P$, and therefore $N$ is anal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Proofs of main theorems}\label{proof of main thm}
-We are finally ready to prove Theorems \ref{main thm} and \ref{main crly}.
-
-Throughout this section, let $u$ be a function of least gradient.
-By Corollary \ref{level sets are minimal}, the superlevel sets of $u$ have least perimeter.
+We are finally ready to prove Theorems \ref{main thm}, \ref{main crly}, and \ref{main lma}.
 
 \subsection{Regularity of minimal hypersurfaces}
-Let $U$ be a superlevel set of $u$.
-We want to show that $N = \partial U$ is as smooth as possible, and to this end, we might as well assume that $u = 1_U$.
+We begin by proving Theorem \ref{main lma}.
+Let $U$ be a set of least perimeter, and let $u$ be its indicator function.
 
 We first may cover $M$ by normal coordinate charts $A_x$ centered on $x \in M$, selected so that $A_x$ is precompact in $M$.
 In particular, if we fix a particular $x$, then the averaged $1$-forms $\int_V du ~\vol$ are well-defined for $V \subseteq A_x$, so the excesses $\Lambda(U, V)$ are well-defined.
@@ -1618,6 +1873,7 @@ Since $\normal_s$ is continuous, it follows that $\normal$ extends to a continuo
 By Proposition \ref{locality of Caccioppoli}, $(A_x')_{x \in N^*}$ defines an open cover of $N$, so $\normal$ extends to a continuous $1$-form on $N$, and hence by Proposition \ref{regularity of reduced boundary}, $N$ is as smooth as possible.
 
 \subsection{Existence of laminations}
+By Corollary \ref{level sets are minimal}, the superlevel sets of $u$ have least perimeter.
 Now we consider the general case when $u$ is a function of least gradient.
 Let
 \begin{equation}\label{lamination union}
