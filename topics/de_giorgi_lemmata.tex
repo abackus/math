@@ -31,6 +31,7 @@
 \newcommand{\Hyp}{\mathbf H}
 \newcommand{\SL}{\mathrm{SL}}
 \newcommand{\evect}{\mathbf e}
+\newcommand{\Lagrange}{\mathscr L}
 
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\cent}{center}
@@ -75,6 +76,8 @@
 \newcommand{\Homology}{\mathrm H_{\mathrm{dR}}}
 \newcommand{\normal}{\mathbf n}
 \newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\Japan}[2]{\left\langle #1 \right\rangle}
 
 \newcommand{\pic}{\vspace{30mm}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
@@ -141,133 +144,169 @@
 
 % \tableofcontents
 
-\section{De Giorgi lemma in hyperbolic space}
-Let $g$ be the hyperbolic metric on $(-R, R) \times (0, \infty)$ given by
-$$g = \begin{bmatrix}y^{-2} \\ & y^{-2}\end{bmatrix}.$$
-Let
-$$\mathscr L(x, \omega, p) = \sqrt{g_{11}(x, \omega) + 2g_{12}(x, u)p + g_{22}(x, \omega) p^2}$$
-be the infinitesimal arc length of the graph of $\omega$ where $\omega' = p$.
-Thus
-$$\mathscr L(\omega, p) = \omega \sqrt{1 + |p|^2}.$$
-This gives a metric $g_\omega$ on $(-\rho, \rho)$ by $\omega(x)^2 ~dx$.
-We write $\Delta_\omega$ to mean the Laplace-Beltrami operator of $g_\omega$, which after a normalization is
-$$\Delta_\omega = \partial^2 + 3(\log \omega)' \partial.$$
-This operator is locally uniformly elliptic on $(-R, R)$.
+\section{The Riemannian minimal surface Lagrangian}
+Let $g$ be a metric written in the form
+$$g = \begin{bmatrix}g_{11} & \\ & g_{22}\end{bmatrix}$$
+where $g_{11}$ is a scalar field and $g_{22}$ is a metric with one dimension down.
+That is, there are no cross-terms $g_{12}$.
+I think that the Gauss lemma implies that we can always write a metric locally in this form.
 
-Consider a sequence $(\omega_j)$ in $C^1((-R, R))$ and let $g_j = g_{\omega_j}$.
-Fix $\rho_j > 0$ and let $B_{\delta,j}$ be the ball $B_{g_j}(0, \delta \rho_j)$.
-We define the averaging operator $A_j$ by letting
-$$A_jf(\delta) = \dashint_{B_{\delta,j}} f ~\vol_{g_j}.$$
+Let
+$$\mathscr L(x, \omega, p) = \sqrt{g_{11}(x, \omega) + g_{22}(x, \omega)(p, p)}.$$
+Then $\mathscr L(x, \omega(x), d\omega(x))$ is the area of the graph of $\omega: \RR^{d - 1} \to \RR$ where $\RR \times \RR^{d - 1}$ is equipped with the metric $g$.
+We henceforth suppress the dependence of $g_i = g_{ii}$ on $x, \omega$.
+
+We can rewrite the Lagrangian as
+$$\mathscr L(\omega, p) = \sqrt{g_1} \cdot \sqrt{1 + \lambda p^2}$$
+where $\lambda p^2$ denotes $g_2(p, p)/g_1$. Since $g_2,g_1$ are positive definite, $p \mapsto \lambda p^2$ is a positive-definite quadratic form.
+Note that in isothermal coordinates, $\lambda = 1$.
+
+\begin{example}
+With $g$ the hyperbolic metric we get $g_1 = g_2 = y^{-2}$.
+In particular $\lambda = 1$ and we get
+$$\Lagrange(\omega, p) = \frac{\sqrt{1 + p^2}}{\omega}.$$
+\end{example}
+
+We now Taylor expand a difference of Lagrangians.
+For every $x, y > -1$ there exists $\kappa \geq 0$ such that
+$$\sqrt{1 + x} = \sqrt{1 + y} + \frac{x - y}{2\sqrt{1 + y}} - \kappa(x - y)^2,$$
+and $\kappa$ depends continuously on $x,y$.
+Setting $x = \lambda p^2$, $y = \lambda q^2$, there exists $\kappa \geq 0$ such that
+$$\Lagrange(\omega, p) - \Lagrange(\omega, q) = \lambda \frac{p^2 - q^2}{2\sqrt{1 + \lambda q^2}} \sqrt{g_1} - \kappa \lambda^2 (p^2 - q^2)^2 \sqrt{g_1}.$$
+Positivity of $\kappa,\lambda$ implies that
+$$\Lagrange(\omega, p) - \Lagrange(\omega, q) \leq \frac{\lambda}{2}(p^2 - q^2) \sqrt{g_1}.$$
+
+
+\section{De Giorgi lemma in two dimensions}
+In this section we let $Af(\rho) = (2\rho)^{-1} \int_{-\rho}^\rho f$ be the mean of $f$ over $(-\rho, \rho)$.
+
+\begin{assumption}
+We assume that:
+\begin{enumerate}
+\item $g = \begin{bmatrix}g_{11} \\ & g_{22}\end{bmatrix}$, as in the previous section.
+\item $g(x, y)$ does not depend on $x$.
+\end{enumerate}
+\end{assumption}
+
+So $g(x, \omega(x))$ is determined by $\omega(x)$ but not $x$ itself.
+I don't think this second assumption actually meaningfully changes the below proof.
+That said, it does make the below proof cleaner.
+Note that this happens for the hyperbolic metric.
 
 \begin{lemma}
-Suppose that $\omega_j' \to 0$ in $L^\infty(B_{1,j})$, $B_{1,j} \subseteq (-R, R)$, and the images of the $\omega_j$ lie in a uniform compact subset of $(0, \infty)$.
+Suppose that $\omega_j' \to \Omega$, where $\Omega$ is a constant, in $C^1$.
 Let $u_j$ be the function defined by
 \begin{align*}
-\Delta_j u_j &= 0 \\
-u_j|\partial B_{1, j} &= \omega_j|\partial B_{1, j}.
+u_j'' &= 0 \\
+u_j(\pm \rho_j) &= \omega_j(\pm \rho_j).
 \end{align*}
-Furthermore, suppose that there exists a small $\delta > 0$ such that
-$$\rho_j^{3 - 2\delta} \lesssim \beta_j \ll 1.$$
+Furthermore, suppose that
+$$0 < \rho_j^2 \ll \beta_j \ll 1.$$
 If
-$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, u_j(x), u_j'(x)) ~dx \leq 0$$
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{-\rho_j}^{\rho_j} \mathscr L(\omega_j, \omega_j') - \Lagrange(u_j, u_j') \leq 0$$
 and
-$$\int_{B_{1,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x),  A_j \omega_j'(\rho_j))) ~dx \leq \beta_j,$$
+$$\int_{-\rho_j}^{\rho_j} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho)) \leq \beta_j,$$
 then
-$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{B_{1/2,j}} \mathscr L(x, \omega_j(x), \omega_j'(x)) - \mathscr L(x, \omega_j(x),  A_j \omega_j'(\rho_j/2))) ~dx \leq \frac{1}{8}.$$
+$$\limsup_{j \to \infty} \frac{1}{\beta_j} \int_{-\rho_j/2}^{\rho_j/2} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho)) \leq \frac{1}{8}.$$
 \end{lemma}
 \begin{proof}
-We first bound for any $p, q \in \RR$
-\begin{align*}
-\mathscr L(\omega, p) - \mathscr L(\omega, q) &= \omega(\sqrt{1 + p^2} - \sqrt{1 + q^2}) \\
-&\leq \frac{\omega}{2\sqrt{1 + q^2}}(p^2 - q^2) \leq \frac{\omega}{2}(p^2 - q^2).
-\end{align*}
-Therefore
-\begin{align*}
-\int_{B_{1/2,j}} \mathscr L(\omega_j(x), \omega_j'(x)) - \mathscr L(\omega_j(x),  A_j \omega_j'(\rho_j/2))) ~dx &\leq \frac{1}{2} \int_{B_{1/2,j}} (\omega_j'(x)^2 -  A_j \omega_j'(\rho_j/2)^2 ) \omega_j(x) ~dx.
-\end{align*}
-We call the right-hand side $I$ and we seek to bound it.
+Fix $\varepsilon > 0$.
+From properties of the Lagrangian,
+$$\int_{-\rho_j/2}^{\rho_j/2} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho_j/2)) \leq \int_{-\rho_j/2}^{\rho_j/2} \frac{\lambda(\omega_j) \sqrt{g_1(\omega_j)}}{2} ((\omega_j')^2 - A \omega_j'(\rho_j/2)^2).$$
+We observe that since $g_1$ does not depend on $x$, the convergence of $\omega_j$ to $\Omega$ implies that there is a constant $\Lambda$ such that
+$$\lim_{j \to \infty} \lambda(\omega_j) \sqrt{g_1(\omega_j)} = \Lambda$$
+uniformly.
+In particular, if we set
+$$2I = \int_{-\rho_j/2}^{\rho_j/2} ((\omega_j')^2 - A \omega_j'(\rho_j/2)^2)$$
+then for every $j$ large enough,
+$$\int_{-\rho_j/2}^{\rho_j/2} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho_j/2)) \leq (1 + \varepsilon) \Lambda I.$$
 
-We begin by transforming the domain.
-Writing $\vol_j = \omega_j(x) ~dx$ for the $1$-form induced by $g_j$, and using geodesic coordinates centered on $0$ and the fact that the metric $g_j$ is flat (so the Taylor expansion of $g_{ij}$ in geodesic coordinates is just $\delta_{ij}$)
-$$\int_{B_{\delta,j}} f ~\vol_j = \int_{-\delta \rho_j}^{\delta \rho_j} f(X) ~dX.$$
-Thus we have a change of coordinates $B_{\delta, j } \to (-\delta \rho_j, \delta \rho_j)$ which induces a change of $1$-forms $dX = \omega_j(x) ~dx$.
-In such coordinates it follows that
-$$2I = \int_{-\rho_j/2}^{\rho_j/2} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j/2)^2 ~dX.$$
-In general, we would get error terms here.
-
-Since $A_j \omega_j'$ is the mean of $\omega_j$ over this domain,
-$$\int_{-\rho_j/2}^{\rho_j/2} \omega_j'(X) A_j \omega_j'(\rho_j/2) ~dX = \int_{-\rho_j/2}^{\rho_j/2} A_j \omega_j'(\rho_j/2)^2 ~dX$$
+Since $A \omega_j'(\rho_j/2)$ is the mean of $\omega_j$ over the domain of integration
+$$\int_{-\rho_j/2}^{\rho_j/2} \omega_j' A\omega_j'(\rho_j/2) = \int_{-\rho_j/2}^{\rho_j/2} A \omega_j'(\rho_j/2)^2$$
 which readily implies
-$$2I = \int_{-\rho_j/2}^{\rho_j/2} (\omega_j'(X) -  A_j \omega_j'(\rho_j/2))^2 ~dX.$$
+$$2I = \int_{-\rho_j/2}^{\rho_j/2} (\omega_j' -  A \omega_j'(\rho_j/2))^2.$$
 For any function $f$, $||f - y||_{L^2}$ is minimized exactly when $y$ is the mean of $f$ (just differentiate the square of that norm in $y$ and look for critical points) so
-$$2I \leq \int_{-\rho_j/2}^{\rho_j/2} (\omega_j'(X) -  A_j \omega_j'(\rho_j))^2 ~dX.$$
+$$2I \leq \int_{-\rho_j/2}^{\rho_j/2} (\omega_j' -  A_j \omega_j'(\rho_j))^2.$$
 
-Let $\varepsilon > 0$.
 By Cauchy's inequality
 $$|\alpha - \gamma|^2 \leq (1 + \varepsilon) |\alpha - \beta|^2 + (1 + 1/\varepsilon) |\beta - \gamma|^2$$
 we have
-$$2I \leq (1 + 1/\varepsilon) \int_{B_{1/2,j}} |\omega_j'(X) - u_j'(X)|^2 ~dX + (1 + \varepsilon) \int_{B_{1/2,j}} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX.$$
-Our boundary condition on $u_j$ says
-$$A_j u_j'(\rho_j) = A_j\omega_j'(\rho_j).$$
-and in the coordinates $X$, $\Delta_j$ becomes $\partial^2$, thus $u_j'' = 0$.
+$$2I \leq (1 + 1/\varepsilon) \int_{-\rho_j/2}^{\rho_j/2} |\omega_j' - u_j'|^2 + (1 + \varepsilon) \int_{-\rho_j/2}^{\rho_j/2} |u_j' - A\omega_j'(\rho_j)|^2.$$
+Our boundary condition on $u_j$, and the fundamental theorem of calculus, imply that
+$$A u_j'(\rho_j) = A\omega_j'(\rho_j).$$
 So by the mean-value property and Cauchy's inequality,
 \begin{align*}
-\int_{-\rho_j/2}^{\rho_j/2} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX &\leq \frac{1}{8} \int_{-\rho}^{\rho} |u_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX\\
-&\leq \frac{1 + \varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX \\
-&\qquad + \frac{1 + 1/\varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) - u_j'(X)|^2 ~dX
+\int_{-\rho_j/2}^{\rho_j/2} |u_j' -  A \omega_j'(\rho_j)|^2 &\leq \frac{1}{8} \int_{-\rho}^{\rho} |u_j' -  A \omega_j'(\rho_j)|^2\\
+&\leq \frac{1 + \varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j' -  A \omega_j'(\rho_j)|^2 + \frac{1 + 1/\varepsilon}{8} \int_{-\rho_j}^{\rho_j} |\omega_j' - u_j'|^2
 \end{align*}
-Thus
+Thus there exists $C_\varepsilon > 0$ (which does not depend on $j$) such that
 \begin{align*}
-I &\leq \frac{(1 + \varepsilon)^2}{16} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) -  A_j \omega_j'(\rho_j)|^2 ~dX + O(1) \int_{-\rho_j}^{\rho_j} |\omega_j'(X) - u_j'(X)|^2 ~dX\\
-&= \frac{(1 + \varepsilon)^2}{16} J + O(1) K.
+I &\leq \frac{(1 + \varepsilon)^2}{16} \int_{-\rho_j}^{\rho_j} |\omega_j'(X) -  A \omega_j'(\rho_j)|^2 ~dX + O(1) \int_{-\rho_j}^{\rho_j} |\omega_j' - u_j'|^2\\
+&= \frac{(1 + \varepsilon)^2}{16} J + C_\varepsilon K.
 \end{align*}
-Here $O(1)$ denotes a constant that is allowed to depend on $\varepsilon$ but not on $j$.
 
 \begin{claim}
 If $j$ is large enough then
-$$J \leq (2 + \varepsilon)\beta_j.$$
+$$J \leq \frac{2 + \varepsilon}{\Lambda}\beta_j.$$
 \end{claim}
 \begin{proof}[Proof of claim]
 One has
+$$J = \int_{-\rho_j}^{\rho_j} (\omega_j')^2 - A \omega_j'(\rho_j)^2.$$
+Using the Taylor expansion of the Lagrangian, this implies
 \begin{align*}
-J &= \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j)^2 ~dX \\
-&= \int_{B_{1, j}} \omega_j'(x)^2 \omega_j(x) -  A_j \omega_j'(\rho_j)^2 \omega_j(x) ~dx \\
-&\leq \int_{B_{1, j}} (\omega_j'(x)^2 -  A_j \omega_j'(\rho_j)^2)^2 \omega_j(x)^2 ~dx \\
-&\qquad + 2\sqrt{1 +  A_j \omega_j'(\rho_j)^2} \int_{B_{1,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j,  A_j \omega_j'(\rho_j)) \\
-&\leq 2 ||\omega_j' ||_{L^\infty}^2 ||\omega_j||_{L^\infty}^2 \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 -  A_j \omega_j'(\rho_j)^2 ~dX + 2 \beta_j\\
-&\leq 2\beta_j + o(1) J. \qedhere
+J &= 2 \int_{-\rho_j}^{\rho_j} \frac{\sqrt{1 + \lambda(\omega_j) A \omega_j'(\rho_j)^2}}{\lambda(\omega_j) \sqrt{g_1(\omega_j)}}\mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, A \omega_j'(\rho))\\
+&\qquad + 2 \int_{-\rho_j}^{\rho_j} \sqrt{1 + \lambda(\omega_j) A \omega_j'(\rho_j)^2}\kappa(\omega_j', A\omega_j') \lambda(\omega_j) ((\omega_j')^2 - A\omega_j'(\rho_j)^2)^2.
 \end{align*}
+The first term is, if $j$ is chosen large enough,
+$$\leq \frac{2 + \varepsilon/2}{\Lambda} \int_{-\rho_j}^{\rho_j} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho)) \leq \frac{2 + \varepsilon/2}{\Lambda} \beta_j.$$
+The convergence of the $\omega_j$ in $C^1$ shows that the second term is bounded for $j$ large by
+$$\lesssim \int_{-\rho_j}^{\rho_j} ((\omega_j')^2 - A\omega_j'(\rho_j)^2)^2.$$
+We can estimate
+$$((\omega_j')^2 - A\omega_j'(\rho_j)^2)^2 \leq ||\omega_j'||_{L^\infty} ((\omega_j')^2 - A \omega_j'(\rho_j)^2)$$
+since $|A \omega_j'(\rho_j)| \leq ||\omega_j'||_{L^\infty}$.
+But $\omega_j' \to 0$ uniformly, so
+$$J \leq \frac{2 + \varepsilon/2}{\Lambda} \beta_j + o(J).$$
+Selecting $j$ large enough now completes the claim.
 \end{proof}
 
 \begin{claim}
-One has $K \leq o(\beta_j)$.
+$K \ll \beta_j$.
 \end{claim}
 \begin{proof}[Proof of claim]
-Since $u_j$ is harmonic,
+Since $u_j'' = 0$,
+$$K = \int_{-\rho_j}^{\rho_j} (\omega_j')^2 - (u_j')^2.$$
+Taylor expanding the Lagrangian,
+$$K \lesssim \int_{-\rho_j}^{\rho_j} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, u_j') + \int_{-\rho_j}^{\rho_j} (\Lagrange(\omega_j, \omega_j')^2 - \Lagrange(\omega_j, u_j')^2)^2.$$
+Moreover,
 \begin{align*}
-K &= \int_{-\rho_j}^{\rho_j} \omega_j'(X)^2 - u_j'(X)^2 ~dX \\
-&\leq 2 \sqrt{1 + ||u_j'||_{L^\infty}^2} \int_{B_{1,j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(\omega_j, u_j')\\
-&\lesssim \int_{B_{1, j}} \mathscr L(\omega_j, \omega_j') - \mathscr L(u_j, u_j') + \int_{B_{1, j}} \mathscr L(u_j, u_j') - \mathscr L(\omega_j, u_j') \\
-&\leq o(\beta_j) + 2||\omega_j - u_j||_{L^1(B_{1,j})}
+(\Lagrange(\omega_j, \omega_j')^2 - \Lagrange(\omega_j, u_j')^2)^2 &\lesssim (||\omega_j'||_{L^\infty} + ||u_j'||_{L^\infty}) (\Lagrange(\omega_j, \omega_j')^2 - \Lagrange(\omega_j, u_j')^2)\\
+& \lesssim (||\omega_j'||_{L^\infty} + ||u_j'||_{L^\infty}) ((\omega_j')^2 - (u_j')^2).
 \end{align*}
-for all $j$ large enough.
+By the maximum principle,
+$$||\omega_j'||_{L^\infty} + ||u_j'||_{L^\infty} \leq 2||\omega_j'||_{L^\infty} \to 0$$
+so
+$$\int_{-\rho_j}^{\rho_j} (\Lagrange(\omega_j, \omega_j')^2 - \Lagrange(\omega_j, u_j')^2)^2 \ll K$$
+and hence
+\begin{align*}
+K &\lesssim \int_{-\rho_j}^{\rho_j} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, u_j')\\
+&= \int_{-\rho_j}^{\rho_j} \mathscr L(\omega_j, \omega_j') - \mathscr L(u_j, u_j') + \int_{-\rho_j}^{\rho_j }\mathscr L(u_j, u_j') - \mathscr L(\omega_j, u_j')\\
+&\lesssim o(\beta_j) + ||\omega_j - u_j||_{L^1}.
+\end{align*}
 The second term is the only interesting new term created by the presence of geometry.
 To bound it, we observe that $\omega_j - u_j$ is trace-free, so by the Poincar\'e, H\"older, and Cauchy inequalities,
-$$||\omega_j - u_j||_{L^1} \lesssim \rho ||\omega_j' - u_j'||_{L^1} \leq \rho^{3/2} ||\omega_j' - u_j'||_{L^2} \leq \rho^{3 - \delta} + \rho^\delta ||\omega_j' - u_j'||_{L^2}^2.$$
-Moreover
-$$||\omega_j' - u_j'||_{L^2}^2 \lesssim \int_{-\rho_j}^{\rho_j} (\omega_j'(X) - u_j'(X))^2 ~dX = K$$
-owing to the uniform boundedness of the $\omega_j$.
+$$||\omega_j - u_j||_{L^1} \lesssim \rho_j ||\omega_j' - u_j'||_{L^1} \leq \rho^{3/2}_j ||\omega_j' - u_j'||_{L^2} \leq \rho^{5/2}_j + \rho^{1/2}_j ||\omega_j' - u_j'||_{L^2}^2 = \rho^{5/2}_j + \rho^{1/2}_j K.$$
 Thus
-$$K \leq o(\beta_j) + \rho^{3 - \delta} + O(\rho^\delta K)$$
-or in other words
-\begin{align*}
-K &\leq \frac{o(\beta_j) + \rho^{3 - \delta}}{1 - O(\rho^\delta)} \leq \frac{o(\beta_j)}{1 + o(1)}. \qedhere
-\end{align*}
+$$K \leq o(\beta_j) + \rho^{5/2}_j + \rho^{1/2}_j K$$
+but we assumed that $\rho^2_j \ll \beta_j$ so this is good.
 \end{proof}
 
-Therefore
-$$\frac{I}{\beta_j} \leq \frac{(1 + \varepsilon)^2(1 + \varepsilon/2)}{8} + o(1).$$
-Taking the limit as $j \to \infty$ we see the claim.
+We now have a bound
+$$I \leq \frac{(1 + \varepsilon)^2}{16} \frac{2 + \varepsilon}{\Lambda} \beta_j + o(\beta_j) \leq \frac{1 + O(\varepsilon)}{8\Lambda} \beta_j$$
+which gives
+$$\int_{-\rho_j/2}^{\rho_j/2} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho_j/2)) \leq \frac{1 + O(\varepsilon)}{8} \beta_j.$$
+We conclude
+$$\lim_{j \to \infty} \frac{1}{\beta_j} \int_{-\rho_j/2}^{\rho_j/2} \Lagrange(\omega_j, \omega_j') - \Lagrange(\omega_j, A \omega_j'(\rho_j/2)) \leq \frac{1 + O(\varepsilon)}{8}.$$
+The left-hand side does not depend on $\varepsilon$, so this is good.
 \end{proof}
 
 In what follows we let $\evect_1, \evect_2 \in S^1$ be the standard basis of $\RR^2$, and let $B_r$ be the hyperbolic ball centered on $\evect_2$ of radius $r > 0$, where we view $\Hyp^2$ as the upper half-plane in $\RR^2$.
