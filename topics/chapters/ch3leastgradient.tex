@@ -1,0 +1,421 @@
+\section{Functions of least gradient}\label{LeastGradientFunctions}
+The purpose of this paper is to study weak solutions to the PDE
+\begin{equation}\label{EulerLagrange}
+\Div \frac{\grad u}{|\grad u|} = 0.
+\end{equation}
+One can view (\ref{EulerLagrange}) as the formal limit as the $p$-Laplace equation as $p \to 1$; this perspective is taken in \cite[\S4]{daskalopoulos2020transverse}.
+However, we will instead (\ref{EulerLagrange}) as the formal Euler-Lagrange equation induced by the variational problem of minimizing $|du|~\vol$, so that weak solutions to (\ref{EulerLagrange}) are functions of least gradient.
+
+\begin{notation}
+If $u \in BV(M)$ and $U \Subset M$, we write
+$$\eta(u, U) = \inf_{v \prec U} \int_U |d(u+v)| ~\vol$$
+so that $u$ has least gradient iff $\eta(u, U) = \int_U |du| ~\vol$ for every $U$.
+\end{notation}
+
+\begin{definition}
+A \dfn{minimal cone} in $\RR^d$ is a cone of least perimeter with vertex at the origin of $\RR^d$.
+\end{definition}
+
+\begin{theorem}\label{minimal cones in R8}
+The following are equivalent:
+\begin{enumerate}
+\item $d \leq 7$.
+\item The boundary of every minimal cone in $\RR^d$ is $C^1$.
+\item The boundary of every minimal cone in $\RR^d$ is a hyperplane.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+Immediate from \cite[Theorem 6.2.2]{Simons68} and \cite[Theorem A]{BOMBIERI1969}.
+\end{proof}
+
+Therefore we cannot sharpen Theorem \ref{main thm} to include the case $d \geq 8$.
+
+\subsection{A priori and Miranda estimates}\label{MirandaStability}
+We omit the proofs of our next few results, as they follow easily from Proposition \ref{traces} and the proofs of \cite[Teorema 2]{Miranda67} and \cite[Lemma 5.6, Remark 5.7]{Giusti77}.
+
+\begin{proposition}[gluing]\label{gluing}
+Let $N$ be a Lipschitz hypersurface which separates $M$ into $U_1,U_2$.
+If $u_j \in BV(U_j)$ and $u \in L^1_l(M)$ is the function such that $u|U_j = u_j$, then $u \in BV(M)$.
+Moreover,
+\begin{equation}
+\label{glued BV norm}
+\int_N |du| ~\vol = \int_N |u_1 - u_2| ~\vol_N.
+\end{equation}
+\end{proposition}
+
+\begin{proposition}[a priori estimates]\label{estimates on good set}
+Let $u, v \in BV(M)$, let $U \Subset M$ have a Lipschitz boundary $N$. Then
+\begin{align}
+|\eta(u, U) - \eta(v, U)| &\leq \int_N |u - v| ~\vol_N, \label{a priori estimate 1}\\
+\eta(u, U) &\leq \int_N |u| ~\vol_N, \label{a priori estimate 2}
+\end{align}
+and if $u$ has least gradient then
+\begin{equation}
+\int_U |du| ~\vol \leq \int_U |dv| + \int_{\partial U} |u - v| ~\vol_N. \label{a priori estimate 3}
+\end{equation}
+\end{proposition}
+
+The exponential pullback $\exp_p^* u$ of a function $u$ of least gradient defined near $p \in M$ need not have least gradient.
+However, in a small ball $B$ around $p$, we will be able to show that $\eta(u, B) \approx |du|_{TV}(B)$ in a sense to be made precise later.
+This observation motivates the following definition.
+
+\begin{definition}
+A sequence $(u_n)$ of functions in $BV(M)$ has \dfn{approximately least gradient} if
+$$\limsup_{n \to \infty} \int_U |du_n| ~\vol \leq \liminf_{n \to \infty} \eta(u_n, U)$$
+uniformly as $U$ ranges over open sets $\Subset M$.
+\end{definition}
+
+To study sequences of approximately least gradient, we need a semicontinuity theorem for the total variation, which in the euclidean case was shown by Miranda \cite[Teorema 3]{Miranda67}.
+
+\begin{definition}
+Let $(u_n)$ be a sequence in $BV_l(M)$ which converges in $L^1_l$ to $u$.
+We say that a Lipschitz hypersurface $N$ \dfn{has no singularities} of $(u_n)$ if:
+\begin{enumerate}
+\item \label{cond1Mir} $\sup_n \int_N |du_n| ~\vol = 0$.
+\item \label{cond2Mir} $(u_n)$ is bounded in $L^1(N, \vol_N)$.
+\item \label{cond3Mir} $\int_N |du| ~\vol = 0$.
+\item \label{cond4Mir} $u_n \to u$ in $L^1(N, \vol_N)$.
+\end{enumerate}
+We say that $N$ \dfn{has no singularities} of $u \in BV_l(M)$ if $N$ has no singularities of the sequence $u_n = u$.
+By Condition $k$ we mean the $k$th bullet in the above list.
+\end{definition}
+
+\begin{lemma}\label{probabilistic method}
+Let $(u_n)$ be a sequence in $BV_l(M)$ which converges in $L^1_l(U)$. Then:
+\begin{enumerate}
+\item \label{probabilistic balls} For every $x \in M$ and $R > 0$ such that $B(x, R) \Subset M$ and almost every $r \in (0, R]$, $\partial B(x, r)$ has no singularities of $(u_n)$.
+\item \label{probabilistic hypersurfaces} For every $U \Subset M$ there exists $U \subseteq V \Subset M$ such that $\partial V$ has no singularities of $(u_n)$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We first prove (\ref{probabilistic balls}).
+Let $r$ be drawn from $[R/2, R]$ uniformly at random; we claim that almost surely, $\partial B(x, r)$ has no singularities of $(u_n)$.
+Let
+$$A = \{s > 0: \int_{\partial B(x, s)} |du| ~\vol > 0\}.$$
+Then
+$$\sum_{s \in A} \int_{\partial B(x, s)} |du| ~\vol \leq \int_{\partial B(x, R)} |du| ~\vol < \infty$$
+since $|du|$ is a Radon measure and $B(x, R) \Subset M$.
+Therefore $A$ is countable,
+%Let $A_n = \{|du_n|_{TV}(N) > 0\}$ and let $A_\infty = \{|du|_{TV}(N) > 0\}$.
+%Then for every $n \in \NN \cup \{\infty\}$, writing $u_\infty = u$,
+%$$\sum_{s \in A_n} |du_n|_{TV}(\partial B(x, s)) \leq |du_n|_{TV}(B(x, R)) < \infty$$
+%since $|du_n|_{TV}$ is a Radon measure and $B(x, R) \Subset M$.
+%Since each of the summands is nonzero by definition of $A_n$, it follows that $A_n$ is countable, and in particular null.
+%Therefore Conditions \ref{cond1Mir} and \ref{cond3Mir} hold almost surely.
+so Condition \ref{cond3Mir} holds almost surely.
+We omit the proof that the other conditions hold almost surely as it is similar.
+
+To prove (\ref{probabilistic hypersurfaces}), let $U \Subset W \Subset M$, and for every $x \in \partial U$, let $R_x \in (0, d(x, \partial W))$.
+Then, by (\ref{probabilistic balls}), for every $x \in \partial U$, there exists $r_x \in (0, R_x)$ such that $\partial B(x, r_x)$ has no singularities of $(u_n)$.
+Let $\mathcal U$ be the open cover of $\overline U$ given by the balls $B(x, r_x)$, as well as $U$ itself.
+Since $\overline U$ is compact, there exists a finite subcover $\mathcal U_0$ of $\mathcal U$.
+Let $V$ be the union of the sets in $\mathcal U_0$.
+Then $\partial V$ is the boundary of a union of finitely many balls $B(x, r_x)$ whose boundaries have have no singularities, and therefore has no singularities.
+\end{proof}
+
+We recall that $BV_l(M)$ is not separable, so it will be useful to have a somewhat weaker topology on $BV_l(M)$, as follows:
+
+\begin{definition}
+A sequence of functions $(u_n)$ in $BV_l(M)$ converges \dfn{in total variation on sets with no singularities} to $u \in BV_l(M)$ if $u_n \to u$ in $L^1_l(M)$ and for every set $A \Subset M$ such that $\partial A$ has no singularities,
+\begin{equation}\label{convergence in TV}
+\lim_{n \to \infty} \int_A |du_n| ~\vol = \int_A |du| ~\vol.
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Miranda stability theorem]\label{Miranda convergence}
+If a sequence of functions $(u_n)$ has approximately least gradient and converges in $L^1_l$, then its limit $u$ has least gradient, and $u_n \to u$ in total variation on sets with no singularities.
+\end{proposition}
+\begin{proof}
+By Lemma \ref{probabilistic method} for every $U$ open $\Subset M$ we can find $U \subseteq V \Subset M$ such that $V$ is open and $\partial V$ has no singularities.
+Now the proof is identical to that of \cite[Teorema 3]{Miranda67}, using Propositions \ref{gluing} and \ref{estimates on good set} whenever the proof of \cite[Teorema 3]{Miranda67} calls for their euclidean counterparts.
+\end{proof}
+
+\begin{corollary}\label{level sets are minimal}
+For every $u$ of least gradient, the superlevel sets $\{u > t\}$ have least perimeter.
+\end{corollary}
+\begin{proof}
+In the proof of \cite[Theorem 1]{BOMBIERI1969}, replace \cite[Theorem 1.6]{Miranda66} with Proposition \ref{Coarea2} and replace \cite[Theorem 3]{Miranda67} with Proposition \ref{Miranda convergence}.
+\end{proof}
+
+\begin{corollary}\label{compactness}
+Let $(u_n)$ be a sequence of indicator functions of approximately least gradient.
+Then there is a subsequence of $(u_n)$ which converges almost everywhere and in total variation on sets with no singularities to the indicator function of a set of least perimeter.
+\end{corollary}
+\begin{proof}
+If $n$ is large enough, then by Proposition \ref{traces}, for every $U \Subset M$,
+$$\int_U |du_n| ~\vol \leq \eta(u_n, U) + 1 \leq |\partial U| + 1$$
+which gives a uniform bound in $BV_l$.
+Since the forgetful map (\ref{Forget}) is compact, a subsequence of $(u_n)$ converges to a function $u$ in $L^1_l$.
+By Proposition \ref{Miranda convergence}, $u$ has least gradient and (\ref{convergence in TV}) holds.
+By taking a further subsequence we can guarantee the convergence pointwise almost everywhere.
+The convergence almost everywhere implies that there is a set $U$ of locally finite perimeter such that $u = 1_U$, which necessarily has least perimeter.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Monotonicity}\label{inequalities}
+Fix $N$, a smooth minimal hypersurface in $M$, and $P \in N$. Then one has
+\begin{equation}\label{classic monotonicity}
+\frac{d}{dr} e^{Ar^2}r^{1 - d} |N \cap B_r| \geq 0
+\end{equation}
+for some $A \in \RR$, where as usual $B_r = B(P, r)$ \cite[\S7]{MarquesXX}.
+This is not quite good enough for our purposes because we need sharper lower bound than $0$ and because we cannot assume that $N$ is smooth.
+However, sharper monotonicity formulae are available on euclidean space \cite[Proposition 5.12]{Giusti77}, and so in this section, we provide a highly streamlined version of the argument of \cite[Chapter 5]{Giusti77}, suitably modified to account for the presence of a nonzero Ricci tensor, which is the source of the constant $A$ in (\ref{classic monotonicity}).
+We begin by considering some general facts about polar coordinates.
+
+\begin{lemma}\label{taylor metric det}
+In normal coordinates $x$ based at $P$, one has
+$$\vol = \left(1 - \frac{R_{\mu\nu}}{6} x^\mu x^\nu - \frac{R_{\mu\nu;\lambda}}{12} x^\mu x^\nu x^\lambda + O(|x|^4)\right) ~\vol^{\mathrm{euc}}$$
+where $R_\bullet$ is $\Ric_P$ and $\vol^{\mathrm{euc}}$ is the euclidean volume form on $T_PM$.
+\end{lemma}
+\begin{proof}
+This follows from \cite[Lemma 3.4]{schoen1994lectures} and the Taylor expansion of $\sqrt \cdot$.
+\end{proof}
+
+\begin{lemma}\label{rescale the sphere form}
+Let $s < r$ and view $\vol_{\partial B_r}$ as a volume form on $\Sph^{d - 1}$.
+Then as $r \to 0$,
+$$\frac{\vol_{\partial B_r}}{\vol_{\partial B_s}}(\Theta) = \frac{r^{d - 1}}{s^{d - 1}} \frac{1 - r^2 \Ric_P(\Theta, \Theta)/6 + O(r^3)}{1 - s^2 \Ric_P(\Theta, \Theta) + O(s^3)}.$$
+\end{lemma}
+\begin{proof}
+Writing $dx$ for the usual euclidean volume form, expanding $\vol$ in polar coordinates and applying Lemma \ref{taylor metric det} gives
+$$\vol_{\partial B_r} = \iota_{\partial r} \vol = (1 - \Ric_P(r\Theta, r\Theta)/6 + O(r^3)) ~\iota_{\partial r} dx.$$
+But $\iota_{\partial r} dx = r^{d - 1} \vol_{\Sph^{d - 1}}(\Theta)$ whence
+\begin{align*}
+\frac{\vol_{\partial B_r}}{\vol_{\partial B_s}}(\Theta) &= \frac{r^{d - 1}}{s^{d - 1}} \frac{1 - r^2 \Ric_P(\Theta, \Theta)/6 + O(r^3)}{1 - s^2 \Ric_P(\Theta, \Theta)/6 +
+O(s^3)} \frac{\vol_{\Sph^{d - 1}}(\Theta)}{\vol_{\Sph^{d - 1}}(\Theta)}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{lemma}\label{GaussLeibniz}
+If $r$ is so small that Gauss' polar coordinates lemma applies to $B_r$, then
+$$\frac{d}{dr} \int_{B_r} |du| ~\vol = \int_{\partial B_r} |du| ~\vol_{\partial B_r}.$$
+\end{lemma}
+\begin{proof}
+Let $\mathbf v_{B_r}$ be the velocity of $B_r$.
+By the Leibniz integral theorem,
+$$\frac{d}{dr} \int_{B_r} |du| ~\vol = \int_{\partial B_r} g(\mathbf v_{B_r}, \normal_{B_r}) |du| ~\vol_{\partial B_r},$$
+but by Gauss' lemma, $\mathbf v_{B_r} = \partial_r = \normal_{B_r}$ and $g(\partial_r, \partial_r) = 1$.
+\end{proof}
+
+\begin{lemma}\label{quasiradial}
+Let $\partial_0$ be a smooth unit-length vector field near $P$. Then for every $\Theta \in \Sph^{d - 1}$,
+\begin{equation}\label{quasiradial claim}
+|1 - |g(\partial_0, \partial_r)(r, \Theta)|| \lesssim r.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We can find smooth functions $f_0, \dots, f_{d - 1}$ such that on $\{r > 0\}$,
+$$\partial_0 = f_0 \partial_r + f_1 \partial_{\theta_1} + \cdots + f_{d - 1} \partial_{\theta_{d - 1}}$$
+where $\Theta = (\theta_1, \dots, \theta_{d - 1})$.
+By Gauss' lemma, $g(\partial_0, \partial_r) = f_0$, but nontrivial linear combinations of the vector fields $\partial_{\theta_i}$ cannot be continuouly extend to $P$.
+Therefore in order for $\partial_0$ to be continuous, $\sum_i f_i \partial_{\theta_i} \to 0$ as $r \to 0$, whence $f_0 \to 1$ since $\partial_0$ has unit length.
+Since $r \mapsto g(\partial_0, \partial_r)(r, \Theta)$ is smooth and tends to $1$ it must convergence at least at a linear speed.
+\end{proof}
+
+\begin{proposition}\label{Monotonicity Formula}
+For every $P \in M$ there exists a continuous function $f$ such that $f(r) = O(r^2)$ as $r \to 0$, and such that for every function $u \geq 0$ of least gradient, every $0 < r_1 < r_2$ small enough, and every smooth unit-length vector field $\partial_0$,
+\begin{align*}
+0
+&\leq \left(r_2^{1 - d} \int_{B_{r_2}} \partial_0u ~\vol - r_1^{1 - d} \int_{B_{r_1}} \partial_0u ~\vol \right)^2\\
+&\leq 2\left[r_2^{1 - d}\left(1 + \log \frac{r_2}{r_1}\right) \int_{B_{r_2}} |du| ~\vol\right] \left[e^{f(r_2)} r_2^{1 - d}\int_{B_{r_2}} |du| ~\vol - e^{f(r_1)} r_1^{1 - d} \int_{B_{r_1}} |du| ~\vol \right].
+\end{align*}
+In particular, for every $r > 0$ small enough,
+\begin{equation}\label{TrueMonotonicity}
+\frac{d}{dr} e^{f(r)} r^{1 - d} \int_{B_r} |du| ~\vol \geq 0.
+\end{equation}
+Finally, $f$ can be taken uniform on compact subsets of $M$.
+\end{proposition}
+\begin{proof}
+To set up the proof, let $A = B_{r_2} \setminus B_{r_1}$ and let $F(r) = r^{1 - d} \int_{B_r} |du| ~\vol$.
+By an approximation argument we may assume that $u$ is $C^1$, and by rescaling $g$ suitably we may assume that Gauss' polar coordinates lemma applies on $B_1$.
+We omit the details of these reductions.
+
+We start the proper proof by integrating by parts:
+\begin{align*}
+\int_{B_r} \partial_0u ~\vol &= \int_{\partial B_r} ug(\partial_0, \partial_r) ~\vol_{\partial B_r} \\
+&= \int_{\partial B_1} u(r, \Theta) g(\partial_0, \partial_r)(r, \Theta) \frac{\vol_{\partial B_r}(\Theta)}{\vol_{\partial B_1}(\Theta)} ~\vol_{\partial B_1}(\Theta)
+\end{align*}
+and hence we may estimate
+\begin{align*}
+|\int_{B_{r_2}} &r_2^{1 - d} \partial_0u ~\vol -\int_{B_{r_1}} r_1^{1 - d} \partial_0u ~\vol|\\
+&\leq \int_{\partial B_1} \left|r_2^{1 - d}u(r_2, \Theta) g(\partial_0, \partial_r)(r_2, \Theta)
+- r_1^{1 - d}u(r_1, \Theta) g(\partial_0, \partial_r)(r_1, \Theta) \right|
+v(\Theta) ~\vol_{\partial B_1}(\Theta) \\
+&\leq 1.5 \int_{\partial B_1} |u(r_2, \Theta) - u(r_1, \Theta)| + |u(r_1, \Theta)|
+\left|1 - \frac{g(\partial_0, \partial_r)(r_2, \Theta) \vol_{\partial B_{r_2}}(\Theta)}{g(\partial_0, \partial_r)(r_1, \Theta) \vol_{\partial B_{r_1}}(\Theta)}\right| ~\vol_{\partial B_1}(\Theta)
+\end{align*}
+for $r_2$ small enough, where
+$$v(\Theta) = \frac{\vol_{\partial B_{r_2}}}{\vol_{\partial B_{r_1}}}(\Theta)$$
+and the estimate
+$$\left|g(\partial_0, \partial_r)(r_1, \Theta) \frac{\vol_{\partial B_{r_1}}(\Theta)}{\vol_{\partial B_1}(\Theta)}\right| \leq 1.5 r_2^{1 - d}$$
+follows from Lemmata \ref{rescale the sphere form} and \ref{quasiradial}, if $r_2$ is chosen so small that the error factor from Lemma \ref{quasiradial} is at most $1.5$.
+
+To control the error term, we further bound
+\begin{align*}
+\int_{\partial B_1} |u(r_1, \Theta)|
+&\left|1 - \frac{g(\partial_0, \partial_r)(r_2, \Theta) \vol_{\partial B_{r_2}}(\Theta)}{g(\partial_0, \partial_r)(r_1, \Theta) \vol_{\partial B_{r_1}}(\Theta)}\right| ~\vol_{\partial B_1}(\Theta) \\
+&\leq ||u(r_1, \cdot)||_{L^\infty} |\partial B_1| \sup_{\Theta \in \Sph^{d - 1}} \left|1 - \frac{g(\partial_0, \partial_r)(r_2, \Theta) \vol_{\partial B_{r_2}}(\Theta)}{g(\partial_0, \partial_r)(r_1, \Theta) \vol_{\partial B_{r_1}}(\Theta)}\right|
+\end{align*}
+and using Lemmata \ref{rescale the sphere form} and \ref{quasiradial}, one can show that
+$$\sup_{\Theta \in \Sph^{d - 1}} \left|1 - \frac{g(\partial_0, \partial_r)(r_2, \Theta) \vol_{\partial B_{r_2}}(\Theta)}{g(\partial_0, \partial_r)(r_1, \Theta) \vol_{\partial B_{r_1}}(\Theta)}\right| \lesssim r_2$$
+so we finally have
+$$
+|\int_{B_{r_2}} r_2^{1 - d}u ~\vol - \int_{B_{r_1}} r_1^{1 - d}u ~\vol|
+\leq O(r_2) + 1.5 \int_{\partial B_1} |u(r_2, \Theta) - u(r_1, \Theta)| ~\vol_{\partial B_1}.$$
+Using a similar argument to the above, one can show that
+$$1.5 \int_{\partial B_1} |u(r_2, \Theta) - u(r_1, \Theta)| ~\vol_{\partial B_1} \leq O(r_2) + 2 \int_{\partial A} r^{1 - d} ug(\partial_r, \normal_{\partial A}) ~\vol_{\partial A}.$$
+
+Since $u \geq 0$,
+$$\int_A \partial_r  r^{1 - d}u ~\vol = (1 - d)\int_A r^{-d}u ~\vol \leq 0$$
+whence integration by parts gives
+$$\int_{\partial A} r^{1 - d} u g(\partial_r, \normal_{\partial A}) ~\vol_{\partial A} \leq \int_A r^{1 - d} \partial_r u ~\vol \leq \int_A r^{1 - d} |\partial_r u| ~\vol.$$
+By the Cauchy-Schwarz inequality,
+\begin{equation}\label{monotonicity CauchySchwarz}
+\left(\int_A r^{1 - d} |\partial_r u| ~\vol \right)^2 \leq \left(\int_A r^{1 - d}|du|~\vol\right)\left(\int_A r^{1 - d}\frac{(\partial_ru)^2}{|du|} ~\vol\right) =: IJ.
+\end{equation}
+To estimate $J$ we fix $r^* \in [r_1, r_2]$ and introduce a competitor $v(r, \Theta) = u(r^*, \Theta)$. Then $\partial_r v = 0$, so
+$$\int_{B_{r^*}} |du| ~\vol \leq \int_{B_{r^*}} |dv| ~\vol = \int_{B_{r^*}} |\partial_\Theta v| ~\vol = \int_0^{r^*} \int_{\partial B_r} |\partial_\Theta v(r, \Theta)| ~\vol_{\partial B_r}(\Theta) ~dr.$$
+By Lemma \ref{rescale the sphere form},
+$$\int_{\partial B_r} |\partial_\Theta v(r, \Theta)| ~\vol_{\partial B_r}(\Theta) \leq \frac{r^{d - 1}}{(r^*)^{d - 1}}(1 + O((r^*)^2)) \int_{\partial B_{r^*}} |\partial_\Theta v(r^*, \Theta)| ~\vol_{\partial B_{r^*}}(\Theta).$$
+But $\partial_\Theta v = \partial_\Theta u$, so for every $r \in [r_1, r_2]$,
+\begin{align*}
+\int_{B_r} |du| ~\vol &\leq \frac{r + O(r^3)}{d - 1} \int_{\partial B_r} |\partial_\Theta u| ~\vol_{\partial B_r}\\
+&= \frac{r + O(r^3)}{d - 1} \int_{\partial B_r} |du| \sqrt{1 - \frac{(\partial_r u)^2}{|du|^2}} ~\vol_{\partial B_r} \\
+&\leq \frac{r + O(r^3)}{d - 1} \int_{\partial B_r} |du| - \frac{1}{2} \frac{(\partial_r u)^2}{|du|} ~\vol_{\partial B_r}.
+\end{align*}
+Therefore
+\begin{align*}
+J &= \int_{r_1}^{r_2} r^{1 - d} \int_{\partial B_r} \frac{(\partial_r u)^2}{|du|} ~\vol \\
+&\leq 2 \int_{r_1}^{r_2} r^{1 - d} \left[\int_{\partial B_r} |du| ~\vol_{\partial B_r} + \frac{d - 1}{r + O(r^3)} \int_{B_r} |du| ~\vol\right] ~dr.
+\end{align*}
+By Lemma \ref{GaussLeibniz},
+\begin{align*}
+F'(r) &= r^{1 - d}\left[\frac{d - 1}{r} \int_{B_r} |du| ~\vol + \int_{\partial B_r} |du| g(\partial_r, \partial_r) ~\vol_{\partial B_r}\right]\\
+&= r^{1 - d}\left[\frac{d - 1}{r + O(r^3)} \int_{B_r} |du| ~\vol + \int_{\partial B_r} |du| ~\vol_{\partial B_r} + O(r^3) \int_{B_r}|du| ~\vol\right].
+\end{align*}
+Moreover, we can use integration by parts to estimate
+$$\int_{r_1}^{r_2} r^2 F(r) ~dr = r_2^2 F(r_2) - r_1^2 F(r_1) + O(r_2^3)(F(r_2) - F(r_1)).$$
+Using the Taylor expansion of $e^x$ we can choose $f(r) = O(r^2)$ so that by the fundamental theorem of calculus,
+\begin{align*}
+J &\leq 2\int_{r_1}^{r_2} F'(r) + O(r^2)F(r) ~\vol ~dr = 2(e^{f(r_2)} F(r_2) - e^{f(r_1)} F(r_1)).
+\end{align*}
+
+We now estimate $I$ using Lemma \ref{GaussLeibniz} and integration by parts, namely
+\begin{align*}
+I &= \int_{r_1}^{r_2} r^{1 - d} \frac{d}{dr} \int_{B_r} |du| ~\vol ~dr \\
+&= F(r_2) - F(r_1) - \int_{r_1}^{r_2} \int_{B_r} |du| ~\vol ~\frac{d}{dr} r^{1 - d} ~dr\\
+&\leq F(r_2) + (d - 1) \int_{r_1}^{r_2} r^{-d} \int_{B_r} |du| ~\vol ~dr
+\end{align*}
+since clearly $F(r_1) \geq 0$.
+The monotonicity formula (\ref{TrueMonotonicity}) follows for $N = \partial^* U$ from (\ref{monotonicity CauchySchwarz}), the estimate on $J$, and the fact that $I \geq 0$.
+So
+$$r^{-d} \int_{B_r} |du| ~\vol = r^{-1} F(r) \leq r^{-1} F(r_2).$$
+This gives us the desired estimate
+\begin{align*}
+I &\leq F(r_2)\left[1 + \int_{r_1}^{r_2} \frac{dr}{r}\right] = F(r_2)\left[1 + \log\frac{r_2}{r_1}\right].
+\end{align*}
+Finally, the local uniformity of $f$ follows easily from the proof thus far and the fact that $g$ and its Ricci tensor are locally bounded.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Dimension of the reduced boundary}
+Our next purpose is to show that the reduced boundary of a set of least perimeter has dimension $d - 1$ in the following sense:
+
+\begin{definition}
+Let $\mu$ be a Radon measure on a metric space $X$, and let $Y$ be the support of $\mu$.
+The \dfn{Ahlfors-David dimension} $\dim \mu$ of $\mu$ is
+$$\dim \mu = \lim_{r \to 0} \frac{\log \mu(B(P, r))}{\log r},$$
+if this limit exists for every $P \in Y$ and is independent of $P$.
+\end{definition}
+
+Equivalently, $\dim \mu = \ell$ iff $\mu(B(P, r)) \sim r^\ell$ as $r \to 0$.
+This notion of dimension is due to \cite[Definition 1.1]{bourgain18} except that we require our estimates to hold at arbitrarily fine scales.
+
+\begin{proposition}\label{doubling dimension}
+Let $U$ be a set of least perimeter. Then
+$$\dim |d1_U|~\vol = d - 1$$
+and for every $P \in M$,
+$$|\partial^* U \cap B(P, r)| \leq |U \cap \partial B(P, r)|.$$
+\end{proposition}
+\begin{proof}
+Fix $P$, and write $B_r = B(P, r)$, $\mu =|d1_U| ~\vol$.
+Since $u = 1_U$ has least gradient, in particular its gradient in $1_{\overline U}$ is less than that of $1_{B_r}$, so
+$$\mu(B_r) \leq |U \cap \partial B_r| \lesssim r^{d - 1}.$$
+Conversely, suppose that $P$ lies in the support $\partial^* U$ of $\mu$, let $\nu = 1_U ~\vol$, and observe that if we set $q = d/(d - 1)$, then by Sobolev embedding\footnote{Sobolev and Poincar\'e inequalities hold for $BV$ functions on $\RR^d$ \cite[\S5.6.1]{evans1991measure},
+and since locally a Riemannian volume form is a perturbation of the euclidean volume form, the inequalities that we use here also hold.}
+$$\nu(B_r)^{1/q} = ||1_{E \cap B_r}||_{L^q} \lesssim \int_M |d1_{E \cap B_r}| ~\vol = |\partial^*(U \cap B_r)|.$$
+The reduced boundary satisfies the ``Leibniz inequality"
+$$\partial^*(U \cap B_r) \subseteq (\partial^* U \cap B_r) \cup (U \cap \partial B_r)$$
+so
+$$\nu(B_r)^{1/q} \leq |\partial^* U \cap B_r| + |U \cap \partial B_r| \leq 2|U \cap \partial B_r| = 2\frac{d}{dr} \nu(B_r).$$
+We make the change of variables $u(r) = \nu(B_r)^{1/q}$, so that we obtain
+$$u(r) \leq 2 \frac{d}{dr} u(r)^q = 2qu(r)^{q - 1}u'(r)$$
+and the initial condition $u(0) = 0$. Thus $u^{2 - q} \leq 2qu'$.
+Since $q > 1$, a separation of variables yields
+$$2qr \leq \int_0^{u(r)} \tilde u^{q - 2}~d\tilde u = \frac{u(r)^{q - 1}}{q - 1}.$$
+Thus
+$$\nu(B_r) \gtrsim r^{q/(q - 1)} = r^d.$$
+Since $\partial^* (M \setminus U) = \partial^* U$, if $\overline{\nu} = |d1_{M \setminus U}| ~\vol$, then we similarly have $\overline{\nu}(B_r) \gtrsim r^d$.
+
+We now fix $r > 0$ and let $[u] = |B_r \cap U|/|B_r|$ be the mean of $u$ on $B_r$. Then by the Poincar\'e inequality,
+\begin{align*}
+\mu(B_r) &= \int_{B_r} |du|~\vol \geq r^{-1} ||u - [u]||_{L^1(B_r)} \\
+&= \frac{1}{r} \left[\int_{B_r \cap U} 1 -[u] ~\vol + \int_{B_r \setminus U} [u] \right] \\
+&= \frac{|B_r||B_r \cap U| - |B_r \cap U|^2 + |B_r \cap U||B_r \setminus U|}{r|B_r|} \\
+&= 2\frac{|B_r \cap U||B_r \setminus U|}{r|B_r|}\\
+&\gtrsim r^{-d-1} \nu(B_r) \overline{\nu}(B_r) \gtrsim r^{2d-d-1} = r^{d - 1}. \qedhere
+\end{align*}
+\end{proof}
+
+\subsection{Blowup of the reduced boundary}
+Now let us study the blowup of $M$ at a point $p$ on the reduced boundary of a set $U$ of least perimeter, giving a generalization of the conjunction of \cite[Theorem 9.3]{Giusti77} and \cite[Theorem 6.2.2]{Simons68}.
+
+\begin{definition}
+For a function $u$ on $M$, $P \in M$ we define the \dfn{tangent rescaling} of $u$ at $P$ to be the net of functions
+$$u_t(v) = u\left(\exp_P(tv)\right)$$
+on $T_PM$, as $t \to 0$.
+\end{definition}
+
+We always view $T_PM$ as carrying the euclidean metric induced by $g$, which defines the notion of approximately least gradient used in the following lemma.
+
+\begin{lemma}\label{almost blowup theorem}
+Suppose that $U$ is a set of least perimeter near $P$, $P \in \partial^* U$, and $u = 1_U$.
+Then the tangent rescaling $(u_t)$ of $u$ has approximately least gradient in every ball $B_{T_PM}(0, r)$.
+\end{lemma}
+\begin{proof}
+We write $|\cdot|'$, $\vol'$ for the notions taken in the tangent space with its euclidean geometry.
+We also write $U_t$ for the set indicated by $u_t$.
+If $V$ is a precompact open subset of $T_PM$, $V_t = \{v \in T_PM: tv \in V\}$, then
+\begin{equation}\label{almost blowup volume form}
+\frac{\exp_P^* \vol}{\vol'} = 1 - \frac{(\Ric_P)_{ij}v^iv^j}{6} + \cdots = 1 + O(t^2)
+\end{equation}
+on $V_t$ and we have the scale-invariance
+\begin{equation}\label{almost blowup scale invariance}
+|\partial^* U_t \cap V|' = t^{1 - d}|\partial^* U_1 \cap V_{1/t}|'.
+\end{equation}
+
+From (\ref{almost blowup scale invariance}, \ref{almost blowup volume form}),
+$$t^{d - 1} |\partial^* U_t \cap V|' = |\partial^* U_1 \cap V_{1/t}|' \leq (1 + O(t^2)) |\partial^* U \cap \exp_P(V_{1/t})|.$$
+For every $w \in BV_c(V)$, the least-gradient nature and (\ref{almost blowup volume form}) of $u$ gives
+$$|\partial^* U \cap \exp_P(V_{1/t})| \leq \int_{V_{1/t}} |d(u + (\exp_P)_* w_{1/t})| ~\vol \leq (1 + O(t^2))\int_{V_{1/t}} |d(u_1 + w_{1/t})| ~\vol'.$$
+Therefore by (\ref{almost blowup scale invariance}, \ref{almost blowup volume form}),
+$$|\partial^* U_t \cap V|' \leq (t^{1 - d} + O(t^{3 - d})) \int_{V_{1/t}} |d(u_1 + w_{1/t})| \vol' = (1 + O(t^2)) \int_V |d(u_t + w)| ~\vol'.$$
+Since $V,w$ were arbitrary, we conclude that $(u_t)$ has approximately least gradient.
+\end{proof}
+
+\begin{proposition}\label{blowup theorem}
+Suppose that $U$ is an open set with least perimeter in $B(P, r)$, $P \in \partial^* U$, and $u = 1_U$.
+Furthermore, suppose that $d \leq 7$.
+Then the tangent rescaling of $u$ converges along a subsequence, in $L^1_l$ and in total variation on sets with no singularities, to the indicator function of a hyperplane $T_P \partial^* U$ in $T_PM$ such that $0 \in T_P \partial^* U$.
+\end{proposition}
+\begin{proof}
+By Lemma \ref{almost blowup theorem} and Corollary \ref{compactness}, there exists a set $C$ of least perimeter in $T_PM$, such that the tangent rescaling converges to $1_C$.
+But $T_PM$ is isometric to $\RR^d$, $d \leq 7$, so by the Bernstein--Fleming theorem \cite[Theorem 17.3]{Giusti77} \cite[\S5]{Fleming62}, $\partial C$ is a hyperplane.
+The fact that $0 \in \partial C$ follows from the fact that $P \in \partial^* U$.
+\end{proof}
+
+It does \emph{not} follow from Proposition \ref{blowup theorem} that the tangent space $T_P \partial^* U$ to $\partial^* U$ define a continuous vector bundle, or even that they are uniquely defined. To accomplish that, we will need Theorem \ref{main lma}.
+By Theorem \ref{minimal cones in R8}, the hypothesis that $d \leq 7$ is sharp here.

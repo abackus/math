@@ -1,0 +1,335 @@
+\section{Riemannian measure theory}\label{RiemMeasureThy}
+\subsection{Notation and conventions}
+\begin{notation}[presheaves]
+If $F$ is a presheaf of function spaces, we write $u \in F_l(U)$ to mean that for every $V \Subset U$, $u \in F(V)$.
+We write $u \in F_c(U)$ to mean that $u \in F(U)$ and $\supp u \Subset U$.
+\end{notation}
+
+\begin{notation}[volume forms]
+We reserve the letter $d$ for dimension or exterior differentiation, and so to avoid awkwardness such as $\int |du| dV$ we write $\vol$ for the Riemannian volume form.
+If $N$ is a closed submanifold we write $\vol_N$ to indicate the pullback of $\vol$ along the inclusion map $M \to N$.
+\end{notation}
+
+\begin{notation}[vector bundles]
+Let $E$ be a vector bundle, which we will always assume is normed, with dual $E'$.
+If $u,v$ are sections of $E',E$ respectively, we write $(u, v)$ for their fiberwise pairing, which is a function $M \to \RR$.
+We write $\langle u, v\rangle$ or $\int_M (u, v) ~\vol$, for their $L^2$-duality pairing, which is a real number.
+If $u$ is a section of $E$, we write $u \prec U$ to mean that $||u||_{L^\infty} \lesssim 1$ and $\supp u \Subset U$.
+\end{notation}
+
+\begin{notation}[Einstein summation]\label{EinsteinNotation}
+We will have occasion to use the Einstein summation convention on a manifold which, in the smooth category, can be expressed as a product $H \times I$ where $H$ is $d-1$-dimensional and $I$ is $1$-dimensional.
+Latin indices range over $1, \dots, d - 1$ and index coordinate directions on $H$; Greek indices range over $0, \dots, d - 1$, and the $0$th coordinate is the coordinate on $I$.
+However, we stress that the metric on $H \times I$ is Riemannian rather than Lorentzian.
+\end{notation}
+
+\begin{definition}
+Let $u$ be a smooth section.
+Then $u$ is \dfn{as smooth as possible} if either $u$ is analytic or $g$ is not analytic.
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The Bochner integral}
+Let $F$ be a separable Fr\'echet space over $\CC$, and $(\Omega, P)$ a measure space.
+We can then define the \dfn{Bochner integral} of a $P$-measurable function $f: \Omega \to F$, which we write as $\int_\Omega f ~dP \in F$.
+See \cite{Rieffel70}, \cite{MO47721}, and \cite[Chapter V]{yosida2012functional}.
+We recall a few facts that we will need:
+
+\begin{theorem}[Pettis]
+Let $f: \Omega \to F$ be any function.
+Then $f$ is $P$-measurable iff for every $X \in F'$, $\omega \mapsto \langle f(\omega), X\rangle$ is $P$-measurable.
+In this case,
+$$\left\langle \int_\Omega f ~dP, X\right\rangle = \int_\Omega \langle f(\omega), X\rangle ~dP(\omega).$$
+If $F = \CC^r$, then the Bochner integral is just the componentwise Lebesgue integral.
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Bundle-valued Radon measures}
+Let $F \to M$ be a normed vector bundle of rank $r$.
+We equip the space $C(K, F)$ of continuous sections of $F$ on a compact set $K$ with its supremum norm.
+The Banach spaces $C(K, F)$ form an inverse system with respect to restriction and therefore define the topological vector space
+$$C_0(M, F) = \varprojlim C(K, F).$$
+
+According to the Riesz-Markov theorem, the space of $\CC^r$-valued Radon measures on $M$ is canonically identified with $C_0(M, (\CC^r)')'$, thus we define:
+
+\begin{definition}
+The topological dual space $\mathcal R(M, F) = C_0(M, F')'$ is the space of \dfn{$F$-valued Radon measures} on $M$.
+\end{definition}
+
+If we write $\mathcal R(U, F)$ to mean $\mathcal R(U, F|U)$, we equip $\mathcal R(U, F)$ with the weak topology of measures.
+Then $\mathcal R(U, F)$ is a separable Fr\'echet space, with seminorms $|\langle \cdot, f_j\rangle|$ where $(f_j)$ is a countable basis for a dense subspace of $C_0(U, F)$.
+Thus $\mathcal R(\cdot, F)$ is a sheaf of separable Fr\'echet spaces.
+
+\begin{definition}
+If $\omega \in \mathcal R(M, F)$ we define the \dfn{total variation} $|\omega|$ to be the positive Radon measure such that on every open set $U$,
+$$|\omega|(U) = \sup_{X \prec U} \langle \omega, X\rangle,$$
+where $X$ ranges over $C_0(M, F')$.
+\end{definition}
+
+Since $\RR_+$ acts on $F$ by scalar multiplication, we can define the \dfn{sphere bundle} $SF = (F \setminus 0)/\RR_+$.
+Since $F$ has a norm, $SF$ is naturally identified with the bundle of elements of $F$ with length $1$.
+
+\begin{proposition}[Riesz-Markov representation]\label{HanhJordan}
+Let $\omega$ be a $F$-valued Radon measure and let $\mu = |\omega|$.
+Then there exists a $\mu$-measurable section $f$ of $SF$ such that for every section $X \in C_0(M, F', \mu)$,
+\begin{equation}\label{RNy formula}
+\langle \omega, X\rangle = \int_M (f, X) ~d\mu.
+\end{equation}
+Furthermore, $f$ is unique up to a $\mu$-null set, and does not depend on the norm of $F$.
+\end{proposition}
+\begin{proof}
+Fix an open cover $(U_i)$ of $M$ by charts which trivialize $F$, so that $U_i$ is precompact in $M$.
+Let $(g_{ij})$ be the transition functions and $(g_{ij}')$ the induced transition functions for the dual bundle $F'$.
+Then can view $\omega_i = \omega|U_i$ as an element of $C(U_i, (\CC^r)')'$, by the precompactness of $U_i$.
+Hence by the Riesz-Markov theorem \cite[Theorem 4.14]{simon1983GMT}, there exists a $\mu$-measurable section $f_i$ of $SF$ for which (\ref{RNy formula}) holds for $\omega_i$, provided that $X \in C(U_i, (\CC^r)')$.
+
+We now show that the $f_i$ are restrictions of a global section $f$, thus we must show $f_j = g_{ij} \circ f_i$ on $\CC^r$.
+To this end, fix $X \in C_0(M, F)$ which is supported in $U_i \cap U_j$ and write $X_i \in C(U_i, (\CC^r)')$ for the trivialization of $X$ with respect to $U_i$.
+Then $X_j = g_{ij}' \circ X_i$, and
+\begin{align*}
+\int_E (f_i, X_i) ~d\mu &= \langle \omega_i, X_i\rangle = \langle \omega_j, X_j\rangle = \int_E (f_j, X_j) ~d\mu = \int_E (f_j, g_{ij}' \circ X_i) ~d\mu.
+\end{align*}
+
+By Urysohn's lemma, $C_c(U_i \cap U_j, (\CC^r)', \mu)$ separates points in $L^1(U_i \cap U_j, \CC^r, \mu)$.
+Therefore, since $X$ was arbitrary, $f_i = g_{ji} \circ f_j$; thus we obtain a unique global section $f$ of $SF$.
+
+Finally, if we change the norm of $F$, replacing $|\cdot|$ with $|\cdot|'$, then we obtain a smooth function $h: F \to \RR_+$ so that if $v \in F_x$, then $|v|' = h(x, v)|v|$.
+The change of norm gives us a new section $f'$ such that $f' = f/h(\cdot, f'(\cdot))$.
+Thus $f'$ defines the same section of $SF$ as $f$.
+\end{proof}
+
+At this stage we have only defined $f$ as a $\mu$-equivalence class of sections of $SF$, so we now use the Lebesgue differentiation theorem to choose the ``correct" representative.
+We state the differentiation theorem in a somewhat strange way, to ensure that the representative chosen is metric-independent.
+
+\begin{definition}
+A \dfn{Besicovitch cover} $\mathcal U$ of a metric space $X$ is a set of open balls, so that every $x \in X$ is the center of an element of $\mathcal U$.
+The \dfn{Besicovitch number} $N \in \NN$ of $X$ is the best constant such that for every $x \in U$ and Besicovitch cover $\mathcal U$ of $B(x, 1/N)$, there exist $\mathcal U_1, \dots \mathcal U_N \subset \mathcal U$ such that $\bigcup_{n=1}^N \mathcal U_n$ is an open cover of $B(x, 1/N)$ and $\mathcal U_n$ is disjoint.
+\end{definition}
+
+It follows from the theory of \cite[\S2.8]{federer2014geometric} that for every Riemannian metric $g$, the Besicovitch number of $(M, g)$ is finite; \cite{Shi91} motivates why we restrict to small balls $B(x, 1/N)$.
+
+For each $x \in M$, let $\mathcal A(x)$ denote the set of all pairs $(g, B, \varphi)$ where:
+\begin{enumerate}
+\item $g$ is a Riemannian metric on $M$,
+\item $B$ is an open ball centered at $x$ with respect to $g$, and
+\item $\varphi$ is a trivialization of $F$ over $B$.
+\end{enumerate}
+Then $\mathcal A(x)$ is a directed system, where the order is given by reverse inclusion of balls.
+Given $(g, B, \varphi) \in \mathcal A(x)$, we obtain a $\mu$-measurable function $f_\varphi: B \to \CC^r$ obtained by trivializing the section $f$.
+We define the average
+\begin{equation}\label{average in a vector bundle}
+f(g, B, \varphi) = \varphi^{-1}\left(\frac{1}{\mu(B)} \int_B f_\varphi ~d\mu\right),
+\end{equation}
+which is a point in $F_x$.
+
+\begin{proposition}[Lebesgue differentiation theorem]\label{LebDiff}
+Let $\mu$ be a Radon measure on $M$, let $f \in L^1_l(M, SF, \mu)$, and let
+$$f(x) = \lim_{(g, B, \varphi) \in \mathcal A(x)} f(g, B, \varphi).$$
+Then the limit defining $f(x)$ converges for $\mu$-almost every $x \in M$ to a point in the sphere $SF_x$.
+\end{proposition}
+If $f(x)$ exists and is $\in SF_x$, we call $x$ a \dfn{Lebesgue point} of the section $f$.
+\begin{proof}
+This is obvious if $f$ has a representative in $C_c(M, SF)$; besides, by a partition of unity argument, we may assume that $\mu$ has compact support.
+We can then select $(f_n)$ in $C_c(M, SF)$ converging in $L^1(M, SF, \mu)$ and almost everywhere to $f$.
+Setting $h_n = |f_n - f|$, we can define the average
+$$h_n(g, B) = \frac{1}{\mu(B)} \int_B h_n ~d\mu,$$
+which converges to $0$ in $L^1(M, \mu)$.
+
+Fix $N \in \NN$ and let $\mathcal B_N$ be the set of Riemannian metrics with Besicovitch number $\leq N$.
+This makes sense if we restrict to a neighborhood of the compact support of $\mu$.
+For each metric $g \in \mathcal B_N$, we have the Hardy-Littlewood inequality \cite[Lemma 4.1.1a]{Ledrappier85}
+\begin{equation}\label{HardyLittlewood}
+||\sup_{r \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} \leq N ||h_n||_{L^1(M, \mu)}.
+\end{equation}
+By (\ref{HardyLittlewood}) and the convergence $h_n \to 0$ in $L^1$,
+$$\lim_{n \to \infty} ||\sup_{0 \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} = 0$$
+uniformly in $g \in \mathcal B_N$.
+Therefore we may pass to a subsequence along which, for $\mu$-almost every $x$,
+$$\lim_{n \to \infty} \sup_{(g, r) \in \mathcal B_N \times (0, 1/N)} h_n(g, B_g(x, r)) = 0.$$
+By the triangle inequality, if
+$$\mathcal A_N(x) = \{(g, B, \varphi) \in \mathcal A(x): g \in \mathcal B_N\},$$
+then (after passing to a subsequence again)
+$$\lim_{n \to \infty} \sup_{(g, B, \varphi) \in \mathcal A_N(x)} |f_n(g, B_g(x, r), \varphi) - f(g, B_g(x, r), \varphi)| = 0.$$
+But $f_n(g, B, \varphi) \to f(x)$ everywhere, $f(x) \in SF_x$, and $SF_x$ is closed, so there exists a $\mu$-null set $Z_N$ such that outside of $Z_N$,
+$$\lim_{(g, B, \varphi) \in \mathcal A_N(x)} f(g, B, \varphi) \in SF_x.$$
+Taking $Z = \bigcup_{N \in \NN} Z_N$, we see that $Z$ is $\mu$-null, which was to be shown.
+\end{proof}
+
+\subsection{Differentiation and boundary}
+In this section we fix a Riemannian metric.
+
+\begin{definition}
+A function in $L^1(M)$ has \dfn{bounded variation} if its distributional derivative is a $T'M$-valued Radon measure of finite total variation.
+We write $BV$ for the presheaf of functions of bounded variation.
+An open set has \dfn{finite perimeter} if its indicator function has bounded variation.
+\end{definition}
+
+\begin{notation}
+If $u$ is a function of locally bounded variation we write $du ~\vol$ for its derivative.
+\end{notation}
+
+Sequences $(u_n)$ in $BV_l(M)$ with $u_n \to u$ in $L^1_l(M)$ satisfy the lower semicontinuity property
+\begin{equation}
+\label{RieszMarkovDistr}
+\int_M |du| ~\vol \leq \liminf_{n \to \infty} \int_M |du_n| ~\vol.
+\end{equation}
+which follows by testing against smooth functions, and the forgetful map
+\begin{equation}\label{Forget}
+BV_l(M) \to L^1_l(M)
+\end{equation}
+is compact. We refer to \cite[Chapter 1]{Giusti77} for a review of the space $BV_l(M)$.
+Our next result can be deduced by applying a partition of unity argument and then copying the proof of \cite[Teorema 1]{Miranda67} verbatim:
+
+\begin{proposition}[trace theorem]\label{traces}
+Let $U$ be an open set such that $N = \partial U$ is a Lipschitz hypersurface.
+For every $u \in BV_l(M)$ there exists a trace $v \in L^1_l(N)$ such that for every $X \in C_c(M, TM)$,
+\begin{equation}\label{Miranda IBP}
+\int_U (du, X) ~\vol + \int_U u ~\mathcal L_X\vol = \int_N vg(X, \normal_N) ~\vol_N.
+\end{equation}
+Moreover, $v$ is determined by the germ of $u$ at $\partial U$.
+If $u$ is an indicator function then so is $v$.
+\end{proposition}
+
+Let $U$ be a set of locally finite perimeter.
+The notion of reduced boundary to $U$ was first introduced in \cite{deGiorgi55}; see \cite{Battista_2021} for an equivalent definition.
+To construct it, let $\omega = d1_U ~\vol$, which by Proposition \ref{HanhJordan} can be expressed as $\omega = \normal \mu$, where $\normal$ is a section of $ST'M$ which is independent of $g$.
+
+\begin{definition}
+Let $U,\normal$ be as above.
+The \dfn{reduced boundary} $\partial^* U$ of a set $U$ of locally finite perimeter is the set of Lebesgue points of $\normal$.
+The \dfn{conormal $1$-form} to $\partial^* U$ is $\normal$.
+\end{definition}
+
+\begin{proposition}\label{metric-independence theorem}
+Let $U$ be a set of locally finite perimeter and let $\normal$ be its conormal $1$-form.
+Then $\normal$ and $\partial^* U$ do not depend on the metric.
+\end{proposition}
+\begin{proof}
+Immediate from the fact that Propositions \ref{HanhJordan} and \ref{LebDiff} did not assume that $M$ was a Riemannian manifold.
+\end{proof}
+
+\begin{proposition}\label{locality of Caccioppoli}
+Let $U$ be a set of locally finite perimeter with conormal $1$-form $\normal$.
+Then:
+\begin{enumerate}
+\item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is rectifiable with respect to $d-1$-dimensional Hausdorff measure.
+\item $\partial^* U$ is dense in the measure-theoretic boundary $\partial U$.
+\item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Immediate from Proposition \ref{metric-independence theorem} and well-known facts about the euclidean case \cite[Chapters 2-4]{Giusti77} \cite{deGiorgi55}.
+\end{proof}
+
+\begin{notation}
+We write $|\partial^* U|$ for $\int_M |d1_U| ~\vol$.
+This does not collide with the notation $|U|$ for the volume of $U$, since $U$ has Hausdorff dimension $d$.
+\end{notation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The coarea formula} \label{coarea section}
+Throughout this section we consider the superlevel sets $E_y = \{u > y\}$ of a function $u \in BV_l(M)$, and the resulting $T'M$-valued Radon measures
+$$\omega(y) = d1_{E_y} ~\vol.$$
+Let $\mu = |du| ~\vol$.
+
+We first observe that for every $X \in \mathcal D(M, TM)$,
+$$\langle \omega(y), X\rangle = -\int_{E_y} \mathcal L_X\vol$$
+is measurable in $y$, since $E_y$ is monotone in $y$.
+So by Pettis' theorem, $\omega$ is measurable in $y$ with respect to the weak topology of measures.
+
+\begin{lemma}[coarea formula for measures]\label{Coarea1}
+One has
+$$du ~\vol = \int_{-\infty}^\infty \omega(y) ~dy.$$
+\end{lemma}
+\begin{proof}
+Fix $X \in C_c(M, TM)$. We may assume that $u \geq 0$, and we must show
+\begin{equation}
+\label{gradient is integral of fibers}
+\int_M (du, X) ~\vol = \int_{-\infty}^\infty \langle \omega(y), X\rangle ~dy.
+\end{equation}
+Since $u \geq 0$,
+\begin{align*}
+\int_M (du, X) ~\vol &= -\int_M u~\mathcal L_X\vol = -\int_M \int_0^{u(x)} dy ~\mathcal L_X\vol\\
+&= -\int_0^\infty \int_{E_y} ~\mathcal L_X\vol ~dy = \int_0^\infty \langle \omega(y), X\rangle ~dy.
+\end{align*}
+by Fubini's theorem.
+If $y < 0$ then $1_{E_y} = 1$ so $\omega(y) = 0$, so we conclude (\ref{gradient is integral of fibers}).
+\end{proof}
+
+Let $p: L \to M$ be the trivial line bundle with its induced metric $h$, and let $\eta$ be the volume form induced by $h$.
+If $W$ is a vector field on $L$, we will write $W_1$ for the projection of $W$ onto $M$ and $W_2$ for its projection onto $\CC$.
+Then Cartan's magic formula implies that if $W_2$ is constant, then
+\begin{equation}
+\label{Lie derivative computation}
+\mathcal L_W\eta = \mathcal L_W\vol \wedge dy.
+\end{equation}
+
+\begin{lemma}\label{coarea converse}
+Suppose that $W \in \mathcal D(L, TL)$ depends on a parameter $n \in \NN$, such that $W_2 = 0$ and for every $y \in \RR$, $X = W_1(\cdot, y)$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
+Then
+$$\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \leq \mu(U).$$
+\end{lemma}
+\begin{proof}
+Let
+$$E = \{(x, y) \in L: x \in E_y\}$$
+be the undergraph of $u$.
+By Fubini's theorem and (\ref{Lie derivative computation}),
+\begin{align*}
+\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy &= -\int_{-\infty}^\infty \int_{E_y} \mathcal L_W\vol ~dy = -\iint_E ~\mathcal L_W\eta = \int_M (d1_E, W) ~\vol.
+\end{align*}
+
+Let $(u_m)$ be a mollification of $u$, so that $u_m \to u$ in the weak topology of distributions.
+Then if $\chi$ is a cutoff, $\langle u_m, \chi\rangle \to \langle u, \chi\rangle$; taking a sequence of $\chi$ which increase to the indicator function of a compact set $K$, we conclude that $u_m \to u$ in $L^1(K)$, and hence $u_m \to u$ in $L^1_l$.
+
+Let $E^{(m)}$ be the undergraph of $u_m$, and $E^{(m)}_y = \{u_m > y\}$.
+Then for every test function $v$,
+\begin{align*}
+\langle 1_{E^{(m)}} - 1_E, v\rangle &= \int_{E^{(m)} \Delta E} v ~\vol \leq |(E^{(m)} \Delta E) \cap (\supp v \times \RR)| \cdot ||v||_{L^\infty}\\
+&\leq ||v||_{L^\infty} \int_{\supp v} |u_m - u| ~\vol \to 0
+\end{align*}
+so $1_{E^{(m)}} \to 1_E$ in the weak topology of distributions.
+Therefore
+$$\lim_{m \to \infty} \int_M (d1_{E^{(m)}}, W) ~\vol = \int_M (d1_E, W) ~\vol.$$
+
+Since $u_m$ is smooth, its graph $F_m = \partial E^{(m)}$ is a smooth manifold.
+Let $\nu_m$ be the upwards unit normal field of $F_m$ and let $\vol_m$ be the volume form on $F_m$ induced by $\eta$.
+Then
+$$\langle d 1_{E^{(m)}}, W\rangle = -\iint_{E^{(m)}} \mathcal L_W\eta = -\int_{F_m} h(\nu_n, W) ~\vol_m.$$
+Let $q_m = p|F_m$ and $Y_m$ be the vector field $(Y_m)_1 = -d u_m$, $(Y_m)_2 = 1$.
+Since $F_m$ is a graph, $q_m: F_m \to M$ is a diffeomorphism, $(q_m)_*\nu_m = Y_m/|Y_m|$, and
+$$(q_m)_* \vol_m = |Y_m| ~\vol.$$
+Therefore
+$$\int_{F_m} h(\nu_n, W) ~\vol_m = \int_M h(Y_m, W) ~\vol = \int_M g(d u_m, W_1) ~\vol = \int_M (d u_m, W_1) ~\vol.$$
+Thus
+\begin{align*}
+|\langle d 1_E, W\rangle| &= \lim_{m \to \infty} |\langle d u_m, W_1\rangle| \leq \mu(U). \qedhere
+\end{align*}
+\end{proof}
+
+\begin{proposition}[coarea formula for $BV_l$ functions]\label{Coarea2}
+Let $u \in BV(M)$, let $E_y = \{u > y\}$, and let $\omega(y) = d1_{E_y} ~\vol$.
+Then, if $\mu$ is the total variation of $du ~\vol$,
+$$\mu = \int_{-\infty}^\infty |\omega(y)| ~dy.$$
+\end{proposition}
+\begin{proof}
+By Lemma \ref{Coarea1} and the triangle inequality,
+$$\mu \leq \int_{-\infty}^\infty |\omega(y)| ~dy.$$
+So we just need to prove the converse.
+
+Let $U \Subset M$.
+Suppose that for every $y \in \RR$, $X = X^{(n)}_y$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
+Since $\omega$ with respect to the weak topology of measures, for every $n$, $X^{(n)}_y(x)$ can be chosen to be measurable in $(x, y)$; indeed, we can take $X^{(n)}_y$ to be a smooth approximation to the Radon measure $d 1_{E_y}/|d 1_{E_y}|_{TV}$ in the weak topology of distributions, which is a product of the measurable functions $\omega$ and $y \mapsto 1/|\omega(y)|$.
+
+By an approximation argument, we can find $W^{(n)} \in C_c(L, TL)$ such that $W^{(n)}_2 = 0$ and for every $y \in \RR$, $X = W^{(n)}_1(\cdot, y)$ is a maximizing sequence for $\langle d 1_{E_y}, X\rangle$ subject to $X \prec U$.
+Let us now suppress the $n$ and write $W(y) = W^{(n)}(\cdot, y)$.
+
+By Lemma \ref{coarea converse}, since $W$ has compact support, the integrand $\langle d 1_{E_y}, W(y)\rangle$ is uniformly bounded in $y$.
+Therefore, by Fatou's lemma,
+\begin{align*}
+\int_{-\infty}^\infty |\omega(y)| ~dy &= \int_{-\infty}^\infty \lim_{n \to \infty} \langle \omega(y), W(y)\rangle ~dy \leq \liminf_{n \to \infty} \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \\
+&\leq \mu(U). \qedhere
+\end{align*}
+\end{proof}
