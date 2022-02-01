@@ -75,7 +75,10 @@ We define an action
     \Phi: \Orth(\RR^d) \to \Iso(\Hyp^d)
 \end{equation}
 of the orthogonal group $\Orth(\RR^d)$, as well as the representation
-$$A^* u(P) = u(\Phi(A)(P))$$
+\begin{align*}
+\Orth(\RR^d) &\to \GL(BV_l(\RR^d))\\
+A^* u(P) &:= u(\Phi(A)(P))
+\end{align*}
 of $\Orth(\RR^d)$ on $BV_l(\RR^d)$, as follows.
 Recall that the hyperbolic metric in the ball model $\DD^d$ is radial, so the natural action of the orthogonal group $\Orth(\RR^d)$ on $\DD^d$ is by isometry, and if we use the Cayley transform to identify the origin of $\DD^d$ with $O$, then we obtain a faithful action (\ref{hyperbolic rotation}) whose orbits are the spheres $\partial B_r$ centered on $O$.
 \end{notation}
@@ -96,7 +99,7 @@ The claim follows.
 \end{proof}
 
 \subsection{Excess: Comparison to Plateau energy}
-Our next task is to formulate and prove Lemma \ref{excess vs plateau energy}, which relates the excess of $1_U$ to the extrinsic geometry of $\partial U$\footnote{For an euclidean analogue, see \cite[TODO]{Miranda66}}.
+Our next task is to relate the excess of $1_U$ to the extrinsic geometry of $\partial U$\footnote{For an euclidean analogue, see \cite[TODO]{Miranda66}}.
 To do this we will use the machinery of Appendices \ref{coarea section} and \ref{crossproducts} and the following lemma, which is an analogue of \cite[Theorem 4.8]{Giusti77} and allows us to represent $\partial U$ as a graph:
 
 \begin{lemma}\label{hopfKilling}
@@ -243,7 +246,7 @@ Moreover, the mean-value property of $dh$ implies that for every $1$-form $\psi$
 
 We are now ready to complete the first step of the proof of the de Giorgi lemma, analogous to \cite[Teorema 4.3]{Miranda66}.
 On first reading, the reader may take $c = 10^{-3}$, $O(c) = 10^{-1}$ and $n^* = 10$; in fact, $c$ will later be chosen to be a dimensional constant.
-Roughly speaking, one should think of $\beta$ as a much smaller parameter than $\kappa$, which in turn is much smaller than $c$ or $2^{-n^*}$.
+Roughly speaking, one should think of $\beta$ as comparable to $2^{-(n - n^*)}$, and $\kappa$ as the ``error incurred by mollification".
 
 \begin{lemma}\label{DGL1}
 For every $c > 0$ there exists a scale $n^* \in \ZZ$ with the following property:
@@ -255,7 +258,7 @@ Let $\omega \in C^1(\Omega)$, suppose that $\kappa, \beta \in (0, 1)$ and $n \ge
 \int_{\tilde B_{2^{-n}}} \Lagrange(d\omega) &\leq \eta(\{(x, y, z) \in \Hyp^d: z < \omega(x, y)\}, 2^{-n}) + \beta \kappa. \label{DGL1 3}
 \end{align}
 Then
-$$\int_{\tilde B_{2^{-(n + 1)}}}\Lagrange(d\omega) - \Lagrange(A_{n + 1}) \leq (1 + O(c)) 2^{-(d + 1)} \beta + O(\beta \sqrt \kappa)$$
+$$\int_{\tilde B_{2^{-(n + 1)}}}\Lagrange(d\omega) - \Lagrange(A_{n + 1} d\omega) \leq (1 + O(c)) 2^{-(d + 1)} \beta + O(\beta \sqrt \kappa)$$
 where all constants only depend on $d$.
 \end{lemma}
 \begin{proof}
@@ -326,22 +329,76 @@ If we set $\varepsilon = \sqrt \kappa$ then it follows that
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{de Giorgi lemma: Case \texorpdfstring{$C^1$}{C1}}
-TODO: exposit and setup
+\subsection{de Giorgi lemma: \texorpdfstring{$C^1$}{C1} and general cases}
+The next step is the $C^1$ case, which is analogous to \cite[Teorema 4.4]{Miranda66}.
 
-\begin{lemma}\label{DGL2 1}
+\begin{lemma}[de Giorgi lemma on $\Hyp^d$, $C^1$ case]\label{DGL2}
 For every $c > 0$ there exists a scale $n^* \in \ZZ$ with the following property:
 
-Let $N$ be a $C^1$ hypersurface in $B_{2^{-n^*}}$ which bounds the set $\{u = 1\} = \supp u$, $n \geq n^*$, with unit normal field $\normal^\sharp$.
-If
+Let $N$ be a $C^1$ hypersurface in $B_{2^{-n}}$, $n \geq n^*$, with unit normal field $\normal^\sharp$, such that $N$ bounds an open set $U$.
+If $\kappa \in (0, 1), \alpha \in \RR_+$ are parameters such that
 \begin{align}
-\Exc_n(u) &\leq \beta, \label{DGL2 1}\\
-|N \cap B_{2^{-n}}| &\leq \eta(\supp u, B_{2^{-n}}) + \beta \kappa, \label{DGL2 2}\\
-||\normal^\sharp - \partial_z||_{L^\infty(B_{2^{-n}})} \leq \kappa^2, \label{DGL2 3}
+\Exc_n(U) &\leq \alpha, \label{DGL2 1}\\
+|N \cap B_{2^{-n}}| &\leq \eta(U, B_{2^{-n}}) + 2^{n(1 - d)}\alpha \kappa, \label{DGL2 2}\\
+||\normal^\sharp - x\partial_z||_{L^\infty(N \cap B_{2^{-n}})} &\leq \kappa^2, \label{DGL2 3}
 \end{align}
 then
-$$\Exc_{n + 1}(u) \leq \frac{1 + O(c)}{2^{d + 1}} \beta + O(\beta \sqrt \kappa).$$
+$$\Exc_{n + 1}(U) \leq \frac{1 + O(c)}{2} \alpha + O(\alpha \sqrt \kappa) + O(4^{-n}).$$
 \end{lemma}
+\begin{proof}
+From Lemma \ref{hopfKilling} and (\ref{DGL2 3}), there exists $n_1 \in \ZZ$ and a function $\omega \in C^1(\RR_+ \times \RR^{d - 2})$ satisfying the derivative bound (\ref{DGL1 1}) for any $n \geq n_1$
+and such that the graph of $\omega$ over $\Pi(B_{2^{-n_1}})$ is $N \cap A_1$.
+Let $\varepsilon > 0$; then we can find a scale $n_2 \geq n_1$ such that if $n \geq n_2$ then
+$$\Pi(B_{(1 - \varepsilon) 2^{-(n+1)}}) \subseteq \tilde B_{2^{-(n+1)}} \text{ and } \tilde B_{2^{-n}} \subseteq \Pi(B_{(1 + \varepsilon) 2^{-n}}).$$
+Up to a multiplicative loss of $1 + c$, all quantities defined for $(1 - \varepsilon)2^{-(n + 1)}$ can be replaced with $2^{-(n + 1)}$; similarly for $2^{-n}$ and $(1 + \varepsilon) 2^{-n}$ (TODO: Justify this) for $\varepsilon$ chosen small enough depending on $c$.
+In order to apply Lemma \ref{DGL1} we apply Lemma \ref{excess vs plateau energy} and (\ref{DGL2 1}) to obtain
+$$\int_{\tilde B_{2^{-n}}} \Lagrange(d\omega) - \Lagrange(A_n d\omega) \leq (1 + c)2^{n(1 - d)}\alpha.$$
+Similarly from (\ref{Lagrangian formula}, \ref{DGL2 2}), we obtain
+$$\int_{\tilde B_{2^{-n}}} \Lagrange(d\omega) \leq \eta(U, B_{2^{-n}}) + (1 + c) 2^{n(1-d)}\alpha \kappa,$$
+and so we have met the hypotheses of Lemma \ref{DGL1} with
+$$\beta = (1 + c)2^{n(1 - d)}\alpha.$$
+Therefore there exists $n_3 \geq n_2$ such that for every $n \geq n_3$,
+$$\int_{\tilde B_{2^{-(n+1)}}} \Lagrange(d\omega) - \Lagrange(A_nd\omega) \leq 2^{(n + 1)(1-d)}\left[ \frac{1 + O(c)}{2} \alpha + O(\alpha \sqrt \kappa)\right].$$
+To convert this estimate back into a result about the excess we use Lemma \ref{excess vs plateau energy}.
+There exists a scale $n^* \geq n_3$ such that if $n \geq n_4$ then $\exp(2^{-(n + 1)}) \leq 1 + c$, so
+\begin{align*}
+\Exc_{n + 1}(U) &\leq (1 + O(c)) 2^{(n+1)(d-1)} \int_{\tilde B_{2^{-(n+1)}}} \Lagrange(d\omega) - \exp(-2^{-n}) \Lagrange(A_nd\omega)\\
+&\leq O(4^{-n}) + (1 + O(c)) 2^{(n+1)(d-1)} \int_{\tilde B_{2^{-(n+1)}}} \Lagrange(d\omega) - \Lagrange(A_nd\omega)\\
+&\leq O(4^{-n}) + \frac{1 + O(c)}{2} \alpha + O(\alpha \sqrt \kappa). \qedhere
+\end{align*}
+\end{proof}
+
+We now prove the de Giorgi lemma.
+The proof settles the choice of the dimensional constant $c$.
+
+\begin{proposition}[de Giorgi lemma on $\Hyp^d$, general case]
+There exist $\sigma, n^*, C > 0$ such that for every set $U$ of least perimeter in $B_{2^{-n}} \subseteq \Hyp^d$,
+$$\Exc_n(U) < \sigma \text{ and } n \geq n^* \implies \Exc_{n+1}(U) \leq \frac{51}{100} \Exc_n(U) + \frac{C}{4^n}.$$
+\end{proposition}
+\begin{proof}
+By Lemma \ref{excess rotation invariant} and the fact that $x\partial_z$ is a unit vector field, it is no loss of generality to assume that
+$$\normal^{(n)}_U = |\normal^{(n)}_U| x\partial_z.$$
+Under this assumption, if we write $u = 1_U$ then
+$$\Exc_n(U) = 2^{n(d - 1)} \exp(2^{-n}) \int_{B_{2^{-n}}} |du| ~\vol - 2^{n(d - 1)} \int_{B_{2^{-n}}} x\partial_z u ~\vol.$$
+The injectivity radius of $O$ is infinite and so, if $\sigma < \exp(2^{-n}) \gamma_*$, we obtain from Proposition \ref{mollifier quant}, for every $\kappa > 0$, a $C^1$ hypersurface $N$ which bounds an open set $V$ which, if $n$ is chosen large enough (TODO: Justify taking $t \to 1$, $\varepsilon \to 0$), satisfies
+\begin{align*}
+|N \cap B_{2^{-n}}| &\leq \eta(V, B_{2^{-n}}) + \kappa \Exc_n(U, B_{2^{-n}}) \\
+\Exc_n(V, B_{2^{-n}}) &\in \Exc_n(U, B_{2^{-n}})[1 - \kappa, 1 + \kappa] \\
+||\normal^\sharp_N - x\partial_z||_{L^\infty} &\leq \kappa.
+\end{align*}
+Therefore by Lemma \ref{DGL2}, there exist dimensional constants $C_1,C_2,C > 0$ such that
+$$\Exc_{n + 1}(V) \leq \frac{1 + C_1c}{2} \Exc_n(U, B_{2^{-n}}) + C_2 \Exc_n(U, B_{2^{-n}}) \sqrt \kappa + \frac{2C}{4^n}.$$
+We now choose $c = C_1/50$, which yields a constant $C_3 > 0$ such that
+$$\Exc_n(U, B_{2^{-n}}) \leq \frac{51}{100} \Exc_n(U, B_{2^{-n}}) + C_3 \Exc_n(U, B_{2^{-n}}) \sqrt \kappa + \frac{2C}{4^n}.$$
+We can then choose $\kappa$ small enough that
+$$C_3 \Exc_n(U, B_{2^{-n}}) \sqrt \kappa \leq \frac{C}{4^n}$$
+to complete the proof.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Induction on scale}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
