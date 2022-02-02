@@ -45,6 +45,7 @@ if $(x, y, z) \in \partial B_{2^{-n}}$ and $x$ is maximal possible. It follows t
 \end{equation}
 and so in particular
 $$\Exc_n(u) \geq 0.$$
+A similar argument shows that $\Exc_n(u) \geq Exc_{n + 1}(u)$ and that if one defined a ``fractional excess'' $\Exc_r(u)$, where $r$ is a real number in $[n, n + 1]$, then $\Exc_r(u) \in [\Exc_{n + 1}(u), \Exc_n(u)]$.
 
 From the law of cosines and (\ref{conormal length bound}),
 \begin{align*}
@@ -371,7 +372,7 @@ There exists a scale $n^* \geq n_3$ such that if $n \geq n_4$ then $\exp(2^{-(n 
 We now prove the de Giorgi lemma.
 The proof settles the choice of the dimensional constant $c$.
 
-\begin{proposition}[de Giorgi lemma on $\Hyp^d$, general case]
+\begin{proposition}[de Giorgi lemma on $\Hyp^d$, general case]\label{DGL 3}
 There exist $\sigma, n^*, C > 0$ such that for every set $U$ of least perimeter in $B_{2^{-n}} \subseteq \Hyp^d$,
 $$\Exc_n(U) < \sigma \text{ and } n \geq n^* \implies \Exc_{n+1}(U) \leq \frac{51}{100} \Exc_n(U) + \frac{C}{4^n}.$$
 \end{proposition}
@@ -398,31 +399,54 @@ to complete the proof.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Induction on scale}
+We now prove Theorem \ref{main lma}.
 
+The first case that we consider is when $U$ is a set of locally finite perimeter for which there exists a scale $n_2$ such that $U$ has least perimeter in $B_{2^{-n_2}}$ and
+\begin{equation}\label{induction on scale:base case}
+    \Exc_{n_2}(U) < \sigma
+\end{equation}
+where $\sigma, n_1$ are the constants given by de Giorgi's lemma, Proposition \ref{DGL 3}.
+A straightforward induction shows that if $b > a$, $c$ are real numbers and $(x_n) \subset \RR_+$ is a sequence such that
+\begin{equation}\label{induction hypothesis}
+x_n \leq \frac{x_{n - 1}}{a} + \frac{c}{b^n},
+\end{equation}
+then
+\begin{equation}\label{induction conclusion}
+x_n \leq a^{-n}\left[x_0 + \frac{bc}{b - a}\right].
+\end{equation}
+Applying (\ref{induction hypothesis}, \ref{induction on scale:base case}) and de Giorgi's lemma, we obtain (\ref{induction hypothesis}) with $x_n = \Exc_{n - n^*}(U)$, $n^* = \max(n_1, n_2)$, $a = 100/51$, $b = 4$, and $c = C$.
+So (\ref{induction conclusion}) reads 
+$$\Exc_n(U) \leq (0.51)^{n - n^*} \left[\sigma + \frac{51}{26}C\right] \lesssim_{n_2} (0.51)^n$$
+and hence from (\ref{excess bounds Cauchy sequence}),
+$$|\normal^{(n)} - \normal^{(n + m)}|^2 \lesssim_{n_2} \frac{(0.51)^{nd}}{|\partial^* U \cap B_{2^{-(n + m)}}}.$$
+So Proposition \ref{doubling dimension} implies that 
+$$|\normal^{(n)} - \normal^{(n + 1)}|^2 \lesssim_{n_2} 2^{n(d - 1)} (0.51)^{nd} \lesssim 2^{n(d - 1) - 0.97 nd} = 2^{0.03nd - n}.$$
+However, as $d \leq 7$\footnote{One could just as well replace $51/100$ with a function of $d$ here. The only \emph{essential} use of $d \leq 7$ is in Proposition \ref{blowup theorem}.}, we conclude 
+$$|\normal^{(n)} - \normal^{(n + 1)}| \lesssim_{n_2} \alpha^n$$
+where $\alpha = 2^{-0.35}$, and hence 
+$$|\normal^{(n)} - \normal^{(n + m)}| \lesssim_{n_2} \sum_{\ell=n}^\infty \alpha^\ell < \alpha^n.$$
+From Proposition \ref{LebDiff}, it follows that 
+\begin{equation}\label{normal convergence rate}
+    |\normal^{(n)} - \normal| \lesssim_{n_2} \alpha^n.
+\end{equation}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Now let $U$ be an arbitrary set of locally finite perimeter, which has least perimeter in an open set $V$.
+If $P, Q \in \partial U \cap V$ are close enough, $P \in \partial^* U$, there is a unique geodesic $\gamma_Q$ from $Q$ to $P$.
+The transitivity of $\Iso(\Hyp^d)$ means that we may assume that $P = O$.
+Integrating the Killing vectors which are tangent to $\gamma$, we obtain an isometry $A_Q \in \Iso(\Hyp^d)$ which maps $O$ to $Q$.
+We can then define $\normal^{(n)}_U(Q) \in T_Q' V$ by first computing $\normal^{(n)}_{A_Q^* U} \in T_O' V$, and then applying the linear map $T_O' V \to T_Q' V$ induced by $A_Q$ and the Levi-Civita connection of $\Hyp^d$.
+Thus $\normal^{(n)}_U$ is a $|d1_U|\vol$-measurable $1$-form on $\Hyp^d$.
+An inspection of the definitions shows that $\normal^{(n)}_U$ is continuous on $\partial^* U$.
+We denote by $n_2(Q)$ the scale in (\ref{induction on scale:base case}), or $n_2(Q) = \infty$ if no such scale exists.
 
-\subsection{Removing the \texorpdfstring{$C^1$}{C1} assumption}\label{proof of DGL}
-We are now ready to prove Proposition \ref{de Giorgi lemma}, and also settle the choice of $c > 0$.
-By local homogeneity, if we can find $\sigma = \sigma(P)$, then $\sigma$ is locally constant and hence constant, so we may restrict to any particular $P \in M$.
-Let $U$ be a set of locally finite perimeter, $u = 1_U$, and $\Psi' = (K_\mu')$ an orthonormal Killing frame.
-Let $v_r = a^{-1}\int_{B_\rho} K_\mu' u/|K_\mu'| ~\vol \evect^\mu$, $a = |\int_{B_\rho} K_\mu' u/|K_\mu'| ~\vol \evect^\mu|$, so $v \in \RR^d$ has unit length and we can find an orthogonal matrix $O$ with $Ov = \evect^0$.
-We then define $\Psi = (K_\mu)$ where $K_\mu = O^\nu_\mu K_\nu'$, so that
-$$\int_{B_\rho} K_\mu u ~\vol = O^\nu_\mu \int_{B_\rho} K_\nu' u ~\vol = aO^\nu_\mu v_\nu = a\delta_\mu^0.$$
-Suppose that $R$ is small enough that $1/2 \leq g(\partial_\mu', \partial_\mu') \leq 2$ on $B_R$.
+We claim that if $Q_k \to O$, then $n_2(Q_k)$ is eventually equal to $n_2(O)$, and is finite.
+Let $\Hilb \subseteq T_O\Hyp^d$ denote the tangent space to $\partial^* U$ given by Proposition \ref{blowup theorem}.
+We can approximate $\Hilb$ by the tangent rescalings of $\partial^* U$ at $P$, and in turn approximate those by the tangent rescalings of $\partial^* U$ at $Q_k$ if $k$ is large (translated to $T_P \Hyp^d$ by the isometry $A_Q$).
+On the other hand it is clear that, if $Z$ is a half-space bounded by $\Hilb$, then $\Exc_n((\exp_P)_* Z) \lesssim 2^{-n}$.
+In particular there exists $n_3 \in \ZZ$ such that $\Exc_{n_3}((\exp_P)_* Z) < \sigma/2$.
+For $k$ large, it follows that $n_2(Q_k) \leq n_3$.
+We omit the details here, as they are extremely similar to \cite[Teorema 4]{Miranda67}.
 
-Let $\gamma^* > 0$ be the constant from Proposition \ref{mollifier quant} with $\delta = \rho$, and suppose that $\sigma \leq \gamma^*$ and $R$ is less than the injectivity radius of $M$.
-Then for almost every $t \in (0, \rho)$, there exists a set $V \subseteq B_t$ with $C^1$ perimeter and satisfying (\ref{mollifier quant1}, \ref{mollifier quant2}, \ref{mollifier quant3}, \ref{mollifier quant4}) with $X = \partial_0'$.
-It follows that $V$ satisfies (\ref{DGLC1 normal points up}, \ref{DGLC1 almost minimal}) with $B_\rho$ replaced by $B_t$ and $\beta \geq \rho^{d - 1} \gamma$, $\kappa = \varepsilon^{1/2}$.
-From (\ref{mollifier quant2}, \ref{mollifier quant3}),
-$$|\Lambda(U, t) - \Lambda(V, t)| \lesssim \varepsilon \rho^{d - 1} \gamma.$$
-Therefore, (\ref{DGLC1 small excess}) also holds for $V, B_t$ with
-$$\beta = \rho^{d - 1} \gamma(1 + O(\varepsilon)).$$
-Let $\rho^* > 0$ be the constant from Lemma \ref{DGLC1} and suppose that $R < \rho^*$.
-Then
-$$\Lambda(V, \rho/2) \leq \frac{1 + O(c + c\varepsilon^{1/4})}{2^{d + 1}} \beta,$$
-so putting everything together, we find an absolute constant $b > 0$ such that if $t < \rho$ is large enough depending on $\varepsilon$,
-$$\Lambda(U, \rho/2) \leq \frac{1 + b(c + c\varepsilon^{1/4} + \varepsilon)}{2^{d + 1}} \Lambda(U, \rho/2).$$
-We may now choose $c, \varepsilon$ so small depending on $b$ that
-$$\Lambda(U, \rho/2) \leq 2^{-d} \Lambda(U, \rho)$$
-which was to be shown.
+Since the rate of convergence in (\ref{normal convergence rate}) only depends on $n_2$, it follows that $\normal^{(n)} \to \normal$ locally uniformly on $\overline{\partial^* U}$, so that $\normal$ is continuous on $\overline{\partial^* U}$.
+Therefore Proposition \ref{locality of Caccioppoli} implies that $\partial U$ is a $C^1$ minimal hypersurface.
+Elliptic theory \cite{morrey2009multiple} now implies that $\partial U$ is as smooth as possible.
