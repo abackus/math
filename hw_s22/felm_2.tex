@@ -1,0 +1,158 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Finite element methods, HW 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+    Show that if $v$ is continuous on $[0, 1]$ and 
+    $$\int_0^1 v(x) w(x) ~dx = 0$$
+    for every piecewise $C^1$ function $w \in H^1_0([0, 1])$, then $v = 0$ on $[0, 1]$.
+\end{exer}
+
+By replacing $v$ with $|v|$ it suffices to assume $v \geq 0$.
+If $v(x^*) > 0$ for some $x^* \in [0, 1]$, then by continuity, we may assume that $x^* \in (0, 1)$.
+Then there exist $\varepsilon, \delta > 0$ such that if $|x - x^*| < \delta$ then $v(x) > \varepsilon$, and $\delta < d(x^*, \{0, 1\})$.
+So if we let $w$ be a piecewise linear, nonnegative continuous function which is supported on $[x^* - \delta, x^* + \delta]$ such that $\int_0^1 w = 1$, then 
+$$\int_0^1 v(x) w(x) ~dx \geq \varepsilon \int_{x^* - \delta}^{x^* + \delta} w(x) ~dx = \varepsilon > 0.$$
+
+\begin{exer}
+    Suppose that $-\Delta u = f$, $u|\partial \Omega = u_0$. Show that for every $v \in \dot H^1_0(\Omega)$,
+    $$\int_\Omega \nabla u \cdot \nabla v = \int_\Omega fv$$
+    and for every $v$ with $v|\partial \Omega = u_0$,
+    $$J(u) \leq J(v),$$
+    where $J$ is Dirichlet energy.
+\end{exer}
+
+To derive the variational formulation, we integrate by parts:
+$$\int_\Omega \nabla u \cdot \nabla v = \int_{\partial \Omega} v\partial_n u - \int_\Omega v\Delta u = \int_\Omega fv.$$
+Here $\partial_n u$ is the normal derivative of $u$, and $v\partial_n u = 0$ on $\partial \Omega$ since $v \in \dot H^1_0(\Omega)$.
+
+To derive the minimization formulation, we decompose $v = u + w$ and then estimate 
+\begin{align*}
+J(v) &= \int_\Omega \frac{|\nabla v|^2}{2} - fv\\
+&= \int_\Omega \frac{|\nabla u|^2}{2} - fu + \frac{|\nabla w|^2}{2} + \nabla u \cdot \nabla w - fw\\
+&= J(u) + \frac{||w||_{\dot H^1}^2}{2} \geq J(u).
+\end{align*}
+So $u$ is a minimizer.
+
+\end{document}
