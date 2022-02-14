@@ -1,0 +1,231 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Finite element methods, HW 3} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $\varepsilon(u)$ be the strain tensor of a deformation $u$.
+Show that
+$$\varepsilon(u):\varepsilon(v) = \sum_{i,j} \varepsilon_{ij}(u) v_{i,j}.$$
+Show that if $v$ vanishes on $\partial \Omega$ then
+$$\int_\Omega \varepsilon(u):\varepsilon(v) = -\int_\Omega v \cdot (\nabla \cdot \varepsilon(u)).$$
+\end{exer}
+
+We have
+\begin{align*}
+\varepsilon(u):\varepsilon(v) &= \frac{1}{4} \sum_{i,j} (u_{i,j} + u_{j,i})(v_{i, j} + v_{j, i}) \\
+&= \frac{1}{4} \sum_{i,j} (u_{i,j} + u_{j,i})v_{i,j} + (u_{i,j} + u_{j,i})v_{j,i}\\
+&= \frac{1}{2} \sum_{i,j} \varepsilon_{ij}(u) v_{i, j} + \varepsilon_{ij}(u) v_{j,i} \\
+&= \sum_{i,j} \varepsilon_{ij}(u) v_{i,j}
+\end{align*}
+where the last line follows from the symmetry of the strain tensor, $\varepsilon_{ij}(u) = \varepsilon_{ji}(u)$.
+
+Now we integrate by parts:
+$$\int_\Omega \varepsilon(u):\varepsilon(v) = \sum_{i,j} \int_\Omega \varepsilon_{ij}(u) v_{i,j} = \sum_{i,j} \int_{\partial \Omega} v_i n_j \varepsilon_{ij}(u) - \int_\Omega v_i \varepsilon_{ij}(u)_{,j}.$$
+Here $n$ is the normal vector and the boundary term vanishes because $v_i = 0$ there.
+From the definition of the divergence of the strain tensor, we conclude
+$$\int_\Omega \varepsilon(u):\varepsilon(v) = -\int_\Omega v \cdot (\nabla \cdot \varepsilon(u)).$$
+
+\begin{exer}
+Consider an elastic plate of thickness $t > 0$ with smooth midsurface $\Omega \subseteq \{z = 0\}$ under a load per unit area of $f(x, y)$ at $(x, y) \in \Omega$.
+Suppose that the load gives a deformation of the form $(-z\theta_1, -z\theta_2, w)$ where $\theta_i, w$ are smooth functions on $\Omega$ and we have stress-strain relations $\sigma_{ij} = E\varepsilon_{ij}$ for $i,j \in \{1, 2\}$ and $\sigma_{13} = 2G\varepsilon_{13}$, $\sigma_{23} = 2G\varepsilon_{23}$.
+Here $E$ is the elastic modulus and $G$ is the shear modulus.
+
+Compute the strain tensor associated to the deformation.
+
+Show that the elastic energy stored by the plate is given by
+$$\alpha Et^3 \int_\Omega \varepsilon(\theta):\varepsilon(\theta) + \beta Gt \int_\Omega |\nabla w - \theta|^2$$
+where $\alpha,\beta$ are explicit numerical constants.
+
+Write down the potential energy functional for the load and derive a variational equation.
+
+Show that if the deformation is smooth then $w,\theta$ satisfy a system of PDE of the form
+\begin{align*}
+\alpha' E \nabla \cdot \varepsilon(\theta) + Gt(\theta - \nabla w) &= 0\\
+\beta' Gt \nabla \cdot(\theta - \nabla w) &= f
+\end{align*}
+wbere $\alpha',\beta'$ are explicit numerical constants.
+\end{exer}
+
+To compute the strain tensor we observe that
+if $i, j \in \{1, 2\}$ then
+$$\varepsilon(u)_{ij} = \frac{-z}{2}(\theta_{i,j} + \theta_{j,i}) -z\varepsilon(\theta)_{ij}$$
+and if $i \in \{1, 2\}$ then
+$$\varepsilon(u)_{i3} = \varepsilon(u)_{3i} = \frac{1}{2} (w_{,i} - \theta_i)$$
+and finally $\varepsilon(u)_{33} = w_{,3} = 0$.
+We write this more suggestively as
+$$\varepsilon(u) = \begin{bmatrix}-z\varepsilon(\theta) & (\nabla w - \theta)/2 \\ (\nabla w - \theta)^t/2 & 0\end{bmatrix}$$
+which is our equation for the strain tensor.
+
+This notation turns out to be quite handy for computing the stress tensor, which is
+$$\sigma(u) = \begin{bmatrix}-zE\varepsilon(\theta) & G(\nabla w - \theta) \\ G(\nabla w - \theta)^t & 0\end{bmatrix}.$$
+The elastic energy density $dU$ is now given by
+$$dU = \varepsilon(u):\sigma(u) ~dxdydz = z^2E\varepsilon(\theta):\varepsilon(\theta) ~dxdydz + G|\nabla w - \theta|^2 ~dxdydz.$$
+Integrating in $P = \Omega \times [-t, t]$ and applying Fubini's theorem, we conclude
+\begin{align*}
+U &= \int_P dU \\
+&= \int_{-t}^t Ez^2 \left[\int_\Omega \varepsilon(\theta):\varepsilon(\theta) ~dxdy + \int_\Omega |\nabla w - \theta|^2 ~dxdy\right] ~dz \\
+&= \frac{2}{3}Et^3 \int_\Omega \varepsilon(\theta):\varepsilon(\theta) ~dxdy + 2Gt \int_\Omega |\nabla w - \theta|^2 ~dxdy.
+\end{align*}
+This gives a formula for the elastic energy.
+
+It is reasonable to assume that the force $f$ is pushing downward and so will do work per unit area given by $fw$, thus
+$$W = \int_\Omega wf ~dxdy.$$
+The total potential energy is then
+\begin{align*}
+E &= U - W\\
+&= \frac{2}{3}Et^3 \int_\Omega \varepsilon(\theta):\varepsilon(\theta) ~dxdy + 2Gt \int_\Omega |\nabla w - \theta|^2 ~dxdy - \int_\Omega wf ~dxdy.
+\end{align*}
+Here we know that the minus sign on $W$ is motivated by the fact that the potential energy will be minimized when the elastic energy is balanced by the work.
+
+To derive a variational equation from the potential energy, suppose that $\varphi$ is a perturbation of $\theta$ and $v$ is a perturbation of $w$.
+We assume that they are compactly supported in $\Omega$, and let $s$ be a small parameter. Then
+$$\frac{\partial}{\partial s}\bigg|_{s = 0} E[\theta + s\varphi, w + sv] = 0$$
+if $\theta,w$ are minimizers of $E$, but this can be rewritten as
+$$\frac{2}{3} Et^3 \int_\Omega \frac{\partial}{\partial s}\bigg|_{s = 0} \varepsilon(\theta + s\varphi):\varepsilon(\theta + s\varphi)
++ 2Gt \int_\Omega \frac{\partial}{\partial s}\bigg|_{s = 0} |\nabla(w + sv) - (\theta + s\varphi)|^2 = \int_\Omega \frac{\partial}{\partial s}\bigg|_{s = 0} (w + sv)f.$$
+Differentiating, we conclude the variational equation
+$$\frac{4}{3} Et^3 \int_\Omega \varepsilon(\theta):\varepsilon(\varphi) + 4Gt \int_\Omega (\nabla w - \theta) \cdot (\nabla v - \varphi) = \int_\Omega vf.$$
+
+Our next task is to derive the Euler-Lagrange equations.
+If we plug in $v = 0$ into the variational equation then we obtain
+$$\frac{4}{3} Et^3 \int_\Omega \varepsilon(\theta):\varepsilon(\varphi) - 4Gt \int_\Omega (\nabla w - \theta) \cdot \varphi = 0.$$
+We can then integrate by parts using the first problem to conclude
+$$\frac{4}{3} Et^3 \int_\Omega \varphi \cdot (\nabla \cdot \varepsilon(\theta)) + 4Gt \int_\Omega (\nabla w - \theta) \cdot \varphi = 0.$$
+Since $\varphi$ was arbitrary, if $w \in C^1$ and $\theta \in C^2$ we obtain a PDE
+$$\frac{4}{3} Et^3 \nabla \cdot \varepsilon(\theta) + 4Gt (\nabla w - \theta) = 0.$$
+On the other hand, we can plug in $\varphi = 0$ to the variational equation to get
+$$4Gt \int_\Omega (\nabla w - \theta) \cdot \nabla v = \int_\Omega vf.$$
+Integrating by parts we get
+$$-4Gt \int_\Omega \nabla \cdot (\nabla w - \theta) v = \int_\Omega vf$$
+which gives rise to the PDE
+$$4Gt \nabla \cdot (\theta - \nabla w) = f$$
+at least assuming that $w \in C^2$ and $\theta \in C^1$.
+Dividing our first PDE by $-4$ we obtain the desired differential system
+\begin{align*}
+-\frac{1}{3} Et^3 \nabla \cdot \varepsilon(\theta) + Gt (\theta - \nabla w) &= 0, \\
+4Gt \nabla \cdot (\theta - \nabla w) &= f,
+\end{align*}
+as long as $\theta, w \in C^2$.
+
+\end{document}
