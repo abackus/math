@@ -1,4 +1,196 @@
 \section{Functions of least gradient}\label{LeastGradientFunctions}
+\begin{notation}[presheaves]
+If $F$ is a presheaf of function spaces, we write $u \in F_l(U)$ to mean that for every $V \Subset U$, $u \in F(V)$.
+We write $u \in F_c(U)$ to mean that $u \in F(U)$ and $\supp u \Subset U$.
+\end{notation}
+
+\begin{notation}[volume forms]
+We reserve the letter $d$ for dimension or exterior differentiation, and write $\vol$ for the Riemannian volume form.
+If $N$ is a closed submanifold we write $\vol_N$ to indicate the pullback of $\vol$ along the inclusion map $M \to N$.
+\end{notation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Bundle-valued Radon measures}
+Let $F \to M$ be a normed vector bundle of rank $r$.
+We equip the space $C(K, F)$ of continuous sections of $F$ on a compact set $K$ with its supremum norm.
+The Banach spaces $C(K, F)$ form an inverse system with respect to restriction and therefore define the topological vector space
+$$C_0(M, F) = \varprojlim C(K, F).$$
+According to the Riesz-Markov theorem, the space of $\CC^r$-valued Radon measures on $M$ is canonically identified with $C_0(M, (\CC^r)')'$, thus we define:
+
+\begin{definition}
+The topological dual space $\mathcal R(M, F) = C_0(M, F')'$ is the space of \dfn{$F$-valued Radon measures} on $M$.
+\end{definition}
+
+If we write $\mathcal R(U, F)$ to mean $\mathcal R(U, F|U)$, we equip $\mathcal R(U, F)$ with the weak topology of measures.
+Then $\mathcal R(U, F)$ is a separable Fr\'echet space, with seminorms $|\langle \cdot, f_j\rangle|$ where $(f_j)$ is a countable basis for a dense subspace of $C_0(U, F)$.
+Thus $\mathcal R(\cdot, F)$ is a sheaf of separable Fr\'echet spaces.
+
+Since $\RR_+$ acts on $F$ by scalar multiplication, we can define the \dfn{sphere bundle} $SF = (F \setminus 0)/\RR_+$.
+Since $F$ has a norm, $SF$ is naturally identified with the bundle of elements of $F$ with length $1$.
+
+\begin{proposition}[Riesz-Markov representation]\label{HanhJordan}
+Let $\omega$ be a $F$-valued Radon measure and let $\mu = |\omega|$.
+Then there exists a $\mu$-measurable section $f$ of $SF$ such that for every section $X \in C_0(M, F', \mu)$,
+\begin{equation}\label{RNy formula}
+\int_M X ~d\omega = \int_M (f, X) ~d\mu.
+\end{equation}
+Furthermore, $f$ is unique up to a $\mu$-null set, and does not depend on the norm of $F$.
+\end{proposition}
+\begin{proof}
+Fix an open cover $(U_i)$ of $M$ by charts which trivialize $F$, so that $U_i$ is precompact in $M$.
+Let $(g_{ij})$ be the transition functions and $(g_{ij}')$ the induced transition functions for the dual bundle $F'$.
+Then can view $\omega_i = \omega|U_i$ as an element of $C(U_i, (\CC^r)')'$, by the precompactness of $U_i$.
+Hence by the Riesz-Markov theorem \cite[Theorem 4.14]{simon1983GMT}, there exists a $\mu$-measurable section $f_i$ of $SF$ for which (\ref{RNy formula}) holds for $\omega_i$, provided that $X \in C(U_i, (\CC^r)')$.
+It is straightforward to check the transition relations $f_j = g_{ij} \circ f_i$.
+% We now show that the $f_i$ are restrictions of a global section $f$, thus we must show $f_j = g_{ij} \circ f_i$ on $\CC^r$.
+% To this end, fix $X \in C_0(M, F)$ which is supported in $U_i \cap U_j$ and write $X_i \in C(U_i, (\CC^r)')$ for the trivialization of $X$ with respect to $U_i$.
+% Then $X_j = g_{ij}' \circ X_i$, and
+% \begin{align*}
+% \int_E (f_i, X_i) ~d\mu &= \langle \omega_i, X_i\rangle = \langle \omega_j, X_j\rangle = \int_E (f_j, X_j) ~d\mu = \int_E (f_j, g_{ij}' \circ X_i) ~d\mu.
+% \end{align*}
+
+% By Urysohn's lemma, $C_c(U_i \cap U_j, (\CC^r)', \mu)$ separates points in $L^1(U_i \cap U_j, \CC^r, \mu)$.
+% Therefore, since $X$ was arbitrary, $f_i = g_{ji} \circ f_j$; thus we obtain a unique global section $f$ of $SF$.
+
+If we change the norm of $F$, replacing $|\cdot|$ with $|\cdot|'$, then we obtain a smooth function $h: F \to \RR_+$ so that if $v \in F_x$, then $|v|' = h(x, v)|v|$.
+The change of norm gives us a new section $f'$ such that $f' = f/h(\cdot, f'(\cdot))$.
+Thus $f'$ defines the same section of $SF$ as $f$.
+\end{proof}
+
+At this stage we have only defined $f$ as a $\mu$-equivalence class of sections of $SF$, so we now use the Lebesgue differentiation theorem to choose the ``correct" representative.
+We state the differentiation theorem in a somewhat strange way, to ensure that the representative chosen is metric-independent.
+
+\begin{definition}
+A \dfn{Besicovitch cover} $\mathcal U$ of a metric space $X$ is a set of open balls, so that every $x \in X$ is the center of an element of $\mathcal U$.
+The \dfn{Besicovitch number} $N \in \NN$ of $X$ is the best constant such that for every $x \in U$ and Besicovitch cover $\mathcal U$ of $B(x, 1/N)$, there exist $\mathcal U_1, \dots \mathcal U_N \subset \mathcal U$ such that $\bigcup_{n=1}^N \mathcal U_n$ is an open cover of $B(x, 1/N)$ and $\mathcal U_n$ is disjoint.
+\end{definition}
+
+It follows from the theory of \cite[\S2.8]{federer2014geometric} that for every Riemannian metric $g$, the Besicovitch number of $(M, g)$ is finite; \cite{Shi91} motivates why we restrict to small balls $B(x, 1/N)$.
+
+For each $x \in M$, let $\mathcal A(x)$ denote the set of all pairs $(g, B, \varphi)$ where:
+\begin{enumerate}
+\item $g$ is a Riemannian metric on $M$,
+\item $B$ is an open ball centered at $x$ with respect to $g$, and
+\item $\varphi$ is a trivialization of $F$ over $B$.
+\end{enumerate}
+Then $\mathcal A(x)$ is a directed system, where the order is given by reverse inclusion of balls.
+Given $(g, B, \varphi) \in \mathcal A(x)$, we obtain a $\mu$-measurable function $f_\varphi: B \to \CC^r$ obtained by trivializing the section $f$.
+We define the average
+\begin{equation}\label{average in a vector bundle}
+f(g, B, \varphi) = \varphi^{-1}\left(\frac{1}{\mu(B)} \int_B f_\varphi ~d\mu\right),
+\end{equation}
+which is a point in $F_x$.
+
+\begin{proposition}[Lebesgue differentiation theorem]\label{LebDiff}
+Let $\mu$ be a Radon measure on $M$, let $f \in L^1_l(M, SF, \mu)$, and let
+$$f(x) = \lim_{(g, B, \varphi) \in \mathcal A(x)} f(g, B, \varphi).$$
+Then the limit defining $f(x)$ converges for $\mu$-almost every $x \in M$ to a point in the sphere $SF_x$.
+\end{proposition}
+If $f(x)$ exists and is $\in SF_x$, we call $x$ a \dfn{Lebesgue point} of the section $f$.
+\begin{proof}
+This is obvious if $f$ has a representative in $C_c(M, SF)$; besides, by a partition of unity argument, we may assume that $\mu$ has compact support.
+We can then select $(f_n)$ in $C_c(M, SF)$ converging in $L^1(M, SF, \mu)$ and almost everywhere to $f$.
+Setting $h_n = |f_n - f|$, we can define the average
+$$h_n(g, B) = \frac{1}{\mu(B)} \int_B h_n ~d\mu,$$
+which converges to $0$ in $L^1(M, \mu)$.
+
+Fix $N \in \NN$ and let $\mathcal B_N$ be the set of Riemannian metrics with Besicovitch number $\leq N$.
+This makes sense if we restrict to a neighborhood of the compact support of $\mu$.
+For each metric $g \in \mathcal B_N$, we have the Hardy-Littlewood inequality \cite[Lemma 4.1.1a]{Ledrappier85}
+\begin{equation}\label{HardyLittlewood}
+||\sup_{r \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} \leq N ||h_n||_{L^1(M, \mu)}.
+\end{equation}
+Reasoning as in the classical proof of the Lebesgue differentiation theorem we see that along a subsequence,
+% By (\ref{HardyLittlewood}) and the convergence $h_n \to 0$ in $L^1$,
+% $$\lim_{n \to \infty} ||\sup_{0 \in (0, 1/N)} h_n(g, B_g(\cdot, r))||_{L^{1, \infty}(M, \mu)} = 0$$
+% uniformly in $g \in \mathcal B_N$.
+% Therefore we may pass to a subsequence along which, for $\mu$-almost every $x$,
+% $$\lim_{n \to \infty} \sup_{(g, r) \in \mathcal B_N \times (0, 1/N)} h_n(g, B_g(x, r)) = 0.$$
+% By the triangle inequality, if
+% $$\mathcal A_N(x) = \{(g, B, \varphi) \in \mathcal A(x): g \in \mathcal B_N\},$$
+% then (after passing to a subsequence again)
+$$\lim_{n \to \infty} \sup_{(g, B, \varphi) \in \mathcal A_N(x)} |f_n(g, B_g(x, r), \varphi) - f(g, B_g(x, r), \varphi)| = 0.$$
+But $f_n(g, B, \varphi) \to f(x)$ everywhere, $f(x) \in SF_x$, and $SF_x$ is closed, so there exists a $\mu$-null set $Z_N$ such that outside of $Z_N$,
+$$\lim_{(g, B, \varphi) \in \mathcal A_N(x)} f(g, B, \varphi) \in SF_x.$$
+Taking $Z = \bigcup_{N \in \NN} Z_N$, we see that $Z$ is $\mu$-null, which was to be shown.
+\end{proof}
+
+\subsection{Differentiation and boundary}
+In this section we fix a Riemannian metric.
+
+\begin{definition}
+A function in $L^1(M)$ has \dfn{bounded variation} if its distributional derivative is a $T'M$-valued Radon measure of finite total variation.
+We write $BV$ for the presheaf of functions of bounded variation.
+An open set has \dfn{finite perimeter} if its indicator function has bounded variation.
+\end{definition}
+
+\begin{notation}
+If $u$ is a function of locally bounded variation we write $du ~\vol$ for its derivative.
+\end{notation}
+
+Sequences $(u_n)$ in $BV_l(M)$ with $u_n \to u$ in $L^1_l(M)$ satisfy the lower semicontinuity property
+\begin{equation}
+\label{RieszMarkovDistr}
+\int_M |du| ~\vol \leq \liminf_{n \to \infty} \int_M |du_n| ~\vol.
+\end{equation}
+which follows by testing against smooth functions, and the forgetful map
+\begin{equation}\label{Forget}
+BV_l(M) \to L^1_l(M)
+\end{equation}
+is compact. We refer to \cite[Chapter 1]{Giusti77} for a review of the space $BV_l(M)$.
+
+\begin{proposition}[trace theorem]\label{traces}
+Let $U$ be an open set such that $N = \partial U$ is a Lipschitz hypersurface.
+For every $u \in BV_l(M)$ there exists a trace $v \in L^1_l(N)$ such that for every $X \in C_c(M, TM)$,
+\begin{equation}\label{Miranda IBP}
+\int_U (du, X) ~\vol + \int_U u ~\mathcal L_X\vol = \int_N vg(X, \normal_N) ~\vol_N.
+\end{equation}
+Moreover, $v$ is determined by the germ of $u$ at $\partial U$.
+If $u$ is an indicator function then so is $v$.
+\end{proposition}
+\begin{proof}
+By a partition of unity argument we may assume that $M$ is diffeomorphic to a product $H \times \RR$ and $N$ is the graph of a Lipschitz function on $H$.
+Diffeomorphism-invariance of $BV_l$ and $L^1_l$ now reduce the claim to \cite[Teorema 1]{Miranda67}.
+\end{proof}
+
+Let $U$ be a set of locally finite perimeter.
+The notion of reduced boundary to $U$ was first introduced in \cite{deGiorgi55}; see \cite{Battista_2021} for an equivalent definition.
+To construct it, let $\omega = d1_U ~\vol$, which by Proposition \ref{HanhJordan} can be expressed as $\omega = \normal \mu$, where $\normal$ is a section of $ST'M$ which is independent of $g$.
+
+\begin{definition}
+Let $U,\normal$ be as above.
+The \dfn{reduced boundary} $\partial^* U$ of a set $U$ of locally finite perimeter is the set of Lebesgue points of $\normal$.
+The \dfn{conormal $1$-form} to $\partial^* U$ is $\normal$.
+\end{definition}
+
+\begin{proposition}\label{metric-independence theorem}
+Let $U$ be a set of locally finite perimeter and let $\normal$ be its conormal $1$-form.
+Then $\normal$ and $\partial^* U$ do not depend on the metric.
+\end{proposition}
+\begin{proof}
+Immediate from the fact that Propositions \ref{HanhJordan} and \ref{LebDiff} did not assume that $M$ was a Riemannian manifold.
+\end{proof}
+
+\begin{proposition}\label{locality of Caccioppoli}
+Let $U$ be a set of locally finite perimeter with conormal $1$-form $\normal$.
+Then:
+\begin{enumerate}
+\item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is rectifiable with respect to $d-1$-dimensional Hausdorff measure.
+\item $\partial^* U$ is dense in the measure-theoretic boundary $\partial U$.
+\item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Immediate from Proposition \ref{metric-independence theorem} and well-known facts about the euclidean case \cite[Chapters 2-4]{Giusti77} \cite{deGiorgi55}.
+\end{proof}
+
+\begin{notation}
+We write $|\partial^* U|$ for $\int_M |d1_U| ~\vol$.
+This does not collide with the notation $|U|$ for the volume of $U$, since $U$ has Hausdorff dimension $d$.
+\end{notation}
+
+\subsection{Least gradient functions TODO rename}
 The purpose of this paper is to study weak solutions to the PDE
 \begin{equation}\label{EulerLagrange}
 \Div \frac{\grad u}{|\grad u|} = 0.
@@ -151,12 +343,12 @@ So if $N$ is a leaf of $\lambda$, the mean curvature of $N$ is
 $$\Div \normal^\sharp = 0.$$
 It follows that on $\lambda$, $u$ solves (\ref{EulerLagrange}), and elsewhere $u$ has a critical point of infinite order.
 
-We compute the first variation of $\int |du| ~\vol$: if $v \in C^\infty_c(U)$, $U$ a small open set, then 
+We compute the first variation of $\int |du| ~\vol$: if $v \in C^\infty_c(U)$, $U$ a small open set, then
 $$\frac{|du + tdv| - |du|}{t} \leq |dv|$$
 and so by dominated convergence,
 $$\partial_t \int_U |d(u + tv)| ~\vol = \int_U \partial_t |d(u + tv)| ~\vol.$$
 An approximation argument allows us to replace $v$ with an arbitrary function in $BV_c(U)$ and $U$ with $U \cap \lambda$.
-Moreover 
+Moreover
 $$\partial_t |d(u + tv)| = \frac{g (\grad (u + tv), \grad v)}{|\grad (u + tv)|}$$
 on $U \cap \lambda$ so, after we integrate by parts, we obtain for $t = 0$ that
 $$\partial_t \int_{U \cap \lambda} |d(u + tv)| ~\vol = \int_I \int_{U \cap N} v\Div \normal^\sharp ~\vol_N ~d\mu(N) = 0$$
