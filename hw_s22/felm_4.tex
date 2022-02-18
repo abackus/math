@@ -1,0 +1,174 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Finite element methods, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $P_3(I)$ denote the space of cubic polynomials on $I = [a, b]$.
+Show that $v \in P_3(I)$ is determined by $(v(a), v'(a), v(b), v'(b))$ and find the corresponding basis functions.
+Construct a finite-dimensional subspace $W_h$ of $W = H^1_0([0, 1])$ of piecewise cubic functions and determine the natural degrees of freedom and basis functions.
+Formulate a finite-element scheme for $W_h$.
+Determine the corresponding linear system for a uniform partition $h$, and determine the corresponding numerical solution of the beam equation $u^{(4)} = f$ with $f$ constant where the partition only has two intervals.
+Compare it to the exact solution.
+\end{exer}
+
+Recall that $P_3(I)$ is $4$-dimensional, so to show that a function in $P_3(I)$ is determined by
+$$X(v) = (v(a), v(b), v'(a), v'(b)),$$
+it suffices to find functions $v_1, v_2, v_3, v_4 \in P_3(I)$ which are linearly independent and are $1$ on one of the entries of $X(v)$ and $0$ on the others. Namely, $v_1(a) = 1$, $v_2(b) = 1$, $v_3'(a) = 1$, $v_3'(b) = 1$.
+In particular, the functions $v_i$ define the corresponding basis for the given degrees of freedom.
+
+To this end, we write 
+$$v_i(x) = v_{i0} + v_{i1}x + v_{i2}x^2 + v_{i3}x^3.$$
+Then
+$$\begin{bmatrix} 1 & a & a^2 & a^3 \\ 1 & b & b^2 & b^3 \\ 0 & 1 & 2a & 3a^2 \\ 0 & 1 & 2b & 3b^2 \end{bmatrix}\begin{bmatrix}v_{i0} \\ v_{i1} \\ v_{i12} \\ v_{i3}\end{bmatrix} = \begin{bmatrix}v_i(a) \\ v_i(b) \\ v_i'(a) \\ v_i'(b)\end{bmatrix}.$$
+Inverting this matrix we see that 
+\begin{align*}
+    v_1(x) &= \frac{b^2(3a - b)}{(a - b)^3} - \frac{6ab}{(a - b)^3}x + \frac{3(a + b)}{(a - b)^3}x^2 - \frac{2}{(a - b)^3}x^3\\
+    v_3(x) &= \frac{-ab^2}{(a - b)^2} + \frac{b(2a + b)}{(a - b)^2}x - \frac{a + 2b}{(a - b)^2}x^2 + \frac{1}{(a - b)^2}x^3
+\end{align*}
+and $v_2,v_4$ are the same with the roles of $a,b$ swapped.
+
+Given a partition of $[0, 1]$ at points $x_0, \dots, x_{n + 1}$ where $|x_i - x_{i + 1}| \leq h$, we define $W_h$ to be the space of $n$-tuples of cubic functions $(f_1, \dots, f_n)$ such that $f_i(x_i) = f_{i + 1}(x_i)$ and $f_i'(x_i) = f_{i + 1}'(x_i)$, and
+$$f_1(x_0) = f_1'(x_0) = f_n(x_{n + 1}) = f_n'(x_{n + 1}) = 0.$$
+We identify each $n$-tuple with the function $f \in H^1_0([0, 1])$ such that $f = f_i$ on $[x_i, x_{i + 1}]$.
+Such a function $f$ is uniquely determined by $f(x_i)$ and $f'(x_i)$ where $i \in \{1, \dots, n\}$ and so we construct a basis
+$$\{f_1, \dots, f_n, g_1, \dots, g_n\}$$
+where $f_i(x_i) = 1$ and $f_i$ annihilates other degrees of freedom, and similarly $g_i'(x_i) = 1$.
+More precisely we set... TODO
+
+\begin{exer}
+Let $u: [0, 1] \to \RR$ be a smooth function and let $p$ be its cubic interpolant on $[0, 1]$.
+Define 
+$$K(x, t) = \frac{1}{6} \begin{cases} x^2 (1 - t)^2 (3t - x - 2xt), & 0 \leq x \leq t \leq 1 \\
+t^2(1 - x)^2(3x - t - 2xt), & 0 \leq t < x \leq 1.
+\end{cases}$$
+Show using integration by parts that 
+$$u(x) - p(x) = \int_0^1 K(x, t) u^{(4)}(t) ~dt.$$
+Conclude that for every $k \leq 3$, there exists $C_k > 0$ such that 
+$$||u^{(k)} - p^{(k)}||_{L^2([0, 1])} \leq C_k ||u^{(4)}||_{L^2([0, 1])}.$$
+Show that for every $a < b$, if $p$ is instead chosen as the cubic interpolant of $u$ on $[0, 1]$.
+$$||u^{(k)} - p^{(k)}||_{L^2([a, b])} \leq C_k (b - a)^{4 - k} ||u^{(4)}||.$$
+Finally, obtain an error estimate for the above finite-element scheme for the beam equation.
+\end{exer}
+
+\end{document}
