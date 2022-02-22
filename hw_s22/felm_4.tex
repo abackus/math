@@ -137,11 +137,11 @@ $$X(v) = (v(a), v(b), v'(a), v'(b)),$$
 it suffices to find functions $v_1, v_2, v_3, v_4 \in P_3(I)$ which are linearly independent and are $1$ on one of the entries of $X(v)$ and $0$ on the others. Namely, $v_1(a) = 1$, $v_2(b) = 1$, $v_3'(a) = 1$, $v_3'(b) = 1$.
 In particular, the functions $v_i$ define the corresponding basis for the given degrees of freedom.
 
-To this end, we write 
+To this end, we write
 $$v_i(x) = v_{i0} + v_{i1}x + v_{i2}x^2 + v_{i3}x^3.$$
 Then
 $$\begin{bmatrix} 1 & a & a^2 & a^3 \\ 1 & b & b^2 & b^3 \\ 0 & 1 & 2a & 3a^2 \\ 0 & 1 & 2b & 3b^2 \end{bmatrix}\begin{bmatrix}v_{i0} \\ v_{i1} \\ v_{i12} \\ v_{i3}\end{bmatrix} = \begin{bmatrix}v_i(a) \\ v_i(b) \\ v_i'(a) \\ v_i'(b)\end{bmatrix}.$$
-Inverting this matrix we see that 
+Inverting this matrix we see that
 \begin{align*}
     v_1(x) &= \frac{b^2(3a - b)}{(a - b)^3} - \frac{6ab}{(a - b)^3}x + \frac{3(a + b)}{(a - b)^3}x^2 - \frac{2}{(a - b)^3}x^3\\
     v_3(x) &= \frac{-ab^2}{(a - b)^2} + \frac{b(2a + b)}{(a - b)^2}x - \frac{a + 2b}{(a - b)^2}x^2 + \frac{1}{(a - b)^2}x^3
@@ -156,19 +156,54 @@ $$\{f_1, \dots, f_n, g_1, \dots, g_n\}$$
 where $f_i(x_i) = 1$ and $f_i$ annihilates other degrees of freedom, and similarly $g_i'(x_i) = 1$.
 More precisely we set... TODO
 
+The finite-element scheme here is to solve the variational equation
+$$a(u, v) = Lv$$
+for every $v \in W_h$, where $a: W^2 \to \RR$ is a continuous quadratic form and $L: W \to \RR$ is a continuous linear form.
+For a uniform partition $h$ we set ...
+
+The exact solution to the homogeneous Dirichlet problem for the beam equation with $u^{(4)} = f$, $f = A$ constant, is
+$$u(x) = \frac{A}{24}x^4 - \frac{A}{12}x^3 + \frac{A}{24}x^2.$$
+The approximate solution with two intervals and a uniform mesh is ...
+
 \begin{exer}
 Let $u: [0, 1] \to \RR$ be a smooth function and let $p$ be its cubic interpolant on $[0, 1]$.
-Define 
+Define
 $$K(x, t) = \frac{1}{6} \begin{cases} x^2 (1 - t)^2 (3t - x - 2xt), & 0 \leq x \leq t \leq 1 \\
 t^2(1 - x)^2(3x - t - 2xt), & 0 \leq t < x \leq 1.
 \end{cases}$$
-Show using integration by parts that 
+Show using integration by parts that
 $$u(x) - p(x) = \int_0^1 K(x, t) u^{(4)}(t) ~dt.$$
-Conclude that for every $k \leq 3$, there exists $C_k > 0$ such that 
+Conclude that for every $k \leq 3$, there exists $C_k > 0$ such that
 $$||u^{(k)} - p^{(k)}||_{L^2([0, 1])} \leq C_k ||u^{(4)}||_{L^2([0, 1])}.$$
-Show that for every $a < b$, if $p$ is instead chosen as the cubic interpolant of $u$ on $[0, 1]$.
+Show that for every $a < b$, if $p$ is instead chosen as the cubic interpolant of $u$ on $[a, b]$.
 $$||u^{(k)} - p^{(k)}||_{L^2([a, b])} \leq C_k (b - a)^{4 - k} ||u^{(4)}||.$$
 Finally, obtain an error estimate for the above finite-element scheme for the beam equation.
 \end{exer}
+
+We define the integrodifferential operator
+$$Tu(x) = \int_0^1 K(x, t) u^{(4)}(t) ~dt$$
+and we want to show that
+$$Tu(0) = Tu(1) = Tu'(0) = Tu'(1) = 0$$
+and $u - Tu$ is a cubic polynomial.
+To compute $Tu(0)$ we write
+$$Tu(0) = \int_0^1 K(0, t) u^{(4)}(t) ~dt = \frac{1}{6} \int_0^1 0^2 (1 - t)^2 (3t - 0) u^{(4)}(t) ~dt = 0.$$
+Similarly for $Tu(1)$. For $Tu'(0)$ we write
+$$Tu'(0) = \int_0^1 \partial_x K(0, t) u^{(4)}(t) ~dt = \frac{1}{3} \int_0^1 0(1 - t)(3t - 0) u^{(4)}(t) ~dt = 0.$$
+Similarly for $Tu'(1)$.
+Now to see that $u - Tu$ is cubic, we claim that $\partial_x^{(k)}(u - Tu) = 0$ for $k \geq 4$.
+If this is identically true for $k = 4$ then it will be true for $k \geq 5$ as well.
+
+Therefore
+$$u^{(k)}(x) - p^{(k)}(x) = \int_0^1 \partial_x^k K(x, t) u^{(4)}(t) ~dt$$
+which gives
+$$\int_0^1 |u^{(k)}(x) - p^{(k)}(x)|^2 ~dx = \int_0^1 \left|\int_0^1 \partial_x^k K(x, t) u^{(4)}(t) ~dt\right|^2 ~dx$$
+and from the triangle inequality the right-hand side is bounded by
+$$\leq ||\partial_x^k K||_{L^\infty}^2 \cdot ||u^{(4)}||_{L^2}^2$$
+and taking square roots of both sides we obtain
+$$||u^{(k)} - p^{(k)}||_{L^2([0, 1])} \leq ||\partial_x^k K||_{L^\infty([0, 1])} ||u^{(4)}||_{L^2([0, 1])}.$$
+Rescaling $[0, 1]$ to have length $b - a$ does not affect the $L^\infty$ norm but but affects the $L^2$ norm of the $k$th derivative by multiplication by $(b - a)^{-k}$.
+This implies that
+$$(b - a)^{-4} ||u^{(k)} - p^{(k)}||_{L^2([0, 1])} \leq (b - a)^{-k} ||\partial_x^k K||_{L^\infty([0, 1])} ||u^{(4)}||_{L^2([0, 1])}$$
+which is the desired estimate.
 
 \end{document}
