@@ -92,6 +92,9 @@
 \renewcommand{\Re}{\operatorname{Re}}
 \renewcommand{\Im}{\operatorname{Im}}
 
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
 \def\Japan#1{\left \langle #1 \right \rangle}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -140,8 +143,8 @@
 
 \begin{document}
 \begin{abstract}
-The least-gradient maximum principle, essentially due to Miranda and de Giorgi in the 1960s, shows that least-gradient functions define a minimal lamination of their domain.
-We extend this result to least-gradient functions on hyperbolic manifolds.
+The least-gradient maximum principle, essentially due to Miranda and de Giorgi in the 1960s, shows that least-gradient functions define a minimal lamination of the support of their derivative.
+We extend this result to least-gradient functions on hyperbolic manifolds and propose means for a proof on general Riemannian manifold.
 \end{abstract}
 
 \maketitle
@@ -156,123 +159,120 @@ We extend this result to least-gradient functions on hyperbolic manifolds.
 \include{chapters/ch3leastgradient}
 \include{chapters/ch4mollification}
 \include{chapters/ch5degiorgi}
+\include{chapters/ch6proofs}
 
-\appendix \section{Bochner integration and coarea} \label{coarea section}
-Let $F$ be a separable Fr\'echet space over $\CC$, and $(\Omega, P)$ a measure space.
-We can then define the \dfn{Bochner integral} of a $P$-measurable function $f: \Omega \to F$, which we write as $\int_\Omega f ~dP \in F$.
-See \cite{Rieffel70}, \cite{MO47721}, and \cite[Chapter V]{yosida2012functional}.
-We recall a few facts that we will need:
+% \appendix \section{Bochner integration and coarea} \label{coarea section}
+% Let $F$ be a separable Fr\'echet space over $\CC$, and $(\Omega, P)$ a measure space.
+% We can then define the \dfn{Bochner integral} of a $P$-measurable function $f: \Omega \to F$, which we write as $\int_\Omega f ~dP \in F$.
+% See \cite{Rieffel70}, \cite{MO47721}, and \cite[Chapter V]{yosida2012functional}.
+% We recall a few facts that we will need:
 
-\begin{theorem}[Pettis]
-Let $f: \Omega \to F$ be any function.
-Then $f$ is $P$-measurable iff for every $X \in F'$, $\omega \mapsto \langle f(\omega), X\rangle$ is $P$-measurable.
-In this case,
-$$\left\langle \int_\Omega f ~dP, X\right\rangle = \int_\Omega \langle f(\omega), X\rangle ~dP(\omega).$$
-If $F = \CC^r$, then the Bochner integral is just the componentwise Lebesgue integral.
-\end{theorem}
+% \begin{theorem}[Pettis]
+% Let $f: \Omega \to F$ be any function.
+% Then $f$ is $P$-measurable iff for every $X \in F'$, $\omega \mapsto \langle f(\omega), X\rangle$ is $P$-measurable.
+% In this case,
+% $$\left\langle \int_\Omega f ~dP, X\right\rangle = \int_\Omega \langle f(\omega), X\rangle ~dP(\omega).$$
+% If $F = \CC^r$, then the Bochner integral is just the componentwise Lebesgue integral.
+% \end{theorem}
 
-Throughout this section we consider the superlevel sets $E_y = \{u > y\}$ of a function $u \in BV_l(M)$, and the resulting $T'M$-valued Radon measures
-$$\omega(y) = d1_{E_y} ~\vol.$$
-Let $\mu = |du| ~\vol$.
+% Throughout this section we consider the superlevel sets $E_y = \{u > y\}$ of a function $u \in BV_l(M)$, and the resulting $T'M$-valued Radon measures
+% $$\omega(y) = d1_{E_y} ~\vol.$$
+% Let $\mu = |du| ~\vol$.
 
-We first observe that for every $X \in \mathcal D(M, TM)$,
-$$\langle \omega(y), X\rangle = -\int_{E_y} \mathcal L_X\vol$$
-is measurable in $y$, since $E_y$ is monotone in $y$.
-So by Pettis' theorem, $\omega$ is measurable in $y$ with respect to the weak topology of measures.
+% We first observe that for every $X \in \mathcal D(M, TM)$,
+% $$\langle \omega(y), X\rangle = -\int_{E_y} \mathcal L_X\vol$$
+% is measurable in $y$, since $E_y$ is monotone in $y$.
+% So by Pettis' theorem, $\omega$ is measurable in $y$ with respect to the weak topology of measures.
 
-\begin{lemma}[coarea formula for measures]\label{Coarea1}
-One has
-$$du ~\vol = \int_{-\infty}^\infty \omega(y) ~dy.$$
-\end{lemma}
-\begin{proof}
-Fix $X \in C_c(M, TM)$. We may assume that $u \geq 0$, and we must show
-\begin{equation}
-\label{gradient is integral of fibers}
-\int_M (du, X) ~\vol = \int_{-\infty}^\infty \langle \omega(y), X\rangle ~dy.
-\end{equation}
-Since $u \geq 0$,
-\begin{align*}
-\int_M (du, X) ~\vol &= -\int_M u~\mathcal L_X\vol = -\int_M \int_0^{u(x)} dy ~\mathcal L_X\vol\\
-&= -\int_0^\infty \int_{E_y} ~\mathcal L_X\vol ~dy = \int_0^\infty \langle \omega(y), X\rangle ~dy.
-\end{align*}
-by Fubini's theorem.
-If $y < 0$ then $1_{E_y} = 1$ so $\omega(y) = 0$, so we conclude (\ref{gradient is integral of fibers}).
-\end{proof}
+% \begin{lemma}[coarea formula for measures]\label{Coarea1}
+% One has
+% $$du ~\vol = \int_{-\infty}^\infty \omega(y) ~dy.$$
+% \end{lemma}
+% \begin{proof}
+% Fix $X \in C_c(M, TM)$. We may assume that $u \geq 0$, and we must show
+% \begin{equation}
+% \label{gradient is integral of fibers}
+% \int_M (du, X) ~\vol = \int_{-\infty}^\infty \langle \omega(y), X\rangle ~dy.
+% \end{equation}
+% Since $u \geq 0$,
+% \begin{align*}
+% \int_M (du, X) ~\vol &= -\int_M u~\mathcal L_X\vol = -\int_M \int_0^{u(x)} dy ~\mathcal L_X\vol\\
+% &= -\int_0^\infty \int_{E_y} ~\mathcal L_X\vol ~dy = \int_0^\infty \langle \omega(y), X\rangle ~dy.
+% \end{align*}
+% by Fubini's theorem.
+% If $y < 0$ then $1_{E_y} = 1$ so $\omega(y) = 0$, so we conclude (\ref{gradient is integral of fibers}).
+% \end{proof}
 
-Let $p: L \to M$ be the trivial line bundle with its induced metric $h$, and let $\eta$ be the volume form induced by $h$.
-If $W$ is a vector field on $L$, we will write $W_1$ for the projection of $W$ onto $M$ and $W_2$ for its projection onto $\CC$.
-Then Cartan's magic formula implies that if $W_2$ is constant, then
-\begin{equation}
-\label{Lie derivative computation}
-\mathcal L_W\eta = \mathcal L_W\vol \wedge dy.
-\end{equation}
+% Let $p: L \to M$ be the trivial line bundle with its induced metric $h$, and let $\eta$ be the volume form induced by $h$.
+% If $W$ is a vector field on $L$, we will write $W_1$ for the projection of $W$ onto $M$ and $W_2$ for its projection onto $\CC$.
+% Then Cartan's magic formula implies that if $W_2$ is constant, then
+% \begin{equation}
+% \label{Lie derivative computation}
+% \mathcal L_W\eta = \mathcal L_W\vol \wedge dy.
+% \end{equation}
 
-\begin{lemma}\label{coarea converse}
-Suppose that $W \in \mathcal D(L, TL)$ depends on a parameter $n \in \NN$, such that $W_2 = 0$ and for every $y \in \RR$, $X = W_1(\cdot, y)$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
-Then
-$$\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \leq \mu(U).$$
-\end{lemma}
-\begin{proof}
-Let
-$$E = \{(x, y) \in L: x \in E_y\}$$
-be the undergraph of $u$.
-By Fubini's theorem and (\ref{Lie derivative computation}),
-\begin{align*}
-\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy &= -\int_{-\infty}^\infty \int_{E_y} \mathcal L_W\vol ~dy = -\iint_E ~\mathcal L_W\eta = \int_M (d1_E, W) ~\vol.
-\end{align*}
+% \begin{lemma}\label{coarea converse}
+% Suppose that $W \in \mathcal D(L, TL)$ depends on a parameter $n \in \NN$, such that $W_2 = 0$ and for every $y \in \RR$, $X = W_1(\cdot, y)$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
+% Then
+% $$\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \leq \mu(U).$$
+% \end{lemma}
+% \begin{proof}
+% Let
+% $$E = \{(x, y) \in L: x \in E_y\}$$
+% be the undergraph of $u$.
+% By Fubini's theorem and (\ref{Lie derivative computation}),
+% \begin{align*}
+% \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy &= -\int_{-\infty}^\infty \int_{E_y} \mathcal L_W\vol ~dy = -\iint_E ~\mathcal L_W\eta = \int_M (d1_E, W) ~\vol.
+% \end{align*}
 
-Let $(u_m)$ be a mollification of $u$, so that $u_m \to u$ in the weak topology of distributions.
-Then if $\chi$ is a cutoff, $\langle u_m, \chi\rangle \to \langle u, \chi\rangle$; taking a sequence of $\chi$ which increase to the indicator function of a compact set $K$, we conclude that $u_m \to u$ in $L^1(K)$, and hence $u_m \to u$ in $L^1_l$.
+% Let $(u_m)$ be a mollification of $u$, so that $u_m \to u$ in the weak topology of distributions.
+% Then if $\chi$ is a cutoff, $\langle u_m, \chi\rangle \to \langle u, \chi\rangle$; taking a sequence of $\chi$ which increase to the indicator function of a compact set $K$, we conclude that $u_m \to u$ in $L^1(K)$, and hence $u_m \to u$ in $L^1_l$.
 
-Let $E^{(m)}$ be the undergraph of $u_m$, and $E^{(m)}_y = \{u_m > y\}$.
-Then for every test function $v$,
-\begin{align*}
-\langle 1_{E^{(m)}} - 1_E, v\rangle &= \int_{E^{(m)} \Delta E} v ~\vol \leq |(E^{(m)} \Delta E) \cap (\supp v \times \RR)| \cdot ||v||_{L^\infty}\\
-&\leq ||v||_{L^\infty} \int_{\supp v} |u_m - u| ~\vol \to 0
-\end{align*}
-so $1_{E^{(m)}} \to 1_E$ in the weak topology of distributions.
-Therefore
-$$\lim_{m \to \infty} \int_M (d1_{E^{(m)}}, W) ~\vol = \int_M (d1_E, W) ~\vol.$$
+% Let $E^{(m)}$ be the undergraph of $u_m$, and $E^{(m)}_y = \{u_m > y\}$.
+% Then for every test function $v$,
+% \begin{align*}
+% \langle 1_{E^{(m)}} - 1_E, v\rangle &= \int_{E^{(m)} \Delta E} v ~\vol \leq |(E^{(m)} \Delta E) \cap (\supp v \times \RR)| \cdot ||v||_{L^\infty}\\
+% &\leq ||v||_{L^\infty} \int_{\supp v} |u_m - u| ~\vol \to 0
+% \end{align*}
+% so $1_{E^{(m)}} \to 1_E$ in the weak topology of distributions.
+% Therefore
+% $$\lim_{m \to \infty} \int_M (d1_{E^{(m)}}, W) ~\vol = \int_M (d1_E, W) ~\vol.$$
 
-Since $u_m$ is smooth, its graph $F_m = \partial E^{(m)}$ is a smooth manifold.
-Let $\nu_m$ be the upwards unit normal field of $F_m$ and let $\vol_m$ be the volume form on $F_m$ induced by $\eta$.
-Then
-$$\langle d 1_{E^{(m)}}, W\rangle = -\iint_{E^{(m)}} \mathcal L_W\eta = -\int_{F_m} h(\nu_n, W) ~\vol_m.$$
-Let $q_m = p|F_m$ and $Y_m$ be the vector field $(Y_m)_1 = -d u_m$, $(Y_m)_2 = 1$.
-Since $F_m$ is a graph, $q_m: F_m \to M$ is a diffeomorphism, $(q_m)_*\nu_m = Y_m/|Y_m|$, and
-$$(q_m)_* \vol_m = |Y_m| ~\vol.$$
-Therefore
-$$\int_{F_m} h(\nu_n, W) ~\vol_m = \int_M h(Y_m, W) ~\vol = \int_M g(d u_m, W_1) ~\vol = \int_M (d u_m, W_1) ~\vol.$$
-Thus
-\begin{align*}
-|\langle d 1_E, W\rangle| &= \lim_{m \to \infty} |\langle d u_m, W_1\rangle| \leq \mu(U). \qedhere
-\end{align*}
-\end{proof}
+% Since $u_m$ is smooth, its graph $F_m = \partial E^{(m)}$ is a smooth manifold.
+% Let $\nu_m$ be the upwards unit normal field of $F_m$ and let $\vol_m$ be the volume form on $F_m$ induced by $\eta$.
+% Then
+% $$\langle d 1_{E^{(m)}}, W\rangle = -\iint_{E^{(m)}} \mathcal L_W\eta = -\int_{F_m} h(\nu_n, W) ~\vol_m.$$
+% Let $q_m = p|F_m$ and $Y_m$ be the vector field $(Y_m)_1 = -d u_m$, $(Y_m)_2 = 1$.
+% Since $F_m$ is a graph, $q_m: F_m \to M$ is a diffeomorphism, $(q_m)_*\nu_m = Y_m/|Y_m|$, and
+% $$(q_m)_* \vol_m = |Y_m| ~\vol.$$
+% Therefore
+% $$\int_{F_m} h(\nu_n, W) ~\vol_m = \int_M h(Y_m, W) ~\vol = \int_M g(d u_m, W_1) ~\vol = \int_M (d u_m, W_1) ~\vol.$$
+% Thus
+% \begin{align*}
+% |\langle d 1_E, W\rangle| &= \lim_{m \to \infty} |\langle d u_m, W_1\rangle| \leq \mu(U). \qedhere
+% \end{align*}
+% \end{proof}
 
-\begin{proposition}[coarea formula for $BV_l$ functions]\label{Coarea2}
-Let $u \in BV(M)$, let $E_y = \{u > y\}$, and let $\omega(y) = d1_{E_y} ~\vol$.
-Then, if $\mu$ is the total variation of $du ~\vol$,
-$$\mu = \int_{-\infty}^\infty |\omega(y)| ~dy.$$
-\end{proposition}
-\begin{proof}
-By Lemma \ref{Coarea1} and the triangle inequality,
-$$\mu \leq \int_{-\infty}^\infty |\omega(y)| ~dy.$$
-So we just need to prove the converse.
 
-Let $U \Subset M$.
-Suppose that for every $y \in \RR$, $X = X^{(n)}_y$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
-Since $\omega$ with respect to the weak topology of measures, for every $n$, $X^{(n)}_y(x)$ can be chosen to be measurable in $(x, y)$; indeed, we can take $X^{(n)}_y$ to be a smooth approximation to the Radon measure $d 1_{E_y}/|d 1_{E_y}|_{TV}$ in the weak topology of distributions, which is a product of the measurable functions $\omega$ and $y \mapsto 1/|\omega(y)|$.
+% \begin{proof}
+% By Lemma \ref{Coarea1} and the triangle inequality,
+% $$\mu \leq \int_{-\infty}^\infty |\omega(y)| ~dy.$$
+% So we just need to prove the converse.
 
-By an approximation argument, we can find $W^{(n)} \in C_c(L, TL)$ such that $W^{(n)}_2 = 0$ and for every $y \in \RR$, $X = W^{(n)}_1(\cdot, y)$ is a maximizing sequence for $\langle d 1_{E_y}, X\rangle$ subject to $X \prec U$.
-Let us now suppress the $n$ and write $W(y) = W^{(n)}(\cdot, y)$.
+% Let $U \Subset M$.
+% Suppose that for every $y \in \RR$, $X = X^{(n)}_y$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
+% Since $\omega$ with respect to the weak topology of measures, for every $n$, $X^{(n)}_y(x)$ can be chosen to be measurable in $(x, y)$; indeed, we can take $X^{(n)}_y$ to be a smooth approximation to the Radon measure $d 1_{E_y}/|d 1_{E_y}|_{TV}$ in the weak topology of distributions, which is a product of the measurable functions $\omega$ and $y \mapsto 1/|\omega(y)|$.
 
-By Lemma \ref{coarea converse}, since $W$ has compact support, the integrand $\langle d 1_{E_y}, W(y)\rangle$ is uniformly bounded in $y$.
-Therefore, by Fatou's lemma,
-\begin{align*}
-\int_{-\infty}^\infty |\omega(y)| ~dy &= \int_{-\infty}^\infty \lim_{n \to \infty} \langle \omega(y), W(y)\rangle ~dy \leq \liminf_{n \to \infty} \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \\
-&\leq \mu(U). \qedhere
-\end{align*}
-\end{proof}
+% By an approximation argument, we can find $W^{(n)} \in C_c(L, TL)$ such that $W^{(n)}_2 = 0$ and for every $y \in \RR$, $X = W^{(n)}_1(\cdot, y)$ is a maximizing sequence for $\langle d 1_{E_y}, X\rangle$ subject to $X \prec U$.
+% Let us now suppress the $n$ and write $W(y) = W^{(n)}(\cdot, y)$.
+
+% By Lemma \ref{coarea converse}, since $W$ has compact support, the integrand $\langle d 1_{E_y}, W(y)\rangle$ is uniformly bounded in $y$.
+% Therefore, by Fatou's lemma,
+% \begin{align*}
+% \int_{-\infty}^\infty |\omega(y)| ~dy &= \int_{-\infty}^\infty \lim_{n \to \infty} \langle \omega(y), W(y)\rangle ~dy \leq \liminf_{n \to \infty} \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \\
+% &\leq \mu(U). \qedhere
+% \end{align*}
+% \end{proof}
 
 
 % \nocite{*}
