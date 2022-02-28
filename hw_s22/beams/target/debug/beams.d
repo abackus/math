@@ -1,1 +1,0 @@
-D:\math\hw_s22\beams\target\debug\beams.exe: D:\math\hw_s22\beams\src\data.rs D:\math\hw_s22\beams\src\global.rs D:\math\hw_s22\beams\src\lib.rs D:\math\hw_s22\beams\src\local.rs D:\math\hw_s22\beams\src\main.rs
