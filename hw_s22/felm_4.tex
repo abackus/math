@@ -126,44 +126,53 @@
 \begin{exer}
 Let $P_3(I)$ denote the space of cubic polynomials on $I = [a, b]$.
 Show that $v \in P_3(I)$ is determined by $(v(a), v'(a), v(b), v'(b))$ and find the corresponding basis functions.
-Construct a finite-dimensional subspace $W_h$ of $W = H^1_0([0, 1])$ of piecewise cubic functions and determine the natural degrees of freedom and basis functions.
-Formulate a finite-element scheme for $W_h$.
+Construct a finite-dimensional subspace $W_h$ of $W = H^2_0([0, 1])$ of piecewise cubic functions and determine the natural degrees of freedom and basis functions.
 Determine the corresponding linear system for a uniform partition $h$, and determine the corresponding numerical solution of the beam equation $u^{(4)} = f$ with $f$ constant where the partition only has two intervals.
 Compare it to the exact solution.
 \end{exer}
 
 Recall that $P_3(I)$ is $4$-dimensional, so to show that a function in $P_3(I)$ is determined by
 $$X(v) = (v(a), v(b), v'(a), v'(b)),$$
-it suffices to find functions $v_1, v_2, v_3, v_4 \in P_3(I)$ which are linearly independent and are $1$ on one of the entries of $X(v)$ and $0$ on the others. Namely, $v_1(a) = 1$, $v_2(b) = 1$, $v_3'(a) = 1$, $v_3'(b) = 1$.
-In particular, the functions $v_i$ define the corresponding basis for the given degrees of freedom.
-
-To this end, we write
-$$v_i(x) = v_{i0} + v_{i1}x + v_{i2}x^2 + v_{i3}x^3.$$
-Then
-$$\begin{bmatrix} 1 & a & a^2 & a^3 \\ 1 & b & b^2 & b^3 \\ 0 & 1 & 2a & 3a^2 \\ 0 & 1 & 2b & 3b^2 \end{bmatrix}\begin{bmatrix}v_{i0} \\ v_{i1} \\ v_{i12} \\ v_{i3}\end{bmatrix} = \begin{bmatrix}v_i(a) \\ v_i(b) \\ v_i'(a) \\ v_i'(b)\end{bmatrix}.$$
-Inverting this matrix we see that
+it suffices to find functions $f_0, f_1, g_0, g_1 \in P_3([0, 1])$ which are linearly independent and such that $f_i(i) = 1$ and $f_i$ annihilates all other degrees of freedom, and $g_i'(i) = 1$ and $g_i$ annihilates all other degrees of freedom. We easily compute
+$$f_0(x) = 1 - 3x^2 + 2x^3$$
+and hence
+$$f_1(x) = 1 - 3(1 - x)^2 + 2(1 - x)^3.$$
+Similarly we compute
+$$g_0(x) = x - 2x^2 + x^3$$
+and hence
+$$g_1(x) = (1 - x) - 2(1 - x)^2 + (1 - x)^3.$$
+This gives a basis of $P_3([0, 1])$ which corresponds to the desired degrees of freedom. The general case follows by scaling, namely for $[a, b]$ we get
 \begin{align*}
-    v_1(x) &= \frac{b^2(3a - b)}{(a - b)^3} - \frac{6ab}{(a - b)^3}x + \frac{3(a + b)}{(a - b)^3}x^2 - \frac{2}{(a - b)^3}x^3\\
-    v_3(x) &= \frac{-ab^2}{(a - b)^2} + \frac{b(2a + b)}{(a - b)^2}x - \frac{a + 2b}{(a - b)^2}x^2 + \frac{1}{(a - b)^2}x^3
+f_{I, -}(x) &= 1 - 3(x - a)^2 + 2(x - a)^3,\\
+f_{I, +}(x) &= 1 - 3(b - x)^2 + 2(b - x)^3,\\
+g_{I, -}(x) &= \frac{(x - a) - 2(x - a)^2 + (x - a)^3}{b - a}, \\
+g_{I, +}(x) &= \frac{(b - x) - 2(b - x)^2 + (b - x)^3}{b - a}.
 \end{align*}
-and $v_2,v_4$ are the same with the roles of $a,b$ swapped.
+Given a partition $\mathcal P$ of $[0, 1]$ at points $x_0, \dots, x_{n + 1}$ where $|x_i - x_{i + 1}| \leq h$, we define $W_h$ to be the space of piecewise cubic functions in $W$ which are cubic on each interval $(x_i, x_{i + 1})$ and $C^1$ everywhere.
+A basis is given by functions $f_i$, which is supported on $[x_{i - 1}, x_{i + 1}]$, with $f_i = f_{[x_{i - 1}, x_i], +}$ on $[x_{i - 1}, x_i]$ and $f_i = f_{[x_i, x_{i + 1}], -}$ on $[x_i, x_{i + 1}]$, which are $1$ at $x_i$,
+and functions $g_i$ which are supported on $[x_{i - 1}, x_{i + 1}]$, with $g_i = g_{[x_i, x_{i + 1}], -}$ on $[x_i, x_{i + 1}]$ and $g_i = - g_{[x_{i - 1}, x_i], +}$ on $[x_{i - 1}, x_i]$, which have derivative $1$ at $x_i$.
+These compatibility conditions ensure that $f_i,g_i$ are $C^1$.
 
-Given a partition of $[0, 1]$ at points $x_0, \dots, x_{n + 1}$ where $|x_i - x_{i + 1}| \leq h$, we define $W_h$ to be the space of $n$-tuples of cubic functions $(f_1, \dots, f_n)$ such that $f_i(x_i) = f_{i + 1}(x_i)$ and $f_i'(x_i) = f_{i + 1}'(x_i)$, and
-$$f_1(x_0) = f_1'(x_0) = f_n(x_{n + 1}) = f_n'(x_{n + 1}) = 0.$$
-We identify each $n$-tuple with the function $f \in H^1_0([0, 1])$ such that $f = f_i$ on $[x_i, x_{i + 1}]$.
-Such a function $f$ is uniquely determined by $f(x_i)$ and $f'(x_i)$ where $i \in \{1, \dots, n\}$ and so we construct a basis
-$$\{f_1, \dots, f_n, g_1, \dots, g_n\}$$
-where $f_i(x_i) = 1$ and $f_i$ annihilates other degrees of freedom, and similarly $g_i'(x_i) = 1$.
-More precisely we set... TODO
-
-The finite-element scheme here is to solve the variational equation
-$$a(u, v) = Lv$$
-for every $v \in W_h$, where $a: W^2 \to \RR$ is a continuous quadratic form and $L: W \to \RR$ is a continuous linear form.
-For a uniform partition $h$ we set ...
+The finite-element scheme here is to solve the equations
+\begin{align*}
+\int_{x_{i - 1}}^{x_{i + 1}} u^{(2)}(x) f_i^{(2)}(x) ~dx &= \int_{x_{i - 1}}^{x_{i + 1}} f(x) f_i(x) ~dx,\\
+\int_{x_{i - 1}}^{x_{i + 1}} u^{(2)}(x) g_i^{(2)}(x) ~dx &= \int_{x_{i - 1}}^{x_{i + 1}} f(x) g_i(x) ~dx.
+\end{align*}
+I don't have time to write out all the details here, and in particular to compute the stiffness operator, so let me just observe that each $f_i$ intersects its supports with only $f_{i - 1}, f_{i + 1}, g_{i - 1}, g_i, g_{i + 1}$.
+Similarly for $g_i$.
+Thus the matrix that we get will be highly sparse.
 
 The exact solution to the homogeneous Dirichlet problem for the beam equation with $u^{(4)} = f$, $f = A$ constant, is
 $$u(x) = \frac{A}{24}x^4 - \frac{A}{12}x^3 + \frac{A}{24}x^2.$$
-The approximate solution with two intervals and a uniform mesh is ...
+Suppose that we have a uniform mesh with just two intervals. Then our only degrees of freedom are the function at $1/2$ and its derivative at $1/2$, namely we can write
+$$u = u(1/2)v + u'(1/2)w$$
+where $v,w$ are both piecewise cubic,
+$$v(0) = v(1) = v'(0) = v'(1) = v'(1/2) = 0,$$
+$v(1/2) = 1$, $w'(1/2) = 1$, and
+$$w(0) = w(1) = w'(0) = w'(1) = w(1/2) = 0.$$
+
+
+
 
 \begin{exer}
 Let $u: [0, 1] \to \RR$ be a smooth function and let $p$ be its cubic interpolant on $[0, 1]$.
@@ -180,18 +189,28 @@ $$||u^{(k)} - p^{(k)}||_{L^2([a, b])} \leq C_k (b - a)^{4 - k} ||u^{(4)}||.$$
 Finally, obtain an error estimate for the above finite-element scheme for the beam equation.
 \end{exer}
 
-We define the integrodifferential operator
-$$Tu(x) = \int_0^1 K(x, t) u^{(4)}(t) ~dt$$
-and we want to show that
-$$Tu(0) = Tu(1) = Tu'(0) = Tu'(1) = 0$$
-and $u - Tu$ is a cubic polynomial.
-To compute $Tu(0)$ we write
-$$Tu(0) = \int_0^1 K(0, t) u^{(4)}(t) ~dt = \frac{1}{6} \int_0^1 0^2 (1 - t)^2 (3t - 0) u^{(4)}(t) ~dt = 0.$$
-Similarly for $Tu(1)$. For $Tu'(0)$ we write
-$$Tu'(0) = \int_0^1 \partial_x K(0, t) u^{(4)}(t) ~dt = \frac{1}{3} \int_0^1 0(1 - t)(3t - 0) u^{(4)}(t) ~dt = 0.$$
-Similarly for $Tu'(1)$.
-Now to see that $u - Tu$ is cubic, we claim that $\partial_x^{(k)}(u - Tu) = 0$ for $k \geq 4$.
-If this is identically true for $k = 4$ then it will be true for $k \geq 5$ as well.
+To show that $K$ is the Peano kernel for cubic interpolation we observe that
+$$p(x) = u(0) + u'(0)x + (3u(1) - 3u(0) - 2u'(0) - u'(1))x^2 + (2u(0) - 2u(1) + u'(0) + u'(1))x^3.$$
+Indeed, that $p(0) = u(0)$ and $p'(0) = u'(0)$ is clear, and we have
+$$p(1) = u(0) + u'(0) + 3u(1) - 3u(0) - 2u'(0) - u'(1) + 2u(0) - 2u(1) + u'(0) + u'(1) = u(1)$$
+and
+$$p'(1) = u'(0) + 6u(1) - 6u(0) - 4u'(0) - 2u'(1) + 6u(0) - 6u(1) + 3u'(0) + 3u'(1) = u'(1).$$
+We now integrate by parts twice:
+\begin{align*}\int_0^1 K(x, t) u^{(4)}(t) ~dt &= \int_0^1 \partial_t^2 K(x, t) u^{(2)}(t) ~dt \\
+&\qquad+ K(x, 1)u^{(3)}(1) + \partial_t K(x, 0)u^{(2)}(0) - K(x, 0)u^{(3)}(0) - \partial_tK(x, 1)u^{(2)}(1).
+\end{align*}
+This formula looks slightly ridiculous because of the large number of boundary terms that have accumulated. To fix that we compute
+$$K(x, 0) = K(x, 1) = \partial_t K(x, 0) = \partial_t K(x, 1) = 0,$$
+thus
+\begin{align*}\int_0^1 K(x, t) u^{(4)}(t) ~dt &= \int_0^1 \partial_t^2 K(x, t) u(t) ~dt.
+\end{align*}
+To further simplify we compute
+$$\partial_t^2 K(x, t) = \begin{cases}
+(-2x^3 + 3x^2)t + (x^3 - 2x^2), & x \leq t, \\
+(-2x^3 + 3x^2 - 1)t + (x^3 - 2x^2 + 1), & x \geq t.
+\end{cases}$$
+This function has a jump discontinuity at $t = x$ of size $x - 1$.
+I think that we need to use the Dirac delta part of $\partial_t^3 K$ to get the desired result but unfortunately I don't have time.
 
 Therefore
 $$u^{(k)}(x) - p^{(k)}(x) = \int_0^1 \partial_x^k K(x, t) u^{(4)}(t) ~dt$$
@@ -205,5 +224,14 @@ Rescaling $[0, 1]$ to have length $b - a$ does not affect the $L^\infty$ norm bu
 This implies that
 $$(b - a)^{-4} ||u^{(k)} - p^{(k)}||_{L^2([0, 1])} \leq (b - a)^{-k} ||\partial_x^k K||_{L^\infty([0, 1])} ||u^{(4)}||_{L^2([0, 1])}$$
 which is the desired estimate.
+
+To apply this to the beam equation we apply C\'ea's lemma to obtain a bound in energy norm
+$$||u - u_h||_a = \inf_{v \in W_h} ||u - v||_a \leq ||u - p||_a = ||Tu||_a.$$
+But the energy norm is $||v||_a = ||v^{(2)}||_{L^2}$, so
+$$||Tu||_a \leq ||(Tu)^{(2)}||_{L^2} \lesssim \sum_{i=1}^{n} (b - a)^2 ||u^{(4)}||_{L^2([0, 1])} \lesssim h||u^{(4)}||_{L^2([0, 1])}.$$
+Putting it all together we obtain
+$$||u^{(2)} - u_h^{(2)}||_{L^2} \lesssim h||u^{(4)}||_{L^2}.$$
+Actually we can do a little better than that, as the Poincar\'e inequality gives us bounds on $u - u_h$ and $u' - u_h'$ as well from this bound:
+$$||u - u_h||_{H^2} \lesssim h ||u^{(4)}||_{L^2}.$$
 
 \end{document}
