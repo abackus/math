@@ -1,0 +1,522 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Finite element methods, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Write down the element stiffness matrix and load vector for the beam equation.
+\end{exer}
+
+From class this is 
+$$S = \frac{2EI}{h} \begin{bmatrix} 6/h & 3 & -6/h & 3 \\ 3 & 2h & -3 & h \\ -6/h & -3 & 6/h & -3 \\ 3 & h & -3 & 2h\end{bmatrix}$$
+and 
+$$L = \frac{hf}{12} \begin{bmatrix} 6 \\ h & 6 & -h\end{bmatrix}.$$
+
+\begin{exer}
+Write a finite element program to solve the beam equation.
+\end{exer}
+
+Here is the file local.rs which contains the basic data structures and constructs the element stiffness matrix and load vector:
+
+\begin{verbatim}
+//! This module deals with procedures that work locally,
+//! thus in a single finite element, node, or dof
+//! The main purpose is to construct element stiffness matrices and load vectors.
+
+use nalgebra::{Matrix4, Vector4};
+
+/// A degree of freedom is just determined by an index
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+pub struct Dof {
+    index: usize,
+}
+
+impl Dof {
+    /// Create a dof with some index
+    pub fn new(index: usize) -> Dof {
+        Dof {
+            index,
+        }
+    }
+
+    /// Return the index of a dof 
+    pub fn index(self) -> usize {
+        self.index
+    }
+}
+
+/// We assume that every node has Dofs for the 0th and 1st derivative
+// In future homeworks I should replace this struct with 
+// pub struct Node<dim, sobolev> {
+//    pub coords: [f64; dim],
+//    pub dofs: [Dof; sobolev],
+// }
+// but implementing that will take a lot of work and I'm lazy
+
+#[derive(Debug, Copy, Clone)]
+pub struct Node {
+    pub coord: f64,
+    pub dof0: Dof, // 0th derivative
+    pub dof1: Dof, // 1st derivative
+}
+
+/// A single finite element.
+/// We index the dofs as follows:
+/// * 0 - left node, 0th derivative
+/// * 1 - left node, 1st derivative
+/// * 2 - right node, 0th derivative
+/// * 3 - right node, 1st derivative
+#[derive(Debug, Copy, Clone)]
+pub struct FiniteElement {
+    pub left: Node,
+    pub right: Node,
+}
+
+impl FiniteElement {
+    /// Create an element from two nodes 
+    pub fn new(left: Node, right: Node) -> FiniteElement {
+        FiniteElement {
+            left,
+            right,
+        }
+    }
+
+    /// Return the dof of index 0 <= i <= 3
+    pub fn eldof(self, i: usize) -> usize {
+        match i {
+            0 => self.left.dof0.index,
+            1 => self.left.dof1.index,
+            2 => self.right.dof0.index,
+            3 => self.right.dof1.index,
+            _ => panic!("Invalid eldof input")
+        }
+    }
+
+    /// Return the length of an element
+    pub fn len(self) -> f64 {
+        self.right.coord - self.left.coord
+    }
+
+    /// Return the element stiffness matrix for the beam equation
+    /// We assume locally constant flexural rigidity `flex`
+    pub fn beam_stiffness(self, flex: f64) -> Matrix4<f64> {
+        let h = self.len();
+        flex * f64::powf(h, -2.0) * Matrix4::new(
+            12.0 / h, 6.0, -12.0 / h, 6.0,
+            6.0, 4.0 * h, -6.0, 2.0 * h,
+            -12.0 / h, -6.0, 12.0 / h, -6.0,
+            6.0, 2.0 * h, -6.0, 4.0 * h
+        )
+    }
+    
+    /// Return the element load vector for the beam equation
+    /// We assume locally constant force `force`
+    pub fn beam_load(self, force: f64) -> Vector4<f64> {
+        let h = self.len();
+        h * force * Vector4::new(
+            0.5,
+            h / 12.0,
+            0.5,
+            -h / 12.0,
+        )
+    }
+}
+\end{verbatim}
+
+Here is global.rs, which runs the subassembly:
+
+\begin{verbatim}
+//! This module deals with procedures that work globally,
+//! thus in all finite elements at once or over the whole domain
+//! The main purpose is to subassemble the stiffness matrix and load vector,
+//! and to reconstruct a function from basis vectors
+
+use crate::local::{Dof, Node, FiniteElement};
+use nalgebra::{DVector, DMatrix};
+use std::collections::VecDeque;
+
+/// The domain of the problem consists of all finite elements
+#[derive(Debug)]
+pub struct Domain {
+    pub elts: Vec<FiniteElement>,
+    dofcounter: usize,
+}
+
+impl Domain {
+    /// Create a domain starting at 0 with specified distances between nodes
+    pub fn new(spacing: Vec<f64>) -> Domain {
+        let mut domain = Domain {
+            elts: Vec::with_capacity(spacing.len() + 1),
+            dofcounter: 0,
+        };
+        let mut coord = 0.0;
+        let mut curr_nodes = VecDeque::with_capacity(2);
+        curr_nodes.push_front(domain.create_node(coord));
+        for h in spacing {
+            coord += h;
+            curr_nodes.push_front(
+                domain.create_node(coord)
+            );
+            domain.create_elt(
+                curr_nodes.pop_back().unwrap(),
+                *curr_nodes.back().unwrap()
+            );
+        }
+        domain
+    }
+
+    /// Create a domain starting at 0 with evenly spaced nodes
+    // This isn't the most efficient way to do this (that would be with an Iterator)
+    // but I'm lazy
+    pub fn evenly_spaced(nodecount: usize, spacing: f64) -> Domain {
+        let mut spacing_vector = Vec::with_capacity(nodecount - 1);
+        for _ in 1..nodecount {
+            spacing_vector.push(spacing);
+        }
+        Domain::new(spacing_vector)
+    }
+
+    /// Create a new node in the domain
+    pub fn create_node(&mut self, coord: f64) -> Node {
+        let node = Node {
+            coord,
+            dof0: Dof::new(self.dofcounter),
+            dof1: Dof::new(self.dofcounter + 1),
+        };
+        self.dofcounter += 2;
+        node
+    }
+
+    /// Create a new element in the domain out of two nodes
+    pub fn create_elt(&mut self, left: Node, right: Node) -> FiniteElement {
+        let elt = FiniteElement::new(left, right);
+        self.elts.push(elt);
+        elt
+    }
+
+    /// Return the stiffness matrix for the beam equation
+    /// We assume constant flexural rigidity `flex`
+    pub fn beam_stiffness(&self, flex: f64) -> DMatrix<f64> {
+        let mut stiffness = DMatrix::zeros(self.dofcounter, self.dofcounter);
+        for elt in &self.elts {
+            for i in 0..4 {
+                for j in 0..4 {
+                    stiffness[(elt.eldof(i), elt.eldof(j))] = elt.beam_stiffness(flex)[(i, j)];
+                }
+            }
+        }
+        stiffness
+    }
+
+    /// Return the load vector for the beam equation
+    /// We assume constant force
+    pub fn beam_load(&self, force: f64) -> DVector<f64> {
+        let mut load = DVector::zeros(self.dofcounter);
+        for elt in &self.elts {
+            for i in 0..4 {
+                load[elt.eldof(i)] = elt.beam_load(force)[i];
+            }
+        }
+        load
+    }
+}
+\end{verbatim}
+
+The next step is to apply point loads and essential boundary data, and this is accomplished by data.rs:
+
+\begin{verbatim}
+//! This module handles point masses and boundary data
+
+use crate::local::Dof;
+use std::collections::{HashMap, HashSet};
+use nalgebra::{DVector, DMatrix};
+
+/// A table of point masses
+#[derive(Debug)]
+pub struct PointMasses {
+    dofs: HashMap<Dof, f64>,
+}
+
+impl PointMasses {
+    /// Create an empty point mass table 
+    pub fn new() -> PointMasses {
+        PointMasses {
+            dofs: HashMap::new()
+        }
+    }
+
+    /// Insert a new point mass
+    pub fn insert(&mut self, dof: Dof, mass: f64) {
+        self.dofs.insert(dof, mass);
+    }
+
+    /// Mutate a load vector by applying self
+    /// This consumes self
+    pub fn apply(self, load: &mut DVector<f64>) {
+        for (dof, mass) in self.dofs {
+            load[dof.index()] += mass;
+        }
+    }
+}
+
+// A set of homogeneous boundary data dofs
+#[derive(Debug)]
+pub struct EssentialBoundaryData {
+    dofs: HashSet<Dof>,
+}
+
+impl EssentialBoundaryData {
+    /// Create essential boundary data from a list of dofs
+    pub fn new(dofs: HashSet<Dof>) -> EssentialBoundaryData {
+        EssentialBoundaryData {
+            dofs,
+        }
+    }
+
+    /// Mutate a load vector and stiffness matrix by applying self
+    /// This consumes self 
+    pub fn apply(self, load: &mut DVector<f64>, stiffness: &mut DMatrix<f64>) {
+        for dof in self.dofs {
+            let i = dof.index();
+            load[i] = 0.0;
+            for j in 0..load.len() {
+                if i == j {
+                    stiffness[(i, i)] = 1.0;
+                } else {
+                    stiffness[(i, j)] = 0.0;
+                    stiffness[(j, i)] = 0.0;
+                }
+            }
+        }
+    }
+}
+\end{verbatim}
+
+Finally main.rs will be modified according to the problem at hand but can be used to solve the matrix equation and print out the solution vector.
+In principle this is where we would also compute the reaction force.
+
+\begin{verbatim}
+use beams::global::Domain;
+use beams::data::{PointMasses, EssentialBoundaryData};
+
+fn main() {
+    let domain = Domain::new(
+         // the ith entry here is the length of the ith interval
+         // in the partition
+        vec![0.5, 0.5]
+    );
+    let mut stiffness = domain.beam_stiffness(1.0);
+    let mut load = domain.beam_load(1.0);
+
+    let moment_dof = domain.elts[0].right.dof1;
+    let pointload_dof = domain.elts[1].right.dof0;
+    
+    let mut pointmasses = PointMasses::new();
+    pointmasses.insert(
+        moment_dof,
+        0.5
+    );
+    pointmasses.insert(
+        pointload_dof,
+        5.0
+    );
+    pointmasses.apply(&mut load);
+
+    EssentialBoundaryData::new(
+        // each entry in this vec consists of a dof which is set to 0
+        vec![
+            domain.elts[0].left.dof0,
+            domain.elts[0].left.dof1, 
+            domain.elts[1].right.dof0,
+            domain.elts[1].right.dof1,
+        ].into_iter().collect()
+    ).apply(&mut load, &mut stiffness);
+    println!("{}", stiffness.try_inverse().unwrap() * load);
+}
+\end{verbatim}
+
+\begin{exer}
+Test your program by resolving the two-interval beam problem from the last homework.
+\end{exer}
+
+The approximate solution $u$ of that beam problem satisfies 
+$$u(1/2) = 0.0026041666...$$
+cf the previous homework. Running my program I get the vector 
+$$(0, 0, 0.002604167, -0.020833333, 0, 0)$$
+so at $1/2$ the only term which contributes is 
+$$u(1/2) = 0.002604167 \frac{(1/2)^2(3/2 - 2(1/2))}{0.5^3} = 0.002604167.$$
+
+\begin{exer}
+Run your program on the given beam problem. Give a plot to show the rate of convergence etc.
+What is the deflection at $P, Q$?
+\end{exer}
+
+I don't have time to finish this so let me just give the code in main.rs that solves this beam problem:
+
+\begin{verbatim}
+use beams::global::Domain;
+use beams::data::{PointMasses, EssentialBoundaryData};
+
+const L: f64 = 5.0;
+const A: f64 = 2.0;
+const P: f64 = 5.0;
+const Q: f64 = 3.0;
+const F: f64 = -1.0;
+const EI: f64 = 1.0;
+
+fn main() {
+    let domain = Domain::new(
+         // the ith entry here is the length of the ith interval
+         // in the partition
+        vec![L/10., L/10., L/10., L/10., L/10.,
+            L/10., L/10., L/10., L/10., L/10.,
+            A/5., A/5., A/5., A/5., A/5.
+        ]
+    );
+    let mut stiffness = domain.beam_stiffness(EI);
+    let mut load = domain.beam_load(F);
+
+    let p_dof = domain.elts[4].right.dof0;
+    let q_dof = domain.elts[14].right.dof0;
+    
+    let mut pointmasses = PointMasses::new();
+    pointmasses.insert(p_dof, P);
+    pointmasses.insert(q_dof, Q);
+    pointmasses.apply(&mut load);
+
+    EssentialBoundaryData::new(
+        // each entry in this vec consists of a dof which is set to 0
+        vec![
+            domain.elts[0].left.dof0,
+            domain.elts[9].right.dof0, 
+        ].into_iter().collect()
+    ).apply(&mut load, &mut stiffness);
+    println!("{}", stiffness.try_inverse().unwrap() * load);
+}
+\end{verbatim}
+
+I don't have time to do much else than that sadly.
+Incidentally, I don't expect my schedule to be that much more free in the future, so I'll most likely drop the class and go back to auditing (I'll probably still turn in partial homeworks if that's OK).
+I registered to help get a bigger room, which I guess isn't happening.
+
+\end{document}

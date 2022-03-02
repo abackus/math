@@ -1,6 +1,7 @@
 //! This module deals with procedures that work globally,
 //! thus in all finite elements at once or over the whole domain
-//! The main purpose is to subassemble the stiffness matrix and load vector
+//! The main purpose is to subassemble the stiffness matrix and load vector,
+//! and to reconstruct a function from basis vectors
 
 use crate::local::{Dof, Node, FiniteElement};
 use nalgebra::{DVector, DMatrix};
