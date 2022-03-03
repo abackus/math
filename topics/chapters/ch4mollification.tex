@@ -1,6 +1,154 @@
 \section{Mollification of sets of least perimeter}\label{MollifierSection}
-In this section our goal is to show that given a set $U$ of least perimeter, we can find a $C^1$ hypersurface $N$ which approximates $\partial^* U$ arbitrarily well.
+In this section our goal is to show that given a set $U$ of least perimeter in $\Hyp^d$, we can find a $C^1$ hypersurface $N$ which approximates $\partial^* U$ arbitrarily well.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Coordinate charts}
+We begin by describing the two coordinate systems on $\Hyp^d$ that we shall use in the remainder of this paper.
+
+We first introduce the coordinate system
+$$(x, y, z) \in \RR_+ \times \RR^{d - 2} \times \RR = \Hyp^d$$
+with the Poincar\'e half-space metric
+\begin{equation}\label{hyperbolic metric}
+g = \frac{\dif x^2 + \dif y_1^2 + \cdots + \dif y_{d - 2}^2 + \dif z^2}{x^2}.
+\end{equation}
+This does not agree with the usual convention for the hyperbolic half-space metric, but will be advantageous when we represent $C^1$ hypersurfaces as graphs of functions $\omega: \RR_+ \times \RR^{d - 2} \to \RR$; then such a hypersurface can be written $\{z = \omega(x, y)\}$.
+The variables $y_1, \dots, y_{d - 2}$ plays no meaningful r\^ole in the proof of Theorem \ref{main lma} and the reader can specialize to the case $d = 2$ without oversimplifying the proof.
+
+We also define the \dfn{hyperbolic origin} $O = (1, 0, 0)$ and write $B_r = B(O, r)$.
+We record that
+\begin{equation}\label{sup in a ball}
+\sup_{(x, y, z) \in B_r} x = e^r,
+\end{equation}
+and we also define the constant
+$$\kappa := -\frac{|\Sph^{d - 1}|}{6d} \tr_g \Ric_O = \frac{|\Sph^{d - 1}|}{3d}$$
+so that, as proven in \cite{gray1974volume},
+\begin{equation}\label{area of sphere form}
+|\partial B_\rho| = |\Sph^{d - 1}|\rho^{d - 1} + \kappa \rho^{d + 1} + O(\rho^{d + 3}).
+\end{equation}
+
+The above coordinate system is useful for studying $C^1$ hypersurfaces, as we already noted, but for reduction to the $C^1$ case, most of our estimates will be in polar coordinates using the Poincar\'e ball metric
+\begin{equation}\label{radial metric}
+g = 4\frac{\dif r^2 + r^2 \sum_{i=1}^{d-1} (\prod_{j=1}^{i-1} \sin^2 \theta_j) \dif\theta_i^2}{(1 - r^2)^2},
+\end{equation}
+(where the empty product is $1$)
+for
+$$(r, \theta) \in (0, 1) \times \Sph^{d - 1} = \Hyp^d \setminus \{O\}$$
+and where the hyperbolic origin $O$ satisfies $r = 0$.
+As in the half-space case, the variables $\theta_2, \dots, \theta_{d - 1}$ have no significant r\^ole.
+The metric (\ref{radial metric}) is the rescaling of the euclidean metric in polar coordinates by the conformal factor $4(1 - r^2)^{-2}$ and so
+\begin{equation}\label{volume in polar coordinates}
+\mathrm{vol} = 2^d \frac{r^{d - 1}}{(1 - r^2)^d} \dif r \cdot \prod_{i=1}^{d - 1} \sin^{d - (1 + i)} \theta_i \dif \theta_i^2
+\end{equation}
+so we have the rescaling
+$$a(s_2, s_1) := \frac{\mathrm{vol}_{\partial \{r < s_2\}}}{\mathrm{vol}_{\partial \{r < s_1\}}} = \frac{r^{d - 1} (1 - s^2)^d}{s^{d - 1} (1 - r^2)^d}.$$
+In particular, $a(r, s) > 1$ for $r > s$.
+Moreover, we have $|\partial_r| = 2/(1 - r^2)$ and the divergence of a radial vector field $f(r)\partial_r$ is, by (\ref{volume in polar coordinates}),
+$$\Div f(r)\partial_r = \frac{(1 - r^2)^d}{r^{d - 1}} \partial_r \left[\frac{r^{d - 1}}{(1 - r^2)^d} f(r)\right].$$
+In particular the vector field
+\begin{equation}\label{good radial vector field}
+R := (1 - r^2)^d r^{1 - d} \partial_r
+\end{equation}
+is divergence-free and satisfies
+\begin{equation}\label{radial length}
+|R| = 2(r - r^3)^{1 - d}.
+\end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Monotonicity formula}
+The next step is to generalize the monotonicity formula of \cite[Teorema 3.3]{Miranda66}.
+We fix
+\begin{align*}
+0 &< r_1 < r_2 < 1/2,\\
+U &= \{r_1 < r < r_2\},\\
+N_\rho &= \partial \{\rho < r\},
+\end{align*}
+and note that the outwards normal to $N_\rho$ is
+$$\normal^\sharp_{N_\rho} = \frac{1 - \rho^2}{2} \partial_r.$$
+We follow \cite[Chapter 5]{Giusti77} and begin with the following analogue of \cite[Lemma 5.3]{Giusti77}:
+
+\begin{lemma}\label{Giusti53}
+Let $f \in BV_\loc(\Hyp^d)$, $0 < r_1 < r_2 < 1/2$, and denote for any function $h$, $h_r(\theta) = h(r, \theta)$. Then
+$$\int_{\partial B_1} *_{\partial B_1} |f_{r_2} - f_{r_1}| \leq \int_{B_{r_2} \setminus B_{r_1}} *|Rf|.$$
+\end{lemma}
+\begin{proof}
+Arguing as on \cite[pg64]{Giusti77}, we may assume that $f \in C^1(\{r < 3/4\})$.
+For any $h \in C^\infty(\{r < 3/4\})$,
+$$\int_{N_{1/2}} *_{N_{1/2}} h(f_{r_2} - f_{r_1}) = a(r_2, 1/2) \int_{N_{r_2}} *_{N_{r_2}} h_{1/2} f - a(r_1, 1/2) \int_{N_{r_1}} *_{N_{r_1}} h_{1/2} f.$$
+Moreover,
+$$\Div(h_{1/2} R) = h_{1/2} \Div R + \sum_{i=1}^{d - 1} (\partial_{\theta_i}h_{1/2} \dif \theta^i, R) = 0,$$
+so by the divergence theorem,
+$$\int_U *h_{1/2} Ru = 2\left(\frac{1 - r_2^2}{r_2}\right)^{d - 1}\int_{N_{r_2}} *_{N_{r_2}} h_{1/2} f - 2\left(\frac{1 - r_1^2}{r_1}\right)^{d - 1}\int_{N_{r_1}} *_{N_{r_1}} h_{1/2} f.$$
+\end{proof}
+
+\begin{lemma}\label{Monotonicity Formula}
+For every function $u \in L^\infty$ of least gradient, if we define for $r > 0$ small
+\begin{align*}
+    F(r) &= r^{1 - d} \int_{B_r} |du| \vol,\\
+    G(r) &= r^{1 - d} \int_{B_r} Xu \vol,
+\end{align*}
+then $F$ is nondecreasing and if $0 < r_1 < r_2$ then
+\begin{equation}\label{StrongMonotonicity}
+0 \leq \left|\inf_\Theta e^{a_\Theta(r_1) - a_\Theta(r_2)}G(r_2) - G(r_1)\right|^2 \lesssim \left(1 + (d - 1)\log \frac{r_2}{r_1}\right)(F(r_2) - F(r_1)).
+\end{equation}
+\end{lemma}
+
+To prepare for the proof of Lemma \ref{Monotonicity Formula}, we specify $X$ by
+$$X = X_0 \partial_r + X_1 \partial_{\theta_1} + \cdots + X_{d - 1} \partial_{\theta_{d - 1}}$$
+where we used $\varphi_r$ to obtain coordinate fields $\partial_{\theta_1}, \dots, \partial_{\theta_{d - 1}}$ on $B_1 \setminus \{P\}$.
+We also fix the notation
+$$U = B_{r_2} \setminus B_{r_1}.$$
+
+\begin{lemma}\label{monotonicity lemma}
+Under the hypotheses of Lemma \ref{Monotonicity Formula}, with $u \in C^1(B_1)$,
+$$\int_U r^{1 - d}\frac{(\partial_ru)^2}{|du|} \vol \leq 2(F(r_2) - F(r_1)).$$
+\end{lemma}
+\begin{proof}
+We fix $r^* \in [r_1, r_2]$ and introduce a competitor $v(r, \Theta) = u(r^*, \Theta)$. We define $\partial_\Theta w(r, \Theta)$ for $w \in C^1(B_1)$ to be the orthogonal projection of $dw(r, \Theta)$ onto $T'\partial B_r$.
+Let $N = \partial B_r$.
+Since $u$ has least gradient,
+$$\int_{B_{r^*}} *|du| \leq \int_{B_{r^*}} *|dv| = \int_0^{r^*} \int_{\partial B_r} *_{\partial B_r} |dv| ~dr.$$
+Then by (\ref{rescale a function by a}), the fact that $\partial_r v = 0$, and Fubini's theorem,
+\begin{align*}
+    \int_0^{r^*} \int_{\partial B_r} *_{\partial B_r} |dv| ~dr &\leq \int_0^{r^*} \frac{r^{d - 1}}{(r^*)^{d - 1}} ~dr \cdot \int_N *_N |dv|.
+\end{align*}
+By the Gauss lemma and Taylor's theorem applied to $\sqrt\cdot$,
+\begin{align*}
+\int_N *_N |dv| = \int_N *_N |\partial_\Theta u| = \int_N *_N |du|\sqrt{1 - \frac{(\partial_r)^2}{|du|^2}} \leq \int_N *_N|du| - *_N\frac{(\partial_ru)^2}{2|du|}
+\end{align*}
+Applying the formula for differentiation of a moving region, we conclude
+$$\frac{1}{2} (r^*)^{1 - d} \int_N \frac{(\partial_ru)^2}{|du|} \vol_N \leq F'(r^*).$$
+Integrating both sides over $r^* \in [r_1, r_2]$, we prove the lemma.
+\end{proof}
+
+\begin{proof}[Proof of Lemma \ref{Monotonicity Formula}]
+By an approximation argument analogous to \cite[pg68]{Giusti77} we may assume that $u \in C^1(B_1)$.
+We may also assume that the Gauss lemma applies to spheres $\partial B_r$ for $r < 1$.
+
+Integrating by parts and using the fact that $\partial_r X_0 = 0$,
+$$\int_{B_r} Xu \vol = \int_{\partial B_1} u(r, \Theta) X_0(\Theta) \frac{\vol_{\partial B_r}}{\vol_{\partial B_1}}(\Theta) \vol_{\partial B_1}(\Theta),$$
+thus after applying (\ref{rescale the sphere form}),
+$$\left|\inf_\Theta e^{a_\Theta(r_1) - a_\Theta(r_2)}G(r_2) - G(r_1)\right| \lesssim_{g, X} \int_{\partial B_1} |u(r_2, \Theta) - u(r_1, \Theta)| \vol_{\partial B_1}.$$
+A straightforward modification of \cite[Lemma 5.3]{Giusti77} to use Proposition \ref{traces} implies that
+$$\int_{\partial B_1} |u(r_2, \Theta) - u(r_1, \Theta)| \vol_{\partial B_1} \leq \int_U r^{1 - d} |\partial_r u| \vol.$$
+By the Cauchy-Schwarz inequality applied to the measure $r^{1-d}\vol$, and Lemma \ref{monotonicity lemma},
+\begin{align*}
+\left(\int_U r^{1 - d} |\partial_r u| \vol \right)^2 &\leq \left(\int_U r^{1 - d}|du|\vol\right)\left(\int_U r^{1 - d}\frac{(\partial_ru)^2}{|du|} \vol\right)\\
+&\leq 2(F(r_2) - F(r_1))\left(\int_U r^{1 - d}|du|\vol\right).
+\end{align*}
+Dividing both sides of this inequality by $C := \int_U r^{1 - d} |du|\vol$ we see that $F' \geq 0$.
+By \cite[Lemma 5.11]{Giusti77} (where we replace Giusti's (5.7) with the fact that $F' \geq 0$),
+$$C \leq \left[1 + (d - 1) \log \frac{r_2}{r_1}\right] r_2^{1 - d} \int_{B_{r_2}} |du| \vol.$$
+Moreover, by the coarea formula, Proposition \ref{Coarea2},
+$$\int_{B_{r_2}} |du| \vol = \int_{-||u||_{L^\infty}}^{||u||_{L^\infty}} |\partial^* \{u > y\} \cap B_{r_2}| ~dy$$
+and from Corollary \ref{level sets are minimal} and Proposition \ref{doubling dimension}, this quantity is $\lesssim r_2^{d - 1}$ which gives the desired estimate.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Constructing the integral kernel}
 \begin{proposition}\label{mollifier quant}
     For every $P \in M$ and every $\varepsilon > 0$, there exists $\gamma^* > 0$ such that $P \mapsto \gamma^*$ is continuous and such that for every $\delta > 0$ such that $\exp_P: \{v: g(v, v) < \delta\} \to M$ is injective, all vector fields $X, Y$ with $1/2 \leq g(X, X), g(Y, Y) \leq 2$ and every set $U$ of least perimeter, $u = 1_U$, such that
     \begin{equation}\label{bootstrap the mollifier}
@@ -17,11 +165,7 @@ In this section our goal is to show that given a set $U$ of least perimeter, we 
     Moreover, $V$ does not depend on $Y$.
 \end{proposition}
 
-The euclidean analogue of this proposition is \cite[Lemma 5.5]{Miranda66}.
-For an exposition of the euclidean proof, we recommend \cite[Chapter 7]{Giusti77}.
-We use the same integral kernel as \cite[Chapter 7]{Giusti77}, and much of our argument is the same, but we must take care to control the error terms arising from $\Ric_g$.
-
-We proceed using compactness and contradiction. More precisely, suppose that the following lemma is true:
+Though Proposition \ref{mollifier quant} is stated so as to be easy to use, it is equivalent to the following qualitative lemma which is what we shall actually prove:
 
 \begin{lemma}\label{mollifier proposition}
 Let $(U_n)$ be a sequence of sets with indicator functions $u_n$, let $X, Y$ be vector fields with $1/2 \leq g(X, X), g(Y, Y) \leq 2$, and let
@@ -43,54 +187,18 @@ Then for almost every $t \in (0, 1)$ there exist open sets $V_n$ with $C^1$ boun
 and the limit in (\ref{mollifier prop4}) is locally uniform.
 \end{lemma}
 
-By rescaling $g$ appropriately, we may assume that $\delta \geq 1$.
-Then if the claim is not true, there exist $P \in M, \varepsilon > 0, X, Y$, and $\gamma_n \to 0$, such that there is a set $U_n$ of least perimeter satisfying (\ref{bootstrap the mollifier}) with $U = U_n$, $\gamma = \gamma_n$, and an exceptional set $T_n \subseteq (0, 1)$ of positive measure such that for every $t \in T_n$ and every set $V$ of $C^1$ perimeter in $B(P, t)$, one of (\ref{mollifier quant1}, \ref{mollifier quant2}, \ref{mollifier quant3}, \ref{mollifier quant4}) is false.
-After passing to a subsequence we may assume that $(\gamma_n) \in \ell^1$.
-If we take $V = V_n$ where $V_n$ is given by Lemma \ref{mollifier proposition}, the failure of the conjunction of (\ref{mollifier quant1}, \ref{mollifier quant2}, \ref{mollifier quant3}, \ref{mollifier quant4}) contradicts the conjunction of (\ref{mollifier prop1}, \ref{mollifier prop2}, \ref{mollifier prop3}, \ref{mollifier prop4}), which completes the proof of Proposition \ref{mollifier quant}.
-So it suffices to show Lemma \ref{mollifier proposition}.
+% By rescaling $g$ appropriately, we may assume that $\delta \geq 1$.
+% Then if the claim is not true, there exist $P \in M, \varepsilon > 0, X, Y$, and $\gamma_n \to 0$, such that there is a set $U_n$ of least perimeter satisfying (\ref{bootstrap the mollifier}) with $U = U_n$, $\gamma = \gamma_n$, and an exceptional set $T_n \subseteq (0, 1)$ of positive measure such that for every $t \in T_n$ and every set $V$ of $C^1$ perimeter in $B(P, t)$, one of (\ref{mollifier quant1}, \ref{mollifier quant2}, \ref{mollifier quant3}, \ref{mollifier quant4}) is false.
+% After passing to a subsequence we may assume that $(\gamma_n) \in \ell^1$.
+% If we take $V = V_n$ where $V_n$ is given by Lemma \ref{mollifier proposition}, the failure of the conjunction of (\ref{mollifier quant1}, \ref{mollifier quant2}, \ref{mollifier quant3}, \ref{mollifier quant4}) contradicts the conjunction of (\ref{mollifier prop1}, \ref{mollifier prop2}, \ref{mollifier prop3}, \ref{mollifier prop4}), which completes the proof of Proposition \ref{mollifier quant}.
+% So it suffices to show Lemma \ref{mollifier proposition}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Polar coordinates}
-Suppose that we are in the situation of Lemma \ref{mollifier proposition}, namely we are given a point $P \in M$ such that the exponential map is a diffeomorphism
-\begin{equation}\label{exp map mollify}
-\exp_P: \{v \in T_PM: g(v, v) < 1\} \to B_1.
-\end{equation}
-Then we may introduce polar coordinates
-\begin{equation}\label{polar coordinates mollify}
-(r, \Theta): B_1 \setminus \{P\} \to (0, 1) \times \Sph^{d - 1},
-\end{equation}
-where $\Theta = (\theta_1, \dots, \theta_{d - 1})$,
-for which $g(\partial_r, \partial_{\theta_i}) = 0$ and $g(\partial_r, \partial_r) = 1$.
-We also define
-$$\kappa = -\frac{R(P)|\Sph^{d - 1}|}{6d}$$
-where $R$ is the scalar curvature field of $g$.
-With this notation we have
-\begin{equation}\label{area of sphere form}
-|\partial B_\rho| = |\Sph^{d - 1}|\rho^{d - 1} + \kappa \rho^{d + 1} + O(\rho^{d + 3}),
-\end{equation}
-and $\kappa$ and the above implied constant depend continuously on $P$; see \cite{gray1974volume} for a proof.
-We use this fact to estimate the normal vector of a set of least perimeter, as follows.
-
-\begin{lemma}\label{scalar curvature monotonicity}
-If $r_1 < r_2$, $U$ is a set of least perimeter, $u = 1_U$, and $Q \in \partial^* U$,
-$$r_2^{1 - d}\int_{B(Q, r_2)} Xu ~\vol - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)| \leq (r_2^2 - r_1^2)\kappa(Q) + O(r_2^4).$$
-\end{lemma}
-\begin{proof}
-Since $U$ is a set of least perimeter, in particular its reduced boundary in $B(Q, r_1)$ has less area than $\partial B(Q, r_1)$.
-By the fundamental theorem of calculus and the Cauchy-Schwarz inequality,
-$$\int_{B(Q, r_2)} Xu ~\vol = \int_{\partial B(Q, r_2) \cap U} g(\normal_{\partial B(Q, r_2)}, X) ~\vol \leq \int_{\partial B(Q, r_2) \cap U} \vol = |\partial B(Q, r_2)|.$$
-Applying (\ref{area of sphere form}),
-\begin{align*}
-r_2^{1 - d}|\partial B(Q, r_2)| - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)|
-&\leq r_2^{1 - d}|\partial B(Q, r_2)| - r_1^{1 - d}|\partial B(Q, r_1)| \\
-&\leq |\Sph^{d - 1}| + r_2^2\kappa(Q) + O(r_2^4) - |\Sph^{d - 1}| - r_1^2 \kappa(Q) + O(r_1^4)\\
-&\leq (r_2^2 - r_1^2)\kappa(Q) + O(r_2^4).\qedhere
-\end{align*}
-\end{proof}
+The euclidean analogue of this proposition is \cite[Lemma 5.5]{Miranda66}.
+For an exposition of the euclidean proof, we recommend \cite[Chapter 7]{Giusti77}.
+We use the same integral kernel as \cite[Chapter 7]{Giusti77}, and much of our argument is the same, but we must take care to control the error terms arising from $\Ric_g$.
 
 We now construct the integral kernel that we will use in the proof of Lemma \ref{mollifier proposition}.
-Using the identification (\ref{exp map mollify}), we can define the difference of two points in $B_1$ and so can define the convolution $\omega * u$ of a function $u \in L^1_\loc(B_1)$ with any volume form $\omega$ with compact support in $B_1$.
+Using the exponential map, we can define the difference of two points in $B_1$ and so can define the convolution $\omega * u$ of a function $u \in L^1_\loc(B_1)$ with any volume form $\omega$ with compact support in $B_1$.
 
 \begin{definition}
 Define the volume form
@@ -159,6 +267,24 @@ $$c^{-1} \vol^{\mathrm{euc}} \leq \vol \leq c\vol^{\mathrm{euc}}$$
 where $\vol^{\mathrm{euc}}$ is the pushforward by $\exp_P$ of the euclidean volume form on $T_PM$ (as given by (\ref{exp map mollify})), then the assertions are immediate from \cite[Lemma 7.2]{Giusti77} with implied constant $c^2$.
 Such a constant $c > 0$ must exist, since $\sqrt{\det g}$ is bounded on the compact set $B_1$.
 \end{proof}
+
+\begin{lemma}\label{scalar curvature monotonicity}
+If $r_1 < r_2$, $U$ is a set of least perimeter, $u = 1_U$, and $Q \in \partial^* U$,
+$$r_2^{1 - d}\int_{B(Q, r_2)} *(Xu) - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)| \leq (r_2^2 - r_1^2)\kappa(Q) + O(r_2^4).$$
+\end{lemma}
+\begin{proof}
+Since $U$ is a set of least perimeter, in particular its reduced boundary in $B(Q, r_1)$ has less area than $\partial B(Q, r_1)$.
+By the divergence theorem and Cauchy-Schwarz inequality,
+$$\int_{B(Q, r_2)} *(Xu) = \int_{\partial B(Q, r_2) \cap U} *g(\normal_{\partial B(Q, r_2)}, X) \leq \int_{\partial B(Q, r_2) \cap U} *1 \leq |\partial B(Q, r_2)|.$$
+Applying (\ref{area of sphere form}),
+\begin{align*}
+r_2^{1 - d}|\partial B(Q, r_2)| - r_1^{1 - d}|\partial^* U \cap B(Q, r_1)|
+&\leq r_2^{1 - d}|\partial B(Q, r_2)| - r_1^{1 - d}|\partial B(Q, r_1)| \\
+&\leq |\Sph^{d - 1}| + r_2^2\kappa(Q) + O(r_2^4) - |\Sph^{d - 1}| - r_1^2 \kappa(Q) + O(r_1^4)\\
+&\leq (r_2^2 - r_1^2)\kappa(Q) + O(r_2^4).\qedhere
+\end{align*}
+\end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
