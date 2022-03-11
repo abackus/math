@@ -1,0 +1,157 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{Finite element methods, HW 7} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $u$ solve
+$$-\varepsilon \Delta u + b \cdot \nabla u + cu = f$$
+where $\varepsilon > 0$ is constant, $b,c \in L^\infty$, and $c \geq \nabla \cdot b/2$.
+Show that a solution exists in $H^1_0$ with an a priori estimate which is independent of $b$.
+\end{exer}
+
+We introduce the stiffness form
+$$a(u, v) = \int_\Omega \varepsilon \nabla u \cdot \nabla v + vb\cdot \nabla u + cuv.$$
+(It would be more natural to define a fractional differential operator $\nabla^{1/2}$ to get a symmetric bilinear form -- and then we could even apply the Riesz representation theorem rather than the Lax-Milgram theorem -- but I'm lazy.)
+A bunch of applications of the Cauchy-Schwarz inequality give
+\begin{align*}
+|a(u, v)| &\leq \varepsilon ||\nabla u|| \cdot ||\nabla v|| + ||b||_{L^\infty} \cdot ||\nabla u|| \cdot ||v|| + ||c||_{L^\infty} \cdot ||u|| \cdot ||v||\\
+&\leq (\varepsilon + ||b||_{L^\infty} + ||c||_{L^\infty}) \cdot ||u||_{H^1} \cdot ||v||_{H^1}
+\end{align*}
+so $a$ is continuous with norm $\varepsilon + ||b||_{L^\infty} + ||c||_{L^\infty}$.
+As usual, we also have a load form $Lv = \int_\Omega fv$, which is continuous with norm $||f||_{L^2}$.
+
+To show ellipticity of the stiffness form we integrate by parts to compute
+$$\int_\Omega ub \cdot \nabla u = -\int_\Omega ub \cdot \nabla u + u^2 \nabla \cdot b$$
+which implies that
+$$\int_\Omega ub \cdot \nabla u = -\frac{1}{2} \int_\Omega u^2 \nabla \cdot b.$$
+It follows that
+$$a(u, u) = \int_\Omega \varepsilon |\nabla u|^2 + (c - \nabla \cdot b/2)|u|^2,$$
+which by hypothesis is
+$$\geq \varepsilon ||\nabla u||^2 \gtrsim_\Omega ||u||_{H^1}^2$$
+by the Poincar\'e inequality. In particular, by the Lax-Milgram theorem, we can, for any $v \in H^1_0$, solve the variational equation
+$$a(u, v) = Lv$$
+for $u \in H^1_0$ which satisfies the estimate
+$$||u||_{H^1} \lesssim \frac{||f||}{\varepsilon}.$$
+
+\end{document}
