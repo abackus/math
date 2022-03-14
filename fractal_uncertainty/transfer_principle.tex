@@ -1,0 +1,215 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+\setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+\setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.05}
+
+\title{Fractal uncertainty principle via finite abelian groups}
+\author{Aidan Backus, James Leng, Zhongkai Tao}
+\date{December 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\DeclareMathOperator*{\Expect}{\mathbf E}
+
+\newcommand{\Four}{\mathcal F}
+\newcommand{\FourD}{\mathcal F^{\mathrm{disc}}}
+\newcommand{\disc}{\mathrm{disc}}
+\DeclareMathOperator{\hull}{hull}
+\newcommand{\dif}{\mathrm d}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\dbar}{\overline \partial}
+\newcommand{\Tree}{\mathcal T}
+\newcommand{\iso}{\xrightarrow{\sim}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic]{biblatex}
+\addbibresource{fup.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+
+\begin{document}
+% \begin{abstract}
+% The least-gradient maximum principle, essentially due to Miranda and de Giorgi in the 1960s, shows that least-gradient functions define a minimal lamination of the support of their derivative.
+% We extend this result to least-gradient functions on hyperbolic manifolds and propose means for a proof on general Riemannian manifold.
+% \end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let's try to come up with a transfer principle relating the Fourier transform on $\RR$ with its discretization on $\ZZ/p^n$ in the semiclassical limit $h \to 0$.
+Here $p$ is a large but fixed prime, $n$ is a scale parameter, and $h = p^{-n}$ is the semiclassical wavelength.
+Roughly speaking we're going to ``throw away frequencies above $1/h$''. In the context of the fractal uncertainty principle this shouldn't be a problem because we're only interested in functions which are bandlimited to a compact fractal $Y$.
+
+We do \emph{not} identify the groups $\ZZ/p^n$ and $\widehat{\ZZ/p^n}$ even though they are isomorphic with the same underlying set $\{0, \dots, p^n - 1\}$.
+Rather, we think of $j \in \ZZ/p^n$ as times $x \in [0, 1] = \RR/\ZZ$ by $x = jh$ and think of $k \in \widehat{\ZZ/p^n}$ as frequencies $\xi \in \ZZ$ by $k = \xi$.
+
+\section{Discretization}
+We write 
+$$e(\theta) = \exp(2\pi i\theta).$$
+For $f: \ZZ/p^n \to \CC$ we have the Fourier inversion formula 
+$$f(j) = h \sum_{k=0}^{p^n - 1} e(jhk) \sum_{m=0}^{p^n - 1} f(m) e(-mhk).$$
+Here $j, m$ are times and $k$ is a frequency. Moving the $h$ inside and using $h^{-1} = p^n$ we can rewrite this sum as 
+$$f(j) = \sum_{k=0}^{p^n - 1} e(jhk) \Expect_{m \in \ZZ/p^n} f(m) e(-mhk).$$
+This motivates us to define:
+
+\begin{definition}
+For $f \in L^2$, we define the \dfn{discretization} $f_h: \ZZ/p^n \to \CC$ by
+$$f_h(j) = \sum_{k=0}^{p^n - 1} e(jhk) \int_0^1 f(x) e(-xk) \dif x.$$
+\end{definition}
+
+Note that this normalization agrees with Theorem 4 in the original Bourgain--Dyatlov paper, but \emph{not} the semiclassical formalism that seems to have become the industry standard since then.
+In accordance with this normalization, we define for $f \in \ZZ/p^n$
+$$||f||_{\ell^2_h}^2 = \Expect_{m \in \ZZ/p^n} |f(m)|^2$$
+and for $g \in \widehat{\ZZ/p^n}$
+$$||g||_{\widehat{\ell^2_h}}^2 = \sum_{k = 0}^{p^n - 1} |g(k)|^2.$$
+Then the discrete Fourier transform
+$$\Four_hf(k) = \Expect_{m \in \ZZ/p^n} f(m) e(-mhk)$$
+is a unitary morphism 
+$$\Four_h: \ell^2_h \iso \widehat{\ell^2_h}$$
+which respects discretization in the sense that 
+$$\Four_h f_h = 1_{\ZZ/p^n} \Four f$$
+where we normalize 
+$$\Four f(k) = \int_0^1 f(x) e(-xk) \dif x.$$ 
+
+\begin{lemma}
+For every $f \in L^2(\RR)$ we have 
+$$||f_h||_{\ell^2_h} \leq ||f||_{L^2([0, 1])}.$$
+If $f$ is bandlimited to $\{0, \dots, p^n - 1\}$ then this inequality is an equality.
+\end{lemma}
+\begin{proof}
+It follows from bounding
+\begin{align*}
+||f_h||_{\ell^2_h} &= ||\Four_h f_h||_{\widehat{\ell^2_h}} = ||1_{\ZZ/p^n} \Four f||_{\ell^2} \leq ||\Four f||_{\ell^2} = ||f||_{L^2([0, 1])}. \qedhere
+\end{align*}
+\end{proof}
+
+We define the discretization of sets of times $X \subseteq [0, 1]$ which support a Radon measure $\mu_X$ by thinking of $[0, 1]$ as a $p$-adic tree.
+More precisely, we define the tree of intervals $\Tree$ by setting the root to be $[0, 1]$ and setting the children of an interval $I \in \Tree$ to be the intervals obtained by splitting $I$ into $p$ subintervals of length $|I|/p$.
+We number the intervals at level $n$ of the tree to correspond left-to-right to the elements of $\ZZ/p^n$.
+Then we set $\Tree(X)$ to be the subtree of active intervals, thus 
+$$\Tree(X) = \{I \in \Tree: \mu_X(I) > 0\},$$
+and set $X_h$ to be the subset of $\ZZ/p^n$ corresponding to level $n$ of $\Tree(X)$.
+
+We define the discretization of sets of frequencies $Y \subseteq \widehat \RR$ which support a Radon measure $\mu_Y$ more simply: we set 
+$$Y_h = \{k \in \ZZ/p^n: \mu_Y([k, k + 1)) > 0\}.$$
+Note that unlike a discrete sets of times $X_h$, the discrete set of frequencies $Y_h$ does not depend on $h$ once $h$ is small enough.
+
+\section{Fractal uncertainty principle}
+We now show that the fractal uncertainty principle reduces to a statement about abelian groups.
+
+\begin{definition}
+We say that $\beta > 0$ is a \dfn{discrete uncertainty exponent} for $(X, Y)$ if:
+\begin{enumerate}
+\item $X \subseteq [0, 1]$ and $Y \subseteq \widehat \RR$ are compact sets.
+\item For every $f: \ZZ/p^n \to \CC$ which is bandlimited to $Y_h$ and every $0 < h \ll 1$,
+$$||1_{X_h} f||_{\ell^2_h} \lesssim h^\beta ||f||_{\ell^2_h}.$$
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+Let $0 < h_1 < h_2 < 1$.
+The set of times $X$ is \dfn{elliptic for convolution} on scales $h \in [h_1, h_2]$ if
+$$||1_X f||_{L^2} \lesssim ||1_{X_h} f_h||_{\ell^2_h}.$$
+\end{definition}
+
+We write $\hull Y$ for the convex hull of a set $Y$. Note that for any $X$,
+$$\Four_h(1_{X_h} f_h) = (\Four_h 1_{X_h}) * (\Four_h f_h) = (\Four_h 1_{X_h}) * 1_{\ZZ/p^n} \Four f.$$
+Now if $1/h > |\hull Y|$, after modulating $f$ we may assume that $\supp \Four f \subseteq 1_{\ZZ/p^n}$.
+We are then interested in when the convolution operator
+\begin{align*}
+\ell^2_h &\to \ell^2_h \\
+g &\mapsto (\Four_h 1_{X_h}) * g
+\end{align*}
+is elliptic.
+There's a chapter in H\"ormander II about convolution operators which might have something to say about this.
+My intuition is that $h_1 = N^{-1}$ where $N$ is as in Bourgain--Dyatlov's Theorem 4: this operator should be elliptic if $X$ is well-approximated by its discretization, which should happen on any scale where $X$ looks $\delta$-regular if its discretization is to be a $\delta$-regular set.
+
+\begin{proposition}[transfer principle]
+Suppose that $\beta$ is a discrete uncertainty exponent for $(X, Y)$ and $X$ is elliptic for convolution on scales $[h_1, h_2]$.
+If $h_2$ is small enough depending on $|\hull Y|$, then for every $f: \RR \to \CC$ which is bandlimited to $Y$ and every $h \in [h_1, h_2]$,
+$$||1_X f||_{L^2} \lesssim h^\beta ||f||_{L^2}.$$
+\end{proposition}
+\begin{proof}
+By modulating $f$ we may assume that $Y$ only consists of positive frequencies, and then if we select $h_*$ small enough,
+\begin{align*}
+||1_X f||_{L^2} &\lesssim ||1_{X_h} f_h||_{\ell^2_h} \lesssim h^\beta ||f_h||_{\ell^2_h} \leq h^\beta ||f||_{L^2}. \qedhere 
+\end{align*}
+\end{proof}
+
+\printbibliography
+
+\end{document}
