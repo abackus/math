@@ -74,6 +74,7 @@
 \DeclareMathOperator{\Div}{div}
 \DeclareMathOperator{\Gram}{Gram}
 \DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\Ell}{Ell}
 \DeclareMathOperator{\WF}{WF}
 
@@ -147,7 +148,8 @@
 \begin{document}
 \begin{abstract}
 The least-gradient maximum principle, essentially due to Miranda and de Giorgi in the 1960s, shows that least-gradient functions define a minimal lamination of the support of their derivative.
-We extend this result to least-gradient functions on hyperbolic manifolds and propose means for a proof on general Riemannian manifold.
+We show that this result still holds on hyperbolic manifolds.
+As a consequence we answer some questions of Daskalopoulos--Uhlenbeck concerning the $L^\infty$-Teichm\"uller theory.
 \end{abstract}
 
 \maketitle
@@ -157,128 +159,232 @@ We extend this result to least-gradient functions on hyperbolic manifolds and pr
 % \tableofcontents
 
 \let\clearpage\relax
-\include{chapters/ch1introduction}
-\include{chapters/ch2measurethy}
+\section{Introduction}
+Throughout this paper, let $M$ be an oriented Riemannian manifold of metric $g$ and dimension $d$.
+For a function $u \in BV_\loc(M)$, we write $*|\dif u|$ for the total variation of the derivative, c.f. (\ref{total variation}).
+
+\begin{definition}\label{main definitions}
+A function $u \in BV_\loc(M)$ has \dfn{least gradient} if for every $v \in BV_\cpt(M)$ such that $\supp v \subseteq U \Subset M$,
+$$\int_U *|\dif u| \leq \int_U *|\dif u + \dif v|.$$
+A set $U$ of locally finite perimeter has \dfn{least perimeter} if $1_U$ has least gradient.
+\end{definition}
+
+Functions of least gradient arise naturally in conductivity imaging \cite{Nachman2009, Tamasan2019} as well as the formal limit of $p$-harmonic functions as $p \to 1$, but we are interested in them primarily because of their applications to minimal surfaces and the $L^\infty$-Teichm\"uller theory of Thurston and Daskalopoulos--Uhlenbeck \cite{thurston1998minimal,daskalopoulos2020transverse}.
+In that context one is interested in the existence of minimal laminations in a closed hyperbolic manifold, as defined below:
+
+\begin{definition}
+A \dfn{minimal lamination} in $M$ is a partition of a closed subset of $M$ into smooth hypersurfaces with zero mean curvature.
+The minimal lamination $\lambda$ is \dfn{analytic} if $(M, g)$ is analytic and each of the hypersurfaces in $\lambda$ is analytic.
+\end{definition}
+
+Our first theorem is an analogue of the maximum principle for least gradient functions on euclidean space \cite[Proposition 3.4]{górny2017planar}.
+
+\begin{theorem}[maximum principle]\label{main thm}
+Suppose that $2 \leq d \leq 7$ and suppose that $M$ has negative constant curvature.
+Let $u: M \to \RR$ be a function of least gradient, and $A_y = \partial \{u > y\}$.
+Then $(A_y)_{y \in \RR}$ is an analytic minimal lamination in $M$.
+\end{theorem}
+
+Theorem \ref{main thm} partially answers a question \cite[Problem 9.5]{daskalopoulos2020transverse} of Daskalopoulos--Uhlenbeck; we state this as Corollary \ref{maximum stretch contains lamination}.
+Moreover, in the course of proving Theorem \ref{main thm}, we shall obtain as a byproduct a solution to \cite[Problem 9.7]{daskalopoulos2020transverse}, namely Corollary \ref{ruelle sullivan antiderivative}.
+
+Theorem \ref{main thm} is a consequence of the following regularity theorem for sets of least perimeter.
+
+\begin{theorem}[regularity of minimal hypersurfaces]\label{main lma}
+Suppose that $2 \leq d \leq 7$.
+Then every set of least perimeter in $\Hyp^d$ is bounded by an analytic minimal hypersurface $N$.
+\end{theorem}
+
+Analogous results to Theorem \ref{main lma} include regularity of minimal currents weighted by an elliptic integrand, proven by Federer \cite[\S5.3]{federer2014geometric}, and regularity of sets of least perimeter on $\RR^d$ developed by Miranda \cite{Miranda64, Miranda66, Miranda67}.
+Our strategy closely mirrors Miranda's, and in this paper we emphasize the steps of the proof where significant modifications of Miranda's arguments are necessary.
+
+\begin{proof}[Proof of Theorem \ref{main thm}]
+We first pass to the universal cover of $M$, which is an open subset of $\Hyp^d$.
+By Corollary \ref{level sets are minimal}, for every function $u$ of least gradient, the superlevel sets of $u$ have least perimeter.
+Let
+\begin{equation}\label{lamination union}
+A = \bigcup_y \partial \{u > y\},
+\end{equation}
+let $B$ be the interior of $\{du = 0\}$, and let $x \in M$.
+Then $x \in B$ iff $u = u(x)$ near $x$, but that happens iff for every $y < u(x)$, $x$ is interior to $\{u > y\}$ and for every $y \geq u(x)$, $x$ is exterior to $\{u > y\}$.
+This happens iff for every $y \in \RR$, $x$ is either interior or exterior to $\{u > y\}$, thus $x \notin \partial \{u > y\}$, which happens iff $x \notin A$.
+Thus $\{A, B\}$ is a partition of $M$, so $A$ is closed.
+Moreover, the sets $\{u > y\}$ are totally ordered by $\subseteq$, so the sets $\partial \{u > y\}$ are disjoint.
+They are also hypersurfaces with the desired amount of regularity, by Theorem \ref{main lma}.
+\end{proof}
+
+It was shown by G\'orny that functions of least gradient on $\RR^d$, $d \leq 7$, have a decomposition into continuous and jump parts \cite[Theorem 1.2]{górny2017planar}.
+We assert that given Theorem \ref{main thm}, the proof of this result goes through verbatim:
+
+\begin{theorem}[G\'orny's regularity theorem]\label{Gorny regularity}
+Let $U$ be an open bounded convex subset of a hyperbolic manifold of dimension $\leq 7$.
+Then any function of least gradient $u: U \to \RR$ can be written as the sum of a continuous function of least gradient, and a function of least gradient with only jump discontinuities.
+\end{theorem}
+
+TODO: Check this very carefully
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Applications to hyperbolic geometry}
+In this section we discuss applications to Teichm\"uller theory and hyperbolic computational geometry.
+
+The Thurston asymmetric metric, first defined in \cite{thurston1998minimal}, is constructed from best-Lipschitz maps between two closed hyperbolic manifolds.
+As a first step towards an analytic understanding of the Thurston asymmetric metric, Daskalopoulos--Uhlenbeck \cite{daskalopoulos2020transverse}considered best-Lipschitz maps $M \to S^1$ where $M$ is a closed hyperbolic surface. 
+They identified a particularly important class of such maps, the $\infty$-harmonic maps, defined as follows, which are particularly significant because they induce geodesic laminations of $M$.
+
+\begin{definition}
+If a function $u$ is the weak limit in $L^r$ for $r > d$ of $p$-harmonic functions as $p \to \infty$, we call $u$ \dfn{$\infty$-harmonic}.
+For an $\infty$-harmonic function $u$ we define the \dfn{maximum-stretch locus}
+$$\lambda_u := \{x \in M: L(x) = \sup L\}$$
+where $L(x)$ denotes the local Lipschitz constant of $u$ at $x$.
+\end{definition}
+
+\begin{theorem}\label{infinity harmonic laminations}
+Suppose that $M$ is a closed hyperbolic surface and $u$ is an $\infty$-harmonic function. Then the maximum-stretch locus $\lambda_u$ is a geodesic lamination in $M$.
+\end{theorem}
+
+In \cite[\S5]{daskalopoulos2020transverse}, Daskalopoulos--Uhlenbeck prove the above theorem by considering the viscosity solution theory of $\infty$-Laplace equation
+\begin{equation}\label{infinity laplace}
+    \Hess u(\grad u, \grad u) = 0.
+\end{equation}
+However, the theory of viscosity solutions of (\ref{infinity laplace}) is still nascent, and Daskalopoulos--Uhlenbeck ask for a proof of Theorem \ref{infinity harmonic laminations} that bypasses (\ref{infinity laplace}) altogether, c.f. \cite[Problem 9.5]{daskalopoulos2020transverse}.
+We give a partial resolution of this problem by proving \cite[Theorem-Conjecture 9.6]{daskalopoulos2020transverse}.
+Before stating it we note that by a \dfn{section of least gradient} $u$ we mean a section that lifts to a section $\tilde u$ on $\Hyp^d$, such that $\tilde u$ can be trivialized to a function of least gradient
+
+\begin{corollary}\label{maximum stretch contains lamination}
+Let $u$ be an $\infty$-harmonic function on a closed hyperbolic surface $M$.
+Then the maximum-stretch locus $\lambda_u$ contains a geodesic lamination.
+\end{corollary}
+\begin{proof}
+By \cite[\S6]{daskalopoulos2020transverse}\footnote{The proof that such a section exists does not use Theorem \ref{infinity harmonic laminations}.}, there exists an affine bundle $E \to M$ and a section $v$ of least gradient of $E$ such that $\supp \dif v \subseteq \lambda_u$.
+By Theorem \ref{main thm}, $\supp \dif v$ is a geodesic lamination.
+\end{proof}
+
+It is not clear that $\supp \dif v = \lambda_u$ in the above corollary, essentially because it is not clear that the map $\dif u \mapsto \dif v$ is locally injective (so $\dif v$ could be $0$ somewhere on $\lambda_u$).
+We believe that this should be true, and state this as Conjecture \ref{two laminations agree}.
+
+Daskalopoulos--Uhlenbeck also ask for a partial converse to the fact that $\dif v$ endows $\lambda_u$ with the structure of an oriented measured lamination.
+We now prove this, resolving \cite[Problem 9.7]{daskalopoulos2020transverse}.
+For the definition of the Ruelle-Sullivan $1$-current of an oriented, transversely measured geodesic lamination, see \cite[\S8]{daskalopoulos2020transverse} or the original paper of Ruelle--Sullivan \cite{Ruelle75}.
+
+\begin{proposition}\label{minimal bounding implies least gradient}
+Let $u \in BV_\loc(M)$, where $M$ is a hyperbolic manifold, and suppose that the level sets $\partial \{u > y\}$ define a minimal lamination.
+Then $u$ is a function of least gradient.
+\end{proposition}
+\begin{proof}
+Fix $U \Subset M$ and let $v$ be a competitor in $U$, thus $v \in BV(U)$ and $u - v$ is trace-free.
+Then for $T: BV(U) \to L^1(U)$ the trace map, $\{Tu > y\} = \{Tv > y\}$ by (\ref{convergence of trace}).
+It follows that $\partial^* \{v > y\}$ is a competitor to $\partial \{u > y\}$ in $U$ and hence, since $\partial \{u > y\}$ is minimal,
+$$|\partial^* \{u > y\} \cap U| \leq |\partial^* \{v > y\} \cap U|.$$
+That $u$ has least gradient now follows from the coarea formula, Proposition \ref{coarea formula}.
+\end{proof}
+
+\begin{corollary}\label{ruelle sullivan antiderivative}
+Let $\lambda$ be an oriented, transversely measured geodesic lamination on a closed hyperbolic surface $M$, and let $\dif v$ be the Ruelle-Sullivan $1$-current induced by $\lambda$.
+Then $\dif v$ is the derivative of a section of least gradient $v: M \to E$, for some affine bundle $E \to M$.
+\end{corollary}
+\begin{proof}
+As observed in \cite[\S9]{daskalopoulos2020transverse}, if we lift $\dif v$ to a $1$-current $\dif \tilde v$ on $\Hyp^2$, then $\dif \tilde v$ is exact and any antiderivative $\tilde v$ of $\dif \tilde v$ has superlevel sets $\{\tilde v \geq y\}$ which are bounded by geodesics.
+Moreover we can choose $\tilde v$ to be $\pi_1(M)$-equivariant.
+The claim now follows from Proposition \ref{minimal bounding implies least gradient} and the realization of $\pi_1(M)$-equivariant functions on $\Hyp^2$ as sections of an affine bundle, c.f. \cite[\S4]{daskalopoulos2020transverse}.
+\end{proof}
+
+Moreover, if $M \to \Sph^1$ is a fibration where $M$ is a closed hyperbolic manifold of dimension $\leq 7$, then we may view the maps of least gradient $u: M \to \Sph^1$ as sections of least gradient of some affine bundle over $M$.
+As our results apply to such sections we obtain a partial resolution of \cite[Problem 9.13]{daskalopoulos2020transverse}.
+
+When combined with work of Loisel \cite{Loisel20}, Theorem \ref{main thm} also finds application in computational hyperbolic geometry, as it furnishes a large class of minimal laminations which are inexpensive to compute.
+
+\begin{proposition}\label{cohomology makes laminations}
+Let $M$ be a closed hyperbolic manifold of dimension $d \leq 7$, and let $\alpha \in H^1(M, \RR)$.
+Then there is a natural minimal lamination $\lambda$ in $M$ induced by $\alpha$, which can be obtained by solving a least-gradient Dirichlet problem on a fundamental polytope of $M$.
+\end{proposition}
+\begin{proof}
+Let $\Gamma = \pi_1(M)$. The Hurcewiz theorem and the universal property of abelianization furnish a commutative diagram
+$$\begin{tikzcd}\Gamma \arrow[dr, "\exists!"] \arrow[r] & H_1(M) \arrow[d, "\alpha"] \\ & \RR\end{tikzcd}$$
+We also denote the unique map $\Gamma \to \RR$ in the above diagram by $\alpha$.
+Then $\alpha$ is a representation of $\Gamma$ and thus induces a space $E$ of equivariant functions on the boundary $\Omega$ of each fundamental polytope $\Omega$ of $\Gamma$. To be more precise, for every $f \in E$ and $\gamma \in \Gamma$,
+\begin{equation}\label{boundary data for Loisel}
+f(\gamma x) = f(x) + \alpha(\gamma),
+\end{equation}
+and $f$ is constant on each face of $\partial \Omega$.
+The relation (\ref{boundary data for Loisel}) is an underdetermined boundary condition for functions in $E$, and so we consider the subspace $E'$ of functions which in addition are zero on a maximal set of faces such that we do not determine $f|\partial \Omega = 0$, thus any function $E' \subseteq E$ has a completely determined trace $t$ on $\partial \Omega$.
+It follows from \cite[Theorem 4.4]{daskalopoulos2020transverse} that there exists a function $u$ of least gradient on $\Omega$ whose trace is $t$.
+The minimal lamination induced by a function $u \in E$ of least gradient from Theorem \ref{main thm} does not depend on the class of $u$ in $E/E'$, since that is a space of constants; so we obtain a uniquely defined minimal lamination of $M$.
+\end{proof}
+
+\begin{corollary}
+With $M, \alpha, \lambda$ as in Proposition \ref{cohomology makes laminations}, and every quasiuniform triangulation $T$ of $M$, there exists a numerical algorithm for computing $\lambda$ with finite elements in $T$ with time complexity $O(|T|^{1/2} \log |T|)$ where $|\cdot|$ is cardinality.
+\end{corollary}
+\begin{proof}
+By \cite[Theorem 1]{Loisel20}, one can solve the least-gradient Dirichlet problem with finite elements in $T$ with time complexity $O(|T|^{1/2} \log |T|)$.
+\end{proof}
+
+TODO: Do some numerical experiments, show what minimal laminations in a fundamental polytope in $\Hyp^3$ look like
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Some open problems}
+We believe that Theorem \ref{main lma} could be extended to a wider class of Riemannian manifolds:
+
+\begin{conjecture}\label{main conj}
+Suppose that $2 \leq d \leq 7$ and $M$ is a simply connected Riemannian $d$-fold. Then Theorem \ref{main lma} holds with $\Hyp^d$ replaced by $M$.
+\end{conjecture}
+
+This conjecture implies Theorem \ref{main thm} for arbitrary $M$ by passing to the universal cover.
+Since our proof strongly uses the symmetries of $\Hyp^d$, it would be reasonable to first try to prove Conjecture \ref{main conj} for locally homogeneous manifolds, and especially those locally homogeneous manifolds $M$ such that for every $P \in M$ there is a natural action of $\Orth(\RR^d)$ on $M$ by isometry that fixes $P$.
+Another line of attack would be to show that our methods are perturbative, so that if $(M, g)$ is a simply connected Riemannian manifold such that $g$ is ``close to constant negative curvature'' in some sense, then Conjecture \ref{main conj} holds for $(M, g)$.
+
+It seems highly unlikely that Theorem \ref{main lma} can be extended to $\Hyp^8$, due to the existence of Simons cones in $\RR^8$ \cite[Theorem A]{BOMBIERI1969}.
+Simons cones are not of least perimeter in $\Hyp^8$, but one could potentially perturb them to obtain a set of least perimeter whose boundary is singular:
+
+\begin{problem}
+    Construct a set $U$ of least perimeter in $\Hyp^8$ such that $\partial U$ has a singularity of codimension $8$.
+\end{problem}
+
+Owing to the G\'orny regularity theorem, Theorem \ref{Gorny regularity}, we suspect that its consequence \cite[Theorem 1.1]{górny2017planar} holds, giving well-posedness for the Dirichlet problem in strictly convex planar domains.
+However, this is not obvious as we have not extended the Sternberg--Williams--Ziemer theorem \cite{ZiemerWilliamsSternberg1992} to the hyperbolic case.
+We therefore state G\'orny's main theorem as a conjecture:
+
+\begin{conjecture}
+Let $U$ be an open, bounded, strictly convex subset of $\Hyp^2$ with $C^1$ boundary.
+Then there exists a solution of the least-gradient Dirichlet problem on $U$ with data in $BV(\partial U)$.
+\end{conjecture}
+
+We would also like to know that the $\infty$-harmonic/least-gradient duality gives a complete proof of Theorem \ref{infinity harmonic laminations}, which follows from the below conjecture.
+
+\begin{conjecture}\label{two laminations agree}
+Let $u$ be an $\infty$-harmonic function with dual least-gradient section $v$.
+Then $\supp \dif v = \lambda_u$.
+\end{conjecture}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Outline of the paper}
+We begin with the preliminaries in \S\ref{LeastGradientFunctions} by developing the theory of functions of least gradient on Riemannian manifolds. A generalization of Miranda's theorem \cite[Teorema 3]{Miranda67} on the stability of functions of least gradient, and generalizations of its standard consequences, easily fall out.
+In particular, we show that the tangent cone to a set of least perimeter exists and is a hyperplane.
+In \S\ref{Monotonicity} we show that a monotonicity formula and several of its standard consequences hold for sets of least perimeter.
+
+We are then ready to prove Theorem \ref{main lma}.
+In \S\ref{MollifierSection}, we show Proposition \ref{mollifier quant}, which says that a set of least perimeter can be approximated by $C^1$ hypersurfaces that are approximately minimal.
+This result is then used in \S\ref{DeGiorgiSection} to prove Theorem \ref{main lma}. We do this by proving an analogue of the de Giorgi regularity lemma \cite[Teorema 5.7]{Miranda66} for $\Hyp^d$. The de Giorgi lemma is the only point of the proof where we use the constant negative curvature of $M$.
+We rely on the transitivity of $\Iso(\Hyp^d)$ as well as the fact that one can represent hypersurfaces in $\Hyp^d$ on euclidean space in a way which approximately preserves the surface area and normal vector field.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Acknowledgements}
+I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions.
+I would also like to thank Joshua Lin for suggesting the proof of Lemma \ref{cross product formula}.
+
+
 \include{chapters/ch3leastgradient}
+\include{chapters/ch2measurethy}
 \include{chapters/ch4mollification}
-\include{chapters/ch5degiorgi}
-\include{chapters/ch6proofs}
-
-% \appendix \section{Bochner integration and coarea} \label{coarea section}
-% Let $F$ be a separable Fr\'echet space over $\CC$, and $(\Omega, P)$ a measure space.
-% We can then define the \dfn{Bochner integral} of a $P$-measurable function $f: \Omega \to F$, which we write as $\int_\Omega f ~dP \in F$.
-% See \cite{Rieffel70}, \cite{MO47721}, and \cite[Chapter V]{yosida2012functional}.
-% We recall a few facts that we will need:
-
-% \begin{theorem}[Pettis]
-% Let $f: \Omega \to F$ be any function.
-% Then $f$ is $P$-measurable iff for every $X \in F'$, $\omega \mapsto \langle f(\omega), X\rangle$ is $P$-measurable.
-% In this case,
-% $$\left\langle \int_\Omega f ~dP, X\right\rangle = \int_\Omega \langle f(\omega), X\rangle ~dP(\omega).$$
-% If $F = \CC^r$, then the Bochner integral is just the componentwise Lebesgue integral.
-% \end{theorem}
-
-% Throughout this section we consider the superlevel sets $E_y = \{u > y\}$ of a function $u \in BV_l(M)$, and the resulting $T'M$-valued Radon measures
-% $$\omega(y) = d1_{E_y} ~\vol.$$
-% Let $\mu = |du| ~\vol$.
-
-% We first observe that for every $X \in \mathcal D(M, TM)$,
-% $$\langle \omega(y), X\rangle = -\int_{E_y} \mathcal L_X\vol$$
-% is measurable in $y$, since $E_y$ is monotone in $y$.
-% So by Pettis' theorem, $\omega$ is measurable in $y$ with respect to the weak topology of measures.
-
-% \begin{lemma}[coarea formula for measures]\label{Coarea1}
-% One has
-% $$du ~\vol = \int_{-\infty}^\infty \omega(y) ~dy.$$
-% \end{lemma}
-% \begin{proof}
-% Fix $X \in C_c(M, TM)$. We may assume that $u \geq 0$, and we must show
-% \begin{equation}
-% \label{gradient is integral of fibers}
-% \int_M (du, X) ~\vol = \int_{-\infty}^\infty \langle \omega(y), X\rangle ~dy.
-% \end{equation}
-% Since $u \geq 0$,
-% \begin{align*}
-% \int_M (du, X) ~\vol &= -\int_M u~\mathcal L_X\vol = -\int_M \int_0^{u(x)} dy ~\mathcal L_X\vol\\
-% &= -\int_0^\infty \int_{E_y} ~\mathcal L_X\vol ~dy = \int_0^\infty \langle \omega(y), X\rangle ~dy.
-% \end{align*}
-% by Fubini's theorem.
-% If $y < 0$ then $1_{E_y} = 1$ so $\omega(y) = 0$, so we conclude (\ref{gradient is integral of fibers}).
-% \end{proof}
-
-% Let $p: L \to M$ be the trivial line bundle with its induced metric $h$, and let $\eta$ be the volume form induced by $h$.
-% If $W$ is a vector field on $L$, we will write $W_1$ for the projection of $W$ onto $M$ and $W_2$ for its projection onto $\CC$.
-% Then Cartan's magic formula implies that if $W_2$ is constant, then
-% \begin{equation}
-% \label{Lie derivative computation}
-% \mathcal L_W\eta = \mathcal L_W\vol \wedge dy.
-% \end{equation}
-
-% \begin{lemma}\label{coarea converse}
-% Suppose that $W \in \mathcal D(L, TL)$ depends on a parameter $n \in \NN$, such that $W_2 = 0$ and for every $y \in \RR$, $X = W_1(\cdot, y)$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
-% Then
-% $$\int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \leq \mu(U).$$
-% \end{lemma}
-% \begin{proof}
-% Let
-% $$E = \{(x, y) \in L: x \in E_y\}$$
-% be the undergraph of $u$.
-% By Fubini's theorem and (\ref{Lie derivative computation}),
-% \begin{align*}
-% \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy &= -\int_{-\infty}^\infty \int_{E_y} \mathcal L_W\vol ~dy = -\iint_E ~\mathcal L_W\eta = \int_M (d1_E, W) ~\vol.
-% \end{align*}
-
-% Let $(u_m)$ be a mollification of $u$, so that $u_m \to u$ in the weak topology of distributions.
-% Then if $\chi$ is a cutoff, $\langle u_m, \chi\rangle \to \langle u, \chi\rangle$; taking a sequence of $\chi$ which increase to the indicator function of a compact set $K$, we conclude that $u_m \to u$ in $L^1(K)$, and hence $u_m \to u$ in $L^1_l$.
-
-% Let $E^{(m)}$ be the undergraph of $u_m$, and $E^{(m)}_y = \{u_m > y\}$.
-% Then for every test function $v$,
-% \begin{align*}
-% \langle 1_{E^{(m)}} - 1_E, v\rangle &= \int_{E^{(m)} \Delta E} v ~\vol \leq |(E^{(m)} \Delta E) \cap (\supp v \times \RR)| \cdot ||v||_{L^\infty}\\
-% &\leq ||v||_{L^\infty} \int_{\supp v} |u_m - u| ~\vol \to 0
-% \end{align*}
-% so $1_{E^{(m)}} \to 1_E$ in the weak topology of distributions.
-% Therefore
-% $$\lim_{m \to \infty} \int_M (d1_{E^{(m)}}, W) ~\vol = \int_M (d1_E, W) ~\vol.$$
-
-% Since $u_m$ is smooth, its graph $F_m = \partial E^{(m)}$ is a smooth manifold.
-% Let $\nu_m$ be the upwards unit normal field of $F_m$ and let $\vol_m$ be the volume form on $F_m$ induced by $\eta$.
-% Then
-% $$\langle d 1_{E^{(m)}}, W\rangle = -\iint_{E^{(m)}} \mathcal L_W\eta = -\int_{F_m} h(\nu_n, W) ~\vol_m.$$
-% Let $q_m = p|F_m$ and $Y_m$ be the vector field $(Y_m)_1 = -d u_m$, $(Y_m)_2 = 1$.
-% Since $F_m$ is a graph, $q_m: F_m \to M$ is a diffeomorphism, $(q_m)_*\nu_m = Y_m/|Y_m|$, and
-% $$(q_m)_* \vol_m = |Y_m| ~\vol.$$
-% Therefore
-% $$\int_{F_m} h(\nu_n, W) ~\vol_m = \int_M h(Y_m, W) ~\vol = \int_M g(d u_m, W_1) ~\vol = \int_M (d u_m, W_1) ~\vol.$$
-% Thus
-% \begin{align*}
-% |\langle d 1_E, W\rangle| &= \lim_{m \to \infty} |\langle d u_m, W_1\rangle| \leq \mu(U). \qedhere
-% \end{align*}
-% \end{proof}
+\include{chapters/ch5degiorgi} 
 
 
-% \begin{proof}
-% By Lemma \ref{Coarea1} and the triangle inequality,
-% $$\mu \leq \int_{-\infty}^\infty |\omega(y)| ~dy.$$
-% So we just need to prove the converse.
-
-% Let $U \Subset M$.
-% Suppose that for every $y \in \RR$, $X = X^{(n)}_y$ is a maximizing sequence for $\langle \omega(y), X\rangle$ subject to $X \prec U$.
-% Since $\omega$ with respect to the weak topology of measures, for every $n$, $X^{(n)}_y(x)$ can be chosen to be measurable in $(x, y)$; indeed, we can take $X^{(n)}_y$ to be a smooth approximation to the Radon measure $d 1_{E_y}/|d 1_{E_y}|_{TV}$ in the weak topology of distributions, which is a product of the measurable functions $\omega$ and $y \mapsto 1/|\omega(y)|$.
-
-% By an approximation argument, we can find $W^{(n)} \in C_c(L, TL)$ such that $W^{(n)}_2 = 0$ and for every $y \in \RR$, $X = W^{(n)}_1(\cdot, y)$ is a maximizing sequence for $\langle d 1_{E_y}, X\rangle$ subject to $X \prec U$.
-% Let us now suppress the $n$ and write $W(y) = W^{(n)}(\cdot, y)$.
-
-% By Lemma \ref{coarea converse}, since $W$ has compact support, the integrand $\langle d 1_{E_y}, W(y)\rangle$ is uniformly bounded in $y$.
-% Therefore, by Fatou's lemma,
-% \begin{align*}
-% \int_{-\infty}^\infty |\omega(y)| ~dy &= \int_{-\infty}^\infty \lim_{n \to \infty} \langle \omega(y), W(y)\rangle ~dy \leq \liminf_{n \to \infty} \int_{-\infty}^\infty \langle \omega(y), W(y)\rangle ~dy \\
-% &\leq \mu(U). \qedhere
-% \end{align*}
-% \end{proof}
 
 
-% \nocite{*}
 \printbibliography
 
 \end{document}
