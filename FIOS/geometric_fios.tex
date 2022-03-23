@@ -1,0 +1,230 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+\setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+\setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.05}
+
+\title[Geometric FIOs]{The geometric POV on Fourier integral operators}
+\author{Aidan Backus}
+\date{May 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Exc}{Exc}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\Ric}{\mathrm{Ric}}
+\newcommand{\Riem}{\mathrm{Riem}}
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand{\LapQL}{\Delta^{\mathrm{ql}}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Gram}{Gram}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
+\newcommand{\DirL}{\mathscr D}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic]{biblatex}
+\addbibresource{fios.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+
+\begin{document}
+\begin{abstract}
+    These notes are my attempt to understand the geometric perspective on Fourier integral operators.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tableofcontents
+
+\section{Symplectic geometry}
+Let $M$ be a manifold which we interpret as the ``classical phase space," and suppose that we have a function 
+$$H: M \to \RR$$
+which is the \dfn{Hamiltonian}, thus $H(x)$ is the energy of a system in state $x$.
+Then according to Hamiltonian mechanics, there should be an $\RR$-action on $M$ which are obtained by integrating the Hamilton equation and describe the evolution of the system.
+To get such a vector field, it suffices to associate a vector field $X_H$ to $H$. We make the following physical assumptions:
+\begin{enumerate}
+\item Since energy is only defined up to a constant, it is natural to require to actually make $X_H$ depend on $\dif H$ rather than $H$ itself. Thus we have an isomorphism $\omega$ which sends $\dif H$ to $X_H$.
+\item Since energy is conserved, $\mathcal L_{X_H} H = 0$.
+\item The symmetries of spacetime require that $\mathcal L_{X_H} \omega = 0$.
+\end{enumerate}
+Our first assumption says that $\dif H \mapsto X_H$ should be given by an isomorphism of vector bundles $T'M \to TM$.
+Such an isomorphism is encoded by a section $\omega$ of $T'M \otimes T'M$ such that for any tangent vector $v$, $w \mapsto \omega(v, w)$ is an isomorphism.
+In that case we have
+$$\iota_{X_H} \omega = \dif H.$$
+In particular, 
+$$0 = \mathcal L_{X_H} H =  (\dif H, X_H) = \omega(X_H, X_H)$$
+so we assert that $\omega$ is a $2$-form, i.e. $\omega(v, v) = 0$.
+Finally, we assert that 
+$$0 = \mathcal L_{X_H} \omega = \dif (\iota_{X_H} \omega) + \iota_{X_H} \dif \omega = \dif^2 H + (\dif \omega, X_H) = (\dif \omega, X_H).$$
+Since $H$ was arbitrary we conclude $\omega$ is closed.
+
+\begin{definition}
+A \dfn{symplectic $2$-form} is a closed $2$-form $\omega$ such that the map $v \mapsto \iota_v \omega$ is an isomorphism.
+The pair $(M, \omega)$ is a \dfn{symplectic manifold}.
+A diffeomorphism $\kappa: M \to N$ of symplectic manifolds for which
+$$\omega_M = \kappa^* \omega_N$$
+is a \dfn{canonical transformation} or a \dfn{symplectomorphism}.
+\end{definition}
+
+In fact, for $M$ a manifold, $T'M$ is a symplectic manifold where 
+$$\omega = \dif x^\mu \wedge \dif \xi_\mu$$
+where $(x^\mu)$ are coordinates on $M$ and $(\xi_\mu)$ are the dual coordinates on each cotangent space.
+Thus $\omega$ is a section of the double cotangent bundle of $M$.
+On the other hand, the definition of a symplectic $2$-form has no local invariants and implies that locally a symplectic manifold can be written as the cotangent bundle of some other manifold.
+
+\begin{definition}
+Let $M$ be a symplectic manifold and suppose that in some coordinate chart, $M$ is symplectomorphic to a cotangent bundle $T'N$.
+Let $(x^\mu)$ be coordinates on $N$ and let $(\xi_\mu)$ be the dual coordinates on each cotangent space of $N$.
+Then $(x^\mu, \xi_\mu)$ are \dfn{canonical coordinates} on $M$.
+\end{definition}
+
+The interpretation here is that $(x^\mu)$ are the position coordinates and $(\xi_\mu)$ are the momentum coordinates.
+
+\begin{definition}
+Let $M$ be a symplectic manifold and $H$ a Hamiltonian on $M$. The \dfn{Hamilton field} is the vector field $X_H$ defined by 
+$$\iota_{X_H} \omega_M = \dif H.$$
+The \dfn{Hamilton flow} is the $\RR$-action on $M$ induced by integrating the Hamilton field.
+\end{definition}
+
+\begin{proposition}[Hamilton's equation]
+Let $(x^\mu, \xi_\mu)$ be canonical coordinates on a symplectic manifold $M$, and let $H$ be a Hamiltonian.
+Then 
+$$X_H x = \partial_\xi H, \qquad X_H \xi = -\partial_x H.$$
+In particular, any integral curve $(x, \xi)$ of $X_H$ is a minimizer of
+$$\int_\gamma \xi_\mu (X_H x)^\mu - H(x, \xi).$$
+\end{proposition}
+
+
+\section{Sheaf cohomology stuff}
+Zworski constructs the phase of a Lagrangian submanifold from Poincare lemma...
+
+\section{Semiclassical Strichartz estimates}
+
+\section{Linearizing the nonlinear Schr\"odinger equation}
+uwu
+
+
+\printbibliography
+
+\end{document}
