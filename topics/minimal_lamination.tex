@@ -15,7 +15,7 @@
 \setlength{\parskip}{0.05in}
 \renewcommand{\baselinestretch}{1.05}
 
-\title[Hyperbolic least-gradient maximum principle]{The least-gradient maximum principle on hyperbolic manifolds}
+\title[Riemannian least-gradient maximum principle]{The least-gradient maximum principle on Riemannian manifolds}
 \author{Aidan Backus}
 \date{May 2022}
 
@@ -324,21 +324,21 @@ TODO: Do some numerical experiments, show what minimal laminations in a fundamen
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Some open problems}
-We believe that Theorem \ref{main lma} could be extended to a wider class of Riemannian manifolds:
+% We believe that Theorem \ref{main lma} could be extended to a wider class of Riemannian manifolds:
+%
+% \begin{conjecture}\label{main conj}
+% Suppose that $2 \leq d \leq 7$ and $M$ is a simply connected Riemannian $d$-fold. Then Theorem \ref{main lma} holds with $\Hyp^d$ replaced by $M$.
+% \end{conjecture}
+%
+% This conjecture implies Theorem \ref{main thm} for arbitrary $M$ by passing to the universal cover.
+% Since our proof strongly uses the symmetries of $\Hyp^d$, it would be reasonable to first try to prove Conjecture \ref{main conj} for locally homogeneous manifolds, and especially those locally homogeneous manifolds $M$ such that for every $P \in M$ there is a natural action of $\Orth(\RR^d)$ on $M$ by isometry that fixes $P$.
+% Another line of attack would be to show that our methods are perturbative, so that if $(M, g)$ is a simply connected Riemannian manifold such that $g$ is ``close to constant negative curvature'' in some sense, then Conjecture \ref{main conj} holds for $(M, g)$.
 
-\begin{conjecture}\label{main conj}
-Suppose that $2 \leq d \leq 7$ and $M$ is a simply connected Riemannian $d$-fold. Then Theorem \ref{main lma} holds with $\Hyp^d$ replaced by $M$.
-\end{conjecture}
-
-This conjecture implies Theorem \ref{main thm} for arbitrary $M$ by passing to the universal cover.
-Since our proof strongly uses the symmetries of $\Hyp^d$, it would be reasonable to first try to prove Conjecture \ref{main conj} for locally homogeneous manifolds, and especially those locally homogeneous manifolds $M$ such that for every $P \in M$ there is a natural action of $\Orth(\RR^d)$ on $M$ by isometry that fixes $P$.
-Another line of attack would be to show that our methods are perturbative, so that if $(M, g)$ is a simply connected Riemannian manifold such that $g$ is ``close to constant negative curvature'' in some sense, then Conjecture \ref{main conj} holds for $(M, g)$.
-
-It seems highly unlikely that Theorem \ref{main lma} can be extended to $\Hyp^8$, due to the existence of Simons cones in $\RR^8$ \cite[Theorem A]{BOMBIERI1969}.
-Simons cones are not of least perimeter in $\Hyp^8$, but one could potentially perturb them to obtain a set of least perimeter whose boundary is singular:
+It seems highly unlikely that Theorem \ref{main lma} can be extended to any manifold $M$ of dimension $8$, due to the existence of Simons cones in $\RR^8$ \cite[Theorem A]{BOMBIERI1969}.
+One could potentially perturb Simons cones to obtain a set of least perimeter whose boundary is singular:
 
 \begin{problem}
-    Construct a set $U$ of least perimeter in $\Hyp^8$ such that $\partial U$ has a singularity of codimension $8$.
+    For each Riemannian manifold $M$ of dimension $8$, construct a set $U$ of least perimeter in $M$ such that $\partial U$ has a singularity of codimension $8$.
 \end{problem}
 
 Owing to the G\'orny regularity theorem, Theorem \ref{Gorny regularity}, we suspect that its consequence \cite[Theorem 1.1]{górny2017planar} holds, giving well-posedness for the Dirichlet problem in strictly convex planar domains.
@@ -373,7 +373,9 @@ We rely on the transitivity of $\Iso(\Hyp^d)$ as well as the fact that one can r
 
 \subsection{Acknowledgements}
 I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions.
-I would also like to thank Joshua Lin for suggesting the proof of Lemma \ref{cross product formula}.
+I would also like to thank Joshua Lin for suggesting the proof of Lemma \ref{construction of Plateau energy}, and Trent Lucas for comments on an earlier draft of this work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Functions of least gradient}\label{LeastGradientFunctions}
 \subsection{Riemannian measure theory}
@@ -588,30 +590,31 @@ so that $E(R) = 0$ iff $u$ has least gradient. Then there exists $A \in \RR$ suc
 \end{equation}
 \end{lemma}
 \begin{proof}
-We fix $s \in [r_1, r_2]$ and introduce a competitor $v(r, \theta) = u(s, \theta)$.
-Let $N = \partial B_{s}$, $U = B_{s}$.
-
+We fix $s \in [r_1, r_2]$, introduce a competitor $v(r, \theta) = u(s, \theta)$, and allow $A \geq 0$ to be a constant which may vary from line to line.
 From the definition of $\eta$,
 \begin{equation}\label{consequence of least gradient monotone}
     \eta(u, s) \leq \int_U \star |\dif v| = \int_0^s \int_{\partial B_r} \star_r |\dif v| \dif r.
 \end{equation}
-Taylor expanding the volume form \cite[Lemma 3.4]{schoen1994lectures}, we obtain the existence of $\tilde A \geq 0$ such that for every $r < s$,
-$$\frac{\vol_{\partial B_r}}{\vol_{\partial B_s}} \leq e^{\tilde A s^2} \frac{r^{d - 1}}{s^{d - 1}},$$
-and hence since $\partial_r v = 0$,
-$$\int_{\partial B_r} \star_r |\dif v| \leq e^{\tilde As^2} \frac{\tilde r^{d - 1}}{s^{d - 1}} \int_N \star_N |\dif v|.$$
+Taylor expanding the volume form and the metric \cite[Lemma 3.4]{schoen1994lectures}, and applying $\partial_r v = 0$, we obtain the existence of $A \geq 0$ such that
+$$\int_{\partial B_r} \star_r |\dif v| \leq e^{As^2} \frac{\tilde r^{d - 1}}{s^{d - 1}} \int_{\partial B_s} \star_s |\dif v|.$$
 Applying (\ref{consequence of least gradient monotone}) and Fubini's theorem,
 \begin{align*}
-\eta(u, s) &\leq  e^{\tilde As^2} \int_0^{s} \frac{r^{d - 1}}{s^{d - 1}} \dif r \cdot \int_N \star_N |\dif v| = \frac{s e^{\tilde As^2}}{d} \int_N \star_N |\dif v|\\
-&\leq \frac{s e^{\tilde As^2}}{d - 1} \int_N \star_N |\dif v|.
+\eta(u, s) &\leq  e^{As^2} \int_0^s \frac{r^{d - 1}}{s^{d - 1}} \dif r \cdot \int_{\partial B_s} \star_s |\dif v| = \frac{s e^{As^2}}{d} \int_{\partial B_s} \star_s |\dif v|\\
+&\leq \frac{s e^{As^2}}{d - 1} \int_{\partial B_s} \star_s |\dif v|.
 \end{align*}
-By Gauss' lemma, $\dif v$ is the orthogonal projection of $\dif u$ onto $T'N$, and its orthocomplement is $\partial_r u$. Therefore by Taylor's theorem,
-$$\int_N \star_N |\dif v| \leq \int_N \star_N |\dif u| \sqrt{1 - \frac{(\partial_r u)^2}{|\dif u|^2}} \leq \int_N \star_N \left[|\dif u| - \frac{(\partial_r u)^2}{2 |\dif u|}\right]$$
-and hence from the definition of $E$,
-$$\frac{(s)^{1 - d}}{d - 1} \int_N \star_N \frac{(\partial_r u)^2}{2|\dif u|} \leq \frac{(s)^{1 - d}}{d - 1} \int_N \star_N |\dif u| - \frac{e^{-\tilde A(s)^2}}{(s)^d}\left[\int_U \star|\dif u| - E(s)\right].$$
-We now select $A = (d - 1)\tilde A/4$ so that for every $r$ small,
-$$e^{-\tilde Ar^2} \geq 1 - \frac{2A}{d - 1}r^2,$$
-and hence
-$$s^{1 - d} \int_N \star_N |\dif u| - (d - 1)\frac{e^{-\tilde As^2}}{s^d} \int_U \star|\dif u| \leq e^{-As^2} \partial_s\left(e^{As^2} s^{1 - d} \int_{B_s} \star|\dif u|\right).$$
+By Gauss' lemma, $\dif v$ is the orthogonal projection of $\dif u$ onto $T' \partial B_s$, and its orthocomplement is $\partial_r u$. Therefore by Taylor's theorem,
+$$\int_{\partial B_s} \star_s |\dif v| \leq \int_{\partial B_s} \star_s |\dif u| \sqrt{1 - \frac{(\partial_r u)^2}{|\dif u|^2}} \leq \int_{\partial B_s} \star_s \left[|\dif u| - \frac{(\partial_r u)^2}{2 |\dif u|}\right]$$
+or in other words
+\begin{align*}
+\int_{\partial B_s} \star_s \frac{(\partial_r u)^2}{2|\dif u|} &\leq \int_{\partial B_s} \star_s |\dif u| - \frac{d - 1}{s} e^{-As^2} \eta(u, s)\\
+&\leq \int_{\partial B_s} \star_s |\dif u| - \frac{d - 1}{s} e^{-As^2} \int_{B_s} \star |\dif u| - O(s^{-1}E(s)).
+\end{align*}
+We moreover have for $\tilde A \in \RR$ that
+$$e^{-\tilde As^2} \partial_s \left[e^{\tilde As^2} s^{1 - d} \int_{B_s} \star |\dif u|\right] = \left[2\tilde As^{2 - d} - \frac{d - 1}{s^d}\right]\int_{B_s} \star |\dif u| + s^{1 - d} \int_{\partial B_s} \star_s |\dif u|$$
+so if we choose $\tilde A$ so that
+$$-\frac{d - 1}{s} e^{-As^2} = 2\tilde As - \frac{d - 1}{s}$$
+then
+$$s^{1 - d} \int_{\partial B_s} \star_s |\dif u| - (d - 1)\frac{e^{-As^2}}{s^d} \int_{B_s} \star|\dif u| \leq e^{-As^2} \partial_s\left(e^{As^2} s^{1 - d} \int_{B_s} \star|\dif u|\right).$$
 We moreover have $e^{-As^2} \leq 1$, so we can now integrate with respect to $\dif s$ to conclude the result.
 \end{proof}
 
@@ -687,13 +690,15 @@ The left-hand side is given by Lemma \ref{least perimeter minimal size}.
 Let $U$ have least perimeter in $M$, $K \Subset M$ compact, and $d \leq 7$. Then only finitely many connected components of $\partial U$ meet $K$.
 \end{proposition}
 \begin{proof}
-If not, then there exists $P \in K \cap \partial U$ and a sequence of connected components $(D_n)$, such that there exists $P_n \in D_n$ with $P_n \to P$.
+If not, then there exists $P \in K \cap \overline{\partial U}$ and a sequence of connected components $(D_n)$, such that there exists $P_n \in D_n \cap K$ with $P_n \to P$.
 Since $\partial^* U$ is dense in $\partial U$ we can in fact take $P_n \in D_n^* := D_n \cap \partial^* U$.
 Now we take $\varepsilon > 0$ so small that for $A$ as in Proposition \ref{doubling dimension}, $e^{-A\varepsilon^2} \geq 1/2$, and choose $N$ so large that if $n \geq N$ then $B_n := B(P_n, \varepsilon/2)$ is contained in $B := B(P, \varepsilon)$.
 Thus
 $$|\partial U \cap B| \geq \sum_{n=N}^\infty |D_n^* \cap B_n| \geq \frac{\varepsilon^{d - 1}}{2^d} \sum_{n=N}^\infty |\Ball^{d - 1}| = \infty$$
 which violates that $U$ has locally finite perimeter.
 \end{proof}
+
+Local finiteness is not quite an obvious fact, since the measure-theoretic boundary need not be closed, and so even if we take $\partial U$ to be a union of lines, the lines could possibly cluster if $U$ is not assumed to have least perimeter.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Mollification of sets of least perimeter}\label{MollifierSection}
