@@ -33,6 +33,7 @@
 \newcommand{\GL}{\mathbf{GL}}
 \newcommand{\Orth}{\mathbf{O}}
 \newcommand{\Ball}{\mathbf{B}}
+\newcommand{\Distr}{\mathscr D}
 
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\cent}{center}
@@ -46,6 +47,7 @@
 \DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\Iso}{Iso}
 \DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Op}{Op}
 \DeclareMathOperator{\Lip}{Lip}
 \DeclareMathOperator{\Met}{Met}
 \DeclareMathOperator{\id}{id}
@@ -147,15 +149,16 @@
 
 
 \begin{document}
-\begin{abstract}
-    These notes are my attempt to understand the geometric perspective on Fourier integral operators.
-\end{abstract}
 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % \tableofcontents
+
+Once upon a time, I tried to read H\"ormander's huge papers on Fourier integral operator calculus.
+Mostly I didn't understand anything.
+In these notes, let me try to rederive the theory from the goal of trying to define pseudodifferential calculus in a coordinate-invariant way.
 
 \section{Symplectic geometry}
 Let $M$ be a manifold which we interpret as the ``classical phase space," and suppose that we have a function 
@@ -187,10 +190,17 @@ $$\omega_M = \kappa^* \omega_N$$
 is a \dfn{canonical transformation} or a \dfn{symplectomorphism}.
 \end{definition}
 
-In fact, for $M$ a manifold, $T'M$ is a symplectic manifold where 
+Locally, every closed $2$-form is the derivative of a $1$-form, and since this is physics we like potentials, so let's realize a symplectic form as a potential.
+
+\begin{definition}
+Suppose that $\dif \alpha$ is a symplectic $2$-form. Then we call $\alpha$ a \dfn{symplectic potential}, and $(M, \dif \alpha)$ an \dfn{exact symplectic manifold}.
+\end{definition}
+
+For $M$ a manifold, $T'M$ is a symplectic manifold where 
 $$\omega = \dif x^\mu \wedge \dif \xi_\mu$$
 where $(x^\mu)$ are coordinates on $M$ and $(\xi_\mu)$ are the dual coordinates on each cotangent space.
-Thus $\omega$ is a section of the double cotangent bundle of $M$.
+Thus $\omega$ is a section of the double cotangent bundle of $M$ and the symplectic potential is 
+$$\alpha = \xi_\mu \dif x^\mu.$$
 On the other hand, the definition of a symplectic $2$-form has no local invariants and implies that locally a symplectic manifold can be written as the cotangent bundle of some other manifold.
 
 \begin{definition}
@@ -211,13 +221,356 @@ The \dfn{Hamilton flow} is the $\RR$-action on $M$ induced by integrating the Ha
 Let $(x^\mu, \xi_\mu)$ be canonical coordinates on a symplectic manifold $M$, and let $H$ be a Hamiltonian.
 Then 
 $$X_H x = \partial_\xi H, \qquad X_H \xi = -\partial_x H.$$
-In particular, any integral curve $(x, \xi)$ of $X_H$ is a minimizer of
-$$\int_\gamma \xi_\mu (X_H x)^\mu - H(x, \xi).$$
+In particular, any integral curve $\gamma = (x, \xi)$ of $X_H$ is a minimizer of
+\begin{equation}\label{EulerLagrange}
+\int_\gamma \xi_\mu (X_H x)^\mu - H(x, \xi).
+\end{equation}
 \end{proposition}
+\begin{proof}
+Writing $\omega$ in canonical coordinates,
+$$\dif H = \iota_{X_h} \dif x^\mu \wedge \dif \xi_\mu = X_H x^\mu \dif \xi_\mu - X_H \xi^\mu \dif x_\mu.$$
+But also 
+$$\dif H = \partial_\xi H \dif \xi + \partial_x H \dif x.$$
+Expressing Hamilton's equation as an Euler-Lagrange equation we obtain the Lagrangian (\ref{EulerLagrange}).
+\end{proof}
+
+Since (\ref{EulerLagrange}) is the Lagrangian for classical mechanics with Hamiltonian $H$, we see that sympletic geometry really is the coordinate-free way of expressing classical mechanics.
+
+\section{Rapid review of pseudodifferential calculus}
+The state space of classical mechanics is a symplectic manifold, but the state space of quantum mechanics is a separable, infinite-dimensional Hilbert space.
+Moreover, we can always ``put coordinates'' on a separable, infinite-dimensional Hilbert space by realizing it as $L^2$ of some manifold.
+We'd like to do this without requiring that our manifold has a volume form (for one thing, there's no reason to believe that the state space is orientable), and this goal is accomplished by a half-density sheaf.
+
+\begin{definition}
+Let $M$ be a manifold. A \dfn{density} on $M$ is a Radon measure $\dif \mu$ on $M$ such that the Radon-Nikod\'ym derivative of $\dif \mu$ with respect to the euclidean volume form induced by any coordinate chart is a smooth function.
+We denote the sheaf of densities by $\Omega$.
+\end{definition}
+
+Observe that if $\mathcal F$ is a sheaf of ``rough functions'' (e.g. measurable functions, distributions, etc.), on $M$, then $\Omega \otimes \mathcal F$ is a sheaf of ``rough densities'' on $M$.
+For example if $\mathcal F$ are distributions that look like Radon measures in each small coordinate chart, then $\Omega \otimes \mathcal F$ is just the sheaf of Radon measures on $M$.
+Thus we will speak about distributional densities, measurable densities, etc.
+
+Moreover, in each coordinate chart, we can identify a density with a smooth function by taking its Radon-Nikod\'ym derivative.
+We can take the square root of a function, so in each coordinate chart we can take the square root $\sqrt{\dif \mu}$ of a density $\dif \mu$.
+Taking sheafifications, we obtain a formal square root sheaf to $\Omega$:
+
+\begin{definition}
+The \dfn{half-density sheaf} of a manifold $M$ is the sheaf $\Omega^{1/2}$ such that $\Omega^{1/2} \otimes \Omega^{1/2} = \Omega$.
+Sections of the half-density sheaf are called \dfn{half-densities}.
+\end{definition}
+
+Since we can integrate Radon measures, and the product of two half-densities is a Radon measure, the integral $\int_M fg$, where $f,g$ are half-densities, is well-defined.
+Thus we obtain an intrinsic definition of $L^2(M)$:
+
+\begin{definition}
+Let $M$ be a manifold. By $L^2(M)$, we mean the Hilbert space of measurable half-densities on $M$ with inner product 
+$$\langle f, g\rangle = \int_M fg$$
+such that $||f||^2 = \langle f, f\rangle$ is finite.
+\end{definition}
+
+By a similar construction we define $L^p(M)$ for $p \in [1, \infty)$.
+
+In quantum mechanics, the states are functions on $L^2(M)$.
+If $P$ is a (densely defined, unbounded) operator on $L^2(M)$, and $u$ is an eigenvector of $P$, then we view $P$ as measuring some attribute of $u$ to be the eigenvalue associated to $u$.
+
+A particularly important case of the above is when $P$ be a differential operator on $M$.
+This means that in coordinates, we have 
+$$Pu(x) = \sum_{|\alpha| \lesssim 1}\partial^\alpha f_\alpha(x) u(x)$$
+for some smooth functions $f_\alpha$, which can be rewritten using the Fourier transform as 
+$$Pu(x) = \sum_{|\alpha| \lesssim 1} \int_{\RR^d} e^{2\pi ix\cdot \xi} i\xi^\alpha \widehat{f_\alpha u}(\xi) \dif \xi$$
+where $\hat u$ is the Fourier transform of $u$ taken in coordinates.
+Unfortunately we do not have a favorable coordinate-free notion of Fourier transform, but let's try to think about what could be a good approximation to it.
+First, $\xi$ ranges over the space of frequencies that $u$ can exhibit at $x$.
+But that exactly means that $\xi$ is a covector at $x$.
+The intuition here is that if $x$ is units of meters, then a frequency should be in units of inverse-meters. So the frequencies should be covectors, not vectors, which would be units of meters also.
+
+The above suggests that we should write
+$$Pu(x) = \sum_{|\alpha| \lesssim 1} \int_{T^* M} i\xi^\alpha f_\alpha(y) u(y) e^{2\pi i(x - y) \cdot \xi} \dif y \wedge \dif \xi$$
+where $\dif x \wedge \dif \xi$ is the (coordinate-invariant) symplectic measure on $T^* M$
+$$\dif x \wedge \dif \xi := \dif x^1 \wedge \cdots \wedge \dif x^d \wedge \dif \xi_1 \wedge \cdots \wedge \dif \xi_d.$$
+This still isn't really coordinate-free because we need some canonical coordinates to talk about the multiindexed expression $\xi^\alpha$ and the dot product $(x - y) \cdot \xi$, and besides we are still talking about $u$ as a function, even though it was supposed to be a half-density and only looks like a function in coordinates.
+Also, for general $f_\alpha$ this expression might not be integrable with respect to the symplectic measure.
+
+Let's deal with the expression $\sum_\alpha i\xi^\alpha f_\alpha(x)$ first. 
+For $x$ fixed, this expression is a polynomial.
+So we're going to consider expressions that are polynomial-like in $\xi$, locally uniformly in $x$.
+We begin by recalling the pseudodifferential calculus on $\RR^d$.
+
+\begin{definition}
+The \dfn{Japanese function} $\Japan \cdot$ is defined on $\RR^d$ by $\Japan \xi = \sqrt{1 + |\xi|^2}$.
+\end{definition}
+
+\begin{definition}
+Let $U \subseteq \RR^d$ and $m \in \RR$.
+The \dfn{H\"ormander seminorms} of a function $a: U_x \times \RR^d_\xi \to \RR$ are defined for $K \subset U$ compact and $\alpha,\beta$ multiindices by
+$$||a||_{K,\alpha,\beta} := \sup_{\substack{x \in K \\ \xi \in \RR^d}} \Japan{\xi}^{|\alpha| - m} |\partial_x^\beta \partial_\xi^\alpha a(x, \xi)|.$$
+The \dfn{H\"ormander space} $S^m(U)$ is the Fr\'echet space of functions whose H\"ormander seminorms are all finite.
+\end{definition}
+
+I'm deliberately suppressing the subscripts $S^m_{\rho,\delta}$ on the H\"ormander space, because the only case we care about is $S^m_{1,0}$.
+I could be doing this in slightly higher generality, but I would have to add technical conditions on $(\rho,\delta)$ that are somewhat outside the scope of things I find worth spending time on.
+
+\begin{definition}
+Let $U \subseteq \RR^d$.
+A \dfn{symbol} on $U$ is an element of the H\"ormander space $S^m(U)$.
+The \dfn{quantization} $\Op(a)$ of a symbol $a$ is the (densely defined unbounded) operator on $L^2(U)$ defined by 
+$$\Op(a)u(x) := \int_{\RR^d} \int_{\RR^d} e^{2\pi i(x - y) \cdot \xi} a(y, \xi) u(y) \dif y \dif \xi$$
+where we extend $u$ off of $U$ as constant on rays.
+Operators of the form $\Op(a)$ for some symbol $a \in S^m(U)$ are called \dfn{pseudodifferential operators} of order $m$.
+The space of pseudodifferential operators of order $m$ is denoted $\Psi_m(U)$.
+The operator calculus of $\Psi_m$ is called \dfn{pseudodifferential calculus}.
+\end{definition}
+
+This construction solves a few problems.
+It provides an abstraction for expressions of the form $\sum_\alpha i\xi^\alpha f_\alpha(x)$ which we can try to eventually make coordinate-invariant.
+It also suggests that the integrability issue can be solved by studying the order $m$.
+
+Let's record a few examples of applications of pseudodifferential calculus before moving on:
+
+\begin{definition}
+A (weakly) \dfn{elliptic pseudodifferential operator} is an operator $\Op(a) \in \Psi^m$ such that $|a(x, \xi)| \gtrsim \Japan{\xi}^m$ for $|\xi| > c \geq 0$.
+The \dfn{parametrix} of an elliptic pseudodifferential operator is the operator $\Op(1/a)$, defined on the space of functions whose Fourier transform is zero on $\{|\xi| \leq c\}$.
+\end{definition}
+
+We think of an elliptic parametrix as the next best thing to an inverse to the pseudodifferential operator.
+
+\begin{example}
+For $\Op(a) = -\Delta$, the parametrix has a convolution kernel, which is none other than the Newtonian potential!
+This is a very abstract way of proving the first theorem in Evans' big book.
+\end{example}
+
+\begin{example}
+Let $M$ be a manifold which bounds an open subset $U$ of $\RR^d$.
+Recall that the \dfn{Dirichlet-to-Neumann morphism} $G$ is defined by letting $Tf$ be the solution to the Dirichlet problem for $-\Delta$ with data $f$, and then letting $Gf$ be the normal derivative of $Tf$.
+It is a densely defined unbounded operator on $L^2(M)$.
+
+The Dirichlet-to-Neumann morphism is pseudodifferential of order $1$.
+Or at least, that's what I'd like to say, but we don't really know how to talk about $\Psi^m(M)$ yet.
+\end{example}
+
+The above construction seems to require a choice of canonical coordinates $(x, \xi)$ on the cotangent bundle.
+Roughly speaking, this is because of the pesky $e^{2\pi i(x - y)\cdot \xi}$, which corresponds to ``a fixed choice of canonical coordinates,'' and so is incompatible with canonical transformations.
+We shall need a more general class of operators than pseudodifferential operators, which includes ``the quantizations of canonical transformations in some sense.''
+
+We turn to the details. First we recall the theorem that made Grothendieck famous... no, not the algebraic geometry theorem, or the other algebraic geometry theorem... \emph{that} theorem.
+
+\begin{definition}
+Let $M$ be a manifold and let $\Distr$ denote the presheaf of locally convex spaces of compactly supported smooth functions on $M$.
+Sections of $\Distr$ are called \dfn{test functions} on $M$, and sections of the dual sheaf $\Distr'$ are called \dfn{distributions} on $M$.
+\end{definition}
+
+It's easy to show that every pseudodifferential operator boundedly maps $\Distr(U) \to \Distr'(U)$ for every open set $U \subseteq \RR^d$.
+
+\begin{definition}
+Let $X, Y$ be manifolds, and $P: \Distr(Y) \to \Distr'(X)$ a bounded linear operator.
+The \dfn{Schwartz kernel} of $P$ is the distribution $P \in \Distr'(X \times Y)$ such that for every $u \in \Distr(Y)$ and $v \in \Distr(X)$,
+$$(Pu, v) = (P, u \otimes v).$$
+\end{definition}
+
+\begin{theorem}[Schwartz kernel theorem]
+Let $X, Y$ be open subsets of $\RR^d$.
+Every bounded linear operator $P: \Distr(Y) \to \Distr'(X)$ has a unique Schwartz kernel.
+\end{theorem}
+\begin{proof}
+The proof in this case is given by \cite[\S5.2]{HoAnalysis1}.
+\end{proof}
+
+In particular, if $a$ is a symbol, then $\Op(a)$ has a Schwartz kernel, which we formally write as 
+\begin{equation}\label{formal kernel}
+\Op(a)(x, y) = \int_{\RR^d} e^{2\pi i(x - y)\cdot \xi} a(y, \xi) \dif \xi.
+\end{equation}
+However, we were motivated by the case when $a$ is a polynomial in $\xi$, in which case that formal integral definitely doesn't make any sense as a Lebesgue integral.
+
+Recall however that Lebesgue integrals are ``absolutely convergent'', so if we were to extend the theory of integration to ``conditionally convergent integrals'', then the formal integral (\ref{formal kernel}) would actually make sense!
+
+\section{Oscillatory integrals}
+We now figure out what to do with the conditionally convergent integral (\ref{formal kernel}).
+Since we will later have to dump the expression $e^{2\pi i(x - y)\cdot \xi}$ anyways, it will be convenient to work with a larger class of integrals than just those of the form (\ref{formal kernel}).
+
+\begin{definition}
+A \dfn{cone bundle} over a manifold $M$ is a fiber bundle $E \to M$ such that there is a smooth action of $\RR_+$ on $E$ which preserves the fibers, and in local coordinates $U$ we have $E_U = U \times \Gamma$ where $\Gamma$ is a subset of $\RR^\ell \setminus 0$ for some $\ell$ which is invariant under the natural action of $\RR_+$ on $\RR^\ell \setminus 0$, and this action is compatible with the given $\RR_+$-action on $E$.
+
+A \dfn{cone} is a cone bundle over a point.
+\end{definition}
+
+\begin{definition}
+An \dfn{operator phase function} $\varphi$ on a symplectic manifold $M$ is a function $\varphi: M \to \RR$ such that there exist canonical coordinates $(x, \xi)$ on $M$, which realize $M$ as a cone bundle over $\{\xi = 0\}$, such that
+\begin{enumerate}
+\item $\varphi$ is smooth on $\{\xi \neq 0\}$,
+\item for every $t > 0$, $\varphi(t\xi) = t\varphi(\xi)$,
+\item $\varphi$ has no critical points on $\{\xi \neq 0\}$, and
+\item the differentials $\dif(\partial_{\xi_j} \varphi)$ are linearly independent.
+\end{enumerate}
+\end{definition}
+
+Suppose that we have a trivialization of the cone bundle $M = X \times \Gamma$. Then we shall be interested in integrals of the form
+\begin{equation}\label{oscillatory integral}
+I_\varphi(a)(x) := \int_\Gamma e^{i\varphi(x, \xi)} a(x, \xi) \dif \xi
+\end{equation}
+where $a \in S^m$. Note that $m$ doesn't depend on the trivialization since locally changing the trivialization just rescales $a(x, \cdot)$.
+This integral seems to depend on the trivialization. However, if we choose $\xi'$ in place of $\xi'$, then we get for $a$ a function that 
+$$I_\varphi(a)(x) = \int_\Gamma e^{i\varphi(x, \xi')} a(x, \xi') \frac{\dif \xi}{\dif \xi'} \dif \xi'.$$
+Now suppose that $a$ is actually a half-density, $a \in S^m \otimes \Omega^{1/2}$.
+Then changing coordinates eats a square root of the Radon-Nikod\'ym derivative, i.e. 
+$$I_\varphi(a)(x) = \int_\Gamma e^{i\varphi(x, \xi')} a(x, \xi') \sqrt{\frac{\dif \xi}{\dif \xi'}} \dif \xi'.$$
+In some sense we want to think of $I_\varphi(\cdot)(x)$ as a ``pairing'' operation, so what we're really interested in is $I(au)(x)$ where $u$ is a section of the dual sheaf to $\Omega^{1/2}$.
+But the dual to $L^2$ is $L^2$ so the dual to $\Omega^{1/2}$ is $\Omega^{1/2}$, i.e. $u$ is a half-density, and in that case it eats the other square root:
+$$I_\varphi(au)(x) = \int_M e^{i\varphi(x, \xi')} a(x, \xi') u(\xi') \dif \xi'.$$
+This this construction doesn't depend on the choice of trivialization of the cone bundle.
+We still needed to choose a way to realize $M$ as a cone bundle, however.
+
+\begin{example}
+The spacelike, timelike, and null bundles over a Lorentz manifold $M$, i.e. a spacetime, are cone bundles contained in $T'M$.
+The solution of the wave equation on Minkowski spacetime $\RR^{1 + d}$ with initial data $f \in \Distr(\RR^d)$ is 
+$$u(x, t) = \int_{\RR^d} e^{2\pi i(x\cdot \xi + t|\xi|)} \frac{\hat f(\xi)}{2i|\xi|} \dif \xi - \int_{\RR^d} e^{2\pi i(x\cdot \xi - t|\xi|)} \frac{\hat f(\xi)}{2i|\xi|} \dif \xi.$$
+The functions 
+$$\varphi_\pm(x, \xi) = e^{2\pi i(x \cdot \xi \pm t|\xi|)}$$
+are operator phase functions on the timelike and spacelike cone bundles over $\RR^d$ but cannot be written in canonical coordinates as $e^{2\pi ix\cdot \xi}$ because they do not extend smoothly to the null cone bundle $\{|x| = |\xi|\}$.
+
+This has to do with the fact that for hyperbolic PDE we have propagation of singularities along the null cone bundle, while for elliptic PDE we have elliptic regularity, which is the sort of thing that pseudodifferential calculus tries to abstract.
+The fact that hyperbolic PDE don't seem to be compatible with pseudodifferential calculus was one of the original motivations for introducing the notion of operator phase function.
+\end{example}
+
+So now the next thing is to figure out how to realize $M$ as a cone bundle without choosing canonical coordinates.
+The next best thing to the subvariety $\{\xi = 0\}$ in a symplectic manifold is a Lagrangian submanifold:
+
+\begin{definition}
+Let $M$ be a symplectic manifold. A submanifold $\Lambda$ of $M$ is \dfn{Lagrangian} if $\omega_M|\Lambda = 0$ and $\dim \Lambda = \dim M/2$.
+\end{definition}
+
+In other works $\Lambda$ is Lagrangian if a symplectic potential is a closed $1$-form on $\Lambda$.
+But locally a closed $1$-form is exact, thus we make the following definition.
+
+\begin{definition}
+A function $\varphi$ on a symplectic manifold is a \dfn{generating function} for a Lagrangian submanifold $\Lambda$ if $\dif \varphi$ is a symplectic potential on $\Lambda$.
+\end{definition}
+
+\begin{lemma}
+Let $\Lambda$ be a Lagrangian cone bundle in a symplectic manifold.
+Then we can cover a neighborhood of $\Lambda$ by canonical coordinates $(x, \xi)$ such that $(x, \xi) \mapsto \xi$ is a submersion and the symplectic potential $\xi \dif x$ is $0$.
+\end{lemma}
+\begin{proof}
+See \cite[pg136]{HoFIOS1}.
+\end{proof}
+
+\begin{proposition}[Poincar\'e's lemma for Lagrangian cone bundles]
+Let $\varphi$ be an operator phase function on a symplectic manifold $M$, and consider the image $\Lambda$ of $\{(x, \xi): \partial_\xi \varphi = 0\}$ under the map $(x, \xi) \mapsto (x, \partial_x \varphi)$.
+Then $\Lambda$ is a Lagrangian cone bundle in $T' \{\xi = 0\}$ and $\varphi$ is a generating function for $\Lambda$.
+
+Conversely, let $\Lambda$ be a Lagrangian cone bundle in $T'X$ for some manifold $X$.
+Then for every $\lambda \in \Lambda$ we can find canonical coordinates $(x, \xi)$, $x \in X_0 \subseteq \RR^d$, based at $\lambda$, an open subcone $\Gamma$ of $\RR^d$, and a function $H: \Gamma \to \RR$ such that
+\begin{equation}\label{canonical form of generating function}
+\varphi(x, \xi) := x \cdot \xi - H(\xi)
+\end{equation}
+is an operator phase function on the trivial cone bundle $X_0 \times \Gamma$, and $\varphi$ is a generating function for $\Lambda$.
+\end{proposition}
+\begin{proof}
+For the first direction, we can use the linear independence condition in the definition of operator phase function to show that $\Lambda$ is smooth and has half dimension.
+The homogeneity implies that $\Lambda$ is a cone bundle.
+Since $\partial_\xi \varphi = 0$ and $\xi = \partial_x \varphi$ we can think of $\dif \varphi$ as $\xi \dif x$ which is the symplectic potential.
+Therefore the symplectic potential is exact.
+
+For the converse we use the lemma to obtain canonical coordinates $(x, \xi)$, and use the fact that $\Lambda$ has half dimension, the submersion condition, and the implicit function theorem, to realize a function $x(\xi)$ with $\Lambda = \{x(\xi), \xi\}$.
+Then $x$ is homogeneous of degree $0$ in $\xi$ since $\Lambda$ is a cone bundle, and since $\Lambda$ is Lagrangian, the symplectic potential $\xi \dif x$ can be chosen to be $0$, thus 
+$$\dif(\xi x) = x \dif \xi.$$
+We then set $H(\xi) = \xi_\mu x^\mu(\xi)$. Then $H$ is homogeneous of degree $1$ and $\partial_\xi H = x$, so $\varphi$ is an operator phase function.
+\end{proof}
+
+\begin{example}
+Suppose that $\varphi(x, \cdot)$ is linear for every $x$. Then $\Lambda$ is the conormal bundle of $\{\partial_\xi \varphi = 0\}$.
+The pseudodifferential case is $\varphi(x, \xi) = x \cdot \xi$, in which case the conormal bundle is $T'_0 \RR^d$.
+\end{example}
+
+The point is that the thing which is coordinate-invariant is not the operator phase function, since we can always locally replace that by (\ref{canonical form of generating function}) for some $H$ that required some choices to define, but rather the Lagrangian cone bundle.
+However, in order to define oscillatory integrals induced by a Lagrangian cone bundle we shall need to work modulo a ``trivial'' class of operator phase functions, defined as follows.
+
+\begin{definition}
+A \dfn{nonstationary phase} is an operator phase function $\varphi$ such that $\partial_\xi \varphi \neq 0$.
+\end{definition}
+
+The point of the below proposition is that $a$ is allowed to be an arbitrarily bad symbol, that is, $m \gg 1$.
+Just the fact that $\varphi$ is a nonstationary phase is enough to kill $a$.
+
+\begin{proposition}[integration by stationary phase]
+Let $\varphi$ be a nonstationary phase on a trivial cone bundle $X \times \Gamma$, and let $a \in S^m(X \times \Gamma)$.
+Then $I_\varphi(a)$ converges absolutely to a smooth function on $X$.
+\end{proposition}
+\begin{proof}
+Obviously if $m < -\dim \Gamma$, then $I_\varphi(a)$ converges absolutely, and if it converges absolutely then we can commute $\partial_x$ with the integral sign and be happy since $\varphi$ and $a$ are both assumed smooth.
+So it suffices to show that we can reduce the order of $a$.
+Since the $\partial_{\xi_j} \varphi$ are linearly independent and $\varphi$ is nonstationary, we can solve the equation $a = \sum_j a_j \partial_{\xi_j} \varphi$ for $(a_j)$, $a_j \in S^m$.
+Then, integrating by parts,
+$$I_\varphi(a)(x) = \sum_{j=1}^{\dim \Gamma} \int_\Gamma e^{i\varphi(x, \xi)} i\partial_{\xi_j} a_j(x, \xi) \dif \xi.$$
+So we replaced the symbol with a symbol of order $m - 1$. So by induction we may assume that $-m \gg 1$.
+\end{proof}
+
+But what about conditional convergence?
+In that case, we should view $I_\varphi(a)$ as a distributional half-density, i.e. something we can pair with test half-densities:
+
+\begin{proposition}[convergence of oscillatory integrals]
+Let $u \in \Distr \otimes \Omega^{1/2}(X)$ be a test half-density, and let $\varphi$ be a operator phase function on a cone bundle $X \times \Gamma$.
+Then for $a \in S^m$, the integral
+$$(I_\varphi(a), u) := \iint_{X \times \Gamma} e^{i\varphi(x, \xi)} u(x) a(x, \xi) \dif x \wedge \dif \xi$$
+converges absolutely.
+\end{proposition}
+\begin{proof}
+This is because we can integrate by parts in $\xi$ to replace $a$ with a symbol in $S^{-\Gamma - \varepsilon}$ for some $\varepsilon > 0$, but then we pick up some horrible expression involving $\varphi(x, \xi)$.
+This expression might grow really fast in $x$ but since $u$ has compact support in $x$ it's OK.
+See \cite[\S1.2]{HoFIOS1} for the details.
+\end{proof}
+
+There's another issue to deal with: the cone that $\varphi$ was defined on might not have the same dimension as $\Lambda$.
+That was OK as long as $(x, \xi)$ were canonical coordinates but a priori we might want to work in more general coordinate systems.
+To deal with this... TODO define the Maslov line bundle
+
+\begin{definition}
+By \dfn{oscillatory integration data} on a manifold $X$ equipped with a closed Lagrangian cone bundle $\Lambda$ in $T'X$, we mean the set of tuple
+$$(U_j, U^\Lambda_j, N_j, \Gamma_j, x_j, \xi_j, \varphi_j)$$
+where:
+\begin{enumerate}
+\item $(U^\Lambda_j)$ is an open cover of $\Lambda$,
+\item $U_j$ is the projection of $U_j^\Lambda$ to $X$ and $U_j^\Lambda$ is a cone bundle over $U_j$,
+\item $\Gamma_j$ is a cone in $\RR^{N_j}$,
+\item $(x_j, \xi_j)$ are coordinates on $\Gamma_j$ with $U = \{\xi = 0\}$, and
+\item $\varphi_j$ is an operator phase function on $\Gamma_j$ which is a generating function for $\Lambda$.
+\end{enumerate}
+\end{definition}
+
+\begin{definition}
+Let $G \to \GL_n(K)$ be a group representation over a field $K$.
+Identify $G$ with the constant sheaf $G$ on a manifold $\Lambda$, and let $(g_{ij})$ be a $1$-cocycle on $\Lambda$ with values in $G$.
+We define a vector bundle $E$ of rank $n$ over the field $K$, which is said to have \dfn{structure group} $G$, by defining the transition map $\tilde g_{ij}$ to be the image of $g_{ij}$ under the representation.
+\end{definition}
+
+\begin{definition}
+Let $X$ be a manifold and $\Lambda$ a closed Lagrangian cone bundle in $T'X$, which admits oscillatory integration data $(U_j, U^\Lambda_j, N_j, \Gamma_j, x_j, \xi_j, \varphi_j)$.
+We introduce the representation $\ZZ/4 \to \GL_1(\CC)$, $[1] \mapsto i$, where $[\cdot]$ denotes residue class, and the $1$-cocycle $(g_{jk})$, where $g_{jk} = g_k - g_j$ and 
+$$g_k := [(\sgn \partial^2_\xi \varphi_k - N_k)/2].$$
+Then the \dfn{Maslov bundle} $L$ is the line bundle on $\Lambda$ with structure group $\ZZ/4$ induced by the $1$-cocycle $(g_{jk})$.
+\end{definition}
+
+...
+
+\begin{definition}
+Let $X$ be a manifold and $\Lambda$ a closed Lagrangian cone bundle in $T'X$.
+We then define the sheaf $I^m(\cdot, \Lambda)$ of \dfn{oscillatory integrals} on $X$, as follows.
+
+Assume that we are given oscillatory integration data $(U_j, U^\Lambda_j, N_j, \Gamma_j, x_j, \xi_j, \varphi_j)$.
+Then the space $I^m(U_j, \Lambda)$ consists of distributional half-densities $A_j$ on $X$ which can be written in the form 
+$$(A_j, u) := (2\pi)^{N_j/2 - n/4} i^{N_j} \iint_{\Gamma_j} e^{i\varphi(x_j, \xi_j)} a_j(x, \xi) u(x) \dif x \wedge \dif \xi$$
+where $u$ ranges over test half-densities, for some symbol
+$$a_j \in (S^m \otimes \Omega^{1/2} \otimes L)(\Gamma_j).$$
+\end{definition}
 
 
 \section{Sheaf cohomology stuff}
-Zworski constructs the phase of a Lagrangian submanifold from Poincare lemma...
+
+In the above definition, if $E$ carries some extra structure we require that the transition functions $(g_{ij})$ to preserve that structure.
+For example if $E$ is the tangent bundle of a Riemannian manifold, then the representation must map $G$ into the space of orthogonal matrices.
+
+pseudolocality...
+
+\section{Propagation of singularities}
 
 \section{Semiclassical Strichartz estimates}
 
