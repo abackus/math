@@ -35,6 +35,8 @@
 \newcommand{\SpOrth}{\mathbf{SO}}
 \newcommand{\Ball}{\mathbf{B}}
 
+\DeclareMathOperator*{\Expect}{\mathbf E}
+
 \DeclareMathOperator{\avg}{avg}
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\cent}{center}
@@ -55,6 +57,7 @@
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\Rm}{Rm}
 \DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Hol}{Hol}
 \DeclareMathOperator{\Radon}{Radon}
 \DeclareMathOperator*{\Res}{Res}
 \DeclareMathOperator{\sgn}{sgn}
@@ -190,7 +193,7 @@ A \dfn{minimal lamination} in $M$ is a partition of a closed subset of $M$ into 
 \end{definition}
 
 \begin{theorem}[maximum principle]\label{main thm}
-Suppose that $2 \leq d \leq 7$.
+Suppose that $2 \leq d \leq 7$ and let $M$ be locally homogeneous.
 Let $u: M \to \RR$ be a function of least gradient, and $A_y = \partial \{u > y\}$.
 Then $\lambda = (A_y)_{y \in \RR}$ is a minimal lamination in $M$, and each $A_y$ is a locally finite union of connected minimal hypersurfaces.
 \end{theorem}
@@ -380,25 +383,25 @@ Then $\supp \dif v = \lambda_u$.
 
 \subsection{Acknowledgements}
 I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions.
-I would also like to thank Trent Lucas for help with the proof of Proposition \ref{cohomology makes laminations} and Joshua Lin for help with the proof of Proposition \ref{construction of Plateau energy}.
+I would also like to thank Trent Lucas for comments on Proposition \ref{cohomology makes laminations} and Joshua Lin for providing me with Proposition \ref{Josh helped}.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Functions of least gradient}\label{LeastGradientFunctions}
-\subsection{Notation}
+\subsection{Riemannian measure theory}
+We begin by fixing notation.
 The statements $A \lesssim B$ and $A = O(B)$ are equivalent and mean that there exists $C > 0$ independent of $A, B \geq 0$ such that $A \leq BC$.
-Similarly the statements $A \ll B$ and $A = o(B)$ mean that there exists a function $f: \RR_+ \to \RR_+$ with $\lim_{x \to 0} f(x) = 0$, such that $A = f(B)$.
+Similarly the statements $A \ll B$ and $A = o(B)$ mean that there exists a function $f: \RR_+ \to \RR_+$ with $\lim_{x \to 0} f(x) = 0$, such that $A \leq Bf(B)$.
 
 The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian volume form.
 For tensor fields we shall use the musical isomorphisms $\sharp, \flat$ and the Einstein convention.
 When using the Einstein convention, Greek indices range over $0, \dots, d - 1$ while Latin indices range over $1, \dots, d - 1$.
 However, all of our metrics are Riemannian, rather than Lorentz.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Riemannian measure theory}
-Let us recall some measure-theoretic facts.
-See \cite[Chapter 1]{Giusti77} for analogous results over $\RR^d$, and see \cite{simon1983GMT} for the definition of a de Rham current.
-We write $\int_U \omega \wedge \psi$ for the pairing of a de Rham $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$.
+We now recall the Riemannian analogue of the main results of \cite[Chapter 1]{Giusti77}.
+We write $\int_U \omega \wedge \psi$ for the pairing of a de Rham $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$. (See \cite{simon1983GMT} for the definition of a de Rham current.)
 We identify the distributional derivative of a function $u$ with the $d-1$-current
 $$\int_U \dif u \wedge \psi = -\int_U u \dif \psi.$$
 A function $u$ is in $BV(U)$ iff its derivative $\dif u$ has finite total variation
@@ -430,7 +433,7 @@ Let $U$ be a set of locally finite perimeter, and let $u = 1_U$. Then:
 \begin{enumerate}
 \item The \dfn{measure-theoretic boundary} $\partial U$ is the set of points whose Lebesgue density with respect to $M$ is $\in (0, 1)$.
 \item The set of Lebesgue points of $\dif u$ is the \dfn{reduced boundary} $\partial^* U$.
-\item The $*|\dif u|$-measurable $1$-form $f$ defined by (\ref{Lebesgue point definition}) is the \dfn{conormal $1$-form} $\normal_U$ to $\partial U$.
+\item The $\star |\dif u|$-measurable $1$-form $f$ defined by (\ref{Lebesgue point definition}) is the \dfn{conormal $1$-form} $\normal_U$ to $\partial U$.
 \end{enumerate}
 \end{definition}
 
@@ -704,7 +707,9 @@ Using (\ref{weak monotone}) we bound this second integral as
 \end{align*}
 \end{proof}
 
-In fact, if $g$ has negative Ricci curvature, then we can take $A = 0$ in (\ref{introduce the ricci tensor}) and hence in (\ref{strong monotone}).
+In fact, if $g$ has negative Ricci curvature, then we can take $A = 0$ in (\ref{introduce the ricci tensor}) and hence in (\ref{strong monotone}). Indeed, one has for $\xi = x/|x|$,
+$$\frac{\star_r 1}{\star_s 1}(\xi) = \frac{1 - r^2 \Ric_{\mu \nu}(0) \xi^\mu \xi^\nu/3 + O(r^3)}{1 - s^2 \Ric_{\mu \nu}(0) \xi^\mu \xi^\nu/3 + O(s^3)}$$
+which is $\leq 1$ for $r < s \lesssim 1$ and $(\Ric_{\mu\nu})$ negative-definite.
 However, we will never need this fact.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -950,9 +955,9 @@ Let $\Gamma_n := \partial(tB_n)$; we claim that almost surely,
 \end{align}
 To establish the claim, observe that by \cite[Lemma 7.2]{Giusti77} and Proposition \ref{doubling dimension},
 $$\limsup_{n \to \infty} \Delta_n^{1 - d} \gamma_n^{-4} \int_{tB_n} \star |u_n - w_n| \leq \limsup_{n \to \infty} \Delta_n^{2-d} |\partial^* U_n \cap tB_n| \lesssim \sup_n \Delta_n \lesssim 1$$
-and hence almost surely,
-$$||u_n - v_n||_{L^1(\Gamma_n)} \lesssim \gamma_n^{-2} ||u_n - w_n||_{L^1(\Gamma_n)} \ll \Delta_n^{d - 1} \gamma_n.$$
-So (\ref{trace of vn}) holds by \cite[Lemma 1.25]{Giusti77} and the fact that $y_n \in (a_n, b_n)$.
+and hence almost surely, by \cite[Lemma 1.25]{Giusti77} and the fact that $y_n \in (a_n, b_n)$,
+$$||u_n - v_n||_{L^1(\Gamma_n)} \lesssim \gamma_n^{-2} ||u_n - w_n||_{L^1(\Gamma_n)} \ll \Delta_n^{d - 1} \gamma_n,$$
+proving (\ref{trace of vn}).
 Now let
 $$f(s) = \sum_{n=1}^\infty \gamma_n \Delta_n^{1 - d} \int_{sB_n} \star |\dif u_n|.$$
 Then $f' \geq 0$, and by Proposition \ref{doubling dimension}, $f(1) \lesssim \sum_n \gamma_n < \infty$.
@@ -990,7 +995,7 @@ Having shown that we can reduce the study of sets of least perimeter to sets wit
 It is natural to expect the Plateau equation to a PDE on a manifold $\Omega$ of dimension $d - 1$, so we now construct $\Omega$.
 
 \subsection{Plateau energy}
-Let $(x^\mu)$ and $\psi$ be as above, let $\overline M \subseteq M$ be the domain of $(x^\mu)$, and let $\Omega \subseteq \RR^{d - 1}$ be a small open neighborhood of $0$ (on which we have not yet imposed a metric).
+Let $\overline M \subseteq M$ be the domain of a coordinate system $(x^\mu)$, and let $\Omega \subseteq \RR^{d - 1}$ be a small open neighborhood of $0$ (on which we have not yet imposed a metric).
 We introduce the projection
 \begin{align*}
     \Pi: \overline M &\to \Omega \subseteq \RR^{d - 1}\\
@@ -1033,7 +1038,7 @@ Then the \dfn{Plateau energy} is the $d-1$-form on $\Omega$,
 \end{equation}
 where $\slashed g = \slashed g^{(\omega)}$ is the reduced metric and $L$ is the vector field
 \begin{equation}\label{Plateau error}
-L^i := 2\slashed g^{ij} \Psi^*_\omega (g_{0j}).
+L^i := 2(\slashed g^{-1})^{ij} \Psi^*_\omega (g_{0j}).
 \end{equation}
 The \dfn{Plateau equation} is the Euler-Lagrange equation for minimizers of $\int \Lagrange[\omega, \dif \omega]$.
 \end{definition}
@@ -1042,6 +1047,10 @@ The \dfn{Plateau equation} is the Euler-Lagrange equation for minimizers of $\in
 For $\omega \in C^1(\Omega)$,
 $$\Lagrange[\omega, \dif \omega] = \Psi_\omega^* \vol_{N_\omega}.$$
 In particular, $N_\omega$ is a nonparametric minimal hypersurface iff $\omega$ is a weak solution of the Plateau equation.
+Moreover, the upwards-pointing conormal $1$-form to $N = N_\omega$ is
+\begin{equation}\label{Josh helped}
+(\Psi_\omega^* \normal)_\mu = \frac{\delta_\mu^0 - \delta_\mu^i \omega_{,i}}{\sqrt{\Psi_\omega^* (g^{00}) + |\dif \omega|_{\slashed g^{-1}}^2 - (\dif \omega, L)}}.
+\end{equation}
 \end{proposition}
 \begin{proof}
 Let $\xi = (\Psi_\omega^* \vol_{N_\omega})/(\dif \overline x)$ (where $\dif \overline x = \dif \overline x^1 \wedge \cdots \wedge \dif \overline x^{d - 1}$); then by Lemma \ref{pullback metric to Omega},
@@ -1055,6 +1064,18 @@ Moreover, by the Weinstein-Aronsazjn theorem,
 &= \det (\slashed g) \cdot 1 + \Psi^*(g_{00}) |\dif \omega|_{\slashed g^{-1}}^2 + (L, \dif \omega).
 \end{align*}
 Taking square roots and using $\sqrt{\det(\slashed g)} \dif \overline x = \star_{\slashed g} 1$, we see the desired result.
+
+Now we claim that the $1$-form $\alpha_\mu = \delta_\mu^0 - \delta_\mu^i \omega_{,i}$
+annihilates all the $\phi_i = \dif \Phi_i$ and has length 
+$$|\alpha| = \sqrt{\Psi_\omega^* (g^{00}) + |\dif \omega|_{\slashed g^{-1}}^2 - (\dif \omega, L)};$$
+this implies the proposition.
+Let $\phi_0 = \alpha^\sharp$, thus $\phi_0^\mu = g^{\mu 0} - g^{\mu i} \omega_{,i}$. We first check orthogonality:
+\begin{align*}
+g_{\mu\nu} \phi_0^\mu \phi_i^\nu &= g_{\mu\nu} (g^{\mu 0} - g^{\mu i} \omega_{,i}) (\delta_0^\nu \omega_{,i} - \delta^\nu_i) = (\delta_\nu^0 - \delta^j_\nu \omega_{,j}) (\delta^\nu_0 \omega_{,i} - \delta^\nu_i) = 0.
+\end{align*}
+To check length we compute 
+$$g_{\mu\nu} \phi_0^\mu \phi_0^\nu = (\delta_\nu^0 - \delta_\nu^i \omega_{,i}) (g^{\nu 0} - g^{\nu j} \omega_{,j}) = g^{00} - g^{0j} \omega_{,j} - g^{i0} \omega_{,i} + g^{ij} \omega_{,i} \omega_{,j}$$
+and the claim follows by symmetry of $(g^{ij})$.
 \end{proof}
 
 \begin{corollary}[elliptic bootstrap]\label{C1 implies smooth}
@@ -1062,71 +1083,104 @@ Let $U$ be a set of least perimeter. If $\normal_U$ extends to a continuous $1$-
 \end{corollary}
 \begin{proof}
 By Proposition \ref{locality of Caccioppoli}, $\partial U$ is a $C^1$ minimal hypersurface.
-Selecting appropriate normal coordinate charts centered on $\partial U$, we realize $\partial U$ locally as the graph of a $C^1$ function $\omega$ which is a weak solution of the Plateau equation by Proposition \ref{construction of Plateau energy}.
+Selecting appropriate coordinate charts centered on $\partial U$, we realize $\partial U$ locally as the graph of a $C^1$ function $\omega$ which is a weak solution of the Plateau equation by Proposition \ref{construction of Plateau energy}.
 Therefore $\omega$ is smooth (see \cite[\S8.3.2]{evans2010partial} and the references therein).
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Killing gauge}
+The Plateau energy $\Lagrange$ is intractible to work with in its current form, as it is highly nonlinear, and in particular has coefficients which depend on $\omega$.
+In this section we select a gauge which any homogeneous space (and in particular the model spaces $\RR^d$, $\Hyp^d$, and $\Sph^d$), can be put in, so as to remove the dependency on $\omega$ from $\Lagrange$.
+
+\begin{definition}
+A metric $g$ is in \dfn{Killing gauge} if $g_{\mu\nu, 0} = 0$.
+\end{definition}
+
+Suppose that $g$ is in Killing gauge. Then $\slashed g(\Pi(x))_{ij} = g(x^0, \Pi(x))_{ij}$ does not depend on $x^0$, so the reduced metric is independent of $\omega$.
+In particular, the Plateau energy $\Lagrange[\omega, \sigma] = \Lagrange[\sigma]$ is independent of $\omega$.
+
+\begin{definition}
+Let $(p, v) \in TM$ and $(x^\mu)$ be a coordinate system. We say that $(x^\mu)$ are \dfn{Killing-normal coordinates} based at $(p, v)$ if:
+\begin{enumerate}
+\item $g_{\mu\nu} = g(\partial_\mu, \partial_\nu)$ is in Killing gauge,
+\item $(x^i)$ are $\slashed g$-normal coordinates, and
+\item $p$ is the origin of $(x^\mu)$ and $\partial_0(p) = v$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}
+Let $M$ be a Riemannian manifold. Then the following are equivalent:
+\begin{enumerate}
+\item $M$ is locally isometric to a Riemannian homogeneous space.
+\item For every $(p, v) \in TM$ there exist coordinates based at $p$ such that $g$ is in Killing gauge and $\partial_0(p) = v$.
+\item For every $(p, v) \in TM$ there exist Killing-normal coordinates based at $(p, v)$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+We recall that the Killing equation
+$$K_{\mu,\nu} + K_{\nu,\mu} - 2\Gamma^\lambda_{\mu\nu} K_\lambda = 0$$
+can be expanded for $K^\mu = \delta_0^\mu$ to take the form
+$$g_{\mu \nu, 0} =  g_{0 \mu, \nu} + g_{0 \nu, \mu} + g_{\mu \nu, 0} - g_{\mu 0, \nu} - g_{\nu 0, \mu} = 0.$$
+Thus $\partial_0$ is a Killing field iff $g$ is in Killing gauge.
+
+If $M$ is homogeneous and $(p, v) \in TM$ is given, then there exists a one-parameter isometry group $(\phi_t)_{t \in I}$ such that $\phi_t(p)$ is the translation of $p$ along the geodesic with initial data $(p, v)$.
+Since $\phi_0(p) = p$, we can express $\phi_t$ as the exponentiation of a Killing field, which we may then integrate using the Frobenius theorem to a coordinate frame $(x^\mu)$ at $p$.
+By construction, $(g_{\mu\nu})$ is in Killing gauge.
+
+If $(x^\mu)$ is given so that $(g_{\mu\nu})$ is in Killing gauge, then we may set $y^0 = x^0$, and choose $\slashed g$-normal coordinates $(y^i)$ on $\{y^0 = 0\}$.
+Flowing along the Killing field $\partial_0$, we extend $(y^i)$ to coordinates on a neighborhood of $\{y^0 = 0\}$.
+Then the components $\tilde g_{\mu\nu} = g(\partial_{y^i}, \partial_{y^j})$ do not depend on $y^0$, so $(\tilde g_{\mu\nu})$ is in Killing gauge and the fact that $(y^i)$ is normal on $\{y^0 = 0\}$ implies that it is normal on $\{y^0 = c\}$ for every $c$, so $(y^\mu)$ is Killing-normal.
+
+Finally, if we can find Killing-normal coordinates based at any $(p, v)$, then for any $q$ close to $p$ we can find a geodesic $\gamma$ from $p$ to $q$ and choose Killing-normal coordinates with $\partial_0(p) = \gamma'(0)$.
+The Lie exponential map maps a multiple of $\partial_0$ to a local isometry which maps $p$ to $q$, so the isometric group of $M$ is locally transitive.
+\end{proof}
+
+To determine how Plateau's equation behaves in Killing gauge, we fix a Killing-normal coordinate system $(x^\mu)$.
+Let us abuse notation and write $\Lagrange[\sigma]$ for $\Lagrange[\sigma]_{12\cdots d - 1}$, thus
+\begin{equation}\label{Lagrangian in coords}
+\Lagrange[\sigma] = \sqrt{\det \slashed g} \sqrt{1 + g_{00} |\sigma|_{\slashed g^{-1}}^2 + (L, \sigma)}.
+\end{equation}
+Since $\Lagrange[\omega, \dif \omega] = \Lagrange[\dif \omega]$, Plateau's equation takes the form $\partial_i \partial_{\omega_{,i}} \Lagrange[\dif \omega] = 0$, or in other words
+\begin{equation}\label{Plateau equation}
+\Div \frac{\det g}{2 \sqrt{1 + g_{00}|\grad_{\slashed g} \omega|_{\slashed g}^2 + L\omega}}(2g_{00} \grad_{\slashed g} \omega + L) = 0
+\end{equation}
+(where $\Div$ is the \emph{euclidean} divergence). Linearizing (\ref{Plateau equation}) about $|x| \ll 1$, $||\omega||_{C^1} \ll 1$, we obtain the euclidean Laplace equation $\Div \grad \omega = 0$.
+
+The above linearization is not directly useful but serves as motivation for the below computations.
+We shall need some small constants $0 < c_\ell \ll 1$ for the remainder of the paper; for now we fix $0 < c_0 \ll 1$ to be determined later. Then for $0 < r \lesssim_{c_0} 1$,
+$$1 - c_0 \leq \sqrt{\det \slashed g}, g_{00} \leq 1 + c_0.$$
+So if $\sigma, \underline \sigma$ are $1$-forms on $\Omega$, then
+$$\Lagrange[\sigma] - \Lagrange[\underline \sigma] \leq \frac{e^{O(c_0)}}{2}(|\sigma|_{\slashed g^{-1}}^2 - |\underline \sigma|_{\slashed g^{-1}}^2) + \frac{e^{O(c_0)}}{2}(L, \sigma - \underline \sigma)).$$
+We can rewrite this inequality somewhat more evocatively if we introduce the Dirichlet energy $\DirL[\sigma] := |\sigma|^2/2$.
+Indeed, since $(x^i)$ are $\slashed g$-normal, we can separate off a quadratic form $a^{ij} = ((\slashed g^{-1})^{ij} - \delta_{ij})/2$ to obtain
+\begin{equation}\label{Plateau and Dirichlet 1}
+\Lagrange[\sigma] - \Lagrange[\underline \sigma] \leq e^{O(c_0)} (\DirL(\sigma) - \DirL(\underline \sigma)) + e^{O(c_0)} ((L/2, \sigma - \underline \sigma) + a(\sigma - \underline \sigma, \sigma + \underline \sigma)).
+\end{equation}
+In particular, if we could discard terms involving $\sigma - \underline \sigma$, then a difference of Plateau energies in Killing gauge is bounded from above by the difference of \emph{euclidean} Dirichlet energies.
+Conversely, 
+\begin{align*}
+\DirL[\sigma] - \DirL[\underline \sigma] \leq \frac{e^{O(c_0)}}{2}(g_{00} |\sigma|_{\slashed g^{-1}}^2 + (L, \sigma) - g_{00} |\underline \sigma|_{\slashed g^{-1}}^2 - (L, \underline \sigma)) - a(\sigma - \underline \sigma, \sigma + \underline \sigma) - (L/2, \sigma - \underline \sigma)
+\end{align*}
+and hence 
+\begin{equation}\label{Plateau and Dirichlet 2}
+\DirL[\sigma] - \DirL[\underline \sigma] \leq e^{O(c_0)} \Lagrange[\sigma] (\Lagrange[\sigma] - \Lagrange[\underline \sigma]) - a(\sigma - \underline \sigma, \sigma + \underline \sigma) - (L/2, \sigma - \underline \sigma)
+\end{equation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{A multiplicative gain}
-We now seek to obtain a multiplicative gain on the oscillation of the Plateau energy $\dif \omega \mapsto \Lagrange[\omega, \dif \omega]$ when one passes from a dyadic scale $r$ to its child $r/2$.
-Such gains appeared in the work of Miranda \cite[Teorema 4.3]{Miranda66}, who proved this result by linearizing the Plateau equation to obtain the Laplace equation on $\Omega$.
-We run into two obstructions to this strategy:
-\begin{enumerate}
-\item $\Omega$ is not flat, so we instead obtain a Laplace-Beltrami equation.
-\item In the limit $\dif \omega \to 0$, $\Lagrange[\omega, \dif \omega]$ has a term $L\omega$ which is pointwise linear in $\dif \omega$, and therefore dominates the Dirichlet energy term $\Psi_\omega^* (g_{00}) \cdot |\dif \omega|_{\slashed g^{-1}}^2$.
-\end{enumerate}
-
-Fix $\omega$, and write $\overline B_r$ for the $\slashed g^{(\omega)}$-ball of radius $r$ centered on $0$.
-Write 
-$$\DirL[\sigma] := \star_{\slashed g} |\sigma|^2_{\slashed g^{-1}}/2$$
-for the Dirichlet energy of a continuous $1$-form $\sigma$.
-One has the curvature estimate 
-\begin{equation}\label{bounds on the curvature}
-||\Rm_{\slashed g}||_{C^r} \lesssim_g 1.
-\end{equation}
-Indeed, the derivatives of $\slashed g$ which appear in (\ref{bounds on the curvature}) do not include any derivatives in the $0$ direction, but $\slashed g(\overline x)_{ij} = g(\overline x, \omega(\overline x))_{ij}$ so for $k = 1, \dots, d - 1$, $\Psi = \Psi_\omega$,
-$$\slashed g(\overline x)_{ij,k} = \dif \Psi_k^\mu \cdot \Psi^* (g_{ij,\mu}) = \delta_k^\mu \Psi^* (g_{ij,\mu}) = \Psi^* (g_{ij,k}),$$
-and hence no derivatives of $\omega$ appear.
-
-For this reason, we may fix a normal coordinate system $(y^i)$ for $\slashed g$ based at $0$, and the constants in the Taylor expansion of $\slashed g$ at $0$ will not depend on $\omega$ (and as usual are locally uniform in the basepoint $P$ of $M$ we chose to define $(x^\mu)$ at, and uniform in the choice of pair $((x^\mu), (y^i)) \in \SpOrth_d \times \SpOrth_{d - 1}$).
-In these coordinates,
-$$[\partial_i, \Delta_{\slashed g}] = -\slashed g^{jk}_{,i} \partial_j \partial_k - \slashed g^{jk} (\log \sqrt{\det \slashed g})_{,ik} \partial_j$$
-and so we have an estimate on the symbol $p$ of the commutator:
-\begin{equation}\label{commutator symbol}
-    |p(y, \eta)| \lesssim |y| \cdot |\eta|^2 + |\eta|.
-\end{equation}
-We also have a mean-value formula
-\begin{equation}\label{MVP}
-    \dashint_{\overline B_r} \star_{\slashed g} u = u(0) + \frac{\Delta_{\slashed g} u(0)}{2(d + 2)}r^2 + O(r^4) ||u||_{L^\infty(\overline B_r)}.
-\end{equation}
-Indeed, by the classical Riemannian mean-value formula \cite[Theorem 3]{cuhk13},
-$$\dashint_{\overline B_r} \star_{\slashed g} u = u(0) + \frac{\Delta_{\slashed g} u(0)}{2(d + 2)}r^2 + O(r^4 ||u||_{C^4(\overline B_{r/2})} \cdot ||\Ric_{\slashed g}||_{L^\infty} \cdot ||\nabla_{\slashed g} \tr_{\slashed g} \Ric_{\slashed g}||_{L^\infty}).$$
-We can neglect the curvature factors using (\ref{bounds on the curvature}), and using an interior Schauder estimate \cite[Theorem 7.18]{zworski2012semiclassical}, we can also bound $||u||_{C^4(\overline B_{r/2})} \lesssim ||u||_{L^\infty(\overline B_r)}$.
+We now seek to obtain a multiplicative gain on the oscillation of the Plateau energy when one passes from a dyadic scale $r$ to its child $r/2$.
+Such gains appeared in the work of Miranda \cite[Teorema 4.3]{Miranda66}, who proved this result by linearizing the Plateau equation to obtain the Laplace equation on $\Omega$ and then exploiting cancellations from the mean-value property.
 
 \begin{definition}
-Let us work in the coordinate system $(y^i)$.
-The \dfn{averaging operator} $\avg_r$ is defined on tensor fields $T$ on $\Omega \subseteq \RR^{d - 1}$ by declaring that for every multiindex $I$,
+Fix a coordinate system on $\Omega$.
+The \dfn{averaging operator} $\avg_r$ is defined on tensor fields $T$ on $\Omega$ by declaring that for every multiindex $I$,
 $$(\avg_r T)_I(y) := \dashint_{\overline B_r} \star_{\slashed g} (T_I).$$
 \end{definition}
 
-The averaging operators respect $\slashed g$-harmonic functions $u$ in the sense that
-\begin{equation}\label{MVP averaged}
-|\avg_r (\dif u)|_{\slashed g^{-1}}^2 = |\dif u(0)|_{\slashed g^{-1}}^2 + O(||\dif u||_{L^\infty}^2 r^2 + ||\dif u||_{L^\infty} r^3 + r^6).
-\end{equation}
-Indeed, by (\ref{MVP}),
-$$\avg_r(\dif u)_i = \dashint_{B_r} \star_{\slashed g} \partial_i u = \partial_i u(0) + \frac{[\Delta_{\slashed g}, \partial_i] u(0)}{2(d + 2)} r^2 + O(r^4 ||\dif u||_{L^\infty}),$$
-and by (\ref{commutator symbol}), the commutator term is $O(r^2 ||\dif u||_{L^\infty} + r^3)$.
-
-We now generalize \cite[Lemma 4.1]{Miranda66} to the Laplace-Beltrami equation, which is the source of the multiplicative gain we seek: more precisely,
-\begin{equation}\label{DGL harmonics}
-\int_{\overline B_{r/2}} \DirL[\dif u] - \DirL[\avg_{r/2}(\dif u)] \leq \frac{1}{2^{d + 1}} \int_{\overline B_r} \DirL[\dif u] - \DirL[\avg_r(\dif u)].
-\end{equation}
-To prove this inequality we may assume that $u(0) = 0$. If in addition $\dif u(0) = 0$ then 
-
 \begin{lemma}
+Fix a Killing-normal coordinate system.
 Let $\sigma$ be a continuous $1$-form and $\underline \sigma = \avg_r \sigma$. Then, uniformly in $\omega$ with $||\omega||_{C^1} \lesssim 1$,
-$$\left|\int_{\overline B_r} \star_{\slashed g} (L, \sigma - \underline \sigma) \right| \lesssim r^d ||\sigma||_{L^\infty(\overline B_r)}.$$
+$$\left|\int_{\overline B_r} \star_{\slashed g} (L, \sigma - \underline \sigma) \right| \lesssim r^{d + 1} ||\sigma||_{L^\infty(\overline B_r)}.$$
 \end{lemma}
 \begin{proof}
 Let $\underline L = \avg_r L$. Then
@@ -1136,11 +1190,10 @@ As for the second term we apply the Poincar\'e inequality:
 \begin{align*}
 \left|\int_{\overline B_r} \star_{\slashed g} (L^i - \underline L^i)(\sigma_i - \underline \sigma_i)\right| &\leq ||L^i - \underline L^i||_{L^1} \cdot ||\sigma_i - \underline \sigma_i||_{L^\infty} \lesssim r^d \cdot ||\sigma||_{L^\infty} \cdot ||\nabla L||_{L^\infty}.
 \end{align*}
-Moreover one can check $||\nabla L||_{L^\infty} \lesssim_{g, ||\omega||_{C^1}} 1$.
+Using the Killing-normal coordinates condition, we have $||\nabla L||_{L^\infty} \lesssim r$.
 \end{proof}
 
-For the remainder of the paper we shall need some small constants $(c_\ell)$.
-We start by fixing $0 < c_0 \ll 1$, which we will later choose to depend only on $(M, g, P)$ (and which will be locally uniform in $P$).
+
 
 \begin{proposition}\label{dGL Laplace}
 For $0 < r \lesssim_{c_0} 1$, with $\overline B_r \subseteq \Omega$, let $0 < \kappa, \beta < 1$ and suppose that 
@@ -1158,68 +1211,6 @@ $$\int_{\overline B_{r/2}} \Lagrange[\omega, \dif \omega] - \Lagrange[\omega, \a
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{The conormal $1$-form}
-It follows from Corollary \ref{C1 implies smooth} that $\normal_U$ is now of interest when $U$ is a set of least perimeter, so we turn to a study of a such $1$-forms.
-
-\begin{definition}
-The \dfn{cross product} $v_1 \times \cdots \times v_{d - 1}$ of vectors $v_1, \dots, v_{d - 1} \in T_QM$ is the unique vector $v_0$
-such that:
-\begin{enumerate}
-\item $g(v_0, v_i) = 0$,
-\item $((-1)^{d - 1} v_0, v_1, \dots, v_{d - 1})$ is positively oriented or linearly dependent, and
-\item $g(v_0, v_0) = |\det \Gram(v_1, \dots, v_{d - 1})|$.
-\end{enumerate}
-\end{definition}
-
-\begin{lemma}
-Let $\omega$ and $\phi_i = \dif \Psi_\omega \cdot \partial_i$ be as above.
-The cross product $\phi_0 := \phi_1 \times \cdots \phi_{d - 1}$ is 
-\begin{equation}\label{phi0 components}
-\phi_0^\mu = e^{O(|x|^2 + |\omega(x)|^2)} (g^{\mu 0} + g^{\mu i}\omega_{,i}).
-\end{equation}
-\end{lemma}
-
-
-\begin{proposition}
-The conormal $1$-form to $N = N_\omega$ is
-\begin{equation}\label{conormal}
-\normal_\mu(x, \omega(x)) = \frac{e^{O(|x|^2 + |\omega(x)|^2)}}{\sqrt{1 + |\dif \omega(x)|^2_{(\slashed g^{(\omega(x))})^{-1}(x)}}} (\delta^0_\mu - \delta^i_\mu \partial_i \omega(x)).
-\end{equation}
-\end{proposition}
-\begin{proof}
-It is clear from (\ref{definition of slashed g}) that (\ref{decay of slashed metric}) holds.
-Moreover, if we let
-$$h_{ij} = g(\phi_i, \phi_j)$$
-be the pullback by $\Psi_\omega$ of the Riemannian metric on $N_\omega$, then $h = \Gram(\phi_1, \dots, \phi_{d - 1})$ and so
-$$\Lagrange[\omega, \grad_{\slashed g} \omega] = \Psi_\omega^* |\phi_0|_{\slashed g^{(\omega)}} \dif x^1 \wedge \cdots \wedge \dif x^{d - 1}$$
-which gives the formula (\ref{Plateau energy}).
-
-Finally, it follows from the definition of cross product that $\normal = \phi_0/|\phi_0|$.
-We therefore claim that
-
-which implies (\ref{conormal}). To prove (\ref{phi0 components}) we observe that $\phi_0$ depends smoothly on $g$ and so if we replace $g$ with the metric $g'$ defined by $g'_{00} = g_{00}$, $g'_{ij} = g_{ij}$, $g'_{0i} = 0$, then it suffices to show that the new cross product $\phi_0'$ satisfies
-\begin{equation}\label{perturbed phi0 components}
-(\phi_0')^\mu = g^{\mu\nu}(\delta_\nu^0 - \delta_\nu^i\omega_{,i}).
-\end{equation}
-With $g$ replaced by $g'$ we obtain the exact formula
-\begin{equation}\label{perturbed norm of phi0}
-g(\phi_0', \phi_0') = \sqrt{\det \slashed g} \sqrt{1 + |\dif \omega|_{\slashed g^{(\omega)}}}
-\end{equation}
-in place of (\ref{norm of phi0}), and so we just need to show that if $\phi_0'$ satisfies (\ref{perturbed phi0 components}) then it is $g'$-orthogonal to the span of $\phi_1, \dots, \phi_{d - 1}$ and has norm (\ref{perturbed norm of phi0}).
-Orthogonality follows from the computation
-$$g'(\phi_0', \phi_i) = g'_{\mu\nu} (\phi_0')\mu \phi_i^\nu = \delta_\mu^\nu (\delta_0^\mu \omega_{,i} + \delta_i^\mu) (\delta_\nu^0 - \delta_\nu^i \omega_{,i}) = 0.$$
-To prove (\ref{perturbed norm of phi0}) we just compute
-\begin{align*}
-g'(\phi_0', \phi_0')
-&= g'_{\mu \nu} (g')^{\mu \lambda}(\delta^0_\lambda - \delta^i_\lambda \omega_{,i}) (g')^{\nu \kappa}(\delta_\kappa^0 - \delta_\kappa^j \omega_{,j})\\
-&= (\delta_\mu^0 - \delta_\nu^i \omega_{,i})((g')^{0 \nu} - (g')^{j \nu} \omega_{,j})\\
-&= (g')^{00} - (g')^{0j} \omega_{,j} - (g')^{0i} \omega_{,i} + (g')^{ij} \omega_{,i} \omega_{,j}.
-\end{align*}
-From the definition of $g'$ we can rewrite this last expression as
-$$g'(\phi_0', \phi_0') = (g_{00})^{-1} + (g_{\hat 0 \hat 0})^{-1} \dif \omega^{\otimes 2}.$$
-But $g_{00} (g_{\hat 0 \hat 0})^{-1} = \slashed g^{-1}$ so this is as desired.
-\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
