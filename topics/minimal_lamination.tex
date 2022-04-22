@@ -493,13 +493,13 @@ So given a matrix $\xi \in \SpOrth(T_PM)$, which induces a normal coordinate sys
 $$\psi_\xi := \dif x^1_\xi \wedge \cdots \dif x^{d - 1}_\xi.$$
 
 \begin{definition}
-The \dfn{cancellative total variation} of a $d-1$-current $\omega$ in a small ball $B(P, r)$ is 
+The \dfn{cancellative total variation} of a $d-1$-current $\omega$ in a small ball $B(P, r)$ is
 \begin{equation}\label{cancellative TV}
 \left|\int_{B(P, r)} \omega \otimes (\star 1)\right| := \sup_{\xi \in \SpOrth(T_PM)} \int_{B(P, r)} \omega \wedge \frac{\psi_\xi}{|\psi_\xi|}.
 \end{equation}
 \end{definition}
 
-Since (\ref{cancellative TV}) is defined by reducing the feasible class of (\ref{total variation}) we have the triangle inequality 
+Since (\ref{cancellative TV}) is defined by reducing the feasible class of (\ref{total variation}) we have the triangle inequality
 \begin{equation}\label{triangle TV}
 \left|\int_{B(P, r)} \omega \otimes (\star 1)\right| \leq \int_{B(P, r)} \star |\omega|.
 \end{equation}
@@ -1056,10 +1056,104 @@ So by Fatou's lemma,
 \end{proof}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Plateau's equation}\label{Plateau section}
+copy the old motivation crap...
+
+\subsection{The Plateau energy}
+choose coords...
+
+\begin{lemma}
+Let $M$ be a hyperbolic manifold and $(P, V) \in TM$.
+Then there exist coordinates $(x^\mu)$ on $M$ such that $x(P) = 0$, $\partial_0(P) = V$, and
+and the metric takes the form $\partial_0 g_{\mu\nu} = 0$, $g_{0i} = g_{i0} = 0$, $\partial_k g_{ij}(0) = 0$, and $g_{\mu\nu}(0) = \delta_{\mu\nu}$.
+\end{lemma}
+\begin{proof}
+Using the upper half-space model, there exist coordinates $(\underline x^\mu)$ on $M$ so that
+$$\underline g_{\mu\nu} = (\underline x^1)^{-2} \delta_{\mu\nu},$$
+$\underline x^0(P) = 0$, $\underline x^1(P) = 1$, and $\underline \partial_0(P) = V$.
+To construct a coordinate system which is more adapted to the Plateau equation we define $x^0 = \underline x^0$.
+Using the flow of $\partial_0$, we obtain maps
+$$\phi_c: \{x^0 = 0\} \to \{x^0 = c\}.$$
+Moreover on $\{x^0 = 0\}$ the metric takes the form $\underline g_{ij} = (\underline x^1)^{-2} \delta_{ij}$, thus $\{x^0 = 0\}$ embeds isometrically in $\Hyp^{d - 1}$.
+We therefore choose $P$-based normal coordinates $(x^i)$ for $\Hyp^{d - 1}$ and extend them to a neighborhood of $\{x^0 = 0\}$ by pulling them back using $\phi_c$.
+We recall that $\partial_0 = \underline \partial_0$ is a Killing field.
+
+Since $(\partial_0)^\flat_\mu = g_{\mu 0}$, one has the Killing equation
+$$\partial_\mu g_{\nu 0} + \partial_\nu g_{\mu 0} - 2\Gamma_{\mu \nu}^\lambda g_{\lambda 0} = 0.$$
+However,
+$$2 \Gamma^\lambda_{\mu \nu} g_{\lambda 0} = \partial_\nu g_{0 \mu} + \partial_\mu g_{0 \nu} - \partial_0 g_{\mu \nu}$$
+and so we conclude $\partial_0 g_{\mu \nu} = 0$.
+Moreover, $x^0 = \underline x^0$ and $\underline \partial_0$ is orthogonal to $\{\underline x^0 = c\}$ which implies that, since $\partial_i$ is tangent to $\{\underline x^0 = c\}$, $g_{0i} = g_{i0} = 0$.
+The remaining two conditions are characteristic of normal coordinates on $\Hyp^{d - 1}$.
+\end{proof}
+
+In other words, the metric $g$ in the above lemma takes the form
+$$g = \begin{bmatrix}
+1 + O(r) & 0\\
+0 & I + O(r^2)
+\end{bmatrix}$$
+where $I$ is the identity matrix. At $P$, the only nonzero components of $(\partial_\lambda g_{\mu\nu})$ are of the form $\partial_i g_{00}$ and so the only nonzero Christoffel symbols there are $\Gamma^0_{0i} = \Gamma^0_{i0} = g^{00} \partial_i g_{00}/2$ and $\Gamma_{00}^i = -\partial^i g_{00}$.
+
+Now suppose that $\Omega \subseteq \Hyp^{d - 1}$ is open and equipped with an identification
+$$\Omega \cong \{x^0 = 0\};$$
+we will not explicitly write pullbacks or pushforwards for this identification.
+Suppose further that
+$$\omega: \Omega \to \RR$$
+is a $C^1$ function. Then one has a graph
+$$N = \{(\omega(x), x) \in M: x \in \Omega\}.$$
+Let $\Psi: \Omega \to N$ be the diffeomorphism $\Psi(x) = (\omega(x), x)$. Then
+$$\dif \Psi = \begin{bmatrix}
+\dif \omega \\
+I
+\end{bmatrix}$$
+so
+\begin{align*}
+(\Psi^* g)_{ij} &= g(\dif \Psi \cdot \partial_i, \dif \Psi \cdot \partial_j) = g_{\mu\nu} \dif \Psi^\mu_i \dif \Psi^\nu_j \\
+&= g_{\mu\nu} (\delta^\mu_0 \partial_i \omega + \delta^\mu_i)(\delta^\nu_0 \partial_j \omega + \delta^\mu_j)\\
+&= \Psi^* (g_{ij}) + \Psi^* (g_{00}) \partial_i \omega \partial_j \omega.
+\end{align*}
+Here $(\Psi^* g)_{ij}$ are components of the pullback metric but $\Psi^* (g_{\mu\nu})$ are pullbacks of the components of the metric.
+Using the Killing nature of $\partial_0$ we can eliminate the pullbacks on the components, thus
+$$\Psi^* g = \slashed g + g_{00} \dif \omega \otimes \dif \omega$$
+where $\slashed g$ is the metric on $\{x^0 = 0\}$, $\slashed g_{ij} = g_{ij}$.
+The only independent component of the volume form of the pullback metric $\Psi^* g$ is
+$$\sqrt{\det \Psi^* g} = \sqrt{\det \slashed g} \sqrt{1 + g_{00} |\dif \omega|_{\slashed g^{-1}}^2}$$
+by the Weinstein-Aronsazjn theorem.
+
+\begin{definition}
+Let $\Omega \subseteq \Hyp^{d - 1}$ and let $\omega: \Omega \to \RR$ be $C^1$. Then the \dfn{Plateau energy} of $\omega$ is the $d-1$-form
+$$\Lagrange[\dif \omega] = \star \sqrt{1 + g_{00} |\dif \omega|^2},$$
+where $|\cdot|$ and $\star$ are with respect to the usual metric $\slashed g$ on $\Hyp^{d - 1}$ and $g_{00}$ is the pullback of the $00$-component of $g$ on $\{x^0 = 0\} \subset M$.
+The \dfn{Plateau equation} is the Euler-Lagrange equation for the Plateau energy.
+\end{definition}
+
+It follows from the definitions that, if $N$ is the graph of $\omega$, then $\Lagrange[\dif \omega]$ is the pullback of the volume form on $N$ by $\Psi$.
+In particular, $\omega$ is a variational solution of the Plateau equation iff $N$ bounds a set of least perimeter.
+
+The Plateau equation can be computed by considering a variation $\omega$ with $\phi = -\dot \omega$ compactly supported in $\Hyp^{d - 1}$.
+In that case,
+\begin{align*}
+\frac{\dif}{\dif t} \Lagrange[\dif \omega] &= \int_{\Hyp^{d - 1}} \star \partial_t \sqrt{1 + g_{00} |\nabla \omega|^2} \\
+&= -\int_{\Hyp^{d - 1}} \star \frac{g_{00} \slashed g(\nabla \phi, \nabla \omega)}{\sqrt{1 + g_{00}|\nabla \omega|^2}} \\
+&= \int_{\Hyp^{d - 1}} \star \phi\left[\frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}} \Delta \omega + \slashed g\left(\nabla \frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}}, \nabla \omega\right)\right].
+\end{align*}
+Thus the Plateau equation is
+\begin{equation}\label{Plateau eqn}
+\Delta \omega + \frac{\sqrt{1 + g_{00} |\nabla \omega|^2}}{g_{00}} \slashed g\left(\nabla \frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}}, \nabla \omega\right) = 0
+\end{equation}
+where $\Delta$ is the hyperbolic Laplace-Beltrami operator. Linearizing about $||\omega||_{C^1} \ll 1$ we arrive at the Laplace-Beltrami equation $\Delta \omega = 0$ on $\Hyp^{d - 1}$.
+We therefore launch into a study of harmonic functions on $\Hyp^{d - 1}$.
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Plateau's equation}\label{Plateau section}
+\section{Plateau's equation OLD}
 Having shown that we can reduce the study of sets of least perimeter to sets with $C^1$ and approximately least perimeter, our next task is to represent such sets as graphs of approximate solutions to a Plateau-type equation.
 It is natural to expect the Plateau equation to a PDE on a manifold $\Omega$ of dimension $d - 1$, so we now construct $\Omega$.
 
@@ -1332,7 +1426,7 @@ We first study the properties of the excess.
 
 \begin{definition}
 Let $U$ be a set of locally finite perimeter and $u = 1_U$.
-The \dfn{approximate conormal} $1$-form $\widetilde \normal_r$ to $U$ at scale $r$ is defined for $P \in \partial U$ by choosing a maximizer $\xi \in \SpOrth(T_PM)$ of $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$ and setting 
+The \dfn{approximate conormal} $1$-form $\widetilde \normal_r$ to $U$ at scale $r$ is defined for $P \in \partial U$ by choosing a maximizer $\xi \in \SpOrth(T_PM)$ of $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$ and setting
 $$\widetilde \normal_r(P) = \frac{1}{|\partial^* U \cap B(P, r)|} \left[\int_{B(P, r)} \dif u \wedge \frac{\psi_\xi}{|\psi_\xi|}\right] \dif x^0_\xi \in T'_PM.$$
 \end{definition}
 
@@ -1353,7 +1447,7 @@ beep
 
 \subsection{de Giorgi's lemma}\label{dGL proof}
 We now complete the proof of Proposition \ref{dGL final} using a compactness-and-contradiction argument.
-Suppose that de Giorgi's lemma is false for some sets $U$ of least perimeter and $K$ compact. Then we can choose $P_n \in K$ and $r_n > 0$ so that $r_n \to 0$, but 
+Suppose that de Giorgi's lemma is false for some sets $U$ of least perimeter and $K$ compact. Then we can choose $P_n \in K$ and $r_n > 0$ so that $r_n \to 0$, but
 $$\gamma_n := \Exc_{B(P_n, r_n)} U$$
 satisfies
 \begin{equation}\label{contradict dGL}
@@ -1372,7 +1466,7 @@ Therefore the assumption $\gamma_n \geq \delta$ implies that every convergent su
 In particular we may assume that $(P_n)$ converges to some $P \in N$. By definition of $N$ there exist $Q_n \in \partial^* U \cap K$ converging to $P$, and by Proposition \ref{blowup theorem}, there exist (possibly nonunique) blowups $v_n: T_{Q_n}M \to \RR$ of $u$.
 
 We choose normal coordinates based at $Q_{n^*}$ for some $n^* \geq 1$, and let $\widetilde \normal_r$ be the induced approximate conormal.
-Then $\widetilde \normal_r$ is continuous 
+Then $\widetilde \normal_r$ is continuous
 \end{proof}
 
 
