@@ -71,6 +71,7 @@
 \newcommand{\Ric}{\mathrm{Ric}}
 \newcommand{\Riem}{\mathrm{Riem}}
 \newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand*\Dif{\mathop{}\!\mathrm{D}}
 \newcommand{\LapQL}{\Delta^{\mathrm{ql}}}
 
 \newcommand{\dbar}{\overline \partial}
@@ -400,8 +401,7 @@ Similarly the statements $A \ll B$ and $A = o(B)$ mean that there exists a funct
 
 The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian volume form.
 For tensor fields we shall use the musical isomorphisms $\sharp, \flat$ and the Einstein convention.
-When using the Einstein convention, Greek indices range over $0, \dots, d - 1$ while Latin indices range over $1, \dots, d - 1$.
-However, all of our metrics are Riemannian, rather than Lorentz.
+When using the Einstein convention, Greek indices range over $0, 1, \dots$ while Latin indices range over $1, \dots$.
 
 We now recall the Riemannian analogue of the main results of \cite[Chapter 1]{Giusti77}.
 We write $\int_U \omega \wedge \psi$ for the pairing of a de Rham $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$. See \cite{simon1983GMT} for the definition of a de Rham current.
@@ -1058,44 +1058,220 @@ So by Fatou's lemma,
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Plateau's equation}\label{Plateau section}
-copy the old motivation crap...
+Having shown that we can reduce the study of sets of least perimeter to sets with $C^1$ and approximately least perimeter, our next task is to represent such sets as graphs of approximate solutions to a Plateau-type equation.
+For hyperbolic manifolds, Plateau's equation will be posed on $\Hyp^{d - 1}$, where we adopt the convention that $\Hyp^m = \RR^m$ for $m = 0, 1$.
+To first order, Plateau's equation is nothing more than the Laplace-Beltrami equation on $\Hyp^{d - 1}$, so we can apply hyperbolic potential theory to prove the desired estimates.
 
-\subsection{The Plateau energy}
-choose coords...
+\subsection{A flat connection}
+Throughout the sequel we will need to ``average'' various tensor fields on $\Hyp^m$ for $m = d-1, d$.
+In the euclidean case this can be accomplished by identifying every fiber $E_x$ of the tensor bundle with the fiber $E_0$ at $0$, and then viewing a tensor field $T$ as a vectorial function $\RR^d \to E_0$, and employ the vectorial integral $\int_{\RR^d} T \in E_0$.
+Of course, the Riemann tensor is an obstruction to the existence of natural isomorphisms $E_x = E_0$ over $\Hyp^m$, so we must find isomorphisms $E_x \cong E_0$ which are ``approximately natural'' in some sense.
+
+For $|x|$ small one can define the parallel propagator $E_x \to E_0$ in normal coordinates, and we believe that such a construction will give the same results that we will prove in the sequel.
+However, since we will later have to restrict ourselves to the hyperbolic case anyways, we found it convenient to instead employ the elegant observation of Daskalopoulos--Uhlenbeck \cite{daskalopoulosPrep1} that one can embed $\Hyp^m$ in the Minkowski spacetime $\RR^{1, m}$ and employ the natural flat connection on $T\RR^{1, m}$ instead.
+
+Recall that $\RR^{1,m}$ is $\RR^{1 + m}$ equipped with the Lorentz metric $\eta_{00} = -1$, $\eta_{ii} = 1$ for $i = 1, \dots, m$, and all other components $0$. TODO: Change the indices here
+For the remainder of this paper we fix an identification of $\Hyp^m$ with the future branch of the unit timelike hyperboloid:
+\begin{equation}\label{hyperboloid choice}
+\Hyp^m \cong \{x \in \RR^{1,m}: \eta(x, x) = -1, x^0 > 1\}.
+\end{equation}
+
+Since the Riemann tensor of $\RR^{1,m}$ vanishes, the Levi-Civita connection on $T\RR^{1, m}$ is $\dif$, and once we have fixed (\ref{hyperboloid choice}), the restriction of the bundle $T\RR^{1, m}$ induces an isomorphism
+$$T\RR^{1,m}|\Hyp^m = \Hyp^m \times \RR^{1,m},$$
+a flat connection $\Dif$ on $\Hyp^m \times \RR^{1, m}$ defined by restricting $\dif$, and an exact sequence of quadratic bundles over $\Hyp^m$:
+$$\begin{tikzcd}
+0 \to (T\Hyp^m)^\perp \to \Hyp^m \times \RR^{1, m} \arrow[r,"\Pi"] & T\Hyp^m \to 0.
+\end{tikzcd}$$
+The next result follows from the definitions:
 
 \begin{lemma}
-Let $M$ be a hyperbolic manifold and $(P, V) \in TM$.
-Then there exist coordinates $(x^\mu)$ on $M$ such that $x(P) = 0$, $\partial_0(P) = V$, and
-and the metric takes the form $\partial_0 g_{\mu\nu} = 0$, $g_{0i} = g_{i0} = 0$, $\partial_k g_{ij}(0) = 0$, and $g_{\mu\nu}(0) = \delta_{\mu\nu}$.
+The Christoffel symbols of $\Dif$ vanish with respect to any frame for $\Hyp^m \times \RR^{1,m}$ induced by a basis of $\RR^{1, m}$.
+\end{lemma}
+
+We henceforth adopt the convention that any $(\ell_1, \ell_2)$-tensor field on $\Hyp^m$ is to be identified with a map
+$$\Hyp^m \to (\RR^{1, m})^{\otimes(\ell_1 + \ell_2)}$$
+equipped with the connection $\Dif$.
+In particular, it makes sense to define the vectorial integral
+\begin{equation}\label{definition of vectorial integral}
+\int_{\Hyp^m} T \otimes \vol \in (\RR^{1, m})^{\otimes (\ell_1 + \ell_2)}
+\end{equation}
+for every volume form $\vol$ and every tensor field $T \in L^1(\vol)$. More precisely, for every linear functional
+$$\varphi: (\RR^{1, m})^{\otimes(\ell_1, \ell_2)} \to \RR,$$
+we define 
+$$\left(\varphi, \int_{\Hyp^m} T \otimes \vol\right) := \int_{\Hyp^m} (\varphi, T(x)) \vol(x)$$
+where $(\varphi, T(x))$ makes sense since $T(x) \in (\RR^{1, m})^{\otimes (\ell_1 + \ell_2)}$.
+Since $\Dif$ is flat, and the group $\SpOrth^+_{1, m}$ of properly orthochronous Lorentz transformations acts transitively on $\Hyp^m$, the integral (\ref{definition of vectorial integral}) is well-defined in the sense that any two different identifications (\ref{hyperboloid choice}) would merely transform the value of the integral by the action of $\SpOrth^+_{1, m}$.
+
+\begin{definition}
+The \dfn{average} in a ball $B \subset \Hyp^m$ is defined for tensor fields $T$ on $\Hyp^m$ by 
+$$\avg_B T := \frac{1}{|B|} \int_B T \otimes (\star 1).$$
+\end{definition}
+
+The average is not a tensor field on $\Hyp^m$, but it can be transformed into one by applying the projection $\Pi$.
+We write $\Pi_Q$ for the fiber of $\Pi$ over $Q \in \Hyp^m$, thus
+\begin{equation}\label{projection formula}
+\Pi_Q V = V + \eta(V, Q)Q.
+\end{equation}
+
+We now estimate $\Pi_Q: T_P\Hyp^m \to T_Q\Hyp^m$.
+In the $m = 2$ case, which is essentially the same as the general case, these estimates already appear in \cite{daskalopoulosPrep1}, but at the time of writing that paper is still in preparation.
+
+\begin{lemma}
+Let $P, Q \in \Hyp^m$ and $t = \dist(P, Q)$. Then $P - Q$ is spacelike and 
+$$\eta(P - Q, P - Q) = 2(\cosh t - 1) \in [t^2, t^2 \cosh t].$$
 \end{lemma}
 \begin{proof}
-Using the upper half-space model, there exist coordinates $(\underline x^\mu)$ on $M$ so that
-$$\underline g_{\mu\nu} = (\underline x^1)^{-2} \delta_{\mu\nu},$$
-$\underline x^0(P) = 0$, $\underline x^1(P) = 1$, and $\underline \partial_0(P) = V$.
-To construct a coordinate system which is more adapted to the Plateau equation we define $x^0 = \underline x^0$.
-Using the flow of $\partial_0$, we obtain maps
-$$\phi_c: \{x^0 = 0\} \to \{x^0 = c\}.$$
-Moreover on $\{x^0 = 0\}$ the metric takes the form $\underline g_{ij} = (\underline x^1)^{-2} \delta_{ij}$, thus $\{x^0 = 0\}$ embeds isometrically in $\Hyp^{d - 1}$.
-We therefore choose $P$-based normal coordinates $(x^i)$ for $\Hyp^{d - 1}$ and extend them to a neighborhood of $\{x^0 = 0\}$ by pulling them back using $\phi_c$.
-We recall that $\partial_0 = \underline \partial_0$ is a Killing field.
-
-Since $(\partial_0)^\flat_\mu = g_{\mu 0}$, one has the Killing equation
-$$\partial_\mu g_{\nu 0} + \partial_\nu g_{\mu 0} - 2\Gamma_{\mu \nu}^\lambda g_{\lambda 0} = 0.$$
-However,
-$$2 \Gamma^\lambda_{\mu \nu} g_{\lambda 0} = \partial_\nu g_{0 \mu} + \partial_\mu g_{0 \nu} - \partial_0 g_{\mu \nu}$$
-and so we conclude $\partial_0 g_{\mu \nu} = 0$.
-Moreover, $x^0 = \underline x^0$ and $\underline \partial_0$ is orthogonal to $\{\underline x^0 = c\}$ which implies that, since $\partial_i$ is tangent to $\{\underline x^0 = c\}$, $g_{0i} = g_{i0} = 0$.
-The remaining two conditions are characteristic of normal coordinates on $\Hyp^{d - 1}$.
+By acting $\SpOrth^+_{1, m}$ on $\RR^{1, m}$ we may assume that $P, Q$ are any two points connected by a geodesic of length $t$.
+The geodesic $\gamma: [0, t] \to \Hyp^m$ such that
+$$\gamma(s) = (\cosh s, \sinh s, 0, \dots, 0)$$
+is spacelike and therefore satisfies
+$$|\gamma| = \int_0^t \sqrt{\eta(\gamma'(s), \gamma'(s))} \dif s = \int_0^t \sqrt{\sinh^2 s - \cosh^2 s} \dif s = t.$$
+Therefore we may assume that
+\begin{align*}
+P &= (1, 0, \dots, 0) \\
+Q &= (\cosh t, \sinh t, 0, \dots, 0)
+\end{align*}
+and hence
+\begin{align*}
+\eta(P - Q, P - Q) &= \sinh^2 t - (\cosh t - 1)^2 = 2(\cosh t - 1). \qedhere 
+\end{align*}
 \end{proof}
 
-In other words, the metric $g$ in the above lemma takes the form
-$$g = \begin{bmatrix}
-1 + O(r) & 0\\
-0 & I + O(r^2)
-\end{bmatrix}$$
-where $I$ is the identity matrix. At $P$, the only nonzero components of $(\partial_\lambda g_{\mu\nu})$ are of the form $\partial_i g_{00}$ and so the only nonzero Christoffel symbols there are $\Gamma^0_{0i} = \Gamma^0_{i0} = g^{00} \partial_i g_{00}/2$ and $\Gamma_{00}^i = -\partial^i g_{00}$.
+\begin{lemma}
+    Let $P, Q \in \Hyp^m$, $V \in T_P\Hyp^m$, and $W = \Pi_Q V$. Then
+\begin{align*}
+    |W| &\leq (1 + \eta(P - Q, P - Q)/2)|V|, \\
+    |W - V| &\leq |V|\sqrt{\eta(P - Q, P - Q)} \sqrt{1 + \frac{1}{4} \eta(P - Q, P - Q)}.
+\end{align*}
+\end{lemma}
+\begin{proof}
+By (\ref{projection formula}),
+$$|W|^2 = \eta(W, W) = \eta(V, V) + \eta(V, Q)^2$$
+and $|W - V| = \eta(V, Q)$.
+We therefore estimate 
+\begin{align*}
+\eta(V, Q)^2 &= \eta(V, \Pi_Q(P - Q))^2 = \eta(V, P - Q + \eta(P - Q, Q)Q).
+\end{align*}
+Since every tangent vector to $Q$ is spacelike,
+$$\eta(V, P - Q + \eta(P - Q, Q)Q) \leq \eta(W, W)(\eta(P - Q, P - Q) + \eta(Q - P, Q)^2)$$
+and as 
+$$\eta(Q - P, Q) = \frac{1}{2}\eta(P - Q, P - Q),$$
+we conclude 
+\begin{align*}
+\eta(V, Q)^2 &\leq \eta(V, V) \eta(P - Q, P - Q) \left[1 + \frac{1}{4} \eta(P - Q, P - Q)\right]. \qedhere
+\end{align*}
+\end{proof}
 
-Now suppose that $\Omega \subseteq \Hyp^{d - 1}$ is open and equipped with an identification
+TODO: Get a formula for $\Dif$ versus $\dif$.
+
+Since we are going to be interested in averages, we will need to study various Laplacian operators acting on tensor fields on $M$.
+The lack of a canonical choice of Laplacian is measured by the \emph{non}commutativity of the diagram 
+$$\begin{tikzcd}
+C^\infty(M, T'M)_{\mathrm{cl}} \arrow[hookrightarrow]{r} \arrow["\dif^*"]{d} &
+C^\infty(M, \RR^{1, m}) \arrow["\Dif"]{r} &
+C^\infty(M, \RR^{1, m} \otimes T'M) \arrow["\Dif^*"]{d} \\
+C^\infty(M, \RR) \arrow["\dif"]{r} &
+C^\infty(M, T'M) \arrow[hookrightarrow]{r} &
+C^\infty(M, \RR^{1, m})
+\end{tikzcd}$$
+where $C^\infty(M, T'M)_{\mathrm{cl}}$ is the space of closed $1$-forms on $M$, $\dif^*$ is the coderivative (so $\dif \circ \dif^*$ is the Hodge-Laplace operator on closed forms), and $\Dif^*$ is the adjoint
+$$\Dif^* (F \otimes \alpha) = \tr_g (\Dif F \otimes \alpha)$$
+(so $\Dif^* \circ \Dif$ is the Laplacian with respect to the flat connection $\Dif$).
+TODO: Who cares?
+
+\begin{definition}
+A $\flat$-\dfn{harmonic form} is a differential form $\alpha$ on $M$ such that
+$$\dif \alpha = \Dif^* (\Dif \alpha) = 0.$$
+\end{definition}
+
+\begin{lemma}
+Let $u$ be a harmonic function on $M$. Then $\Dif^* \Dif \dif u = ...$
+\end{lemma}
+
+\begin{lemma}[$\flat$-mean value property]
+Let $\alpha$ be a $\flat$-harmonic form. Then for $P \in M$ and $r > 0$<
+$$\alpha(P) - \avg_{B(P, r)} \alpha = TODO.$$
+\end{lemma}
+\begin{proof}
+
+\end{proof}
+
+\subsection{Plateau energy}
+% choose coords...
+
+% \begin{lemma}
+% Let $M$ be a hyperbolic manifold and $(P, V) \in TM$.
+% Then there exist coordinates $(x^\mu)$ on $M$ such that $x(P) = 0$, $\partial_0(P) = V$, and
+% and the metric takes the form $\partial_0 g_{\mu\nu} = 0$, $g_{0i} = g_{i0} = 0$, $\partial_k g_{ij}(0) = 0$, and $g_{\mu\nu}(0) = \delta_{\mu\nu}$.
+% \end{lemma}
+% \begin{proof}
+% Using the upper half-space model, there exist coordinates $(\underline x^\mu)$ on $M$ so that
+% $$\underline g_{\mu\nu} = (\underline x^1)^{-2} \delta_{\mu\nu},$$
+% $\underline x^0(P) = 0$, $\underline x^1(P) = 1$, and $\underline \partial_0(P) = V$.
+% To construct a coordinate system which is more adapted to the Plateau equation we define $x^0 = \underline x^0$.
+% Using the flow of $\partial_0$, we obtain maps
+% $$\phi_c: \{x^0 = 0\} \to \{x^0 = c\}.$$
+% Moreover on $\{x^0 = 0\}$ the metric takes the form $\underline g_{ij} = (\underline x^1)^{-2} \delta_{ij}$, thus $\{x^0 = 0\}$ embeds isometrically in $\Hyp^{d - 1}$.
+% We therefore choose $P$-based normal coordinates $(x^i)$ for $\Hyp^{d - 1}$ and extend them to a neighborhood of $\{x^0 = 0\}$ by pulling them back using $\phi_c$.
+% We recall that $\partial_0 = \underline \partial_0$ is a Killing field.
+
+% Since $(\partial_0)^\flat_\mu = g_{\mu 0}$, one has the Killing equation
+% $$\partial_\mu g_{\nu 0} + \partial_\nu g_{\mu 0} - 2\Gamma_{\mu \nu}^\lambda g_{\lambda 0} = 0.$$
+% However,
+% $$2 \Gamma^\lambda_{\mu \nu} g_{\lambda 0} = \partial_\nu g_{0 \mu} + \partial_\mu g_{0 \nu} - \partial_0 g_{\mu \nu}$$
+% and so we conclude $\partial_0 g_{\mu \nu} = 0$.
+% Moreover, $x^0 = \underline x^0$ and $\underline \partial_0$ is orthogonal to $\{\underline x^0 = c\}$ which implies that, since $\partial_i$ is tangent to $\{\underline x^0 = c\}$, $g_{0i} = g_{i0} = 0$.
+% The remaining two conditions are characteristic of normal coordinates on $\Hyp^{d - 1}$.
+% \end{proof}
+
+% In other words, the metric $g$ in the above lemma takes the form
+% $$g = \begin{bmatrix}
+% 1 + O(r) & 0\\
+% 0 & I + O(r^2)
+% \end{bmatrix}$$
+% where $I$ is the identity matrix. At $P$, the only nonzero components of $(\partial_\lambda g_{\mu\nu})$ are of the form $\partial_i g_{00}$ and so the only nonzero Christoffel symbols there are $\Gamma^0_{0i} = \Gamma^0_{i0} = g^{00} \partial_i g_{00}/2$ and $\Gamma_{00}^i = -\partial^i g_{00}$.
+
+Our next task is to construct Plateau's equation as the Euler-Lagrange equation of a certain Lagrangian on $\Hyp^{d - 1}$.
+To accomplish this we first identify a coordinate condition which makes Plateau's equation take a particularly simple form.
+
+\begin{definition}
+Let $M = (M, g)$ be a hyperbolic manifold equipped with a coordinate system $(x^\mu)$.
+We say that $g$ is in \dfn{Killing gauge} if it takes the form 
+$$g = g_{00} \dif x^0 \otimes \dif x^0 + g_{ij} \dif x^i \otimes \dif x^j$$
+for $i, j = 1, \dots, d - 1$, and $\partial_0$ is an infinitesimal generator of translations.
+\end{definition}
+
+\begin{lemma}
+If $g$ is in Killing gauge, then $\partial_0 g_{\mu\nu} = 0$ and $(\{x^0 = c\}, (g_{ij}))$ is locally isometric to $\Hyp^{d - 1}$.
+\end{lemma}
+\begin{proof}
+The equation $\partial_0 g_{\mu\nu} = 0$ is equivalent to $\partial_0$ being a Killing field. This follows from the fact that $(\partial_0)^\flat_\mu = g_{\mu 0}$ and the Killing equation 
+$$\partial_\mu g_{\nu 0} + \partial_\nu g_{\mu 0} - 2\Gamma_{\mu \nu}^\lambda g_{\lambda 0} = 0,$$
+where we can expand the Christoffel symbols as
+$$2 \Gamma^\lambda_{\mu \nu} g_{\lambda 0} = \partial_\nu g_{0 \mu} + \partial_\mu g_{0 \nu} - \partial_0 g_{\mu \nu}.$$
+Moreover, since $\partial_0$ is an infinitesimal generator of translations, we can identify $x^0$ with the vector field $\tilde x^0$ in the half-space model $\tilde g_{\mu\nu} = (\tilde x^1)^{-2} \delta_{\mu\nu}$, thus $(\{x^0 = c\}, (g_{ij}))$ is locally isometric to $(\{\tilde x^0 = 0\}, (\tilde g_{ij}))$ and $\tilde g_{ij} = (\tilde x^1)^{-2} \delta_{ij}$ so $(\{\tilde x^0 = 0\}, (\tilde g_{ij})) \cong \Hyp^{d - 1}$.
+\end{proof}
+
+\begin{lemma}[existence of Killing gauge]\label{existence of Killing gauge}
+Let $M$ be a hyperbolic manifold, $(P, V) \in TM$, and $(y^i)$ are coordinates on an open subset $\Omega$ of $\Hyp^{d - 1}$ based at some point $Q$.
+Then, possibly after shrinking $\Omega$, we can find an embedding $\iota: \Omega \to \Hyp^d$ and coordinates $(x^\mu)$ on $\Hyp^d$ based at $P$ such that:
+\begin{enumerate}
+\item $\iota(Q) = P$ and $\iota^* (x^i) = y^i$ for $i = 1, \dots, d - 1$,
+\item $(g_{\mu\nu})$ is in Killing gauge,
+\item $\iota_* (\Omega) = \{x^0 = 0\}$, and 
+\item $\partial_0(P) = V$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+Since $M$ is hyperbolic and the statement is local, we may assume that $M = \Hyp^d$ in the half-space model $\tilde g_{\mu\nu} = (\tilde x^{d - 1})^{-2} \delta_{\mu\nu}$, $P = (0, \dots, 0, 1)$, and $V = \tilde \partial_0(P)$.
+We then set $x^0 = \tilde x^0$.
+In particular, $\partial_0$ is a Killing field and is orthogonal to $\{x^0 = c\}$ for every $c$.
+In the coordinates $(\tilde x^\mu)$, the induced metric on $\{x^0 = 0\}$ is $\tilde g_{ij} = (\tilde x^{d - 1})^{-2} \delta_{ij}$, which is hyperbolic, so $\{x^0 = 0\}$ is locally isometric to $\Hyp^{d - 1}$.
+The coordinate fields $\partial_i$ are tangent to $\Hyp^{d - 1}$ and therefore orthogonal to $\partial_0$.
+Therefore the desired embedding $\iota$ exists and maps $\Omega$ onto a small neighborhood of $P$ in $\{x^0 = 0\}$.
+\end{proof}
+
+Suppose that $(x^\mu)$ is in Killing gauge, $\Omega \subseteq \Hyp^{d - 1}$ is open, and we have an identification
 $$\Omega \cong \{x^0 = 0\};$$
 we will not explicitly write pullbacks or pushforwards for this identification.
 Suppose further that
@@ -1115,367 +1291,223 @@ so
 \end{align*}
 Here $(\Psi^* g)_{ij}$ are components of the pullback metric but $\Psi^* (g_{\mu\nu})$ are pullbacks of the components of the metric.
 Using the Killing nature of $\partial_0$ we can eliminate the pullbacks on the components, thus
-$$\Psi^* g = \slashed g + g_{00} \dif \omega \otimes \dif \omega$$
-where $\slashed g$ is the metric on $\{x^0 = 0\}$, $\slashed g_{ij} = g_{ij}$.
+$$\Psi^* g = g_{ij} \dif x^i \otimes \dif x^j + g_{00} \dif \omega \otimes \dif \omega.$$
 The only independent component of the volume form of the pullback metric $\Psi^* g$ is
-$$\sqrt{\det \Psi^* g} = \sqrt{\det \slashed g} \sqrt{1 + g_{00} |\dif \omega|_{\slashed g^{-1}}^2}$$
+$$\sqrt{\det \Psi^* g} = \sqrt{\det ((g_{ij}))} \sqrt{1 + g_{00} |\dif \omega|_{g^{-1}}^2}$$
 by the Weinstein-Aronsazjn theorem.
 
 \begin{definition}
+Suppose that $(M, g)$ is a hyperbolic manifold and $g$ is in Killing gauge.
 Let $\Omega \subseteq \Hyp^{d - 1}$ and let $\omega: \Omega \to \RR$ be $C^1$. Then the \dfn{Plateau energy} of $\omega$ is the $d-1$-form
-$$\Lagrange[\dif \omega] = \star \sqrt{1 + g_{00} |\dif \omega|^2},$$
-where $|\cdot|$ and $\star$ are with respect to the usual metric $\slashed g$ on $\Hyp^{d - 1}$ and $g_{00}$ is the pullback of the $00$-component of $g$ on $\{x^0 = 0\} \subset M$.
-The \dfn{Plateau equation} is the Euler-Lagrange equation for the Plateau energy.
+$$\Lagrange[\dif \omega] = \star \sqrt{1 + F |\dif \omega|^2},$$
+on $\Hyp^{d - 1}$ and $F$ is the pullback of $g_{00}$ on $\{x^0 = 0\} \subset M$ to $\Hyp^{d - 1}$.
+
+The \dfn{Plateau equation} is the Euler-Lagrange equation for the Plateau energy, and a variational solution of the Plateau equation is called a \dfn{minimal graph}.
 \end{definition}
 
 It follows from the definitions that, if $N$ is the graph of $\omega$, then $\Lagrange[\dif \omega]$ is the pullback of the volume form on $N$ by $\Psi$.
-In particular, $\omega$ is a variational solution of the Plateau equation iff $N$ bounds a set of least perimeter.
+In particular, minimal graphs have no mean curvature.
 
-The Plateau equation can be computed by considering a variation $\omega$ with $\phi = -\dot \omega$ compactly supported in $\Hyp^{d - 1}$.
-In that case,
-\begin{align*}
-\frac{\dif}{\dif t} \Lagrange[\dif \omega] &= \int_{\Hyp^{d - 1}} \star \partial_t \sqrt{1 + g_{00} |\nabla \omega|^2} \\
-&= -\int_{\Hyp^{d - 1}} \star \frac{g_{00} \slashed g(\nabla \phi, \nabla \omega)}{\sqrt{1 + g_{00}|\nabla \omega|^2}} \\
-&= \int_{\Hyp^{d - 1}} \star \phi\left[\frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}} \Delta \omega + \slashed g\left(\nabla \frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}}, \nabla \omega\right)\right].
-\end{align*}
-Thus the Plateau equation is
+\begin{lemma}
+The Plateau equation is the elliptic PDE on $\Hyp^{d - 1}$,
 \begin{equation}\label{Plateau eqn}
-\Delta \omega + \frac{\sqrt{1 + g_{00} |\nabla \omega|^2}}{g_{00}} \slashed g\left(\nabla \frac{g_{00}}{\sqrt{1 + g_{00} |\nabla \omega|^2}}, \nabla \omega\right) = 0
+\Delta \omega + \frac{\sqrt{1 + F |\nabla \omega|^2}}{F} g\left(\nabla \frac{F}{\sqrt{1 + F |\nabla \omega|^2}}, \nabla \omega\right) = 0.
 \end{equation}
-where $\Delta$ is the hyperbolic Laplace-Beltrami operator. Linearizing about $||\omega||_{C^1} \ll 1$ we arrive at the Laplace-Beltrami equation $\Delta \omega = 0$ on $\Hyp^{d - 1}$.
-We therefore launch into a study of harmonic functions on $\Hyp^{d - 1}$.
-
-
-
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Plateau's equation OLD}
-Having shown that we can reduce the study of sets of least perimeter to sets with $C^1$ and approximately least perimeter, our next task is to represent such sets as graphs of approximate solutions to a Plateau-type equation.
-It is natural to expect the Plateau equation to a PDE on a manifold $\Omega$ of dimension $d - 1$, so we now construct $\Omega$.
-
-\subsection{Plateau energy}
-Let $\overline M \subseteq M$ be the domain of a coordinate system $(x^\mu)$, and let $\Omega \subseteq \RR^{d - 1}$ be a small open neighborhood of $0$ (on which we have not yet imposed a metric).
-We introduce the projection
-\begin{align*}
-    \Pi: \overline M &\to \Omega \subseteq \RR^{d - 1}\\
-    x &\mapsto \overline x := (x^1, \dots, x^{d - 1}).
-\end{align*}
-If $\omega$ is a $C^r$ function $\Omega \to \RR$, we introduce as a section of $\Pi$ the locally closed $C^r$ embedding
-\begin{align*}
-    \Psi_\omega: \Omega &\to M \\
-    x &\mapsto (\omega(x), x^1, x^2, \dots, x^{d - 1})
-\end{align*}
-which identifies $\Omega$ with the ``graph'' $N_\omega$ of $\omega$, which is a hypersurface in $M$.
-
-We shall need to pull back component functions by a diffeomorphism $\Psi$. Thus for a tensor field $T$ and multiiindex $I$,
-$(\Psi^* T)_I$ denotes the $I$th component of the pullback tensor field $\Psi^* T$, while $\Psi^* (T_I) := T_I \circ \Psi$.
-In particular $(\Psi^* T)_I \neq \Psi^* (T_I)$.
-
-\begin{lemma}\label{pullback metric to Omega}
-Let $\omega: \Omega \to \RR$ and $\Psi = \Psi_\omega$. Then
-$$(\Psi^* g)_{ij} = \Psi^* (g_{00}) \omega_{,i} \omega_{,j} + 2 \Psi^* (g_{i0}) \omega_{,j} + \Psi^* (g_{ij}).$$
 \end{lemma}
 \begin{proof}
-Let us suppress pullbacks on component functions. Let $h = \Psi^* g$, thus
-$$h_{ij} = g_{\mu\nu} (\dif \Psi \cdot \partial_i)^\mu (\dif \Psi \cdot \partial_j)^\nu = g_{\mu\nu} (\dif \Psi)^\mu_i (\dif \Psi)^\nu_j.$$
-As $\Psi^\mu = \delta^\mu_0 \omega + x^\mu$,
-it follows that
-$$h_{ij} = g_{\mu\nu}(\delta^\mu_0 \omega_{,i} + \delta^\mu_i)(\delta^\nu_0 \omega_{,j} + \delta^\mu_j)$$
-which implies the claim.
-\end{proof}
-
-The previous lemma involves pullbacks of components $g_{ij}$, so for a fixed $\omega$, we define the \dfn{reduced metric} $\slashed g = \slashed g^{(\omega)}$ to be the metric on $\Omega$ with components
-$$\slashed g_{ij} = \Psi_\omega^*(g_{ij}).$$
-We note carefully that $\slashed g$ is not the pullback of $g|N$ by $\Psi$ unless $\Psi = \Psi_\omega$ and $\dif \omega = 0$; roughly speaking, $\slashed g^{(\omega)}$ is the pullback of the metric on $N$ if we ``ignore the curvature induced by $\omega$.''
-Henceforth when we have a function $\omega$ in mind, $\slashed g^{(\omega)}$ will be our metric of choice on $\Omega$.
-
-\begin{definition}\label{definition of Plateau energy}
-Let $\omega: \Omega \to \RR$ be $C^1$ and let $\sigma$ be a continuous $1$-form on $\Omega$.
-Then the \dfn{Plateau energy} is the $d-1$-form on $\Omega$,
-\begin{equation}\label{Plateau energy}
-\Lagrange[\omega, \sigma] := \star_{\slashed g} \sqrt{1 + \Psi_\omega^* (g_{00}) \cdot |\sigma|_{\slashed g^{-1}}^2 + (\sigma, L)}
-\end{equation}
-where $\slashed g = \slashed g^{(\omega)}$ is the reduced metric and $L$ is the vector field
-\begin{equation}\label{Plateau error}
-L^i := 2(\slashed g^{-1})^{ij} \Psi^*_\omega (g_{0j}).
-\end{equation}
-The \dfn{Plateau equation} $P\omega = 0$ is the Euler-Lagrange equation for minimizers of $\int \Lagrange[\omega, \dif \omega]$.
-\end{definition}
-
-\begin{proposition}\label{construction of Plateau energy}
-For $\omega \in C^1(\Omega)$,
-$$\Lagrange[\omega, \dif \omega] = \Psi_\omega^* \vol_{N_\omega}.$$
-In particular, $N_\omega$ is a nonparametric minimal hypersurface iff $\omega$ is a weak solution of the Plateau equation.
-Moreover, the upwards-pointing conormal $1$-form to $N = N_\omega$ is
-\begin{equation}\label{Josh helped}
-(\Psi_\omega^* \normal)_\mu = \frac{\delta_\mu^0 - \delta_\mu^i \omega_{,i}}{\sqrt{\Psi_\omega^* (g^{00}) + |\dif \omega|_{\slashed g^{-1}}^2 - (\dif \omega, L)}}.
-\end{equation}
-\end{proposition}
-\begin{proof}
-Let $\xi = (\Psi_\omega^* \vol_{N_\omega})/(\dif \overline x)$ (where $\dif \overline x = \dif \overline x^1 \wedge \cdots \wedge \dif \overline x^{d - 1}$); then by Lemma \ref{pullback metric to Omega},
-$$\xi^2 = \det(\Psi^* (g_{00}) \dif \omega \otimes \dif \omega + L^\flat \otimes \dif \omega + \slashed g)$$
-where the $\flat$ was taken using $\slashed g$.
-We want to show $\xi \dif \overline x = \Lagrange[\omega, \dif \omega]$.
-Moreover, by the Weinstein-Aronsazjn theorem,
+Consider a variation $\omega$ with $\phi = -\dot \omega$ compactly supported in $\Hyp^{d - 1}$:
 \begin{align*}
-\xi^2 &= \det(\slashed g) \cdot \det(1 + \slashed g^{-1}(\Psi^* (g_{00}) \dif \omega \otimes \dif \omega + L^\flat \otimes \dif \omega))\\
-&= \det (\slashed g) \cdot \det(1 + \Psi^*(g_{00}) \slashed g^{-1}(\dif \omega, \dif \omega) + \slashed g^{-1}(L^\flat, \dif \omega))\\
-&= \det (\slashed g) \cdot 1 + \Psi^*(g_{00}) |\dif \omega|_{\slashed g^{-1}}^2 + (L, \dif \omega).
+\frac{\dif}{\dif t} \Lagrange[\dif \omega] &= \int_{\Hyp^{d - 1}} \star \partial_t \sqrt{1 + F |\nabla \omega|^2} \\
+&= -\int_{\Hyp^{d - 1}} \star \frac{F g(\nabla \phi, \nabla \omega)}{\sqrt{1 + F|\nabla \omega|^2}} \\
+&= \int_{\Hyp^{d - 1}} \star \phi\left[\frac{F}{\sqrt{1 + F |\nabla \omega|^2}} \Delta \omega + g\left(\nabla \frac{F}{\sqrt{1 + F |\nabla \omega|^2}}, \nabla \omega\right)\right]. \qedhere
 \end{align*}
-Taking square roots and using $\sqrt{\det(\slashed g)} \dif \overline x = \star_{\slashed g} 1$, we see the desired result.
-
-Now we claim that the $1$-form $\alpha_\mu = \delta_\mu^0 - \delta_\mu^i \omega_{,i}$
-annihilates all the $\phi_i = \dif \Phi_i$ and has length
-$$|\alpha| = \sqrt{\Psi_\omega^* (g^{00}) + |\dif \omega|_{\slashed g^{-1}}^2 - (\dif \omega, L)};$$
-this implies the proposition.
-Let $\phi_0 = \alpha^\sharp$, thus $\phi_0^\mu = g^{\mu 0} - g^{\mu i} \omega_{,i}$. We first check orthogonality:
-\begin{align*}
-g_{\mu\nu} \phi_0^\mu \phi_i^\nu &= g_{\mu\nu} (g^{\mu 0} - g^{\mu i} \omega_{,i}) (\delta_0^\nu \omega_{,i} - \delta^\nu_i) = (\delta_\nu^0 - \delta^j_\nu \omega_{,j}) (\delta^\nu_0 \omega_{,i} - \delta^\nu_i) = 0.
-\end{align*}
-To check length we compute
-$$g_{\mu\nu} \phi_0^\mu \phi_0^\nu = (\delta_\nu^0 - \delta_\nu^i \omega_{,i}) (g^{\nu 0} - g^{\nu j} \omega_{,j}) = g^{00} - g^{0j} \omega_{,j} - g^{i0} \omega_{,i} + g^{ij} \omega_{,i} \omega_{,j}$$
-and the claim follows by symmetry of $(g^{ij})$.
 \end{proof}
 
-\begin{corollary}[elliptic bootstrap]\label{C1 implies smooth}
-Let $U$ be a set of least perimeter. If $\normal_U$ extends to a continuous $1$-form on $\partial U$, then $\partial U$ is a smooth minimal hypersurface.
-\end{corollary}
-\begin{proof}
-By Proposition \ref{locality of Caccioppoli}, $\partial U$ is a $C^1$ minimal hypersurface.
-Selecting appropriate coordinate charts centered on $\partial U$, we realize $\partial U$ locally as the graph of a $C^1$ function $\omega$ which is a weak solution of the Plateau equation by Proposition \ref{construction of Plateau energy}.
-Therefore $\omega$ is smooth (see \cite[\S8.3.2]{evans2010partial} and the references therein).
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{The Killing gauge}
-The Plateau energy $\Lagrange$ is intractible to work with in its current form, as it is highly nonlinear, and in particular has coefficients which depend on $\omega$.
-In this section we select a gauge which any locally homogeneous space can be put in and which removes the dependency on $\omega$ from $\Lagrange$.
-
-\begin{definition}
-A metric $g$ is in \dfn{Killing gauge} if $g_{\mu\nu, 0} = 0$.
-\end{definition}
-
-Suppose that $g$ is in Killing gauge. Then $\slashed g(\Pi(x))_{ij} = g(x^0, \Pi(x))_{ij}$ does not depend on $x^0$, so the reduced metric is independent of $\omega$.
-In particular, the Plateau energy $\Lagrange[\omega, \sigma] = \Lagrange[\sigma]$ is independent of $\omega$.
-We shall abuse notation and write $\Lagrange[\sigma]$ for $\Lagrange[\sigma]_{12\cdots d - 1}$, thus
-\begin{equation}\label{Lagrangian in coords}
-\Lagrange[\sigma] = \sqrt{\det \slashed g} \sqrt{1 + g_{00} |\sigma|_{\slashed g^{-1}}^2 + (L, \sigma)}
-\end{equation}
-for a metric tensor $\slashed g$ and a vector field $L$ on $\Omega$ which do not depend on $\omega$.
-
-The following lemma is not logically required for the remainder of the paper.
-However, it provides motivation for many of the later computations which heavily rely on properties of the euclidean Laplacian.
-
-\begin{lemma}
-The linearization of the Plateau equation $P\omega = 0$ in Killing gauge with
-\begin{equation}\label{hypothesis on the linearization}
-||\dif \omega||_{L^\infty} + ||g_{00} - 1||_{C^1} + \sum_{i,j = 1}^{d - 1} ||\slashed g_{ij} - \delta_{ij}||_{C^1} \ll 1
-\end{equation}
-is the euclidean Laplace equation $\Delta \omega = 0$.
+\begin{lemma}\label{C1 implies smooth}
+Let $U$ be a set of least perimeter in a hyperbolic manifold, and assume that $\normal_U$ extends to a continuous $1$-form on $\partial U$.
+Then $\partial U$ is $C^\infty$.
 \end{lemma}
 \begin{proof}
-In Killing gauge, the Plateau equation takes the form $\partial_i \partial_{\omega_{,i}} \Lagrange[\dif \omega] = 0$, or in other words
-\begin{equation}\label{Plateau equation}
-\Div_{\slashed g} \frac{2g_{00} \grad_{\slashed g} \omega + L}{2 \sqrt{1 + g_{00}|\grad_{\slashed g} \omega|_{\slashed g}^2 + L\omega}} = 0.
-\end{equation}
-Moreover, $L$ is given by (\ref{Plateau error}) and so vanishes as $\slashed g_{ij} - \delta_{ij} \to 0$ and $g_{00} \to 1$ in $C^1$.
-So in the linearization of (\ref{Plateau equation}) we may discard terms involving $L$; we may also discard terms involving $|\dif \omega|^2$. We are then left with $\Div \grad \omega = 0$.
+By Proposition \ref{locality of Caccioppoli}, $\partial U$ is $C^1$ and has no mean curvature.
+Let $P \in \partial U$, and use Lemma \ref{existence of Killing gauge} to choose coordinates based at $(P, \normal_U(P))$ for which $g$ is in Killing gauge.
+In these coordinates, $\partial U$ is a minimal graph and by elliptic regularity is $C^\infty$.
 \end{proof}
 
-We therefore seek to impose (\ref{hypothesis on the linearization}), which would be true for $||\dif \omega||_{L^\infty} \ll 1$ if $(x^\mu)$ were normal coordinates, but we do not have the freedom to impose both that $(x^\mu)$ are normal and that $g$ is in Killing gauge:
-We therefore compromise between these two conditions:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Hyperbolic harmonics}
+Linearizing (\ref{Plateau eqn}) about $||\omega||_{C^1} \ll 1$, we arrive at the Laplace-Beltrami equation $\Delta \omega = 0$ on $\Hyp^{d - 1}$, $d \geq 2$.
+We therefore will study of harmonic functions on $\Hyp^{d - 1}$.
+The results of this section are trivial for $d = 2$ and so the reader who is only interested in application to surfaces can skip this section entirely.
+Henceforth, we assume $d \geq 3$.
 
-\begin{definition}
-Let $(p, v) \in TM$ and $(x^\mu)$ be a coordinate system. We say that $(x^\mu)$ are \dfn{Killing-normal coordinates} based at $(p, v)$ if:
-\begin{enumerate}
-\item $g_{\mu\nu} = g(\partial_\mu, \partial_\nu)$ is in Killing gauge,
-\item $(x^i)$ are $\slashed g$-normal coordinates,
-\item $g_{00}(p) = 1$, and
-\item $p$ is the origin of $(x^\mu)$ and $\partial_0(p) = v$.
-\end{enumerate}
-\end{definition}
-
-\begin{proposition}
-Let $M$ be a Riemannian manifold. Then the following are equivalent:
-\begin{enumerate}
-\item $M$ is locally isometric to a Riemannian homogeneous space.
-\item For every $(p, v) \in TM$ there exist coordinates based at $p$ such that $g$ is in Killing gauge and $\partial_0(p) = v$.
-\item For every $(p, v) \in TM$ there exist Killing-normal coordinates based at $(p, v)$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-We recall that the Killing equation
-$$K_{\mu,\nu} + K_{\nu,\mu} - 2\Gamma^\lambda_{\mu\nu} K_\lambda = 0$$
-can be expanded for $K^\mu = \delta_0^\mu$ to take the form
-$$g_{\mu \nu, 0} =  g_{0 \mu, \nu} + g_{0 \nu, \mu} + g_{\mu \nu, 0} - g_{\mu 0, \nu} - g_{\nu 0, \mu} = 0.$$
-Thus $\partial_0$ is a Killing field iff $g$ is in Killing gauge.
-
-If $M$ is locally homogeneous and $(p, v) \in TM$ is given, then there exists a geodesic $\gamma$ with $\gamma(0) = p$, $\gamma'(0) = v$ and a one-parameter family of isometries $(\phi_t)_{t \in I}$ such that $\phi_t(p) = \gamma(t)$.
-So $v$ is a Killing vector, so there exists a coordinate frame $(x^\mu)$ such that $\partial_0$ is Killing and hence $(g_{\mu\nu})$ is in Killing gauge.
-After rescaling $\partial_0$ as necessary we may assume that $g_{00}(p) = 1$.
-
-If $(x^\mu)$ is given so that $(g_{\mu\nu})$ is in Killing gauge, then we may set $y^0 = x^0$, and choose $\slashed g$-normal coordinates $(y^i)$ on $\{y^0 = 0\}$.
-Flowing along the Killing field $\partial_0$, we extend $(y^i)$ to coordinates on a neighborhood of $\{y^0 = 0\}$.
-Then $(g(\partial_{y^\mu}, \partial_{y^\nu}))$ is in Killing gauge and the fact that $(y^i)$ is normal on $\{y^0 = 0\}$ implies that $(y^i)$ is normal on $\{y^0 = c\}$ for every $c$, so $(y^\mu)$ is Killing-normal.
-
-Finally, if we can find Killing-normal coordinates $(x^\mu(p, v))$ for every $(p, v) \in TM$, then the Lie algebra $\mathfrak g$ of Killing vectors at $p$ satisfies $\dim \mathfrak g = d$; the same holds for the Lie group $\Group$ generated by $\mathfrak g$.
-Then $\Group$ has a transitive local action on $M$ near $p$, so $M$ is locally homogeneous.
-\end{proof}
-
-We now show that we can compare $\Lagrange$ to the euclidean Dirichlet energy $\DirL[\sigma] := |\sigma|^2/2$ in Killing-normal coordinates.
-
-\begin{lemma}
-Let $\sigma, \underline \sigma$ be $1$-forms on $\Omega$ and suppose that $(x^\mu)$ are Killing-normal coordinates.
-Then there exists a tensor field $a$ with $a^{ij}(x) \lesssim |x|$, a vector field $M$ with $M^i(x) \lesssim |x|$, and a scalar field $\xi$ with $||\xi||_{L^\infty} \lesssim 1$, such that
-\begin{align*}
-\Lagrange[\sigma] - \Lagrange[\underline \sigma]
-&= \DirL[\sigma] - \DirL[\underline \sigma] + E + O(|x|^2)(||\sigma||_{L^\infty} + ||\underline \sigma||_{L^\infty}),\\
-E &:= a(\sigma - \underline \sigma, \sigma + \underline \sigma) + (M, \sigma - \underline \sigma) \\
-&\qquad - \xi \cdot (\DirL[\sigma] - \DirL[\underline \sigma] + a(\sigma - \underline \sigma, \sigma + \underline \sigma) + (M, \sigma - \underline \sigma))^2.
-\end{align*}
-\end{lemma}
-\begin{proof}
-By Taylor's theorem, for every $\eta_1, \eta_2 \in \RR_+$ there exists $\eta \in [\eta_1, \eta_2]$ such that
-\begin{equation}\label{taylor expand sqrt}
-\sqrt{1 + \eta_1} - \sqrt{1 + \eta_2} = \frac{\eta_1 - \eta_2}{2\sqrt{1 + \eta_2}} - \frac{(\eta_1 - \eta_2)^2}{8(1 + \eta)^{3/2}}.
-\end{equation}
-With $\eta_1 = g_{00} |\sigma|_{\slashed g^{-1}}^2 + (L, \sigma)$ and similarly for $\eta_2$ and $\underline \sigma$, we therefore have
-$$\Lagrange[\sigma] - \Lagrange[\underline \sigma] = \frac{\sqrt{\det \slashed g}}{2\sqrt{1 + g_{00}|\underline \sigma|_{\slashed g^{-1}}^2}} \left[g_{00}|\sigma|_{\slashed g^{-1}}^2 + g_{00} |\underline \sigma|_{\slashed g^{-1}}^2 + (L, \sigma - \underline \sigma)\right] + Q$$
-where $(\det \slashed g)^{-1/2}Q$ is the term in (\ref{taylor expand sqrt}) which is quadratic in $\eta_1 - \eta_2$.
-To eliminate the $\det \slashed g$ we use the fact that $\slashed g$ is in normal coordinates to bound all terms involving $1 - \sqrt{\det \slashed g}$ as $\lesssim |x|^2 (||\sigma||_{L^\infty} + ||\underline \sigma||_{L^\infty})$.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A multiplicative gain}
-We now seek to obtain the fundamental inequality of the present paper: a multiplicative gain on the oscillation of the Plateau energy when one passes from a dyadic scale $r$ to its child $r/2$.
-Such gains appeared in the work of Miranda \cite[Teorema 4.3]{Miranda66}, by exploiting the mean-value property of the linearization of $\Omega$.
-
-\begin{definition}
-Fix a coordinate system on $\Omega$.
-The \dfn{averaging operator} $\avg_r$ is defined on tensor fields $T$ on $\Omega$ by declaring that for every multiindex $I$,
-$$(\avg_r T)_I(y) := \dashint_{\overline B_r} \star_{\slashed g} (T_I).$$
-\end{definition}
-
-\begin{lemma}
-Fix a Killing-normal coordinate system.
-Let $\sigma$ be a continuous $1$-form and $\underline \sigma = \avg_r \sigma$. Then, uniformly in $\omega$ with $||\omega||_{C^1} \lesssim 1$,
-$$\left|\int_{\overline B_r} \star_{\slashed g} (L, \sigma - \underline \sigma) \right| \lesssim r^{d + 1} ||\sigma||_{L^\infty(\overline B_r)}.$$
-\end{lemma}
-\begin{proof}
-Let $\underline L = \avg_r L$. Then
-$$\int_{\overline B_r} \star_{\slashed g} (L, \sigma - \underline \sigma) = \underline L^i \int_{\overline B_r} \star_{\slashed g} (\sigma_i - \underline \sigma_i) + \int_{\overline B_r} \star_{\slashed g} (L^i - \underline L^i)(\sigma_i - \underline \sigma_i)$$
-and the first term on the right-hand side vanishes by definition of $\underline \sigma$.
-As for the second term we apply the Poincar\'e inequality:
-\begin{align*}
-\left|\int_{\overline B_r} \star_{\slashed g} (L^i - \underline L^i)(\sigma_i - \underline \sigma_i)\right| &\leq ||L^i - \underline L^i||_{L^1} \cdot ||\sigma_i - \underline \sigma_i||_{L^\infty} \lesssim r^d \cdot ||\sigma||_{L^\infty} \cdot ||\nabla L||_{L^\infty}.
-\end{align*}
-Using the Killing-normal coordinates condition, we have $||\nabla L||_{L^\infty} \lesssim r$.
-\end{proof}
-
-
-
-\begin{proposition}[de Giorgi's lemma, $C^1$ nonparametric case]\label{dGL Laplace}
-For $0 < r \lesssim_{c_0} 1$, with $\overline B_r \subseteq \Omega$, let $0 < \kappa, \beta < 1$ and suppose that
+In polar coordinates, we have 
+$$\sinh^2 r \Delta = \sinh^2 r \frac{\partial^2}{\partial r^2} + (d - 2) \sinh r \cosh r \frac{\partial}{\partial r} - L$$
+where $-L$ is the Laplace-Beltrami operator on $\Sph^{d - 2}$.
+From the separation ansatz $u(r, \theta) = v(r) Y(\theta)$ we have if $u$ is harmonic that 
+$$0 = \sinh^2 r \Delta u(r, \theta) = Y(\theta) (\sinh^2 r v''(r) + (d - 2) \sinh r \cosh r v'(r)) - v(r) LY(\theta)$$
+which decouples into the system 
 \begin{align}
-||\dif \omega||_{L^\infty(\overline B_r)} &\leq \kappa, \label{dGL Linfty}\\
-\int_{\overline B_r} \Lagrange[\omega, \dif \omega] - \Lagrange[\omega, \avg_r \dif \omega] &\leq \beta, \label{dGL osc}\\
-\int_{\overline B_r} \Lagrange[\omega, \dif \omega] &\leq \eta(U_\omega, \overline B_r \times (-\ell, \ell)) + \beta\kappa, \label{dGL mean curv}
+\sinh^2 r v''(r) + (d - 2) \sinh r \cosh r v'(r) - \lambda vR(r) &= 0 \label{radial hyperbolic harmonic} \\
+LY(\theta) - \lambda Y(\theta) &= 0
 \end{align}
-where $\ell > ||\omega||_{L^\infty}$ and $\partial U_\omega = N_\omega$. Then
-\begin{equation}\label{dGL cons}
-\int_{\overline B_{r/2}} \Lagrange[\omega, \dif \omega] - \Lagrange[\omega, \avg_{r/2} \dif \omega] \leq \frac{e^{c_0}}{2^{d + 1}} \beta + O(\kappa (\beta + r^d)).
-\end{equation}
-\end{proposition}
+where $\lambda$ ranges over $\Spec L$, thus $\lambda = \lambda_\ell := \ell(\ell + d - 3)$ for some quantum number $\ell \in \NN$ and after rescaling $Y$ by some constant $\alpha > 0$ (and thus rescaling $v$ by $1/\alpha$), $Y$ is a spherical harmonic $Y = Y^k_\ell$ for some quantum number $k \in \NN$.
+
+\begin{definition}
+By a \dfn{hyperbolic harmonic} we mean a function of the form 
+$$u(r, \Theta) = v(r) Y^k_\ell(\theta)$$
+where $v$ is a \dfn{radial hyperbolic harmonic} of quantum number $\ell$, i.e. a solution of (\ref{radial hyperbolic harmonic}) with $\lambda = \lambda_\ell$.
+\end{definition}
+
+\begin{lemma}
+For every $\ell \in \NN$ we can find hyperbolic harmonics $v_\ell^m$, $m \in \{0, 1\}$, of quantum number $\ell$, so that $(v_\ell^m Y^k_\ell)_{\ell, m, k}$ is an orthonormal basis of the space of harmonic functions on any ball centered on the origin.
+\end{lemma}
+\begin{proof}
+By standard elliptic theory the hyperbolic harmonics are dense.
+For fixed $\ell$ the space of smooth solutions to (\ref{radial hyperbolic harmonic}) is $\leq 2$-dimensional and so $v_\ell^m$ are given by the Gram-Schmidt algorithm.
+Now if we set $u_\ell^{m, k}$ we have for a ball $B_r$, 
+$$\int_{B_r} \star u_{\ell_1}^{m_1, k_1} u_{\ell_2}^{m_2, k_2} = \langle v_{\ell_1}^{m_1}, v_{\ell_2}^{m_2}\rangle \int_{\Sph^{d - 1}} Y_{\ell_1}^{k_1} Y_{\ell_2}^{k_2} \dif \sigma.$$
+The spherical integral vanishes unless $(\ell_1, k_1) = (\ell_2, k_2)$.
+If $\ell_1 = \ell_2$ then the inner product vanishes unless $m_1 = m_2$.
+\end{proof}
+
+\begin{lemma}
+If $u$ has a double zero at $P \in \Hyp^{d - 1}$ and $\Delta u = 0$, then 
+$$\int_{B(P, r/2)} \star |\dif u|^2 \leq \frac{1}{2^{d + 1}} \int_{B(P, r)} \star |\dif u|^2.$$
+\end{lemma}
 \begin{proof}
 
 \end{proof}
 
-The losses incurred in (\ref{dGL cons}) are acceptable due to the following lemma: TODO sum a geometric series, using $\kappa = \beta^q$ for some $q > 0$.
+
+
+% \subsection{Laplacian approximation}
+% For this subsection only, let $g$ be a Riemannian metric on $\RR^{d - 1}$ which is normal based at $0$.
+% Thus if $d = 2$, $g_{\mu\nu} = \delta_{\mu\nu}$ and all the results of this section are vacuously true, so for the remainder of this section only we assume $d \geq 3$.
+% In particular, the reader who is only interested in our application to closed hyperbolic surfaces can skip this section entirely.
+
+% We will compare the behavior of the Laplace-Beltrami equation
+% $$\Delta u = \nabla^\mu \partial_\mu u = 0$$
+% of $g$ to the euclidean Laplace equation $Lu = 0$, in the limiting case $r + ||u||_{C^1} \ll 1$ where $r$ is the radial coordinate.
+
+% \begin{definition}
+% The \dfn{Laplacian approximation} of a $g$-harmonic function $u$ on $B_r$ is the euclidean-harmonic function $v$ such that $u = v$ on $\partial B_r$.
+% \end{definition}
+
+% \begin{lemma}
+% Let $u$ be a $g$-harmonic function. Then the Laplacian approximation $v$ on $B_r$ satisfies 
+% $$||u - v||_{L^\infty} \lesssim r^3 ||u||_{\dot W^{1, \infty}} + r^4 ||u||_{\dot W^{2, \infty}}.$$
+% \end{lemma}
+% \begin{proof}
+% Expanding $\Delta$ near $0$ we have 
+% $$\Delta = (\delta^{\mu\nu} + O(r^2)^{\mu\nu})(\partial_\mu \partial_\nu - \Gamma_{\mu\nu}^\lambda \partial_\lambda).$$
+% Since all Christoffel symbols vanish at $0$, we obtain from Taylor's formula and the fact that $L = \delta^{\mu\nu} \partial_\mu \partial_\nu$ that
+% $$\Delta - L = O(r|\partial| + r^2|\partial|^2).$$
+% If we set $w = u - v$, then $w$ solves the equation 
+% $$Lw = O(r|\partial| + r^2|\partial|^2)u$$
+% and has homogeneous Dirichlet data. So if $G: B_r \times B_r \to \RR$ is the Green function of $L$,
+% $$w(x) = \int_{B_r} G(x, y) O(|y|\cdot ||u||_{\dot W^{1, \infty}} + |y|^2 \cdot ||u||_{\dot W^{2, \infty}}) \dif y$$
+% and hence by H\"older's inequality,
+% \begin{equation}\label{Linfty LBL error bound}
+% ||w||_{L^\infty} \lesssim ||G||_{L^\infty;L^1} (r||u||_{\dot W^{1, \infty}} + r^2 ||u||_{\dot W^{2, \infty}}).
+% \end{equation}
+% The maximizer of $||G(x, \cdot)||_{L^1}$ is $x = 0$, and $L$ admits a fundamental solution since $d \geq 3$, whose radial profile we denote by $\Phi$. Therefore
+% $$||G||_{L^\infty;L^1} = ||G(0, \cdot)||_{L^1} = \int_{B_r} \Phi(|y|) - \Phi(r) \dif y.$$
+% If $d = 3$, then
+% $$\int_{B_r} \Phi(|y|) - \Phi(r) \dif y \lesssim \int_0^r s(\log r - \log s) \dif s \lesssim r^2,$$
+% while for $d \geq 4$,
+% $$\int_{B_r} \Phi(|y|) - \Phi(r) \dif y \lesssim \int_0^r s^{d - 2}(s^{3 - d} - r^{3 - d}) \dif s \lesssim r^2 \left[\frac{1}{3} - \frac{1}{d}\right] \lesssim r^2.$$
+% Plugging this into (\ref{Linfty LBL error bound}) gives the desired result.
+% \end{proof}
+
+
+
+
+
+
+\begin{proposition}\label{dGL Laplace}
+de giorgi lemma for harmonics
+\end{proposition}
 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Regularity of minimal hypersurfaces}\label{de Giorgi section}
-In this section we shall prove Theorem \ref{main lma}.
-The key step, as in \cite{Miranda66}, is to prove a de Giorgi lemma for sets of least perimeter by exploiting the gains of Proposition \ref{dGL Laplace}, which we now formulate.
+% \section{Regularity of minimal hypersurfaces}\label{de Giorgi section}
+% In this section we shall prove Theorem \ref{main lma}.
+% The key step, as in \cite{Miranda66}, is to prove a de Giorgi lemma for sets of least perimeter by exploiting the gains of Proposition \ref{dGL Laplace}, which we now formulate.
 
-\begin{definition}
-The \dfn{excess} of a set $U$ of locally finite perimeter in a ball $B$, with indicator function $u = 1_U$, is
-$$\Exc_B U := r^{1 - d}\left[\int_B \star |\dif u| - \left|\int_B \dif u \otimes (\star 1)\right|\right].$$
-\end{definition}
+% \begin{definition}
+% The \dfn{excess} of a set $U$ of locally finite perimeter in a ball $B$, with indicator function $u = 1_U$, is
+% $$\Exc_B U := r^{1 - d}\left[\int_B \star |\dif u| - \left|\int_B \dif u \otimes (\star 1)\right|\right].$$
+% \end{definition}
 
-\begin{proposition}[de Giorgi's lemma]\label{dGL final}
-Suppose that $M$ is locally homogeneous, $d \leq 7$, $K \subseteq M$ is compact, and $U$ is a set of least perimeter. Then for every $P \in K$,
-$$\Exc_{B(P, r)} U \lesssim_{U, K} r.$$
-\end{proposition}
+% \begin{proposition}[de Giorgi's lemma]\label{dGL final}
+% Suppose that $M$ is locally homogeneous, $d \leq 7$, $K \subseteq M$ is compact, and $U$ is a set of least perimeter. Then for every $P \in K$,
+% $$\Exc_{B(P, r)} U \lesssim_{U, K} r.$$
+% \end{proposition}
 
-The excess measures how badly the conormal $1$-form $\normal = \normal_U$ fails to be ``constant'' and so functions as a sort of averaged version of the second fundamental form of $\partial U$.
-As there are multiple, nonequivalent notions of excess in the literature, we stress that this notion of excess is a generalization of the notion defined by de Giorgi when he first proved his lemma \cite{deGiorgi61}; it is not equivalent to the notion used by Allard \cite{Allard72} in the proof of his regularity theorem, c.f. \cite{colding2011course}.
+% The excess measures how badly the conormal $1$-form $\normal = \normal_U$ fails to be ``constant'' and so functions as a sort of averaged version of the second fundamental form of $\partial U$.
+% As there are multiple, nonequivalent notions of excess in the literature, we stress that this notion of excess is a generalization of the notion defined by de Giorgi when he first proved his lemma \cite{deGiorgi61}; it is not equivalent to the notion used by Allard \cite{Allard72} in the proof of his regularity theorem, c.f. \cite{colding2011course}.
 
-The proof of Proposition \ref{dGL final} generalizes the proof of \cite[Teorema 5.7]{Miranda66}; it appears in \S\ref{dGL proof}.
-In \S\ref{main lma proof} we apply de Giorgi's lemma and a standard induction-on-scale argument, following \cite[Teorema 6.5]{Miranda66}, to conclude Theorem \ref{main lma}.
+% The proof of Proposition \ref{dGL final} generalizes the proof of \cite[Teorema 5.7]{Miranda66}; it appears in \S\ref{dGL proof}.
+% In \S\ref{main lma proof} we apply de Giorgi's lemma and a standard induction-on-scale argument, following \cite[Teorema 6.5]{Miranda66}, to conclude Theorem \ref{main lma}.
 
-\subsection{The excess}
-We first study the properties of the excess.
+% \subsection{The excess}
+% We first study the properties of the excess.
 
-\begin{definition}
-Let $U$ be a set of locally finite perimeter and $u = 1_U$.
-The \dfn{approximate conormal} $1$-form $\widetilde \normal_r$ to $U$ at scale $r$ is defined for $P \in \partial U$ by choosing a maximizer $\xi \in \SpOrth(T_PM)$ of $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$ and setting
-$$\widetilde \normal_r(P) = \frac{1}{|\partial^* U \cap B(P, r)|} \left[\int_{B(P, r)} \dif u \wedge \frac{\psi_\xi}{|\psi_\xi|}\right] \dif x^0_\xi \in T'_PM.$$
-\end{definition}
+% \begin{definition}
+% Let $U$ be a set of locally finite perimeter and $u = 1_U$.
+% The \dfn{approximate conormal} $1$-form $\widetilde \normal_r$ to $U$ at scale $r$ is defined for $P \in \partial U$ by choosing a maximizer $\xi \in \SpOrth(T_PM)$ of $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$ and setting
+% $$\widetilde \normal_r(P) = \frac{1}{|\partial^* U \cap B(P, r)|} \left[\int_{B(P, r)} \dif u \wedge \frac{\psi_\xi}{|\psi_\xi|}\right] \dif x^0_\xi \in T'_PM.$$
+% \end{definition}
 
-By compactness of $\SpOrth(T_PM)$ there exists $\xi \in \SpOrth(T_PM)$ which maximizes $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$.
-Moreover this maximizer is unique if $P \in \overline{\partial^* U}$, so the approximate conormal $1$-form is well-defined as a measurable section of $T'M$ along $\partial U$ by Proposition \ref{locality of Caccioppoli}.
-Since it is defined by an averaging procedure, $\widetilde \normal_r$ is also continuous.
-By (\ref{Lebesgue point definition}), $\widetilde \normal_r \to \normal_U$, $\star|\dif u|$-almost everywhere.
-Moreover, since $(x^\mu_\xi)$ is normal based at $P$, and $\widetilde \normal_r(P) \in T'_PM$,
-$$|\widetilde \normal_r(P)| \int_{B(P, r)} \star |\dif u| = \left|\int_{B(P, r)} \dif u \otimes (\star 1)\right|.$$
-In particular,
-\begin{equation}\label{excess vs 1form}
-\Exc_{B(P, r)} U = r^{1 - d} (1 - |\widetilde \normal_r(P)|) \int_{B(P, r)} \star |\dif u|.
-\end{equation}
+% By compactness of $\SpOrth(T_PM)$ there exists $\xi \in \SpOrth(T_PM)$ which maximizes $\int_{B(P, r)} \dif u \wedge \psi_\xi/|\psi_\xi|$.
+% Moreover this maximizer is unique if $P \in \overline{\partial^* U}$, so the approximate conormal $1$-form is well-defined as a measurable section of $T'M$ along $\partial U$ by Proposition \ref{locality of Caccioppoli}.
+% Since it is defined by an averaging procedure, $\widetilde \normal_r$ is also continuous.
+% By (\ref{Lebesgue point definition}), $\widetilde \normal_r \to \normal_U$, $\star|\dif u|$-almost everywhere.
+% Moreover, since $(x^\mu_\xi)$ is normal based at $P$, and $\widetilde \normal_r(P) \in T'_PM$,
+% $$|\widetilde \normal_r(P)| \int_{B(P, r)} \star |\dif u| = \left|\int_{B(P, r)} \dif u \otimes (\star 1)\right|.$$
+% In particular,
+% \begin{equation}\label{excess vs 1form}
+% \Exc_{B(P, r)} U = r^{1 - d} (1 - |\widetilde \normal_r(P)|) \int_{B(P, r)} \star |\dif u|.
+% \end{equation}
 
-\begin{lemma}[de Giorgi's lemma, $C^1$ case]
-beep
-\end{lemma}
+% \begin{lemma}[de Giorgi's lemma, $C^1$ case]
+% beep
+% \end{lemma}
 
-\subsection{de Giorgi's lemma}\label{dGL proof}
-We now complete the proof of Proposition \ref{dGL final} using a compactness-and-contradiction argument.
-Suppose that de Giorgi's lemma is false for some sets $U$ of least perimeter and $K$ compact. Then we can choose $P_n \in K$ and $r_n > 0$ so that $r_n \to 0$, but
-$$\gamma_n := \Exc_{B(P_n, r_n)} U$$
-satisfies
-\begin{equation}\label{contradict dGL}
-\gamma_n \geq nr.
-\end{equation}
-In what follows we shall pass to subsequences repeatedly as necessary.
+% \subsection{de Giorgi's lemma}\label{dGL proof}
+% We now complete the proof of Proposition \ref{dGL final} using a compactness-and-contradiction argument.
+% Suppose that de Giorgi's lemma is false for some sets $U$ of least perimeter and $K$ compact. Then we can choose $P_n \in K$ and $r_n > 0$ so that $r_n \to 0$, but
+% $$\gamma_n := \Exc_{B(P_n, r_n)} U$$
+% satisfies
+% \begin{equation}\label{contradict dGL}
+% \gamma_n \geq nr.
+% \end{equation}
+% In what follows we shall pass to subsequences repeatedly as necessary.
 
-\begin{claim}
-We may assume $(\gamma_n) \in \ell^1$.
-\end{claim}
-\begin{proof}
-If not, then there exists $\delta > 0$ such that $\gamma_n \geq \delta$.
-Let $N = \overline{\partial^* U} \cap K$.
-If $(P_n)$ converges to a point in the open set $M \setminus N$, then since $N$ is the support of $\star |\dif u|$, $\gamma_n$ is eventually $0$.
-Therefore the assumption $\gamma_n \geq \delta$ implies that every convergent subsequence of $(P_n)$ converges to a point in $N$.
-In particular we may assume that $(P_n)$ converges to some $P \in N$. By definition of $N$ there exist $Q_n \in \partial^* U \cap K$ converging to $P$, and by Proposition \ref{blowup theorem}, there exist (possibly nonunique) blowups $v_n: T_{Q_n}M \to \RR$ of $u$.
+% \begin{claim}
+% We may assume $(\gamma_n) \in \ell^1$.
+% \end{claim}
+% \begin{proof}
+% If not, then there exists $\delta > 0$ such that $\gamma_n \geq \delta$.
+% Let $N = \overline{\partial^* U} \cap K$.
+% If $(P_n)$ converges to a point in the open set $M \setminus N$, then since $N$ is the support of $\star |\dif u|$, $\gamma_n$ is eventually $0$.
+% Therefore the assumption $\gamma_n \geq \delta$ implies that every convergent subsequence of $(P_n)$ converges to a point in $N$.
+% In particular we may assume that $(P_n)$ converges to some $P \in N$. By definition of $N$ there exist $Q_n \in \partial^* U \cap K$ converging to $P$, and by Proposition \ref{blowup theorem}, there exist (possibly nonunique) blowups $v_n: T_{Q_n}M \to \RR$ of $u$.
 
-We choose normal coordinates based at $Q_{n^*}$ for some $n^* \geq 1$, and let $\widetilde \normal_r$ be the induced approximate conormal.
-Then $\widetilde \normal_r$ is continuous
-\end{proof}
+% We choose normal coordinates based at $Q_{n^*}$ for some $n^* \geq 1$, and let $\widetilde \normal_r$ be the induced approximate conormal.
+% Then $\widetilde \normal_r$ is continuous
+% \end{proof}
 
 
-\subsection{Proof of main theorem}\label{main lma proof}
-Let $U$ be a set of least perimeter, and $P \in \partial U$.
-We shall show that in the limit $r \to 0$, $(\widetilde \normal_r)$ is a locally uniformly Cauchy net.
-If this is true, then $\normal$ is a continuous section of $T'M$ on $\partial U$, so by Corollary \ref{C1 implies smooth}, $\partial U$ is smooth.
+% \subsection{Proof of main theorem}\label{main lma proof}
+% Let $U$ be a set of least perimeter, and $P \in \partial U$.
+% We shall show that in the limit $r \to 0$, $(\widetilde \normal_r)$ is a locally uniformly Cauchy net.
+% If this is true, then $\normal$ is a continuous section of $T'M$ on $\partial U$, so by Lemma \ref{C1 implies smooth}, $\partial U$ is smooth.
 
-To show the Cauchy condition, we TODO: Approximate $\widetilde \normal_r$ by normal coordinates that agree with $\Exc_r$ (eats a loss of $r^2$) and then use Giusti82
+% To show the Cauchy condition, we TODO: Approximate $\widetilde \normal_r$ by normal coordinates that agree with $\Exc_r$ (eats a loss of $r^2$) and then use Giusti82
 
 
 \printbibliography
