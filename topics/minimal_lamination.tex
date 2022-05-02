@@ -47,6 +47,7 @@
 \DeclareMathOperator{\diam}{diam}
 \DeclareMathOperator{\dom}{dom}
 \DeclareMathOperator{\Exc}{Exc}
+\newcommand{\ext}{\mathrm{ext}}
 \DeclareMathOperator{\Gal}{Gal}
 \DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\Iso}{Iso}
@@ -68,6 +69,7 @@
 \DeclareMathOperator{\Tan}{Tan}
 \newcommand{\tr}{\operatorname{tr}}
 
+\newcommand{\Mink}{\mathbf m}
 \newcommand{\Ric}{\mathrm{Ric}}
 \newcommand{\Riem}{\mathrm{Riem}}
 \newcommand*\dif{\mathop{}\!\mathrm{d}}
@@ -347,6 +349,8 @@ With $M, \alpha, \lambda$ as in Proposition \ref{cohomology makes laminations}, 
 By \cite[Theorem 1]{Loisel20}, one can solve the least-gradient Dirichlet problem with finite elements in $T$ with time complexity $O(|T|^{1/2} \log |T|)$.
 \end{proof}
 
+TODO: Need to check that the laminations induced by the finite element space converge to a minimal lamination
+
 TODO: Do some numerical experiments, show what minimal laminations in a fundamental polytope in $\Hyp^3$ look like
 
 
@@ -398,10 +402,12 @@ I would also like to thank Trent Lucas for comments on Proposition \ref{cohomolo
 We begin by fixing notation.
 The statements $A \lesssim B$ and $A = O(B)$ are equivalent and mean that there exists $C > 0$ independent of $A, B \geq 0$ such that $A \leq BC$.
 Similarly the statements $A \ll B$ and $A = o(B)$ mean that there exists a function $f: \RR_+ \to \RR_+$ with $\lim_{x \to 0} f(x) = 0$, such that $A \leq Bf(B)$.
-
+The Japanese function is denoted $\Japan\cdot := \sqrt{1 + |\cdot|^2}$.
 The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian volume form.
+On a hypersurface $\Sigma$, $\vol_\Sigma$ denotes the induced volume form.
 For tensor fields we shall use the musical isomorphisms $\sharp, \flat$ and the Einstein convention.
 When using the Einstein convention, Greek indices range over $0, 1, \dots$ while Latin indices range over $1, \dots$.
+All such indices range over spacelike components; when we use a Lorentz metric we reserve $t$ for a timelike component.
 
 We now recall the Riemannian analogue of the main results of \cite[Chapter 1]{Giusti77}.
 We write $\int_U \omega \wedge \psi$ for the pairing of a de Rham $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$. See \cite{simon1983GMT} for the definition of a de Rham current.
@@ -1056,29 +1062,111 @@ So by Fatou's lemma,
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Mean-value property of \texorpdfstring{$\Box$}{the wave equation}}\label{wave section}
-Motivation... establish notation on $\RR^{1, m}$...
+\section{An adapted connection}\label{wave section}
+In the sequel, the Riemann curvature causes the Levi-Civita connection $\nabla$ on $\Hyp^m$, $m = d - 1, d$ to fail to have certain properties which are essential in the proof of the de Giorgi lemma for $\RR^d$.
+We shall deal with this technical issue by embedding $\Hyp^m$ as a spacelike hypersurface in the Minkowski spacetime $\RR^{1, m}$.
+We then view $T\Hyp^m$ as a subbundle of the trivial quadratic bundle $\Hyp^m \times \RR^{1, m}$, and view $\nabla$ as the projection of the natural flat connection $\Dif$ on $\Hyp^m \times \RR^{1, m}$.
+The gain here is that $\Dif$ is a connection which is a suitable substitute for $\nabla$.\footnote{This elegant observation should be credited to \cite{daskalopoulosPrep1}, which at the time of writing is still in preparation. We are grateful to Georgios Daskalopoulos for providing us with an early draft.}
 
-Let $\Sigma$ be a spacelike hypersurface in $\RR^{1, m}$. Then $\Sigma$ can be expressed as a graph
-$$\Sigma = \{(t, x) \in \RR^{1, m}: x \in \RR^m, ~t = \tau(x)\}$$
-for some $\tau \in C^\infty(\RR^m)$ and so we have a diffeomorphism
-$$\RR^m \ni x \mapsto (\tau(x), x) \in \Sigma.$$
-With respect to the coordinates induced by this diffeomorphism the metric on $\Sigma$ is
-$$g_{\mu\nu} = \delta_{\mu\nu} - \partial_\mu \tau \partial_\nu \tau.$$
-Since the Laplace-Beltrami operator is
-$$\Delta := \nabla^\mu \partial_\mu = g^{\mu \nu} (\partial_\mu \partial_\nu - \Gamma_{\mu \nu}^\lambda \partial_\lambda),$$
-if $||\nabla \tau||_{C^1} \ll 1$ then we can think of $\Delta$ as a perturbation of the euclidean Laplacian $\delta^{\mu\nu} \partial_\mu \partial_\nu$.
-On the other hand, the d'Alembertian is $\Box = \delta^{\mu\nu} \partial_\mu \partial_\nu - \partial_t \partial_t$, so if $||\nabla \tau||_{C^1} \ll 1$ then harmonic functions on $\Sigma$ are approximately static solutions of the wave equation.
-To be more precise we make a definition.
+\subsection{Undesirable properties of the Levi-Civita connection}
+For motivation, we begin by discussing why the Levi-Civita connection is not suitable for the proof of the de Giorgi lemma.
+
+On euclidean space, one can integrate a tensor field by identifying every fiber $E_x$ of the tensor bundle with the fiber $E_0$ at $0$, and then viewing a tensor field $T$ as a vectorial function $\RR^d \to E_0$, and employ the vectorial integral $\int_{\RR^d} T \in E_0$.
+In the Riemannian case, the identification $E_x \to E_0$ is given by the parallel propagator $\mathcal P$ along geodesics, and the curvature can be viewed as measuring how badly $\mathcal P$ fails to be an isometry: if the distance between $x$ and $0$ is $r$, then the difference between $\mathcal P$ and an isometry is of scale $r^2 |\nabla \Gamma|$ where $\Gamma$ are the Christoffel symbols,\footnote{For an explicit formula for $\mathcal P$, from which the $O(r^2 |\nabla \Gamma|)$ bound can be easily derived, see \cite[Chapter II.2]{baez1994gauge}.} 
+and $|\nabla \Gamma|$ is bounded from below in any coordinate system by a formula involving the curvature $\Riem$.
+
+We believe that we could define the integral of a tensor field using $\mathcal P$ and successfully manage the resulting $O(r^2)$ terms.
+However, we have not attempted to do so, because there is a more serious issue: curvature causes $\nabla$ to fail to commute with the Laplace-Beltrami operator, which is defined to act on tensor fields by
+$$\Delta = \nabla^\mu \nabla_\mu.$$
+More precisely, for any scalar field $u$,
+$$\nabla_\alpha \Delta u - \Delta \nabla_\alpha u = \nabla_\alpha g^{\beta \gamma} \nabla_\beta \partial_\gamma u - g^{\beta \gamma} \nabla_\beta \nabla_\gamma \partial_\alpha u.$$
+To simplify, we may pass to normal coordinates, so that $g^{\beta \gamma} - \delta^{\beta \gamma}$ vanishes to second order and hence
+$$\nabla_\alpha g^{\beta \gamma} \nabla_\beta \partial_\gamma - g^{\beta \gamma} \nabla_\beta \nabla_\gamma \partial_\alpha = {\Riem^{\gamma \beta}}_{\beta \alpha} \partial_\gamma,$$
+so that $\nabla$ and $\Delta$ do not even commute approximately.
+
+\subsection{Constructing the adapted connection}
+We need a vector bundle equipped with connection that can play the role of the tangent bundle with the Levi-Civita connection.
+In particular, it must be a quadratic bundle:
 
 \begin{definition}
-Let $\Sigma$ be a spacelike hypersurface, and suppose that $u: \Sigma \to \RR^k$ is harmonic.
-The \dfn{wave extension} of $u$ is the function $v: \RR^{1, m} \to \RR^k$ such that
+A \dfn{quadratic bundle} is a vector bundle $E$ equipped with a section $q$ of $E' \otimes E'$ such that the contraction $v \mapsto q(v, \cdot)$ is injective.
+\end{definition}
+
+We adopt the convention that Minkowski spacetime $\RR^{1, m}$ is $\RR \times \RR^m$ equipped with the Lorentz metric $\Mink(\partial_t, \partial_t) = -1$ where $t$ is the coordinate on $\RR$, $\Mink(\partial_\mu, \partial_\mu) = 1$ for $\mu = 1, \dots, m$ the coordinate indices on $\RR^m$, and all other components $0$.
+
+For the remainder of this paper we fix an identification of $\Hyp^m$ with the future branch of the unit timelike hyperboloid:
+\begin{equation}\label{hyperboloid choice}
+\Hyp^m \cong \{x \in \RR^{1,m}: \Mink(x, x) = -1, x^0 > 1\}.
+\end{equation}
+Since the Christoffel symbols of $\RR^{1,m}$ vanish, the Levi-Civita connection on $T\RR^{1, m}$ is $\dif$, and once we have fixed (\ref{hyperboloid choice}), the restriction of the bundle $T\RR^{1, m}$ induces an isomorphism
+$$T\RR^{1,m}|\Hyp^m = \Hyp^m \times \RR^{1,m},$$
+a flat connection $\Dif$ on $\Hyp^m \times \RR^{1, m}$ defined by restricting $\dif$, and an exact sequence of quadratic bundles over $\Hyp^m$:
+$$\begin{tikzcd}
+0 \to (T\Hyp^m)^\perp \to \Hyp^m \times \RR^{1, m} \arrow[r,"\Pi"] & T\Hyp^m \to 0
+\end{tikzcd}$$
+so that the Christoffel symbols of $\Dif$ vanish with respect to any frame for $\Hyp^m \times \RR^{1, m}$ induced by a basis of $\RR^{1, m}$.
+
+\begin{definition}
+We call $\Dif$ the \dfn{adapted connection} on $\Hyp^m \times \RR^{1, m}$.
+\end{definition}
+
+To study the form the metric tensor on $\Hyp^m$ takes in the above coordinates it will be recall that $\Hyp^m$ is spacelike and work in slightly higher generality.
+
+\begin{definition}
+Let $\Sigma$ be a spacelike hypersurface in $\RR^{1, m}$. The \dfn{defining function} $\tau \in C^\infty(\RR^m)$ of $\Sigma$ is the function such that
+$$\Sigma = \{(t, x) \in \RR^{1, m}: x \in \RR^m, ~t = \tau(x)\}.$$
+\end{definition}
+
+It is straightforward to show that $\tau$ is well-defined for any spacelike hypersurface and induces a diffeomorphism
+$$\RR^m \ni x \mapsto (\tau(x), x) \in \Sigma.$$
+With respect to the coordinates induced by this diffeomorphism the metric on $\Sigma$ is
+\begin{equation}\label{spacelike metric}
+g_{\mu\nu} = \delta_{\mu\nu} - \partial_\mu \tau \partial_\nu \tau.
+\end{equation}
+In the case of hyperbolic space, one has 
+\begin{equation}\label{defining function}
+\tau(x) = \sqrt{|x|^2 + 1}.
+\end{equation}
+
+\subsection{Mean-value property}
+We return to the case that $\Sigma = \Hyp^m$. Since the Laplace-Beltrami operator acting on functions is
+$$\Delta = \nabla^\mu \partial_\mu = g^{\mu \nu} (\partial_\mu \partial_\nu - \Gamma_{\mu \nu}^\lambda \partial_\lambda),$$
+and $\Gamma_{\mu \nu}^\lambda = 0$ at $(0, 1)$, we can think of $\Delta$ as a perturbation of the euclidean Laplacian $\delta^{\mu\nu} \partial_\mu \partial_\nu$.
+On the other hand, the d'Alembertian is $\Box = \delta^{\mu\nu} \partial_\mu \partial_\nu - \partial_t \partial_t$, and from a Taylor expansion of (\ref{defining function}) we see that near $(0, 1)$, harmonic functions on $\Hyp^m$ can be extended to approximately static solutions of the wave equation, as below.
+
+If $\Hilb$ is a finite-dimensional vector space, we extend linear partial differential operators $P$ acting on $\RR$-valued functions to $\Hilb$-valued functions by 
+$$(\varphi, Pu) = P \cdot (\varphi, u)$$
+for any linear map $\varphi: \Hilb \to \RR$.
+
+\begin{definition}
+Let $\Hilb$ a finite-dimensional vector space, and suppose that $u: \Hyp^m \to \Hilb$ is harmonic.
+The \dfn{wave extension} of $u$, denoted $u^\ext$, is the solution of the Cauchy problem
 \begin{align*}
-\Box v &= 0, \\
-(v, \partial_t v)|M &= (u, 0).\\
+\Box u^\ext &= 0, \\
+(u^\ext, \partial_t u^\ext)|\Hyp^m &= (u, 0).
 \end{align*}
 \end{definition}
+
+\begin{lemma}
+Let $u: \Hyp^m \to \Hilb$ be harmonic, and let $v$ be the restriction of $u^\ext$ to $\{t = 1\}$. Then
+Then 
+$$|\Delta v(x)| \lesssim |x|(||\dif u||_{L^\infty} + |x| \cdot \Japan{||u||_{C^2}}).$$
+\end{lemma}
+\begin{proof}
+Since $\Box u^\ext = 0$, $\Delta v = \partial_t^2 u^\ext$, a Taylor expansion of $u^\ext$ in the time direction gives 
+$$\Delta v(1, x) = \delta^{\mu \nu} \partial_\mu \partial_\nu u(\tau(x), x) + O(|\partial_t^3 u^\ext(\tau(x), x)| \cdot (\tau(x) - 1)).$$
+Taylor expanding (\ref{defining function}) we see that $\tau(x) - 1 \lesssim |x|^2$.
+
+\end{proof}
+
+\begin{proposition}[mean-value property]
+Let $u: \Hyp^m \to \Hilb$ be harmonic and let $(r, \theta)$ be polar coordinates on $\Hyp^m$.
+Then for every $r > 0$ and $k \in \NN$,
+$$\left|\Dif^k u(P) - \int_{\partial B_r} \Dif^k u(r, \theta) \frac{\vol_{\partial B_r}(\theta)}{\sinh r}\right| \lesssim r^3(||\Dif^{k + 1} u||_{L^\infty} + r ||u||_{C^{k + 2}}).$$
+\end{proposition}
+\begin{proof}
+
+\end{proof}
 
 Two properties of wave extensions: MVP and commutating with $\Dif$
 
@@ -1090,31 +1178,6 @@ For hyperbolic manifolds, Plateau's equation will be posed on $\Hyp^{d - 1}$, wh
 To first order, Plateau's equation is nothing more than the Laplace-Beltrami equation on $\Hyp^{d - 1}$, so we can apply hyperbolic potential theory to prove the desired estimates.
 
 \subsection{A flat connection}
-Throughout the sequel we will need to ``average'' various tensor fields on $\Hyp^m$ for $m = d-1, d$.
-In the euclidean case this can be accomplished by identifying every fiber $E_x$ of the tensor bundle with the fiber $E_0$ at $0$, and then viewing a tensor field $T$ as a vectorial function $\RR^d \to E_0$, and employ the vectorial integral $\int_{\RR^d} T \in E_0$.
-Of course, the Riemann tensor is an obstruction to the existence of natural isomorphisms $E_x = E_0$ over $\Hyp^m$, so we must find isomorphisms $E_x \cong E_0$ which are ``approximately natural'' in some sense.
-
-For $|x|$ small one can define the parallel propagator $E_x \to E_0$ in normal coordinates, and we believe that such a construction will give the same results that we will prove in the sequel.
-However, since we will later have to restrict ourselves to the hyperbolic case anyways, we found it convenient to instead employ the elegant observation of Daskalopoulos--Uhlenbeck \cite{daskalopoulosPrep1} that one can embed $\Hyp^m$ in the Minkowski spacetime $\RR^{1, m}$ and employ the natural flat connection on $T\RR^{1, m}$ instead.
-
-Recall that $\RR^{1,m}$ is $\RR^{1 + m}$ equipped with the Lorentz metric $\eta_{00} = -1$, $\eta_{ii} = 1$ for $i = 1, \dots, m$, and all other components $0$. TODO: Change the indices here
-For the remainder of this paper we fix an identification of $\Hyp^m$ with the future branch of the unit timelike hyperboloid:
-\begin{equation}\label{hyperboloid choice}
-\Hyp^m \cong \{x \in \RR^{1,m}: \eta(x, x) = -1, x^0 > 1\}.
-\end{equation}
-
-Since the Riemann tensor of $\RR^{1,m}$ vanishes, the Levi-Civita connection on $T\RR^{1, m}$ is $\dif$, and once we have fixed (\ref{hyperboloid choice}), the restriction of the bundle $T\RR^{1, m}$ induces an isomorphism
-$$T\RR^{1,m}|\Hyp^m = \Hyp^m \times \RR^{1,m},$$
-a flat connection $\Dif$ on $\Hyp^m \times \RR^{1, m}$ defined by restricting $\dif$, and an exact sequence of quadratic bundles over $\Hyp^m$:
-$$\begin{tikzcd}
-0 \to (T\Hyp^m)^\perp \to \Hyp^m \times \RR^{1, m} \arrow[r,"\Pi"] & T\Hyp^m \to 0.
-\end{tikzcd}$$
-The next result follows from the definitions:
-
-\begin{lemma}
-The Christoffel symbols of $\Dif$ vanish with respect to any frame for $\Hyp^m \times \RR^{1,m}$ induced by a basis of $\RR^{1, m}$.
-\end{lemma}
-
 We henceforth adopt the convention that any $(\ell_1, \ell_2)$-tensor field on $\Hyp^m$ is to be identified with a map
 $$\Hyp^m \to (\RR^{1, m})^{\otimes(\ell_1 + \ell_2)}$$
 equipped with the connection $\Dif$.
