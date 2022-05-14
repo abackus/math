@@ -1,0 +1,515 @@
+\documentclass[reqno,12pt,letterpaper]{amsart}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+\setlength{\textheight}{8.50in} \setlength{\oddsidemargin}{0.00in}
+\setlength{\evensidemargin}{0.00in} \setlength{\textwidth}{6.08in}
+\setlength{\topmargin}{0.00in} \setlength{\headheight}{0.18in}
+\setlength{\marginparwidth}{1.0in}
+\setlength{\abovedisplayskip}{0.2in}
+\setlength{\belowdisplayskip}{0.2in}
+\setlength{\parskip}{0.05in}
+\renewcommand{\baselinestretch}{1.10}
+
+\title{Harmonic maps}
+\author{Georgios Daskalopoulos}
+\date{May 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\DeclareMathOperator*{\Expect}{\mathbf E}
+
+\DeclareMathOperator{\avg}{avg}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Exc}{Exc}
+\newcommand{\ext}{\mathrm{ext}}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\Jac}{Jac}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Rm}{Rm}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Hol}{Hol}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\Mink}{\mathbf m}
+\newcommand{\Ric}{\mathrm{Ric}}
+\newcommand{\Riem}{\mathrm{Riem}}
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand*\Dif{\mathop{}\!\mathrm{D}}
+\newcommand{\LapQL}{\Delta^{\mathrm{ql}}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\atanh}{atanh}
+\DeclareMathOperator{\csch}{csch}
+\DeclareMathOperator{\sech}{sech}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Gram}{Gram}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
+\newcommand{\DirL}{\mathscr D}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+\newcommand{\parl}{\left(}
+\newcommand{\parr}{\right)}
+\newcommand{\bral}{\left\langle}
+\newcommand{\brar}{\right\rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{topics.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tableofcontents
+
+\section{Harmonic maps}
+Let $f: M \to N$ be a map, let $(x_\alpha)$ be coordinates on $M$, $(y_i)$ coordinates on $N$, $(\gamma_{\alpha\beta})$ a metric on $M$, and $(g_{ij})$ a metric on $N$.
+We can view $\dif f$ as a section 
+$$\dif f \in \Omega^1(f^* TN) := C^\infty(T^* M \otimes f^* TN)$$
+and the codifferential induced by the Levi-Civita connection on $f^* TN$ by
+$$\nabla^*: \Omega^1(f^* TN) \to \Omega^0(f^* TN) := C^\infty(f^* TN).$$
+
+\begin{definition}
+Let 
+$$\tau(f) := -\nabla^* \dif f.$$
+Then $f$ is a \dfn{harmonic map} if it satisfies the \dfn{harmonic maps equation} $\tau(f) = 0$.
+\end{definition}
+
+\subsection{Expression in local coordinates}
+We write the harmonic maps equation in local coordinates by setting 
+$$\frac{\partial}{\partial f_i} := \frac{\partial}{\partial y_i} \circ f \in C^\infty_\loc(f^* TN)$$
+and defining
+$$\omega\left(\frac{\partial}{\partial y_i}\right) := \Gamma_{jk}^i \dif y_k \otimes \frac{\partial}{\partial y_j},$$
+where $\Gamma_{jk}^i$ are Christoffel symbols on $N$, and $\tilde \omega := f^* \omega$.
+Then 
+\begin{align*}
+\nabla^* \dif f &= -\star \nabla \star \dif f \\
+&= -\star (\dif + \tilde \omega)\parl\star \dif f_i \otimes \frac{\partial}{\partial f_i}\parr \\
+&= - \star \dif \star \dif f_i \otimes \frac{\partial}{\partial f_i} - (-1)^{m - 1} \star\parl\star \dif f_i \otimes \tilde \omega\parl\frac{\partial}{\partial f_i}\parr\parr\\
+&= \Delta f_i \otimes \frac{\partial}{\partial f_i} - (-1)^{m - 1} \star \parl \frac{\partial f_i}{\partial x_\alpha} \star \dif x_\alpha \wedge f^*(\Gamma_{ijk}^k \dif y_k) \frac{\partial}{\partial f_j}\parr.
+\end{align*}
+Moreover,
+\begin{align*}
+\frac{\partial f_i}{\partial x_\alpha} \star \dif x_\alpha \wedge f^*(\Gamma_{ijk}^k \dif y_k) \frac{\partial}{\partial f_j}
+&= \frac{\partial f_i}{\partial x_\alpha} \star \dif x_\alpha \wedge \Gamma_{ik}^j \circ f \cdot \frac{\partial f_k}{\partial x_\beta} \dif x_\beta \frac{\partial}{\partial f_j} \\
+&= \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_k}{\partial x_\beta} \Gamma_{ik}^j \circ f \frac{\partial}{\partial f_j} \star (\star \dif x_\alpha \wedge \dif x_\beta).
+\end{align*}
+In conclusion,
+\begin{align*}
+\nabla^* \dif f &= \Delta f_i \otimes \frac{\partial}{\partial f_i} - (-1)^{m - 1} \parl \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_k}{\partial x_\beta} \Gamma_{ik}^j \circ f \frac{\partial}{\partial f_j} \star (\star \dif x_\alpha \wedge \dif x_\beta) \parr \\
+&= \Delta f_k \otimes \frac{\partial}{\partial f_k} - \gamma^{\alpha \beta} \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} \Gamma_{ij}^k \circ f \frac{\partial}{\partial f_k}.
+\end{align*}
+Thus the harmonic maps equation is 
+\begin{equation}
+\Delta^- f_k + \gamma^{\alpha \beta} \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} \Gamma_{ij}^k \circ f = 0.
+\end{equation}
+Expanding out the definition of $\Delta^-$, this in fact reads
+\begin{equation}
+\gamma^{\alpha \beta} \parl \frac{\partial^2 f_k}{\partial x_\alpha \partial x_\beta} - {}^M \Gamma_{\alpha \beta}^\gamma \frac{\partial f_k}{\partial x_\gamma} + {}^N \Gamma_{ij}^k \circ f \frac{\partial f_i}{\partial x^\alpha} \frac{\partial f_j}{\partial x^\beta} \parr = 0.
+\end{equation}
+
+\subsection{The energy of maps}
+Recall 
+$$\dif f \parl \frac{\partial}{\partial x_\alpha} \parr \bigg|_p = \frac{\partial f_i}{\partial x_\alpha} \frac{\partial}{\partial y_i} \bigg|_{f(p)}$$
+hence 
+$$\dif f_p = \frac{\partial f_i}{\partial x_\alpha} \otimes \frac{\partial}{\partial y_i} \bigg|_{f(p)}$$
+or using our notation $\partial/\partial f_i = \partial/\partial y_i \circ f$ from the previous section,
+$$\dif f = \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \frac{\partial}{\partial f_i}.$$
+
+\begin{definition}
+Set 
+$$e(f) := \frac{1}{2} ||\dif f||^2 = \frac{1}{2} \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} \gamma^{\alpha \beta} g_{ij} \circ f.$$
+The \dfn{energy} of $f$ is 
+$$E(f) := \int_M |e(f)|^2 \star 1 = \frac{1}{2} \int_M \gamma^{\alpha \beta}(x) g_{ij}(f(x)) \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} \sqrt{\gamma(x)} \dif x_1 \cdots \dif x_n.$$
+\end{definition}
+
+\begin{lemma}
+Let $(f_t)$ be a one-parameter family of $C^\infty$ maps.
+Then for the induced connection 
+$$\nabla \frac{\partial f}{\partial t} = \nabla_{\partial/\partial t} \dif f$$
+where $f = f_t$, and 
+$$\frac{\partial f}{\partial t} = \frac{\partial f_i}{\partial t} \frac{\partial}{\partial f} \in \Gamma(f^* TN).$$
+\end{lemma}
+\begin{proof}
+First,
+\begin{align*}
+\nabla_{\partial/\partial t} \dif f &= \frac{\partial^2 f_i}{\partial t \partial x_\alpha} \dif x_\alpha \otimes \frac{\partial}{\partial f_i} + \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \nabla_{\partial/\partial t} \frac{\partial}{\partial f_i}.
+\end{align*}
+We compute 
+\begin{align*}
+    \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \nabla_{\partial/\partial t} \frac{\partial}{\partial f_i} &= \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \parl \nabla_{f_*(\partial/\partial t)} \frac{\partial}{\partial y_i} \parr \circ f \\
+    &= \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \frac{\partial f_j}{\partial t} \nabla_{\partial/\partial y_j} \parl \frac{\partial}{\partial y_i} \parr \circ f \\
+    &= \frac{\partial f_i}{\partial x_\alpha} \dif x_\alpha \otimes \frac{\partial f_j}{\partial t} \nabla_{\partial/\partial y_i} \parl \frac{\partial}{\partial y_j} \parr \circ f \\
+    &= \frac{\partial f_j}{\partial t} \dif x_\alpha \otimes \nabla_{\frac{\partial f_i}{\partial x_\alpha} \frac{\partial}{\partial y_i}} \parl \frac{\partial}{\partial y_j} \parr \circ f.
+\end{align*}
+Therefore 
+\begin{align*}
+\nabla_{\partial/\partial t} \dif f &= \frac{\partial^2 f_i}{\partial t \partial x_\alpha} \dif x_\alpha \otimes \frac{\partial}{\partial f_i} + \frac{\partial f_j}{\partial t} \dif x_\alpha \otimes \nabla_{\frac{\partial f_i}{\partial x_\alpha} \frac{\partial}{\partial y_i}} \parl \frac{\partial}{\partial y_j} \parr \circ f \\
+&= \frac{\partial}{\partial x_\alpha} \parl \frac{\partial f_j}{\partial t} \parr \frac{\partial}{\partial f_j} \otimes \dif x_\alpha + \frac{\partial f_j}{\partial t} \nabla_{f_*(\partial/\partial x_\alpha)} \parl \frac{\partial}{\partial y_j} \parr \circ f \dif x_\alpha \\
+&= \frac{\partial}{\partial x_\alpha} \parl \frac{\partial f_j}{\partial t} \parr \frac{\partial}{\partial f_j} \otimes \dif x_\alpha + \frac{\partial f_j}{\partial t} \nabla_{\partial/\partial x_\alpha} \parl \frac{\partial}{\partial f_j} \parr \dif x_\alpha \\
+&= \nabla_{\partial/\partial x_\alpha} \parl \frac{\partial f}{\partial t} \parr \dif x_\alpha = \nabla \frac{\partial f}{\partial t}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+One has 
+$$\frac{\dif}{\dif t} E(f_t) = \int_M \bral \nabla \frac{\partial f}{\partial t}, \dif f\brar \star 1 = \int_M \bral \frac{\partial f}{\partial t}, -\tau f\brar \star 1.$$
+\end{corollary}
+\begin{proof}
+We compute 
+\begin{align*}
+\frac{\dif}{\dif t} E(f_t) &= \frac{1}{2} \int_M \frac{\dif}{\dif t} \bral \dif f, \dif f \brar \star 1\\
+&= \int_M \bral \nabla_{\partial/\partial t} \dif f, \dif f \brar \star 1\\
+&= \int_M \bral \nabla \frac{\partial f}{\partial t}, \dif f \brar \star 1\\
+&= \int_M \bral \frac{\partial f}{\partial t}, \nabla^* \dif f \brar \star 1\\
+&= \int_M \bral \frac{\partial f}{\partial t}, -\tau f \brar \star 1. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+Critical points of the energy functional are the harmonic maps.
+\end{corollary}
+\begin{proof}
+Let $f_t$ be a family of maps with 
+$$\frac{\dif}{\dif t}\bigg|_{t = 0} f_t = \psi \in C^\infty(f^* TM).$$
+Then 
+$$\frac{\dif}{\dif t}\bigg|_{t = 0} E(f_t) = \int_M \bral \psi, -\tau f \brar \star 1 = 0$$
+which holds for every $\psi \in C^\infty(f^* TM)$ iff $\tau f = 0$.
+\end{proof}
+
+\subsection{The Dirichlet and Neumann problems}
+We extend the Riemann curvature 
+$$R^N: TN \times TN \times TN \to TN$$
+to a curvature
+$$R^N: f^* TN \times f^* TN \times f^* TN \to f^* TN$$
+in the natural way.
+
+\begin{lemma}
+Let $f_t: M \to N$, and let $V$ be a vector field along $f_t$. Then 
+$$\nabla_{\partial/\partial t} \nabla V = \nabla \nabla_{\partial/\partial t} V - R^N \parl \dif f, \frac{\partial f}{\partial t} \parr V.$$
+\end{lemma}
+\begin{proof}
+Set $V = \partial/\partial f_i$, then 
+\begin{align*}
+\nabla_{\partial/\partial t} \parl \nabla \frac{\partial}{\partial f_i} \parr &= \nabla_{\partial/\partial t} \parl \nabla_{f_*(\partial/\partial x_\alpha)} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha \\
+&= \nabla_{\partial/\partial t} \parl \nabla_{\frac{\partial f_j}{\partial x_\alpha} \frac{\partial}{\partial y_j}} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha \\
+&= \nabla_{\partial/\partial t} \parl \frac{\partial f_j}{\partial x_\alpha} \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_j} \parr \circ f \otimes \dif x_\alpha \\
+&= \frac{\partial^2}{\partial x_\alpha \partial t} \parl \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha + \frac{\partial f_j}{\partial x_\alpha} \nabla_{\partial/\partial t} \parl \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha.
+\end{align*}
+The second term is 
+\begin{align*}
+\frac{\partial f_j}{\partial x_\alpha} \nabla_{\partial/\partial t} \parl \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha &= \frac{\partial f_j}{\partial x_\alpha} \parl \nabla_{f_*(\partial/\partial t)} \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha \\
+&= \frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_p}{\partial t} \parl \nabla_{\partial/\partial y_p} \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha \\
+&= \frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_p}{\partial t} \parl \nabla_{\partial/\partial y_j} \nabla_{\partial/\partial y_p} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha \\
+&\qquad - \frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_p}{\partial t} R^N \parl \frac{\partial}{\partial y_j}, \frac{\partial}{\partial y_p} \parr \frac{\partial}{\partial y_i} \circ f \otimes \dif x_\alpha.
+\end{align*}
+Undoing the above computation we see that 
+$$\frac{\partial^2}{\partial x_\alpha \partial t} \parl \nabla_{\partial/\partial y_j} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha + \frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_p}{\partial t} \parl \nabla_{\partial/\partial y_j} \nabla_{\partial/\partial y_p} \frac{\partial}{\partial y_i} \parr \circ f \otimes \dif x_\alpha = \nabla \nabla_{\partial/\partial t} V.$$
+Moreover,
+\begin{align*}
+\frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_p}{\partial t} R^N \parl \frac{\partial}{\partial y_j}, \frac{\partial}{\partial y_p} \parr \frac{\partial}{\partial y_i} \circ f \otimes \dif x_\alpha &= R^N \parl \dif f, \frac{\partial f}{\partial t} \parr V. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+One has 
+$$\frac{\dif^2}{\dif t^2} E(f_t) = ||\nabla \frac{\partial f}{\partial t}||^2 - \int_M \bral R^N \parl \dif f, \frac{\partial f}{\partial t} \parr \frac{\partial f}{\partial t}, \dif f \brar \star 1 + \int_M \bral \nabla_{\partial/\partial t} \frac{\partial f}{\partial t}, \tau f \brar \star 1.$$
+\end{corollary}
+\begin{proof}
+We compute 
+\begin{align*}
+\frac{\dif^2}{\dif t^2} E(f_t) &= \int_M \frac{\dif}{\dif t} \bral \nabla \frac{\partial f}{\partial t}, \dif f \brar \star 1 \\
+&= \int_M \parl \bral \nabla_{\partial/\partial t} \nabla \frac{\partial f}{\partial t}, \dif f \brar + \bral \nabla \frac{\partial f}{\partial t}, \nabla_{\partial/\partial t} \dif f \brar \parr \star 1 \\
+&= \int_M \parl \bral \nabla \nabla_{\partial/\partial t} \frac{\partial f}{\partial t}, \dif f \brar - \bral R^N \parl \dif f, \frac{\partial f}{\partial t} \parr \frac{\partial f}{\partial t}, \dif f \brar + ||\nabla \frac{\partial f}{\partial t}||^2 \parr \star 1. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+If $N$ has $\leq 0$ sectional curvature and $f_t$ is harmonic then $E(f_t)$ is convex.
+\end{corollary}
+
+\begin{corollary}
+Let $u, \phi: M \to N$ be homotopic with $u|\partial M = \phi|\partial M$.
+If $N$ has $\leq 0$ sectional curvature and $u$ is harmonic, then
+$$E(u) \leq E(\phi).$$
+\end{corollary}
+\begin{proof}
+Let $f_t$ be a geodesic homotopy between $u, \phi$, thus $f_0 = u$, $f_1 = \phi$. Then $E(t) = E(f_t)$ is convex, and $E'(0) = 0$. So $E(1) \geq E(0)$, hence $E(\phi) \geq E(u)$.
+\end{proof}
+
+\begin{corollary}
+Let $f_0, f_1$ be homotopic harmonic maps with $f_0|\partial M = f_1|\partial M$.
+If $N$ has $\leq 0$ sectional curvature, then:
+\begin{enumerate}
+\item If $\partial M$ is nonempty, then $f_0 = f_1$.
+\item If $\partial M$ is empty and $N$ has $< 0$ sectional curvature, then either $f_0 = f_1$ or the rank of $f_0$ is $\leq 1$ and $N$ has $< 0$ sectional curvature.
+\end{enumerate}
+\end{corollary}
+\begin{proof}
+Let $F$ be a geodesic homotopy between $f_0, f_1$, $E(t) = F(\cdot, t)$. Then $E$ is convex and $E'(0) = E'(1) = 0$. So $E' = 0$, so $E'' = 0$, so 
+$$\nabla \frac{\partial F}{\partial t} = 0$$
+and 
+$$\bral R^N \parl \dif f, \frac{\partial f}{\partial t} \parr \frac{\partial f}{\partial t}, \dif f \parr = 0.$$
+Then 
+$$\frac{\partial}{\partial x_\alpha} ||\frac{\partial F}{\partial t}||^2 = 2 \bral \nabla_{\partial/\partial x_\alpha} \frac{\partial F}{\partial t}, \frac{\partial F}{\partial t} \brar = 0$$
+which implies that $||\partial F/\partial t||$ is constant.
+But $\partial F/\partial t = 0$ on $\partial M$, so $\partial F/\partial t = 0$ everywhere if $\partial M$ is nonempty and hence $f_0 = f_1$.
+
+If $\partial M$ is empty, then if $||\partial F/\partial t|| = 0$, then $f_0 = f_1$.
+Otherwise, $\partial F/\partial t \neq 0$ for every $x, t$. So $\dif f$ is parallel to $\partial F/\partial t$, which implies that the image of $\dif f$ has dimension $\leq 1$.
+\end{proof}
+
+\subsection{Examples of harmonic maps}
+First suppose $M = \Sph^1$.
+Then 
+$$E(f) = \frac{1}{2} \int_0^{2\pi} |\dot f(t)| \dif t$$
+and the critical points of $E(f)$ are geodesics.
+We can also see this from the harmonic maps equation.
+Since $\Sph^1$ is $1$-dimensional we can take $\gamma^{\alpha \beta} = \delta^{\alpha \beta}$.
+Then 
+$$\frac{\partial^2 f_k}{\partial t^2} + \Gamma_{ij}^k \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} = 0.$$
+
+Another example are when $M, N$ are K\"ahler manifolds, and $f$ is a holomorphic map. Then $f$ is harmonic.
+
+\section{Properties of harmonic maps}
+Recall that 
+$$\Delta^- f = - \dif^* \dif f = \Div \grad f = \tr(x \mapsto \nabla_x (\dif f)^v)$$
+where 
+$$v: T^*M \to TM.$$
+In coordinates we have 
+$$\Delta^- f = \frac{1}{\sqrt \gamma} \frac{\partial}{\partial x_\beta} \parl \sqrt \gamma \gamma^{\alpha \beta} \frac{\partial f}{\partial x_\alpha} \parr = g^{\alpha \beta} \frac{\partial^2 f}{\partial x_\alpha \partial x_\beta} - \Gamma_{\alpha \beta}^\gamma \gamma^{\alpha \beta} \frac{\partial f}{\partial x_\gamma}.$$
+As for $\tau$,
+$$\tau(f) = -\nabla^* \dif f = \tr(x \mapsto \nabla_x (\dif f)^v)$$
+where we extended
+$$v: T^* M \otimes f^* TN \to TM \otimes f^* TN.$$
+In coordinates,
+$$\tau(f)_k = \nabla^- f_k + \Gamma_{ij}^k \frac{\partial f_i}{\partial x_\alpha} \frac{\partial f_j}{\partial x_\beta} \gamma^{\alpha \beta}.$$
+
+\begin{corollary}
+If $(e_\alpha)$ is an orthonormal basis of $TM$ then 
+$$\tau(f) = \nabla_{e_\alpha} (\dif f \cdot e_\alpha).$$
+\end{corollary}
+\begin{proof}
+We have 
+$$\dif f = (\dif f \cdot e_\alpha) e_\alpha^*, \qquad \dif f^v = (\dif f \cdot e_\alpha) e_\alpha.$$
+Since 
+$$\nabla_{e_\beta}(\dif f(e_\alpha) \cdot e_\alpha) = \nabla_{e_\beta} (\dif f \cdot e_\alpha) e_\alpha + \dif f (e_\alpha) \nabla_{e_\beta} e_\alpha,$$
+\begin{align*}
+\tau(f) &= \bral \nabla_{e_\beta}(\dif f(e_\alpha)) e_\alpha, e_\beta \brar + \dif f(e_\alpha) \bral \nabla_{e_\beta} e_\alpha, e_\beta \brar \\
+&= \nabla_{e_\alpha}(\dif f(e_\alpha)) + \dif f(e_\alpha) \bral \nabla_{e_\alpha} e_\beta, e_\beta \brar \\
+&= \nabla_{e_\alpha}(\dif f \cdot e_\alpha). \qedhere 
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+Let $u \in C^2(M, N)$ and $h \in C^2(N, \RR)$.
+Let $\Dif^2h: TN \times TN \to RR$ be the Hessian of $h$, thus 
+$$\Dif^2 h(X, Y) = \bral \nabla_X \grad h, Y\brar,$$
+and $(e_\alpha)$ an orthonormal frame of $M$ with $u_{e_\alpha} = \dif u(e_\alpha)$. Then
+$$\Delta^-(h \circ u) = \Dif^2 h(u_{e_\alpha}, u_{e_\alpha}) + \bral \grad h \circ u, \tau(u) \brar.$$
+\end{lemma}
+\begin{proof}
+First,
+\begin{align*}
+\grad(h \circ u) &= \bral \grad(h \circ u), e_\alpha \brar e_\alpha = \dif(h \circ u)(e_\alpha) e_\alpha \\
+&= \dif h \circ u u_{e\alpha} e_\alpha = \bral \grad h \circ u, u_{e_\alpha} \brar e_\alpha.
+\end{align*}
+Therefore 
+\begin{align*}
+\Delta^- (h \circ u) &= \Div \grad (h \circ u) \\
+&= \tr(e_\beta \mapsto \nabla_{e_\beta} \bral \grad h \circ u, u_{e_\alpha} \brar e_\alpha)\\
+&= \tr(e_\beta \mapsto \bral \nabla_{e_\beta} \grad(h \circ u), u_{e_\alpha} \brar e_\alpha + \bral \grad(h \circ u), \nabla_{e_\beta} u_{e_\beta} \brar e_\alpha \\
+&\qquad + \bral \grad(h \circ u), u_{e_\alpha} \brar \nabla_{e_\beta} e_\alpha) \\
+&= \Dif^2 h(u_{e_\beta}, u_{e_\alpha}) \bral e_\beta, e_\alpha \brar + \bral \grad(h \circ u), \nabla_{e_\beta} u_\alpha \brar \bral e_\beta, e_\alpha \brar \\
+&\qquad + \bral \grad (h \circ u), u_{e_\alpha} \brar \bral \nabla_{e_\beta} e_\alpha, e_\alpha \brar \\
+&= \Dif^2 h(u_{e_\alpha}, u_{e_\alpha}) + \bral \grad(h \circ u), \nabla_{e_\alpha} u_{e_\alpha} \brar + \frac{1}{2} e_\beta \bral e_\alpha, e_\alpha \brar \bral \grad(h \circ u), u_{e_\alpha} \brar \\
+&= \Dif^2 h(u_{e_\alpha}, u_{e_\alpha}) + \bral \grad(h \circ u), \tau(u) \brar + 0. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{corollary}
+If $u$ is harmonic and $h$ is convex then $h \circ u$ is subharmonic.
+\end{corollary}
+\begin{proof}
+One has 
+\begin{align*}
+\Delta^- (h \circ u) &= \Dif^2 h(u_{e_\alpha}, u_{e_\alpha}) \geq 0. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{theorem}[Weitzenb\"ock formula]
+Let $f: M \to N$ be a harmonic map and $(e_\alpha)$ an orthonormal frame for $TM$. Then 
+\begin{align*}
+\Delta^- e(f) &= |\nabla \dif f|^2 + \frac{1}{2} \bral \dif f \Ric^M(e_\alpha), \dif f e_\alpha \brar \\
+&\qquad - \frac{1}{2} \bral R^N(\dif f e_\alpha, \dif f e_\beta) \dif f e_\beta, \dif f e_\alpha \brar.
+\end{align*}
+\end{theorem}
+\begin{proof}
+Since $f$ is harmonic,
+$$\gamma^{\alpha \beta} f_{i/\alpha\beta} - \gamma^{\alpha\beta} {}^M \Gamma_{\alpha \beta}^\eta f_{i/\eta} + \gamma^{\alpha\beta} {}^N \Gamma_{k\ell}^i \circ f f_{k/\alpha} f_{\ell/\beta}.$$
+Let $x \in M$, $f(x) = y$, and normal coordinates around them. Differentiating,
+\begin{align*}
+f_{i/\alpha \alpha \varepsilon} &= {}^M \Gamma_{\alpha\alpha/\varepsilon}^\eta f_{i/\eta} - {}^N \Gamma_{k\ell/m}^i f_{m/\varepsilon} f_{k\alpha} f_{\ell/\alpha} \\
+&= \frac{1}{2} (\gamma_{\alpha \eta/\alpha \varepsilon} + \gamma_{\alpha \eta/\alpha \varepsilon} - \gamma_{\alpha \alpha/\eta \varepsilon}) f_{i/\eta} \\
+&\qquad - \frac{1}{2} (g_{ki/\ell m} + g_{\ell i/km} - g_{k\ell/im}) f_{m/\varepsilon} f_{k/\alpha} f_{\ell/\alpha}.
+\end{align*}
+So,
+\begin{align*}
+\Delta^- \parl \frac{1}{2} \gamma^{\alpha \beta} g_{ij} \circ f f_{i/\alpha} f_{j/\beta} \parr &= \frac{1}{\sqrt \gamma} \frac{\partial}{\partial x_\sigma} \parl \sqrt \gamma \gamma^{\sigma \tau} \frac{\partial}{\partial \tau} \parl \frac{1}{2} \gamma^{\alpha \beta} g_{ij} \circ f f_{i/\alpha} f_{j/\beta} \parr \parr \\
+&= f_{i/\alpha \sigma} f_{i/\alpha \sigma} - \frac{1}{2} (\gamma_{\alpha \beta/\sigma \sigma} + \gamma_{\sigma\sigma/\alpha \beta} - \gamma_{\sigma\alpha/\sigma \beta} - \gamma_{\sigma \alpha/\sigma \beta}) f_{i/\alpha} f_{i/\beta} \\
+&\qquad + \frac{1}{2} (g_{ij/k\ell} + g_{k\ell/ji} - g_{ik/j\ell} - g_{j\ell/ik}) f_\alpha^i f_\alpha^j f_\sigma^k f_\sigma^\ell \\
+&= f_{i/\alpha \sigma} f_{i/\alpha \sigma} + \frac{1}{2} \Ric^M_{\alpha \beta} f_{i/\alpha} f_{j/\beta} - \frac{1}{2} R^N_{ikj\ell} f_{i/\alpha} f_{j/\alpha} f_{k/\sigma} f_{\ell/\sigma}. \qedhere
+\end{align*}
+\end{proof}
+
+In particular, if
+$$\frac{\partial f}{\partial t} = \tau(f),$$
+then 
+\begin{align*}
+\Delta^- e(f) - \frac{\partial e(t)}{\partial t} &= |\nabla \dif f|^2 + \frac{1}{2} \bral \dif f \Ric^M(e_\alpha), \dif f e_\alpha \brar \\
+&\qquad - \frac{1}{2} \bral R^N (\dif f e_\alpha, \dif f e_\beta) \dif f e_\beta, \dif f e_\alpha \brar.
+\end{align*}
+
+For a harmonic map, we of course have 
+\begin{equation}\label{schauder estimate prep}
+\Delta^- f_i = -\gamma^{\alpha \beta} \Gamma_{jk}^i \frac{\partial f_j}{\partial x_\alpha} \frac{\partial f_k}{\partial x_\beta}.
+\end{equation}
+
+\begin{theorem}
+If $f: M \to N$ is harmonic, and $N$ has $\leq 0$ sectional curvature, then 
+$$|f|_{C^{2 + \alpha}} \leq c$$
+where $c > 0$ depends on $E(f)$ and the geometries of $M, N$.
+\end{theorem}
+\begin{proof}
+Since $\Delta^- e(f) \geq -C e(f)$, the maximum principle gives 
+$$\sup_M e(f) \leq \int_M \star e(f) = E(f).$$
+Now the right-hand side of (\ref{schauder estimate prep}) is $C^0$-bounded. So by elliptic regularity, $f_i$ is $C^{1 + \alpha}$-bounded.
+But then the right-hand side of (\ref{schauder estimate prep}) is $C^\alpha$-bounded, so $f_i$ is $C^{2 + \alpha}$-bounded.
+\end{proof}
+
+\begin{corollary}
+If $f: M \to N$ is harmonic, and $N$ has $\leq 0$ sectional curvature, then $f \in C^\infty(M, N)$.
+\end{corollary}
+\begin{proof}
+Keep bootstrapping with (\ref{schauder estimate prep}).
+\end{proof}
+
+\printbibliography
+
+\end{document}
