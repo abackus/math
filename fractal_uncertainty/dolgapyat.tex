@@ -16,9 +16,9 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Dolgopyat}
-\author{los tres amigos}
-\date{July 2022}
+\title{The higher-dimensional fractal uncertainty principles for low-dimensional fractals}
+\author{Bacon, Lettuce, and Tomato}
+\date{August 2022}
 
 \newcommand{\NN}{\mathbf{N}}
 \newcommand{\ZZ}{\mathbf{Z}}
@@ -80,9 +80,7 @@
 
 \newcommand{\dbar}{\overline \partial}
 
-\DeclareMathOperator{\atanh}{atanh}
-\DeclareMathOperator{\csch}{csch}
-\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\hull}{hull}
 
 \DeclareMathOperator{\Div}{div}
 \DeclareMathOperator{\Gram}{Gram}
@@ -163,7 +161,7 @@
 
 \usepackage[backend=bibtex,style=numeric]{biblatex}
 \renewcommand*{\bibfont}{\normalfont\footnotesize}
-\addbibresource{topics.bib}
+\addbibresource{fup.bib}
 \renewbibmacro{in:}{}
 \DeclareFieldFormat{pages}{#1}
 
@@ -179,95 +177,380 @@
 
 % \tableofcontents
 
-\section{The trees that discretize}
-\begin{definition}
-A compactly supported Borel measure $\mu$ on $\RR^d$ is \dfn{$\delta$-regular} on scales $[\alpha, \beta]$ if for every square box with side length $\in [\alpha, \beta]$,
-$$\mu(I) \leq C_R |I|^{\delta/d},$$
-and if in addition $I$ is centered on $x \in \supp \mu$,
-$$C_R^{-1} |I|^{\delta/d} \leq \mu(I).$$
-\end{definition}
-
-For $q \in L^{-k} \ZZ$ we set $I_k(q)$ to be the half-open box
-$$I_k(q) := [q_1 + L^{-k} + q_1) \times [q_2 + L^{-k} + q_2) \times \cdots \times [q_d, L^{-k} + q_d).$$
+\section{Measure-theoretic botany}
+For $q \in \RR^d$ we set $I_k(q)$ to be the closed box
+$$I_k(q) := [q_1, L^{-k} + q_1] \times [q_2, L^{-k} + q_2] \times \cdots \times [q_d, L^{-k} + q_d].$$
+Write $J \subseteq_\mu I$ to mean that $J \setminus I$ is $\mu$-null.
 
 \begin{definition}
-Let $\mu$ be a compactly supported Borel measure on $\RR^d$.
-The \dfn{tree which discretizes} $\mu$ is the tree $V$ whose level $V_k$ are nodes which are given by subsets of $\RR^d$ obtained from the following procedure: start with the set of all boxes $I_k(q)$ such that $\mu(I_k(q)) > 0$, then merge any two boxes which are adjacent.
-We denote its height function on nodes by $H$.
+A compactly supported finite Borel measure $\mu$ on $\RR^d$ is \dfn{Ahlfors-David regular} of dimension $\delta \in [0, d]$, on scales $[\alpha, \beta]$, with regularity $C_R \geq 1$, if for every closed square box with side length $r \in [\alpha, \beta]$,
+$$\mu(I) \leq C_R r^\delta,$$
+and if in addition $I$ is centered on a point in $\supp \mu$,
+$$C_R^{-1} r^\delta \leq \mu(I).$$
+In short we say that $\mu$ (or sometimes $\supp \mu$) is \dfn{$\delta$-regular}.
 \end{definition}
 
-So the nodes of $V$ are not necessarily boxes. We don't want to fill them in either.
+\begin{definition}
+Let $\mu$ be a compactly supported finite Borel measure on $\RR^d$ and $L \geq 2$.
+The \dfn{tree which discretizes} $\mu$ is the tree $V$ whose level $V_k$ is constructed as follows: Let
+$$V_k' = \{I_k(q): L^kq \in \ZZ^d, ~\mu(I_k(q)) > 0\},$$
+let the elements of $V_k$ be elements of $V_k'$ where we merge any two intersecting elements, and let there be an edge $I \leq J$ if $I \subseteq J$.
+\end{definition}
+
+So the vertices of $V$ are not necessarily boxes. We don't want to fill them in either.
 If we did, and we were studying a fractal which was L-shaped, then we'd end up being really wasteful, at least at scales that aren't too fine: the smallest box containing an L-shape is much larger than the L, and doesn't scale correctly.
+It also causes overlap problems.
 
-Clearly any two distinct nodes in $V_k$ are $L^{-k}$-separated, and $\mu$ is supported on the union of the nodes in $V_k$.
-Also it really is a tree. Finally,
-$$0 < \mu(I) = \sum_n \mu(I_n)$$
-whenever $(I_n)$ are the children of $I$.
+\begin{definition}
+We call a compact set $I \subset \RR^d$ a \dfn{vine} if it has a \dfn{box decomposition}, that is, a finite set $B(I) \subset L^{-k} \ZZ^d$, such that $I_k(q_1) \cap I_k(q_2)$ is nonempty for $q_1, q_2 \in B(I)$, and $I = \bigcup_{q \in B(I)} I_k(q)$.
 
-Since we're merging adjacent boxes, we could have two boxes in the same node which only touch on a corner, or more generally an edge of codimension $\geq 2$.
+If $I$ is a vine which is the union of boxes $I_k(q)$, its \dfn{height} is $H(I) := k$.
+Its \dfn{hull}, $\hull I$, is the smallest box $I_\ell(q)$ with $q \in L^{-\ell} \ZZ^d$, for some $\ell \leq k$, such that $I \subseteq \hull I$.
+\end{definition}
 
 \begin{lemma}
-Let $\mu$ be $\delta$-regular to scale $L^{-K}$ and $0 < \delta < 2$. Then for every node $I \in V$,
-$$L^{-dH(I)} \leq |I| \lesssim_d (C_R)^{\frac{2d}{d - \delta}} L^{-dH(I)}$$
-and 
-$$C_R^{-1} L^{-\delta H(I)} \leq \mu(I) \lesssim_d C_R^{\frac{2\delta}{d - \delta} + 1} L^{-\delta H(I)}.$$
+Let $V$ be the tree which discretizes $\mu$. Then:
+\begin{enumerate}
+\item $V$ is a tree.
+\item Every vertex of $V$ is a vine.
+\item Any two distinct vines in $V_k$ are $L^{-k}$-separated.
+\item $\supp \mu \subseteq \bigcup_{I \in V_k} I$.
+\item Let $I_1, \dots, I_N$ be the children of $I \in V$, then
+$$0 < \mu(I) = \sum_{n \leq N} \mu(I_n).$$
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-The lower bound on $|I|$ is obvious. For the upper bound, let $I$ be the union of $M$ boxes $I_k(q_n)$.
-Then the $I_k(q_n)$ are almost disjoint and $\mu(I_k(q_n)) > 0$.
-Let $x_n \in I_k(q_n) \cap \supp \mu$ and let $J_n$ be the box of side length $L^{-k}$ centered on $x_n$.
-Let $J = \bigcup_n J_n$, then $J \setminus I$ is $\mu$-null since distinct nodes are $L^{-k}$-separated. In particular,
-$$\mu(J) \leq \mu(I) \leq C_R (ML^{-kd})^{\delta/d} = C_R M^{\delta/d} L^{-k\delta},$$
-and $(J_n)$ covers $J$ efficiently in the sense that for every $x \in J$, $x$ is contained in at most $O_d(1)$ many $J_n$'s.
-Here $O_d(1)$ is the combinatorial constant defined to be the number of boxes in the standard grid of side length $L^{-k}$ that are within $2$ boxes of the origin.
+If $I \subseteq J \subseteq I$ then $H(I) \leq H(J) \leq H(I)$ so $H(I) = H(J)$ and so $I = J$, so $V$ is acyclic.
+Moreover, by taking $K \in \NN$ so large that $I := I_{-K}(0)$ contains $\supp \mu$, we see that every vertex $J$ is contained in $I$, so $V$ is rooted.
+Conversely any vertex cannot be $\mu$-null by definition.
+Since a box is a vine, and the merger of two intersecting vines is a vine, every vertex of $V$ is a vine.
+If $I_1, I_2$ are vines which are not $L^{-k}$-separated then we can find boxes $I_k(q_i) \subseteq I_i$ which are not $L^{-k}$-separated, hence $I_k(q_1) \cap I_k(q_2)$ is nonempty and $I_1 = I_2$.
+The estimate on $\supp \mu$ follows from the definitions.
+If $I_1, \dots, I_N$ are the children of $I$, then they are $L^{-k}$-separated and hence disjoint, so $\mu(I) = \sum_n \mu(I_n)$.
+\end{proof} 
 
+\subsection{Regularity of trees which discretize}
+Let's generalize \cite[Lemma 2.1]{Dyatlov_2018}.
+
+\begin{lemma}\label{vine to hull}
+Let $I$ be a vine of height $k$, and view $\hull I$ as a vine of height $k$.
+Then
+$$\card B(\hull I) \leq \card B(I)^d.$$
+\end{lemma}
+\begin{proof}
+We first consider the case that $I$ is a \dfn{straight vine}, that is, when there exist
+$$x_1, \dots, x_M, y_1, \dots, y_{d - 1} \in L^{-k}\ZZ$$
+such that
+$$B(I) = \{(x_1, y_1, \dots, y_{d - 1}), (x_2, y_1, \dots, y_{d - 1}), \dots, (x_M, y_1, \dots, y_{d - 1})\}.$$
+Since $I$ is connected, possibly after rearranging the $x_i$ so $x_1 < x_i$ for $i \geq 2$,
+$$I = [x_1, x_1 + ML^{-k}] \times [y_1, y_1 + L^{-k}] \times \cdots \times [y_{d - 1}, y_{d - 1} + L^{-k}].$$
+Therefore 
+$$\hull I = [x_1, x_1 + ML^{-k}] \times [y_1, y_1 + ML^{-k}] \times \cdots [y_{d - 1}, y_{d - 1} + ML^{-k}],$$
+and so $\hull I$ is the $\mu$-almost disjoint union of $M^d$ boxes of side length $L^{-k}$.
+But since $I$ is a straight vine it is the $\mu$-almost disjoint union of $M$ boxes of side length $L^{-k}$.
+So $\card B(\hull I) = \card B(I)^d$.
+
+In the general case, we observe that the desired inequality must be saturated exactly when there exactly one box of side length $L^{-k}$ in each row of $\hull I$, since this is already enough to generate $\hull I$, and so if $I$ was an arbitrary vine we could remove elements of the box decomposition of $I$ without affecting $\hull I$ until we reduced to the case that $I$ had exactly one box of side length $L^{-k}$ in each row of $\hull I$.
+Such a set $J$ may not be a vine but by sliding all boxes in $J$ into a single column and permuting coordinate indices, we may transform $J$ into a straight vine while preserving $\hull J = \hull I$ and $\card B(J)$.
+\end{proof}
+
+For the next lemma we recall that $\sqrt d = \diam I_0(q)$.
+Then we denote 
+$$B_d := \card \{q \in \ZZ^d: |q| \leq \sqrt d\}.$$
+
+\begin{lemma}
+Let $\mu$ be $\delta$-regular to scale $L^{-K}$, $0 < \delta < 1$, and let $V$ be the tree which discretizes $\mu$. Let 
+$$A = C_R^{\frac{2}{1 - \delta}}B_d.$$
+Then for every vertex $I \in V$ such that $H(I) \leq K$,
+\begin{align}
+L^{-dH(I)} &\leq |I| \leq AL^{-dH(I)} \\
+C_R^{-1} L^{-\delta H(I)} &\leq \mu(I) \leq AL^{-\delta H(I)} \\
+1 &\leq \card B(I) \leq A \\
+L^{-H(I)} \sqrt d &\leq \diam I \leq AL^{-H(I)}.
+\end{align}
+Moreover, if $I \in V$, $H(I) < K$, and $J$ is a child of $I$,
+\begin{equation}
+\frac{\mu(J)}{\mu(I)} \geq \frac{L^{-\delta}}{C_R^{\frac{3 - \delta}{1 - \delta}} B_d}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The lower bounds on $|I|$, $\diam I$, and $\card B(I)$ are obvious. For the upper bounds, let
+$$B(I) = \{q_1, \dots, q_M\}.$$
+Then the $I_k(q_n)$ are almost disjoint and $\mu(I_k(q_n)) > 0$.
+Let $x_n \in I_k(q_n) \cap \supp \mu$, let $J_n$ be the box of side length $L^{-k}$ centered on $x_n$, and let $J = \bigcup_n J_n$.
+Then $J \subseteq_\mu I$ since distinct vines are $L^{-k}$-separated. In particular, if we let $N$ denote the number of boxes of side length $L^{-k}$ in $\hull I$, then $\hull I$ has side length $N^{1/d} L^{-k}$, and so 
+$$\mu(J) \leq \mu(I) \leq \mu(\hull I) \leq C_R (N^{1/d} L^{-k})^\delta.$$
+By Lemma \ref{vine to hull}, however, 
+$$N^{\delta/d} \leq M^\delta,$$
+hence
+$$\mu(J) \leq C_R M^\delta L^{-k\delta}.$$
+Moreover, $(J_n)$ covers $J$ so efficiently that for every $x \in J$, $x$ is contained in at most $B_d$ many $J_n$'s.
 So
-$$\mu(J) \gtrsim_d M\mu(J_n) \geq MC_R^{-1}L^{-k\delta},$$
-and solving for $M$ gives 
-$$M \lesssim_d C_R^{\frac{2d}{d - \delta}}.$$
-Now we use $|I| = \sum_n |I_n|$, which also gives the upper bound on $\mu(I)$.
+$$\mu(J) \geq B_d M\mu(J_n) \geq B_d MC_R^{-1}L^{-k\delta},$$
+and solving for $M$ gives $M \leq A$.
+Now we use $|I| = \sum_n |I_k(q_n)| = M|I_k(q_1)|$, which also gives the upper bounds on $\mu(I)$, $\diam I$, and $\card B(I)$.
 
 For the lower bound on $\mu(I)$, let $J$ be a box of side length $L^{-k}$ centered on $I \cap \supp \mu$.
-Then $J \setminus I$ is $\mu$-null so 
+Then $J \subseteq_\mu I$ since distinct vines are $L^{-k}$-separated, so
 \begin{align*}
-\mu(I) &\geq \mu(J) \geq C_R^{-1} |J|^{\delta/d} = C_R^{-1} (L^{-kd})^{\delta/d} = C_R^{-1} L^{-k\delta}. \qedhere 
+\mu(I) &\geq \mu(J) \geq C_R^{-1} L^{-k\delta}.
 \end{align*}
+The bound on $\mu(J)/\mu(I)$ follows.
+\end{proof}
+
+\begin{definition}
+A (quantitative) \dfn{sunflower} with core $I \subseteq \RR^d$ and constant $c > 0$ is a set $\mathcal P$ of \dfn{petals}, that is, subsets of $\RR^d$ which intersect $I$, such that for $P_1, P_2 \in \mathcal P$ and $p_i \in P_i$,
+$$|p_i - p_j| \geq c.$$
+\end{definition}
+
+\begin{lemma}\label{sigma is 23}
+Let $\mu$ be $\delta$-regular to scale $L^{-K}$, $0 < \delta < 1$, and let $V$ be the tree which discretizes $\mu$.
+If $0 < \sigma < 1$, and
+\begin{equation}
+L \gtrsim_d C_R^{O(\frac{1}{1 - \sigma})},
+\end{equation}
+then every $I \in V$ with $H(I) < K$ has children $J_1, J_2$ such that for every $x_i \in J_i$,
+\begin{equation}
+L^{-H(I)-\sigma} \leq |x_1 - x_2| \lesssim_d L^{-H(I)-\sigma}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Choose $x \in I \cap \supp \mu$, let $k := H(I)$, let $Q$ be the box of side length $L^{-k-\sigma}$ centered on $x$, and let $\mathcal P$ be the set of all children of $I$ which intersect $Q$.
+Then $\mathcal P$ is a sunflower with $c = L^{-(k + 1)}$ and core $Q$, so if we arbitrarily choose $x_P \in P$ for each $P \in \mathcal P$, we have $|x_{P_1} - x_{P_2}| \geq L^{-(k + 1)}$ for $P_1 \neq P_2$.
+Let 
+$$T := L^{k + \sigma} \max_{P_1, P_2 \in \mathcal P} |x_{P_1} - x_{P_2}|.$$
+Since $Q$ is the core of $\mathcal P$, the triangle inequality gives
+$$T \leq L^{k + \sigma}\left(\diam Q + 2 \max_{P \in \mathcal P} \diam P\right) \leq \sqrt d + O_d(C_R^{\frac{2}{1 - \delta}} L^{\sigma - 1}) \lesssim 1.$$
+
+To bound $T$ from below, observe that $R := \bigcup_{P \in \mathcal P} P$ is contained in a box of side length
+$$\ell \leq TL^{-(k + \sigma)} + 2 \max_{P \in \mathcal P} \diam P \leq TL^{-(k + \sigma)} + O_d(C_R^{\frac{2}{1 - \delta}} L^{-(k + 1)}).$$
+Moreover, $Q \subseteq_\mu R$, since $Q \setminus R$ consists of the part of $Q$ that does not meet any vine in $V_{k + 1}$, and $\supp \mu \subseteq \bigcup_{I \in V_{k + 1}} I$.
+So
+$$C_R^{-1} L^{-(k + \sigma)\delta} \leq \mu(Q) \leq \mu(R) \leq \ell^\delta \leq \left(TL^{-(k + \sigma)} + O_d(C_R^{\frac{2}{1 - \delta}} L^{-(k + 1)})\right)^\delta.$$
+In other words,
+$$T \geq C_R^{-1/\delta} - O_d(C_R^{\frac{2}{1 - \delta}} L^{\sigma - 1}) \gtrsim C_R^{-1/\delta}.$$
+
+Finally, choose petals $P_1, P_2$ which attain the maximum, thus 
+$$T = L^{k + \sigma} |x_{P_1} - x_{P_2}|.$$
+Then for every $y_{P_i} \in P_i$,
+$$|y_{P_1} - y_{P_2}| \lesssim L^{-(k + \sigma)} + \max_{i \in \{1, 2\}} \diam P_i \lesssim L^{-(k + \sigma)}.$$
+Similarly,
+\begin{align*}
+|y_{P_1} - y_{P_2}| &\gtrsim C_R^{-1/\delta} L^{-(k + \sigma)} - \max_{i \in \{1, 2\}} \diam P_i \gtrsim C_R^{-1/\delta} L^{-(k + \sigma)}. \qedhere
+\end{align*}
+\end{proof}
+
+\subsection{Mean value space}
+We need to generalize the space $C_\theta(I)$ where $d = 1$ (see \cite[\S2.2]{Dyatlov_2018}), which is supposed to capture ``the action of the mean value theorem on a function on $I$".
+
+\begin{definition}
+Let $I$ be a vine, and $x, y \in I$. Let $\mathcal A$ be the admissible class of all piecewise $C^1$ curves $[0, 1] \to I$, $x \to y$. Then 
+$$\dist(x, y) := \inf_{\gamma \in \mathcal A} ||\gamma'||_{L^1([0, 1])}.$$
+We define the \dfn{length} $\ell(I)$ of the vine to be 
+$$\ell(I) := \max_{x, y \in I} \dist(x, y).$$
+\end{definition}
+
+\begin{definition}
+Let $I$ be a vine and $\theta \in (0, 1)$. The function space $C_\theta(I)$ is $C^1(I)$ equipped with the norm
+$$||f||_{\theta, I} := \max\left(||f||_{C^0(I)}, \theta \ell(I) ||f'||_{C^0(I)}\right).$$
+\end{definition}
+
+\begin{lemma}
+Let $I$ be a vine and $x, y \in I$. Then for $f \in C^1(I)$,
+$$|f(x) - f(y)| \leq ||f'||_{C^0(I)} \cdot \dist(x, y) \leq \frac{\dist(x, y)}{\theta \ell(I)} ||f||_{C_\theta(I)}.$$
+\end{lemma}
+\begin{proof}
+We choose a curve $\gamma: x \to y$ and apply the mean-value property along $\gamma$.
+Then optimize in $\gamma$.
 \end{proof}
 
 \begin{lemma}
-Let $J$ be a child of $I$, then 
-$$\mu(J) \gtrsim_d C_R^{-1 - \frac{2\delta}{d - \delta}} L^{-\delta} \mu(I).$$
+Let $V$ be a tree which discretizes a $\delta$-regular measure up to scale $K$ and suppose that $I \in V$ has $H(I) \leq K$.
+Then 
+$$\diam I \leq \ell(I) \leq B_d C_R^{\frac{2}{1 - \delta}} \diam I.$$
+If in fact $H(I) < K$ and $J$ is a child of $I$,
+\begin{equation}\label{length of a child}
+\ell(J) \leq \frac{C_R^{\frac{2}{1 - \delta}} B_d}{L} \ell(I).
+\end{equation}
 \end{lemma}
 \begin{proof}
-By the previous lemma, 
-$$\mu(J) \geq C_R^{-1} L^{-\delta} L^{-\delta H(I)}$$
-and 
-$$L^{-\delta H(I)} C_R^{\frac{2\delta}{d - \delta}} \gtrsim_d \mu(I).$$
-In particular, 
+That $\diam I \leq \ell(I)$ holds is obvious.
+Conversely, if $J \in B(I)$ then
 \begin{align*}
-\mu(J) &\gtrsim_d L^{-\delta} \frac{\mu(I)}{C_R^{\frac{2\delta}{d - \delta} + 1}}. \qedhere 
+\ell(I) &\leq \diam J \cdot \card B(I) \leq \sqrt d L^{-H(I)} B_d C_R^{\frac{2}{1 - \delta}} \leq B_d C_R^{\frac{2}{1 - \delta}} \diam I.
+\end{align*}
+If $J$ is instead a child of $I$,
+$$\ell(J) \leq \card B(J) \cdot \sqrt d \cdot L^{-H(J)} \leq B_d C_R^{\frac{2}{1 - \delta}} \sqrt d L^{-H(I)} L^{-1} \leq C_R^{\frac{2}{1 - \delta}} B_d \diam I L^{-1}$$
+and the claim follows since $\diam I \leq \ell(I)$.
+\end{proof}
+
+\begin{lemma}
+Let $V$ be a tree which discretizes a $\delta$-regular measure up to scale $K$ and suppose that $I \in V$ has $H(I) < K$.
+Let $J$ be a child of $I$ and $\psi \in C^\infty(I)$ satisfies 
+\begin{align}
+\theta \ell(I) ||\psi'||_{C^0(I)} &\leq \frac{1}{4} \label{theta choice hyp 1}\\
+L &\geq \frac{4}{C_R^{\frac{2}{1 - \delta}} B_d} \label{theta choice hyp 2}.
+\end{align}
+Then we have an estimate on the multiplication-restriction operator
+\begin{equation}\label{theta choice concl}
+||e^{i\psi}||_{C_\theta(I) \to C_\theta(J)} \leq 1.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The estimates (\ref{theta choice hyp 2}) and (\ref{length of a child}) imply $\ell(J) \leq \ell(I)/4$.
+Clearly $||f||_{C^0(J)} \leq ||f||_{C^0(I)}$, so we just need to show that 
+$$\theta \ell(J) ||(e^{i\psi}f)'||_{C^0(J)} \leq ||f||_{C_\theta(I)}.$$
+To do this we use the Leibniz inequality:
+$$\theta \ell(J) ||(e^{i\psi}f)'||_{C^0(J)} \leq \frac{\theta}{4} \ell(I) (||f'||_{C^0(I)} + ||\psi'||_{C^0(I)} \cdot ||f||_{C^0(I)}).$$
+Now by (\ref{theta choice hyp 1}),
+\begin{align*}
+\frac{\theta}{4} \ell(I) (||f'||_{C^0(I)} + ||\psi'||_{C^0(I)} \cdot ||f||_{C^0(I)})
+&\leq \frac{\theta}{4} \ell(I) ||f'||_{C^0(I)} + \frac{||f||_{C^0(I)}}{16}  \\
+&\leq \max(\theta \ell(I) ||f'||_{C^0(I)}, ||f||_{C^0(I)}). \qedhere
 \end{align*}
 \end{proof}
 
-Separation to scale $L^{k-2/3}$ needs to be formulated more carefully in this formalism.
-The reason is that unlike in one dimension, the nodes do not need to be convex sets. 
-Actually, that makes me think that this formalism is fundamentally incorrect: we *don't* want to merge adjacent boxes!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-That doesn't mean the above lemmata are worthless though.
-In the formalism where we don't merge boxes, Lemma 1.3 is telling you that at most $O_d(C_R^{-\frac{2d}{d - \delta}})$ boxes can touch at each scale.
-You could probably get more precise estimates by refining what we mean by touching: in some sense, most of the intersections should have high codimension, so you can get a stronger estimate for codimension-$1$ intersections.
+\section{The inductive step}
+In this section we fix Ahlfors-David sets $(X, \mu_X)$ and $(Y, \mu_Y)$ in $\RR^d$, with dimension $0 \leq \delta_X, \delta_Y < 1$, and a semiclassical Fourier integral operator 
+$$\mathcal B_h f(x) = \int_Y e^{i\Phi(x, y)/h} G(x, y) f(y) \dif \mu_Y(y)$$
+where $X \subset I_0$, $Y \subset J_0$, $I_0, J_0$ are boxes, $\Phi \in C^2(\RR^2)$ has
+$$1/2 < |\partial_x \partial_y \Phi(x, y)| < 2$$
+and $G$ is bounded in $C^1(\RR^2)$.
+We let $V_X, V_Y$ be the trees that discretize $\mu_X, \mu_Y$.
+We also fix $f \in L^2(\mu_Y)$ for our operator $\mathcal B_h$ to act on.
 
-\section{Induction on scale}
-A model problem for Prop 3.1 in Dyatlov--Jin is:
+\subsection{Setup}
+For each $J \in V_Y$ we choose a point $y_J \in J$.
+Let
+$$F_J(x) := \frac{1}{\mu_J(Y)} e^{-i\Phi(x, y_J)/h} \mathcal B_h(1_J)(x).$$
+Then if $\{J_b: b \in B\}$ is the set of children of $J$,
+\begin{equation}\label{F versus child}
+F_J = \sum_{b \in B} q_b e^{i\Psi_b} F_{J_b}
+\end{equation}
+where 
+$$q_b = \frac{\mu_Y(J_b)}{\mu_Y(J)}, ~\Psi_b(x) = \frac{\Phi(x, y_{J_b}) - \Phi(x, y_J)}{h}.$$
+
+We take as our monotone quantity the $L^2(\mu_X)$,
+$$E_J(x) := ||F_J||_{C_\theta(I)}, ~H(I) + H(J) = K := -\log_L h.$$
+The key estimate is (cf \cite[(3.11)]{Dyatlov_2018}):
 
 \begin{proposition}
-Let $0 < \delta < D$ (where $D = D(d)$, maybe $D = 1$), $C_R > 1$.
-Let $I_0, J_0 \subset \RR^d$ be boxes containing $X, Y$ repsectively, where $X, Y$ are $\delta$-regular fractals with regularity $C_R$.
-Then there exist $L, \varepsilon_1 > 0$ with $L \lesssim C_R^{O_\delta(1)}$ and $\varepsilon_1^{-1} \lesssim C_R^{O_\delta(1)}$, such that if we set $K \in \NN$, $h = L^{-K}$, and
-$$\varepsilon_0 := -\frac{\log(1 - \varepsilon)}{\log L}$$
-then 
-$$||\mathcal F_h f||_{L^2(\mu_X)} \lesssim_{\mu_X(X), \mu_Y(Y)} h^{\varepsilon_0} ||f||_{L^2(\mu_Y)}.$$
+There exist $\theta, \varepsilon_1 > 0$, such that $\theta$ depends only on $C_R$ and $\delta$, and $\varepsilon_1$ depends on $C_R, \delta, L$, such that if we assume that $H(I) + H(J) = K - 1$, then
+\begin{equation}\label{main bound}
+||E_J||_{L^2(I, \mu_X)}^2 \leq (1 - \varepsilon_1) \sum_{b \in B} q_b ||E_{J_b}||_{L^2(I, \mu_X)}^2.
+\end{equation}
 \end{proposition}
+
+We prove it in the remainder of this section.
+
+Let $\{I_a: a \in A\}$ be the set of children of $I$ and assume that (\ref{main bound}) fails, thus
+\begin{equation}\label{contradicted main bound}
+||E_J||_{L^2(I, \mu_X)}^2 > (1 - \varepsilon_1) \sum_{b \in B} q_b ||E_{J_b}||_{L^2(I, \mu_X)}^2.
+\end{equation}
+We also assume that $L$ is chosen large enough (TODO find the right bounds).
+
+For simplicity we take
+$$\delta_X = \delta_Y$$
+but this is NOT essential and should be removed before putting anything on the arxiv.
+
+\subsection{Choosing \texorpdfstring{$\theta, \varepsilon_1$}{theta and epsilon1}}
+We begin by estimating 
+\begin{equation}\label{Psi in C1}
+||\Psi_b'||_{C^0(I_a)} \leq \frac{1}{h} \max_{x \in I_a} \max_{y \in J_b} |\partial_x \partial_y \Phi(x, y)| \ell(J) \leq \frac{2}{h} \ell(J).
+\end{equation}
+We want to satisfy (\ref{theta choice hyp 1}). To do this, we use (\ref{length of a child}) to get 
+\begin{align*}
+\ell(I_a) \ell(J) &\leq B_d^2 C_R^{\frac{4}{1 - \delta}} \diam I_a \cdot \diam J\\
+&\leq B_d^4 C_R^{\frac{8}{1 - \delta}} L^{-H(I) - 1 - H(J)}
+\end{align*}
+and recall $L^{-H(I)-1-H(J)} = h$. Thus we set 
+\begin{equation}\label{choice of theta}
+\theta := \frac{C_R^{\frac{1 - \delta}{8}}}{4B_d^4}
+\end{equation}
+in order to achieve (\ref{theta choice hyp 1}) and hence by (\ref{theta choice concl}),
+\begin{equation}\label{Psi is bounded}
+||e^{i\Psi_b} F_{J_b}||_{C_\theta(I_a)} \leq ||F_{J_b}||_{C_\theta(I)}.
+\end{equation}
+By \cite[(2.15)]{Dyatlov_2018} and (\ref{F versus child}),
+\begin{equation}\label{strict convexity}
+||F_J||_{C_\theta(I_a)}^2 \leq \left|\sum_{b \in B} q_b ||F_{J_b}||_{C_\theta(I)}\right|^2 \leq \sum_{b \in B} q_b ||F_{J_b}||_{C_\theta(I)}^2.
+\end{equation}
+From definition of $E_J$ we also have 
+\begin{equation}\label{disjointness of E}
+E_J|I_a = ||F_J||_{C_\theta(I_a)}, ~ E_{J_b}|I = ||F_{J_b}||_{C_\theta(I)},
+\end{equation}
+and by summing this over $A$ using (\ref{strict convexity}) we obtain (\ref{main bound}) with the illegal choice $\varepsilon_1 := 0$.
+
+Put 
+$$p_a := \frac{\mu_X(I_a)}{\mu_X(I)},$$
+and let 
+$$R := \sum_{b \in B} q_b ||F_{J_b}||_{C_\theta(I)}^2.$$
+By (\ref{disjointness of E}), the contradiction hypothesis (\ref{contradicted main bound}) reads
+\begin{equation}\label{contradicted main bound 2}
+\sum_{a \in A} p_a ||F_J||_{C_\theta(I_a)}^2 > (1 - \varepsilon_1) R.
+\end{equation}
+Moreover we have 
+\begin{equation}
+p_a, q_b \geq \frac{L^{-\delta}}{C_R^{\frac{3 - \delta}{1 - \delta}} B_d},
+\end{equation}
+so we can choose $\varepsilon_1$ so that 
+\begin{equation}\label{choice of epsilon1}
+p_a, q_b \geq 2\sqrt{\varepsilon_1}.
+\end{equation}
+Summing (\ref{strict convexity}) over $A$ and using (\ref{contradicted main bound 2}),
+$$\left|\sum_{b \in B} q_b ||F_{J_b}||_{C_\theta(I)}\right|^2 \geq (1 - \varepsilon)R.$$
+By \cite[(2.17)]{Dyatlov_2018}, it follows that 
+\begin{equation}\label{child F is under R}
+||F_{J_b}||_{C_\theta(I)} \leq 2 \sqrt R.
+\end{equation}
+
+\begin{lemma}
+There exist $x_a \in I_a$ such that 
+$$\sum_{a \in A} p_a |F_J(x_a)|^2 > (1 - 2\varepsilon_1)R.$$
+\end{lemma}
+\begin{proof}
+Argument should be the same as \cite[Lemma 3.5]{Dyatlov_2018}.
+\end{proof}
+
+We now set 
+$$F_{ab} := F_{J_b}(x_a), ~\omega_{ab} := \Psi_b(x_a).$$
+Then 
+$$F_J(x_a) = \sum_{b \in B} q_b e^{i\omega_{ab}} F_{ab}.$$
+Reasoning identically to \cite[(3.25), (3.26)]{Dyatlov_2018} we have 
+\begin{equation}\label{Dyatlov325}
+(1 - 2\varepsilon_1)R + \sum_{a, b < b'} p_a q_b q_{b'} |e^{i(\omega_{ab} - \omega_{ab'})} F_{ab} - F_{ab'}|^2 < \sum_{a, b} p_a q_b |F_{ab}|^2 \leq R.
+\end{equation}
+It follows using (\ref{choice of epsilon1}) that 
+$$|e^{i(\omega_{ab} - \omega_{ab'})} F_{ab} - F_{ab'}| \lesssim L^{2\delta} \sqrt{\varepsilon_1 R}.$$
+So if our choice of $\varepsilon_1$ is correct, we obtain reasoning identically to \cite[Lemma 3.6]{Dyatlov_2018} that 
+\begin{equation}\label{F isnt small}
+|F_{ab}| \geq \frac{\sqrt R}{2}.
+\end{equation}
+
+\subsection{Contradiction}
+By (\ref{child F is under R}),
+$$||F_{J_b}||_{C_\theta(I)} \leq \frac{2\sqrt R}{\theta \ell(I)}$$
+and hence 
+$$|F_{ab} - F_{a'b}| \leq \frac{2\sqrt R}{\theta \ell(I)} \dist(x_a, x_{a'}) \leq \frac{2 \sqrt{Rd}}{\theta} L^{H(I)} \dist(x_a, x_{a'}).$$
+By the mean value theorem applied to a plane in $\RR^{2d}$ we see that 
+$$\tau := \omega_{ab} + \omega_{a'b'} - \omega_{a'b} - \omega_{ab'} = \frac{(x - x_{a'})(y_b - y_{b'})}{b} \partial_x \partial_y \Phi(\tilde x, \tilde y)$$
+for some
+$$(\tilde x, \tilde y) \in \hull I \times \hull J.$$
+Using the uniform bounds on $\partial_x \partial_y \Phi$ we obtain 
+$$C(C_R, \delta) L^{-1/3} \leq |\tau| \ll L^{-1/3} \leq \pi$$
+where we chose $a, a', b, b'$ according to Lemma \ref{sigma is 23}.
+Reasoning as in \cite[(3.30)]{Dyatlov_2018} we get 
+$$|F_{ab}| \cdot |e^{i\tau} - 1| \geq C(C_R, \delta) L^{-1/3} \sqrt R.$$
+But 
+$$|F_{ab}| \cdot |e^{i\tau} - 1| \leq |e^{i(\omega_{ab} - \omega_{ab'})} F_{ab} - F_{ab'}| + |e^{i(\omega_{a'b} - \omega_{a'b'})} F_{a'b} - F_{a'b'}| + |F_{ab'} - F_{a'b'}| + |F_{ab} - F_{a'b}|.$$
+We estimated the first two terms to be $\lesssim L^{2\delta} \sqrt{\varepsilon_1 R}$ and the last two to be $\lesssim \theta^{-1} \sqrt R L^{-2/3}$.
+In conclusion,
+$$L^{-1/3} \lesssim_{C_R, \delta} L^{2\delta} \sqrt{\varepsilon_1} + \theta^{-1} L^{-2/3}.$$
+But $\theta$ is independent of $L$, so this is a contradiction if $\varepsilon_1 \lesssim L^{-5}$ since $\delta < 1$.
+
+
 
 \printbibliography
 
