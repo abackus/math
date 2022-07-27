@@ -106,6 +106,10 @@
 \newcommand{\evect}{\mathbf e}
 \newcommand{\vol}{\mathrm{vol}}
 
+\newcommand{\Bmu}{\boldsymbol \mu}
+\newcommand{\Bnu}{\boldsymbol \nu}
+\newcommand{\Blambda}{\boldsymbol \lambda}
+
 \newcommand{\pic}{\vspace{30mm}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
 
@@ -228,7 +232,7 @@ Then, if $u$ is a function of least gradient:
 \item $A_y$ is either empty or a locally finite union of connected hypersurfaces with boundary, and 
 \item if $M$ is the interior of a surface-with-boundary $\overline M$, then $\lambda$ extends to a geodesic lamination of $\overline M$.
 \end{enumerate}
-Conversely, if $\lambda$ is a discrete minimal lamination, then $u$ has least gradient.
+% Conversely, if $\lambda$ is a discrete minimal lamination, then $u$ has least gradient.
 \end{mainthm}
 
 Theorem \ref{main thm} is called a maximum principle because it implies that if $M$ is the interior of a manifold-with-boundary $\overline M = M \cup \partial M$, then the level sets of any function of least gradient on $M$ must extend all the way to the boundary, just as the maximum principle implies that the level sets of the solution to an elliptic Dirichlet problem should behave.
@@ -299,6 +303,189 @@ From Theorem \ref{main lma} and general facts about functions of least gradient 
 We prove the regularity theorem by using the monotonicity formula and a Plateau-type equation adapted to manifolds to deduce a generalization, Proposition \ref{de Giorgi}, of the famous de Giorgi lemma to manifolds.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Preliminaries on functions of bounded variation}
+We start by fixing some notation. The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian volume form.
+On a submanifold $\Sigma$ of codimension $\geq 1$, $\vol_\Sigma$ denotes the induced volume form and $\star_\Sigma$ denotes the induced Hodge star. We also write $\star_\rho := \star_{B(P, \rho)}$ if $P \in M$ is fixed.
+
+Recall the definition of a de Rham current \cite{simon1983GMT}.
+We write $\int_U \omega \wedge \psi$ for the pairing of an $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$, and identify any $d - \ell$-form $\omega$ with the $\ell$-current $\psi \mapsto \int_U \omega \wedge \psi$.
+
+We now recall the Riemannian analogue of the theory in \cite[Chapter 1]{Giusti77}.
+We identify the derivative of a function $u$ with the $d-1$-current
+$$\int_U \dif u \wedge \psi = -\int_U u \dif \psi.$$
+For a vector field $X$, we write $\star (Xu) := \dif u \wedge \star (X^\flat)$.
+By definition, the space of functions of \dfn{bounded variation} $BV(U)$ is the space of functions $u$ for which
+\begin{equation}\label{total variation}
+\int_U \star |\dif u| := \sup_{\substack{||\psi||_{C^0} \leq 1\\\supp \psi \Subset V}} \int_U \dif u \wedge \psi
+\end{equation}
+is finite.
+The local finiteness of $\int \star |\dif u|$, and hence the sheaf $BV_\loc$, is diffeomorphism-invariant.
+Thanks to the diffeomorphism-invariance, one can reduce the following theorem to the euclidean case \cite[Teorema 1]{Miranda67}:
+
+\begin{proposition}[Miranda trace theorem]\label{traces}
+Let $U \subseteq M$ be an open set with nonempty Lipschitz boundary.
+For every $u \in BV_\loc(U)$ there exists $v \in L^1_\loc(\partial U)$ such that for every $d-1$-form $\psi$,
+\begin{equation}\label{Miranda IBP}
+\int_U \dif u \wedge \psi + \int_U u \dif \psi = \int_{\partial U} v\psi.
+\end{equation}
+Moreover, for almost every $x \in \partial U$,
+\begin{equation}\label{convergence of trace}
+\int_{U \cap B(x, \varepsilon)} \star |v(x) - u| \ll \varepsilon^d.
+\end{equation}
+\end{proposition}
+
+By \cite[Theorem 4.14]{simon1983GMT}, for every $u \in BV_\loc(M)$, there exists a $\star |\dif u|$-measurable section $f$ of the cosphere bundle $S'M$ such that for every compactly supported $d-1$-form $\psi$,
+\begin{equation}\label{RNy formula}
+\int_M \dif u \wedge \psi = \int_M f|\dif u| \wedge \psi.
+\end{equation}
+The section $f$ of (\ref{RNy formula}) is given pointwise $\star |\dif u|$-almost everywhere, in any local coordinates $(x^\mu)$, by
+\begin{equation}\label{Lebesgue point definition}
+    f(P) = \left[\lim_{r \to 0} \frac{\int_{B(x, r)} \star \partial_\mu u}{\int_{B(x, r)} \star |\dif u|}\right] ~\dif x^\mu,
+\end{equation}
+according to the Besicovitch differentiation theorem; here we view $(\dif x^\mu)$ as a basis of $T'_PM$.
+Whether the limit $f(P)$ in (\ref{Lebesgue point definition}) exists, or indeed its value as a point of $S'_PM$, is diffeomorphism-invariant.
+
+\begin{definition}
+Let $U \subseteq M$ and $u = 1_U$. Then we say that $U$ has \dfn{locally finite perimeter} if $u \in BV_\loc(M)$.
+In that case we make the following definitions:
+\begin{enumerate}
+\item The \dfn{measure-theoretic boundary} $\partial U$ is the set of points whose Lebesgue density with respect to $M$ is $\in (0, 1)$.
+\item The set of points $P$ for which the limit (\ref{Lebesgue point definition}) exists and satisfies $|f(P)| = 1$ is the \dfn{reduced boundary} $\partial^* U$.
+\item The $\star |\dif u|$-measurable $1$-form $f$ defined by (\ref{Lebesgue point definition}) is the \dfn{conormal $1$-form} $\normal_U$ to $\partial U$.
+\item The \dfn{perimeter} $|\partial^* U \cap E|$ in a Borel set $E$ is $\int_E \star |\dif u|$.
+\end{enumerate}
+\end{definition}
+
+Our definition of reduced boundary and conormal $1$-form follows \cite[Definition 3.3]{Giusti77} and is due to \cite{deGiorgi55}.
+See \cite{Battista_2021} for an equivalent definition of reduced boundary on Riemannian manifolds, and see \cite[Chapter 6]{Pugh02} for the definition of Lebesgue density.
+
+\begin{proposition}\label{locality of Caccioppoli}
+    Let $U$ be a set of locally finite perimeter with conormal $1$-form $\normal$.
+    Then:
+    \begin{enumerate}
+    \item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is $d-1$-rectifiable.
+    \item $\partial^* U$ is a dense subset of $\partial U$.
+    \item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
+    \item If $\partial^* U = \partial U$ is a $C^1$ hypersurface, then $\normal$ is the conormal $1$-form on $\partial U$ as defined in differential topology, and $\star |\dif 1_U|$ is the induced volume form on $\partial U$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+Most of the assertions of this proposition are diffeomorphism-invariant, so we may assume that $M = \RR^d$ and appeal to \cite[Chapters 2-4]{Giusti77}.
+The proof that $\star |\dif 1_U|$ is the induced volume form is identical to \cite[Example 1.4]{Giusti77}.
+\end{proof}
+
+\begin{proposition}[coarea formula]\label{Coarea2}
+Let $u \in BV_\loc(M)$ and $E$ an open set. Then
+\begin{equation}\label{coarea formula}
+\int_E \star |\dif u| = \int_{-\infty}^\infty |E \cap \partial^* \{u > y\}| \dif y.
+\end{equation}
+\end{proposition}
+\begin{proof}
+We follow \cite[Theorem 1.23]{Giusti77}, which first proves (\ref{coarea formula}) for $u \in C^\infty(\RR^d)$ using piecewise linear functions.
+Such functions are not available for our purposes; instead we note that if $u \in C^\infty(\RR^d)$ and $u$ has no critical points then (\ref{coarea formula}) follows from Fubini's theorem, the fact that $|E \cap \partial \{u > y\}|$ is the surface area of $E \cap \{u = y\}$ (by Proposition \ref{locality of Caccioppoli}), and the change-of-variables formula.
+However the left-hand side of (\ref{coarea formula}) is unaffected by critical points of $u$, and the right-hand side of (\ref{coarea formula}) is unaffected by critical values of $u$ by Sard's theorem.
+So (\ref{coarea formula}) holds for $u \in C^\infty(\RR^d)$.
+The rest of the proof is identical to \cite[Theorem 1.23]{Giusti77}, so we omit it.
+% Taking a sequence in $C^\infty(M)$ that converges to $u$ in $L^1_\loc(M)$\footnote{Recall that $C^\infty(M)$ is not dense in $BV_\loc(M)$.}, and applying Fatou's lemma and the semicontinuity of total variation, we conclude the $\geq$ direction of (\ref{coarea formula}).
+% Moreover, Stokes' theorem gives that for every $d-1$-form $\psi$ such that $||\psi||_{L^\infty} \leq 1$ and $\supp \psi \Subset E$,
+% $$\int_E u \wedge \dif \psi = \int_{-\infty}^\infty \int_E |\psi| \star |\dif 1_{\partial \{u > y\}}| \dif y \leq \int_{-\infty}^\infty |E \cap \partial \{u > y\}| \dif y.$$
+% Taking the supremum over $\psi$ we obtain the direction $\leq$ in (\ref{coarea formula}).
+\end{proof}
+
+We define
+$$\eta(u, U) := \inf_{v \in BV_\cpt(U)} \int_U \star |\dif(u + v)|$$
+for $u \in BV_\loc(M)$ and $U \Subset M$ with Lipschitz boundary, so that $u$ has least gradient iff $\eta(u, U) = \int_U \star |\dif u|$ for every $U$.
+It is straightforward to generalize \cite[Lemma 5.6]{Giusti77}, thus for $u, v \in BV_\loc(U)$,
+\begin{equation}
+|\eta(u, U) - \eta(v, U)| \leq ||u - v||_{L^1(\partial U)}. \label{a priori estimate 1}
+\end{equation}
+In case $v = 0$, we note that by (\ref{convergence of trace}), the trace map is a contraction in $L^\infty$ norm, thus
+\begin{equation}
+\eta(u, U) \leq ||u||_{L^1(\partial U)} \leq |\partial U| \cdot ||u||_{L^\infty(M)}. \label{a priori estimate 2}
+\end{equation}
+
+\begin{definition}
+A sequence $(u_n)$ in $BV_\loc(M)$ has \dfn{approximately least gradient} if for every open $U \Subset M$,
+$$\limsup_{n \to \infty} \int_U \star |\dif u_n| \leq \liminf_{n \to \infty} \eta(u_n, U) < \infty.$$
+\end{definition}
+
+\begin{proposition}[Miranda stability theorem]\label{Miranda convergence}
+If a sequence of functions $(u_n)$ has approximately least gradient and $u_n \to u$ in $L^1_\loc(M)$, then $u$ has least gradient, and for every open set $U \Subset M$ with Lipschitz boundary such that $\int_{\partial U} \star |\dif u| = 0$, one has
+\begin{equation}\label{convergence in total variation}
+\lim_{n \to \infty} \int_U \star |\dif u_n| = \int_U \star |\dif u|.
+\end{equation}
+\end{proposition}
+\begin{proof}
+The proof is similar to Teorema 3 and Osservazione 3 in \cite{Miranda67}; we just note the necessary modifications.
+Suitable generalizations of Teorema 2 and Osservazione 2 follow from Proposition \ref{traces}.
+One needs to add a term of size $o(1)$ to the right-hand side of the inequalities (2.8), (2.9), (2.13), and (2.14); however, in the limit, this term vanishes and so the conclusions (2.15) and (2.16) are unaffected.
+\end{proof}
+
+\begin{remark}\label{transversality}
+The somewhat unusual condition $\int_{\partial U} \star |\dif u| = 0$ refers to the same Radon measure $\star |\dif u|$ that acts on the open sets of $M$, not on a measure that acts on the relatively open subsets of $\partial U$.
+It should be interpreted as a transversality condition: if $u$ is the indicator function of a set $Z$ with $C^\infty$ boundary, then $\int_{\partial U} \star |\dif u| = 0$ if $\partial U$ is transverse to $\partial Z$.
+In particular, the notion of convergence in the Miranda stability theorem is weaker than convergence in $BV_\loc(M)$.\footnote{Therefore the Dirichlet problem for functions of least gradient is ill-posed in general, as the trace morphism is discontinuous with respect to the topology for this notion of convergence. See \cite{spradlin2013traces} for an explicit counterexample.}
+\end{remark}
+
+\begin{corollary}\label{compactness}
+Every sequence $(u_n)$ of approximately least gradient converges in $L^1_\loc$ and almost everywhere along a subsequence to a function of least gradient $u$ such that for every open set $U \Subset M$ of Lipschitz boundary such that $\int_{\partial U} \star |\dif u| = 0$, one has (\ref{convergence in total variation}).
+\end{corollary}
+\begin{proof}
+By compactness of the natural map $BV_\loc \to L^1_\loc$, $(u_n)$ has a convergent subsequence in $L^1_\loc$ and almost everywhere.
+The conditions on the limit $u$ follow from the Miranda stability theorem.
+\end{proof}
+
+\begin{proposition}\label{level sets are minimal}
+For every function $u$ of least gradient, the superlevel sets $\{u > y\}$ have least perimeter.
+If we instead have a sequence $(u_n)$ of approximately least gradient, then $(\{u_n > y\})$ has approximately least perimeter.
+\end{proposition}
+\begin{proof}
+In the proof of \cite[Theorem 1]{BOMBIERI1969}, we replace the coarea formula (replace \cite[Theorem 1.6]{Miranda66} with Proposition \ref{Coarea2}) and the Miranda stability theorem (replace \cite[Teorema 3]{Miranda67} with Proposition \ref{Miranda convergence}).
+\end{proof}
+
+% There is an annoying technicality with normal coordinates: they are not isothermal.\footnote{Suppose that the exponential map is conformal. By checking on planes in the tangent space we may assume that $d = 2$, and hence that $g$ is locally K\"ahler. But every K\"ahler metric with a holomorphic exponential map is flat \cite{MO68766}.} 
+% To get around this, we introduce coordinates which are isothermal, but still satisfy the estimate (\ref{expand metric}):
+
+% \begin{definition}
+% We call two coordinate systems $(x^\mu)$ and $(\tilde x^\mu)$, based at $(P, V)$ and $(Q, W)$ respectively, \dfn{compatible} if: TODO update this
+% \begin{enumerate}
+% \item both $(x^\mu)$ and $(\tilde x^\mu)$ are normal coordinates, or they are both are stereographic coordinates, and 
+% \item when written out in the coordinates $(x^\mu)$ and $(\tilde x^\mu)$ respectively, $V$ is a scalar multiple of $W$.
+% \end{enumerate}
+% \end{definition}
+
+\begin{definition}
+For a function $u$ on $M$, $P \in M$ we define the \dfn{tangent rescaling} of $u$ at $P$ to be the net of functions $u_t: T_PM \to \RR$, given by
+$$u_t(v) = u\left(\exp_P(tv)\right).$$
+\end{definition}
+
+\begin{proposition}\label{blowup theorem}
+Suppose that $U$ is an open set with least perimeter in $B(P, r)$, $P \in \partial^* U$, and $u = 1_U$.
+Furthermore, suppose that $d \leq 7$.
+Then the tangent rescaling of $u$ converges as $t \to 0$ along a subsequence (that we also denote $t \to 0$) in $L^1_\loc$ and almost everywhere, to the indicator function $v$ of a half-space $C \subset T_PM$ such that $0 \in \partial C$.
+Moreover, for every open set $V \Subset T_PM$ of Lipschitz boundary such that $\partial V$ is transverse to $\partial C$,
+$$\lim_{t \to 0} \int_V \star |\dif u_t| = \int_V \star |\dif v|.$$
+\end{proposition}
+\begin{proof}
+We first observe that the tangent rescaling $(u_t)$ has approximately least gradient in $T_PM$ (where we give $T_PM$ its euclidean metric).
+This follows from the Taylor expansion of the volume form and reasoning as in the proof of \cite[Theorem 9.3]{Giusti77}, and so by Corollary \ref{compactness}, there exists a set $C$ of least perimeter in $T_PM$, such that the tangent rescaling converges to $v := 1_C$ in the desired sense.
+But $T_PM$ is isometric to $\RR^d$, $d \leq 7$, so by the Bernstein--Fleming theorem \cite[Theorem 17.3]{Giusti77}, $\partial C$ is a hyperplane.
+The fact that $0 \in \partial C$ follows from the fact that $P \in \partial^* U$.
+% To prove the claim, write $|\cdot|'$, $\star'$ for the notions taken in the tangent space with its euclidean geometry, and write $U_t$ for the set indicated by $u_t$.
+% If $V$ is a precompact open subset of $T_PM$, $V_t = \{v \in T_PM: tv \in V\}$, then we have the scale-invariance
+% \begin{equation}\label{almost blowup scale invariance}
+% |\partial^* U_t \cap V|' = t^{1 - d}|\partial^* U_1 \cap V_{1/t}|'.
+% \end{equation}
+% From (\ref{almost blowup scale invariance}) and the Taylor expansion (\ref{expand volume form}),
+% $$t^{d - 1} |\partial^* U_t \cap V|' = |\partial^* U_1 \cap V_{1/t}|' \leq e^{O(t^2)} |\partial^* U \cap \exp_P(V_{1/t})|.$$
+% For every $w \in BV_\cpt(V)$, the least-gradient nature of $u$ gives
+% $$|\partial^* U \cap \exp_P(V_{1/t})| \leq \int_{(\exp_P)_* V_{1/t}} \star |\dif(u + (\exp_P)_* w_{1/t})| \leq e^{O(t^2)} \int_{V_{1/t}} \star'|\dif(u_1 + w_{1/t})|'.$$
+% Therefore, after applying (\ref{almost blowup scale invariance}) and (\ref{expand volume form}) again,
+% $$|\partial^* U_t \cap V|' \leq e^{O(t^2)} t^{1 - d} \int_{V_{1/t}} \star' |\dif (u_1 + w_{1/t})| = e^{O(t^2)} \int_V \star' |\dif (u_t + w)|.$$
+% Since $V,w$ were arbitrary, we conclude that $(u_t)$ has approximately least gradient.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Applications to hyperbolic geometry}\label{hyperbolicApps}
 Let $M$ be a closed hyperbolic surface.
@@ -332,19 +519,18 @@ Since $\supp \dif v$ is a geodesic lamination, we conclude from the maximum prin
 The maximum-stretch locus of an $\infty$-harmonic function on a closed hyperbolic surface contains a geodesic lamination.
 \end{corollary}
 
-Using the maximum principle one can also show a partial converse to the fact that $\dif v$ endows $\lambda_u$ with the structure of an oriented measured lamination.
+The general results in \S2, which were known before this paper, allow us to solve \cite[Problem 9.7]{daskalopoulos2020transverse} by showing that $\dif v$ endows $\lambda_u$ with the structure of an oriented measured lamination.
 For the definitions, see \cite[\S8]{daskalopoulos2020transverse} or \cite{Ruelle75}.
-This resolves \cite[Problem 9.7]{daskalopoulos2020transverse}.
 
-\begin{corollary}\label{ruelle sullivan antiderivative}
+\begin{proposition}\label{ruelle sullivan antiderivative}
 Let $\lambda$ be an oriented, transversely measured geodesic lamination on a closed hyperbolic surface $M$, and let $\dif v$ be the Ruelle-Sullivan $1$-current induced by $\lambda$.
 Then $\dif v$ is the derivative of a section of locally least gradient on $M$.
-\end{corollary}
+\end{proposition}
 \begin{proof}
 As observed in \cite[\S9]{daskalopoulos2020transverse}, if we lift $\dif v$ to a $1$-current $\dif \tilde v$ on the universal cover $\Hyp^2$, then $\dif \tilde v$ is exact and any antiderivative $\tilde v$ of $\dif \tilde v$ has superlevel sets $\{\tilde v \geq y\}$ which are bounded by geodesics.
 Moreover we can choose $\tilde v$ to be $\pi_1(M)$-equivariant.
 Then the lift $\tilde \lambda$ of the geodesic lamination $\lambda$ to a fundamental domain of $M$ is a geodesic lamination in an open subset of $\Hyp^2$ and so is discrete, owing the chaoticness of the geodesic flow on the cosphere bundle $S'\Hyp^2$.
-Thus we obtain a section of least gradient on $M$, by the maximum principle.
+Thus we obtain a section of least gradient on $M$, by the maximum principle. TODO coarea formula once we know it's discrete
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -411,18 +597,13 @@ Then if $\mathcal T$ is sufficiently fine depending on $S$, it is possible to co
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Overview of the paper}
-We discuss preliminaries in \S\ref{prelims}: we recall known facts about geometric measure theory on Riemannian manifolds, laminations, and functions of least gradient.
+%We discuss preliminaries in \S\ref{prelims}: we recall known facts about geometric measure theory on Riemannian manifolds, laminations, and functions of least gradient.
 
-Our next three sections have purely local results:
-\begin{itemize}
-\item In \S\ref{MollifierSection}, we prove the monotonicity formula, Theorem \ref{monotonicity prestate}, and review its standard consequences.
-\item In \S\ref{Plateau section}, we reduce the regularity theorem, Theorem \ref{main lma}, to a de Giorgi-type lemma, Proposition \ref{de Giorgi}, and develop a ``gauge-invariant'' framework for its proof.
-\item In \S\ref{proof of De Giorgi}, we prove the de Giorgi lemma using Theorem \ref{monotonicity prestate}.
-\end{itemize}
+Our next two sections have purely local results.
+In \S\ref{MollifierSection}, we prove the monotonicity formula, Theorem \ref{monotonicity prestate}, and review its standard consequences.
+Then in \S\ref{Plateau section}, we reduce the regularity theorem, Theorem \ref{main lma}, to a de Giorgi-type lemma, Proposition \ref{de Giorgi}, develop a ``gauge-invariant'' framework for its proof, and prove the de Giorgi lemma.
 
 We prove the global results of this paper in \S\ref{GornySec}: we use Theorems \ref{monotonicity prestate} and \ref{main lma} to prove the maximum principle, Theorem \ref{main thm}, and then as a consequence of the maximum principle and a topological argument we conclude the G\'orny decomposition, Theorem \ref{Gorny regularity}.
-
-Finally, in Appendix \ref{geometric computations} we carry out some tedious but elementary computations in $\Hyp^d$ and $\Sph^d$ that we will use in the formulation and proof of the de Giorgi lemma.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -430,270 +611,8 @@ Finally, in Appendix \ref{geometric computations} we carry out some tedious but 
 I would like to thank Georgios Daskalopoulos, Karen Uhlenbeck, Trent Lucas, Christine Breiner, NSF...
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preliminaries}\label{prelims}
-\subsection{Notation and conventions}
-For tensor fields we shall use the musical isomorphisms $\sharp, \flat$ and the Einstein convention.
-When using the Einstein convention, Greek indices range over $0, 1, \dots$ while Latin indices range over $1, \dots$.
-If we have a fixed coordinate system $(x^\mu)$, we sometimes suppress it and write $\partial_\mu := \partial_{x^\mu}$; sometimes we also write $y := x^0$.
-The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian volume form.
-On a submanifold $\Sigma$ of codimension $\geq 1$, $\vol_\Sigma$ denotes the induced volume form and $\star_\Sigma$ denotes the induced Hodge star. We also write $\star_\rho := \star_{B(P, \rho)}$ if $P \in M$ is fixed.
-We write $\Japan\xi$ for the Japanese norm $\Japan\xi := \sqrt{1 + |\xi|^2}$
-of an element $\xi$ of a normed space.
-We write $\int_U \omega \wedge \psi$ for the pairing of a de Rham $\ell$-current $\omega$ with a compactly supported $\ell$-form $\psi$ in an open set $U$.
-In particular, we have a Poincar\'e duality map which identifies a $d - \ell$-form $\omega$ with the $\ell$-current $\psi \mapsto \int_U \omega \wedge \psi$.
-See \cite{simon1983GMT} for the definition of a de Rham current.
-We identify the distributional derivative of a function $u$ with the $d-1$-current
-$$\int_U \dif u \wedge \psi = -\int_U u \dif \psi.$$
-For a vector field $X$, we write $\star (Xu) := \dif u \wedge \star (X^\flat)$.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Riemannian measure theory}
-We recall the Riemannian analogue of the main results of \cite[Chapter 1]{Giusti77}.
-A function $u$ is in $BV(U)$ iff its derivative $\dif u$ has finite total variation
-\begin{equation}\label{total variation}
-\int_U \star |\dif u| := \sup_{\substack{||\psi||_{C^0} \leq 1\\\supp \psi \Subset V}} \int_U \dif u \wedge \psi.
-\end{equation}
-Whether a current has locally finite total variation is independent of the Riemannian metric and so $BV_\loc(M)$ is also independently defined.
-By \cite[Theorem 4.14]{simon1983GMT}, for every $u \in BV_\loc(M)$, there exists a $\star |\dif u|$-measurable section $f$ of the cosphere bundle $S'M$ such that for every compactly supported $d-1$-form $\psi$,
-\begin{equation}\label{RNy formula}
-\int_M \dif u \wedge \psi = \int_M f|\dif u| \wedge \psi.
-\end{equation}
-The section $f$ of (\ref{RNy formula}) is given pointwise $\star |\dif u|$-almost everywhere, in any local coordinates $(x^\mu)$, by
-\begin{equation}\label{Lebesgue point definition}
-    f(P) = \left[\lim_{r \to 0} \frac{\int_{B(x, r)} \star \partial_\mu u}{\int_{B(x, r)} \star |\dif u|}\right] ~\dif x^\mu,
-\end{equation}
-according to the Besicovitch differentiation theorem; here we view $(\dif x^\mu)$ as a basis of $T'_PM$.
-Whether the limit $f(P)$ in (\ref{Lebesgue point definition}) exists, or indeed its value as a point of $S'_PM$, denotes not depend on the Riemannian metric or the choice of coordinates.
-
-\begin{definition}
-Let $U$ be a set of locally finite perimeter, and let $u = 1_U$. Then:
-\begin{enumerate}
-\item The \dfn{measure-theoretic boundary} $\partial U$ is the set of points whose Lebesgue density with respect to $M$ is $\in (0, 1)$.
-\item The set of points $P$ for which the limit (\ref{Lebesgue point definition}) exists and satisfies $|f(P)| = 1$ is the \dfn{reduced boundary} $\partial^* U$.
-\item The $\star |\dif u|$-measurable $1$-form $f$ defined by (\ref{Lebesgue point definition}) is the \dfn{conormal $1$-form} $\normal_U$ to $\partial U$.
-\end{enumerate}
-\end{definition}
-
-Our definition of reduced boundary and conormal $1$-form follows \cite[Definition 3.3]{Giusti77} and is due to \cite{deGiorgi55}.
-See \cite{Battista_2021} for an equivalent definition of reduced boundary on Riemannian manifolds, and see \cite[Chapter 6]{Pugh02} for the definition of Lebesgue density.
-
-\begin{proposition}\label{locality of Caccioppoli}
-    Let $U$ be a set of locally finite perimeter with conormal $1$-form $\normal$.
-    Then:
-    \begin{enumerate}
-    \item $\partial^* U$ is either empty or $d-1$-dimensional in the Hausdorff sense, and is $d-1$-rectifiable.
-    \item $\partial^* U$ is a dense subset of $\partial U$.
-    \item If $\normal$ extends to a continuous $1$-form on $\partial U$, then $\partial^* U = \partial U$ is a $C^1$ hypersurface.
-    \item If $\partial^* U = \partial U$ is a $C^1$ hypersurface, then $\normal$ is the conormal $1$-form on $\partial U$ as defined in differential topology, and $\star |\dif 1_U|$ is the induced volume form on $\partial U$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-Most of the assertions of this proposition are diffeomorphism-invariant, so we may assume that $M = \RR^d$ and appeal to \cite[Chapters 2-4]{Giusti77}.
-The proof that $\star |\dif 1_U|$ is the induced volume form is identical to \cite[Example 1.4]{Giusti77}.
-\end{proof}
-
-\begin{definition}
-Let $M$ be a Riemannian manifold, let $U$ be a set of locally finite perimeter, and let $E$ be a Borel set.
-The \dfn{perimeter} of $U$ in $E$ is
-$$|E \cap \partial^* U| := \int_E \star |\dif 1_U|.$$
-\end{definition}
-
-\begin{proposition}[coarea formula]\label{Coarea2}
-Let $M$ be a Riemannian manifold and $u \in BV_\loc(M)$. Then for every open set $E$,
-\begin{equation}\label{coarea formula}
-\int_E \star |\dif u| = \int_{-\infty}^\infty |E \cap \partial \{u > y\}| \dif y.
-\end{equation}
-\end{proposition}
-\begin{proof}
-We follow \cite[Theorem 1.23]{Giusti77}, which first proves (\ref{coarea formula}) for $u \in C^\infty(\RR^d)$ using piecewise linear functions.
-Such functions are not available for our purposes; instead we note that if $u \in C^\infty(\RR^d)$ and $u$ has no critical points then (\ref{coarea formula}) follows from Fubini's theorem, the fact that $|E \cap \partial \{u > y\}|$ is the surface area of $E \cap \{u = y\}$ (by Proposition \ref{locality of Caccioppoli}), and the change-of-variables formula.
-However the left-hand side of (\ref{coarea formula}) is unaffected by critical points of $u$, and the right-hand side of (\ref{coarea formula}) is unaffected by critical values of $u$ by Sard's theorem.
-So (\ref{coarea formula}) holds for $u \in C^\infty(\RR^d)$.
-
-The rest of the proof is identical to \cite[Theorem 1.23]{Giusti77}, so we omit the details.
-Taking a sequence in $C^\infty(M)$ that converges to $u$ in $L^1_\loc(M)$\footnote{Recall that $C^\infty(M)$ is not dense in $BV_\loc(M)$.}, and applying Fatou's lemma and the semicontinuity of total variation, we conclude the $\geq$ direction of (\ref{coarea formula}).
-Moreover, Stokes' theorem gives that for every $d-1$-form $\psi$ such that $||\psi||_{L^\infty} \leq 1$ and $\supp \psi \Subset E$,
-$$\int_E u \wedge \dif \psi = \int_{-\infty}^\infty \int_E |\psi| \star |\dif 1_{\partial \{u > y\}}| \dif y \leq \int_{-\infty}^\infty |E \cap \partial \{u > y\}| \dif y.$$
-Taking the supremum over $\psi$ we obtain the direction $\leq$ in (\ref{coarea formula}).
-\end{proof}
-
-\begin{proposition}[Miranda trace theorem]\label{traces}
-Let $U \subseteq M$ be an open set with nonempty Lipschitz boundary.
-For every $u \in BV_\loc(U)$ there exists $v \in L^1_\loc(\partial U)$ such that for every $d-1$-form $\psi$,
-\begin{equation}\label{Miranda IBP}
-\int_U \dif u \wedge \psi + \int_U u \dif \psi = \int_{\partial U} v\psi.
-\end{equation}
-Moreover, for almost every $x \in \partial U$,
-\begin{equation}\label{convergence of trace}
-\int_{U \cap B(x, \varepsilon)} \star |v(x) - u| \ll \varepsilon^d.
-\end{equation}
-\end{proposition}
-\begin{proof}
-This follows from a partition-of-unity argument and \cite[Teorema 1]{Miranda67}; we omit the details.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Functions of least gradient}\label{LeastGradientFunctions}
-Recall that a function $u \in BV_\loc$ has least gradient iff $u$ is a minimizer of the action $\int_B \star |\dif u|$.
-We define
-$$\eta(u, U) := \inf_{v \in BV_\cpt(U)} \int_U \star |\dif(u + v)|$$
-for $u \in BV_\loc(M)$ and $U \Subset M$, so that $u$ has least gradient iff $\eta(u, U) = \int_U \star |\dif u|$ for every $U$.
-
-Suppose that $u, v \in BV_\loc(M)$ and $U \Subset M$ is bounded by a Lipschitz hypersurface $N$. It is straightforward to generalize \cite[Lemma 5.6]{Giusti77}, thus
-\begin{equation}
-|\eta(u, U) - \eta(v, U)| \leq ||u - v||_{L^1(N)}. \label{a priori estimate 1}
-\end{equation}
-In case $v = 0$, we note that by (\ref{convergence of trace}), the trace map is a contraction in $L^\infty$ norm, thus
-\begin{equation}
-\eta(u, U) \leq ||u||_{L^1(N)} \leq |N| \cdot ||u||_{L^\infty(M)}. \label{a priori estimate 2}
-\end{equation}
-
-\begin{definition}
-A sequence $(u_n)$ in $BV_\loc(M)$ has \dfn{approximately least gradient} if for every open $U \Subset M$,
-$$\limsup_{n \to \infty} \int_U \star |\dif u_n| \leq \liminf_{n \to \infty} \eta(u_n, U) < \infty.$$
-\end{definition}
-
-\begin{proposition}[Miranda stability theorem]\label{Miranda convergence}
-If a sequence of functions $(u_n)$ has approximately least gradient and $u_n \to u$ in $L^1_\loc(M)$, then $u$ has least gradient, and for every open set $U \Subset M$ with Lipschitz boundary such that $\int_{\partial U} \star |\dif u| = 0$, one has
-\begin{equation}\label{convergence in total variation}
-\lim_{n \to \infty} \int_U \star |\dif u_n| = \int_U \star |\dif u|.
-\end{equation}
-\end{proposition}
-\begin{proof}
-The proof is similar to Teorema 3 and Osservazione 3 in \cite{Miranda67}; we just note the necessary modifications.
-Suitable generalizations of Teorema 2 and Osservazione 2 follow from Proposition \ref{traces}.
-One needs to add a term of size $o(1)$ to the right-hand side of the inequalities (2.8), (2.9), (2.13), and (2.14); however, in the limit, this term vanishes and so the conclusions (2.15) and (2.16) are unaffected.
-\end{proof}
-
-\begin{remark}\label{transversality}
-The somewhat unusual condition $\int_{\partial U} \star |\dif u| = 0$ refers to the same Radon measure $\star |\dif u|$ that acts on the open sets of $M$, not on a measure that acts on the relatively open subsets of $\partial U$.
-It should be interpreted as a transversality condition: if $u$ is the indicator function of a set $Z$ with $C^\infty$ boundary, then $\int_{\partial U} \star |\dif u| = 0$ if $\partial U$ is transverse to $\partial Z$.
-In particular, the notion of convergence in the Miranda stability theorem is weaker than convergence in $BV_\loc(M)$.\footnote{Therefore the Dirichlet problem for functions of least gradient is ill-posed in general, as the trace morphism is discontinuous with respect to the topology for this notion of convergence. See \cite{spradlin2013traces} for an explicit counterexample.}
-\end{remark}
-
-\begin{corollary}\label{compactness}
-Every sequence $(u_n)$ of approximately least gradient converges in $L^1_\loc$ and almost everywhere along a subsequence to a function of least gradient $u$ such that for every open set $U \Subset M$ of Lipschitz boundary such that $\int_{\partial U} \star |\dif u| = 0$, one has (\ref{convergence in total variation}).
-\end{corollary}
-\begin{proof}
-By compactness of the natural map $BV_\loc \to L^1_\loc$, $(u_n)$ has a convergent subsequence in $L^1_\loc$ and almost everywhere.
-The conditions on the limit $u$ follow from the Miranda stability theorem.
-\end{proof}
-
-\begin{proposition}\label{level sets are minimal}
-For every function $u$ of least gradient, the superlevel sets $\{u > y\}$ have least perimeter.
-If we instead have a sequence $(u_n)$ of approximately least gradient, then $(\{u_n > y\})$ has approximately least perimeter.
-\end{proposition}
-\begin{proof}
-In the proof of \cite[Theorem 1]{BOMBIERI1969}, we replace the coarea formula (replace \cite[Theorem 1.6]{Miranda66} with Proposition \ref{Coarea2}) and the Miranda stability theorem (replace \cite[Teorema 3]{Miranda67} with Proposition \ref{Miranda convergence}).
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{The exponential map}
-Let $(M, g)$ be a Riemannian manifold.
-Recall that in normal coordinates $(x^\mu)$, we have the expansion
-\begin{equation}\label{expand metric}
-g_{\mu\nu} = \delta_{\mu\nu} + O(|x|^2)_{\mu\nu}.
-\end{equation}
-The same estimate holds for the metric on the Poincar\'e ball model of $\Hyp^d$ or the stereographic projection of $\Sph^d$.
-One can of course add more terms to this expansion, and in fact we will later use the third-order expansion of the $\sqrt{\det g}$ in normal coordinates \cite[Lemma 3.4]{schoen1994lectures}:
-\begin{equation}\label{expand volume form}
-\sqrt{\det g} = 1 - \frac{1}{3} \Ric_{\mu\nu}(P) x^\mu x^\nu + O(|x|^3).
-\end{equation}
-% There is an annoying technicality with normal coordinates: they are not isothermal.\footnote{Suppose that the exponential map is conformal. By checking on planes in the tangent space we may assume that $d = 2$, and hence that $g$ is locally K\"ahler. But every K\"ahler metric with a holomorphic exponential map is flat \cite{MO68766}.} 
-% To get around this, we introduce coordinates which are isothermal, but still satisfy the estimate (\ref{expand metric}):
-
-Following \cite{Giusti77}, we often use the freedom to choose coordinates to assume that the normal vectors to certain hypersurfaces $N$ are approximately horizontal
-We make this precise by asserting that the conormal $1$-form to $N$, when wedged with the \dfn{vertical $d-1$-form}
-\begin{equation}\label{d1 form}
-\psi := \dif x^1 \wedge \dif x^2 \wedge \cdots \wedge \dif x^{d - 1}.
-\end{equation}
-should be close to the volume form.
-
-% \begin{definition}
-% We call two coordinate systems $(x^\mu)$ and $(\tilde x^\mu)$, based at $(P, V)$ and $(Q, W)$ respectively, \dfn{compatible} if: TODO update this
-% \begin{enumerate}
-% \item both $(x^\mu)$ and $(\tilde x^\mu)$ are normal coordinates, or they are both are stereographic coordinates, and 
-% \item when written out in the coordinates $(x^\mu)$ and $(\tilde x^\mu)$ respectively, $V$ is a scalar multiple of $W$.
-% \end{enumerate}
-% \end{definition}
-
-It follows from the definitions and a Taylor expansion that if $(x^\mu)$ and $(\tilde x^\mu)$ are compatible (TODO: redefine this) and based at $P, Q$, and $P, Q \in B_\rho$ for a ball $B_\rho$ of radius $\rho > 0$, then the vertical $d-1$-forms satisfy on $B_\rho$
-\begin{equation}\label{compatible verticals}
-|\psi - \tilde \psi| \lesssim \rho.
-\end{equation}
-The same estimate holds on $B_\rho = B(P, \rho)$ if $(x^\mu)$ is stereographic based at $(P, V)$ and $(\tilde x^\mu)$ is normal based at $(P, V)$.
-
-Using (\ref{expand volume form}) for normal coordinates, we study the blowup of $M$ at a point $p$ on the reduced boundary of a set $U$ of least perimeter, giving a generalization of the conjunction of \cite[Theorem 9.3]{Giusti77} and \cite[Theorem 6.2.2]{Simons68}.
-
-\begin{definition}
-For a function $u$ on $M$, $P \in M$ we define the \dfn{tangent rescaling} of $u$ at $P$ to be the net of functions $u_t: T_PM \to \RR$, given by
-$$u_t(v) = u\left(\exp_P(tv)\right).$$
-\end{definition}
-
-\begin{proposition}\label{blowup theorem}
-Suppose that $U$ is an open set with least perimeter in $B(P, r)$, $P \in \partial^* U$, and $u = 1_U$.
-Furthermore, suppose that $d \leq 7$.
-Then the tangent rescaling of $u$ converges as $t \to 0$ along a subsequence (that we also denote $t \to 0$) in $L^1_\loc$ and almost everywhere, to the indicator function $v$ of a half-space $C \subset T_PM$ such that $0 \in \partial C$.
-Moreover, for every open set $V \Subset T_PM$ of Lipschitz boundary such that $\partial V$ is transverse to $\partial C$,
-$$\lim_{t \to 0} \int_V \star |\dif u_t| = \int_V \star |\dif v|.$$
-\end{proposition}
-\begin{proof}
-We claim that the tangent rescaling $(u_t)$ has approximately least gradient in $T_PM$ (where we give $T_PM$ its euclidean metric). If this true, then by Corollary \ref{compactness}, there exists a set $C$ of least perimeter in $T_PM$, such that the tangent rescaling converges to $v := 1_C$ in the desired sense.
-But $T_PM$ is isometric to $\RR^d$, $d \leq 7$, so by the Bernstein--Fleming theorem \cite[Theorem 17.3]{Giusti77}, $\partial C$ is a hyperplane.
-The fact that $0 \in \partial C$ follows from the fact that $P \in \partial^* U$.
-
-To prove the claim, write $|\cdot|'$, $\star'$ for the notions taken in the tangent space with its euclidean geometry, and write $U_t$ for the set indicated by $u_t$.
-If $V$ is a precompact open subset of $T_PM$, $V_t = \{v \in T_PM: tv \in V\}$, then we have the scale-invariance
-\begin{equation}\label{almost blowup scale invariance}
-|\partial^* U_t \cap V|' = t^{1 - d}|\partial^* U_1 \cap V_{1/t}|'.
-\end{equation}
-From (\ref{almost blowup scale invariance}) and the Taylor expansion (\ref{expand volume form}),
-$$t^{d - 1} |\partial^* U_t \cap V|' = |\partial^* U_1 \cap V_{1/t}|' \leq e^{O(t^2)} |\partial^* U \cap \exp_P(V_{1/t})|.$$
-For every $w \in BV_\cpt(V)$, the least-gradient nature of $u$ gives
-$$|\partial^* U \cap \exp_P(V_{1/t})| \leq \int_{(\exp_P)_* V_{1/t}} \star |\dif(u + (\exp_P)_* w_{1/t})| \leq e^{O(t^2)} \int_{V_{1/t}} \star'|\dif(u_1 + w_{1/t})|'.$$
-Therefore, after applying (\ref{almost blowup scale invariance}) and (\ref{expand volume form}) again,
-$$|\partial^* U_t \cap V|' \leq e^{O(t^2)} t^{1 - d} \int_{V_{1/t}} \star' |\dif (u_1 + w_{1/t})| = e^{O(t^2)} \int_V \star' |\dif (u_t + w)|.$$
-Since $V,w$ were arbitrary, we conclude that $(u_t)$ has approximately least gradient.
-\end{proof}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Euclidean minimal graphs}
-Let us recall some facts about the Plateau equation for minimal hypersurfaces in $\RR^d$.
-We remind the reader that $\Japan\xi$ denotes the Japanese norm $\sqrt{1 + |\xi|^2}$.
-
-If $v$ is a function on $\RR^{d - 1}$, then we can use diffeomorphism $x \mapsto (x, v(x))$ to impose coordinates on the graph $N$ of $v$; in these coordinates the metric tensor on $N$ can be easily seen to be $1 + \dif v \otimes \dif v$.
-Then by \cite[(24)]{Petersen2008}, the surface area of $N$ in $\Omega \times \RR$ is $\int_\Omega \Japan{\dif v} \dif x$, where $\dif x := \dif x^1 \wedge \cdots \wedge \dif x^{d - 1}$.
-The Lagrangian $\Japan{\dif v} \dif x$ is invariant under the scaling
-\begin{equation}\label{rescaled solution}
-v_\lambda(x) := v(\lambda x)/\lambda.
-\end{equation}
-
-As in \cite{deGiorgi61, Miranda66}, de Giorgi's lemma is based on the below key estimate.
-To state it, we define for a $1$-form $\xi: \RR^{d - 1} \to (\RR^{d - 1})'$ and $\rho > 0$, the $1$-form $\avg_\rho \xi$ which acts on vectors $v \in T_x\RR^{d - 1} = \RR^{d - 1}$ by
-\begin{equation}\label{definition of averaging}
-(\avg_\rho \xi(x), v) := \dashint_{B_\rho} (\xi(x), v) \dif x
-\end{equation}
-where $B_\rho \subset \RR^{d - 1}$.\footnote{(\ref{definition of averaging}) relies on the flatness of the Levi-Civita connection of $\RR^{d - 1}$ to make the identification $T'\RR^{d - 1} = \RR^{d - 1} \times (\RR^{d - 1})'$, so that we cannot replace $\RR^{d - 1}$ with a curved space in this definition.}
-Now the below lemma follows from \cite[Lemma 4.2]{Miranda66} and the scale-invariance (\ref{rescaled solution}):
-
-\begin{lemma}[de Giorgi lemma, euclidean minimal graphs]\label{Miranda42 quant}
-For every $c_0 > 0$ small there exists $c_1 = c_1(d, c_0) > 0$ such that the following holds.
-Let $\beta, \rho > 0$, $0 < \alpha < 1$, $w \in C^1(B_\rho)$, and let $u$ be the harmonic function on $B_\rho$ with $u|\partial B_\rho = w|\partial B_\rho$.
-If $||\dif w||_{C^0} \leq c_1$,
-\begin{align}
-\int_{B_\rho} \Japan{\dif w} - \Japan{\avg_\rho \dif w} \dif x &\leq \beta, \label{Miranda42 hyp} \\
-\int_{B_\rho} \Japan{\dif w} - \Japan{\dif u} \dif x &\leq c_1 \beta,
-\end{align}
-then 
-\begin{equation}\label{Miranda42 concl}
-\int_{B_{\alpha \rho}} \Japan{\dif w} - \Japan{\avg_{\alpha \rho} \dif w} \dif x \leq (\alpha^{d + 1} + c_0) \beta.
-\end{equation}
-\end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{The global picture} \label{Global picture}
@@ -747,6 +666,13 @@ This is possible because
 \end{equation}
 We write $\dif \sigma$ for the standard measure on $\Sph^{d - 1}$.
 
+Following \cite{Giusti77}, we often use the freedom to choose coordinates to assume that the normal vectors to certain hypersurfaces $N$ are approximately horizontal with respect to a coordinate system $(x^\mu)$.
+We make this precise by asserting that the conormal $1$-form to $N$, when wedged with the \dfn{vertical $d-1$-form}
+\begin{equation}\label{d1 form}
+\psi := \dif x^1 \wedge \dif x^2 \wedge \cdots \wedge \dif x^{d - 1}.
+\end{equation}
+should be close to the volume form.
+
 \begin{remark}\label{independence of constants}
 Let $K$ be a contractible compact set in $M$.
 Then all below implied constants may be chosen independently of the choice of $(x^\mu)$ as long as $P \in K$.
@@ -772,11 +698,11 @@ From the definition of $\eta$,
 \begin{equation}\label{consequence of least gradient monotone}
     \eta(u, s) \leq \int_U \star |\dif v| = \int_0^s \int_{\partial B_r} \star_r |\dif v| \dif r.
 \end{equation}
-Using the expansions (\ref{expand metric}) and (\ref{expand volume form}) in normal coordinates, and applying $\partial_r v = 0$, we obtain the existence of $A \geq 0$ such that
+Using the Taylor expansion of the metric in normal coordinates, and applying $\partial_r v = 0$, we obtain the existence of $A \geq 0$ such that
 \begin{equation}\label{introduce the ricci tensor}
 \int_{\partial B_r} \star_r |\dif v| \leq e^{As^2} \frac{\tilde r^{d - 1}}{s^{d - 1}} \int_{\partial B_s} \star_s |\dif v|.
 \end{equation}
-Here if $g$ has negative Ricci curvature or is flat, then $A = 0$.
+Here if $g$ has negative Ricci curvature or is flat, then $A = 0$, thanks to the facts that $\sqrt{\det g} = 1 + O(|x|^2)$ and $\partial_i\partial_j \sqrt{\det g} = -\Ric_{ij}/3$ \cite[Lemma 3.4]{schoen1994lectures}.
 Applying (\ref{consequence of least gradient monotone}) and Fubini's theorem,
 \begin{align*}
 \eta(u, s) &\leq  e^{As^2} \int_0^s \frac{r^{d - 1}}{s^{d - 1}} \dif r \cdot \int_{\partial B_s} \star_s |\dif v| = \frac{s e^{As^2}}{d} \int_{\partial B_s} \star_s |\dif v|\\
@@ -857,7 +783,7 @@ $$|\Ball^{d - 1}|e^{-Ar^2}r^{d - 1} \leq |\partial^*U \cap B_r| \leq |\Sph^{d - 
 \end{proposition}
 \begin{proof}
 The upper bound on $|\partial^* U \cap B_r|$ is obtained by using (\ref{a priori estimate 2}) and the fact that the surface area of $\partial B_r$ is $|\Sph^{d - 1}|(1 + O(r^2))r^{d - 1}$.
-This can be seen by integrating $\star_{\partial B_r} 1$ along $\partial B_r$ in normal coordinates and applying (\ref{expand volume form}).
+This can be seen by integrating $\star_{\partial B_r} 1$ along $\partial B_r$ in normal coordinates and applying the Taylor expansion of the volume form.
 The lower bound is obtained from the monotonicity formula, which implies that
 $$\lim_{\rho \to 0} e^{-A\rho^2} \rho^{1 - d} |\partial^* U \cap B_\rho| \leq |\partial^* U \cap B_r|.$$
 The left-hand side is given by Lemma \ref{least perimeter minimal size}.
@@ -877,6 +803,10 @@ The argument there required one to cover $\partial^* U$ by small balls and apply
 To deal with the somewhat large number of parameters involved here, it may helpful to think of the case $\Delta = 1$, in which case we have
 $$1 \gg \gamma^q \gg \sigma \gg \gamma \gg \varepsilon \gg \varepsilon \delta > 0.$$
 
+\begin{equation}\label{compatible verticals}
+    \Hilb
+\end{equation}
+
 \begin{lemma}[control on $u_\varepsilon$ in each ball]\label{mollifier sublemma}
 Let $q < \min(1/8, 1/(4(d - 1)))$.
 For every $0 < \Delta, \gamma \lesssim 1$, if we let $\varepsilon = \gamma^4 \Delta$, $\sigma = \gamma^{1/(2(d - 1))} \Delta$, $\delta = \gamma^d$, and let $u$ be the indicator function of a set $U$ of least perimeter such that
@@ -892,7 +822,7 @@ We first claim that for $r > 0$ so small that $B(Q, 2r) \subseteq B_\varepsilon$
 \sup_{y \in B(Q, 2r)} \chi_\varepsilon(x - y) \lesssim \inf_{y \in B(Q, r)} \chi_\varepsilon(x - y).
 \end{equation}
 In the euclidean case (with constant equal to $4$) this result can be isolated from the proof of \cite[Theorem 7.3]{Giusti77}.
-Otherwise, we can use the smallness of $\varepsilon$ and the expansion (\ref{expand metric}) to approximate $g$-balls by euclidean balls.
+Otherwise, we can use the smallness of $\varepsilon$ and the Taylor expansion of the metric to approximate $g$-balls by euclidean balls.
 This suffices to prove (\ref{bound the kernel}), since $\chi_\varepsilon$ is uniformly continuous.
 
 Now let $V := B(Q, 2\delta\varepsilon)$.
@@ -1033,7 +963,7 @@ Moreover, if $0 < \tau \lesssim 1$, then
 \end{lemma}
 \begin{proof}
 The estimate (\ref{Giusti125}) is a straightforward modification of \cite[Lemma 1.25]{Giusti77}.
-The estimates (\ref{Giusti711}, \ref{Giusti712}) follow from \cite[Lemma 7.2]{Giusti77} where we use the fact that for $\tau \lesssim 1$, we can impose normal coordinates and compare $\star 1$ to the euclidean volume form using (\ref{expand volume form}).
+The estimates (\ref{Giusti711}, \ref{Giusti712}) follow from \cite[Lemma 7.2]{Giusti77} where we use the fact that for $\tau \lesssim 1$, we can impose normal coordinates and compare $\star 1$ to the euclidean volume form using Taylor expansion.
 \end{proof}
 
 We now state our main mollification result.
@@ -1130,6 +1060,12 @@ To set up the proof, recall that we can cover any manifold $M$ of constant secti
 g_{\mu\nu} = \frac{\delta_{\mu\nu}}{(1 + K|x|^2/4)^2}.
 \end{equation}
 We fix such a chart and its origin $O$, where $x = 0$.
+
+When using the Einstein convention, Greek indices range over $0, 1, \dots$ while Latin indices range over $1, \dots$.
+We write $y := x^0$.
+Note that even when we have a hyperbolic time $t$ we do \emph{not} sum over it, and do not write $x^0 = t$.
+We write $\Japan \xi := \sqrt{1 + |\xi|^2}$ for the Japanese norm of a vector $\xi$.
+
 Consider a smooth family $(\Phi^P)_{P \in M}$ of oriented isometries $M \to M$, such that $\Phi^O = \id_M$ and $\Phi^P(P) = O$.
 We write 
 $$\partial^P_\mu := \Phi^P_* \partial_{x^\mu}.$$
@@ -1142,23 +1078,13 @@ $$\normal_U(P, r) := \frac{\int_{B(P, r)} \partial^P_\mu 1_U \star 1}{|\partial^
 \end{definition}
 
 \begin{lemma}
-Let $U$ be a set of locally finite perimeter, then:
-\begin{enumerate}
-\item $\normal_U(P, r)$ is gauge-invariant.
-\item For $r$ fixed, $\normal_U(P, r)$ is a continuous $1$-form along $\partial U$.
-\item For $\star|\dif 1_U|$-almost every $P \in \partial U$,
-\begin{equation}\label{convergence of conormal}
-\lim_{r \to 0} \normal_U(P, r) = \normal_U(P).
-\end{equation}
-\item One has $|\normal_U(P, r)| \leq e^{C|K|r^2}$.
-\end{enumerate}
+Let $U$ be a set of locally finite perimeter. Then $\normal_U(P, r)$ is gauge-invariant, and $|\normal_U(P, r)| \leq e^{C|K|r^2}$.
 \end{lemma}
 \begin{proof}
 For the gauge-invariance, let $\chi \in \SpOrth(T_PM)$ be a rotation.
 Acting $\chi$ on $\normal_U(P, r)$ we obtain
 $$\frac{\int_{B(P, r)} \chi^\nu_\mu \partial^P_\nu 1_U \star 1}{|\partial^* U \cap B(P, r)|} (\chi^{-1})_\lambda^\mu \dif x^\lambda_P(P) = \normal_U(P, r).$$ 
-The continuity is clear, and (\ref{convergence of conormal}) follows from the Lebesgue differentiation theorem.
-Finally we compute for $M := |\partial^* U \cap B(P, r)|$ that 
+Now we compute for $M := |\partial^* U \cap B(P, r)|$ that 
 \begin{align*}
 |\normal_U(P, r)|^2 &= g^{\mu\nu}_P(P) M^{-2} \left(\int_{B(P, r)} \partial^P_\mu 1_U \star 1\right) \left(\int_{B(P, r)} \partial^P_\nu 1_U \star 1\right) \\
 &= \sum_\mu M^{-2} \left(\int_{B(P, r)} \partial^P_\mu 1_U \star 1\right)^2.
@@ -1171,67 +1097,136 @@ Taking square roots and using the triangle inequality,
 The claim now easily follows from the formula (\ref{constant sectional curvature metric}) for the metric.
 \end{proof}
 
-In order to use the previous lemma we need to show that approximate conormal $1$-form converges locally uniofrmly.
-Therefore we need to control its oscillation.
-This is accomplished by the de Giorgi lemma, and the main term in the de Giorgi lemma is called the excess.
+As in \cite[Chapters 8-9]{Giusti77} we need to estimate the oscillation of $\normal_U(P, \cdot)$, and the quantity that governs this oscillation is the excess:
 
 \begin{definition}
 The \dfn{excess} of a set $U \subset M$ of locally finite perimeter at $P \in \partial U$ and in the open set $A \ni P$ is 
-$$\Exc_A(U, P) := |\partial^* U \cap A| - \sqrt{g^{\mu\nu}_P(P) \left(\int_A \partial^P_\mu 1_U \star 1\right) \left(\int_A \partial^P_\nu 1_U \star 1\right)}.$$
+$$\Exc_A(U, P) := |\partial^* U \cap A| - \left|\int_A \partial^P_\mu 1_U \star 1 \dif x_P^\mu(P)\right|.$$
 For $\rho > 0$ we write $\Exc_\rho(U, P) := \Exc_{B(P, \rho)}(U, P)$.
 \end{definition}
 
-\begin{lemma}
-Let $U$ be a set of locally finite perimeter, let $A$ be an open set with Lipschitz boundary, and let $P \in A$.
-Then $\Exc_A(U, P)$ is gauge-invariant and $g^{\mu\nu}_P(P) = \delta^{\mu\nu}$.
-\end{lemma}
-\begin{proof}
-The gauge-invariance is analogous to the proof for $\normal_U(P, r)$, and the computation $g^{\mu\nu}_P(P) = \delta^{\mu\nu}$ follows because $g_{\mu\nu} = \delta_{\mu\nu}$.
-\end{proof}
+Reasoning as above, we see that $\Exc_A(U, P)$ is gauge-invariant.
 
 \begin{lemma}
-Let $U$ be a set of locally finite perimeter, let $A$ be a Lipschitz open set such that
-$$|\partial^* U \cap A| \leq C(\diam A)^{d - 1},$$
-and let $P \in A$. Then:
-\begin{enumerate}
-\item For every $P' \in A$,
-\begin{equation}\label{translation invariance}
-|\Exc_A(U, P) - \Exc_A(U, P')| \leq C|K|(\diam A)^{d + 1}.
-\end{equation}
-\item If $P \in A' \subseteq A$, and $|\partial^* U \cap A| \geq C(\diam A)^{d - 1}$, then
+Let $U$ be a set of locally finite perimeter, let $A' \subseteq A$ be open sets with Lipschitz boundary such that $|\partial^* U \cap A| \sim (\diam A)^{d - 1}$,
+and let $P \in A'$. Then
 \begin{equation}\label{approximate monotone}
 -C |K| (\diam A)^{d + 1} \leq \Exc_{A'}(U, P) \leq \Exc_A(U, P) + C |K|(\diam A)^{d + 1}.
 \end{equation}
-\end{enumerate}
 The hypotheses of this lemma are met if $A$ is a ball and $|\partial U \cap A| \leq 2\eta(U, A)$.
 \end{lemma}
 \begin{proof}
-We first bound
-\begin{align*}
-|\Exc_A(U, P) - \Exc_A(U, P')| &= \left|\left|\int_A \partial^P_\mu 1_U \star 1 \dif x^\mu_P(P)\right| - \left|\int_A \partial^{P'}_\mu 1_U \star 1 \dif x^\mu_{P'}(P')\right|\right| \\
-&\lesssim \max_\mu \int_A |\partial^P_\mu - \partial^{P'}_\mu| \star |\dif 1_U| \\
-&\lesssim \max_\mu |\partial^P_\mu - \partial^{P'}_\mu| \cdot L(\diam A)^{d - 1}.
-\end{align*}
-To estimate this, we recall that since the excess is gauge-invariant, we may apply a gauge transformation $\chi$ to assume that $\Psi := \Phi^{P'} \circ (\Phi^P)^{-1}$ preserves the geodesic through $P, P'$.
-Then by Lemma \ref{Coxeter estimate}, on $T_QM$, $Q \in A$,
-\begin{align*}
-|\partial^P_\mu - \partial^{P'}_\mu| &= |\Phi^P_* \partial_\mu - \Phi^{P'}_* \partial_\mu| \leq |\id - \Psi| \cdot |\partial_\mu|
-\lesssim |K| \dist(Q, P) \dist(P', P) + |K| \dist(P', P)^2 \\
-&\lesssim |K| (\diam A)^2.
-\end{align*}
-
 To deduce the positivity, we compute for $\rho := \diam A'$ that
 \begin{align*}
 \sqrt{g^{\mu\nu}_P(P) \left(\int_{A'} \partial^P_\mu 1_U \star 1\right) \left(\int_{A'} \partial^P_\nu 1_U \star 1\right)} &\leq \sqrt{\sum_\mu \left(\int_{A'} \partial_\mu^P 1_U \star 1\right)^2} \\
  & \leq \max_\mu ||\partial^P_\mu||_{C^0(A')} \cdot |\partial^* U \cap A'| \leq e^{CK\rho^2} |\partial^* U \cap A'| \\
- & \leq |\partial^* U \cap A'| + CK\rho^{d + 1}.
+ & \leq |\partial^* U \cap A'| + C|K|\rho^{d + 1}.
 \end{align*}
 The proof of monotonicity is similar.
 
-Finally, if $A$ is a ball and $|\partial U \cap A| \leq 2\eta(U, A)$, then $\eta(U, A) \sim (\diam A)^{d - 1}$ by Proposition \ref{doubling dimension}.
+If $A$ is a ball and $|\partial U \cap A| \leq 2\eta(U, A)$, then $\eta(U, A) \sim (\diam A)^{d - 1}$ by Proposition \ref{doubling dimension}.
 To complete the proof we just note that $|\partial U \cap A| \geq \eta(U, A)$, so $|\partial U \cap A| \sim \eta(U, A) \sim (\diam A)^{d - 1}$.
 \end{proof}
 
+\subsection{Translation symmetry}
+In the euclidean case, the excess $\Exc_A(U, P)$ is independent of $P$.
+Here this is false because the curvature of $M$ implies that $\partial_\mu^P$ actually depends on $P$, but we can at least prove the following:
+
+\begin{lemma}
+Let $U$ be a set of locally finite perimeter, $A \ni P, Q$ an open set with Lipschitz boundary. Then
+\begin{equation}\label{translation invariance}
+|\Exc_A(U, P) - \Exc_A(U, Q)| \leq C|K|(\diam A)^2 |\partial^* U \cap A|.
+\end{equation}
+\end{lemma}
+\begin{proof}
+We prove this for $M = \Hyp^d$. For $M = \Sph^d$ the computation is completely analogous but with Minkowski spacetime replaced with that of $\RR^{d + 1}$ and Lorentz boosts replaced with rotations around the $x$-axis. 
+
+We assume by applying an isometry that $x^i(P) = 0$, $y(P) = \rho$, where $\rho := \dist(P, Q)$, and $Q = O$.
+Then, since $|\partial^* U \cap A|$ does not depend on $P$, that to prove (\ref{translation invariance}) it suffices to show that
+\begin{equation} \label{Coxeter estimate coordinate}
+||v| - |w|| := \left|\left|\int_A \partial_\mu^P 1_U \star 1 \dif x^\mu_P\right| - \left|\int_A \partial_\mu 1_U \star 1 \dif x^\mu\right|\right| \lesssim (\diam A)^2 |\partial^* U \cap A|.
+\end{equation}
+
+Let $\RR^{1, d} = \RR_t \times \RR_y \times \RR_x^{d - 1}$ be the Minkowski spacetime.
+We have an embedding
+\begin{align*}
+\Psi: \Hyp^d &\to \RR^{1, d} \\
+x &\mapsto \frac{1}{1 - |x|^2/4 - y^2/4} \begin{bmatrix}1 + |x|^2/4 + y^2/4\\y \\ x\end{bmatrix}
+\end{align*}
+whose image is the unit future hyperboloid.
+The trivial bundle $\Hyp^d \times \RR^{1, d}$ and the conormal bundle $N'\Hyp^d$ fit into a split exact sequence of bundles of $\SpOrth^+(\RR^{1, d})$-representations:
+\begin{equation}\label{SES}
+0 \to N'\Hyp^d \to \Hyp^d \times \RR^{1, d} \to T'\Hyp^d \to 0.
+\end{equation}
+Using the splitting of (\ref{SES}) we can view both covectors $v \in T_P' \Hyp^d, w \in T_O' \Hyp^d$ in (\ref{Coxeter estimate coordinate}) as elements of $\RR^{1, d}$.
+
+We let $\varepsilon := \diam A$, thus $\rho < \varepsilon$, and let $\Pi: \RR^{1, d} \to T'_O\Hyp^d$ be the fiber of (\ref{SES}) over $O$.
+Then by \cite[Lemma 4.2]{daskalopoulosPrep1}, for any $\xi \in T'_P \Hyp^d$, $|\xi| \leq |\Pi \xi| \leq |\xi| + O(\varepsilon^2)$.
+
+\begin{claim}
+One has
+$$||v| - |w|| \lesssim \varepsilon^2 |\partial^* U \cap A| + \max_\mu \left[||\partial^P_\mu - \partial_\mu||_{C^0(A)} + |\Pi(\dif x_P^\mu(P)) - \dif x^\mu(O)|\right] |\partial^* U \cap A|.$$
+\end{claim}
+\begin{proof}[Proof of claim]
+By the reverse triangle inequality,
+$$||v| - |w|| \leq ||v| - |\Pi v|| + ||\Pi v| - |w|| \leq O(\varepsilon^2) + |\Pi v - w|.$$
+We further estimate
+\begin{align*}
+|\Pi v - w| &= \left|\left[\int_A \partial^P_\mu 1_U \star 1\right] \Pi(\dif x_P^\mu(P)) - \left[\int_A \partial_\mu 1_U \star 1\right] \dif x^\mu(O)\right| \\
+&\leq \max_\mu \int_A |\partial^P_\mu - \partial_\mu| \star |\dif 1_U| + \int_A |\partial_\mu^P| \star |\dif 1_U| \cdot |\Pi(\dif x_P^\mu(P)) - \dif x^\mu(O)| \\
+&\leq 2 \max_\mu \left[||\partial^P_\mu - \partial_\mu||_{C^0(A)} + |\Pi(\dif x_P^\mu(P)) - \dif x^\mu(O)|\right] |\partial^* U \cap A|. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{claim}
+One has $|\partial^P_\mu - \partial_\mu| \lesssim \varepsilon^2$.
+\end{claim}
+\begin{proof}[Proof of claim]
+The Lorentz boost
+$$\Lambda := \begin{bmatrix}\cosh \rho & \sinh \rho \\ \sinh \rho & \cosh \rho \\ &&\id\end{bmatrix}$$
+acts on the hyperboloid by hyperbolic translation along the $y$-axis by $\rho$.
+Since the left-hand side of (\ref{Coxeter estimate coordinate}) is gauge-invariant, we may assume that $\Psi^P$ acts on $\Hyp^d$ by hyperbolic translation, and hence that the diagram
+\begin{equation}\label{compatible isometry diagram}
+\begin{tikzcd}
+\RR^{1, d} \arrow[r, "\Lambda"] & \RR^{1, d} \\
+\Hyp^d \arrow[u, "\Psi"] \arrow[r, "\Phi^P"] & \Hyp^d \arrow[u, "\Psi"]
+\end{tikzcd}
+\end{equation}
+commutes. 
+
+Let $X \in \Hyp^d$; we prove the claim in $T_X \Hyp^d$.
+Let $Y = \Phi^P(X)$.
+Thanks to the coordinate frame $(\partial_\mu)$ we have choices of bases for $T_X \Hyp^d$ and for $T_Y \Hyp^d$.
+We are interested in bounding the operator norm of $\dif \Phi^P - I: T_X \Hyp^d \to T_Y \Hyp^d$ where $I$ is the operator which is represented by the identity matrix for these bases.
+Linearizing (\ref{compatible isometry diagram}) and using the canonical isomorphism $T\RR^{1, d} = (\RR^{1, d})^{\oplus 2}$, we obtain
+$$\begin{tikzcd}[column sep=50pt, row sep=30pt]
+\RR^{1, d} \arrow[r, "\Lambda"] & \RR^{1, d} \\
+T_X \Hyp^d \arrow[u, "\dif \Psi(X)"] \arrow[r, "\dif \Phi^P(X)"] & T_Y \Hyp^d \arrow[u, "\dif \Psi(Y)"]
+\end{tikzcd}$$
+and so it suffices to show that $\Lambda \circ \dif \Psi(X) = \dif \Psi(Y) \circ I + O(\varepsilon^2)$.
+
+To see this, we compute for $f(x, y) := |x|^2/4 + y^2/4$ that
+\begin{align*}
+\dif \Psi &= \frac{1}{1 - f} \begin{bmatrix} \partial_y f & \partial_x f \\ 1 \\ & \id \end{bmatrix} + \frac{1}{(1 - f)^2} \begin{bmatrix}(1 + f) \partial_y & (1 + f) \partial_x f \\
+y \partial_y f & y \partial_x f \\
+\partial_y f x & x \otimes \partial_x f
+\end{bmatrix} \\
+&= \begin{bmatrix}y & x \\ 1 \\ & \id \end{bmatrix} + O(\varepsilon^2)
+\end{align*}
+since $f = O(\varepsilon^2)$ and $2\dif f = (y, x)$. Now if $X = (x^*, y^*)$, then $Y = (x^*, y^* + \rho) + O(\varepsilon^2)$ \cite[(4.5.5)]{ratcliffe2006foundations}.
+We can now compute 
+\begin{align*}
+\Lambda \circ \dif \Psi(X) &= \begin{bmatrix}1 & \rho \\ \rho & 1 \\ && \id \end{bmatrix} \begin{bmatrix}y^* & x^* \\ 1 \\ & \id \end{bmatrix} + O(\varepsilon^2) = \begin{bmatrix}y^* + \rho & x^* \\ 1 \\ & \id\end{bmatrix} \begin{bmatrix}1 \\ & \id\end{bmatrix} + O(\varepsilon^2) \\
+&= \dif \Psi(Y) \circ I. \qedhere
+\end{align*}
+\end{proof}
+
+To round out the proof, we just need to estimate $|\Pi \dif x^\mu_P(P) - \dif x^\mu(O)|$.
+It is $\leq |\dif x^\mu_P(P) - \dif x^\mu(O)| + O(\varepsilon^2)$ by \cite[Lemma 4.2]{daskalopoulosPrep1}, and by dualizing the previous claim we see that this is $\lesssim \varepsilon^2$.
+\end{proof}
+
+
+\subsection{de Giorgi's lemma}
 \begin{proposition}[de Giorgi lemma]\label{de Giorgi}
 There exist $C > 0$, $c > 0$, and $\rho_* > 0$, such that for every $P \in M$, $\rho$ such that $0 < \rho < \rho_*$, and set $U \subset M$ of least perimeter such that 
 $$\Exc_\rho(U, P) \leq c\rho^{d - 1},$$
@@ -1240,69 +1235,78 @@ $$\Exc_{\rho/2}(U, P) \leq 2^{-d} \Exc_\rho(U, P) + C|K|\rho^{d + 1}.$$
 The constants $C, c, \rho_*$ only depend on $d$ for $|K| \lesssim 1$ (but may explode as $|K| \to \infty$).
 \end{proposition}
 
-\subsection{Reduction to the de Giorgi lemma}
-We defer the proof of the de Giorgi lemma to \S\ref{proof of De Giorgi}.
-Here we show that it implies Theorem \ref{main lma}.
+We defer the proof of the de Giorgi lemma to later in the section. Here is a sketch:
+Let $U$ be a set of least perimeter.
+Since the excess is gauge-invariant, we may assume that $\partial U$ is horizontal on average.
+So by Proposition \ref{mollifier quant}, we may replace $\partial U$ with a $C^1$ submanifold $N$ of $M$ which is approximately minimal, and such that $O$ is close to $N$ and $N$ is almost horizontal in a pointwise sense; this is Lemma \ref{single mollify}.
+Now we can invoke approximate translation-invariance of the excess to assume that in fact, $O \in N$.
+This allows us to represent $N$ as an approximate solution of a quasilinear elliptic PDE which satisfies a de Giorgi-type lemma if $w(0) = 0$, namely Lemma \ref{Miranda43}, essentially because we can Taylor expand the metric.
 
-\begin{lemma}
-Assume the de Giorgi lemma.
-Let $U$ be a set of least perimeter and $2 \leq d \leq 7$.
-Then there is an open cover $\mathcal V$ of $\partial U$ by sets $V \in \mathcal V$, and constants $0 < \rho(V) < \rho_*$, so that for every $P \in V$,
-$$\Exc_{\rho(V)}(U, P) \leq c\rho(V)^{d - 1}.$$
-\end{lemma}
-\begin{proof}
-We first check that the desired inequality holds on the reduced boundary:
+Here we show that the de Giorgi lemma implies Theorem \ref{main lma}.
+Reasoning identically to \cite[Corollary 9.5]{Giusti77}, it suffices to prove Proposition \ref{blowup theorem} and the following analogue of \cite[Theorem 8.2]{Giusti77}:
 
-\begin{claim}
-For each $P \in \partial^* U$ one has
-$$\lim_{\rho \to 0} \rho^{1 - d} \Exc_\rho(U, P) = 0.$$
-\end{claim}
-\begin{proof}[Proof of claim]
-Let $u = 1_U$, and recall the notation of Proposition \ref{blowup theorem}. If the lemma fails, then we can find $0 < \rho_n < 1/n$ and $\delta > 0$ such that 
-$$\int_{B(P, \rho_n)} \star |\dif u| - \sqrt{\sum_{\mu = 0}^{d - 1} \left[\int_{B(P, \rho_n)} \star_{\partial U} \partial_\nu u\right]^2} > \delta \rho_n^{d - 1}.$$
-At scale $\rho$, the difference between the pullback metric $\exp_P^* g$ and the euclidean metric on $T_PM$ is $O(K\rho^2)$, so if we denote by $v_n$ the tangent rescaling of $u$ to scale $\rho_n$, then for any sufficiently large $n$,
-$$\int_{B'(0, 1)} \star |\dif v_n| - \left|\int_{B'(0, 1)} \dif v_n \star 1\right| \gtrsim \delta,$$
-where $\int_{B'(0, 1)} \dif v_n \star 1$ needs to be understood as a vectorial integral.
-By Proposition \ref{blowup theorem}, by taking subsequences we may assume that the tangent rescaling converges in the sense of the Miranda stability theorem to the indicator function $w$ of a half-space $C$ with $0 \in \partial C$.
-But $B'(0, 1)$ is an open ball which contains the origin, so $\partial B'(0, 1)$ is transverse to $\partial C$.
-Therefore, pursuant to Remark \ref{transversality},
-\begin{equation}\label{c3 is zero}
-\int_{B'(0, 1)} \star |\dif w| - \left|\int_{B'(0, 1)} \dif w \star 1\right| \gtrsim \delta,
-\end{equation}
-but $\partial C$ is a hyperplane, thus the left-hand side of (\ref{c3 is zero}) is $0$, which is a contradiction.
-\end{proof}
+% \begin{lemma}
+% Assume the de Giorgi lemma.
+% Let $U$ be a set of least perimeter and $2 \leq d \leq 7$.
+% Then there is an open cover $\mathcal V$ of $\partial U$ by sets $V \in \mathcal V$, and constants $0 < \rho(V) < \rho_*$, so that for every $P \in V$,
+% $$\Exc_{\rho(V)}(U, P) \leq c\rho(V)^{d - 1}.$$
+% \end{lemma}
+% \begin{proof}
+% % We first check that the desired inequality holds on the reduced boundary:
 
-Now let $Q \in \partial^* U$.
-Then by the claim, there exists $\delta_* > 0$ such that for $0 < \delta < \delta_*$,
-$$\Exc_\delta(U, Q) \leq \frac{c\delta^{d - 1}}{2^d}.$$
-Then we can choose $\delta < \min(\delta_*, \rho_*)$ so small depending on $K$ that
-$$\frac{c}{4^d} + C|K|\delta^2 \leq \frac{c}{2^d}.$$
-Now if $P \in \partial U \cap B(Q, (2^{-1} - 2^{(d - 1)/d})\delta)$ and $\rho := 2^{(d - 1)/d}\delta$, then $B(P, \rho) \subseteq B(Q, \delta/2)$ and so by the de Giorgi lemma,
-\begin{align*}
-\Exc_\rho(U, P) &\leq \Exc_{\delta/2}(U, Q) + C|K|\delta^{d + 1} \leq \frac{\Exc_\delta(U, Q)}{2^d} + C|K|\delta^{d + 1} \\
-&\leq \left(\frac{c}{4^d} + C|K|\delta^2\right)\delta^{d - 1} \leq \frac{c\delta^{d - 1}}{2^d} \leq \rho^d.
-\end{align*}
-Since $\partial^* U$ is dense in $\partial U$, we can define our open cover to consist of balls $V := B(Q, (2^{-1} - 2^{(d - 1)/d})\delta)$ for $Q \in \partial^* U$ and $\delta = \delta(Q)$ as above, and let $\rho(V) := 2^{(d - 1)/d}\delta$.
-\end{proof}
+% % \begin{claim}
+% % For each $P \in \partial^* U$ one has
+% % $$\lim_{\rho \to 0} \rho^{1 - d} \Exc_\rho(U, P) = 0.$$
+% % \end{claim}
+% % \begin{proof}[Proof of claim]
+% % The proof is identical to the 
+% % % Let $u = 1_U$, and recall the notation of Proposition \ref{blowup theorem}. If the lemma fails, then we can find $0 < \rho_n < 1/n$ and $\delta > 0$ such that 
+% % % $$\int_{B(P, \rho_n)} \star |\dif u| - \sqrt{\sum_{\mu = 0}^{d - 1} \left[\int_{B(P, \rho_n)} \star_{\partial U} \partial_\nu u\right]^2} > \delta \rho_n^{d - 1}.$$
+% % % At scale $\rho$, the difference between the pullback metric $\exp_P^* g$ and the euclidean metric on $T_PM$ is $O(K\rho^2)$, so if we denote by $v_n$ the tangent rescaling of $u$ to scale $\rho_n$, then for any sufficiently large $n$,
+% % % $$\int_{B'(0, 1)} \star |\dif v_n| - \left|\int_{B'(0, 1)} \dif v_n \star 1\right| \gtrsim \delta,$$
+% % % where $\int_{B'(0, 1)} \dif v_n \star 1$ needs to be understood as a vectorial integral.
+% % % By Proposition \ref{blowup theorem}, by taking subsequences we may assume that the tangent rescaling converges in the sense of the Miranda stability theorem to the indicator function $w$ of a half-space $C$ with $0 \in \partial C$.
+% % % But $B'(0, 1)$ is an open ball which contains the origin, so $\partial B'(0, 1)$ is transverse to $\partial C$.
+% % % Therefore, pursuant to Remark \ref{transversality},
+% % % \begin{equation}\label{c3 is zero}
+% % % \int_{B'(0, 1)} \star |\dif w| - \left|\int_{B'(0, 1)} \dif w \star 1\right| \gtrsim \delta,
+% % % \end{equation}
+% % % but $\partial C$ is a hyperplane, thus the left-hand side of (\ref{c3 is zero}) is $0$, which is a contradiction.
+% % \end{proof}
+
+% Let $Q \in \partial^* U$.
+% Then there exists $\delta_* > 0$ such that for $0 < \delta < \delta_*$,
+% $$\Exc_\delta(U, Q) \leq \frac{c\delta^{d - 1}}{2^d};$$
+% this is a consequence of Proposition \ref{blowup theorem} and can be seen by reasoning identically to \cite[pg109]{Giusti77}.
+% Then we can choose $\delta < \min(\delta_*, \rho_*)$ so small depending on $K$ that
+% $$\frac{c}{4^d} + C|K|\delta^2 \leq \frac{c}{2^d}.$$
+% Now if $P \in \partial U \cap B(Q, (2^{-1} - 2^{(d - 1)/d})\delta)$ and $\rho := 2^{(d - 1)/d}\delta$, then $B(P, \rho) \subseteq B(Q, \delta/2)$ and so by the de Giorgi lemma,
+% \begin{align*}
+% \Exc_\rho(U, P) &\leq \Exc_{\delta/2}(U, Q) + C|K|\delta^{d + 1} \leq \frac{\Exc_\delta(U, Q)}{2^d} + C|K|\delta^{d + 1} \\
+% &\leq \left(\frac{c}{4^d} + C|K|\delta^2\right)\delta^{d - 1} \leq \frac{c\delta^{d - 1}}{2^d} \leq \rho^d.
+% \end{align*}
+% Since $\partial^* U$ is dense in $\partial U$, we can define our open cover to consist of balls $V := B(Q, (2^{-1} - 2^{(d - 1)/d})\delta)$ for $Q \in \partial^* U$ and $\delta = \delta(Q)$ as above, and let $\rho(V) := 2^{(d - 1)/d}\delta$.
+% \end{proof}
 
 
 \begin{proposition}\label{implication of DGL}
-    Assume the de Giorgi lemma. Let $U$ be a set of least perimeter.
-    If $2 \leq d \leq 7$ then for $P \in V$, $V \in \mathcal V$, and for every $0 < s < r < \rho(V)$,
+    Assume the de Giorgi lemma. Let $U$ be a set of least perimeter and let $P \in \partial U$.
+    If there exists $\rho > 0$ such that $\Exc_\rho(U, P) \leq c\rho^{d - 1}$, then
     \begin{equation}\label{LC Cauchy}
     %|\normal_U(P, r) - \normal_U(P, s)| \lesssim \sqrt{\left(1 - |K| \log \frac{r}{\rho(V)}\right)\frac{r}{\rho(V)}}.
-    |\normal_U(P, r) - \normal_U(P, s)| \lesssim \sqrt{\frac{r \Japan K}{\rho(V)}}.
+    |\normal_U(P, r) - \normal_U(P, s)| \lesssim \sqrt{\frac{r \Japan K}{\rho}}.
     \end{equation}
 \end{proposition}
 \begin{proof}
 To fix notation, let
-$\xi := \normal_{U, r}(P)$, $\eta = \normal_{U, s}(P)$, $m := |\partial^* U \cap B(P, s)|$, $M := |\partial^* U \cap B(P, r)|$, $\rho := \rho(V)$, and $\gamma_n := \Exc_{\rho/2^n}(U, P)$.
+$\xi := \normal_{U, r}(P)$, $\eta = \normal_{U, s}(P)$, $m := |\partial^* U \cap B(P, s)|$, $M := |\partial^* U \cap B(P, r)|$, and $\gamma_n := \Exc_{\rho/2^n}(U, P)$.
+As in the proof of \cite[Theorem 8.2]{Giusti77} we may assume that $r/2 < s < r = \rho/2^n$ for some $n$.
 
-\begin{claim}
-The proposition holds if $r/2 < s < r := \rho/2^n$.
-% $$|\xi - \eta| \lesssim \sqrt{\left[\frac{1}{\rho} + |K|\log_2\left(\frac{\rho}{r}\right)\right] r}.$$
-\end{claim}
-\begin{proof}[Proof of claim]
+% \begin{claim}
+% The proposition holds if $r/2 < s < r := \rho/2^n$.
+% % $$|\xi - \eta| \lesssim \sqrt{\left[\frac{1}{\rho} + |K|\log_2\left(\frac{\rho}{r}\right)\right] r}.$$
+% \end{claim}
+% \begin{proof}[Proof of claim]
 We first estimate
 $$|\xi - \eta|^2 = |\xi|^2 + |\eta|^2 - 2 g^{-1}(\xi, \eta) \leq 2(1 - g^{-1}(\xi, \eta)) + C|K|r^2.$$
 To estimate the right-hand side we write 
@@ -1332,28 +1336,23 @@ $$\gamma_n \leq \frac{\gamma_0 + 2C'}{2^{nd}} \leq \frac{c\rho^{d - 1} + 2C'}{2^
 % $$\gamma_n \leq \frac{\gamma_0}{2^{nd}} + \frac{nC'}{2^{nd}} \leq \left[\frac{1}{\rho} + C|K|\log_2\left(\frac{\rho}{r}\right)\right] r^d.$$
 % |\xi - \eta|^2 &\lesssim \left[\frac{1}{\rho} + |K|\log_2\left(\frac{\rho}{r}\right) + |K|r\right] r.
 The result now follows from (\ref{just need the excess}).
-\end{proof}
+% \end{proof}
 
-In general we can find $n, m \in \NN$ such that $\rho/2^{n + 1} < \xi \leq \rho/2^n$ and $\rho/2^{n + m + 1} < \eta \leq \rho/2^{n + m}$.
-Writing $\zeta_\ell := \normal_{U, \rho/2^\ell}$ we have by the claim that
+% In general we can find $n, m \in \NN$ such that $\rho/2^{n + 1} < \xi \leq \rho/2^n$ and $\rho/2^{n + m + 1} < \eta \leq \rho/2^{n + m}$.
+% Writing $\zeta_\ell := \normal_{U, \rho/2^\ell}$ we have by the claim that
+% % \begin{align*}
+% % |\xi - \eta| &\leq |\xi - \zeta_n| + \sum_{\ell=n}^{n + m - 1} |\zeta_\ell - \zeta_{\ell + 1}| + |\zeta_{n + m} - \eta| \\
+% % &\lesssim \rho^{-1/2} \left[\sqrt{\frac{1 + |K|n}{2^{nd}}} + \sum_{\ell=n}^{n + m - 1} \sqrt{\frac{1 + |K|\ell}{2^{\ell d}}} + \sqrt{\frac{1 + |K|(n + m)}{2^{(n + m)d}}}\right] \\
+% % &\lesssim \sqrt{\frac{1}{2^{nd} \rho}} \left[\sqrt{1 + |K|n} + \sum_{\ell=0}^\infty 2^{-\ell d} + |K|^{1/2} \sum_{\ell=0}^\infty 2^{-\ell(d - 1)}\right] \\
+% % &\lesssim \sqrt{\frac{1 + |K|n}{2^{nd} \rho}}. \qedhere
+% % \end{align*}
 % \begin{align*}
-% |\xi - \eta| &\leq |\xi - \zeta_n| + \sum_{\ell=n}^{n + m - 1} |\zeta_\ell - \zeta_{\ell + 1}| + |\zeta_{n + m} - \eta| \\
-% &\lesssim \rho^{-1/2} \left[\sqrt{\frac{1 + |K|n}{2^{nd}}} + \sum_{\ell=n}^{n + m - 1} \sqrt{\frac{1 + |K|\ell}{2^{\ell d}}} + \sqrt{\frac{1 + |K|(n + m)}{2^{(n + m)d}}}\right] \\
-% &\lesssim \sqrt{\frac{1}{2^{nd} \rho}} \left[\sqrt{1 + |K|n} + \sum_{\ell=0}^\infty 2^{-\ell d} + |K|^{1/2} \sum_{\ell=0}^\infty 2^{-\ell(d - 1)}\right] \\
-% &\lesssim \sqrt{\frac{1 + |K|n}{2^{nd} \rho}}. \qedhere
+% |\xi - \eta| &\lesssim |\xi - \zeta_n| + \sum_{\ell=n}^{n + m - 1} |\zeta_\ell - \zeta_{\ell + 1}| + |\zeta_{n + m} - \eta| \\
+% &\lesssim \sqrt{\frac{\Japan K}{\rho}} \left[2^{-nd/2} + \sum_{\ell=n}^{n + m - 1} 2^{-\ell d/2} + 2^{-(n + m) d/2} \right]\\
+% &\lesssim \sqrt{\frac{\Japan{K}}{2^{nd} \rho}} \left[1 + \sum_{\ell=0}^\infty 2^{-\ell d}\right] \lesssim \sqrt{\frac{\Japan{K}}{2^{nd} \rho}}. \qedhere
 % \end{align*}
-\begin{align*}
-|\xi - \eta| &\lesssim |\xi - \zeta_n| + \sum_{\ell=n}^{n + m - 1} |\zeta_\ell - \zeta_{\ell + 1}| + |\zeta_{n + m} - \eta| \\
-&\lesssim \sqrt{\frac{\Japan K}{\rho}} \left[2^{-nd/2} + \sum_{\ell=n}^{n + m - 1} 2^{-\ell d/2} + 2^{-(n + m) d/2} \right]\\
-&\lesssim \sqrt{\frac{\Japan{K}}{2^{nd} \rho}} \left[1 + \sum_{\ell=0}^\infty 2^{-\ell d}\right] \lesssim \sqrt{\frac{\Japan{K}}{2^{nd} \rho}}. \qedhere
-\end{align*}
 \end{proof}
 
-\begin{proof}[Proof of Theorem \ref{main lma} assuming the de Giorgi lemma]
-By an elliptic bootstrapping argument it suffices to show that $\partial U$ is $C^1$.
-Then, by Proposition \ref{locality of Caccioppoli}, it suffices to show that $\normal_U$ extends to a continuous $1$-form along $\partial U$.
-But this is clear, because the continuous $1$-form $\normal_U(\cdot, r)$ approximates it locally uniformly by Proposition \ref{implication of DGL}.
-\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1368,33 +1367,56 @@ But this is clear, because the continuous $1$-form $\normal_U(\cdot, r)$ approxi
 % That the loss is logarithmic is a manifestation of the fact that in order to estimate the excess at scale $\rho \sim 2^{-n}$, we must invoke the approximate translation-invariance a total of $O(n)$ times, since the de Giorgi lemma is designed to allow induction on dyadic scales and we invoke the approximate translation-invariance $O(1)$ times at each inductive step.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Proof of the de Giorgi lemma}\label{proof of De Giorgi}
-Since the proof of the de Giorgi lemma is long, we begin with a sketch.
-Let $U$ be a set of least perimeter such that $O \in \partial U$, let $\psi$ be the vertical form, and fix a scale $\rho > 0$.
-Since the excess is rotation-invariant, we may assume that $\partial U$ is almost horizontal in the sense that on average, $\normal_U \wedge \psi$ is approximately the volume form of $M$.
-So by Proposition \ref{mollifier quant}, we may replace $\partial U$ with a $C^1$ submanifold $N$ of $M$ which is approximately minimal, and such that $O$ is close to $N$ and $N$ is almost horizontal in a pointwise sense; this is Lemma \ref{single mollify}.
-Now we can invoke approximate translation-invariance of the excess to assume that in fact, $O \in N$, at the price of a loss of size $C|K|\rho^{d + 1}$.
+% \section{Proof of the de Giorgi lemma}\label{proof of De Giorgi}
 
-Since we have an explicit choice of coordinates on $M$ and $N$ is approximately horizontal, we can find a function $w$ on an open subset of $\RR^{d - 1}$ whose graph is $N$; this is Lemma \ref{rep as a good graph}.
-Moreover, the fact that $N$ is approximately minimal means that $w$ is an approximate solution of a certain quasilinear elliptic PDE.
-Such an equation is close to the Plateau equation for $|x|^2 + |w(x)|^2$ small and so we can apply de Giorgi's estimates on the Plateau equation (Lemma \ref{Miranda42 quant}) to obtain a de Giorgi-type lemma for $w$, namely Lemma \ref{Miranda43}.
-Here we have $|w(x)| \lesssim |x|$ since $O \in N$ and hence $w(0) = 0$.
-Backtracking, we obtain analogous de Giorgi-type lemmata for $N$ (Lemma \ref{Miranda44}) and ultimately $U$, proving Proposition \ref{de Giorgi}.
 
-\begin{remark}
-The reason why Miranda's argument cannot be generalized verbatim is that it relies on an elementary estimate \cite[Lemma 4.1]{Miranda66} due to de Giorgi \cite{deGiorgi61} for the euclidean Laplace equation.
-This is problematic for two reasons:
+% \begin{remark}
+% The reason why Miranda's argument cannot be generalized verbatim is that it relies on an elementary estimate \cite[Lemma 4.1]{Miranda66} due to de Giorgi \cite{deGiorgi61} for the euclidean Laplace equation.
+% This is problematic for two reasons:
 
-\begin{enumerate}
-\item The proof of \cite[Lemma 4.1]{Miranda66} relies on the decomposition of harmonic functions on $\RR^{d - 1}$ into orthogonal harmonic polynomials, and an analogous result does not seem to be available for more general elliptic operators.
-\item To apply \cite[Lemma 4.1]{Miranda66} (or more precisely, its consequence, Lemma \ref{Miranda42 quant}), we need to realize a function as a graph. This is unnatural on manifolds such as $\Sph^d$ and $\Hyp^d$ which do not have a natural product structure.
-\end{enumerate}
+% \begin{enumerate}
+% \item The proof of \cite[Lemma 4.1]{Miranda66} relies on the decomposition of harmonic functions on $\RR^{d - 1}$ into orthogonal harmonic polynomials, and an analogous result does not seem to be available for more general elliptic operators.
+% \item To apply \cite[Lemma 4.1]{Miranda66} (or more precisely, its consequence, Lemma \ref{Miranda42 quant}), we need to realize a function as a graph. This is unnatural on manifolds such as $\Sph^d$ and $\Hyp^d$ which do not have a natural product structure.
+% \end{enumerate}
 
-One may be able to avoid these issues, and give a more natural proof of Theorem \ref{main lma}, via the phase transition theory, c.f. \S\ref{open problems}.
-\end{remark}
+% One may be able to avoid these issues, and give a more natural proof of Theorem \ref{main lma}, via the phase transition theory, c.f. \S\ref{open problems}.
+% \end{remark}
+
+\subsection{Euclidean minimal graphs}
+Before proving the de Giorgi lemma, we need to recall some facts about the Plateau equation for minimal hypersurfaces in $\RR^d$.
+We remind the reader that $\Japan\xi$ denotes the Japanese norm $\sqrt{1 + |\xi|^2}$.
+
+If $v$ is a function on $\RR^{d - 1}$, then we can use diffeomorphism $x \mapsto (x, v(x))$ to impose coordinates on the graph $N$ of $v$; in these coordinates the metric tensor on $N$ can be easily seen to be $1 + \dif v \otimes \dif v$.
+Then by \cite[(24)]{Petersen2008}, the surface area of $N$ in $\Omega \times \RR$ is $\int_\Omega \Japan{\dif v} \dif x$, where $\dif x := \dif x^1 \wedge \cdots \wedge \dif x^{d - 1}$.
+The Lagrangian $\Japan{\dif v} \dif x$ is invariant under the scaling
+\begin{equation}\label{rescaled solution}
+v_\lambda(x) := v(\lambda x)/\lambda.
+\end{equation}
+
+As in \cite{deGiorgi61, Miranda66}, de Giorgi's lemma is based on the below key estimate.
+To state it, we define for a $1$-form $\xi: \RR^{d - 1} \to (\RR^{d - 1})'$ and $\rho > 0$, the $1$-form $\avg_\rho \xi$ which acts on vectors $v \in T_x\RR^{d - 1} = \RR^{d - 1}$ by
+\begin{equation}\label{definition of averaging}
+(\avg_\rho \xi(x), v) := \dashint_{B_\rho} (\xi(x), v) \dif x
+\end{equation}
+where $B_\rho \subset \RR^{d - 1}$.\footnote{(\ref{definition of averaging}) relies on the flatness of the Levi-Civita connection of $\RR^{d - 1}$ to make the identification $T'\RR^{d - 1} = \RR^{d - 1} \times (\RR^{d - 1})'$, so that we cannot replace $\RR^{d - 1}$ with a curved space in this definition.}
+Now the below lemma follows from \cite[Lemma 4.2]{Miranda66} and the scale-invariance (\ref{rescaled solution}):
+
+\begin{lemma}[de Giorgi lemma, euclidean minimal graphs]\label{Miranda42 quant}
+For every $c_0 > 0$ small there exists $c_1 = c_1(d, c_0) > 0$ such that the following holds.
+Let $\beta, \rho > 0$, $0 < \alpha < 1$, $w \in C^1(B_\rho)$, and let $u$ be the harmonic function on $B_\rho$ with $u|\partial B_\rho = w|\partial B_\rho$.
+If $||\dif w||_{C^0} \leq c_1$,
+\begin{align}
+\int_{B_\rho} \Japan{\dif w} - \Japan{\avg_\rho \dif w} \dif x &\leq \beta, \label{Miranda42 hyp} \\
+\int_{B_\rho} \Japan{\dif w} - \Japan{\dif u} \dif x &\leq c_1 \beta,
+\end{align}
+then 
+\begin{equation}\label{Miranda42 concl}
+\int_{B_{\alpha \rho}} \Japan{\dif w} - \Japan{\avg_{\alpha \rho} \dif w} \dif x \leq (\alpha^{d + 1} + c_0) \beta.
+\end{equation}
+\end{lemma}
 
 \subsection{Minimal graphs case}
-We turn to the details.
+We turn to the proof of the de Giorgi lemma.
 First we show that the de Giorgi lemma holds for $C^1$ hypersurfaces which are approximated by minimal graphs; this is an analogue of \cite[Teorema 4.3]{Miranda66}.
 
 Recall that for a coordinate system $(x^\mu)$, we sometimes write $y := 0$, in which case we sum indices as $i, j, k = 1, \dots, d - 1$ and $\mu, \nu, \lambda = 0, \dots, d - 1$, and write $x := (x^i)$.
@@ -1634,6 +1656,30 @@ We conclude from that lemma that (\ref{Miranda43 concl}) holds.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Smooth case} 
 Our next task is to show the $C^1$ de Giorgi lemma, an analogue of \cite[Teorema 4.4]{Miranda66}.
+We begin by checking a convexity hypothesis.
+
+\begin{lemma}\label{convex balls}
+Let $B \subset M$ be a ball such that $O \in B$.
+If $\diam B \lesssim |K|^{-1/2}$, then $B$ appears convex in the coordinates from the Poincar\'e ball model (for $K < 0$) or the stereographic projection (for $K > 0$).
+\end{lemma}
+\begin{proof}
+We may rescale $K$ so that
+$$\dist(P, Q) = \mathrm{arsinh} \sqrt{\delta(P, Q)}, \qquad \delta(P, Q) := \frac{|P - Q|^2}{(1 \pm |P|^2)(1 \pm |Q|^2)}$$
+where $\pm = \sgn K$, $|\cdot|$ is the euclidean norm, and if $K < 0$, then $|P|, |Q| < 1$.
+In particular, if $B = B(Q, r)$, $\delta := \delta(\cdot, Q)$, and $\delta_* := \sinh^2 r$, then $\partial B$ is cut out by the equation $\delta = \delta_*$.
+Therefore $B$ appears convex in coordinates if its second fundamental form $\Two = \nabla(\dif \delta/|\dif \delta|)$ is positive-definite (where the second fundamental form, Levi-Civita connection, and cometric are all euclidean).
+For $Q$ fixed, $\dif \delta$ is proportional to 
+$$\xi := (1 \pm |P|^2)^{-1} \left[\left(1 + \frac{|P - Q|^2}{1 \pm |P|^2}\right)P - Q\right] = P - Q + O(|P|^2 + |Q|^2),$$
+and $\nabla \xi = \id + O(|P| + |Q|)$.
+In particular,
+\begin{align*}
+\Two &= \nabla\frac{\xi}{|\xi|} = \frac{\nabla \xi}{|\xi|} - \frac{\xi \otimes \nabla|\xi|}{|\xi|^2} \\
+&= |\xi|^{-1} \left[\nabla \xi - \frac{\xi \otimes \tr(\xi \otimes \nabla \xi)}{|\xi|}\right] \\
+&= |\xi|^{-1} [\id + O(|\xi| + |P| + |Q|)] = |\xi|^{-1} [\id + O(r)]
+\end{align*}
+which is positive-definite for $r \ll 1$.
+\end{proof}
+
 We fix $\alpha = \alpha(c_0)$ to be chosen later, such that $\alpha = 1/2 + O(c_0)$.
 The reading of the next lemma can be simplified by making the illegal choice $\alpha := 1/2$.
 
@@ -1786,7 +1832,7 @@ Replacing $\tilde \beta$ with $e^{O(c_0)} \tilde \beta$ we have by Lemma \ref{Mi
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{General case}
+\subsection{Proof of the de Giorgi lemma}
 We now use a compactness argument to apply Proposition \ref{mollifier quant} and obtain the full de Giorgi lemma, an analogue of \cite[Teorema 5.7]{Miranda66}.
 
 \begin{lemma}\label{single mollify}
@@ -1851,71 +1897,79 @@ which is sufficient due to our choice of $c_0$.
 \subsection{The maximum principle}\label{Max Princip}
 We now prove Theorem \ref{main thm}, following \cite[\S3]{górny2017planar}. Let $u \in BV_\loc(M)$, $A_y = \partial \{u > y\}$, and $\lambda := \bigcup_{y \in \RR} A_y$.
 
-\subsubsection{Least gradient implies minimal lamination}
 Let $u$ have least gradient, and observe that $\lambda = \supp \dif u$, so $\lambda$ is closed.
 The sets $\{u > y\}$ are totally ordered by $\subseteq$, so either $A_y = A_{y'}$ or $A_y \cap A_{y'} = \emptyset$.
 By Proposition \ref{level sets are minimal}, $\{u > y\}$ has least perimeter, so by Theorem \ref{main lma}, $A_y$ is a disjoint union of $C^\infty$ minimal hypersurfaces.
+Moreover, by Proposition \ref{doubling dimension}, $A_y$ can only have locally finitely many connected components (or else it would have infinite measure, since each component has measure $\gtrsim r^{d - 1}$ in a ball of radius $r$).
+To round out the proof, we note that the special conditions for $\lambda \subset \overline M$ a geodesic lamination are identical to \cite[Proposition 3.5]{górny2017planar} with euclidean triangles replaced by geodesic triangles.
 
-\subsubsection{Local finiteness}
-We now claim that the decomposition of $\{u > y\}$ into minimal hypersurfaces is finite in any compact subset $K$ of $M$.
-If not, then there exists $P \in K \cap \overline{\partial U}$ and a sequence of connected components $(D_n)$, such that there exists $P_n \in D_n \cap K$ with $P_n \to P$.
-Since $\partial^* U$ is dense in $\partial U$ we can in fact take $P_n \in D_n^* := D_n \cap \partial^* U$.
-Now we take $\varepsilon > 0$ so small that $e^{-A\varepsilon^2} \geq 1/2$, and choose $N$ so large that if $n \geq N$ then $B_n := B(P_n, \varepsilon/2)$ is contained in $B := B(P, \varepsilon)$.
-Thus by Proposition \ref{doubling dimension},
-$$|\partial U \cap B| \geq \sum_{n=N}^\infty |D_n^* \cap B_n| \geq \sum_{n=N}^\infty \frac{\varepsilon^{d - 1}}{2^d} |\Ball^{d - 1}| = \infty,$$
-which violates that $U$ has locally finite perimeter.
+% \begin{lemma}
+% The decomposition of $\{u > y\}$ into minimal hypersurfaces is finite in any compact subset $K$ of $M$.
+% \end{lemma}
+% \begin{proof}
+% If not, then there exists $P \in K \cap \overline{\partial U}$ and a sequence of connected components $(D_n)$, such that there exists $P_n \in D_n \cap K$ with $P_n \to P$.
+% Since $\partial^* U$ is dense in $\partial U$ we can in fact take $P_n \in D_n^* := D_n \cap \partial^* U$.
+% Now we take $\varepsilon > 0$ so small that $e^{-A\varepsilon^2} \geq 1/2$, and choose $N$ so large that if $n \geq N$ then $B_n := B(P_n, \varepsilon/2)$ is contained in $B := B(P, \varepsilon)$.
+% Thus by Proposition \ref{doubling dimension},
+% $$|\partial U \cap B| \geq \sum_{n=N}^\infty |D_n^* \cap B_n| \geq \sum_{n=N}^\infty \frac{\varepsilon^{d - 1}}{2^d} |\Ball^{d - 1}| = \infty,$$
+% which violates that $U$ has locally finite perimeter.
+% \end{proof}
 
-\subsubsection{Surfaces with boundary}
-Now suppose that $\overline M$ is a surface-with-boundary.
-We must show that if $\gamma_1, \gamma_2$ are two distinct geodesics in the lamination $\lambda$, then their extensions $\overline \gamma_i$ to $\overline M$ do not intersect on $\partial M$.
-If they do intersect at $P \in \partial M$, then $\gamma_1, \gamma_2$ bound the same superlevel set $\{u > y\}$.
-Let $Q, R$ be points on $\gamma_1, \gamma_2$ respectively which are so close to $P$ that $P, Q, R$ bound a nondegenerate, contractible geodesic triangle $T$.
-By local finiteness, we may assume that no geodesics in $A_y$ pass through the interior of $T$.
-Since $\{u > y\}$ has least perimeter, $v = 1_{\{u > y\}}$ has least gradient, and without loss of generality we may assume that $v = 1$ inside $T$ and $v = 0$ on the opposite sides of $\gamma_1, \gamma_2$.
-Moreover $\int_M \star |\dif v|$ is the sum of lengths of geodesics in $A_y$.
-If we define $\tilde v = v$ away from the interior of $T$ and $\tilde v = 0$ on $T$, then $\int_M \star |\dif \tilde v|$ is the sum of lengths of geodesics in $A_y$, but with $\overline{PQ}$ and $\overline{PR}$ replaced by $\overline{QR}$.
-So by the triangle inequality and the fact that $T$ is nondegenerate,
-$$\int_M \star |\dif \tilde v| < \int_M \star |\dif v|,$$
-yet by construction $\tilde v$ and $v$ have the same trace (which is well-defined by Proposition \ref{traces}).
-This is a contradiction since $v$ has least gradient.
 
-\begin{figure}
-\centering
-\begin{subfigure}[b]{0.4\linewidth}
-\includegraphics[width=\linewidth]{geodesic_triangle.png}
-\end{subfigure}
-\begin{subfigure}[b]{0.4\linewidth}
-\includegraphics[width=\linewidth]{converse_max.png}
-\end{subfigure}
-\caption{The left picture illustrates the $d = 2$ case.
-The geodesic triangle $T$ is lightly shaded, bounded by the geodesics $\gamma_1, \gamma_2, \overline{QR}$. Here $\{u > y\} = \{v > 0\}$ is shaded, and $\{\tilde v > 0\}$ is darkly shaded.
-The right picture illustrates the converse to the maximum principle. The function $u$ is constant on each colored piece of $\partial U$, and its level sets $A_1, A_2$ form a geodesic lamination.
-The competitor $v$ has the same trace on $\partial U$, but its level sets (the lighter curves) are not geodesics and so by the coarea formula, $u$ is smaller.}
-\label{max_princip_graphs}
-\end{figure}
 
-\subsubsection{Minimal lamination implies least gradient}
-Now suppose that $\lambda$ is a minimal lamination whose set of leaves is discrete, so every set $A_y$ is minimal and $y$ ranges over a discrete set $\Gamma$.
-Fix $U \Subset M$ with Lipschitz boundary, let $T: BV(U) \to L^1(\partial U)$ be the trace map, and let $v$ be a competitor in $U$, thus $v \in BV(U)$ and $Tu = Tv$.
-In particular, for every $y \in \Gamma$, $\{Tu \geq y\} = \{Tv \geq y\}$.
+% \subsubsection{Surfaces with boundary}
+% Now suppose that $\overline M$ is a surface-with-boundary.
+% We must show that if $\gamma_1, \gamma_2$ are two distinct geodesics in the lamination $\lambda$, then their extensions $\overline \gamma_i$ to $\overline M$ do not intersect on $\partial M$.
+% If they do intersect at $P \in \partial M$, then $\gamma_1, \gamma_2$ bound the same superlevel set $\{u > y\}$.
+% Let $Q, R$ be points on $\gamma_1, \gamma_2$ respectively which are so close to $P$ that $P, Q, R$ bound a nondegenerate, contractible geodesic triangle $T$.
+% By local finiteness, we may assume that no geodesics in $A_y$ pass through the interior of $T$.
+% Since $\{u > y\}$ has least perimeter, $v = 1_{\{u > y\}}$ has least gradient, and without loss of generality we may assume that $v = 1$ inside $T$ and $v = 0$ on the opposite sides of $\gamma_1, \gamma_2$.
+% Moreover $\int_M \star |\dif v|$ is the sum of lengths of geodesics in $A_y$.
+% If we define $\tilde v = v$ away from the interior of $T$ and $\tilde v = 0$ on $T$, then $\int_M \star |\dif \tilde v|$ is the sum of lengths of geodesics in $A_y$, but with $\overline{PQ}$ and $\overline{PR}$ replaced by $\overline{QR}$.
+% So by the triangle inequality and the fact that $T$ is nondegenerate,
+% $$\int_M \star |\dif \tilde v| < \int_M \star |\dif v|,$$
+% yet by construction $\tilde v$ and $v$ have the same trace (which is well-defined by Proposition \ref{traces}).
+% This is a contradiction since $v$ has least gradient.
 
-By (\ref{convergence of trace}), for any $w \in BV(U)$, $x \in \partial U$, and $z \in \RR$, $T(1_{w > z})(x)$ is the density of $\{w > z\}$ in an infinitesimal neighborhood of $x$.
-Let $\varepsilon > 0$ be so small that $\{Tu > y\} = \{Tu > y - 2\varepsilon\}$, which exists since $\Gamma$ is discrete.
-If $Tv(x) > y$, then the density of $\{v > y - \varepsilon/2\}$ near $x$ is $1$, so $T(1_{\{v > y - \varepsilon/2\}})(x) = 1$, so 
-$$1_{\{Tu > y\}} = 1_{\{Tv > y\}} \leq T(1_{\{v > y - \varepsilon/2\}}).$$
-Conversely, if $Tv(x) \leq y - \varepsilon$, then the density of $\{v > y - \varepsilon/2\}$ near $x$ is $0$. Thus 
-$$T(1_{\{v > y - \varepsilon/2\}}) \leq T(1_{\{v > y - \varepsilon\}}) \leq 1_{\{Tv > y - \varepsilon\}} = 1_{\{Tu > y - \varepsilon\}} = 1_{\{Tu > y\}}.$$
-The inequalities collapse and imply that $1_{\{Tu > y - \varepsilon\}} = T(1_{\{v > y - \varepsilon\}})$.
-This is true for $\varepsilon$ arbitrarily small, so
-$$1_{\{Tu \geq y\}} = T(1_{\{v \geq y\}}).$$
-The left-hand side is $T(1_{\{u > y\}})$ since $u$ is locally constant away from $\lambda$ (since $\Gamma$ is discrete).
-Therefore $A_y$ and $1_{\{v \geq y\}}$ are competitors, thus since $A_y$ is minimal, 
-\begin{equation}\label{laminationwise least gradient}
-|A_y \cap U| \leq |\partial^* \{v \geq y\} \cap U|.
-\end{equation}
-We now integrate both sides of (\ref{laminationwise least gradient}) against $\dif y$ and apply the coarea formula, Proposition \ref{coarea formula}, to see that
-$$\int_U \star |\dif u| = \int_{-\infty}^\infty |A_y \cap U| \dif y \leq \int_{-\infty}^\infty |\partial^* \{v \geq y\} \cap U| \dif y = \int_U \star |\dif v|,$$
-    implying that $u$ has least gradient.
+% \begin{figure}
+% \centering
+% \begin{subfigure}[b]{0.4\linewidth}
+% \includegraphics[width=\linewidth]{geodesic_triangle.png}
+% \end{subfigure}
+% \begin{subfigure}[b]{0.4\linewidth}
+% \includegraphics[width=\linewidth]{converse_max.png}
+% \end{subfigure}
+% \caption{The left picture illustrates the $d = 2$ case.
+% The geodesic triangle $T$ is lightly shaded, bounded by the geodesics $\gamma_1, \gamma_2, \overline{QR}$. Here $\{u > y\} = \{v > 0\}$ is shaded, and $\{\tilde v > 0\}$ is darkly shaded.
+% The right picture illustrates the converse to the maximum principle. The function $u$ is constant on each colored piece of $\partial U$, and its level sets $A_1, A_2$ form a geodesic lamination.
+% The competitor $v$ has the same trace on $\partial U$, but its level sets (the lighter curves) are not geodesics and so by the coarea formula, $u$ is smaller.}
+% \label{max_princip_graphs}
+% \end{figure}
+
+% For the converse, suppose that $\lambda$ is a minimal lamination whose set of leaves is discrete, so every set $A_y$ is minimal and $y$ ranges over a discrete set $\Gamma$.
+% Fix $U \Subset M$ with Lipschitz boundary, let $T: BV(U) \to L^1(\partial U)$ be the trace map, and let $v$ be a competitor in $U$, thus $v \in BV(U)$ and $Tu = Tv$.
+% In particular, for every $y \in \Gamma$, $\{Tu \geq y\} = \{Tv \geq y\}$.
+
+% By (\ref{convergence of trace}), for any $w \in BV(U)$, $x \in \partial U$, and $z \in \RR$, $T(1_{w > z})(x)$ is the density of $\{w > z\}$ in an infinitesimal neighborhood of $x$.
+% Let $\varepsilon > 0$ be so small that $\{Tu > y\} = \{Tu > y - 2\varepsilon\}$, which exists since $\Gamma$ is discrete.
+% If $Tv(x) > y$, then the density of $\{v > y - \varepsilon/2\}$ near $x$ is $1$, so $T(1_{\{v > y - \varepsilon/2\}})(x) = 1$, so 
+% $$1_{\{Tu > y\}} = 1_{\{Tv > y\}} \leq T(1_{\{v > y - \varepsilon/2\}}).$$
+% Conversely, if $Tv(x) \leq y - \varepsilon$, then the density of $\{v > y - \varepsilon/2\}$ near $x$ is $0$. Thus 
+% $$T(1_{\{v > y - \varepsilon/2\}}) \leq T(1_{\{v > y - \varepsilon\}}) \leq 1_{\{Tv > y - \varepsilon\}} = 1_{\{Tu > y - \varepsilon\}} = 1_{\{Tu > y\}}.$$
+% The inequalities collapse and imply that $1_{\{Tu > y - \varepsilon\}} = T(1_{\{v > y - \varepsilon\}})$.
+% This is true for $\varepsilon$ arbitrarily small, so
+% $$1_{\{Tu \geq y\}} = T(1_{\{v \geq y\}}).$$
+% The left-hand side is $T(1_{\{u > y\}})$ since $u$ is locally constant away from $\lambda$ (since $\Gamma$ is discrete).
+% Therefore $A_y$ and $1_{\{v \geq y\}}$ are competitors, thus since $A_y$ is minimal, 
+% \begin{equation}\label{laminationwise least gradient}
+% |A_y \cap U| \leq |\partial^* \{v \geq y\} \cap U|.
+% \end{equation}
+% We now integrate both sides of (\ref{laminationwise least gradient}) against $\dif y$ and apply the coarea formula, Proposition \ref{coarea formula}, to see that
+% $$\int_U \star |\dif u| = \int_{-\infty}^\infty |A_y \cap U| \dif y \leq \int_{-\infty}^\infty |\partial^* \{v \geq y\} \cap U| \dif y = \int_U \star |\dif v|,$$
+%     implying that $u$ has least gradient.
+
+% TODO: If $M$ has negative curvature then maybe the chaoticness of the geodesic flow implies that $\lambda$ is a priori discrete, so we can drop that hypothesis?
+% Since that's the only case we care about, maybe remove this from the max princip and just put it in the section on hyperbolic geometry
 
 \subsection{G\'orny decomposition}
 We next prove Theorem \ref{Gorny regularity}, following \cite[\S3]{górny2017planar}.
@@ -2047,57 +2101,30 @@ Repeating the reasoning from the start of this proof and using the fact that $u_
 
 % TODO: Do some numerical experiments, show what minimal laminations in a fundamental polytope in $\Hyp^3$ or $\Sph^3$ look like
 
-%%%%%%%%%%%%%%%%
 
-\appendix 
-\section{Geometric computations}\label{geometric computations}
-Throughout this appendix, let $M = K^{-2}\Sph^d$ or $M = |K|^{-2}\Hyp^d$, for some sectional curvature $K$, expressed using stereographic projection (for $M = \Sph^d$) or the Poincar\'e ball model (for $M = \Hyp^d$).
-We write $|P|$ for the euclidean distance of $P$ to $O$, and $P - Q$ for the vector obtained from affine subtraction in $\RR^d$.
 
-\begin{lemma}\label{Coxeter estimate}
-Let $P \in M$ and let $\gamma$ be the unique geodesic through $O, P$.
-Let $\Phi^P: M \to M$ be the unique oriented isometry of $M$ such that $\Phi^P(P) = O$ and $\Phi^P$ maps $\gamma$ into itself.
-Then on $T_QM$, $Q \in M$,
-$$|\dif \Phi^P - \id| \lesssim |K|(|P|^2 + |P| \cdot |Q|).$$
-\end{lemma}
-\begin{proof}
-We prove this in case $K = -1$, in which case we have 
-$$\varphi(Q) := (\Phi^P)^{-1}(Q) = \frac{(1 - |P|^2)Q + (|Q|^2 + 2P \cdot Q + 1)P}{|P|^2 |Q|^2 + 2P \cdot Q + 1}$$
-by \cite[(4.5.5)]{ratcliffe2006foundations}.
-The cited proof only relies on the fact that the isometry group of $M$ is Coxeter and generated by spherical inversions, so we can adapt it to the case $K = +1$ as well. TODO: Write out the details for $K = +1$.
-The case of general $K$ follows by a scaling argument.
+% \begin{lemma}
+% Let $P \in M$ and let $\gamma$ be the unique geodesic through $O, P$.
+% Let $\Phi^P: M \to M$ be the unique oriented isometry of $M$ such that $\Phi^P(P) = O$ and $\Phi^P$ maps $\gamma$ into itself.
+% Then on $T_QM$, $Q \in M$,
+% $$|\dif \Phi^P - \id| \lesssim |K|(|P|^2 + |P| \cdot |Q|).$$
+% \end{lemma}
+% \begin{proof}
+% We prove this in case $K = -1$, in which case we have 
+% $$\varphi(Q) := (\Phi^P)^{-1}(Q) = \frac{(1 - |P|^2)Q + (|Q|^2 + 2P \cdot Q + 1)P}{|P|^2 |Q|^2 + 2P \cdot Q + 1}$$
+% by \cite[(4.5.5)]{ratcliffe2006foundations}.
+% The cited proof only relies on the fact that the isometry group of $M$ is Coxeter and generated by spherical inversions, so we can adapt it to the case $K = +1$ as well. TODO: Write out the details for $K = +1$.
+% The case of general $K$ follows by a scaling argument.
 
-We now compute 
-\begin{align*}
-\dif \varphi &= (1 - |P|^2) \dif \frac{Q}{|P|^2|Q|^2 + 2P \cdot Q + 1} + P \otimes \dif \frac{|Q|^2 + 2P \cdot Q + 1}{|P|^2 |Q|^2 + 2P\cdot Q + 1} \\
-&= \frac{1 - |P|^2}{|P|^2 |Q|^2 + 2 P \cdot Q + 1} \id - \frac{1 - |P|^2}{(|P|^2 |Q|^2 + 2P \cdot Q + 1)^2}(2|P|^2Q^{\otimes 2} + 2P \otimes Q) \\
-&\qquad + \frac{2Q \otimes P + 2P^{\otimes 2}}{|P|^2 |Q|^2 + 2P \cdot Q + 1} - \frac{|Q|^2 + 2P \cdot Q + 1}{(|P|^2 |Q|^2 + 2P \cdot Q + 1)^2} (2Q \otimes P + 2P^{\otimes 2}) \\
-&= \id + O(|P|^2 + |P| \cdot |Q|). 
-\end{align*}
-Inverting $\dif \varphi$ using a Neumann series completes the proof.
-\end{proof}
-
-\begin{lemma}\label{convex balls}
-Let $B \subset M$ be a ball such that $O \in B$.
-If $\diam B \lesssim |K|$, then $B$ appears convex in coordinates.
-\end{lemma}
-\begin{proof}
-By rescaling we may assume that $|K| = 2$, so that 
-$$\dist(P, Q) = \mathrm{arsinh} \sqrt{\delta(P, Q)}, \qquad \delta(P, Q) := \frac{|P - Q|^2}{(1 \pm |P|^2)(1 \pm |Q|^2)}$$
-where the $\pm$ is the sign of $K$ and if $K = -1$ then $|P|, |Q| < 1$.
-In particular, if $B = B(Q, r)$, $\delta := \delta(\cdot, Q)$, and $\delta_* := \sinh^2 r$, then $\partial B$ is cut out by the equation $\delta = \delta_*$.
-Therefore $B$ appears convex in coordinates if its second fundamental form $\Two = \nabla(\dif \delta/|\dif \delta|)$ is positive-definite (where the second fundamental form, Levi-Civita connection, and cometric are all euclidean).
-For $Q$ fixed, $\dif \delta$ is proportional to 
-$$\xi := (1 \pm |P|^2)^{-1} \left[\left(1 + \frac{|P - Q|^2}{1 \pm |P|^2}\right)P - Q\right] = P - Q + O(|P|^2 + |Q|^2),$$
-and $\nabla \xi = \id + O(|P| + |Q|)$.
-In particular,
-\begin{align*}
-\Two &= \nabla\frac{\xi}{|\xi|} = \frac{\nabla \xi}{|\xi|} - \frac{\xi \otimes \nabla|\xi|}{|\xi|^2} \\
-&= |\xi|^{-1} \left[\nabla \xi - \frac{\xi \otimes \tr(\xi \otimes \nabla \xi)}{|\xi|}\right] \\
-&= |\xi|^{-1} [\id + O(|\xi| + |P| + |Q|)] = |\xi|^{-1} [\id + O(r)]
-\end{align*}
-which is positive-definite for $r \ll 1$.
-\end{proof}
+% We now compute 
+% \begin{align*}
+% \dif \varphi &= (1 - |P|^2) \dif \frac{Q}{|P|^2|Q|^2 + 2P \cdot Q + 1} + P \otimes \dif \frac{|Q|^2 + 2P \cdot Q + 1}{|P|^2 |Q|^2 + 2P\cdot Q + 1} \\
+% &= \frac{1 - |P|^2}{|P|^2 |Q|^2 + 2 P \cdot Q + 1} \id - \frac{1 - |P|^2}{(|P|^2 |Q|^2 + 2P \cdot Q + 1)^2}(2|P|^2Q^{\otimes 2} + 2P \otimes Q) \\
+% &\qquad + \frac{2Q \otimes P + 2P^{\otimes 2}}{|P|^2 |Q|^2 + 2P \cdot Q + 1} - \frac{|Q|^2 + 2P \cdot Q + 1}{(|P|^2 |Q|^2 + 2P \cdot Q + 1)^2} (2Q \otimes P + 2P^{\otimes 2}) \\
+% &= \id + O(|P|^2 + |P| \cdot |Q|). 
+% \end{align*}
+% Inverting $\dif \varphi$ using a Neumann series completes the proof.
+% \end{proof}
 
 \printbibliography
 
