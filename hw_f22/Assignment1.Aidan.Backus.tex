@@ -1,0 +1,182 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\Aut}{\operatorname{Aut}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\CVect}{\CC\operatorname{-Vect}}
+\newcommand{\Cantor}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 1} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Consider the problem $u - u' = f$ subject to $u(0) = u_0$ and $f \in H^{-1}$.
+Show that the problem can be expressed in the form $B(u, v) = Lv$ for all $v \in Y$ where
+$$B(u, v) = (u, v') + (u, v),$$
+$L \in Y^*$, and $X, Y$ are explicit Hilbert spaces.
+\end{exer}
+
+Let $X := L^2$, $Y := \{v \in H^1: v(1) = 0\}$, and
+$$Lv = (f, v) - u_0v(0).$$
+We claim that if $u$ solves this problem, and has higher regularity, then $u - u' = f$ with boundary condition $u(0) = u_0$.
+That is, this is the appropriate weak formulation.
+
+To see why, supppose that $u$ is a weak solution in this candidate sense and has higher regularity, thus for every $v \in H^1$ such that $v(1) = 0$,
+$$(u, v') + (u, v) = (f, v) - u_0v(0).$$
+Integrating the left-hand side by parts,
+$$(f, v) - u_0v(0) = (u - u', v) + u(1)v(1) - u(0)v(0).$$
+That is, $u - u' = f$ since we could take $v$ to approximate a Dirac delta, $u(1)v(1) = 0$, and we have the Dirichlet data $u(0) = u_0$.
+
+\begin{exer}
+Show that $B, L$ are continuous and linear in each argument.
+\end{exer}
+
+$L$ is the Riesz representation of $f$, which is continuous and linear, plus the evaluation map at $1$ (the Riesz representation of $\delta_1$), which is also continuous and linear.
+
+$B$ is the $L^2$ pairing of $u, v'$ (and $v' \in L^2$ is continuous and linear in $v$ since $v \in H^1$) plus the $L^2$ pairing of $u, v$.
+Thus the continuity follows by Cauchy-Schwarz and the bilinearity is by definition.
+
+\begin{exer}
+Let $v \in Y$ be nonzero. Show that there exists $u \in X$ such that $B(u, v) > 0$.
+\end{exer}
+
+Since $v$ is continuous, we can solve the equation $u - u' = v$ with Dirichlet data $u(0) = -v(0)$. Then 
+$$B(u, v) = (u, v + v') = (u - u', v) - u(0)v(0) = ||v||^2 + |v(0)|^2 > 0.$$
+
+\begin{exer}
+Let $u \in X$ be nonzero. Show that there exists $v \in Y$ such that 
+$$B(u, v) \geq \alpha ||u||_X ||v||_Y.$$
+\end{exer}
+
+We solve the ODE $v + v' = u$ with Dirichlet data $v(1) = 0$ using the method of integrating factors:
+$$v(x) = -e^{-x} \int_x^1 u(y) e^y ~d y.$$
+Then it is clear that $||v|| \lesssim ||u||$, and moreover
+$$|v'(x)| \leq |v(x)| + |u(x)|,$$
+where the first term comes from differentiating the $e^{-x}$ and the second term comes from the fundamental theorem of calculus.
+Therefore $||v||_Y \lesssim ||u||$ and 
+$$B(u, v) = (u, v + v') = ||u||^2 \gtrsim ||u|| \cdot ||v||_Y.$$
+Here $||u||_X = ||u||$.
+
+\begin{exer}
+Show that the problem has a unique solution $u \in X$ such that $||u||_X \leq C/\alpha$ for some $C = C(u_0, f)$.
+\end{exer}
+
+The problem satisfies the hypotheses of the Babuška et al. theorem and hence $||u||_X \lesssim ||L||_{Y^*}/\alpha$.
+Moreover, $||L||_{Y^*} \leq C^*(f) + |u_0|$.
+
+
+\end{document}
