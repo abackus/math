@@ -1,0 +1,217 @@
+\documentclass[reqno,10pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Random translations of a Bourgian--Dyatlov tree}
+\author{BLT}
+\date{October 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\DeclareMathOperator*{\Expect}{\mathbf E}
+\DeclareMathOperator*{\Var}{\mathbf V}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\sinc}{sinc}
+\DeclareMathOperator{\supp}{supp}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+
+\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
+\newcommand{\DirL}{\mathscr D}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\Bmu}{\boldsymbol \mu}
+\newcommand{\Bnu}{\boldsymbol \nu}
+\newcommand{\Blambda}{\boldsymbol \lambda}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+% \newtheorem{claim}{Claim}[theorem]
+% \renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{fup.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+
+\begin{document}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tableofcontents
+
+Let $\mu$ be an Ahlfors-David fractal probability measure supported on some compact subset of $[0, 1]^d$, say 
+$$\dif \mu(x) = f(x) \dif x.$$
+We can always enforce this by scaling.
+We are interested in when we can randomly translate $\mu$ so that most of it is contained in the ``good grid.''
+To be more precise, fix $L \geq 3$, $c \ll 1$, $\alpha = 1 - O(L^{-2/3})$, $I_n := \alpha [0, L^{-n}]^d$, and
+$$G_n = \bigcup_{\sigma \in \Sigma} I_n + L^{-n} \sigma$$
+where $\Sigma := \{-L^n, \dots, 2L^n\}^d$.
+We want to show that there exists $\omega \in [-1, 1]^d$ such that $\mu(G_n - \omega) \geq 1 - c$.
+
+To do this, it's natural to use the second moment method.
+If we draw $\omega$ uniformly at random, it suffices to show that 
+$$\sum_{n \in \NN} \Pr\left(\mu(G_n - \omega) + c < 1\right) < 1.$$
+Actually, we can prove something even weaker than that if we can in addition show that the random variables $X_n := \mu(G_n - \omega)$ meet some independence condition.
+I'd need to go back to my martingales notes to remind myself of what happens in that case.
+Anyways, this means that we want $\Expect X_n > 1 - c/2$ and $\Var X_n$ to tend to $0$ fast enough, where ``fast enough'' is determined by the Paley-Zygmund or Chebyshev inequalities.
+We might be able to sharpen this even more by bounding the kurtosis of $X_n$.
+
+\section{Moments of the random sequence}
+Since $X_n$ is a crosscorrelation, it is given by the Fourier inversion formula:
+$$X_n = \int_{\RR^d} 1_{G_n}(x + \omega) f(x) \dif x = \int_{\RR^d} e^{2\pi i\omega \cdot \xi} \widehat{1_{G_n}}(\xi) \overline{\hat f(\xi)} \dif \xi.$$
+
+By Fubini's theorem,
+$$\Expect X_n = 2^{-d} \int_{\RR^d} \left[\int_{[-1, 1]^d} e^{2\pi i\omega \cdot \xi} \dif \omega\right] \widehat{1_{G_n}}(\xi) \overline{\hat f(\xi)} \dif \xi.$$
+Fubini is justified here as long as $1_{G_n} \in L^1_\mu$, which follows because $\mu(G_n) = 1$.
+To compute the inner integral we use Fubini again:
+$$2^{-d} \int_{[-1, 1]^d} e^{2\pi i\omega \cdot \xi} \dif \omega = \prod_{j = 1}^d \frac{1}{2} \int_{-1}^1 e^{2\pi i \omega_j \xi_j} \dif \omega_j = \prod_{j=1}^d \sinc(2\pi \xi_j) = \sinc(2\pi \xi).$$
+Here the \dfn{sampling function} is defined on $\RR^m$ by 
+$$\sinc \eta := \prod_{k=1}^m \frac{\sin \eta_k}{\eta_k}.$$
+
+\begin{lemma}
+For $\beta := (1 - \alpha)/2 \lesssim L^{-2/3}$, and $\xi \lesssim L^n$,
+$$\widehat{1_{G_n}}(\xi) = 3^d \alpha^d e^{-2(1 + \beta) \pi i L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \sinc(3\pi \xi) + O\left(\frac{\xi}{L^n}\right).$$
+\end{lemma}
+\begin{proof}
+We begin by computing 
+$$1_{G_n}(x) = \sum_{\sigma \in \Sigma} 1_{I_n + L^{-n}\sigma}(x) = \sum_{\sigma \in \Sigma} 1_{I_n}(x - L^{-n}\sigma).$$
+Using the translation-equivariance of the Fourier transform,
+$$\widehat{1_{G_n}}(\xi) = \widehat{1_{I_n}}(\xi) \sum_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}.$$
+But
+$$1_{L_n}(x) = 1_{[0, 1]^d}(\alpha^{-1} L^n x)$$
+and it is well-known that 
+$$\widehat{1_{[0, 1]^d}}(\xi) = e^{-i\pi \sum_j \xi_j} \sinc(\pi \xi)$$
+so, since $\Sigma$ has $(3L^n)^d$ elements,
+\begin{align*}
+\widehat{1_{G_n}}(\xi)
+&=\frac{\alpha^d}{L^{nd}} e^{-i\pi \alpha L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \sum_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi} \\
+&= (3\alpha)^d e^{-i\pi \alpha L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \Expect_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}.
+\end{align*}
+We approximate the expected value using endpoint quadrature. The derivative of $\sigma_j \mapsto e^{-2\pi iL^{-n} \sigma_j \xi_j}$ is $\sim L^{-n} \xi_j$ which gives 
+\begin{align*}
+\Expect_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}
+&= \prod_{j=1}^d \dashint_{-1}^2 e^{-2\pi iL^{-n}\sigma_j \xi_j} \dif \sigma_j + O(L^{-n} |\xi|) \\
+&= \prod_{j=1}^d e^{-\pi iL^{-n} \xi_j} \sinc(3\pi \xi_j) + O(L^{-n} |\xi|) \\
+&= e^{-\pi i L^{-n} \sum_j \xi_j} \sinc(3\pi \xi) + O(L^{-n} |\xi|).
+\end{align*}
+The computation of the dominant term is now complete. As for the error term, it is essentially 
+\begin{align*}
+&\lesssim \left|\sinc\left(\frac{\pi \alpha}{L^n} \xi\right) L^{-n} |\xi|\right| \lesssim \left|\sin\left(\frac{\pi \alpha}{L^n} |\xi|\right)\right| \lesssim \frac{|\xi|}{L^n}. \qedhere
+\end{align*}
+\end{proof}
+
+For $\xi \gg L^n$, I instead want to get $\widehat{1_{G_n}}(\xi)$ to be really small using integration by stationary phase. 
+Anyways let's ignore that for now.
+
+Throwing caution to the wind we get for $x_j := 1 + \beta$, $\Expect X_n$ becomes $3^d \alpha^d$ times the convolution of the inverse Fourier transforms of $\sinc(\pi \alpha L^{-n} \xi)$, $\sinc(2\pi \xi)$, $\sinc(3\pi \xi)$, and $\overline{\hat f(\xi)}$, evaluated at $x$.
+The sincs are all Fourier transforms of indicator functions of boxes centered on the origin, and 
+$$\int_{\RR^d} \sinc(2\pi \xi) \sinc(3\pi \xi) \dif \xi = 3^{-d},$$
+so it's reasonable to hope that up to a loss of $O(\beta/L^n)$ or something we get $f$ integrated over $[-1, 1]^d$.
+Then we do the same computation again for the second (and fourth) moments though we won't get something nearly as nice as $\sinc(2\pi \xi)$ in that case.
+
+\printbibliography
+
+\end{document}
