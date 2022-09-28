@@ -204,7 +204,7 @@ Lipschitz regularity is optimal, even in the nicest possible case of a geodesic 
 Indeed, let $M = B((2, 0), 1)$ in $\RR^2$. Then the chords $\{y = ax\}$ for $a > 0$ and $\{y = a\}$ for $a \leq 0$ define a foliation $\lambda$ of $M$.
 If we equip $M$ with the Beltrami-Klein metric, then, since the leaves of $\lambda$ are chords, $\lambda$ defines a geodesic foliation of $M \cong \Hyp^2$.
 Moreover the conormal to the foliation is
-$$\normal = \frac{1}{\sqrt{1 + y^2/x^2}} \left[\dif y - \frac{y}{x} \dif x\right]$$
+$$\normal = \frac{1_{y > 0}}{\sqrt{1 + y^2/x^2}} \left[\dif y - \frac{y}{x} \dif x\right] + 1_{y \leq 0} \dif y$$
 which is clearly not $C^1$.
 \end{example}
 
@@ -251,7 +251,7 @@ are supported on the leaf space $K_\alpha$ and satisfy $(\psi_{\alpha\beta})^* \
 \end{proposition}
 
 TODO: Currents and orientations. What does it mean for a current to be normal? and cooriented?
-
+Alternatively, maybe all this stuff should go in the FLG paper. I'm not sure.
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -266,25 +266,20 @@ We now recall the ``geometric topology'' introduced by Thurston \cite[\S8.10]{th
 To state it we let $\normal_N(x)$ denote the unit-length conormal $1$-form to a hypersurface $N$ at a point $x$ with respect to some Riemannian metric.
 
 \begin{definition}
-A sequence of laminations $\lambda_i$ converges to $\lambda$ in \dfn{Thurston's geometric topology} if:
-\begin{enumerate}
-\item For every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$ and $\normal_{N_i}(x_i) \to \normal_N(x)$.
-\item Conversely, for every sequence of leaves $N_i$ of $\lambda_i$, there exists a leaf $N$ of $\lambda$ such that for every convergent sequence $x_i \in N_i$, $x_i$ converges to a point of $N$ (and hence the normal vectors converge).
-\end{enumerate}
+A sequence of laminations $\lambda_i$ converges to $\lambda$ in \dfn{Thurston's geometric topology} if, for every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$ and $\normal_{N_i}(x_i) \to \normal_N(x)$.
 \end{definition}
 
 It is straightforward to see that this topology does not depend on the Riemannian metric, or on the choice of trivialization that was used to make sense of the convergence $\normal_{N_i}(x_i) \to \normal_N(x)$.
+
+I think we actually want to define the limit to be the MAXIMAL lamination to which all the leaves converge to.
+Otherwise (as Thurston already observed) the limits are nonunique (and in fact everything converges to the empty lamination, so ``every sequence has a convergent subsequence'' is a vacuous statement).
 
 Since Thurston's geometric topology requires convergence of normal vector fields pointwise, it ``respects the regularity of the flow boxes" in some sense.
 On the other hand this makes it somewhat hard to prove convergence in this topology.
 To overcome this issue we use the following lemma:
 
 \begin{lemma}
-Let $(\lambda_i)$ be a sequence of minimal laminations, and $\lambda$ a lamination, such that:
-\begin{enumerate}
-\item For every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$.
-\item Conversely, for every sequence of leaves $N_i$ of $\lambda_i$, there exists a leaf $N$ of $\lambda$ such that for every convergent sequence $x_i \in N_i$, $x_i$ converges to a point of $N$.
-\end{enumerate}
+Let $(\lambda_i)$ be a sequence of minimal laminations, and $\lambda$ a lamination, such that for every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$.
 Then $\lambda_i \to \lambda$ in Thurston's geometric topology, and $\lambda$ is minimal.
 \end{lemma}
 \begin{proof}
@@ -295,17 +290,16 @@ If this is false then
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Hausdorff distance}
-Convergence in Hausdorff distance is also called ``convergence of the leaves as sets'', and appears in \cite{ColdingMinicozziV}.
-In order to give the definition of Hausdorff distance between two laminations, we need to first recall the definition of Hausdorff distance for closed subsets of a compact metric space \cite[Chapter 2]{Pugh02}.
+Convergence in Hausdorff distance is also called ``convergence of the leaves as sets''.
+In order to give the definition of Hausdorff distance between two laminations, we need to first recall the definition of Hausdorff distance for closed subsets of a compact metric space \cite[Chapter 4]{nadler2017continuum}.
 
 \begin{definition}
 Let $X$ be a compact metric space. The \dfn{Hausdorff distance} between two closed sets $A, B \subset X$ is
 $$\dist(A, B) := \max\left(\max_{a \in A} \min_{b \in B} \dist(a, b), \max_{b \in B} \min_{a \in A} \dist(a, b)\right).$$
-The space of closed subsets of $X$ is denoted $\mathscr H(X)$.
+The space of closed subsets of $X$ is the \dfn{hyperspace} $\mathscr H(X)$.
 \end{definition}
 
-It is easy to check that $\mathscr H(X)$ is a compact metric space.
-The topology on $\mathscr H(X)$ depends only on the topology of $X$, however, not the distance on $X$.
+For a compact metric space $X$, $\mathscr H(X)$ is a compact metric space, and its topology is determined by the topology on $X$ \cite[Corollary 4.6, Theorem 4.13]{nadler2017continuum}.
 
 It is natural to phrase definitions that involve minimax conditions (or equivalently, that have a high quantifier complexity) in terms of games.
 In the case of Hausdorff distance, we consider the following game:
@@ -322,11 +316,7 @@ We shall in addition assume that $\partial U_n$ is $C^\infty$, and that if $M$ i
 
 \begin{definition}
 Let $M$ be a Riemannian manifold and $(U_n)$ a compact exhaustion of $M$.
-We say that a sequence $(\lambda_i)$ of laminations converges to a lamination $\lambda$ in \dfn{Hausdorff distance} if:
-\begin{enumerate}
-\item For every leaf $N$ of $\lambda$ there exist leaves $N_i$ of $\lambda_i$ such that for every $n$, $N_i \cap \overline{U_n} \to N \cap \overline{U_n}$ in $\mathscr H(\overline{U_n})$.
-\item For every sequences of leaves, $N_i$ of $\lambda_i$, such that for every $n$, $N_i \cap \overline{U_n} \to N \cap \overline{U_n}$ in $\mathscr H(\overline{U_n})$, $N$ is a leaf of $\lambda$.
-\end{enumerate}
+We say that a sequence $(\lambda_i)$ of laminations converges to a lamination $\lambda$ in \dfn{Hausdorff distance} if, for every leaf $N$ of $\lambda$, there exists leaves $N_i$ of $\lambda_i$ such that for every $n$, $N_i \cap \overline{U_n} \to N \cap \overline{U_n}$ in $\mathscr H(\overline{U_n})$.
 \end{definition}
 
 Analogously to the definition of the topology on a Fr\'echet space, we say that a sequence of laminations converges for Hausdorff distance if it converges in the $n$th Hausdorff distance for every $n$ (but possibly not uniformly as $n \to \infty$).
@@ -351,10 +341,6 @@ Then Bob would play optimally by choosing the geodesic $\rho$ which is orthogona
 Then the segment of $\rho$ between $\gamma$ and $\gamma_j$ would become arbitrarily long as $x \to \partial \Hyp^2$.
 So in global Hausdorff distance, $\lambda_j$ and $\lambda$ are infinitely far apart!
 \end{example}
-
-Convergence in Hausdorff distance is primarily useful as a consequence of other modes of convergence, not as a mode of convergence in its own right.
-The reason is that convergence in Hausdorff distance affords no control over $||\lambda||_K$.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -403,17 +389,9 @@ The following definition is one possible interpretation of the vague definition 
 \begin{definition}
 A sequence $(\lambda_i)$ in $\Lam M$ \dfn{converges on the level of flow boxes} to $\lambda$ if we can find atlases
 $$F_{i\alpha}: U_\alpha \to V_\alpha \times N_\alpha$$
-of flow boxes for $\lambda_i$, and an atlas $F_\alpha: U_\alpha \to V_\alpha \times N_\alpha$ of flow boxes for $\lambda$, such that $F_{i\alpha} \to F_\alpha$ in $C^{1-}$, and the leaf space $K_\alpha \subseteq V_\alpha$ of $\lambda$ is the set of limits of sequences in $\prod_{i=1}^\infty K_{i\alpha}$.
+of flow boxes for $\lambda_i$, and an atlas $F_\alpha: U_\alpha \to V_\alpha \times N_\alpha$ of flow boxes for $\lambda$, such that $F_{i\alpha} \to F_\alpha$ in $C^{1-}$, and the leaf space $K_\alpha \subseteq V_\alpha$ of $\lambda$ is the set of of all $\lim_{i \to \infty} k_{i\alpha}$ where $k_{i\alpha} \in K_{i\alpha}$.
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Tangential convergence}
-
-
-\begin{definition}
-A sequence $(\lambda_i)$ in $\Lam M$ \dfn{converges tangentially} to $\lambda$ if we can cover $M$ by coordinate charts $U \times \RR$ in which every leaf of $\lambda_i$ and of $\lambda$ is the graph of a $C^\infty$ function $U \to \RR$, and, if we identify the leaves with their respective functions, the leaves of $\lambda$ are exactly the limits in $C^\infty$ of the leaves of $\lambda_i$ as $i \to \infty$.
-\end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
@@ -423,7 +401,7 @@ A sequence $(\lambda_i)$ in $\Lam M$ \dfn{converges tangentially} to $\lambda$ i
 
 
 \begin{example}
-Let $f_i$ be a smooth approximation to the Dirac measure $\delta_{1/2-1/i}$ at $1/2 - 1/i$ with compact support in $(1/2 - 2/i, 1/2)$.
+Let $f_i$ be a smooth approximation to the Dirac measure $\delta_{1/2-1/i}$ at $1/2 - 1/i$ with compact support in $(1/2 - 2/i, 1/2)$, so $f_i \to 0$ pointwise.
 Let $\lambda_i$ be the lamination consisting of the graph of $f_i$ in $\RR^2$ and $\lambda$ the lamination consisting of the horizontal line through $0$.
 Then $\lambda_i$ converges to $\lambda$ in Thurston's geometric topology but not in Hausdorff distance.
 TODO: Include a picture
@@ -442,7 +420,6 @@ Let $(\lambda_i)$ be a sequence of minimal laminations.
 Then $(\lambda_i)$ converges in Thurston's geometric topology iff it converges in Hausdorff distance, and then its limit lamination is minimal.
 \end{proposition}
 \begin{proof}
-First assume that $\lambda_i \to \lambda$ in Thurston's geometric topology.
 
 \end{proof}
 
@@ -465,8 +442,18 @@ Then $\lambda$ is minimal and $\lambda_i \to \lambda$ in Thurston's geometric to
 \subsection{Flow boxes and Thurston's geometric topology}
 \begin{proposition}
 Let $(\lambda_i)$ be a sequence of minimal laminations which converges on the level of flow boxes to $\lambda$.
-Then $\lambda_i \to \lambda$ in Thurston's geometric topology and Hausdorff distance.
+Then $\lambda_i \to \lambda$ in Thurston's geometric topology.
 \end{proposition}
+\begin{proof}
+The statement is local so we work in a single flow box.
+Let $N$ be a leaf of $\lambda$, and let $k$ be the index of $N$.
+Then there are indices $k_i$ of leaves $N_i$ of $\lambda_i$ such that $k_i \to k$.
+So there exists $x_i \in x$ such that $x_i \to x$.
+So the normal vectors converge.
+\end{proof}
+
+I guess the converse should fail, because presumably there's a sequence of minimal surfaces (in a ball of $\RR^3$ or $\Hyp^3$, say) where the curvature blows up.
+Then these guys would have a subsequence in Hausdorff distance by compactness of $\mathscr H$ but not in flow boxes.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -535,9 +522,8 @@ Then $\lambda$ is a minimal lamination.
 Let $(x_i)$ be a dense sequence in $\supp \lambda$, and let $N_i$ be the leaf containing $x_i$.
 Then the union of $N_1, \dots, N_i$ is the support of a lamination $\lambda_i$.
 By assumption, $||\lambda_i||_K \lesssim_K 1$.
-So $(\lambda_i)$ has a minimal subsequential limit $\tilde \lambda$ in Thurston's geometric topology.
-
-TODO: Why is $\tilde \lambda = \lambda$?
+So $(\lambda_i)$ has a minimal subsequential limit $\tilde \lambda$ on the level of flow boxes.
+We then have to use Thurston's geometric topology to show that $\tilde \lambda = \lambda$.
 \end{proof}
 
 The above result is particularly useful when it is combined with the stable Bernstein theorem.\footnote{so-called because this theorem is essentially equivalent to the assertion that a stable two-sided minimal hypersurface in $\RR^d$ is a hyperplane.}

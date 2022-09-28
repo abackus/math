@@ -1,0 +1,244 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 2} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+    Consider the problem $-u'' = f$ on $(0, 1)$ subject to $u(0) = u'(1) = 0$, $f \in L^2$.
+    Show that the problem may be expressed as $\sigma' = f$, $u' + \sigma = 0$ subject to $u(0) = \sigma(1) = 0$.
+\end{exer}
+
+Suppose that $-u'' = f$ holds with the desired data. We solve $u' + \sigma = 0$, thus $\sigma = -u'$ and $\sigma(1) = 0$.
+Moreover, $\sigma' = -u'' = f$.
+
+\begin{exer}
+    Let $X := L^2 \times Z$ where $Z := \{\tau \in H^1: \tau(1) = 0\}$.
+    Show that $||(v, \tau)||_X := ||v|| + ||\tau'||$ is a norm on $X$.
+\end{exer}
+
+The scaling property is immediate and the triangle inequality is 
+$$||(u + v, \tau + \rho)||_X = ||u + v|| + ||\tau' + \rho'|| \leq ||u|| + ||v|| + ||\tau'|| + ||\rho'|| = ||(u, \tau)||_X + ||(v, \rho)||_X.$$
+So we just need to show the positivity.
+In fact if $||(v, \tau)||_X = 0$ then $||v|| = 0$ so $v = 0$, and $||\tau'|| = 0$ so $\tau' = 0$.
+But $\tau(1) = 0$ as well, so $\tau = 0$ in that case.
+
+\begin{exer}
+    Show that the problem may be expressed in the variational form 
+    $$(u, \sigma) \in X: B((u, \sigma), (v, \tau)) = (f, v) ~\forall (v, \tau) \in X.$$
+\end{exer}
+
+We set 
+$$B((u, \sigma), (v, \tau)) := (\sigma', v) + (\sigma, \tau) - (u, \tau')$$
+which is evidently a bilinear form.
+If $B((u, \sigma), (v, \tau)) = (f, v)$ for every $(v, \tau)$ and $(u, \sigma)$ has the requisite smoothness, then integrating by parts using the boundary conditions, we get 
+$$(f, v) = B((u, \sigma), (v, \tau)) = (\sigma', v) + (\sigma, \tau) + (u', \tau) = (\sigma', v) + (u' + \sigma, \tau).$$
+This now decouples since the first term was paired with $v$ and does not involve $\tau$, and vice versa for the second term, thus we have 
+\begin{align*}
+(\sigma', v) &= (f, v) \\
+(u' + \sigma, \tau) &= 0.
+\end{align*}
+Since $u, \sigma$ were assumed smooth and $v, \tau$ were arbitrary we conclude $\sigma' = f$ and $u' + \sigma = 0$.
+
+\begin{exer}
+    Show that $B$ is continuous but not coercive.
+\end{exer}
+
+We first bound 
+\begin{align*}
+    |B((u, \sigma), (v, \tau))| &\leq |(\sigma', v)| + |(\sigma, \tau)| + |(u, \tau')| \\
+    &\leq ||\sigma'|| \cdot ||v|| + ||\sigma|| \cdot ||\tau|| + ||u|| \cdot ||\tau'||.
+\end{align*}
+By Poincar\'e's inequality and the fact that $\sigma(1) = \tau(1) = 0$ the second term is $\leq ||\sigma'|| \cdot ||\tau'||$.
+Thus 
+$$|B((u, \sigma), (v, \tau))| \leq 3 ||(u, \sigma)|| \cdot ||(v, \tau)||$$
+which implies continuity of $B$.
+
+As for coercivity we just observe that $B((1, 0), (1, 0)) = 0$ so $B$ is not even positive-definite.
+
+\begin{exer}
+    Let $(u, \sigma) \in X$ be nonzero and let 
+\begin{align*}
+    \tau(x) &:= \int_x^1 u(s) \dif s, \\
+    v(x) &:= \sigma'(x) + \int_0^x \tau(s) \dif s.
+\end{align*}
+    Show that $(v, \tau) \in X$, 
+    $$B((u, \sigma), (v, \tau)) = ||u||^2 + ||\sigma'||^2,$$
+    and $||(v, \tau)||_X \lesssim ||(u, \sigma)||_X$.
+\end{exer}
+
+The third condition clearly implies the first, which in turn is needed to make sense of the second.
+So we prove the third condition first.
+First, 
+$$||(v, \tau)||_X = ||v|| + ||\tau'||$$
+and by construction, $\tau' = -u$ so $||\tau'|| = ||u||$.
+Moreover, by Minkowski's and Poincar\'e's inequalities,
+\begin{align*}
+    ||v||^2
+    &= 2\left[||\sigma'||^2 + \int_0^1 \left|\int_0^x \tau(s) \dif s\right|^2 \dif x\right] \\
+    &\leq 2||\sigma'||^2 + 2 \left|\int_0^1 ||1_{[0, x]} \tau||_{L^2} \dif x\right|^2 \\
+    &\leq 2||\sigma'||^2 + 2 ||\tau||^2 \\
+    &\leq 2||\sigma'||^2 + 2 ||u||^2.
+\end{align*}
+In conclusion, $||v|| \lesssim ||(u, \sigma)||_X$, which is what we were meant to show.
+
+Now let
+$$w(x) := \int_0^x \int_y^1 u(z) \dif z \dif y.$$
+Then
+\begin{align*}
+    B((u, \sigma), (v, \tau)) 
+    &= (\sigma', v) + (\sigma, \tau) - (u, \tau') \\
+    &= (\sigma', \sigma') + (\sigma', w) + (\sigma, w') - (u, -u) \\
+    &= (\sigma', \sigma') + (\sigma', w) - (\sigma', w) + (u, u) \\
+    &= ||\sigma'||^2 + ||u||^2
+\end{align*}
+which was to be shown.
+
+\begin{exer}
+    Show that the Babuška-Brezzi and sup conditions are met.
+\end{exer}
+
+First we correct $X$ to be a Hilbert space by redefining the norm to be 
+$$||(v, \tau)||_X^2 := ||v||^2 + ||\tau'||^2.$$
+Clearly this norm is comparable to the norm we've been using above so this is no great loss.
+
+Now we check the Babuška-Brezzi condition.
+Given $(u, \sigma) \in X$ we let $(v, \tau)$ be as in the previous problem. Then
+$$B((u, \sigma), (v, \tau)) = ||(u, \sigma)||_X^2 \gtrsim ||(u, \sigma)||_X ||(v, \tau)||_X.$$
+
+Finally we check the sup condition.
+Given $(v, \tau) \in X$ we let $u = -\tau'$ and 
+$$\sigma(x) = \int_x^1 v(t) - \int_0^t \tau(s) \dif s \dif t.$$
+If we let 
+$$\kappa(x) := \int_0^x \int_y^1 \tau(z) \dif z \dif y$$
+then $(\sigma', v) = (v, v) - (\kappa, v)$, $(\sigma, \tau) = (\kappa, v) + (\kappa, \kappa)$, and $(u, \tau') = -(\tau', \tau')$.
+So
+$$B((u, \sigma), (v, \tau)) = (v, v) - (\kappa, v) + (\kappa, v) + (\kappa, \kappa) + (\tau', \tau').$$
+Cancelling the $(\kappa, v)$ we see that this is positive for $(v, \tau) \in X$ nonzero, as desired.
+
+\begin{exer}
+    Show that the problem is well-posed.
+\end{exer}
+
+This is immediate from the above claims and the Babuška theorem.
+
+
+
+
+\end{document}
