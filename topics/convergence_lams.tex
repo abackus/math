@@ -45,11 +45,11 @@
 \DeclareMathOperator{\Lam}{Lam}
 \DeclareMathOperator{\supp}{supp}
 
+\newcommand{\Leaves}{\mathscr L}
+\newcommand{\Hypspace}{\mathscr H}
+
 \newcommand{\Two}{\mathrm{I\!I}}
 
-\newcommand{\Lagrange}{\mathscr L}
-\newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
-\newcommand{\DirL}{\mathscr D}
 
 \newcommand{\Hilb}{\mathcal H}
 \newcommand{\Homology}{\mathrm H}
@@ -162,11 +162,11 @@ I would like to thank Georgios Daskalopolous for suggesting this project and for
 
 \section{Preliminaries}
 \begin{definition}
-Let $S$ be a closed subset of a smooth manifold $M$.
+Let $S$ be a nonempty closed subset of a smooth manifold $M$.
 \begin{enumerate}
 \item A (codimension $1$ lamination) \dfn{flow box} for $S$ is a $C^0$ chart in which $S$ can be expressed as $K \times N \subseteq \RR^d$ for some closed $K \subseteq \RR$ and open connected $N \subseteq \RR^{d - 1}$; we call $K$ a \dfn{leaf space}.
 \item A (codimension $1$) \dfn{lamination} $\lambda$ in $M$, with support $S$, consists of an atlas of lamination flow boxes whose transition maps preserve the local product structure, such that the preimage of the sets $N$ are $C^2$ hypersurfaces in $M$.
-\item A \dfn{leaf} of $\lambda$ is a connected subset of $\supp \lambda = S$ which is locally modeled on the fibers $\{k\} \times N$, $k \in K$.
+\item A \dfn{leaf} of $\lambda$ is a connected subset of $\supp \lambda = S$ which is locally modeled on the fibers $\{k\} \times N$, $k \in K$. We then call $k$ the \dfn{index} of the leaf.
 \item A \dfn{plaque} of $\lambda$ is a connected component of $M \setminus S$.
 \end{enumerate}
 \end{definition}
@@ -188,6 +188,7 @@ A \dfn{geodesic lamination} is a minimal lamination in a surface.
 
 In most applications one is interested in geodesic laminations, or minimal laminations in threefolds.
 In those cases one can easily control $||\lambda||_K$ in terms of simpler invariants: for geodesic laminations, $||\lambda||_K = 0$, and for minimal laminations in threefolds, $||\lambda||_K$ is controlled by the Gauss curvature of the leaves of $\lambda$ on $K$.
+In any case, we shall say that a sequence $(\lambda_i)$ of laminations has \dfn{bounded curvature} if for every $K$, $||\lambda_i||_K$ is bounded independently of $i$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -210,31 +211,37 @@ which is clearly not $C^1$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Transverse measures}
-Let $X$ be a locally compact Polish space, and $C_0(X)$ the space of continuous functions on $X$ which vanish at infinity.
-Then $C_0(X)$ naturally has a locally convex structure, induced by the natural isomorphism
-$$C_0(X) = \varinjlim C(K)$$
-where $K$ ranges over all compact subsets of $X$, thus $C(K)$ is a Banach space with respect to the supremum norm.
-Moreover, by the Riesz-Markov theorem, $C_0(X)'$ is naturally isomorphic to the space of (signed) Radon measures on $X$.
-The weak topology on $C_0(X)'$ is therefore known as the \dfn{weak topology of measures}.
-Unpacking the definitions, this means that a sequence $(\mu_i)$ of Radon measures converges to $\mu$ iff for every $f \in C_0(X)$,
+Let $X$ be a compact Polish space.
+Then the space of Radon measures on $X$ is canonically isomorphic to the dual of the Banach space $C(X)$ of continuous functions on $X$.
+
+\begin{definition}
+The weak topology on $C_0(X)'$ is known as the \dfn{weak topology of measures}.
+\end{definition}
+
+Unpacking the definitions, a sequence $(\mu_i)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every $f \in C(X)$,
 $$\lim_{i \to \infty} \int_X f \dif \mu_i = \int_X f \dif \mu.$$
+
+\begin{definition}
+We say that a path $\gamma$ in $M$ is \dfn{transverse} to a lamination $\lambda$ if for every flow box $U \times N$, the projection of $\gamma$ onto the space of leaves $U$ lie in plaques of $\lambda$, and if $\gamma$ has endpoints, then they lie in plaques of $\lambda$.
+(In particular, if $\lambda$ is a foliation, we are only interested in complete paths.)
+A homotopy of paths $(\gamma_t)$ is \dfn{transverse} to $\lambda$ if each of the paths $\gamma_t$ is transverse to $\lambda$.
+In case that there is a homotopy of paths $(\gamma_t)$, the endpoint paths $\gamma_0, \gamma_1$ are said to be \dfn{homotopic relative to} $\lambda$.
+\end{definition}
+
+\begin{definition}
+Let $\lambda$ be a lamination. A Radon measure $\mu$ on $M$ is \dfn{transverse} to $\lambda$ if $\supp \mu \subseteq \supp \lambda$ and, for every homotopy of paths $(\gamma_t)$ which is transverse to $\lambda$,
+$$\frac{\dif}{\dif t} \mu(\gamma_t([0, 1])) = 0.$$
+The pair $(\lambda, \mu)$ is a \dfn{measured lamination} (with full support) if $\mu$ is a transverse measure to $\lambda$ and $\supp \mu = \supp \lambda$.
+\end{definition}
 
 If we have a second locally compact Polish space $Y$, equipped with a Radon measure $\mu \in C_0(Y)'$ and a Borel map $\pi: Y \to X$, we can view $Y$ as a ``measure-theoretic fiber bundle'' over $X$ by equipping $X$ with the pushforward measure
 $$\pi_* \mu(E) := \mu(\pi^{-1}(E)).$$
-By the disintegration theorem, each fiber $Y_x := \pi^{-1}(x)$ naturally carries the structure of a measured space, where the measure $\mu_x$ on $Y_x$ characterized by the formula
+
+\begin{lemma}[disintegration theorem]
+Each fiber $Y_x := \pi^{-1}(x)$ naturally carries the structure of a measured space, where the measure $\mu_x$ on $Y_x$ characterized by the formula
 $$\int_Y f \dif \mu = \int_X \int_{Y_x} f(y) \dif \mu_x(y) \dif \pi_* \mu(x)$$
 for every $f \in C_0(Y)$.
-
-
-\begin{definition}
-Let $\lambda$ be a lamination.
-\begin{enumerate}
-\item A path $\gamma: [0, 1] \to M$ is \dfn{transverse} to $\lambda$ if for every flow box $U \times N$, the projection of $\gamma$ onto $U$ is a homeomorphism onto its image, and the endpoints $\gamma(0), \gamma(1)$ lie in plaques of $\lambda$.
-\item A Radon measure $\mu$ on $M$ is \dfn{transverse} to $\lambda$ if $\supp \mu \subseteq \supp \lambda$ and, for every homotopy of paths $(\gamma_t)$ which is transverse to $\lambda$,
-$$\frac{\dif}{\dif t} \mu(\gamma_t([0, 1])) = 0.$$
-\item The pair $(\lambda, \mu)$ is a \dfn{measured lamination} (with full support) if $\mu$ is a transverse measure to $\lambda$ and $\supp \mu = \supp \lambda$.
-\end{enumerate}
-\end{definition}
+\end{lemma}
 
 Owing to the disintegration theorem, there is an equivalent characterization of transverse measures in terms of local coordinates.
 
@@ -250,9 +257,98 @@ are supported on the leaf space $K_\alpha$ and satisfy $(\psi_{\alpha\beta})^* \
 \end{enumerate}
 \end{proposition}
 
+A lamination does not come equipped with a canonical transverse measure, and in fact may have \emph{no} transverse mesures whatsoever (since we require that they have full support).
+This can happen in the nicest possible case of geodesic laminations:
+
+\begin{example}
+Not every geodesic lamination admits a transverse measure.
+Let $M$ be a punctured torus.
+Then we can select a Riemannian metric on $M$ so that an unpunctured neck of $M$ admits a simple closed geodesic $\gamma_1$, and in addition a geodesic $\gamma_2$ from the puncture which wraps around the neck infinitely many times and converges to $\gamma_1$.
+Then $\gamma_1, \gamma_2$ define a geodesic lamination $\lambda$, since the union of their images is closed.
+But any transverse path $\rho$ through $\gamma_1$ passes through $\gamma_2$ infinitely many times, and each time, if $\lambda$ admits a transverse measure $\mu$, the measure of $\rho$ increases by $\mu_\alpha(\{\gamma_2\}) > 0$.
+Thus $\mu$ is not locally finite but is Radon, a contradiction.
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsection{Hausdorff distance}
+
+\begin{definition}
+Let $X$ be a compact metric space. The \dfn{Hausdorff distance} between two closed sets $A, B \subset X$ is
+$$\dist(A, B) := \max\left(\max_{a \in A} \min_{b \in B} \dist(a, b), \max_{b \in B} \min_{a \in A} \dist(a, b)\right).$$
+The space of closed subsets of $X$ is the \dfn{hyperspace} $\Hypspace X$.
+\end{definition}
+
+\begin{lemma}
+Every hyperspace $\Hypspace X$ is a compact metric space, and its topology is determined by the topology on $X$.
+In particular, $\Hypspace$ is a self-map of the class of compact metrizable spaces.
+Moreover, if $K_i \to K$ in $\Hypspace X$, then $K$ is the set of limits of sequences $(k_i)$ such that $k_i \in K_i$.
+\end{lemma}
+\begin{proof}
+\cite[Chapter 4]{nadler2017continuum}.
+\end{proof}
+
+% It is natural to phrase definitions that involve minimax conditions (or equivalently, that have a high quantifier complexity) in terms of games.
+% In the case of Hausdorff distance, we consider the following game:
+% \begin{enumerate}
+% \item Alice chooses either $A$ or $B$, and a point $x$ in the set she chose.
+% \item Bob chooses a path $\gamma$ from $x$ to any point in the set Alice did not choose.
+% \end{enumerate}
+% The payoff for Alice is the length of $\gamma$.
+% It is straightforward to see that if Alice and Bob both play optimally then Alice's payoff is $\dist(A, B)$.
+
+Owing to the following example, which shows that Hausdorff convergence is too strong on noncompact domains $X$, we do not consider Hausdorff convergence on noncompact domains.
+
+\begin{example}
+Consider $\Hyp^2$ with its disk model in $\CC$, and let $\gamma$ be the horizontal geodesic through the origin $0$.
+Consider also a sequence of geodesics $(\gamma_j)$ through $i/j$ which are horizontal at $i/j$.
+Then $\lambda_j \to \lambda$ in Thurston's geometric topology and in Hausdorff distance.
+However,
+$$\dist_{\mathscr H(\Hyp^2)}(\gamma_j, \gamma) = \infty.$$
+Indeed, Alice can choose points $x$ on $\gamma$ which are arbitrarily close to the circle $\partial \Hyp^2$ at infinity.
+Then Bob would play optimally by choosing the geodesic $\rho$ which is orthogonal to $\gamma$ at $x$.
+Then the segment of $\rho$ between $\gamma$ and $\gamma_j$ would become arbitrarily long as $x \to \partial \Hyp^2$.
+\end{example}
+
+We use the hyperspace of a closed manifold to define a space of leaves of a lamination.
+
+\begin{definition}
+If $\lambda$ is a lamination in a closed manifold $M$, we let $\Leaves \lambda$ be the subset of $\Hypspace M$ whose elements are closed sets $\overline N$ where $N$ is a leaf of $\lambda$.
+\end{definition}
+
+\begin{proposition}
+For any lamination $\lambda$, $\Leaves \lambda$ is in canonical bijection with the set of all leaves of $\lambda$, and is a closed subset of $\Hypspace M$.
+\end{proposition}
+\begin{proof}
+Clearly the map $N \mapsto \overline N$ is a canonical surjection from the set of leaves of $\lambda$ to $\Leaves \lambda$.
+In fact, it is injective as well: if $\overline N = \overline{N'}$, then for any sequence $(x_i)$ in $N$ such that $x_i \to x$ in $M$, there exists a sequence $(x_i')$ in $N'$ such that $x_i' \to x$.
+Moreover (possibly after discarding finitely many entries in the sequence) we may assume that these limits take place inside some flow box $U$, so there are co-Cauchy sequences $(k, y_i)$ and $(k', y_i')$ in $\RR \times \RR^{d - 1}$.
+This is only possible if $k = k'$ and so $N \cap U = N' \cap U$.
+After covering $M$ by flow boxes we see that $N = N'$ and so the canonical map is injective.
+
+Now if $(N_i)$ is a sequence in $\Leaves \lambda$ which converges to some closed set $N \in \Hypspace M$, then $N \in \Hypspace(\supp \lambda)$.
+Indeed, $\supp \lambda$ is a compact subset of $M$, so $\Hypspace(\supp \lambda)$ is compact, and hence is a closed subset of $\Hyp M$.
+In any flow box $U$, the sets $N_i \cap U$ take the form $\{k_i\} \times \RR^{d - 1}$, and any limit of such sets must of the form $\{k\} \times \RR^{d - 1}$.
+So $N \cap U$ is a leaf of the restriction of $\lambda$ to $U$.
+It follows that $N \in \Leaves \lambda$.
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsection{Intersection theory for geodesic laminations}
+
+\begin{proposition}\label{construction of ruelle sullivan currents}
+Let $\lambda$ be a lamination, $\omega$ a $d-1$-current which is normal to $\lambda$, and $(\chi_\alpha)_{\alpha \in A}$ a partition of unity subordinate to an atlas of flow boxes for $\lambda$ which is cooriented with $\omega$ and leaf spaces $(K_\alpha)$.
+Then $\mu := \star |\omega|$ is a transverse measure to $\lambda$, such that for every continuous $d-1$-form $\varphi$ of compact support,
+$$\int_M \omega \wedge \varphi = \sum_{\alpha \in A} \int_{K_\alpha} \int_{N_{\alpha k}} \chi_\alpha \varphi \dif \mu_\alpha(k)$$
+where $N_{\alpha k}$ denotes the $k$th leaf in the $\alpha$th flow box.
+\end{proposition}
+
+\begin{definition}
+The current $\omega$ of Proposition \ref{construction of ruelle sullivan currents} associated to the oriented measured lamination $(\lambda, \mu)$ is called the \dfn{Ruelle-Sullivan current} associated to $(\lambda, \mu)$.
+\end{definition}
+
 TODO: Currents and orientations. What does it mean for a current to be normal? and cooriented?
 Alternatively, maybe all this stuff should go in the FLG paper. I'm not sure.
-
 
 %%%%%%%%%%%%%%%%%%%%%
 
@@ -266,81 +362,35 @@ We now recall the ``geometric topology'' introduced by Thurston \cite[\S8.10]{th
 To state it we let $\normal_N(x)$ denote the unit-length conormal $1$-form to a hypersurface $N$ at a point $x$ with respect to some Riemannian metric.
 
 \begin{definition}
-A sequence of laminations $\lambda_i$ converges to $\lambda$ in \dfn{Thurston's geometric topology} if, for every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$ and $\normal_{N_i}(x_i) \to \normal_N(x)$.
+A sequence of laminations $\lambda_i$ converges to $\lambda$ in \dfn{Thurston's geometric topology} if, for every leaf $N$ in $\lambda$, every $x \in N$, and every $\varepsilon > 0$, we can find $i \in \NN$, a leaf $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $\dist(x_i, x) < \varepsilon$ and $|\normal_{N_i}(x) - \normal_N(x)| < \varepsilon$.
 \end{definition}
 
 It is straightforward to see that this topology does not depend on the Riemannian metric, or on the choice of trivialization that was used to make sense of the convergence $\normal_{N_i}(x_i) \to \normal_N(x)$.
+It is also straightforward to see that if $\lambda_i \to \lambda$ and $\lambda' \subseteq \lambda$ then $\lambda_i \to \lambda$.
+Thus Thurston's geometric topology is very far from Hausdorff.
+To deal with the lack of uniqueness of limits we single out the special case that we have a privileged choice of limit:
 
-I think we actually want to define the limit to be the MAXIMAL lamination to which all the leaves converge to.
-Otherwise (as Thurston already observed) the limits are nonunique (and in fact everything converges to the empty lamination, so ``every sequence has a convergent subsequence'' is a vacuous statement).
+\begin{definition}
+If $\lambda_i \to \lambda$ in Thurston's geometric topology, and for every lamination $\lambda'$, $\lambda_i \to \lambda'$ iff $\lambda' \subseteq \lambda$, we say that $\lambda$ is a \dfn{maximal limit} of $(\lambda_i)$ in Thurston's geometric topology.
+\end{definition}
 
 Since Thurston's geometric topology requires convergence of normal vector fields pointwise, it ``respects the regularity of the flow boxes" in some sense.
 On the other hand this makes it somewhat hard to prove convergence in this topology.
 To overcome this issue we use the following lemma:
 
 \begin{lemma}
-Let $(\lambda_i)$ be a sequence of minimal laminations, and $\lambda$ a lamination, such that for every leaf $N$ in $\lambda$ and every $x \in N$ there exist leaves $N_i$ of $\lambda_i$, and $x_i \in N_i$, such that $x_i \to x$.
-Then $\lambda_i \to \lambda$ in Thurston's geometric topology, and $\lambda$ is minimal.
+Let $(\lambda_i)$ be a sequence of geodesic laminations in a closed surface $M$, and $\lambda$ a lamination such that $\Leaves \lambda_i \to \Leaves \lambda$ in $\Hypspace^2 M$.
+Then $\lambda$ is a maximal limit of $(\lambda_i)$ in Thurston's geometric topology.
 \end{lemma}
 \begin{proof}
-We must show that $\normal_N(x)$ is the limit of $\normal_{N_i}(x_i)$, possibly along a subsequence.
-If this is false then
+
 \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+From this lemma and the compactness of $\Hypspace^2 M$ (we can prove compactness of $\Hypspace^k M$ by induction on $k$) we have:
 
-\subsection{Hausdorff distance}
-Convergence in Hausdorff distance is also called ``convergence of the leaves as sets''.
-In order to give the definition of Hausdorff distance between two laminations, we need to first recall the definition of Hausdorff distance for closed subsets of a compact metric space \cite[Chapter 4]{nadler2017continuum}.
-
-\begin{definition}
-Let $X$ be a compact metric space. The \dfn{Hausdorff distance} between two closed sets $A, B \subset X$ is
-$$\dist(A, B) := \max\left(\max_{a \in A} \min_{b \in B} \dist(a, b), \max_{b \in B} \min_{a \in A} \dist(a, b)\right).$$
-The space of closed subsets of $X$ is the \dfn{hyperspace} $\mathscr H(X)$.
-\end{definition}
-
-For a compact metric space $X$, $\mathscr H(X)$ is a compact metric space, and its topology is determined by the topology on $X$ \cite[Corollary 4.6, Theorem 4.13]{nadler2017continuum}.
-
-It is natural to phrase definitions that involve minimax conditions (or equivalently, that have a high quantifier complexity) in terms of games.
-In the case of Hausdorff distance, we consider the following game:
-\begin{enumerate}
-\item Alice chooses either $A$ or $B$, and a point $x$ in the set she chose.
-\item Bob chooses a path $\gamma$ from $x$ to any point in the set Alice did not choose.
-\end{enumerate}
-The payoff for Alice is the length of $\gamma$.
-It is straightforward to see that if Alice and Bob both play optimally then Alice's payoff is $\dist(A, B)$.
-
-We now upgrade this topology on the space of closed sets to a topology on the space of laminations.
-To do so, recall that a \dfn{compact exhaustion} of a manifold $M$ consists of an increasing chain $(U_n)$ of open subsets of $M$, such that the closures $\overline{U_n}$ are compact and such that $\bigcup_n U_n = M$.
-We shall in addition assume that $\partial U_n$ is $C^\infty$, and that if $M$ is compact, then $U_n = M$.
-
-\begin{definition}
-Let $M$ be a Riemannian manifold and $(U_n)$ a compact exhaustion of $M$.
-We say that a sequence $(\lambda_i)$ of laminations converges to a lamination $\lambda$ in \dfn{Hausdorff distance} if, for every leaf $N$ of $\lambda$, there exists leaves $N_i$ of $\lambda_i$ such that for every $n$, $N_i \cap \overline{U_n} \to N \cap \overline{U_n}$ in $\mathscr H(\overline{U_n})$.
-\end{definition}
-
-Analogously to the definition of the topology on a Fr\'echet space, we say that a sequence of laminations converges for Hausdorff distance if it converges in the $n$th Hausdorff distance for every $n$ (but possibly not uniformly as $n \to \infty$).
-Since the topology induced by Hausdorff distance on the level of closed sets is independent of the metric, the convergence in Hausdorff distance on the level of laminations is also independent of any Riemannian structure one may put on $M$.
-One can also show that the topology is independent of the choice of compact exhaustion.
-
-There is another reasonable-sounding definition of Hausdorff distance for laminations, where one allows Hausdorff distance to be defined on \emph{arbitrary} metric spaces and considers the Hausdorff distance on closed subsets of $M$, rather than closed subsets of the closures of entries of a compact exhaustion of $M$.
-One would of course need to replace certain maxes and mins with sups and infs as necessary.
-We call this topology the \dfn{global Hausdorff distance}.
-However, we view this topology as somewhat pathological if $M$ is noncompact, and so we will never use it.
-For example, convergence of minimal laminations in Thurston's geometric topology does not imply convergence in global Hausdorff distance:
-
-\begin{example}
-Consider $\Hyp^2$ with its disk model in $\CC$, and let $\gamma$ be the horizontal geodesic through the origin $0$.
-Consider also a sequence of geodesics $(\gamma_j)$ through $i/j$ which are horizontal at $i/j$.
-Then we can define a geodesic lamination $\lambda$ consisting of each of these geodesics, and sublaminations $\lambda_j$ which contain $\gamma_1, \dots, \gamma_j$.
-Then $\lambda_j \to \lambda$ in Thurston's geometric topology and in Hausdorff distance.
-However,
-$$\dist_{\mathscr H(\Hyp^2)}(\gamma_j, \gamma) = \infty.$$
-Indeed, Alice can choose points $x$ on $\gamma$ which are arbitrarily close to the circle $\partial \Hyp^2$ at infinity.
-Then Bob would play optimally by choosing the geodesic $\rho$ which is orthogonal to $\gamma$ at $x$.
-Then the segment of $\rho$ between $\gamma$ and $\gamma_j$ would become arbitrarily long as $x \to \partial \Hyp^2$.
-So in global Hausdorff distance, $\lambda_j$ and $\lambda$ are infinitely far apart!
-\end{example}
+\begin{proposition}
+Every sequence of geodesic laminations in a closed surface has a subsequence which converges to a maximal limit in Thurston's geometric topology.
+\end{proposition}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -351,119 +401,43 @@ Another topology in common use is the weak topology on measures on the space of 
 A sequence $(\lambda_i, \mu_i)$ of measured laminations (with full support) converges in the \dfn{weak topology of measures} to a measured lamination $(\lambda, \mu)$ if $(\mu_i)$ converges to $\mu$ in the weak topology of measures.
 \end{definition}
 
-Let us extoll some advantages and disadvantages of the weak topology of measures.
-First, a lamination does not come equipped with a canonical transverse measure, and in fact may have \emph{no} transverse mesures whatsoever (since we require that they have full support).
-This can happen in the nicest possible case of geodesic laminations:
+TODO: This isn't quite right because it neglects the flow box structure.
 
-\begin{example}
-Not every geodesic lamination, admits a transverse measure.
-Let $M$ be a punctured torus.
-Then we can select a Riemannian metric on $M$ so that an unpunctured neck of $M$ admits a simple closed geodesic $\gamma_1$, and in addition a geodesic $\gamma_2$ from the puncture which wraps around the neck infinitely many times and converges to $\gamma_1$.
-Then $\gamma_1, \gamma_2$ define a geodesic lamination $\lambda$, since the union of their images is closed.
-But any transverse path $\rho$ through $\gamma_1$ passes through $\gamma_2$ infinitely many times, and each time, if $\lambda$ admits a transverse measure $\mu$, the measure of $\rho$ increases by $\mu_\alpha(\{\gamma_2\}) > 0$.
-Thus $\mu$ is not locally finite but is Radon, a contradiction.
-\end{example}
+The weak topology of measures is not directly related to $||\lambda||_K$ (at least if $\lambda$ is nonminimal).
+This is a blessing and a curse: it makes convergence in the weak topology of measures easy to prove, but also not particularly useful unless we assume in addition that $\lambda$ is minimal and satisfies a curvature bound.
 
-Second, the weak topology of measures is not directly related to $||\lambda||_K$ (at least if $\lambda$ is nonminimal).
-This is a blessing and a curse: it makes convergence in the weak topology of measures easy to prove, but also not particularly useful without a minimality assumption.
+\begin{lemma}[Prokhorov compactness theorem]
+Let $X$ be a compact Polish space.
+Then every sequence $(\mu_i)$ of positive Radon measures $X$ either satisfies $\mu_i(X) \to \infty$, or has a subsequence which converges in the weak topology of measures.
+\end{lemma}
 
-Finally, in the companion papers \cite{BackusFLG, DaskalopoulosPrep2}, the weak topology of measures will be useful because we are interested in Ruelle-Sullivan currents, defined in terms of a transverse measure and a global normal vector field as below:
-
-\begin{proposition}\label{construction of ruelle sullivan currents}
-Let $\lambda$ be a lamination, $\omega$ a $d-1$-current which is normal to $\lambda$, and $(\chi_\alpha)_{\alpha \in A}$ a partition of unity subordinate to an atlas of flow boxes for $\lambda$ which is cooriented with $\omega$ and leaf spaces $(K_\alpha)$.
-Then $\mu := \star |\omega|$ is a transverse measure to $\lambda$, such that for every continuous $d-1$-form $\varphi$ of compact support,
-$$\int_M \omega \wedge \varphi = \sum_{\alpha \in A} \int_{K_\alpha} \int_{N_{\alpha k}} \chi_\alpha \varphi \dif \mu_\alpha(k)$$
-where $N_{\alpha k}$ denotes the $k$th leaf in the $\alpha$th flow box.
+\begin{proposition}
+Let $(\lambda_i, \mu_i)$ be a sequence of measured minimal laminations on a closed manifold $M$ of bounded curvature.
+Then either $\mu_i(M) \to \infty$ or there is a subsequence of $(\lambda_i, \mu_i)$ which converges in the weak topology of measures.
 \end{proposition}
+\begin{proof}
+By the Prokhorov compactness theorem, it suffices to show that if $\mu_i \to \mu$ in the weak topology of measures, then there exists a minimal lamination to which $\mu$ is transverse.
 
-\begin{definition}
-The current $\omega$ of Proposition \ref{construction of ruelle sullivan currents} associated to the oriented measured lamination $(\lambda, \mu)$ is called the \dfn{Ruelle-Sullivan current} associated to $(\lambda, \mu)$.
-\end{definition}
+\end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Convergence in flow boxes}
 Let $C^{1-}$ be the Fr\'echet space $\bigcap_{\alpha < 1} C^\alpha$, where $C^\alpha$ are H\"older spaces.
-The following definition is one possible interpretation of the vague definition of \cite[Appendix B]{ColdingMinicozziIV}.
+The following definition is one possible interpretation of the vague definition of \cite[Lemma II.1.2]{ColdingMinicozziV}.
 
 \begin{definition}
-A sequence $(\lambda_i)$ in $\Lam M$ \dfn{converges on the level of flow boxes} to $\lambda$ if we can find atlases
+A sequence $(\lambda_i)$ of laminations \dfn{converges on the level of flow boxes} to $\lambda$ if it converges in Thurston's geometric topology, and we can find atlases
 $$F_{i\alpha}: U_\alpha \to V_\alpha \times N_\alpha$$
-of flow boxes for $\lambda_i$, and an atlas $F_\alpha: U_\alpha \to V_\alpha \times N_\alpha$ of flow boxes for $\lambda$, such that $F_{i\alpha} \to F_\alpha$ in $C^{1-}$, and the leaf space $K_\alpha \subseteq V_\alpha$ of $\lambda$ is the set of of all $\lim_{i \to \infty} k_{i\alpha}$ where $k_{i\alpha} \in K_{i\alpha}$.
+of flow boxes for $\lambda_i$, and an atlas $F_\alpha: U_\alpha \to V_\alpha \times N_\alpha$ of flow boxes for $\lambda$, such that $F_{i\alpha} \to F_\alpha$ and $F_{i\alpha}^{-1} \to F_\alpha^{-1}$ in $C^{1-}$.
 \end{definition}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Implications between modes}
-
-\subsection{Thurston's geometric topology versus Hausdorff distance}
-
-
-\begin{example}
-Let $f_i$ be a smooth approximation to the Dirac measure $\delta_{1/2-1/i}$ at $1/2 - 1/i$ with compact support in $(1/2 - 2/i, 1/2)$, so $f_i \to 0$ pointwise.
-Let $\lambda_i$ be the lamination consisting of the graph of $f_i$ in $\RR^2$ and $\lambda$ the lamination consisting of the horizontal line through $0$.
-Then $\lambda_i$ converges to $\lambda$ in Thurston's geometric topology but not in Hausdorff distance.
-TODO: Include a picture
-\end{example}
-
-\begin{example}\label{Hausdorff does not imply Thurston}
-Consider the sequence of continuous functions $f_i: \RR \to \RR$ where $f_i$ is constant away from $[0, 1/i^2]$, is $0$ on $(-\infty, 0]$, is $1/i$ on $[1/i^2, \infty)$, and is linear on $[0, 1/i^2]$.
-By smoothing out the graphs of $f_i$ appropriately one obtains a sequence of $C^1$ curves $\gamma_i$ in $\RR^2$, whose geodesic curvatures blow up near $(0, 0)$, and if we set $\lambda_i$ to be the union of $\gamma_1, \dots, \gamma_i$, then $(\lambda_i)$ is a sequence of laminations which converges in Hausdorff distance but not in Thurston's geometric topology.
-TODO: Include a picture.
-\end{example}
-
-On the other hand, if we assume minimality, then we can prove equivalence.
+Just as for Thurston's geometric topology, convergence on the level of flow boxes does not satisfy uniqueness of limits, and hence we speak of \dfn{maximal limits} to allow us to speak of a unique limit of a sequence.
 
 \begin{proposition}
-Let $(\lambda_i)$ be a sequence of minimal laminations.
-Then $(\lambda_i)$ converges in Thurston's geometric topology iff it converges in Hausdorff distance, and then its limit lamination is minimal.
+Every sequence of minimal laminations in a closed manifold with bounded curvature has a subsequence which has a maximal limit on the level of flow boxes.
 \end{proposition}
-\begin{proof}
-
-\end{proof}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{The weak topology of measures}
-TODO: Cite Thurston, give ounterexamples to show we need minimality
-
-\begin{proposition}
-Let $(\lambda_i, \mu_i)$ be a sequence of measured minimal laminations which converge in the weak topology of measures to $(\lambda, \mu)$.
-Then $\lambda$ is minimal and $\lambda_i \to \lambda$ in Thurston's geometric topology and Hausdorff distance.
-\end{proposition}
-\begin{proof}
-
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Flow boxes and Thurston's geometric topology}
-\begin{proposition}
-Let $(\lambda_i)$ be a sequence of minimal laminations which converges on the level of flow boxes to $\lambda$.
-Then $\lambda_i \to \lambda$ in Thurston's geometric topology.
-\end{proposition}
-\begin{proof}
-The statement is local so we work in a single flow box.
-Let $N$ be a leaf of $\lambda$, and let $k$ be the index of $N$.
-Then there are indices $k_i$ of leaves $N_i$ of $\lambda_i$ such that $k_i \to k$.
-So there exists $x_i \in x$ such that $x_i \to x$.
-So the normal vectors converge.
-\end{proof}
-
-I guess the converse should fail, because presumably there's a sequence of minimal surfaces (in a ball of $\RR^3$ or $\Hyp^3$, say) where the curvature blows up.
-Then these guys would have a subsequence in Hausdorff distance by compactness of $\mathscr H$ but not in flow boxes.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The compactness theorem}
-Let us give a precise and general statement of the compactness theorem, \cite[Proposition B.1]{ColdingMinicozziIV}.
-
-\begin{theorem}
-Let $(\lambda_i)$ be a sequence of minimal laminations such that for each compact $K$, $||\lambda_i||_K \lesssim_K 1$.
-Then after passing to a subsequence, there exists a minimal lamination $\lambda$ such that $\lambda_i \to \lambda$ on the level of flow boxes.
-\end{theorem}
 \begin{proof}
 By a density argument we may assume that $\lambda_i$ has finitely many leaves.
 We now select $x_0 \in M$ and construct flow boxes $F_i$ on $B(x_0, r)$ where $r > 0$ is to be determined, but is at least smaller than the injectivity radius $R(x_0)$.
@@ -502,6 +476,67 @@ Finally, the Solomon regularity theory implies that we can upgrade from $C^{1-}$
 
 That's very sketchy and there's a lot of details to fill in. But that's the idea.
 \end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Implications between modes}
+
+\subsection{Thurston's geometric topology versus Hausdorff distance}
+
+
+\begin{example}
+Let $f_i$ be a smooth approximation to the Dirac measure $\delta_{1/2-1/i}$ at $1/2 - 1/i$ with compact support in $(1/2 - 2/i, 1/2)$, so $f_i \to 0$ pointwise.
+Let $\lambda_i$ be the lamination consisting of the graph of $f_i$ in $\RR^2$ and $\lambda$ the lamination consisting of the horizontal line through $0$.
+Then $\lambda_i$ converges to $\lambda$ in Thurston's geometric topology but not in Hausdorff distance.
+TODO: Include a picture
+\end{example}
+
+\begin{example}\label{Hausdorff does not imply Thurston}
+Consider the sequence of continuous functions $f_i: \RR \to \RR$ where $f_i$ is constant away from $[0, 1/i^2]$, is $0$ on $(-\infty, 0]$, is $1/i$ on $[1/i^2, \infty)$, and is linear on $[0, 1/i^2]$.
+By smoothing out the graphs of $f_i$ appropriately one obtains a sequence of $C^1$ curves $\gamma_i$ in $\RR^2$, whose geodesic curvatures blow up near $(0, 0)$, and if we set $\lambda_i$ to be the union of $\gamma_1, \dots, \gamma_i$, then $(\lambda_i)$ is a sequence of laminations which converges in Hausdorff distance but not in Thurston's geometric topology.
+TODO: Include a picture.
+\end{example}
+
+On the other hand, if we assume minimality, then we can prove equivalence.
+
+\begin{proposition}
+Let $(\lambda_i)$ be a sequence of minimal laminations.
+Then $(\lambda_i)$ converges in Thurston's geometric topology iff it converges in Hausdorff distance, and then its limit lamination is minimal.
+\end{proposition}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The weak topology of measures}
+TODO: Cite Thurston, give ounterexamples to show we need minimality
+
+\begin{proposition}
+Let $(\lambda_i, \mu_i)$ be a sequence of measured minimal laminations which converge in the weak topology of measures to $(\lambda, \mu)$.
+Then $\lambda$ is minimal and $\lambda_i \to \lambda$ in Thurston's geometric topology and Hausdorff distance.
+\end{proposition}
+\begin{proof}
+
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Flow boxes and Thurston's geometric topology}
+\begin{proposition}
+Let $(\lambda_i)$ be a sequence of minimal laminations which converges on the level of flow boxes to $\lambda$.
+Then $\lambda_i \to \lambda$ in Thurston's geometric topology.
+\end{proposition}
+\begin{proof}
+The statement is local so we work in a single flow box.
+Let $N$ be a leaf of $\lambda$, and let $k$ be the index of $N$.
+Then there are indices $k_i$ of leaves $N_i$ of $\lambda_i$ such that $k_i \to k$.
+So there exists $x_i \in x$ such that $x_i \to x$.
+So the normal vectors converge.
+\end{proof}
+
+I guess the converse should fail, because presumably there's a sequence of minimal surfaces (in a ball of $\RR^3$ or $\Hyp^3$, say) where the curvature blows up.
+Then these guys would have a subsequence in Hausdorff distance by compactness of $\mathscr H$ but not in flow boxes.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
