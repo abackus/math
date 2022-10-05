@@ -1,0 +1,227 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle, block=fill]{metropolis}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\newcommand{\normal}{\mathbf n}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}
+
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\title{Functions of least gradient, minimal laminations, and averaging of differential forms}
+% \subtitle{A modern beamer theme}
+% \date{\today}
+\date{October 2022}
+\author{Aidan Backus}
+\institute{Brown University}
+% \titlegraphic{\hfill\includegraphics[height=1.5cm]{logo.pdf}}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents%[hideallsubsections]
+\end{frame}
+
+\section{The one-Laplacian}
+
+\begin{frame}{The one-Laplacian}
+We shall study the one-Laplace equation
+$$\Delta_1 u := \dif^* \frac{\dif u}{|\dif u|} = 0.$$
+Solutions are called \dfn{one-harmonic} or are said to have \dfn{least gradient}.
+
+The good news:
+\begin{itemize}
+    \item $\Delta_1$ is in divergence form.
+    \item If $y$ is a regular value of $u$, and $u(x) = y$, then $\Delta_1 u(x)$ is the mean curvature of $\{u = y\}$ at $x$, so $\{u = y\}$ is a minimal surface.
+\end{itemize}
+
+The bad news:
+\begin{itemize}
+    \item $\Delta_1 u$ is not elliptic near $\{\dif u = 0\}$.
+    \item The weak formulation $$\int_M \left(\frac{\dif u}{|\dif u|}, \nabla \varphi\right) \dif V = 0$$ makes no sense if $\{\dif u = 0\}$ has positive measure.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Weak and variational formulations}
+
+\begin{definition}[de L\'eon, Maz\'on, Rosser '14]
+A scalar field $u \in BV_\loc(M)$ is a \dfn{weak solution} of $\Delta_1 u = 0$ if there exists a vector field $X \in L^\infty(M, |\dif u|\dif V)$ such that as currents, $|\dif u| = (\dif u, X)$,
+and for every $\varphi \in H^1_\cpt(M)$,
+$$\int_M (\dif \varphi, X) \dif V = 0.$$
+\end{definition}
+
+\begin{theorem}[de L\'eon, Maz\'on, Rosser '14]
+A scalar field $u \in BV(M)$ is a weak solution of $\Delta_1 u = 0$ iff $u$ minimizes 
+$$\int_M |\dif u| \dif V := \sup_{X \in C^0_\cpt} \frac{1}{||X||_{C^0}} \int_M (\dif u, X) \dif V$$
+among all scalar fields with the same trace.
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Minimal surfaces}
+Since the natural space for solving $\Delta_1 u = 0$ is $BV$, solutions may have jumps, and in fact could even be indicator functions:
+
+\begin{definition}
+A set $U$ has \dfn{locally finite perimeter} if $1_U \in BV_\loc$.
+It has \dfn{least perimeter} if, in addition, $\Delta_1 1_U = 0$.
+\end{definition}
+
+\begin{theorem}[de Giorgi--Miranda regularity theorem, '60s]
+If $M$ is an open subset of $\RR^d$ and $d \leq 7$, then for every set $U$ of least perimeter in $M$, $\partial U$ is an (analytic, embedded, stable) minimal hypersurface.
+\end{theorem}
+
+This is false for $d = 8$ because $\{(x, y) \in (\RR^4)^2: |x|^2 = |y|^2\}$ is area-minimizing and singular. \textbf{Henceforth we assume $d \leq 7$ without explicitly stating it.}
+    
+\end{frame}
+
+\begin{frame}{Minimal surfaces}
+\begin{theorem}[de Giorgi--Miranda regularity theorem, '60s]
+If $M$ is an open subset of $\RR^d$ and $d \leq 7$, then for every set $U$ of least perimeter in $M$, $\partial U$ is an (analytic, embedded, stable) minimal hypersurface.
+\end{theorem}
+
+\begin{question}
+Let $M = M^d$ be a Riemannian manifold.
+Under what hypotheses on $M$ does the de Giorgi--Miranda regularity theorem hold?
+\end{question}
+
+\end{frame}
+
+\begin{frame}{Geodesic laminations}
+Consider the infinity-Laplace equation
+$$\Delta_\infty v := \nabla^\mu \partial^\nu v \cdot \partial_\mu v \cdot \partial_\nu v = 0.$$
+Solutions are minimizers of $||\dif v||_{L^\infty}$.
+
+Daskalopolous and Uhlenbeck constructed a \dfn{conjugate one-harmonic} function $u$ to an $\infty$-harmonic function.
+
+\begin{definition}
+A \dfn{geodesic lamination} is a closed subset of $M$ equipped with a Lipschitz local product structure $K \times N$ where $K \subset \RR$ is compact and the fibers $\{k\} \times N$ are complete geodesics.
+\end{definition}
+
+\begin{theorem}[Daskalopolous, Uhlenbeck '20]
+Let $M$ be a closed Riemann surface of genus $\geq 2$, $\Delta_\infty v = 0$, and $u$ the conjugate $1$-harmonic function to $v$.
+Then the support $\lambda$ of $\dif u$ is a geodesic lamination, and the geodesics are level sets of $u$.
+Moreover, $|\dif v| = ||\dif v||_{L^\infty}$ on $\lambda$.
+\end{theorem}
+
+\end{frame}
+
+\begin{frame}{Geodesic laminations}
+\begin{theorem}[Daskalopolous, Uhlenbeck '20]
+Let $M$ be a closed Riemann surface of genus $\geq 2$, $\Delta_\infty v = 0$, and $u$ the conjugate $1$-harmonic function to $v$.
+Then the support $\lambda$ of $\dif u$ is a geodesic lamination, and the geodesics are level sets of $u$.
+Moreover, $|\dif v| = ||\dif v||_{L^\infty}$ on $\lambda$.
+\end{theorem}
+
+\begin{question}
+On a more general Riemannian manifold $M$, what is the topological structure of the support $\lambda$ of $\dif u$, where $u$ is $1$-harmonic?
+What is the analogue of the conjugate $\infty$-harmonic $v$, and how does it interact with $\lambda$?
+\end{question}
+
+\end{frame}
+
+\begin{frame}{Computational geometry}
+Currently algorithms for computing minimal surfaces proceed by running a parabolic PDE solver on the mean curvature flow and taking $t \to \infty$.
+Can we do better?
+
+\begin{theorem}[Loisel '20]
+Let $\mathcal T$ be a quasiuniform triangulation of $M$ with $n$ simplices.
+Using a convex optimization method, one can minimize $\int_M |\dif u| \dif V$ among all functions of the same trace in $PL(\mathcal T)$, in $O(n^{1/2} \log n)$ Newton iterations.
+\end{theorem}
+
+\begin{question}
+In what sense does the minimizer in $PL(\mathcal T)$ converge to a $1$-harmonic function as we refine $\mathcal T$?
+Does this give an algorithm for computing minimal surfaces, geodesic laminations, and similar objects, from their Dirichlet data, which improves over mean curvature flow methods?
+\end{question}
+\end{frame}
+
+\section{The regularity theorem}
+\begin{frame}{The regularity theorem}
+\begin{theorem}[--, '22]
+If $M$ is a \textbf{manifold of constant sectional curvature} and $d \leq 7$, then for every set $U$ of least perimeter in $M$, $\partial U$ is an (analytic, embedded, stable) minimal hypersurface.
+\end{theorem}
+
+To set up the proof and see what's different from Miranda's case ($M \subseteq \RR^d$), we need to scrutinize the Lebesgue differentiation theorem to see how to construct the conormal $1$-form to $\partial U$.
+\end{frame}
+
+\begin{frame}{Lebesgue differentiation theorem}
+We need to take averages of differential forms:
+\begin{itemize}
+    \item If $f \in L^1_\loc(\RR^d)$ and $\mu$ is Radon, then for $\mu$-almost every $x$,
+$$f(x) := \lim_{\varepsilon \to 0} \frac{1}{\mu(B(x, \varepsilon))} \int_{B(x, \varepsilon)} f \dif \mu$$
+is well-defined.
+    \item If $f = \dif u/|\dif u|$ where $u = 1_U$, $U$ locally finite perimeter, one hopes to define the conormal $1$-form to $\partial U$, $|\dif u|\dif V$-almost everywhere.
+    \item If $M$ is not flat, then $f(x), f(y)$ live in \textbf{different vector spaces} for $x \neq y$! One has to choose a trivialization of the cotangent bundle to take the average of $f$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Lebesgue differentiation theorem}
+\begin{proposition}
+Let $\omega$ be a distribution of locally finite total variation, and $f: M \to T'M$ a $1$-form.
+Then there exists an $\omega$-null set $Z$ such that for every Riemannian metric on $M$, every frame $(\partial_\mu)$ and dual coframe $(\dif x^\mu)$, and every $p \notin Z$,
+$$f(p) := \lim_{\varepsilon \to 0} \frac{\int_{B(p, \varepsilon)} (f, \partial_\mu) |\omega| \dif V}{\int_{B(p, \varepsilon)} |\omega| \dif V} \dif x^\mu(p)$$
+is well-defined.
+\end{proposition}
+    
+The content here is that $Z$ is independent of the choice of Riemannian metric, frame, or coframe.
+In other words, \textbf{the notion of Lebesgue point of a differential form is well-defined}.
+
+\end{frame}
+
+\begin{frame}{de Giorgi's reduced boundary}
+\begin{definition}
+Let $U$ be a set of locally finite perimeter, $u := 1_U$, $\normal := \dif u/|\dif u|$, and $\partial^* U$ the set of $|\dif u|$-Lebesgue points of $\normal$.
+Then we call $\normal$ the \dfn{conormal one-form} to the \dfn{reduced boundary} $\partial^* U$.
+\end{definition}
+
+It is now easy to show (c.f. Giusti, Chapters 3 and 4):
+\begin{itemize}
+    \item $|\dif u|\dif V$ is the codimension-$1$ Hausdorff measure $\dif S$ on the measure-theoretic boundary $\partial U$.
+    \item $\partial^* U$ is dense and $\dif S$-full measure in $\partial U$.
+    \item If $\normal$ extends to a continuous $1$-form along $\partial U$, then $\partial U = \partial^* U$ is an embedded $C^1$ hypersurface.
+    \item Elliptic bootstrapping: If $\partial U$ is $C^1$ and $U$ has least perimeter, then $\partial U$ is an analytic stable minimal hypersurface.
+\end{itemize}
+
+The upshot is that we just need to show that $\normal$ is continuous.
+\end{frame}
+
+\begin{frame}{Minkowski spacetime}
+    $so(2, 1)$
+\end{frame}
+
+\end{document}
