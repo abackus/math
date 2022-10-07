@@ -125,7 +125,7 @@
     Let
     $$J(v) := \frac{1}{2} v^tAv - f^tv.$$
     Consider the problem of minimizing $J(v)$ subject to $Bv = g$.
-    By introducing a Lagrange multiplier $\lambda \in \RR^m$, show that the optimization problem is equivalent to 
+    By introducing a Lagrange multiplier $\lambda \in \RR^m$, show that the optimization problem is equivalent to
     $$\begin{bmatrix}A & B^t \\ B\end{bmatrix} \begin{bmatrix}u \\ v \end{bmatrix} = \begin{bmatrix}f \\ g\end{bmatrix}.$$
 \end{exer}
 
@@ -133,7 +133,7 @@ Assuming that $A$ is positive-semidefinite, we are searching for critical points
 (Otherwise solutions of that matrix equation could define saddle points of $J$!)
 Thus, we want $\partial_t J(v + tw)|_{t = 0} = 0$ for any $w \in \ker B$.
 $$\partial_t J(v + tw)|_{t = 0} = v^t Aw - f^t w$$
-thus (using the symmetry of $A$) the weak Euler-Lagrange equation is 
+thus (using the symmetry of $A$) the weak Euler-Lagrange equation is
 $$w^t Av = f ~\forall w \in \ker B.$$
 Since $(\ker B)^\perp$ is the image $V$ of $B^t$, we can rewrite this in the strong form
 $$Av \cong f \text{ modulo } V.$$
@@ -146,13 +146,66 @@ These two equations can be thus rewritten as the desired matrix equation.
     Show that the matrix equation is well-posed iff $BA^{-1}B^t$ is nonsingular.
 \end{exer}
 
-We rewrite the matrix as 
+We rewrite the matrix as
 $$\begin{bmatrix}A & B^t \\ B\end{bmatrix} = \begin{bmatrix}A \\ & I\end{bmatrix} \begin{bmatrix}I & A^{-1}B^t \\ B\end{bmatrix}$$
 where we multiplied by the diagonal of $(A, I)$, and its inverse.
-Then we have the determinant formula 
+Then we have the determinant formula
 $$\det \begin{bmatrix}A & B^t \\ B\end{bmatrix} = \det \begin{bmatrix}A \\ & I\end{bmatrix} \cdot \det \begin{bmatrix}I & A^{-1}B^t \\ B\end{bmatrix}.$$
-The first determinant is $\det A$ which is nonzero. So the problem is well-posed iff 
+The first determinant is $\det A$ which is nonzero. So the problem is well-posed iff
 $$0 \neq \det \begin{bmatrix}I & A^{-1}B^t \\ B\end{bmatrix} = \det(BA^{-1}B^t).$$
+
+\begin{exer}
+Suppose that $A$ is (possibly) indefinite.
+Show that if for $v \in \ker B$,
+$$v^t A v \gtrsim |v|^2$$
+and for all $\mu \in \RR^m$,
+$$\sup_{v \neq 0} \frac{\mu^t Bv}{|v|} \gtrsim |\mu|,$$
+then the problem is well-posed.
+\end{exer}
+
+The first condition here implies that $A$ restricts to a self-map of $\ker B$ which is positive-definite.
+The second condition says that $B$ is surjective: in fact, given $\mu \in \RR^m$, we choose $v$ as in the proposition, and then $\mu^t Bv \gtrsim |v| |\mu|$, thus $Bv$ is a scalar multiple of $\mu$, so there exists $c \in \RR$ such that $B(cv) = \mu$.
+
+We now decompose $\RR^n$ into $\ker B \oplus V$ where $V$ is the coimage of $B$.
+Since $A$ is positive-definite on $\ker B$ we can decompose $A$ as
+$$A = \begin{bmatrix}A_{++} & A_{0+} \\ & A_{00}\end{bmatrix}$$
+where $A_{++}: \ker B \to \ker B$ is an isomorphism, and $A_{0+}: \ker B \to V$, $A_{00}: V \to V$ are possibly singular linear maps.
+With this decomposition, $B, B^t$ become isomorphisms $B: V \to \RR^m$ and $B^t: \RR^m \to V$ and we can rewrite the system as
+$$\begin{bmatrix}A_{++} & A_{0+} \\ & A_{00} & B^t \\ & B\end{bmatrix} \begin{bmatrix} u_+ \\ u_0 \\ \lambda\end{bmatrix} = \begin{bmatrix} f_+ \\ f_0 \\ g\end{bmatrix}.$$
+Since $B$ is an isomorphism when restricted to $V$, $u_0 := B^{-1}g$ is well-defined.
+This lets us rewrite the system as
+$$\begin{bmatrix}A_{++} \\ &B^t \end{bmatrix} \begin{bmatrix} f_+ \\ \lambda \end{bmatrix} = \begin{bmatrix} f_+ - A_{0+} B^{-1} g \\ f_0 - A_{00} B^{-1} g\end{bmatrix}.$$
+Since $A_{++}$ and $B^t$ are both isomorphisms when so suitably restricted and corestricted, this system is well-posed.
+
+We have ignored continuous dependence on the data $(f, g)$.
+In fact, since the matrix in question is invertible, its conorm $\xi$ is positive, and then we have $|(u, \lambda)| \leq \xi^{-1} |(f, g)|$, so we do have continuous dependence.
+However, this fact is not quite useful as stated, as if we take $n, m \to \infty$ and $A, B$ are obtained as projections of some infinite-dimensional operators, then it could be that $\xi \to 0$.
+That is, the dependence is not uniform as $n, m \to \infty$.
+
+\begin{exer}
+Show that if either of the above conditions are violated then the system may not be well-posed.
+\end{exer}
+
+We should first point out that we never used the fact that $A_{++}$ is positive-definite, only that it is an isomorphism.
+So any counterexamples must require $A_{++}$ to not be an isomorphism, or else for there to be a component $A_{+0}: V \to \ker B$.
+If $A_{+0}$ is nonzero, but $A_{++}$ is an isomorphism, the system turns out to still be solvable.
+
+But suppose that $A_{++}$ is not an isomorphism (and $A_{+0}$ is zero). Then $u_0, \lambda$ are fixed, but $A_{++}$ is a square matrix, so it is not surjective, and hence there exist $f_+, g$ such that the equation
+$$A_{++} u = f_+ - A_{0+} B^{-1} g$$
+has no solution.
+
+So now let's consider the other fail-state where $B$ is not surjective on
+Then there exists $g$ such that $Bu_0 = g$ has no solution.
+
+\begin{exer}
+Show that if $A$ is positive-definite and $BA^{-1}B^t$ is nonsingular, then the two conditions are satisfied.
+\end{exer}
+
+It is clear that if $A$ is positive-definite then so is its restriction to $\ker B$.
+Since $BA^{-1}B^t$ is nonsingular, it is in particular injective.
+However, if $B$ is not surjective, then $B^t$ is not injective, so there exists $u$ such that $B^t u = 0$.
+But then $BA^{-1}B^t u = 0$ so it is not injective.
+Therefore $B$ is surjective.
 
 
 \end{document}

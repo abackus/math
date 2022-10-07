@@ -30,6 +30,7 @@
 \newcommand*\dif{\mathop{}\!\mathrm{d}}
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
 
+\newcommand{\avg}{\mathrm{avg}}
 \newcommand{\normal}{\mathbf n}
 
 \newcommand{\loc}{\mathrm{loc}}
@@ -64,7 +65,7 @@
 \begin{frame}{The one-Laplacian}
 We shall study the one-Laplace equation
 $$\Delta_1 u := \dif^* \frac{\dif u}{|\dif u|} = 0.$$
-Solutions are called \dfn{one-harmonic} or are said to have \dfn{least gradient}.
+Solutions are called \dfn{one-harmonic}.
 
 The good news:
 \begin{itemize}
@@ -88,9 +89,8 @@ $$\int_M (\dif \varphi, X) \dif V = 0.$$
 \end{definition}
 
 \begin{theorem}[de L\'eon, Maz\'on, Rosser '14]
-A scalar field $u \in BV(M)$ is a weak solution of $\Delta_1 u = 0$ iff $u$ minimizes 
-$$\int_M |\dif u| \dif V := \sup_{X \in C^0_\cpt} \frac{1}{||X||_{C^0}} \int_M (\dif u, X) \dif V$$
-among all scalar fields with the same trace.
+A scalar field $u \in BV(M)$ is a weak solution of $\Delta_1 u = 0$ iff $u$ is a critical point of the Lagrangian
+$$\int_M |\dif u| \dif V := \sup_{X \in C^0_\cpt} \frac{1}{||X||_{C^0}} \int_M (\dif u, X) \dif V.$$
 \end{theorem}
 \end{frame}
 
@@ -98,8 +98,8 @@ among all scalar fields with the same trace.
 Since the natural space for solving $\Delta_1 u = 0$ is $BV$, solutions may have jumps, and in fact could even be indicator functions:
 
 \begin{definition}
-A set $U$ has \dfn{locally finite perimeter} if $1_U \in BV_\loc$.
-It has \dfn{least perimeter} if, in addition, $\Delta_1 1_U = 0$.
+A function $u$ has \dfn{least gradient} if it is a minimizer of $\int |\dif u| \dif V$.
+A set $U$ has \dfn{locally finite perimeter} if $1_U \in BV_\loc$, and has \dfn{least perimeter} if $1_U$ has least gradient.
 \end{definition}
 
 \begin{theorem}[de Giorgi--Miranda regularity theorem, '60s]
@@ -107,7 +107,7 @@ If $M$ is an open subset of $\RR^d$ and $d \leq 7$, then for every set $U$ of le
 \end{theorem}
 
 This is false for $d = 8$ because $\{(x, y) \in (\RR^4)^2: |x|^2 = |y|^2\}$ is area-minimizing and singular. \textbf{Henceforth we assume $d \leq 7$ without explicitly stating it.}
-    
+
 \end{frame}
 
 \begin{frame}{Minimal surfaces}
@@ -120,6 +120,7 @@ Let $M = M^d$ be a Riemannian manifold.
 Under what hypotheses on $M$ does the de Giorgi--Miranda regularity theorem hold?
 \end{question}
 
+If $M$ has constant sectional curvature I can answer this question in the affirmative.
 \end{frame}
 
 \begin{frame}{Geodesic laminations}
@@ -127,13 +128,13 @@ Consider the infinity-Laplace equation
 $$\Delta_\infty v := \nabla^\mu \partial^\nu v \cdot \partial_\mu v \cdot \partial_\nu v = 0.$$
 Solutions are minimizers of $||\dif v||_{L^\infty}$.
 
-Daskalopolous and Uhlenbeck constructed a \dfn{conjugate one-harmonic} function $u$ to an $\infty$-harmonic function.
+Daskalopoulos and Uhlenbeck constructed a \dfn{conjugate one-harmonic} function $u$ to an $\infty$-harmonic function on a Riemann surface.
 
 \begin{definition}
 A \dfn{geodesic lamination} is a closed subset of $M$ equipped with a Lipschitz local product structure $K \times N$ where $K \subset \RR$ is compact and the fibers $\{k\} \times N$ are complete geodesics.
 \end{definition}
 
-\begin{theorem}[Daskalopolous, Uhlenbeck '20]
+\begin{theorem}[Daskalopoulos, Uhlenbeck '20]
 Let $M$ be a closed Riemann surface of genus $\geq 2$, $\Delta_\infty v = 0$, and $u$ the conjugate $1$-harmonic function to $v$.
 Then the support $\lambda$ of $\dif u$ is a geodesic lamination, and the geodesics are level sets of $u$.
 Moreover, $|\dif v| = ||\dif v||_{L^\infty}$ on $\lambda$.
@@ -153,11 +154,11 @@ On a more general Riemannian manifold $M$, what is the topological structure of 
 What is the analogue of the conjugate $\infty$-harmonic $v$, and how does it interact with $\lambda$?
 \end{question}
 
+I can answer the first part of this question (topological structure) but not the second (conjugate $\infty$-harmonics). The second is a goal of mine.
 \end{frame}
 
 \begin{frame}{Computational geometry}
 Currently algorithms for computing minimal surfaces proceed by running a parabolic PDE solver on the mean curvature flow and taking $t \to \infty$.
-Can we do better?
 
 \begin{theorem}[Loisel '20]
 Let $\mathcal T$ be a quasiuniform triangulation of $M$ with $n$ simplices.
@@ -166,11 +167,15 @@ Using a convex optimization method, one can minimize $\int_M |\dif u| \dif V$ am
 
 \begin{question}
 In what sense does the minimizer in $PL(\mathcal T)$ converge to a $1$-harmonic function as we refine $\mathcal T$?
-Does this give an algorithm for computing minimal surfaces, geodesic laminations, and similar objects, from their Dirichlet data, which improves over mean curvature flow methods?
+Does this give an algorithm for computing minimal surfaces, geodesic laminations, and similar objects, from their Dirichlet data?
 \end{question}
+
+Not going to address this question today. But it's a goal of mine.
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The regularity theorem}
+
 \begin{frame}{The regularity theorem}
 \begin{theorem}[--, '22]
 If $M$ is a \textbf{manifold of constant sectional curvature} and $d \leq 7$, then for every set $U$ of least perimeter in $M$, $\partial U$ is an (analytic, embedded, stable) minimal hypersurface.
@@ -197,7 +202,7 @@ Then there exists an $\omega$-null set $Z$ such that for every Riemannian metric
 $$f(p) := \lim_{\varepsilon \to 0} \frac{\int_{B(p, \varepsilon)} (f, \partial_\mu) |\omega| \dif V}{\int_{B(p, \varepsilon)} |\omega| \dif V} \dif x^\mu(p)$$
 is well-defined.
 \end{proposition}
-    
+
 The content here is that $Z$ is independent of the choice of Riemannian metric, frame, or coframe.
 In other words, \textbf{the notion of Lebesgue point of a differential form is well-defined}.
 
@@ -220,8 +225,218 @@ It is now easy to show (c.f. Giusti, Chapters 3 and 4):
 The upshot is that we just need to show that $\normal$ is continuous.
 \end{frame}
 
-\begin{frame}{Minkowski spacetime}
-    $so(2, 1)$
+\begin{frame}{Continuity of the conormal}
+We just need to show that $\normal$ is continuous.
+Miranda proceeds as follows:
+
+\begin{itemize}
+\item Take averages $\normal_r$ over $B(x, r)$ of $\normal$.
+\item Show that $(\normal_r)$ is locally uniformly Cauchy using induction on scale.
+\end{itemize}
+
+In order for us to take averages we need a way to embed all the tangent spaces of $M$ in a single vector space, in a way that respects the geometry enough to not give error terms when we do induction on scale.
+\begin{itemize}
+\item A natural choice is to use the exponential map.
+\begin{itemize} \item This gives very messy computations that seem to lead nowhere. \end{itemize}
+\item But if $M$ has constant sectional curvature, all its tangent spaces embed in a certain space in a very natural way...
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Isomorphisms of tangent spaces}
+We work out the case $M = \Hyp^d$ explicitly (other cases similar).
+\begin{itemize}
+\item Embed $\Hyp^d$ as the future unit hyperboloid in Minkowski spacetime $\RR^{1, d}$: $\Hyp^d = \{t^2 = |x|^2, t > 0\}$.
+\item $\RR^{1, d}$ is flat, so all its tangent spaces are identified with $\RR^{1, d}$.
+\item So the tangent spaces $T_x\Hyp^d$ all embed in $\RR^{1, d}$ and are identified up to Lorentz transformations ($SO^+(d, 1)$).
+\begin{itemize}
+\item In the nonrelativistic limit $c \to \infty$ ($c$ the lightspeed), an observer at the origin of $\RR^{1, d}$ would think that $M$ is $\{t = 1\}$.
+\item The error the observer would make would only be quadratically small in $c^{-1}$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Isomorphisms of tangent spaces}
+To define an averaging operator on $\Omega^1\Hyp^d$, we used the embedding $\Hyp^d \subset \RR^{1, d}$.
+\begin{itemize}
+\item Up to a quadratically small error in the scale $c^{-1}$, everything is $SO(d, 1)$-equivariant.
+\item Precedent for this trick: Daskalopoulos and Uhlenbeck '22 propose to study a PDE on $\Hyp^d$ using the action of $SO(d, 1)$ on $\RR^{1, d}$.
+\begin{itemize}
+\item In the case of D-U, they want to study Schatten-von Neumann $p$-harmonic maps $u: \Hyp^2 \to \Hyp^2$.
+\item To construct a stress tensor (or ``energy-momentum tensor") for $u$, they have to apply N\"other's theorem to $so(2, 1)$.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Definition of the averaging operator}
+Let $(x^\mu)$ be Poincar\'e ball coordinates on $\Hyp^d$.
+Using a family of isometries (uniquely defined up to a gauge transformation $\chi: \Hyp^d \to \SpOrth(\Hyp^d)$) we define translates $(x^\mu_p)$ based at any point $p \in \Hyp^d$.
+
+\begin{definition}
+For a $1$-form $\xi$ on $\Hyp^d$, $p \in \Hyp^d$, $A \subseteq \Hyp^d$, and a measure $\omega$, define
+$$\avg_{p, A, \omega} = \left[\frac{1}{\omega(A)} \int_A (\xi, \partial_\mu^p) \dif \omega\right] \dif x^\mu_p(p).$$
+\end{definition}
+
+\begin{proposition}
+The average is gauge-invariant, and almost translation-invariant:
+$$|\avg_{p, A} \xi - \avg_{q, A} \xi| \lesssim (\mathrm{diam} A)^2 ||\xi||_{C^0}.$$
+\end{proposition}
+\end{frame}
+
+\begin{frame}{The excess}
+\begin{definition}
+Let $U$ be a set of locally finite perimeter. We let
+$$\normal_r(p) := \avg_{p, B(p, r), dS} \dif 1_U.$$
+The \dfn{excess} of $U$ in an open set $A$ based at $p$ is
+$$\gamma_{A, p} := |\partial^* U \cap A|\left(1 - \left|\avg_{p, A, dS} \dif 1_U\right|\right).$$
+\end{definition}
+
+\begin{proposition}[de Giorgi's lemma]
+If $U$ has least perimeter and $r \ll 1$, then
+$$\gamma_{B(p, r/2), p} \leq \frac{\gamma_{B(p, r), p}}{2^d} + O(r^{d + 1}).$$
+\end{proposition}
+
+From de Giorgi's lemma and an induction on scale, $\gamma_{B(p, r), p} \lesssim r^d$, and it follows that $(\normal_r)$ is locally uniformly Cauchy, so we win.
+\end{frame}
+
+\begin{frame}{Proof of de Giorgi's lemma}
+\begin{proposition}[de Giorgi's lemma]
+If $U$ has least perimeter and $r \ll 1$, then
+$$\gamma_{B(p, r/2), p} \leq \frac{\gamma_{B(p, r), p}}{2^d} + O(r^{d + 1}).$$
+\end{proposition}
+
+\begin{itemize}
+\item Since we can take a loss of size $O(r^{d + 1})$, we can replace $\gamma_{B(p, r), p}$ with $\gamma_{B(p, r), q}$ as long as $q \in B(p, r)$.
+\item So wlog, the excess is based at a point of $\partial U$. By a mollification argument, wlog $\partial U$ is $C^1$.
+\item After a rotation, $\partial U$ is the graph of an approximate solution of a certain quasilinear elliptic PDE $Pw = 0$, since it minimizes hyperbolic area.
+\item So we just need to prove an elliptic estimate on $P$...
+\end{itemize}
+\end{frame}
+
+\begin{frame}{An elliptic estimate}
+\begin{lemma}
+Let $\mathscr L$ be the Lagrangian for the elliptic operator $P$.
+For each $\varepsilon > 0$, there exists $\delta > 0$ such that for every $w \in C^1(B_\rho)$ with $w(0) = 0$ and $||\dif w||_{C^0} \leq \delta$ and every $\beta > 0$, if we have a bound on the oscillation of $\mathscr L$ in the sense that
+$$\int_{B_\rho} \mathscr L(w, \dif w) - \mathscr L(w, \avg_\rho \dif w) \leq \beta$$
+and $w$ is approximately a solution in the sense that there exists $\tilde w$ with the same trace such that $P\tilde w = 0$ and
+$$\int_{B_\rho} \mathscr L(w, \dif w) \leq \delta \beta + \int_{B_\rho} \mathscr L(\tilde w, \dif \tilde w),$$
+then for any $\alpha = 0.5 + O(\varepsilon)$,
+$$\int_{B_{\alpha \rho}} \mathscr L(w, \dif w) - \mathscr L(w, \avg_{\alpha \rho} \dif w) \leq (\alpha^{d + 1} + \varepsilon) \beta + O(\rho^{d + 1}).$$
+\end{lemma}
+\end{frame}
+
+\begin{frame}{Proof of the elliptic estimate}
+Up to a small error, the oscillation of $\mathscr L$ is the excess! Also, $w(0) = 0$ - this is equivalent to the fact that the excess is based at $\partial U$ \textbf{and the reason why averaging must be translation-invariant up to quadratic error}.
+
+How to prove the elliptic estimate?
+\begin{itemize}
+\item Since $w(0) = 0$ and $||\dif w||_{C^0} \leq \delta$, we are only interested in near the origin of hyperbolic space.
+\item Taylor expanding the hyperbolic metric at the origin
+$$g_{\mu\nu} = \frac{\delta_{\mu\nu}}{(1 - |x|^2/4)^2} = \delta_{\mu\nu} + O(|x|^2)$$
+we see that up to $O(\rho^{d + 1})$, we can replace $P$ with the euclidean minimal surface equation.
+\item Reduced the problem to its euclidean case, which is proven in Miranda '66.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Elliptic estimates for euclidean minimal surface Lagrangians}
+How does Miranda prove the elliptic estimate in the euclidean case?
+
+\begin{itemize}
+\item Miranda linearizes the minimal surface equation to get the Laplacian, replacing $\mathscr L$ with the Dirichlet energy $\mathscr D$.
+\item Up to a small error, $w$ is a harmonic polynomial.
+\item The linear part of $w$ doesn't contribute since the mean value property kills the oscillation of $\mathscr D$.
+\item For harmonic polynomials of degree $\geq 2$, the estimate on $\mathscr D$ is a vacuous statement.
+\end{itemize}
+
+With this estimate in hand, we have proven the de Giorgi lemma and hence the de Giorgi--Miranda regularity theorem for $M = \Hyp^d$!!
+The proof for more general manifolds of constant sectional curvature is very similar.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Topological structure of functions of least gradient}
+
+\begin{frame}{Topological structure of functions of least gradient}
+\begin{definition}
+A \dfn{minimal lamination} $\lambda$ is a closed set with a Lipschitz local product structure $K \times N$, where $K \subseteq \RR$ is closed and the \dfn{leaves} -- that is, fibers $\{k\} \times N$ -- all have zero mean curvature.
+\end{definition}
+
+\begin{definition}
+A $d-1$-current $T$ is \dfn{Ruelle-Sullivan} with respect to the minimal lamination $\lambda$ if $T,\lambda$ have the same support, and $T$ locally takes the form
+$$\int_M T \wedge \varphi = \int_K \left[\int_{\{k\} \times N} \varphi\right] \dif \mu$$
+for every $d-1$-form $\varphi$ of regularity $C^0_\cpt$ and some Radon measure $\mu$ on $K$.
+\end{definition}
+\end{frame}
+
+\begin{frame}{Topological structure of functions of least gradient}
+
+\begin{theorem}[--, '22]
+Suppose that $M$ has constant sectional curvature and $2 \leq d \leq 4$.
+A function $u \in BV(M)$ has least gradient iff there is a minimal lamination $\lambda$ such that $\dif u$ is Ruelle-Sullivan for $\lambda$.
+Moreover, the leaves of $\lambda$ are the level sets $\partial \{u > y\}$.
+\end{theorem}
+
+The assertion that $\dif u$ is Ruelle-Sullivan for a minimal lamination easily implies that $u$ has least gradient, using the coarea formula.
+The content of this theorem is the other direction.
+\end{frame}
+
+\begin{frame}{Proof of the topological structure theorem}
+Let $u$ have least gradient.
+\begin{itemize}
+\item Level sets of $u$ are stable embedded minimal hypersurfaces, and if $\partial U, \partial V$ are level sets then either $U \subseteq V$ or $V \subseteq U$.
+\item Minimal surface equation is elliptic, so by the maximum principle, $\partial U, \partial V$ are disjoint.
+\item Given minimal hypersurfaces, when we can we glue them together in a Lipschitz way?
+\begin{itemize}
+\item For $d = 2$ (geodesics), D-U '20 found Lipschitz charts using the exponential map, since it sends geodesics to lines.
+\item Exponential map doesn't send minimal hypersurfaces to hyperplanes, so need a new idea.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gluing together the level sets}
+To glue together the level sets we drop some some sledgehammers.
+
+\begin{theorem}[Colding, Minicozzi '02]
+Let $(N_i)$ be a sequence of minimal hypersurfaces in a precompact subset of $M$, and assume that the second fundamental forms are locally uniformly bounded.
+Then there exists a minimal lamination $\lambda$ such that $N_i \to \lambda$ along a subsequence, in the sense that if we think of $N_i$ as a lamination with finitely many leaves, the local product structure of $N_i$ converges in a H\"older space to the local product structure of $\lambda$.
+\end{theorem}
+
+\begin{itemize}
+\item By Schauder and Harnack, a bound on the second fundamental forms implies a bound on the derivatives of the local product structures.
+\item By Ascoli, a subsequence converges.
+\item Finally, a regularity theorem for minimal laminations implies that a continuous lamination is Lipschitz.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Gluing together the level sets}
+
+\begin{theorem}[stable Bernstein theorem]
+Assume that $2 \leq d \leq 4$.
+The second fundamental form of a \textbf{stable} minimal hypersurface $N$ in $M$ is locally uniformly bounded independently of $N$.
+\end{theorem}
+
+The proof of this is very dimension-specific:
+\begin{itemize}
+\item For $d = 2$ this is vacuous (the second fundamental form of a geodesic is $0$).
+\item For $d = 3$, Schoen '83 uses the fact that $N$ has quadratic area growth to bound its Gauss curvature.
+\item For $d = 4$, Chodosh and Li '21 slice $N$ by level sets of the fundamental solution of the Laplacian on $M$; the slices are $2$-dimensional, hence have controlled Gauss curvature by Gauss-Bonnet.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The punchline}
+Let $u$ be a function of least gradient.
+
+\begin{itemize}
+\item By the de Giorgi--Miranda theorem, the level sets of $u$ are smooth disjoint stable embedded minimal hypersurfaces.
+\item By the stable Bernstein theorem, the level sets all satisfy the same bound on their second fundamental forms.
+\item So by the compactness theorem of Colding--Minicozzi, if we choose a dense sequence $(\tilde N_i)$ of level sets, and let
+$$N_i := \tilde N_1 \cup \cdots \cup \tilde N_i,$$
+then along a subsequence, $N_i$ converges to a lamination.
+\end{itemize}
+
+That's what we wanted to show!
+\end{frame}
+
+\begin{frame}{Thanks for coming!}
+Questions?
 \end{frame}
 
 \end{document}
