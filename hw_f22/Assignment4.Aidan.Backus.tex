@@ -1,0 +1,187 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 4} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Consider the pure Neumann problem $-\Delta u = f$, $\partial_n u = g$.
+Reformulate it in variational form
+$$a(u, v) = Lv ~\forall v \in X$$
+where $X = \{v \in H^1(\Omega): \int_\Omega v = 0\}$ and $L(1) = 0$.
+\end{exer}
+
+We let
+$$a(u, v) := (\nabla u, \nabla v)$$
+and
+$$Lv := (g, v)_{L^2(\partial \Omega)} - (f, v).$$
+
+\begin{exer}
+Show that the problem can be reformulated as minimizing $J(v)$ subject to $\int v = 0$ where
+$$J(v) := \frac{1}{2} a(v, v) - Lv.$$
+\end{exer}
+
+Since $J$ is a quadratic functional on $X$ its Euler-Lagrange equation is
+$$a(v, w) = Lw ~\forall w \in X.$$
+We also claim that $a$ is positive-definite on $X$, so $J$ is strictly convex on $X$ (so minimizers of $J$ are exactly solutions of the Euler-Lagrange equations).
+In fact, if $v \in X$ then clearly $a(v, v) \geq 0$; also if $a(v, v) = 0$ then $\nabla v = 0$, so by Poincar\'e's inequality (valid on $X$ by definition of $X$), $v = 0$.
+
+\begin{exer}
+By enforcing the constraint as a Lagrange multiplier, show that the constrained minimization problem is equivalent to the saddle point problem
+\begin{align*}
+a(u, v) + b(v, \lambda) &= Lv ~\forall v \in H^1\\
+b(u, \mu) &= 0 ~\forall \mu \in \RR
+\end{align*}
+where $b(v, \mu) := \mu \int_\Omega v$.
+\end{exer}
+
+Suppose that $u$ solves the constrained minimization problem. Then $b(u, \cdot) = 0$ since $u \in X$, and besides, if we write $v = v_0 + v^\perp$ where $v_0 \in X$ and $v^\perp \in X^\perp \cong \RR$, then $a(u, v^\perp) = 0$ since $v^\perp$ is constant, and $b(v_0, \lambda) = 0$ since $v_0 \in X$.
+So
+$$a(u, v) + b(v, \lambda) = a(u, v_0) + b(v^\perp, \lambda) = a(u, v_0) + \lambda v^\perp |\Omega|.$$
+On the other hand,
+$$Lv = Lv_0 + Lv^\perp = a(u, v_0) + v^\perp L(1).$$
+So if we set $\lambda := L(1)/|\Omega|$ then $(u, \lambda)$ solves the saddle point problem.
+
+\begin{exer}
+Show that the saddle point problem satisfies the hypotheses of Brezzi's theorem.
+Conclude that the problem is well-posed.
+\end{exer}
+
+We already argued that $a$ is positive-definite on the left kernel $X$ of $b$.
+In fact we can upgrade this positive-definiteness to ellipticity: the elliptic constant is given by the Poincar\'e constant of $\Omega$.
+It remains to check the Babuška-Brezzi condition, namely that for every $\mu \in \RR$ there exists $v \in H^1$ such that
+$$b(v, \mu) \gtrsim |\mu| \cdot ||v||_{H^1}.$$
+In fact, if we take $v := 1$, then
+$$b(v, \mu) = \mu \int_\Omega 1 = \mu |\Omega| \gtrsim \mu \cdot 1.$$
+So by Brezzi's theorem, the saddle point problem is well-posed.
+
+\begin{exer}
+Show that if $(u, \lambda)$ solves the saddle point problem, then $u$ solves the pure Neumann problem, and write $\lambda$ explicitly.
+\end{exer}
+
+If $u$ solves the saddle point problem, then $u$ lies in the left kernel $X$ of $b$.
+In particular $\int_\Omega u = 0$.
+Taking $v = 1$, we see that
+$$\lambda = \frac{1}{|\Omega|} \left[\int_{\partial \Omega} g - \int_\Omega f\right].$$
+Taking $v \in X$,
+$$\int_{\partial \Omega} v\partial_n u - \int_\Omega v\Delta u = \int_\Omega \nabla u \cdot \nabla v = \int_{\partial \Omega} gv - \int_\Omega fv.$$
+Testing against functions with zero mean is enough to determine a function pointwise, so $\partial_n u = g$ and $\Delta u = f$.
+
+
+\end{document}
