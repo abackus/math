@@ -172,8 +172,8 @@ Here the \dfn{sampling function} is defined on $\RR^m$ by
 $$\sinc \eta := \prod_{k=1}^m \frac{\sin \eta_k}{\eta_k}.$$
 
 \begin{lemma}
-For $\beta := (1 - \alpha)/2 \lesssim L^{-2/3}$, and $\xi \lesssim L^n$,
-$$\widehat{1_{G_n}}(\xi) = 3^d \alpha^d e^{-2(1 + \beta) \pi i L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \sinc(3\pi \xi) + O\left(\frac{\xi}{L^n}\right).$$
+One has
+$$\widehat{1_{G_n}}(\xi) = \alpha^d e^{-i\pi(\alpha + 1)L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \frac{\sin(\pi (3 + L^{-n}) \xi_j)}{\sin(\pi L^{-n} \xi_j)}.$$
 \end{lemma}
 \begin{proof}
 We begin by computing 
@@ -187,19 +187,16 @@ $$\widehat{1_{[0, 1]^d}}(\xi) = e^{-i\pi \sum_j \xi_j} \sinc(\pi \xi)$$
 so, since $\Sigma$ has $(3L^n)^d$ elements,
 \begin{align*}
 \widehat{1_{G_n}}(\xi)
-&=\frac{\alpha^d}{L^{nd}} e^{-i\pi \alpha L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \sum_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi} \\
-&= (3\alpha)^d e^{-i\pi \alpha L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \Expect_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}.
+&=\frac{\alpha^d}{L^{nd}} e^{-i\pi \alpha L^{-n} \sum_j \xi_j} \sinc\left(\frac{\pi \alpha}{L^n} \xi\right) \sum_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}.
 \end{align*}
-We approximate the expected value using endpoint quadrature. The derivative of $\sigma_j \mapsto e^{-2\pi iL^{-n} \sigma_j \xi_j}$ is $\sim L^{-n} \xi_j$ which gives 
+We split up the sum 
+$$\sum_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi} = \prod_{j=1}^d \sum_{\sigma_j=-L^n}^{2L^n} e^{-2\pi iL^{-n} \sigma_j \xi_j}  $$
+and observe that each factor is a modulated Dirichlet kernel.
+To be more precise, if we set $\tau_j = \sigma_j = L^{-n}/2$, then 
 \begin{align*}
-\Expect_{\sigma \in \Sigma} e^{-2\pi iL^{-n} \sigma \cdot \xi}
-&= \prod_{j=1}^d \dashint_{-1}^2 e^{-2\pi iL^{-n}\sigma_j \xi_j} \dif \sigma_j + O(L^{-n} |\xi|) \\
-&= \prod_{j=1}^d e^{-\pi iL^{-n} \xi_j} \sinc(3\pi \xi_j) + O(L^{-n} |\xi|) \\
-&= e^{-\pi i L^{-n} \sum_j \xi_j} \sinc(3\pi \xi) + O(L^{-n} |\xi|).
-\end{align*}
-The computation of the dominant term is now complete. As for the error term, it is essentially 
-\begin{align*}
-&\lesssim \left|\sinc\left(\frac{\pi \alpha}{L^n} \xi\right) L^{-n} |\xi|\right| \lesssim \left|\sin\left(\frac{\pi \alpha}{L^n} |\xi|\right)\right| \lesssim \frac{|\xi|}{L^n}. \qedhere
+\sum_{\sigma_j=-L^n}^{2L^n} e^{-2\pi iL^{-n} \sigma_j \xi_j}
+&= e^{-\pi i L^n\xi_j} \sum_{\tau_j = -1.5 L^n}^{1.5 L^n} e^{-2\pi iL^{-n} \tau_j \xi_j} \\
+&= e^{-\pi i L^n\xi_j} \frac{\sin(2\pi (1.5 + 0.5L^{-n}) \xi_j)}{\sin(\pi L^{-n} \xi_j)}. \qedhere
 \end{align*}
 \end{proof}
 
