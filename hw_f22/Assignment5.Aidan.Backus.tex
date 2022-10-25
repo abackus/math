@@ -1,0 +1,219 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 5} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+    Consider the biharmonic equation $\Delta^2 u = f$ with $u = \partial_n u = 0$ on $\partial \Omega$.
+    Introduce $\sigma = \Delta u$ and show that the problem can be formulated in saddle-point form
+\begin{align*}
+    a(\sigma, \tau) + b(\tau, u) &= 0 \\
+    b(\sigma, v) &= -(f, v)
+\end{align*}
+    for all $(\tau, v) \in H^1(\Omega) \times H^1_0(\Omega)$.
+\end{exer}
+
+Let $a(\psi, \tau) = -(\psi, \tau)$ and $b(\tau, v) = (\nabla \tau, \nabla v)$.
+Morally, the first equation is equivalent to $-\sigma + \Delta u = 0$, while the second is just the usual Laplace equation $-\Delta \sigma = -f$.
+However, we have to check the boundary terms from integration by parts:
+$$b(\tau, u) = (\nabla \tau, \nabla u) = -(\tau, \Delta u) + \int_{\partial \Omega} \tau \partial_n u \dif S$$
+and 
+$$b(\sigma, v) = (\nabla \sigma, \nabla v) = -(\Delta \sigma, v) + \int_{\partial \Omega} v \partial_n \sigma \dif S = -(\Delta \sigma, v)$$
+where the second boundary term drops out because $v \in H^1_0(\Omega)$.
+In particular, the saddle-point problem is equivalent to
+\begin{align*}
+(\psi, \tau) + (\tau, \Delta u) &= \int_{\partial \Omega} \tau \partial_n u \dif S \\
+(\Delta \sigma, v) &= (f, v) \\
+u|_{\partial \Omega} &= 0
+\end{align*}
+for all $\tau \in H^1(\Omega)$ and $v \in H^1_0(\Omega)$ (where the Dirichlet condition arises from the fact that $u \in H^1_0(\Omega)$).
+Now if we assume the saddle-point formulation then we can take $\tau$ supported arbitrarily close to the boundary to make the left-hand side of the first equation arbitrarily small, which means that the right-hand side must be zero, that is, $\partial_n u = 0$.
+Thus if the saddle-point formulation holds, then so does the formulation 
+\begin{align*}
+(\psi, \tau) + (\tau, \Delta u) &= \int_{\partial \Omega} \tau \partial_n u \dif S \\
+(\Delta \sigma, v) &= (f, v) \\
+u|_{\partial \Omega} &= 0\\
+\partial_n u|_{\partial \Omega} &= 0
+\end{align*}
+for all $\tau \in H^1_0(\Omega)$ and $v \in H^1_0(\Omega)$.
+Clearly this formulation implies the other saddle-point formulation; it is also manifestly equivalent to the original formulation in terms of the biharmonic equation.
+
+\begin{exer}
+Show that the saddle-point problem satisfies Brezzi's theorem and is well-posed.
+\end{exer}
+
+Since $a$ is an inner product, it is elliptic everywhere, in particular on the left kernel of $b$.
+Moreover $a, b$ are clearly continuous bilinear forms.
+As for the Babuška-Brezzi condition, observe that given $v \in H^1_0(\Omega)$ nonzero, we can take $\tau = v$, and then 
+$$b(\tau, v) = (\nabla \tau, \nabla v) \gtrsim ||\tau||_{H^1} \cdot ||v||_{H^1_0}$$
+by Poincar\'e's inequality.
+So by Brezzi's theorem, the saddle-point problem is well-posed.
+
+\begin{exer}
+Let $P_h$ be a triangulation of $\Omega$ and $V_h \subseteq H^1(\Omega)$, $M_h \subseteq H^1_0(\Omega)$ consist of continuous piecewise linear functions.
+Show that there is a unique solution $(\sigma_h, u_h)$ of the saddle-point problem discretized in $V_h \times M_h$.
+\end{exer}
+
+Since $a$ is elliptic everywhere, this is in particular true on the left kernel of $b|_{V_h \times M_h}$.
+Also the Babuška-Brezzi condition stil holds: for $v \in M_h$, $\tau = v$ is an element of $V_h$ and so we can use Poincar\'e's inequality.
+Then the existence and uniqueness is immediate from Brezzi's theorem.
+
+For the later parts of this problem set let me record that the stability constant is the maximum of $1$ (given by the ellipticity of the inner product $a$) and the reciprocal of the Poincar\'e constant of $\Omega$.
+Neither of these constants have anything to do with $P_h$, so these discretizations are actually uniformly well-posed.
+
+\begin{exer}
+Show that 
+$$||\sigma - \sigma_h||_{H^1} + ||u - u_h||_{H^1_0} \lesssim h||u||_{H^4}.$$
+\end{exer}
+
+By the Aziz-Babuška inequality and the fact that the discretizations are uniformly well-posed as $h \to 0$,
+$$||\sigma - \sigma_h||_{H^1} + ||u - u_h||_{H^1_0} \lesssim ||\sigma - \tilde \sigma_h||_{H^1} + ||u - \tilde u_h||_{H^1_0}$$
+where $\tilde \sigma_h, \tilde u_h$ are the orthogonal projections of $\sigma, u$ to $V_h, M_h$ respectively.
+Since we are using piecewise linear elements,
+$$||\sigma - \tilde \sigma_h||_{H^1} \lesssim h ||\sigma||_{H^2} \leq h ||u||_{H^4}$$
+and 
+$$||u - \tilde u_h||_{H^1_0} \lesssim h ||u||_{H^2} \leq h ||u||_{H^4}.$$
+
+\begin{exer}
+Show that one can obtain $(\sigma_h, u_h)$ by solving a system of linear equations of the form 
+\begin{align*}
+    A_h \sigma + B_h^t u &= 0 \\
+    B_h \sigma &= -f
+\end{align*}
+where $A_h$ is the mass matrix of the $L^2$ inner product and $B_h$ is the stiffness matrix of the Poisson problem for $P_h$.
+Explain why this scheme is more attractive in practice than the usual disretization of the biharmonic equation.
+\end{exer}
+
+Let $(\tau_i)$ and $(v_\alpha)$ be bases of $V_h$ and $M_h$ respectively. The discrete saddle-point problem is 
+\begin{align*}
+-(\sigma, \tau_i) + (\nabla \tau_i, \nabla u) &= 0 \\
+(\nabla \sigma, \nabla v_\alpha) &= -(f, v_\alpha)
+\end{align*}
+for every $i, \alpha$.
+Since the matrix with rows $(\cdot, \tau_i)$ is the $L^2$ inner product on $V_h$, and $-(\nabla \bullet, \nabla \tau_i)$ exactly discretizes to the $i$th column of the stiffness matrix of the Poisson problem, the first row is
+$$-A_h \sigma - B_h^t u = 0.$$
+By the same argument, $B_h \sigma = -f$.
+
+This is a very convenient scheme, because every finite element package out there has a routine to generate the basis functions for the piecewise linear spaces $V_h, M_h$, and how to solve the Poisson problem on such a discretization.
+The $L^2$ mass matrix $A_h$ is also pretty straightforward to generate, as one can just compute what the pairings of any two basis functions are in $L^2$.
+
+Solving the biharmonic equation directly would instead require one to either have access to a package, or write a package, with $H^2$ conforming elements, such as piecewise cubics. Aside from being extra work, since piecewise cubics have more degrees of freedom, such a scheme would require one to invert matrices $A_h, B_h$ which are much larger.
+
+\end{document}

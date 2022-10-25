@@ -1,0 +1,406 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Notes on Yang-Mills and gauge theory}
+\author{Aidan Backus}
+\date{October 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\SpUn}{\mathbf{SU}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\newcommand*\Dif{\mathop{}\!\mathrm{D}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\Ad}{\mathrm{Ad}}
+\newcommand{\ad}{\mathrm{ad}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\tr}{\mathrm{tr}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+% \newtheorem{claim}{Claim}[theorem]
+% \renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{yangmills.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+
+\begin{document}
+\begin{abstract}
+    Here are some notes on Yang-Mills as I try to learn about it.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ \tableofcontents
+
+\section{Preliminaries}
+\subsection{Lie algebras}
+Let $G$ be a compact semisimple Lie group over $\CC$.
+In other words $G$ is the finite product of simple Lie groups, those which do not have a nontrivial Lie quotient.
+(This theory works in higher generality but I want to be concrete.)
+The (real) tangent space at the identity, that is, the \dfn{linearization} of $G$, is a Lie algebra $\mathfrak g$ over $\CC$.
+Thus, $\chi \in G$ which is close to the identity can be written $\chi = e^A$ for some $A \in \mathfrak g$.
+
+\begin{definition}
+The \dfn{adjoint representation} $\Ad$ of $G$ on $\mathfrak g$ is the linearization of the action of $G$ on itself by conjugation, namely
+$$\Ad(\chi) A := \chi A \chi^{-1}.$$
+The \dfn{adjoint representation} $\ad$ of $\mathfrak g$ on itself is the linearization of the adjoint action of $G$, namely 
+$$\ad(A) B := [A, B].$$
+\end{definition}
+
+In particular we have 
+$$\Ad: G \to \Aut(\mathfrak g)$$
+and hence $\ad$ maps $\mathfrak g$ into the Lie algebra of derivations of $\mathfrak g$, that is 
+$$\ad(A) [B, C] = [B, \ad(A)C] + [\ad(A)B, C].$$
+Indeed, this Lie algebra is the linearization of the Lie group $\Aut(\mathfrak g)$.
+Thinking of $\ad(A)$ as a linear map, we can define:
+
+\begin{definition}
+    The \dfn{Killing form} of a Lie algebra $\mathfrak g$ acts on $A, B \in \mathfrak g$ by 
+    $$(A, B) := \tr(\ad(A) \overline{\ad(B)}).$$
+\end{definition}
+
+\begin{theorem}
+    Suppose that $\mathfrak g$ is semisimple. Then the Killing form is an $\Ad$-invariant inner product on $\mathfrak g$.
+\end{theorem}
+
+Since $G$ is semisimple, so is its linearization, thus its linearization carries the structure of a Hilbert space.
+
+%%%%%%%%%%%%%%%
+\subsection{Connections}
+\begin{definition}
+Let $M$ be a manifold, $G$ a Lie group, and $E \to M$ a vector bundle over $\CC$.
+We call $E \to M$ a $G$-\dfn{bundle} if it is equipped with a representation $G \to \Aut(E)$ so that transition maps can be chosen to lie in $G$.
+In this setting we call a map $M \to G$ a \dfn{gauge transformation}.
+\end{definition}
+
+If $E \to M$ is a $G$-bundle, then any gauge transformation $\chi: M \to G$ acts on the fibers of $E$:
+$$\chi(x, v) = (x, \chi(x)v).$$
+In particular $\chi$ acts on sections $f: M \to E$ by $\chi f(x) = \chi(x) f(x)$.
+
+Recall that if $E \to M$ is a vector bundle and $\Dif$ is a connection on $E$, then locally we can find \dfn{gauge fields} or \dfn{Christoffel symbols}, which are $\mathfrak{gl}(E)$-valued $1$-forms 
+$$A: M \to T'M \otimes \mathfrak{gl}(E)$$
+such that for any section $f: M \to E$,
+$$\Dif_\mu f = \partial_\mu f + A_\mu f.$$
+Here $\mathfrak{gl}(E)$ is the bundle of Lie algebras of linear maps $E_x \to E_x$, $x \in M$.
+On the other hand, if $\mathfrak g$ is the Lie algebra of $G$, then the linearization of the representation $G \to \Aut(E)$ is a representation $\mathfrak g \to \mathfrak{gl}(E)$.
+So the next definition makes sense:
+
+\begin{definition}
+Let $G$ be a Lie group with Lie algebra $\mathfrak g$.
+By a \dfn{connection} on a $G$-bundle $E$ we shall mean a connection $\Dif$ on the level of vector bundles, such that we can cover $M$ by open sets in which $\Dif$ admits gauge fields valued in $\mathfrak g$.
+\end{definition}
+
+Assuming that the representation $G \to \Aut(E)$ is faithful, we can think of the linearization $\mathfrak g$ of $G$ as a Lie algebra bundle, by identifying it with a subbundle of $\mathfrak{gl}(E)$.
+Then a connection $\Dif$ acts on sections of $\mathfrak g$ using the adjoint representation.
+Indeed, if $\Dif$ has gauge field $A$, then 
+$$\Dif_\mu B = \partial_\mu B + [A_\mu, B].$$
+In particular the curvature satisfies
+$$[\Dif_\mu, \Dif_\nu] = \ad(\partial_\mu A_\nu - \partial_\nu A_\mu + [A_\mu, A_\nu]).$$
+This motivates our next definition, and shows that it does not depend on a choice of gauge field.
+
+\begin{definition}
+The \dfn{curvature} $2$-form of a connection with gauge field $A$ is the $\mathfrak g$-valued $2$-form
+$$F_{\mu \nu} := \partial_\mu A_\nu - \partial_\nu A_\mu + [A_\mu, A_\nu].$$
+\end{definition}
+
+Henceforth we assume that $G$ is semisimple, compact, and faithful so everything is well-defined.
+
+The curvature form $F$ of a connection $\Dif$ is antisymmetric and its derivative is the $\mathfrak g$-valued $3$-form
+$$(\Dif F)_{\mu \nu \lambda} = \Dif_\mu F_{\nu \lambda} + \Dif_\nu F_{\lambda \mu} + \Dif_\lambda F_{\mu \nu}.$$
+
+\begin{proposition}[Bianchi identity]
+The curvature $2$-form $F$ of $\Dif$ satisfies $\Dif F = 0$.
+\end{proposition}
+\begin{proof}
+The first term is 
+$$\Dif_\mu F_{\nu \lambda} = \partial_\mu (\partial_\nu A_\lambda - \partial_\lambda A_\nu + [A_\nu, A_\lambda]) + [A_\mu, F_{\nu \lambda}].$$
+Note that
+$$\partial_\mu (\partial_\nu A_\lambda - \partial_\lambda A_\nu) + \partial_\nu (\partial_\lambda A_\mu - \partial_\mu A_\lambda) + \partial_\lambda (\partial_\mu A_\nu - \partial_\nu A_\mu) = 0$$
+by the classical Bianchi identity. So 
+$$(\Dif F)_{\mu \nu \lambda} = \partial_\mu [A_\nu, A_\lambda] + \partial_\nu [A_\lambda, A_\mu] + \partial_\lambda [A_\mu, A_\nu] + [A_\mu, F_{\nu \lambda}] + [A_\nu, F_{\lambda \mu}] + [A_\lambda, F_{\mu \nu}].$$
+Now observe that 
+$$[A_\mu, F_{\nu \lambda}] = [A_\mu, \partial_\nu A_\lambda] - [A_\mu, \partial_\lambda A_\nu] + [A_\mu, [A_\nu, A_\lambda]].$$
+By the Jacobi identity
+$$[A_\mu, [A_\nu, A_\lambda]] = [A_\nu, [A_\lambda, A_\mu]] + [A_\lambda, [A_\mu, A_\nu]] = 0,$$
+the double commutator terms all cancel out.
+Thus 
+\begin{align*}
+(\Dif F)_{\mu \nu \lambda} &= \partial_\mu [A_\nu, A_\lambda] + \partial_\nu [A_\lambda, A_\mu] + \partial_\lambda [A_\mu, A_\nu] \\
+&\qquad + [A_\mu, \partial_\nu A_\lambda] - [A_\mu \partial_\lambda A_\nu] + [A_\nu, \partial_\lambda A_\mu] - [A_\nu, \partial_\mu A_\lambda] + [A_\lambda, \partial_\mu A_\nu] - [A_\lambda, \partial_\nu A_\mu].
+\end{align*}
+By the product rule
+$$\partial_\mu [A_\nu, A_\lambda] = [\partial_\mu A_\nu, A_\lambda] + [A_\nu, \partial_\mu A_\lambda]$$
+all the remaining terms cancel.
+\end{proof}
+
+Now consider the action of a gauge transformation $\chi: M \to G$.
+We define a gauge-transformed gauge field
+$$A_\mu^{(\chi)} := \chi A_\mu \chi^{-1} - \chi_{,\mu} \chi^{-1}$$
+so that for a gauge-transformed section $f^{(\chi)} := \chi f$,
+$$\Dif^{(\chi)}_\mu f^{(\chi)} = \chi_{,\mu} f + \chi \Dif_\mu f - \chi_{,\mu} f = \chi \Dif_\mu f = (\Dif_\mu f)^{(\chi)}.$$
+Noticing that the $\chi_{,\mu} \chi^{-1}$ terms all cancel when we take curvatures, we observe that gauge transformations act on curvature by
+\begin{equation}\label{curvature transformation}
+F_{\mu \nu}^{(\chi)} = \chi F_{\mu \nu} \chi^{-1}.
+\end{equation}
+
+\begin{definition}
+The \dfn{Laplace} (for $M$ Riemannian) $\Delta_A$ or \dfn{wave} (for $M$ Lorentzian) $\Box_A$ operators on sections $f: M \to E$ are defined by $\Dif^\mu \Dif_\mu$.
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Characteristic classes}
+\begin{definition}
+Let $\Dif$ a connection on a $G$-bundle of rank $k$ with curvature $F$.
+For a symmetric $\Ad$-invariant homogeneous polynomial $f: \mathfrak g \to \CC$ of degree $k$, define the cohomology class of
+$$f(F_{\mu_1 \mu_2}, \dots, F_{\mu_{2k - 1} \mu_{2k}}) \dif x^{\mu_1} \wedge \cdots \wedge \dif x^{\mu_{2k}}$$
+to be the \dfn{characteristic class} of $\Dif$ measured by $f$.
+\end{definition}
+
+\begin{theorem}[Chern-Weil]
+Let $\Dif$ be a connection on a $G$-bundle $E \to M$ of rank $k$.
+Then the characteristic class of $\Dif$ measured by a symmetric $k$-linear form $f$ is well-defined as an element of $H^{2k}(M, \CC)$, and only depends on $E$ and $f$.
+\end{theorem}
+\begin{proof}
+Since $f$ is $\Ad$-invariant, it commutes with $\Dif$, and by the Bianchi identity, $\Dif F = 0$.
+So $\Dif$ annihilates the characteristic class.
+But the characteristic class is a $2k$-form with values in $\CC$, not in $\mathfrak g$, so it commutes with the gauge field $A$ of $\Dif$.
+Therefore $A$ annihilates the characteristic class, so $\dif$ does as well.
+In particular, the representative of the characteristic class is a closed $2k$-form, so it honestly defines an element of $H^{2k}(M, \CC)$.
+Any two connections on $E$ are homotopic, so as an element of $H^{2k}(M, \CC)$ their characteristic classes are identical.
+\end{proof}
+
+This suggests that the homotopy class of the vector bundle associated to a gauge field is of great importance, since the gauge field already knows the characteristic class of the vector bundle.
+Thus we make the following definition.
+
+\begin{definition}
+Let $A$ be a gauge field on a closed manifold.
+The \dfn{homotopy class} of $A$ is the isomorphism class of the vector bundle which admits $A$ as a connection.
+\end{definition}
+
+If $A$ is a gauge field on $\RR^d$ with compactly supported curvature, then we can also define its homotopy class.
+Applying a gauge transformation, we may assume that $A = 0$ near infinity.
+We then pull back $A$ by stereographic projection to a bundle on $\Sph^d$, which is well-defined because we just set $A = 0$ at the north pole of $\Sph^d$.
+Since $\Sph^d$ is a closed manifold, this gives us a gauge field on $\Sph^d$ and we define the homotopy class of $A$ to be the homotopy class of this extended gauge field.
+
+%%%%%%%%%%%%%
+\subsection{Uhlenbeck's lemma}
+Let's work on a Riemannian manifold and put units on everything.
+A gauge field $A$ has one down-index, so it should be in units of inverse meters.
+Thus the curvature $2$-form should be in units of inverse square meters, and the $L^p$ norm of the curvature is in units of meters$^{d - 2p}$.
+So the curvature naturally lives in $L^{d/2}$, and hence we naturally think of $A \in W^{1, d/2}$.
+
+The first upshot is that the energy is critical if $d = 4$.
+For $d \geq 5$ the energy is subcritical and Yang-Mills is ``easy'' to understand; if $d \leq 3$ then the energy is supercritical and we expect some kind of blowup.
+This is why so many papers about Yang-Mills focus on applications to fourfolds, or equivalently five-dimensional spacetimes.
+
+The second upshot is that we want an ellipticity bound 
+$$||A||_{W^{1, d/2}} \lesssim ||F||_{L^{d/2}}.$$
+Now this is obviously not true because we can consider a flat connection $A$ (thus $F = 0$) which is wildly oscillatory at infinity.
+This can be easily imposed using a gauge transformation of the trivial connection.
+However, the claim is even pretty unreasonable if we only require that there exists a gauge transformation $\chi$ such that $||A^{(\chi)}||_{W^{1, d/2}}$ is small, because Yang-Mills is nonlinear.
+The best we can hope for is the following:
+
+\begin{theorem}[Uhlenbeck's lemma]
+Let $F$ be a curvature $2$-form such that $||F||_{L^{d/2}} \ll 1$.
+Then there exists a gauge field $A$ and a gauge transformation $\chi$ with curvature $F^{(\chi)}$, such that
+$$||A||_{W^{1, d/2}} \lesssim ||F||_{L^{d/2}},$$
+and moreover $A$ is in Coulomb gauge.
+\end{theorem}
+TODO
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Yang-Mills equation}
+\begin{definition}
+Let $M$ be a Lorentzian or Riemannian manifold, let $A$ be a gauge field over $M$, and let $F$ be the curvature of $A$.
+The \dfn{Yang-Mills energy} of $A$ is 
+$$E(A) := \frac{1}{2} \int_M \star (F_{\mu \nu}, F^{\mu \nu}).$$
+The \dfn{Yang-Mills equation} is the Euler-Lagrange equation
+$$\Dif^\mu F_{\mu \nu} = 0$$
+for critical points of the Yang-Mills energy.
+\end{definition}
+
+Applying (\ref{curvature transformation}) and the fact that the Killing form $(\cdot, \cdot)$ is invariant under gauge transformations, we see that the Yang-Mills energy, hence also the Yang-Mills equation, is preserved by gauge transformations as well.
+Writing out the Yang-Mills equations explicitly for $A$, they are 
+\begin{equation}\label{explicit yang mills}
+(\partial^\mu + \ad(A^\mu))(\partial_\mu A_\nu - \partial_\nu A_\mu + [A_\mu, A_\nu]) = 0.
+\end{equation}
+
+Henceforth we use Latin indices for Riemannian indices, Greek indices for Lorentzian indices, and $0$ for the timelike Lorentzian index.
+Thus we usually write 
+$$\Dif^j F_{jk} = 0$$
+for the Yang-Mills equation on a Riemannian manifold, that is, the \dfn{elliptic Yang-Mills equation}.
+We call solutions \dfn{Yang-Mills connections}.
+It's a bit of a lie to call this equation elliptic, though, since it has many solutions: if $A$ is a solution, then so is $A^{(\chi)}$ for any gauge transformation $\chi$.
+
+\begin{definition}
+A gauge field $A$ is in \dfn{Coulomb gauge} if $\partial^j A_j = 0$.
+\end{definition}
+
+Note that in Coulomb gauge, the term $\partial^j \partial_j A_j$ is zero, so the only second-order term in (\ref{explicit yang mills}) is $\partial^\mu \partial_\mu A_\mu$.
+In particular the principal Yang-Mills symbol in Coulomb gauge is $|\xi|^2$ which is elliptic.
+
+We can do a similar trick for the \dfn{hyperbolic Yang-Mills equation} (that is, the case that $M$ is Lorentzian) using the Lorenz gauge:
+
+\begin{definition}
+A gauge field $A$ is in \dfn{Lorenz gauge} if $\partial^\mu A_\mu = 0$.
+\end{definition}
+
+We call solutions to the hyperbolic Yang-Mills equation \dfn{Yang-Mills waves}.
+
+%%%%%%%%%%%%%%%%%%
+\subsection{Ground states}
+If $M$ is Riemannian and we give $M \times \RR$ a Lorentzian metric in the usual way, then Yang-Mills connections on $M$ are static Yang-Mills waves on $M \times \RR$.
+On the other hand, since the ellipticity of Coulomb gauge implies that the elliptic Yang-Mills equation honestly is elliptic up to gauge transformation, we can look for an energy-minimizing connection on $M$ in each homotopy class.
+Such a connection must be a Yang-Mills connection.
+
+\begin{definition}
+A nonzero Yang-Mills connection which minimizes the energy in its homotopy class is called an \dfn{instanton}.
+An instanton which minimizes energy among all instantons (possibly not in its homotopy class) is called a \dfn{ground state}.
+\end{definition}
+
+If $G$ is abelian, then the Yang-Mills equations reduce to the Maxwell equations
+$$\partial^\mu(\partial_\mu A_\nu - \partial_\nu A_\mu) = 0.$$
+Here $A_0$ is the electric potential, $A_j$ is the magnetic potential, and the reduction occurred because all the commutator terms dropped out.
+We call such an $A$ a \dfn{photon field}.
+There are no finite-energy static photon fields except the trivial field, if $M$ is complete (since there are no nontrivial harmonic functions with finite Dirichlet energy), and in particular there are no ground states in the theory of electromagnetism.
+Notice that in Lorenz gauge, the Maxwell equations simplify further to $\Box A_\mu = 0$, the wave equation!
+Solutions are light waves, which justifies why we call $A$ a photon field.
+
+However, if $G$ is nonabelian, then there can exist ground states. Let me take the following as a black box:
+
+\begin{theorem}
+The second Chern class $c_2$ of a $\SpUn(2)$-bundle $E \to \Sph^4$ is given by the characteristic class $\star \tr(F \wedge F)$ where $F$ is the curvature of a connection on $E$.
+Moreover, $c_2$ is a complete invariant of $\SpUn(2)$-bundles over $\Sph^4$, and $c_2$ is in turn completely determined by $\int_{\Sph^4} c_2/8\pi^2 \in \ZZ$.
+\end{theorem}
+
+In particular we have a $\SpUn(2)$-bundle over $\Sph^4$ for each integer, and the ground state is the instanton corresponding to the $\SpUn(2)$-bundle for which $\int_{\Sph^4} c_2 = 8\pi^2$.
+
+%%%%%%%%%%%%%%%
+\subsection{Physical interpretation}
+We already argued that for $G$ abelian, a $G$-Yang-Mills wave is nothing more than a photon field.
+However, the same thing happens for $G = \mathbf U(1) \times \SpUn(2)$ or $G = \SpUn(3)$ on the Minkowski spacetime $\RR^{3, 1}$, where $\mathbf U(1) \times \SpUn(2)$ corresponds to the electroweak force and $\SpUn(3)$ corresponds to the strong force.
+In particular, a $\SpUn(3)$-Yang-Mills wave is a \dfn{gluon field}.
+
+Let's look a bit more at the strong force.
+There are $8$ gluons, which correspond to the $8$ basis vectors of $\mathfrak{su}(3)$.
+Basis vectors of $\mathfrak{su}(3)$ are called \dfn{Gell-Mann matrices}.
+Since $\SpUn(3)$ is nonabelian, we expect there to exist a ground state gluon field, and the Yang-Mills equation are nonlinear.
+The nonlinearity arises from the terms $[A^\mu, \partial_\mu A_\nu]$, $[A^\mu, \partial_\nu A_\mu]$, and $[A^\mu, [A_\mu, A_\nu]]$.
+The first two are quadratic nonlinearities and correspond to two gluons interacting.
+However we could also have three gluons interacting.
+
+But gluons don't just act on each other.
+In particle physics the $\SpUn(3)$-Yang-Mills equation is usually coupled to the Dirac equation
+\begin{align*}
+(i\cancel \Dif - m) \psi &= 0\\
+\Dif^\mu F_{\mu \nu} &= \Im(\psi \overline{\Dif_\nu \psi})
+\end{align*}
+where $\cancel \Dif$ is the Dirac operator, i.e. the natural action of $\Dif$ on spinor fields tensored with a representation of $\SpUn(3)$, $m$ is the mass of a quark, and the spinor field $\psi$ is called the \dfn{quark field}.
+Unfortunately this system seems analytically out of reach, given that we can't even handle nonabelian Yang-Mills half the time.
+Since $\psi$ consists of a spinor field tensored with a representation of $\SpUn(3)$, it has 3 ``components'', each of which is a spinor field.
+The components correspond to the three different ``color charges'' that a quark can have.
+
+Similar happens in the Maxwell case, where $\psi$ carries electric charge (thus $\psi$ can be thought of as the electron and proton fields, at least to crude approximation).
+There the fact that the spinor field needs to be tensored with a representation of $\mathbf U(1)$ corresponds to the fact that there is only one electric charge, unlike color charge.
+
+
+
+\printbibliography
+
+\end{document}

@@ -1,0 +1,227 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 6} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+    Consider $u - \Delta u = f$ on $\Omega$ where $u|_{\partial \Omega} = 0$.
+    Setting $\sigma := \nabla u$ show that the problem can be reformulated in the primal mixed form 
+    \begin{align*}
+        a(\sigma, \tau) + b(\tau, u) &= 0\\
+        b(\sigma, v) - (u, v) &= -(f, v)
+    \end{align*}
+    for all $(\tau, v) \in H^1(\Omega) \times H^1_0(\Omega)$ and some bilinear forms $a, b$.
+    Show that the primal mixed form satisfies the Babuška-Brezzi conditions and so is well-posed.
+\end{exer}
+
+We set $a(\sigma, \tau) := (\sigma, \tau)$ and
+$$b(\tau, v) := -\int_\Omega \tau(x) \cdot \nabla v(x) \dif x.$$
+The first equation becomes
+$$0 = (\sigma, \tau) - \int_\Omega \tau \cdot \nabla u(x) \dif x$$
+and since $\tau$ is arbitrary, this is equivalent to the strong formulation $\sigma = \nabla u$.
+The second equation becomes 
+$$\int_\Omega \sigma(x) \cdot \nabla v(x) \dif x + (u, v) = (f, v).$$
+Integrating by parts using the fact that $v \in H^1_0$, we rewrite this as 
+$$-(\nabla \cdot \sigma, v) + (u, v) = (f, v)$$
+which in strong form reads $-\nabla \cdot \sigma + u = f$.
+Combining the two strong equations we get $-\Delta u + u = f$ which was desired.
+
+TODO or not...
+
+\begin{exer}
+    Let $P_h$ be a triangulation of $\Omega$ and $V_h \subseteq L^2(\Omega)^d$ the space of discontinuous piecewise polynomial maps of degree $n$, $M_h \subseteq H^1_0(\Omega)$ the space of continuous piecewise polynomials of degree $n + 1$ on $P_h$.
+    Show that there is a unique solution $(\sigma_h, u_h)$ of the discretization of the primal mixed form problem in $V_h \times M_h$ such that if $u \in H^{n + 1}(\Omega)$ then 
+    $$||\sigma - \sigma_h||_{L^2} + ||u - u_h||_{H^1_0} \lesssim h^n ||u||_{H^{n + 1}}.$$
+\end{exer}
+
+TODO more Babuška-Brezzi...
+Finally the claimed estimate follows by the Aziz-Babuška inequality and the usual estimates from approximation theory.
+
+\begin{exer}
+    Show that $(\sigma_h, u_h)$ can be obtained by solving a system of linear equations 
+    \begin{align*}
+        A_h \sigma_h + B_h u_h &= 0 \\
+        B_h^t \sigma_h - C_h u_h &= -f,
+    \end{align*}
+    where $(A_h)_{ij} = a(\tau_i, \tau_j)$ for some basis $(\tau_i)$ of $V_h$, and $B_h$ is an appropriate matrix.
+    Deduce that $u_h$ can be computed by solving a system
+    $$(S_h + C_h) u_h = f.$$
+\end{exer}
+
+Warning: I changed a $\sigma$ to a $\tau$ in the problem statement because I wanted to talk about components of $\sigma_h$ and was starting to feel like the notation was a little overloaded.
+
+The discretization is 
+\begin{align*}
+    (\sigma_h, \tau_i) - (\nabla u_h, \tau_i) &= 0 \\
+    (\sigma_h, \nabla v_\mu) + (u_h, v_\mu) &= (f, v_\mu)
+\end{align*}
+where $(\tau_i)$ is a basis of $V_h$ and $(v_\mu)$ is a basis of $M_h$.
+Writing $\sigma_h = \sum_i \sigma^i \tau_i$ and $u_h = \sum_\mu u^\mu v_\mu$ this leads us to
+\begin{align*}
+    \sigma^i (\tau_i, \tau_j) - u^\mu (\nabla v_\mu, \tau_j) &= 0\\
+    -\sigma^i (\tau_i, \nabla v_\nu) - u^\mu (v_\mu, v_\nu) &= -(f, v_\nu).
+\end{align*}
+Setting $(A_h)_{ij} := (\tau_i, \tau_j)$, $(B_h)_{\mu i} := (\nabla v_\mu, \tau_i)$, $(C_h)_{\mu \nu} = (v_\mu, v_\nu)$, we obtain the desired matrix formula for the discretization.
+Here $A_h$ is invertible because it is the inner product when expressed in the basis $(\tau_i)$.
+Now if we set 
+$$S_h := B_h^t A_h^{-1} B_h,$$
+then since $\sigma_h = A_h^{-1} B_h u_h$, $(S_h + C_h) u_h = f$.
+
+\begin{exer}
+    Let $P: L^2(\Omega)^d \to V_h$ be the orthogonal projection with respect to $a$.
+    Show that if $v_h \in M_h$ then $P \nabla v_h = \sum_i c(v_h)^i \tau_i$, where 
+    $$c(v_h) := A_h^{-1} B_h v.$$
+\end{exer}
+
+To ease the notation let's assume that $(\tau_i)$ is an orthonormal basis of $V_h$.
+We can always assume that, thanks to Gram-Schmidt, since we don't care about the sparsity of the matrix $B_h$ in this problem.
+
+Under the above assumption, $A_h$ is the identity, $\sum_i c(v_h)^i \tau_i = c(v_h)$, and the assertion is that $P\nabla = B_h$.
+But 
+$$(B_hv_h)^i = (\nabla v_h, \tau_i) = (\nabla v_h, P\tau_i) = (P\nabla v_h, \tau_i)$$
+where the second inequality is $\tau_i \in V_h$ and the third is because $P$ is self-adjoint, since it is an orthogonal projection.
+Since $i$ was arbitrary and $(\tau_i)$ is orthonormal it follows that $B_h v = P \nabla v$.
+
+\begin{exer}
+    Deduce that $S_h$ is precisely the same matrix as would be obtained if one were to discretize the Poisson problem discretly using $M_h$.
+    Why is the primal mixed form problem of the Poisson problem not used in practice?
+\end{exer}
+
+Since $A_h^{-1}$ is the inner product on $V_h$, we can again suppress it by taking $(\tau_i)$ to be orthonormal.
+This is fine because $S_h: M_h \to (M_h)'$ only cares about what basis $(v_\mu)$ we put on $M_h$ (and then the dual basis will be put on $(M_h')$) and not the basis $(\tau_i)$, so $(\tau_i)$ could even be a nonlocal basis if we wanted it to be.
+
+Let $Q$ be the orthogonal projection onto $M_h$ using the inner product on $H^1_0$.
+Then since $Q$ is the identity on $M_h$,
+$$B_h = P\nabla = P\nabla Q$$
+and hence
+$$S_h = B_h^t B_h = Q\nabla^t PP\nabla Q = Q \nabla^t P \nabla.$$
+Integration by parts shows that $\nabla^t \tau = - \nabla \cdot \tau$.
+Moreover, $\nabla$ carries $M_h$ into $V_h$ by construction of these two spaces, so $P\nabla|_{M_h} = \nabla$.
+Thus 
+$$S_h = -Q \nabla \cdot \nabla = -Q\Delta$$
+and in particular for $w \in M_h$,
+$$(S_h w, v_\mu) = -(Q\Delta w, v_\mu) = -(\Delta w, Qv_\mu) = -(\Delta w, v_\mu).$$
+(These pairings of course need to be understood as the pairing $H^1_0 \times H^1 \to \RR$.)
+However, this is exactly the definition of the usual discretization of the Laplacian we learned about last year.
+
+In short, the discretization of the primal mixed form of the Poisson problem can be easily rewritten as the discretization of the usual Poisson problem.
+So it has no advantages over the classical discretization, unless one happened to have a solver for Brezzi-type problems lying around that they were using as a black box.
+
+\end{document}
