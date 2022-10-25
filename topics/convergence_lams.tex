@@ -358,22 +358,24 @@ However one may consider the case that there are two limiting laminations whose 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Compactness}
+\begin{definition}
+A sequence of laminations $(\lambda_i)$ is \dfn{tight} if there exists a compact set $K \subseteq M$ such that for every $i$ there exists a leaf $N_i$ of $\lambda_i$, such that $N_i \cap K$ is nonempty.
+\end{definition}
 
-\begin{lemma}
-Let $(\lambda_i)$ be a sequence of geodesic laminations in a closed surface $M$, and $\lambda$ a lamination such that $\Leaves \lambda_i \to \Leaves \lambda$ in $\Hypspace^2 M$.
-Then $\lambda$ is a maximal limit of $(\lambda_i)$ in Thurston's geometric topology.
-\end{lemma}
+\begin{theorem}
+Let $(\lambda_i)$ be a tight sequence of geodesic laminations.
+Then there exists a geodesic lamination $\lambda$ such that $\lambda_i \to \lambda$ in Thurston's geometric topology along a subsequence.
+Moreover, $\Leaves \lambda_i \to \Leaves \lambda$ in $\Hypspace^2 M$.
+\end{theorem}
 \begin{proof}
+Since $(\lambda_i)$ is tight, we can view $\Leaves \lambda_i$ as a closed subset of $\Hypspace K$ for some compact $K \subseteq M$.
+After enlarging $K$ slightly, we may assume that it is diffeomorphic to a smooth closed ball, and that every leaf of $\lambda_i$ is uniformly transverse to $\partial K$, thus no sequence of leaves can converge in $\Hypspace K$ to a leaf tangent to the boundary of $K$.
+
+Since $\Hypspace^2$ is compact, there is a closed subset $\mathscr S$ of $\Hypspace K$ such that, along a subsequence $\Leaves \lambda_i \to \mathscr S$, in $\Hypspace^2 K$.
+If $N \in \mathscr S$, then $N$ is the limit in $\Hypspace K$ of a sequence of geodesics $(N_i)$ and is nowhere tangent to $K$.
+In particular, as graphs TODO, $N_i$ solves the minimal surface equation and so converges to $N$ which solves the minimal surface equation, hence is a geodesic.
 
 \end{proof}
-
-From this lemma and the compactness of $\Hypspace^2 M$ (we can prove compactness of $\Hypspace^k M$ by induction on $k$) we have:
-
-\begin{proposition}
-Every sequence of geodesic laminations in a closed surface has a subsequence which converges to a maximal limit in Thurston's geometric topology.
-\end{proposition}
-
-Minimality is a crucial hypothesis in the characterization of Thurston's geometric topology by Hausdorff distance:
 
 \begin{example}
 Let $f_i$ be a smooth approximation to the Dirac measure $\delta_{1/2-1/i}$ at $1/2 - 1/i$ with compact support in $(1/2 - 2/i, 1/2)$, so $f_i \to 0$ pointwise.
@@ -410,14 +412,14 @@ The weak topology on $C_0(X)'$ is known as the \dfn{weak topology of measures}.
 Unpacking the definitions, a sequence $(\mu_i)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every compact $Y \subseteq X$ and every continuous function $f: Y \to \RR$,
 $$\lim_{i \to \infty} \int_Y f \dif \mu_i = \int_Y f \dif \mu.$$
 The same thing works for currents.
-The advantage of the weak topology is its compactness.
-
-\begin{proposition}[Prokohorov compactness theorem]
-If $X$ is a compact Polish space, then any closed set $S \subseteq C(X)'$ such that $\sup_{\mu \in S} \mu(X) < \infty$ is compact.
-\end{proposition}
-\begin{proof}
-TODO Cite
-\end{proof}
+% The advantage of the weak topology is its compactness.
+%
+% \begin{proposition}[Prokohorov compactness theorem]
+% If $X$ is a compact Polish space, then any closed set $S \subseteq C(X)'$ such that $\sup_{\mu \in S} \mu(X) < \infty$ is compact.
+% \end{proposition}
+% \begin{proof}
+% TODO Cite
+% \end{proof}
 
 Having topologized the space of Radon measures, we define what it means for such a measure to be transverse to a lamination:
 
@@ -474,11 +476,23 @@ We first claim that the right-hand side of (\ref{RS current}) is always finite, 
 In fact, possibly after refining $(\chi_\alpha)$, we may assume that it is a locally finite partition of unity.
 In particular, we just need to check the continuity in a single flow box:
 $$\left|\int_{K_\alpha} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* (\chi_\alpha \varphi) \right] \dif \mu_\alpha(k)\right| \leq \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} |(F_\alpha^{-1})^* (\chi_\alpha \varphi)| \dif \mu_\alpha(k).$$
-The inner integral is controlled by $||\varphi||_{C^0(U_\alpha)}$ where $U_\alpha$ is the image of $F_\alpha$.
+The inner integral is controlled by $||\varphi||_{L^1(U_\alpha)} \cdot |U_\alpha|$ where $U_\alpha$ is the image of $F_\alpha$.
 The outer integral is then well-defined because it is against a Radon measure.
 
-The independence of choices is like in \cite[Theorem 8.2]{daskalopoulos2020transverse} TODO.
-Also if a $d-2$-form $\psi$ has compact support in a single flow box, then
+We next observe that the choice of partition of unity is irrelevant, thus if $\varphi$ has compact support in $U_\alpha \cap U_\beta$, then
+\begin{equation}\label{well-defined of Ruelle-Sullivan}
+\int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k) = \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k).
+\end{equation}
+Indeed,
+\begin{align*}
+\int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)
+&= \int_{K_\beta} (F_\alpha F_\beta^{-1})^* \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)\right] \\
+&= \int_{K_\beta} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi\right] (F_\alpha F_\beta^{-1})^* \dif \mu_\beta(k) \\
+&= \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k)
+\end{align*}
+where the last equation is because of the measure-preserving nature of the transition maps; this proves (\ref{well-defined of Ruelle-Sullivan}).
+
+Finally, if a $d-2$-form $\psi$ has compact support in a single flow box, then
 $$\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \dif \psi = \int_{\RR^{d - 1} \times \{k\}} \dif((F_\alpha^{-1})^* \psi) = 0$$
 by Stokes' theorem, so
 \begin{align*}
@@ -745,16 +759,12 @@ Moreover, if $F$ is a flow box for $\lambda$ near $x$, then $F$ is also a flow b
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Compactness}
-\begin{definition}
-A set $\Lambda$ of laminations is \dfn{tight} if for every sequence $(\lambda_i)$ in $\Lambda$ and $x_i \in \supp \lambda_i$, there is a subsequence of $(x_i)$ which converges in $M$.
-\end{definition}
-
 \begin{theorem}
 Let $(\lambda_i)$ be a tight sequence of finite minimal laminations with bounded curvature. Then:
 \begin{enumerate}
 \item After passing to a subsequence, we may assume that $(\lambda_i)$ converges to a maximal limit $\lambda$ on the level of flow boxes, and hence in Thurston's geometric topology.
 \item The limit $\lambda$ is a Lipschitz minimal lamination satisfying the same curvature bounds as $(\lambda_i)$.
-\item If $\mu_i$ is a transverse measure to $\lambda_i$ such that $(\mu_i)$ is tight, then after passing to a further subsequence, we may assume that $(\lambda_i, \mu_i)$ in fact converges to some measured minimal lamination $(\tilde \lambda, \mu)$ in the weak topology of measures, where $\tilde \lambda$ is a sublamination of the maximal lamination $\lambda$.
+\item If $\mu_i$ is a transverse measure to $\lambda_i$ and for every compact $K \subseteq M$, $\mu_i(K) \lesssim_K 1$, then after passing to a further subsequence, we may assume that $(\lambda_i, \mu_i)$ in fact converges to some measured minimal lamination $(\tilde \lambda, \mu)$ in the weak topology of measures, where $\tilde \lambda$ is a sublamination of the maximal lamination $\lambda$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
@@ -776,15 +786,23 @@ Since $|\Two_{ij}| \leq 2\varepsilon$, if $\varepsilon \leq 1$,
 
 By the maximum principle, if $f_{ij}(x_i) = f_{ij'}(x_i)$ for some $i, j, j'$, then $j = j'$.
 So after applying a permutation to $\{1, \dots, k_i\}$ we may assume that $j < j'$ implies $f_{ij} < f_{ij'}$.
-Then if we set $u_{ij} := f_{i,j+1} - f_{ij}$, then $u_{ij} > 0$ by the maximum principle, and we get a second-order operator $P_{ij}(\varepsilon)$ such that
-$$-\Delta u_{ij} = P_{ij}(\varepsilon) u_{ij}$$
-(TODO: Use \cite[\S1.1, \S7.1]{colding2011course} and Gilbarg--Trudinger to derive this)
-where $P_{ij}(\varepsilon)$ is perturbative as $\varepsilon \to 0$, in the sense that for $0 < \delta < 1/2$,
-$$\sup_{B_{\delta r}} u_{ij} \leq e^{c_1(\varepsilon) \delta^{c_2(\varepsilon)}} \inf_{B_{\delta r}} u_{ij}$$
-where $c_i(\varepsilon) \to c_i > 0$, given by the Harnack inequality for $-\Delta$.
-In paticular, we now choose $\varepsilon$ small enough that for $\delta < 1$,
+Then if we set $u_{ij} := f_{i,j+1} - f_{ij}$, then $u_{ij} > 0$ by the maximum principle, and we get a second-order divergence-form operator $P_{ij}(\varepsilon, r)$ such that
+\begin{equation}\label{elliptic PDE}
+-\Delta u_{ij} = P_{ij}(\varepsilon, r) u_{ij}
+\end{equation}
+and $P_{ij}(\varepsilon, r)$ is perturbative as $\varepsilon, r \to 0$ in the sense that its coefficients can be made arbitrarily small in $C^0(B_{r/2})$ by taking $\varepsilon, r$ small.
+In fact, by \cite[Chapter 7]{colding2011course}, if we set
+$$F(x, y, p, q) := h^{ij} (q_{ij} + \Gamma_{ij}^0 + p_i \Gamma_{0j}^0 + p_j \Gamma^0_{i0} + p_i p_j \Gamma^0_{00}) - p_m h^{ij} (\Gamma_{ij}^m + p_i \Gamma_{0j}^m + p_i \Gamma_{i0}^m + q_{ij} \Gamma_{00}^m),$$
+where $\Gamma_{\mu \nu}^\lambda$ are Christoffel symbols for $M$ at $(x, y)$, $x_0 := (0, 0)$, the zero index corresponds to $y$, and $h^{ij}$ are the components of the inverse of
+$$h_{ij} = g_{ij} + p_i g_{j0} + p_j g_{0i} + p_i p_j g_{00}$$
+evaluted at $(x, y)$, then $h_{ij} = \delta_{ij} + O(|x|^2 + y^2 + |p|^2)$, $\Gamma_{\mu \nu}^\lambda = O(|x|^2 + y^2)$, and
+$$F(x, f_{i, j + 1}(x), \dif f_{i, j + 1}(x), \partial^2 f_{i, j + 1}(x)) - F(x, f_{ij}(x), \dif f_{ij}(x), \partial^2 f_{ij}(x)) = 0.$$
+By (\ref{bound on derivatives}), we conclude that the dominant term is $\Delta u_{ij}$ and the perturbative terms are $O(r + \varepsilon)$ in $C^0$, as required by (\ref{elliptic PDE}).
+TODO: Reindex all this, don't want the ij's to be Einstein indices and leaf indices
+It follows that if $\varepsilon, r$ are small, then $-\Delta - P$ is uniformly elliptic, with ellipticity constant close to that of $-\Delta$.
+So by the Harnack inequality, for any $0 < \delta < 1/2$,
 \begin{equation}\label{Harnack bound}
-	\sup_{B_{\delta r}} u_{ij} \leq e^{2 c_1\delta^{c_2}} \inf_{B_{\delta r}} u_{ij}.
+\sup_{B_{\delta r}} u_{ij} \leq e^{O(\delta)} \inf_{B_{\delta r}} u_{ij}.
 \end{equation}
 
 We now set $\eta_{ij} := f_{ij}(0)$ and define
@@ -798,19 +816,29 @@ Moreover
 &\qquad + \sum_{j = 2}^{k_j - 1} \delta_{\eta_{ij}}(\eta_i)\left[f_{i,j-1}(\xi_i) + u_{i,j-1}(\xi_i) - f_{i,j}(\xi_i)\right] \\
 &= \sum_{j=1}^{k_j - 1} 1_{[\eta_{ij}, \eta_{i, j + 1})}(\eta_i) \left[\dif f_{ij} + \frac{\eta_i - \eta_{ij}}{\eta_{i,j+1} - \eta_{ij}} \dif u_{ij} + \frac{u_{ij}}{\eta_{i,j+1} - \eta_{ij}} \dif \eta_i\right].
 \end{align*}
-Now $\eta_i - \eta_{ij} \in [0, \eta_{i, j + 1} - \eta_{ij}]$ for $\eta_i \in [\eta_{ij}, \eta_{i,j+1})$, so the first two terms are bounded by (\ref{bound on derivatives}) as 
-$$\left|\left|\dif f_{ij} + \frac{\eta_i - \eta_{ij}}{\eta_{i,j+1} - \eta_{ij}} \dif u_{ij}\right|\right|_{C^0(B_r)} \leq 3\sup_{j' \in \{1, \dots, k_i\}} ||\dif f_{ij'}||_{C^0(B_r)} \lesssim r.$$
+Now $\eta_i - \eta_{ij} \in [0, \eta_{i, j + 1} - \eta_{ij}]$ for $\eta_i \in [\eta_{ij}, \eta_{i,j+1})$, so the first two terms are bounded by (\ref{bound on derivatives}) as
+$$\left|\left|\dif f_{ij} + \frac{\eta_i - \eta_{ij}}{\eta_{i,j+1} - \eta_{ij}} \dif u_{ij}\right|\right|_{C^0(B_{\delta r})}
+\leq 3\sup_{j' \in \{1, \dots, k_i\}} ||\dif f_{ij'}||_{C^0(B_{\delta r})}
+\lesssim \delta r.$$
+From (\ref{Harnack bound}),
+$$\frac{u_{ij}}{\eta_{i,j+1} - \eta_{ij}} = \frac{u_{ij}(0) + \sup_{B_{\delta r}} u_{ij} - \inf_{B_{\delta r}} u_{ij}}{u_{ij}(0)} = 1 + O(\delta r).$$
+In conclusion
+$$\dif \varphi_i = \dif \eta_i + O(\delta r).$$
+Therefore the flow boxes $F_i(\xi_i, \eta_i) := (x_i, y_i)$ have Lipschitz norm and conorm in $(1/2, 3/2)$ if $\delta$ is chosen small enough independently of $i$.
+So by a compactness argument, a subsequence of flow boxes and their inverses converge in $C^{1-}$ to a local diffeomorphism $F$.
+Since $x_0$ was arbitrary, a diagonal argument ensures that we can cover $M$ by sets $U_\alpha := B(x_0, \delta r)$ in which these flow boxes $F_{i\alpha}$ converge to some local diffeomorphism $F_\alpha$.
+By taking a further subsequence and rotating, we may assume that $R_i$ converges to the identity as well.
 
+Since $(\lambda_i)$ is tight, a further subsequence converges in Thurston's geometric topology to a geodesic lamination $\lambda$. (TODO)
+If $N$ is a leaf of $\lambda$, then we can find leaves $N_i$ of $\lambda_i$ which locally converge to $N$ in Hausdorff distance.
+Then $F_{i\alpha}^{-1}(N_i \cap U_\alpha) = \{\eta = \eta_i\}$ for some $\eta_i$, and by the $C^{1-}$-convergence of the $F_i$, the hyperplanes $\{\eta = \eta_i\}$ must converge to some hyperplane $\{\eta = \eta_\infty\}$, so that $F_\alpha(\{\eta = \eta_\infty\}) = N \cap U_\alpha$.
+So $F_\alpha$ is a flow box for $\lambda$.
+The regularity theorem implies that this flow box is Lipschitz TODO.
 
-
-
-
-So by a compactness argument we see that a subsequence converges in $C^{1-}$ to a flow box $F$.
-The leaves are $C^{1-}$-limits of hypersurfaces with uniformly small second fundamental form so they are $C^{1-}$ as well.
-But a $C^{1-}$ limit of minimal hypersurfaces is minimal, and also $C^\infty$.
-Finally, Theorem \ref{regularity theorem} implies that we can upgrade from $C^{1-}$ regularity of $F$ to Lipschitz regularity.
-
-TODO, That's very sketchy and there's a lot of details to fill in. But that's the idea.
+Finally, if $\mu_i$ is transverse to $\lambda_i$, then we observe that since $(\lambda_i)$ is tight, we can find a compact subset $K$ of $M$ which meets every leaf of $\lambda$.
+Then $\lambda, \lambda_i$ are orientable on $K \cap U_\alpha$, so we can take $T_{\mu_i}|_{K \cap U_\alpha}$ and obtain a convergent subsequence to some $T_\mu|_{K \cap U_\alpha}$; here we use the uniform bounds on $\mu_i(K)$.
+Diagonalizing again, we obtain $\mu := |T_\mu|$, which is a transverse measure to $\lambda|_K$, and is globally defined since it is not oriented.
+Since $K$ meets every leaf of $\lambda$, $\mu$ extends uniquely to all of $M$ as a transverse measure to $\lambda$.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -820,12 +848,12 @@ Let $(\lambda_i, \mu_i)$ be measured geodesic laminations.
 If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then $\lambda_i \to \lambda$ on the level of flow boxes.
 \end{theorem}
 \begin{proof}
-For each $i$, let $(\lambda_{ij})_j$ be finite sublaminations of $\lambda_i$ converging to $\lambda_i$ on the level of flow boxes.
+The question is local, so we may remove all leaves of $\lambda$ except those that meet some precompact open set.
+Then, for each $i$, let $(\lambda_{ij})_j$ be finite sublaminations of $\lambda_i$ converging to $\lambda_i$ on the level of flow boxes.
 Then any subsequence $(i_k)$, has a further subsequence $(i_{k_\ell})$ such that $\lambda_{i_{k_\ell} i_{k_\ell}} \to \lambda$ on the level of flow boxes.
-Indeed, as geodesic laminations, they have bounded curvature, and it is clear from construction that they are tight.
+Indeed, as geodesic laminations, they have bounded curvature, and $(\lambda_i)$ is tight by construction.
 So $\lambda_{i_{k_\ell}} \to \lambda$ on the level of flow boxes, but $(i_k)$ was arbitrary, so $\lambda_i \to \lambda$ on the level of flow boxes.
 \end{proof}
-
 
 % \begin{lemma}
 % For every geodesic lamination $\lambda$ and every $x \in \supp \lambda$, there is a transverse curve to $\lambda$ through $x$.
@@ -901,29 +929,29 @@ Then $\lambda$ is a minimal lamination.
 \end{theorem}
 \begin{proof}
 Let $(x_i)$ be a dense sequence in $\supp \lambda$, and let $N_i$ be the leaf containing $x_i$.
-Then the union of $N_1, \dots, N_i$ is the support of a lamination $\lambda_i$.
-By assumption, $||\lambda_i||_K \lesssim_K 1$.
-So $(\lambda_i)$ has a minimal subsequential limit $\tilde \lambda$ on the level of flow boxes.
-TODO we have to use Thurston's geometric topology to show that $\tilde \lambda = \lambda$.
-\end{proof}
-
-The above result is particularly useful when it is combined with the stable Bernstein theorem.\footnote{so-called because this theorem is essentially equivalent to the assertion that a stable two-sided minimal hypersurface in $\RR^d$ is a hyperplane.}
-
-\begin{proposition}[stable Bernstein theorem]
-Let $2 \leq d \leq 4$ and let $N$ be a two-sided stable minimal hypersurface in $B_r \subseteq M$, $r \lesssim 1$, where $M$ has bounded geometry and dimension $d$.
-Then on $B_{r/2}$, $|\Two_N| \lesssim_M r^{-1}$.
-\end{proposition}
-\begin{proof}
-If $d = 2$ this is trivial since $\Two_N$ has zero independent components and hence $\Two_N = 0$, if $d = 3$ then it was proven by Schoen \cite[Corollary 2.11]{colding2011course}, and if $d = 4$ it was proven by Chodosh--Li \cite{Chodosh2021}.
+Then the union of $N_1, \dots, N_i$ is the support of a lamination $\lambda_i$, so that the curvatures of $\lambda_i$ are locally uniformly bounded.
+So $(\lambda_i)$ has a maximal subsequential limit $\tilde \lambda$ on the level of flow boxes.
+In particular, the leaves of $\tilde \lambda$ are exactly the limits in Hausdorff distance of the leaves of $\lambda$, but $\Leaves \lambda$ is closed so $\lambda = \tilde \lambda$.
 \end{proof}
 
 \begin{corollary}
-Let $\lambda$ be a minimal partition in $M$ whose leaves are two-sided and stable, where $M$ has dimension $2 \leq d \leq 4$.
-Then $\lambda$ is a minimal lamination.
+Let $\lambda$ be a geodesic partition. Then $\lambda$ is a geodesic lamination.
 \end{corollary}
 
-TODO: Construction of $\dif u$ on $\lambda$ from some data on $\lambda$
+The above result is also useful when combined with the below stable Bernstein theorem.\footnote{so-called because this theorem is essentially equivalent to the assertion that a stable two-sided minimal hypersurface in $\RR^d$ is a hyperplane.}
 
+\begin{proposition}[stable Bernstein theorem]
+Let $3 \leq d \leq 4$ and let $N$ be a two-sided stable minimal hypersurface in $B_r \subseteq M$, $r \lesssim 1$, where $M$ has bounded geometry and dimension $d$.
+Then on $B_{r/2}$, $|\Two_N| \lesssim_M r^{-1}$.
+\end{proposition}
+\begin{proof}
+If $d = 3$ then it was proven by Schoen \cite[Corollary 2.11]{colding2011course}, and if $d = 4$ it was proven by Chodosh--Li \cite{Chodosh2021}.
+\end{proof}
+
+\begin{corollary}
+Let $\lambda$ be a minimal partition in $M$ whose leaves are two-sided and stable, where $M$ has dimension $3 \leq d \leq 4$.
+Then $\lambda$ is a minimal lamination.
+\end{corollary}
 
 \printbibliography
 
