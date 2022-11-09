@@ -363,8 +363,8 @@ Then $\bigcup_{y \in \RR} \partial \{u > y\}$ is the support of a minimal lamina
 \end{theorem}
 
 However, Theorem \ref{main thm} leaves a key point -- the r\^ole of the $\infty$-Laplacian -- open, and we have not attempted to address this point here.
-The Daskalopoulos--Uhlenbeck theorem was our main motivation for this series of papers; however, our work works in dimension $d = 3$ while Theorem \ref{DU theorem} is purely a statement about $d = 2$.
-Indeed, if $d \geq 3$, then the $\infty$-Laplacian gives geodesic laminations, but the $1$-Laplacian gives codimension-$1$ laminations, which are necessarily not geodesic, so there is not an obvious generalization of Theorem \ref{DU theorem} to $d = 3$.
+The Daskalopoulos--Uhlenbeck theorem was our main motivation for this series of papers; however, our work works in dimensions $d = 3, 4$ while Theorem \ref{DU theorem} is purely a statement about $d = 2$.
+Indeed, the $\infty$-Laplacian gives geodesic laminations, but the $1$-Laplacian gives codimension-$1$ laminations, which are not geodesic if $d \geq 3$, so there is not an obvious generalization of Theorem \ref{DU theorem} for $d = 3, 4$.
 
 It is tantalizing to think that a suitable system of coupled $\infty$-Laplacians will satisfy a generalized maximum-stretch condition on a codimension-$1$ minimal lamination $\lambda$, and that the conservation law for this conjectural system will be the $1$-Laplacian.
 However, even if one was to derive such a system of $\infty$-Laplacians formally, the analysis for studying such a system would likely not be in place.
@@ -375,7 +375,7 @@ Even so, we hope to return to this question in a later work: what is the correct
 \subsection{Outline of the paper}
 In \S\ref{Prelims} we recall preliminaries.
 
-In \S3 we prove the compactness Theorem \ref{compactness theorem} and the convergence implications Theorem \ref{implication theorem} simultaneously.
+In \S\ref{CompactnessSec} we prove the compactness Theorem \ref{compactness theorem} and the convergence implications Theorem \ref{implication theorem} simultaneously.
 
 In \S4 we prove Theorem \ref{building a minimal lamination} establishing which sets of minimal hypersurfaces are minimal laminations, using Theorem \ref{compactness theorem}.
 We then use Theorem \ref{building a minimal lamination} to prove Theorem \ref{main thm}.
@@ -623,98 +623,132 @@ Then take $\mu$ to be the usual measure on $\lambda$, $\nu$ to be $\mu$ plus a s
 We can take $\nu$ to be arbitrarily close to $\mu$ while preserving the fact that $\supp \nu = \supp \kappa$.
 \end{example}
 
+\begin{proposition}[portmanteau theorem]
+	Let $(\mu_n)$ be a sequence of Radon measures on a metrizable space $X$ with $\mu_n(X) \lesssim 1$, and let $\mu$ be a Radon measure on $X$. The following are equivalent:
+\begin{enumerate}
+	\item $\mu_n \to \mu$ in the weak topology of measures.
+	\item $\liminf_{n \to \infty} \mu_n(X) \geq \mu(X)$ and for every closed $Y \subseteq X$, $\limsup_{n \to \infty} \mu_n(Y) \leq \mu(Y)$.
+	\item $\limsup_{n \to \infty} \mu_n(X) \leq \mu(X)$ and for every open $Z \subseteq X$, $\liminf_{n \to \infty} \mu_n(Z) \geq \mu(Z)$.
+	\item For every $W \subseteq X$ with $\mu(\partial W) = 0$, $\lim_{n \to \infty} \mu_n(W) = \mu(W)$.
+\end{enumerate}
+	If $X$ is a manifold, these conditions are equivalent to:
+\begin{enumerate}
+	\setcounter{enumi}{4}
+	\item For every $x \in X$ and almost every $0 < \varepsilon \ll 1$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+	See \cite[Theorem 13.16]{klenke2013probability} for the metrizable case.
+	For the manifold case, we just observe that almost every $\varepsilon > 0$ satisfies $\mu(\partial B(x, \varepsilon)) = 0$. Indeed, if not, then we can find a set of real numbers $A$ such that $0$ is a condensation point of $A$, and for every $\varepsilon \in A$, $\mu(\partial B(x, \varepsilon)) > 0$.
+	In particular, for every $\delta > 0$, $A \cap (0, \delta)$ is uncountable, so
+	$$\mu(B(x, \delta)) \geq \sum_{\varepsilon \in A \cap (0, \delta)} \mu(\partial B(x, \delta)) = \infty,$$
+	but since $X$ is a manifold, if $\delta$ is small enough then $B(x, \delta)$ is precompact.
+	This contradicts that $\mu$ is a Radon measure.
+\end{proof}
+
+\begin{proposition}[Miranda stability theorem]
+	If a sequence of functions $(u_n)$ (not necessarily of the same trace) is bounded in $L^1_\loc(M)$ and satisfies for every open $U \Subset M$ with Lipschitz boundary
+\begin{equation}\label{boundedness in Miranda}
+	\limsup_{n \to \infty} \int_U \star |\dif u_n| \leq \liminf_{n \to \infty} \eta(u_n, U) < \infty,
+\end{equation}
+	then there exists a function $u$ of least gradient such that along a subsequence, $u_n \to u$ in $L^1_\loc(M)$ and $\dif u_n \to \dif u$ in the weak topology of measures.
+\end{proposition}
+\begin{proof}
+The forgetful map $BV_\loc(M) \to L^1_\loc(M)$ is compact, so (\ref{boundedness in Miranda}) and the bounds in $L^1_\loc(M)$ imply that $(u_n)$ has a convergent subsequence.
+The rest of the proof is similar to \cite[Teorema 3 and Osservazione 3]{Miranda67}; see \cite[\S2]{BackusFLG} for the straightforward modifications.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Compactness}\label{CompactnessSec}
+In this section we prove Theorems \ref{compactness theorem} and \ref{implication theorem}.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Weak topology of measures versus Thurston's geometric topology}
-We now show that for a geodesic lamination, convergence in the weak topology of measures implies convergence in Thurston's geometric topology.
-Thurston claimed this fact \cite[Proposition 8.10.3]{thurston1979geometry} but his proof left something to be desired as it did not justify why the limit is geodesic, or why the convergence respects the normal vectors.
-
-\begin{lemma}\label{measured limits are almost thurston}
-Let $(\lambda_i, \mu_i)$ be measured geodesic laminations.
-If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then for every $x \in \supp \lambda$ there exists $x_i \in \supp \lambda_i$ such that $x_i \to x$.
-\end{lemma}
-\begin{proof}
-For every $\varepsilon > 0$, $\mu(B(x, \varepsilon)) > 0$, so by the portmanteau theorem,
-$$\liminf_{i \to \infty} \mu_i(B(x, 2\varepsilon)) \geq \mu(B(x, \varepsilon)).$$
-Therefore there exists $x_i \in \supp \lambda_i \cap B(x, 2\varepsilon)$ if $i$ is large enough.
-\end{proof}
-
-\begin{lemma}\label{weak convergence of FLG}
-Let $(u_i)$ be a sequence of functions of least gradient which is bounded in $L^1$, and $T$ a current such that $\dif u_i \to T$ weakly.
-Then there exists a function $u$ of least gradient such that along a subsequence, $u_i \to u$ weakly in $BV$, and $\dif u = T$.
-\end{lemma}
-\begin{proof}
-By the Miranda stability theorem, $(u_i)$ has a subsequential limit $u$ in $L^1$, which has least gradient.
-For any compactly supported $d-1$-form $\varphi$,
-\begin{align*}
-\int_M T \wedge \varphi
-&= \lim_{i \to \infty} \int_M \dif u_i \wedge \varphi
-= -\lim_{i \to \infty} \int_M u_i \dif \varphi = - \int_M u \dif \varphi.
-\end{align*}
-where the last equality is because the Radon-Nikod\'ym derivative of $\dif \varphi$ with respect to Lebesgue measure is in $L^\infty$ and hence $L^1(\dif \varphi)$ is a weaker space than $L^1$. The last expression here is $\int_M \dif u \wedge \varphi$.
-So $T = \dif u$ and $\dif u_i \to \dif u$ in the weak topology of measures; that is, $u_i \to u$ weakly in $BV$.
-\end{proof}
+We first show that for a minimal lamination, convergence in the weak topology of measures implies convergence in Thurston's geometric topology.
+Thurston claimed this fact \cite[Proposition 8.10.3]{thurston1979geometry} in case $d = 2$, but his proof left something to be desired as it did not justify why the limit is geodesic, or why the convergence respects the normal vectors.
 
 \begin{lemma}\label{limits of measured geodesic lams are geodesic}
-Let $(\lambda_i, \mu_i)$ be measured geodesic laminations.
-If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then $\lambda$ is geodesic.
+	The set of minimal measured laminations is closed in the weak topology of measures.
 \end{lemma}
 \begin{proof}
+Let $(\lambda, \mu)$ be a measured lamination and suppose that $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, where $(\lambda_i, \mu_i)$ are measured minimal.
 Let $x \in \supp \lambda$ and $r > 0$ such that $B := B(x, r)$ is contractible.
 In $B$, we can write $T_{\mu_i} = \dif u_i$ for some sequence of functions of least gradient $u_i \in BV(B)$.
 Since $u_i$ is only defined up to a constant, we impose $\int_M \star u_i = 0$, so by Poincar\'e's inequality,
-$$||u_i||_{L^1(B)} \lesssim r\int_B \star |T_{\mu_i}| \lesssim 1$$
-where the last bound is because $(T_{\mu_i})$ is compact in the weak topology of measures.
-So by Lemma \ref{weak convergence of FLG}, $u_i \to u$ where $u$ has least gradient and satisfies $T_\mu = \dif u$.
-So by \cite{BackusFLG}, the leaf $N$ containing $x$ is a geodesic and $x$ is not an endpoint of $N$.
-But $x$ was arbitrary, so $N$ is in fact complete.
+$$||u_i||_{L^1(B)} \lesssim r\mu_i(B) \leq 2r \mu(B) < \infty$$
+for $i$ large.
+So by the Miranda stability theorem, there exists a $1$-harmonic function $u$ such that along a subsequence, $\dif u_i \to \dif u$ in the weak topology of measures.
+But then we must have $T = \dif u$, so $\lambda$ is minimal by Theorem \ref{main thm of old paper}.
 \end{proof}
 
 \begin{proposition}\label{measured implies Thurston}
-Let $(\lambda_i, \mu_i)$ be measured geodesic laminations.
-If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then $\lambda$ is a geodesic lamination and $\lambda_i \to \lambda$ in Thurston's geometric topology.
+Let $(\lambda_i, \mu_i)$ be measured minimal laminations.
+If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then $\lambda$ is a minimal lamination and $\lambda_i \to \lambda$ in Thurston's geometric topology.
 \end{proposition}
 \begin{proof}
-By Lemmata \ref{measured limits are almost thurston} and \ref{convergence of geodesic lams in thurston},
-$\lambda$ is a geodesic lamination and for every $x \in \supp \lambda$, $\varepsilon > 0$, and large $i$, there exists $y \in \supp \lambda_i \cap B(x, \varepsilon)$.
-To get convergence of the normals we choose a Lipschitz $d-1$-form $\varphi$ which extends $\star \normal$.
-Then $\int_K T_\mu \wedge \varphi = \mu(K)$ for any $\mu$-continuity set $K$, so by the portmanteau theorem,
-$$\lim_{i \to \infty} \frac{\int_K T_{\mu_i} \wedge \varphi}{\mu_i(K)} = \frac{\int_K T_\mu \wedge \varphi}{\mu(K)} = 1.$$
+We first show that
+\begin{equation}\label{support is nonincreasing}
+	\supp \lambda \subseteq \liminf_{i \to \infty} \supp \lambda_i.
+\end{equation}
+Indeed, if $x \in \supp \lambda$ then for all $\varepsilon > 0$, $\mu(B(x, \varepsilon)) > 0$.
+Then by the portmanteau theorem, for all $i$ large, $\mu_i(B(x, \varepsilon)) > 0$; this proves (\ref{support is nonincreasing}).
+It follows that for every $x \in \supp \lambda$, $\varepsilon > 0$, and large $i$, there exists $y \in \supp \lambda_i \cap B(x, \varepsilon)$.
+By Lemma \ref{limits of measured geodesic lams are geodesic}, $\lambda$ is a minimal lamination.
+
+To get convergence of the normals we choose a Lipschitz $d-1$-form $\varphi$ which extends $\star \normal$ (TODO: This is the regularity theorem).
+Then for every $\varepsilon > 0$,
+$$\int_{B(x, \varepsilon)} T_\mu \wedge \varphi = \mu(B(x, \varepsilon))$$
+so by the portmanteau theorem, for almost every $\varepsilon > 0$,
+\begin{equation}\label{epsilon is a continuity set}
+	\lim_{i \to \infty} \frac{\int_{B(x, \varepsilon)} T_{\mu_i} \wedge \varphi}{\mu_i(B(x, \varepsilon))} = \frac{\int_{B(x, \varepsilon)} T_\mu \wedge \varphi}{\mu(B(x, \varepsilon))} = 1.
+\end{equation}
 On the other hand, if we assume that there exists $\delta, \varepsilon > 0$ such that for every $y \in \supp \lambda_i \cap B(x, \varepsilon)$,
-$$|\sin(\normal_i(y) - \normal(x))| \geq \delta,$$
-then possibly after shrinking $\varepsilon$ we may assume that $B(x, \varepsilon)$ is a $\mu$-continuity set, so that
-$$\int_K T_{\mu_i} \wedge \varphi = \int_K \normal_i\mu_i \wedge \star \normal \leq (1 - O(\delta)) \mu_i(K)$$
-which contradicts $\delta > 0$.
+$$|\sin \angle(\normal_i, \normal)| \geq \delta,$$
+then possibly after shrinking $\varepsilon$ we may assume that (\ref{epsilon is a continuity set}) holds, hence
+$$\int_{B(x, \varepsilon)} T_{\mu_i} \wedge \varphi = \int_{B(x, \varepsilon)} \normal_i\mu_i \wedge \star \normal \leq (1 - O(\delta)) \mu_i(B(x, \varepsilon))$$
+and therefore $\delta = 0$, a contradiction.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Convergence in flow boxes}
-Let $C^{1-}$ be the Fr\'echet space $\bigcap_{\alpha < 1} C^\alpha$, where $C^\alpha$ are H\"older spaces.
-The following definition is one possible interpretation of the vague definition of \cite[Lemma II.1.2]{ColdingMinicozziV}.
+\subsection{Hausdorff distance versus Thurston's geometric topology}
+Convergence in Thurston's geometric topology can be annoying to check, as it requires one to check the convergence of the normal vectors as well as the leaves themselves.
+Here we eliminate the need to check convergence of the normal vectors under certain hypotheses.
 
-
-
-We allow the limiting flow box to not be Lipschitz, but just $C^{1-}$, if necessary.
-Just as for Thurston's geometric topology, convergence on the level of flow boxes does not satisfy uniqueness of limits, and hence we speak of \dfn{maximal limits} to allow us to speak of a unique limit of a sequence.
-
-\begin{proposition}
-Let $(\lambda, \mu)$ be a measured geodesic lamination.
-Then there exist finite sublaminations $\lambda_i$ of $\lambda$ such that $\lambda$ is a maxima limit of $(\lambda_i)$ on the level of flow boxes.
+\begin{proposition}\label{convergence of geodesic lams in thurston}
+Assume that $(\lambda_i)$ is a sequence of minimal laminations, and $\lambda$ a minimal lamination, such that for every leaf $N$ of $\lambda$ and every large $i$, there is a leaf $N_i$ of $\lambda_i$ such that $N_i \to N$ in $\Hypspace M$.
+Furthermore, suppose that $(\lambda_i)$ has bounded curvature.
+Then $\lambda_i \to \lambda$ in Thurston's geometric topology.
 \end{proposition}
 \begin{proof}
-Let $(x_i)$ be a dense sequence in $\supp \lambda$ and $N_i$ the leaf containing $x_i$.
-Since $\lambda$ admits a transverse measure, $N_i$ is closed, so setting $\lambda_i := \bigcup_{j < i} N_j$, $\lambda_i$ is a finite lamination.
-Now if $N$ is a leaf in $\lambda$, either $N = N_i$ for some $i$, in which case clearly $N$ is a limiting leaf of $\lambda_i$, or for every $x \in N$ there exists a subsequence $(x_{i_j})$ such that $x_{i_j} \to x$.
-In partiular, $N_{i_j}$ approximates $N$ in Thurston's geometric topology (here the convergence of normal vectors is because it's a geodesic lamination).
-Moreover, if $F$ is a flow box for $\lambda$ near $x$, then $F$ is also a flow box for $N_i$ for every $i$, hence the convergence in flow boxes.
+Suppose not. Then, there exists $P \in N$ such that for every $P_i \in N_i$ such that $P_i \to P$, $\normal_i := \normal_{N_i}(P_i)$ does not converge to $\normal := \normal_N(P)$ in the cosphere bundle $S'M$.
+In normal coordinates $(x, y')$ based at $P$, $N$ can be viewed as the graph of a function $\{y' = w(x)\}$; we then set $y := y' - w(x)$, so that $N = \{y = 0\}$.
+Using the coordinates $(x, y)$ we identify $M$, and each of its cotangent spaces, with $\RR^d$.
+
+Possibly after taking a subsequence of $(\lambda_i)$, we may choose $\varepsilon > 0$ such that no matter what sequence $(P_i)$ we choose,
+\begin{equation}\label{thurston angle defect}
+	|\sin \angle(\normal_i, \normal)| \geq \varepsilon.
+\end{equation}
+The second fundamental form $\Two_i'$ of $N_i$ with respect to the euclidean metric on $\RR^d$ is bounded in terms of the curvature tensors of $M$ and $N$, and the second fundamental form $\Two_i$ of $N_i$ with respect to $M$, in $B(P, 2\varepsilon)$, as long as $\varepsilon$ is small.
+But $\Two_i$ is uniformly bounded since $(\lambda_i)$ has bounded curvature. TODO: Spell this out. What does ``sin'' even mean in this context?
+The resulting uniform bound on $\Two_i'$, combined with (\ref{thurston angle defect}), furnishes a small $\delta > 0$ independent of $i$ such that $N_i$ \dfn{avoids cones} in the sense that for every $v \in \RR^d$ such that $0 < |v| < \delta$ and $|\sin v| < \varepsilon/2$, $P_i + v \notin N_i$.
+After shrinking $\varepsilon$, we may assume that $\varepsilon < \max(\delta/2, 1/100)$.
+
+To obtain a contradiction, we choose $Q \in N$ such that $\dist(P, Q) = \varepsilon$, which can be done as long as $\varepsilon$ is small.
+For $i$ large, $|P_i| < \varepsilon^2/10$, so
+$$0 < \varepsilon - \varepsilon^2 \leq |Q - P_i| < 2\varepsilon < \delta$$
+and hence (using a superscript $j$ to indicate the $j$th coordinate)
+$$|y^1 - x_i^1| \geq |y - x_i| - |x_i^2| \geq \varepsilon - 2\varepsilon^2.$$
+Consider the triangle $\Delta$ whose vertices are $x_i, y$, and $z_i := (y^1, x_i^2)$.
+Then $\Delta$ is a right triangle, and its smallest angle $\theta_\Delta$ satisfies
+$$|\sin \theta_\Delta| = \frac{|x_i^2|}{|y^1 - x_i^1|} < \frac{\varepsilon^2}{\varepsilon - 2\varepsilon^2} < \frac{\varepsilon}{4}.$$
+Thus for every large $i$, $y$ is contained in the cone avoided by $N_i$, and in fact for any $y_i \in N_i$, $\dist(y, y_i) \geq \varepsilon/4$.
+But we argued above that any point of $N$ could be approximated by points of $N_i$ for $i$ large, so this is a contradiction.
 \end{proof}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
 \subsection{Compactness}
-\begin{definition}
-A sequence of laminations $(\lambda_i)$ is \dfn{tight} if there exists a compact set $K \subseteq M$ such that for every $i$ there exists a leaf $N_i$ of $\lambda_i$, such that $N_i \cap K$ is nonempty.
-\end{definition}
 
 \begin{lemma}\label{limit of minimals is minimal}
 Let $(N_i)$ be a sequence of complete embedded minimal hypersurfaces of uniformly bounded curvature and $N_i \to N$ in $\Hypspace M$.
@@ -731,42 +765,18 @@ Now if $(x, y) \in U$ but $(x, y) \notin U_i$ for arbitrarily large $i$, then $f
 This violates the convergence $N_i \to N$ in $\Hypspace N$.
 
 So $u_i \to u$ almost everywhere, and hence by dominated convergence also converges in $L^1$.
-By the Miranda stability theorem it follows that $U$ has least perimeter, and so by \cite{BackusFLG}, $N$ is a complete minimal hypersurface.
+By the Miranda stability theorem it follows that $U$ has least perimeter, and so Theorem \ref{main thm of old paper}, $N$ is a complete minimal hypersurface.
 \end{proof}
 
-\begin{lemma}\label{convergence of geodesic lams in thurston}
-Assume that $(\lambda_i)$ is a sequence of geodesic laminations, and $\lambda$ a geodesic lamination, such that for every leaf $N$ of $\lambda$, there is a leaf $N_i$ of $\lambda_i$ such that $N_i \to N$ pointwise.
-Then $\lambda_i \to \lambda$ in Thurston's geometric topology.
-\end{lemma}
-\begin{proof}
-We must show that for $x \in N$ and $x_i \in N_i$, $N_i$ a leaf of $\lambda_i$ such that $x_i \to x$, $\normal_i := \normal_{N_i}(x_i)$ converges to $\normal := \normal_N(x)$ in the cosphere bundle $S'M$.
-If this fails, then we work in normal coordinates based at $x$, so we can think of points of $M$ as vectors in $\RR^d$, and points of $S'M$ as unit vectors in $\RR^d$.
-In such coordinates we may view $N$ as the first axis.
-Possibly after taking a subsequence of $(\lambda_i)$, we may assume that no matter what sequence $(x_i)$ we choose,
-$$|\sin \angle(\normal_i, \normal)| \geq \varepsilon.$$
-The geodesic curvature of $N_i$ with respect to the euclidean metric on the tangent space is bounded independently of $i$ in terms of the scalar curvature $R$ of $M$ near $x$, so there exists $r = r(R) > 0$ independent of $i$ such that $N_i$ \dfn{avoids cones} in the sense that for every $v \in \RR^d$ such that $0 < |v| < r$ and $|\sin v| < \varepsilon/2$, $v + x_i$ does not lie in $N_i$.
-After shrinking $\varepsilon$, we may assume that $\varepsilon < \max(r/2, 1/100)$.
 
-To obtain a contradiction, we choose $y$ to lie on $N$ and satisfy $\dist(x, y) = \varepsilon$.
-For $i$ large, $|x_i| < \varepsilon^2/10$, so
-$$0 < \varepsilon - \varepsilon^2 \leq |y - x_i| < 2\varepsilon = r$$
-and hence (using a superscript $j$ to indicate the $j$th coordinate)
-$$|y^1 - x_i^1| \geq |y - x_i| - |x_i^2| \geq \varepsilon - 2\varepsilon^2.$$
-Consider the triangle $\Delta$ whose vertices are $x_i, y$, and $z_i := (y^1, x_i^2)$.
-Then $\Delta$ is a right triangle, and its smallest angle $\theta_\Delta$ satisfies
-$$|\sin \theta_\Delta| = \frac{|x_i^2|}{|y^1 - x_i^1|} < \frac{\varepsilon^2}{\varepsilon - 2\varepsilon^2} < \frac{\varepsilon}{4}.$$
-Thus for every large $i$, $y$ is contained in the cone avoided by $N_i$, and in fact for any $y_i \in N_i$, $\dist(y, y_i) \geq \varepsilon/4$.
-But we argued above that any point of $N$ could be approximated by points of $N_i$ for $i$ large, so this is a contradiction.
-\end{proof}
-
-\begin{theorem}\label{compactness in flow boxes and Thurston}
+\begin{proposition}\label{compactness in flow boxes and Thurston}
 Let $(\lambda_i)$ be a tight sequence of finite minimal laminations with bounded curvature. Then:
 \begin{enumerate}
 \item After passing to a subsequence, we may assume that $(\lambda_i)$ converges to a maximal limit $\lambda$ on the level of flow boxes, and hence in Thurston's geometric topology.
 \item The limit $\lambda$ is a Lipschitz minimal lamination satisfying the same curvature bounds as $(\lambda_i)$.
 \item If $\mu_i$ is a transverse measure to $\lambda_i$ and for every compact $K \subseteq M$, $\mu_i(K) \lesssim_K 1$, then after passing to a further subsequence, we may assume that $(\lambda_i, \mu_i)$ in fact converges to some measured minimal lamination $(\tilde \lambda, \mu)$ in the weak topology of measures, where $\tilde \lambda$ is a sublamination of the maximal lamination $\lambda$.
 \end{enumerate}
-\end{theorem}
+\end{proposition}
 \begin{proof}
 We first select $x_0 \in M$; we will construct suitable flow boxes $F_i$ for $\lambda_i$ with image $B(x_0, r)$.
 Here $r$ is to be determined, but at least is smaller than $R(x_0)/2$, where $R(x_0)$ is the injectivity radius of $M$ at $x_0$.
@@ -849,16 +859,35 @@ Since $K$ meets every leaf of $\lambda$, $\mu$ extends uniquely to all of $M$ as
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Convergence in flow boxes versus the weak topology of measures}
-\begin{theorem}\label{measures implies flow boxes}
+\begin{proposition}\label{measures implies flow boxes}
 Let $(\lambda_i, \mu_i)$ be measured geodesic laminations.
 If $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, then $\lambda_i \to \lambda$ on the level of flow boxes.
-\end{theorem}
+\end{proposition}
 \begin{proof}
 The question is local, so we may remove all leaves of $\lambda$ except those that meet some precompact open set.
 Then, for each $i$, let $(\lambda_{ij})_j$ be finite sublaminations of $\lambda_i$ converging to $\lambda_i$ on the level of flow boxes.
 Then any subsequence $(i_k)$, has a further subsequence $(i_{k_\ell})$ such that $\lambda_{i_{k_\ell} i_{k_\ell}} \to \lambda$ on the level of flow boxes by Theorem \ref{compactness in flow boxes and Thurston}.
 Indeed, as geodesic laminations, they have bounded curvature, and $(\lambda_i)$ is tight by construction.
 So $\lambda_{i_{k_\ell}} \to \lambda$ on the level of flow boxes, but $(i_k)$ was arbitrary, so $\lambda_i \to \lambda$ on the level of flow boxes.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Putting it all together}
+We now complete the proof of Theorems \ref{compactness theorem} and \ref{implication theorem}.
+
+\begin{lemma}\label{reduction to finite case}
+Let $(\lambda, \mu)$ be a measured minimal lamination.
+Then there exist finite sublaminations $\lambda_i$ of $\lambda$ such that $\lambda$ is a maximal limit of $(\lambda_i)$ on the level of flow boxes.
+\end{lemma}
+\begin{proof}
+Let $(x_i)$ be a dense sequence in $\supp \lambda$ and $N_i$ the leaf containing $x_i$.
+Since $\lambda$ admits a transverse measure, $N_i$ is closed, so setting $\lambda_i := \bigcup_{j < i} N_j$, $\lambda_i$ is a finite lamination.
+Now if $N$ is a leaf in $\lambda$, either $N = N_i$ for some $i$, in which case clearly $N$ is a limiting leaf of $\lambda_i$, or for every $x \in N$ there exists a subsequence $(x_{i_j})$ such that $x_{i_j} \to x$.
+We claim that $N$ is a maximal limit of $N_{i_j}$ in Thurston's geometric topology.
+To see why, we observe that $\normal_\lambda \in W^{1, \infty}$ TODO: regularity theorem so that $||\Two_{\lambda_i}||_{L^\infty} \lesssim 1$.
+Since the second fundamental form of each individual leaf is continuous, it follows that $||\Two_{N_i}||_{C^0} \lesssim 1$ and so $(\lambda_i)$ has bounded curvature.
+The desired convergence in Thurston's geometric topology now follows from Proposition \ref{convergence of geodesic lams in thurston}.
+Finally, if $F$ is a flow box for $\lambda$ near $x$, then $F$ is also a flow box for $N_i$ for every $i$, hence the convergence in flow boxes.
 \end{proof}
 
 % \begin{lemma}
@@ -921,7 +950,7 @@ So $\lambda_{i_{k_\ell}} \to \lambda$ on the level of flow boxes, but $(i_k)$ wa
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Construction of minimal laminations}
+\section{Construction of minimal laminations}
 We conclude this paper by applying the above theory to prove a condition for a collection of minimal hypersurfaces to form a minimal lamination.
 This condition will be used in the companion papers \cite{BackusFLG, DaskalopoulosPrep2}.
 
@@ -944,7 +973,7 @@ In particular, the leaves of $\tilde \lambda$ are exactly the limits in Hausdorf
 Let $\lambda$ be a geodesic partition. Then $\lambda$ is a geodesic lamination.
 \end{corollary}
 
-The above result is also useful when combined with the below stable Bernstein theorem.\footnote{so-called because this theorem is essentially equivalent to the assertion that a stable two-sided minimal hypersurface in $\RR^d$ is a hyperplane.}
+The above result is also useful when combined with the below stable Bernstein theorem.
 
 \begin{proposition}[stable Bernstein theorem]
 Let $3 \leq d \leq 4$ and let $N$ be a two-sided stable minimal hypersurface in $B_r \subseteq M$, $r \lesssim 1$, where $M$ has bounded geometry and dimension $d$.
@@ -958,6 +987,9 @@ For $d = 3$ see \cite[Corollary 2.11]{colding2011course}, and for $d = 4$ see \c
 Let $\lambda$ be a minimal partition in $M$ whose leaves are two-sided and stable, where $M$ has dimension $3 \leq d \leq 4$.
 Then $\lambda$ is a minimal lamination.
 \end{corollary}
+
+\subsection{The antiderivative of a Ruelle-Sullivan current}
+TODO
 
 \printbibliography
 

@@ -1,0 +1,257 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+\DeclareMathOperator{\Div}{div}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, HW 7} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+    We construct $H(\Div)$-conforming finite elements, as follows. Let $K = (0, h)^2$, $P = \spn((1, 0), (0, 1), (x, 0), (0, y))$, and $\Sigma = \{\sigma_\gamma: \gamma \in E\}$ where $E$ is the set of edges of $K$ and
+    $$\sigma_\gamma(\tau) = \int_\gamma n \cdot \tau \dif s.$$
+    Show that $(K, P, \Sigma)$ is unisolvent, and deduce that it is a finite element.
+\end{exer}
+
+    We do this at the same time as solving the next problem, constructing a Lagrange basis.
+    Indeed, if we have a $\Sigma$-Lagrange basis of $P$, then $(P, \Sigma)$ is unisolvent and hence $(K, P, \Sigma)$ is a finite element.
+    Let $\gamma_{11} := \{x = 0\}$, $\gamma_{12} := \{x = h\}$, $\gamma_{21} := \{y = 0\}$, and $\gamma_{22} := \{y = h\}$.
+    Let $\varphi_{11} := h^{-1} (0, h - x)$, $\varphi_{12} := h^{-1} (0, x)$, $\varphi_{21} := h^{-1} (h - y, 0)$, and $\varphi_{22} := h^{-1} (y, 0)$.
+    Then $\varphi_{ij}$ is orthogonal to $n_{i'j'}$ unless $i = i'$ (in which case it is parallel), and the restriction of $\varphi_{ij}$ to $\gamma_{i'j'}$ is $0$ unless $j = j'$ (in which case it is $h^{-1}$).
+    Since each edge has length $h$ the claim follows, and the $\varphi_{ij}$ are clearly in $P$ since they are piecewise linear, the claim follows.
+
+\begin{exer}
+    Construct a Lagrange basis $\{\varphi_\gamma: \gamma \in E\}$.
+\end{exer}
+
+    See above.
+
+\begin{exer}
+    Write down an explicit formula for the operator $\Pi: C(K)^2 \to P$ defined by 
+\begin{equation}\label{orthoprojection}
+    \sigma_\gamma \cdot \Pi = \sigma_\gamma,
+\end{equation}
+    and show that it satisfies the commutative property 
+\begin{equation}\label{commuting}
+    \Div \circ \Pi = \Pi_0 \circ \Div
+\end{equation}
+    where you should define $\Pi_0$.
+\end{exer}
+
+    As usual, $\Pi$ is given by 
+    $$\Pi(\tau) = \sum_{\gamma \in E} \sigma_\gamma(\tau) \varphi_\gamma.$$
+    Then 
+\begin{align*}
+    \sigma_\gamma(\Pi(\tau)) &= \sum_{\kappa \in E} \sigma_\kappa(\tau) \sigma_\gamma(\varphi_\kappa) = \sum_{\kappa \in E} \sigma_\kappa(\tau) \delta_{\kappa \gamma} \\
+    &= \sigma_\gamma(\tau)
+\end{align*}
+    which implies (\ref{orthoprojection}). Now we let $\Pi_0 u$ be the mean of $u$ on $(0, h)^2$ like usual.
+    Observing that $\varphi_\gamma$ was chosen to be the outwards normal to $\gamma$ of length $h^{-1}$, and hence has divergence $\pm h^{-1}$ depending on the orientation, we get 
+\begin{align*}
+    \Pi_0(\Div \tau) &= h^{-2} \int_K \Div \tau \dif A = h^{-2} \int_{\partial K} n \cdot \tau \dif s = \sum_{\gamma \in E} \Div \varphi_\gamma \int_\gamma \varphi_\gamma \cdot \tau \dif s \\
+    &= \Div(\Pi \tau).
+\end{align*}
+    As usual, the orientation signs canceled out with the signs arising from the orientation of the boundary. We conclude (\ref{commuting}).
+
+\begin{exer}
+    Show that $\Pi c = c$ for every $c \in \RR^2$.
+\end{exer}
+
+    If we choose an inner product on $C(K)^2$ so that $\{\varphi_\gamma: \gamma \in E\}$ becomes an orthonormal set, then $\Pi$ is the orthogonal projection with respect to that inner product.
+    In particular $\Pi$ fixes $P$, and hence $c \in P$.
+
+\begin{exer}
+    Show that 
+\begin{equation}\label{L2 estimate}
+    ||\Pi \sigma||_K \lesssim ||\sigma||_K + h ||\nabla \sigma||_K
+\end{equation}
+    and 
+    $$||\Div(\Pi \sigma)||_K \leq ||\Div \sigma||_K.$$
+    Conclude that 
+    $$\Pi: H^1(K)^2 \to H(\Div, K)$$
+    is a bounded linear map.
+\end{exer}
+
+    We compute 
+    $$||\Pi \tau||_K^2 = \sum_{\gamma, \kappa \in E} \int_\gamma n \cdot \tau \dif s \int_\kappa n \cdot \tau \dif s \int_K \varphi_\gamma \cdot \varphi_\kappa \dif s.$$
+    We then can bound 
+    $$\left|\int_K \varphi_\gamma \cdot \varphi_\kappa \dif s\right| \lesssim 1$$
+    owing to the fact that we're integrating over a region of area $h^2$ two functions that are each $\lesssim h^{-1}$. 
+    The expression $\int_\gamma n \cdot \tau \dif s$ appeared already when were building a finite element basis for simplices, where we bounded 
+    $$\left|\int_\gamma n \cdot \tau \dif s\right| \lesssim ||\tau||_K + h ||\nabla \tau||_K.$$
+    The $L^2$ estimate (\ref{L2 estimate}) follows.
+    Since $\Pi_0$ is the orthogonal projection $L^2(K) \to \RR$,
+    $$||\Div(\Pi \tau)||_K = ||\Pi(\Div \tau)||_K \leq ||\Div \tau||_K.$$
+    Then 
+    $$||\Pi \tau||_{H(\Div, K)}^2 = ||\Pi \tau||_K^2 + ||\Div \tau||_K^2 \lesssim ||\tau||_K^2 + h^2 ||\nabla \sigma||_K^2 + ||\Div \tau||_K^2 \lesssim ||\tau||_{H^1(K)}^2.$$
+    Thus $\Pi$ carrries $H^1(K)^2$ to $H(\Div, K)$ boundedly.
+
+\begin{exer}
+    Show that if $\sigma \in H^1(K)^2$ then 
+    $$||(1 - \Pi)\sigma||_K \lesssim h ||\sigma||_{H^1(K)}$$
+    and if $\Div \sigma \in H^1(K)^2$ then 
+    $$||\Div(1 - \Pi)\sigma||_K \lesssim h ||\Div \sigma||_{H^1(K)}.$$
+\end{exer}
+
+    Let $\tau$ be the best approximation of $\sigma$ by constant vector fields for the $L^2$ norm. Then
+    $$|(1 - \Pi)\sigma||_K \leq ||(1 - \Pi)(\sigma - \tau)||_K + ||(1 - \Pi) \tau||_K.$$
+    Since $\tau \in P$ the second term vanishes, and moreover
+    $$||(1 - \Pi)(\sigma - \tau)||_K \leq ||\sigma - \tau||_K + ||\Pi (\sigma - \tau)||_K.$$
+    We bound the first term using the Bramble-Hilbert lemma as
+\begin{equation}\label{Bramble Hilbert}
+    ||\sigma - \tau||_K \lesssim h ||\sigma||_{H^1(K)}.
+\end{equation}
+    For the second, we apply (\ref{L2 estimate}) to obtain
+    $$||\Pi (\sigma - \tau)||_K \lesssim ||\sigma - \tau||_K + h ||\nabla (\sigma - \tau)||_K.$$
+    The first term here is harmless by (\ref{Bramble Hilbert}) and the second is $h ||\nabla \sigma||_K$ since $\tau$ was assumed constant, hence
+    $$h ||\nabla (\sigma - \tau)||_K \lesssim h ||\sigma||_{H^1(K)}.$$
+
+    Now we use the fact that $||1 - \Pi_0||_{H^1(K) \to L^2(K)} \lesssim h$ to estimate 
+    $$||\Div(1 - \Pi)\sigma||_K = ||(1 - \Pi_0) \Div \sigma||_K \lesssim h ||\Div \sigma||_{H^1(K)}.$$
+
+\begin{exer}
+    Let $P_h$ be a partition of $\Omega$ into squares of length $h$, let
+    $$M_h = \{v \in L^2(\Omega): v|_K \in \mathbb P_0 \forall K \in P_h\}$$
+    and let 
+    $$V_h = \{\sigma \in H(\Div, \Omega): \sigma|_K \in P(K) \forall K \in P_h\}.$$
+    Show that the dual finite element approximation $(\sigma_h, u_h)$ of the Poisson problem with data $f$ based on $V_h \times M_h$ is well-defined, uniformly stable, and satisfies 
+    $$||\sigma - \sigma_h||_{H(\Div, \Omega)} + ||u - u_h|| \lesssim h ||f||_{H^1(\Omega)}.$$
+\end{exer}
+
+    We need to verify the Babuška-Brezzi conditions for $a(\sigma, \tau) = (\sigma, \tau)$ and 
+    $$b(u, \sigma) = (u, \Div \sigma)$$
+    on $V_h, M_h$. Clearly $a$ is elliptic (and in particular is elliptic on the left kernel of $b$).
+    Let $\sigma \in V_h$; we must find $u \in M_h$ so that 
+    $$(u, \Div \sigma) \gtrsim ||u||_{L^2} \cdot ||\Div \sigma||_{H(\Div)}.$$
+    In fact, the divergences of elements of $V_h$ were chosen to be piecewise constant and hence they lie in $M_h$, so we can take $u = \Div \sigma$ with implied constant $1$ (since $||\Div \sigma||_{H(\Div)} \geq ||\Div \sigma||_{L^2}$).
+    
+    Since the constants in the Babuška-Brezzi conditions are both $1$, in particular they are independent of $h$.
+    So the dual approximations is uniformly stable by Brezzi's theorem. So, since projection commutes with divergence,
+    $$||\sigma - \sigma_h||_{H(\Div, \Omega)} + ||u - u_h|| \lesssim ||(1 - \Pi) \sigma||_{H(\Div, \Omega)} + ||(1 - \Pi_0) u||.$$
+    Then, by the previous problem and the Bramble-Hilbert lemma,
+    $$||(1 - \Pi) \sigma||_{H(\Div, \Omega)} + ||(1 - \Pi_0) u|| \lesssim h\left(||\sigma||_{H^1(\Omega)} + ||\Div \sigma||_{H^1(\Omega)} + ||u||_{H^1(\Omega)}\right).$$
+    To bound these we first observe that
+    $$\nabla \times \sigma = \nabla \times \nabla u = 0,$$
+    so by elliptic regularity of the div-curl system,
+    $$||\sigma||_{H^1(\Omega)} \lesssim ||\Div \sigma||,$$
+    and since $\Div \sigma = f$, we obtain 
+    $$||\sigma||_{H^1(\Omega)} + ||\Div \sigma||_{H^1(\Omega)} \lesssim ||f||_{H^1(\Omega)}.$$
+    Finally, we use the elliptic regularity of the Laplacian to bound 
+    $$||u||_{H^1(\Omega)} \lesssim ||f||_{H^{-1}(\Omega)} \leq ||f||_{H^1(\Omega)}.$$
+
+
+\end{document}
