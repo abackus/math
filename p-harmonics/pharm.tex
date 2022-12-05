@@ -1,4 +1,4 @@
-\documentclass[reqno,10pt]{amsart}
+\documentclass[reqno,12pt]{amsart}
 \usepackage[letterpaper, margin=1in]{geometry}
 \RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
 \RequirePackage[usenames,dvipsnames]{xcolor}
@@ -190,7 +190,8 @@
 
 % \tableofcontents
 
-\section{The p-Laplacian}
+\section{Preliminaries}
+\subsection{The $p$-Laplacian}
 Let $1 < p < \infty$.
 
 \begin{definition}
@@ -254,7 +255,7 @@ Actually, that paper only states this for $M$ closed and the sheaf of untwisted 
 I guess it's fine though, as the proof relies mainly on the good local behavior of the Riesz transform, rather than anything global about the manifold.
 We do need to worry about the possibility that Gaffney's inequality might degenerate in the limit $p \to 1$ though.
 
-\section{Hodge theory}
+\subsection{Hodge theory}
 We let
 $$\mathscr K_\ell := \ker \dif \cap \ker \dif^*$$
 be the sheaf of closed and coclosed $\ell$-forms.
@@ -291,66 +292,87 @@ Finally, we can bound the ``size'' of the singular manifolds $\{\dif u = 0\}$ an
 The motivation for this conjecture is the regularity of elliptic systems in \cite{Uhlenbeck77} and the fact that if $d = 2$ the cardinality of the singular manifold is given by the Euler characteristic of $M$ \cite{Daskalopolous20}.
 In general, maybe the codimension is bounded from below and we can control the cohomology of the singular manifolds in terms of some characteristic classes of $M$.
 
-\section{Harmonic duality}
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Fenchel-Noether duality}
 \begin{definition}
-Let $1 < p, q < \infty$ be H\"older conjugate and let an $\ell$-form $u$ and a $d-\ell$-form $v$ satisfy the \dfn{$p, q$-Cauchy-Riemann equations}
-\begin{align*}
-\dif u &= |\dif^* v|^{q - 2} \dif^* v,\\
-\dif^* u &= |\dif u|^{q - 2} \dif v,\\
-\dif v &= |\dif^* u|^{p - 2} \dif^* u,\\
-\dif^* v &= |\dif u|^{p - 2} \dif u.
-\end{align*}
-Then we call $u, v$ \dfn{$p, q$-harmonic conjugate}.
+Let $u$ be a $p$-harmonic function. We define the \dfn{Noetherian flux} associated to $u$ by 
+$$\psi := -\star |\dif u|^{p - 2} \dif u.$$
 \end{definition}
 
-Clearly the $q$-harmonic conjugate of a $p$-harmonic $\ell$-form is well-defined modulo $\mathscr K_{d - \ell}(M)$ if it exists.
-In particular, for untwisted global forms on closed manifolds, this notion is completely boring, because then every $p$-harmonic $\ell$-form is conjugate to every $q$-harmonic $d-\ell$-form, by Poincar\'e duality.
-We probably have to talk about twisted $p$-harmonics to make it not useless; this is already the case in \cite{Daskalopolous20} and \cite{Backus23}.
+From the definition, $\dif \psi = 0$.
+It's a straightforward computation to see that $\dif \psi = 0$ is the conservation law for $p$-harmonic functions induced by the Lie algebra of symmetries $u \mapsto u + c$.
+On the other hand, $\psi$ is a solution to the Fenchel dual problem to the $p$-Laplacian, namely the maximization of $-\|\psi\|_{L^q}$ where $1/p + 1/q = 1$ \cite[Chapter IV, Proposition 2.2]{Ekeland99}.
+By \cite[Lemma 3.2]{Daskalopolous20}, $\psi$ solves the PDE 
+$$\dif^*(|\psi|^{q - 2} \psi) = 0.$$
+We introduce the \dfn{Noetherian potential}, a $d - 2$-form $\eta$ which solves $\dif \eta = \psi$, hence 
+\begin{equation}\label{gauge invariant qLap}
+\dif^*(|\dif \eta|^{q - 2} \dif \eta) = 0.
+\end{equation}
+
+The equation (\ref{gauge invariant qLap}) is like the $q$-Laplacian, except it is gauge invariant as it does not specify $\dif^* \eta$.
+
+The dumb choice of gauge here is \dfn{Couloumb gauge} $\dif^* \eta = 0$. If it is exists, then Couloumb gauge implies that $\eta$ is a $q$-harmonic $d-2$-form.
+
+\begin{definition}
+The \dfn{gauge $\infty$-Laplace equation} is the PDE on $d-2$-forms
+\begin{equation}\label{gauge invariant infLap}
+  \langle \nabla (\dif \eta), \dif \eta \rangle \wedge \star \dif \eta = 0.
+\end{equation}
+\end{definition}
+
+Here $\nabla (\dif \eta) \in \Omega^1 \otimes \Omega^{d - 1}$, and since $\dif \eta \in \Omega^{d - 1}$, their contraction is in $\Omega^1$.
+Then $\star \dif \eta \in \Omega^1$, so the left-hand side of (\ref{gauge invariant infLap}) is a $2$-form.
+
+The gauge $\infty$-Laplacian is the formal limit of (\ref{gauge invariant qLap}) as $q \to \infty$.
+In fact 
+\begin{align*}
+  \dif^*(|\dif \eta|^{q - 2} \dif \eta)
+  &= (-1)^{d - 1} \star^{-1} \dif(|\dif \eta|^{q - 2} \star \dif \eta) \\
+  &= (-1)^{d - 1} \star^{-1} (\dif(|\dif \eta|^{q - 2}) \wedge \star \dif \eta + |\dif \eta|^{q - 2} \dif(\star \dif \eta)) \\
+  &= (-1)^{d - 1} \star^{-1} (\dif(|\dif \eta|^{q - 2}) \wedge \star \dif \eta) + |\dif \eta|^{q - 2} \dif^* \dif \eta.
+\end{align*}
+Since $|\dif \eta|^{q - 2}$ is a scalar field, if $q \geq 4$ then
+$$\dif(|\dif \eta|^{q - 2}) = \nabla(|\dif \eta|^{q - 2}) = (q - 2) |\dif \eta|^{q - 4} \langle \nabla(\dif \eta), \dif \eta\rangle.$$
+We now consider a family of gauge $q$-harmonic $d-2$-forms $\eta_q$, where $q \in [4, \infty)$, normalized so that $|\dif \eta_q|^{q - 2}$ remains bounded. It solves 
+$$|\dif \eta_q|^{-2} \langle \nabla(\dif \eta_q), \dif \eta_q\rangle \wedge \star \dif \eta_q + \frac{(-1)^{d - 1}}{q - 2} \star \dif^* \dif \eta_q = 0.$$
+In the limit $\eta$ where $q \to \infty$, the second term drops out and we're left with 
+$$|\dif \eta|^{-2} \langle \nabla(\dif \eta), \dif \eta\rangle \wedge \star \dif \eta = 0.$$
+If we have a bound on the sets $\{|\eta_q| \ll 1\}$ where $\eta_q$ is not even elliptic up to gauge, then we can multiply by $|\dif \eta|^2$ and get (\ref{gauge invariant infLap}).
+This is the same formal derivation of the scalar $\infty$-Laplacian that appears in \cite{Lindqvist14}.
+
+Now suppose that $u$ is a $1$-harmonic function and $\eta$ is the Noetherian poential for $u$.
+We can't really use variational solutions since (\ref{gauge invariant qLap}) is Euler-Lagrange for the nonstrictly convex functional $\|\dif \eta\|_{L^q}$.
+Instead what follows probably needs to be justified using the Maz\'on--Rossi--Segura de L\'eon (MRS) notion of a weak solution. 
 
 \begin{proposition}
-If $u, v$ are $p, q$-harmonic conjugate then $u, v$ are $p, q$-harmonic.
+The following are equivalent:
+\begin{enumerate}
+\item A function of least gradient.
+\item An MRS solution of the $1$-Laplace equation.
+\item An MRS solution $u$ of the $1$-Laplace equation such that $\dif u/|\dif u|$ is Lipschitz.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
-Since $p, q$ are H\"older conjugate, $(p - 1)(q - 2) + p - 2 = 0$.
-Therefore for some sign $\sigma$,
-\begin{align*}
-\dif^*(|\dif v|^{q - 2} \dif v) &= (-1)^\sigma \dif^*(|\dif^* \star v|^{q - 2} \dif^* \star v) \\
-&= (-1)^\sigma \dif^* (|\dif^* u|^{(p - 1)(q - 2)} |\dif^* u|^{p - 2} \dif^* u) \\
-&= (-1)^\sigma (\dif^*)^2 u = 0.
-\end{align*}
-A similar computation shows $\dif(|\dif^* v|^{q - 2} \dif^* v) = 0$.
-It follows that $\Delta_q v = 0$.
+By \cite[Theorem 2.5, (ii) implies (i)]{Mazon14}, $2 \implies 1$ (this is basically a one-liner).
+Also $3 \implies 2$ is trivial.
+By my stuff, $1 \implies 3$.
 \end{proof}
 
-\begin{conjecture}
-For each $p$-harmonic $u$ there is a unique $q$-harmonic conjugate $v$ modulo $\mathscr K_{d - \ell}(M)$.
-Also $||v||_{W^{1, q}} \sim ||u||_{W^{1, p}}$ (where we assume that if we have Dirichlet data then it is zero).
-\end{conjecture}
-
-I guess this should follow from some results about div-curl solvability, especially if we have some elliptic regularity for the $p$-harmonic $u$.
-Oh--Tataru \cite[Appendix A]{Oh:2017mdn} carefully proves existence and regularity for certain div-curl systems using Uhlenbeck's lemma and maybe that's the line of attack I should use as well.
-Oh taught a class on the Einstein equation when I was an undergrad and maybe I could go back to him for help here.
-
-\section{The limiting case}
-\begin{conjecture}
-Let $[u]$ be the Dirichlet or Neumann data of a $1$-harmonic $u$.
-Then the $p$-harmonics $u_p$ with the same data $[u]$ converge in $BV$ to $u$ as $p \to 1$.
-Moreover, $||u_p||_{W^{1, p}} \sim ||u||_{BV}$.
-In particular the $q$-harmonic conjugates $v_q$ satisfy $||v_q||_{W^{1, q}} \sim ||u||_{BV}$ and so as $q \to \infty$ they converge to an $\infty$-harmonic $v$ with $||v||_{C^{1-}} \sim ||u||_{BV}$.
-\end{conjecture}
-
-Here I think that $\infty$-harmonic means that some kind of contraction of the Hessian with the div and curl is zero. But I'm not sure exactly what.
-I think we can always reduce to the Dirichlet case using a Dirichlet-to-Neumann transform.
-Then this conjecture probably follows from the general theory in \cite{Mazon14} if we were to extend it to the differential forms case.
-
-It's natural to try to guess the form of the $\infty$-Laplacian using the stochastic game interpretation of the $p$-Laplacian \cite{Peres08}:
+This gives an alternate proof of (a stronger version of!) the MRS theorem \cite[Theorem 1.1(1)]{Mazon14} by completely different means. 
 
 \begin{conjecture}
-There's a notion of value FORM for certain generalizations of stochastic games, such that for generalized tug-of-war, the $\infty$-Laplacian represents optimal play, the $2$-Laplacian represents random play, and for $2 < p < \infty$, the $p$-Laplacian is an interpolant.
+\begin{enumerate}
+\item There is a good (game-theoretic?) notion of weak solution for (\ref{gauge invariant infLap}).
+\item If $\eta_q \to \eta$ in $W^{1, q}$ and $\eta_q$ solves (\ref{gauge invariant qLap}), then $\eta$ is weakly gauge $\infty$-harmonic.
+\item Every weakly gauge $\infty$-harmonic $d-2$-form $\eta$ which is the Noetherian potential of a measured minimal lamination $\lambda$ satisfies 
+$$\supp \lambda = \{|\dif \eta| = \|\dif \eta\|_{L^\infty}\}.$$
+\end{enumerate}
 \end{conjecture}
 
-Obviously we don't need this to be true, and I don't even know what a value form would encode, but if it's true it's a very convincing motivation for defining the $\infty$-Laplacian to be whatever it needs to be.
-
+If this conjecture is true, then so is even more. On $\supp \lambda$,
+$$\dif \eta = \star \frac{\dif u}{|\dif u|} = \star \normal_\lambda$$
+where $\dif u$ is the Ruelle-Sullivan current of $\lambda$. So $\dif \eta$ is a way of filling in $\normal_\lambda$ on the plaques.
+Maybe choosing the gauge corresponds to choosing the plaques in a nice way?
 
 \printbibliography
 
