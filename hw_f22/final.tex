@@ -1,0 +1,360 @@
+
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{article}
+
+\usepackage[margin=.7in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usepackage{mathtools}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{algorithm2e}
+\usepackage{verse,stmaryrd}
+\usepackage{fancyvrb}
+
+% Number systems
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\DD}{\mathbb D}
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\newcommand{\card}{\operatorname{card}}
+\newcommand{\dbar}{\overline \partial}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\newcommand{\GL}{\operatorname{GL}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\id}{\operatorname{id}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Inn}{\operatorname{Inn}}
+\newcommand{\interior}{\operatorname{int}}
+\newcommand{\lcm}{\operatorname{lcm}}
+\newcommand{\mesh}{\operatorname{mesh}}
+\newcommand{\LL}{\mathcal L_0}
+\newcommand{\Leb}{\mathcal{L}_{\text{loc}}^2}
+\newcommand{\Lip}{\operatorname{Lip}}
+\newcommand{\ppGL}{\operatorname{PGL}}
+\newcommand{\ppic}{\vspace{35mm}}
+\newcommand{\ppset}{\mathcal{P}}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator*{\Res}{Res}
+\newcommand{\Riem}{\mathcal{R}}
+\newcommand{\RVect}{\RR\operatorname{-Vect}}
+\newcommand{\Sch}{\mathcal{S}}
+\newcommand{\SL}{\operatorname{SL}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\spn}{\operatorname{span}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\Torus}{\mathbb T}
+\DeclareMathOperator{\tr}{tr}
+
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\curl}{curl}
+\DeclareMathOperator{\Div}{div}
+
+% Calculus of variations
+\DeclareMathOperator{\pp}{\mathbf p}
+\DeclareMathOperator{\zz}{\mathbf z}
+\DeclareMathOperator{\uu}{\mathbf u}
+\DeclareMathOperator{\vv}{\mathbf v}
+\DeclareMathOperator{\ww}{\mathbf w}
+
+\DeclareMathOperator{\Olo}{\mathscr O}
+
+% Categories
+\newcommand{\Ab}{\mathbf{Ab}}
+\newcommand{\Cat}{\mathbf{Cat}}
+\newcommand{\Group}{\mathbf{Group}}
+\newcommand{\Module}{\mathbf{Module}}
+\newcommand{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\Fun}{Fun}
+\DeclareMathOperator{\Iso}{Iso}
+
+% Complex analysis
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+% Logic
+\renewcommand{\iff}{\leftrightarrow}
+\newcommand{\Henkin}{\operatorname{Henk}}
+\newcommand{\PA}{\mathbf{PA}}
+\DeclareMathOperator{\proves}{\vdash}
+
+% Group
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Fix}{Fix}
+\DeclareMathOperator{\Out}{Out}
+
+% Other symbols
+\newcommand{\heart}{\ensuremath\heartsuit}
+
+\DeclareMathOperator{\atanh}{atanh}
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{falselemma}{Grader's ``Lemma"}
+\newtheorem{exer}{Exercise}
+\newtheorem{lemma}{Lemma}[exer]
+\newtheorem{theorem}[lemma]{Theorem}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\begin{document}
+\noindent
+\large\textbf{FEM 2, final exam} \hfill \textbf{Aidan Backus} \\
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------\
+
+\begin{exer}
+Let $\Omega$ be a planar domain. Formulate the Stokes problem
+$$
+\begin{cases}
+    -\Delta u + \nabla p = f \\
+    \nabla \cdot u = 0 \\
+    u|_{\partial \Omega} = g
+\end{cases}
+$$
+in standard mixed variational form over appropriate function spaces $V, M$.
+You may assume that there exists a sufficiently smooth function $u_g$ defined over $\Omega$ which agrees with $g$ on $\partial \Omega$.
+\end{exer}
+
+Let $V := H^1_0(\Omega)$, $M := L^2(\Omega)/\RR$, and let $u_g$ be an inverse trace of $g$.
+We then need to find $u \in V$ and $p \in M$ such that for every $v \in V$ and $q \in M$,
+$$
+\begin{cases}
+    (\nabla u, \nabla v) - (\nabla \cdot v, p) = (f + \Delta u_g, \nabla v) \\
+    (\nabla \cdot u, q) = -(\nabla \cdot u_g, q).
+\end{cases}
+$$
+Then $u + u_g$ has trace $g$ and is a solution of the Stokes problem with the prescribed data $(f, g)$.
+It is clear from Brezzi's theorem and the existence of a Ladyzhenskaya operator $M \to V$ that the standard mixed variational form of the Stokes problem is well-posed over $V, M$.
+
+\begin{exer}
+Let $\mathcal P_h$ be a partition of $\Omega$ into triangles in the usual way and define
+\begin{align*}
+    V_h &:= \{v \in V: \forall K \in \mathcal P_h v|_K \in (\mathbf P_1(K) \oplus B(K))^2\} \\
+    M_h &:= \{q \in M \cap H^1(\Omega): \forall K \in \mathcal P_h q|_K \in \mathbf P_1(K)\}
+\end{align*}
+where $B(K)$ is spanned by the \emph{bubble function} $\beta_K := \lambda_1 \lambda_2 \lambda_3$, where $(\lambda_i)$ are barycentric coordinates on $K$.
+Explain with a rough sketch why $\beta_K$ is called a bubble function on $K$.
+\end{exer}
+
+From definition of barycentric coordinates, $\beta_K|_{\partial K} = 0$, $\beta_K > 0$ on $K$, and on the barycenter $x_K$ of $K$, $\beta_K(x_K)$ attains its maximum $1/9$.
+The level sets of $\beta_K$ are triangles centered on $x_K$, so $\beta_K$ is shaped like a bubble; see the contour diagram attached.
+
+\begin{exer}
+Define $\Pi^B_K : V \to B(K)$ by 
+$$\int_M v(x) - \Pi^B_K v(x) \dif x = 0.$$
+Give an explicit formula for $\Pi^B_K v$ in terms of the bubble function and an invariant of $v$.
+Show that 
+$$|\Pi^B_K v|_{H^1(K)} \lesssim \frac{\|v\|_K}{h_K}$$
+and for every $q_h \in M_h$,
+$$\int_K (v(x) - \Pi^B_K v(x)) \cdot \nabla q_h(x) \dif x = 0.$$
+\end{exer}
+
+It is clear that for $\beta := \beta_K$,
+$$\Pi^B_K v = \frac{\beta}{\int_K \beta(x) \dif x} \int_K v(x) \dif x.$$
+
+A scaling argument implies that for quasiuniform $\mathcal P_h$,
+$$\nabla \beta \sim h_K^{-3} \int_K \beta(x) \dif x;$$
+in fact, $\beta$ is dimensionless since barycentric coordinates are scale-invariant by definition, so if $x$ is in units of meters (hence so is $h_K$) then $\nabla \beta$ is in units of inverse meters and $\int_K \beta$ is in units of square meters.
+Therefore everything will be dimensionally consistent (i.e. respects scaling) if $\|\nabla \beta\|_K \sim h_K^{-2}$, so that
+$$|\Pi^B_K v|_{H^1(K)} = \|\nabla \Pi^B_K v\|_K \leq \frac{\|\nabla \beta\|_K}{\int_K \beta(x) \dif x} \int_K |v(x)| \dif x.$$
+By the Cauchy-Schwarz inequality and the fact that $|K| \sim h_K^2$,
+$$ \int_K |v(x)| \dif x \lesssim h_K \|v\|_K$$
+so it follows that 
+$$ \frac{\|\nabla \beta\|_K}{\int_K \beta(x) \dif x} \int_K |v(x)| \dif x \lesssim h_K^{-1} \|v\|_K$$
+as desired.
+
+Finally, we observe that $\nabla q_h$ is a constant vector field, so it can be pulled out of the integral; the definition of $\Pi^B_K v$ implies then that $(1 - \Pi^B_K)v$ is orthogonal to $\nabla q_h$.
+
+\begin{exer}
+    Show that there exists an operator $\Pi^B: V \to V_h$ satisfying
+    $$\|\Pi^B v\|_V^2 \lesssim \sum_{K \in \mathcal P_h} h_K^{-2} \|v\|_K^2$$
+    and for every $q_h \in M_h$,
+    $$\int_\Omega q_h(x) \nabla \cdot (v - \Pi^B v)(x) \dif x = 0.$$
+\end{exer}
+
+We just need to define $\Pi^B v(x) := \Pi^B_K v(x)$ for $x \in K$. It is clear that $\Pi^B v|_K \in B(K)$, and $\Pi^B v \in H^1_0(\Omega)$ since $\Pi^B v$ vanishes on every edge and (hence satisfies the Dirichlet condition and does not have jump discontinuities) and by Poincar\'e's inequality,
+$$\|\Pi^B v\|_V^2 = |\Pi^B v|_{H^1}^2 = \sum_{K \in \mathcal P_h} |\Pi^B_K v|_{H^1(K)}^2 \lesssim \sum_{K \in \mathcal P_h} h_K^{-2} \|v\|_K^2.$$
+This also gives the desired bound on $\|\Pi^B v\|_V^2$.
+If we integrate by parts, and use the fact that $v - \Pi^B v$ is traceless, then
+\begin{align*}
+    \int_\Omega q_h(x) \nabla \cdot (v - \Pi^B v)(x) \dif x 
+    &= - \int_\Omega \nabla q_h(x) \cdot (v - \Pi^B v)(x) \dif x \\
+    &= - \sum_{K \in \mathcal P_h} \int_K \nabla q_h(x) \cdot (v - \Pi^B_K v)(x) \dif x \\
+    &= 0.
+\end{align*}
+
+\begin{exer}
+    Show that there exists a Fortin operator $\Pi^F: V \to V_h$ satisfying $\|\Pi^F v\|_V \lesssim \|v\|_V$ and for every $q_h \in M_h$,
+    $$\int_\Omega q_h(x) \nabla \cdot (v - \Pi^F v)(x) \dif x = 0.$$
+\end{exer}
+
+Let $\Pi^{SZ}: V \to V_h$ be the Scott-Zhang interpolant of $V_h$, which is well-defined because $V_h$ contains all PL vector fields and introduce the Fortin operator 
+$$\Pi^F := \Pi^{SZ} + \Pi^B (1 - \Pi^{SZ}).$$
+Then 
+$$\int_\Omega q_h \nabla \cdot(v - \Pi^F v) = \int_\Omega q_h \nabla \cdot(v - \Pi^B v) + \int_\Omega q_h \nabla \cdot (\Pi^{SZ}v - \Pi^B \Pi^{SZ} v) = 0 + 0 = 0.$$
+Moreover,
+$$\|\Pi^F v\|_V^2 = |\Pi^F v|_{H^1}^2 \leq |\Pi^{SZ} v|_{H^1}^2 + \sum_{K \in \mathcal P_h} h_K^{-2} \|v - \Pi^{SZ}v\|_K^2.$$
+We then estimate 
+$$|\Pi^{SZ} v|_{H^1} = \|\Pi^{SZ} v\|_V \lesssim \|v\|_V$$
+and 
+$$h_K^{-1} \|v - \Pi^{SZ}v\|_K \lesssim \|1_K v\|_V$$
+using well-known facts about Scott-Zhang interpolation. Summing over $K$ we obtain 
+$$\|\Pi^F v\|_V^2 \lesssim \|v\|_V^2.$$
+
+\begin{exer}
+    Show that $(V_h, M_h)$ satisfies the Babuška-Brezzi conditions and obtain a priori error estimate for the accuracy of the mixed finite element approximation.
+\end{exer}
+
+The Laplacian is elliptic, so in particular it is elliptic on the left kernel of the divergence.
+Now let $q_h \in M_h$ be a pressure, let $v \in V$ be the Ladyzhenskaya velocity of $q_h$, and let $v_h := \Pi^F v$.
+Then 
+$$(\nabla \cdot v_h, q_h) = (\nabla \cdot v, q_h) = \|q_h\|^2$$
+and by the Fortin and Ladyzhenskaya inequalities,
+$$\|v_h\|_V \lesssim \|v\|_V \lesssim \|q_h\|$$
+from which it follows that 
+$$\frac{(\nabla \cdot v_h, q_h)}{\|v_h\|_V} \gtrsim \|q_h\|,$$
+the Babuška-Brezzi condition. Now recall the following corollary of Brezzi's theorem:
+$$\|u - u_h\|_V + \|p - p_h\|_M \lesssim \inf_{v_h \in V_h} \|u - v_h\|_V + \inf_{q_h \in M_h} \|p - q_h\|_M.$$
+By the Bramble-Hilbert lemma, we have 
+$$\inf_{v_h \in V_h} \|u - v_h\|_V + \inf_{q_h \in M_h} \|p - q_h\|_M \lesssim h\left(\|u\|_{H^2} + \|p\|_{H^1}\right).$$
+To obtain a $H^2 \times H^1$ bound on the true solution, we need the following elliptic regularity theorem:
+
+\begin{lemma}
+Let $(u, p)$ be the solution of
+$$\begin{cases}
+    -\Delta u + \nabla p = f \\
+    \nabla \cdot u = 0 \\
+    u|_{\partial \Omega} = g
+\end{cases}$$
+and $s \geq 0$.
+Then 
+$$\|u\|_{H^{s + 1}} + \|p\|_{H^s} \lesssim \|f\|_{H^{s - 1}} + \|g\|_{H^{s + 1/2}(\partial \Omega)}.$$
+\end{lemma}
+\begin{proof}
+Let $\alpha$ be a multiindex of length $s$. Then $\partial^\alpha$ commutes with the Stokes operator, hence 
+$$\begin{cases}
+    -\Delta \partial^\alpha \tilde u + \nabla \partial^\alpha p = \partial^\alpha f + \partial^\alpha \Delta u_g \\
+    \nabla \cdot \partial^\alpha \tilde u = \nabla \cdot \partial^\alpha u_g \\
+    \tilde u|_{\partial \Omega} = 0
+\end{cases}$$
+where $u_g$ is an inverse trace of $g$ and $u = \tilde u + u_g$. The trace operator is surjective 
+$$W^{s, p} \to W^{s - 1/p, p}$$
+for $1 < p < \infty$, and in particular for $p = 2$ we may choose $u_g$ to satisfy the inverse trace inequality
+$$\|u_g\|_{H^{s + 1}} \lesssim \|g\|_{H^{s + 1/2}}.$$
+By Brezzi's theorem and elliptic regularity for $-\Delta$,
+\begin{align*}
+    \|\partial^\alpha \tilde u\|_{H^1} + \|\partial^\alpha p\|_{L^2} &\lesssim \|\partial^\alpha f\|_{H^{-1}} + \|\partial^\alpha \Delta u_g\|_{H^{-1}} \\
+    &\lesssim \|f\|_{H^{s - 1}} + \|\Delta u_g\|_{H^{s - 1}} \\
+    &\lesssim \|f\|_{H^{s - 1}} + \|u_g\|_{H^{s + 1}} \\
+    &\lesssim \|f\|_{H^{s - 1}} + \|g\|_{H^{s + 1/2}}.
+\end{align*}
+Since $\alpha$ was arbitrary we conclude 
+$$\|\tilde u\|_{H^{s + 1}} + \|\tilde u_g\|_{H^{s + 1}} + \|p\|_{H^s} \lesssim \|f\|_{H^{s - 1}} + \|g\|_{H^{s + 1/2}}$$
+and the claim follows from the triangle inequality.
+\end{proof}
+
+Applying the elliptic regularity theorem with $s = 1$ we conclude that 
+$$\|u - u_h\|_V + \|p - p_h\|_M \lesssim h\left(\|u\|_{H^2} + \|p\|_{H^1}\right) \lesssim h\left(\|f\|_{L^2} + \|g\|_{H^{3/2}}\right),$$
+which is an a priori estimate on the error provided that $(f, g) \in L^2 \times H^{3/2}$.
+
+\begin{exer}
+    Explain what modifications to your PL finite element code for Poisson's equation would be needed to solve the mixed finite element approximation for the Stokes problem. Give details of the element matrices involved and the details of the new matrix entries needed and how they are computed.
+\end{exer}
+
+Let me assume that we're referring to the original code for solving Poisson from last semester, not the mixed finite element code from more recently, both because it mentions PL in the problem description and because I didn't do that problem set this semester.
+
+Let $K$ be a triangle in the mesh, and let $f_1, f_2, f_3$ be the PL basis vectors from the previous code.
+For simplicity in the below computations let me assume $f_1(x, y) = 1$, $f_2(x, y) = x$, and $f_3(x, y) = y$, though of course these will be hat functions.
+We define $X_i := (f_i, 0, 0)$, $Y_i := (0, f_i, 0)$, and $Z_i := (0, 0, f_i)$.
+We also need the bubble function, so we define $X_4 := (\beta, 0, 0)$ and $Y_4 := (0, \beta, 0)$.
+Then $X_i, Y_i$, $i=1, \dots, 4$ is a basis for $V_h(K)$, and $Z_i$, $i=1, 2, 3$, is a basis for $M_h(K)$, so together they form a basis for $V_h(K) \times M_h(K)$.
+We order this basis as $X_1, \dots, X_4, Y_1, \dots, Y_4, Z_1, Z_2, Z_3$.
+
+To define the element stiffness matrix $(a_{ij})$, which is $11 \times 11$, we first address the PL part.
+Let $(p_{ij})$ be the element stiffness matrix for the Poisson problem, which is $3 \times 3$, and let $a_{ij} = a_{i+4,j+4} = p_{ij}$ for $i, j=1, 2, 3$.
+To include the divergence operator, we observe that $\partial_1 X_i = \delta_{2i}$ for $i = 1, \dots, 3$, and similarly for $\partial_2 Y_i$ (note that $\partial_2 X_i = \partial_1 Y_i = 0$).
+Therefore 
+$$(\partial_1 X_i, Z_j) = |K|
+\begin{cases}
+    0, &i \neq 2 \\
+    1, &i = 2, j = 1 \\
+    \overline x, &i = 2, j = 2\\
+    \overline y, &i = 2, j = 3
+\end{cases}$$
+where $(\overline x, \overline y)$ is the barycenter of $K$. Similarly for $(\partial_2 Y_i, Z_j)$. So we set
+\begin{align*}
+    a_{2,9} = a_{9,2} = a_{7,9} = a_{9,7} &= |K| \\
+    a_{2,10} = a_{10,2} = a_{7,10} = a_{10,7} &= |K| \overline x \\
+    a_{2,11} = a_{11,2} = a_{7,11} = a_{11,7} &= |K| \overline y.
+\end{align*}
+We then set $a_{ij} = 0$ for $(i, j)$ or $(j, i)$ equal to
+$$ (9, 1), (10, 1), (11, 1), (9, 3), (10, 3), (11, 3), (9, 5), (10, 5), (11, 5), (9, 6), (10, 6), (11, 6)$$
+and also if $i$ and $j$ are both $\geq 9$ (there's no coupling of $Z_i$ and $Z_j$), or one is one of $1,2,3,4$ and the other is one of $5,6,7,8$ (there's no coupling of $X_i$ and $Y_j$).
+
+We now turn to the bubble function part of the element stiffness matrix.
+We know that $\nabla X_1 = \nabla Y_1 = 0$ so we set $a_{ij} = 0$ for $(i,j)$ or $(j,i)$ equal to $(1, 4)$ or $(5, 8)$.
+Moreover, the contribution to the Laplacian of $X_2$ and $X_4$ is 
+\begin{align*}
+    (\nabla X_2, \nabla X_4) &= \int_K \nabla X_2 \cdot \nabla \beta = \int_K \partial_x \beta \\
+    &= \int_{y_1}^{y_2} \int_{x_1(y)}^{x_2(y)} \partial_x \beta(x, y) \dif x \dif y \\
+    &= \int_{y_1}^{y_2} \beta(x_2(y), y) - \beta(x_1(y), y) \dif y
+\end{align*}
+where $x_i(y)$ are the endpoints of the $y$-slice of $K$. However, $\beta|_{\partial K} = 0$ so it follows that $(\nabla X_2, \nabla X_4) = 0$.
+Similarly for $(\nabla X_3, \nabla X_4)$ and $(\nabla Y_i, \nabla Y_4)$, hence we set $a_{ij} = 0$ for $(i,j)$ or $(j,i)$ equal to $(2, 4), (3, 4), (6, 8), (7, 8)$.
+
+Let $c_K := \|\nabla \beta\|_K^2$.
+Then $c_K$ is a dimensionless constant that depends on the geometry of $K$ (honestly, it might be easiest just to evaluate it by quadrature, if the mesh is sufficiently complicated; it's not obvious to me that there should be a closed form for $c_K$ for scalene $K$ that isn't obscenely long).
+Anyways, we set $a_{44} = a_{88} = c_K$. Thus we finally have filled out the Laplacian part of the matrix $(a_{ij})$, namely $a_{ij}$ for $i, j \leq 8$.
+
+Next we recall that $\partial_x \beta$ has mean zero, hence 
+$$(\nabla \cdot X_4, Z_1) = (\partial_x \beta, 1) = \int_K \partial_x \beta = 0$$
+and similarly for $Y_4$. We therefore have $a_{ij} = 0$ for $(i,j)$ or $(j,i)$ equal to $(9, 4)$ or $(9, 8)$.
+Next we observe that 
+$$(\nabla \cdot X_4, Z_2) = (\partial_x \beta, x) = \int_K x \partial_x \beta = -\int_K \beta \partial_x x = -\int_K \beta$$
+where we used the fact that $\beta|_{\partial K} = 0$ again to integrate by parts.
+To integrate this we use the formula for integration in barycentric coordinates:
+\begin{align*}
+    \int_K \beta 
+    &= 2|K| \int_0^1 \int_0^{1 - \lambda_2} \lambda_1 \lambda_2 (1 - \lambda_1 - \lambda_2) \dif \lambda_1 \dif \lambda_2 \\
+    &= 2|K| \int_0^1 \lambda_2 \int_0^{1 - \lambda_2} (1 - \lambda_2) \lambda_1 - \lambda_1^2 \dif \lambda_1 \dif \lambda_2 \\
+    &= \frac{2}{3} |K| \int_0^1 \lambda_2(1 - \lambda_2)^3 \dif \lambda_2 \\
+    &= \frac{|K|}{30}.
+\end{align*}
+The same computation works for $(\nabla \cdot Y_4, Z_3)$ and so we set $a_{ij} = |K|/30$ for $(i,j)$ or $(j,i)$ equal to $(10, 4)$ or $(11, 8)$.
+The model case for the last entries in the matrix is
+$$(\nabla \cdot X_4, Z_3) = \int_K y \partial_x \beta$$
+and integration by parts, using $\partial_x y = 0$ and $\beta_{\partial K} = 0$, implies that this is zero. We conclude that the last four entries, those for which $(i,j)$ or $(j,i)$ is $(11, 4)$ or $(10, 8)$, are all zero.
+
+So that's the element stiffness matrix.
+Assembly is basically the same for most of the rows and columns, since all the rows and columns except $4$ and $8$ in each element matrix are PL functions and assemble just like in the Poisson problem.
+The only new issue is the assembly of the bubble functions.
+Each triangle $K$ in the mesh gets two rows and two columns in the assembled stiffness matrix for each bubble function, corresponding to rows and columns $4$ and $8$ in each element stiffness matrix.
+This is because the bubble function is supported on the interior of $K$ and so does not interact with neighbors of $K$, or glue to any other bubble functions for that matter.
+
+My Poisson PL code was very amateurish and didn't exploit the sparsity of the stiffness matrix.
+However, a correctly done Poisson PL code would have done this, only doing matrix multiplication for matrix entries which are sufficiently close to the diagonal.
+The same thing works here.
+Assuming for simplicity that each triangle is adjacent to three other triangles, only those $(i, j)$ with $|i - j| \leq 33$ (actually less than that even!) should be considered in the matrix multiplication.
+
+
+
+\end{document}

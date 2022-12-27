@@ -657,6 +657,11 @@ and the image of $F_\alpha$ contains a ball of radius $r$.
 
 To begin the proof we first consider when we can represent the leaves of $\lambda$ as graphs in a uniform way.
 
+If $f: \RR^{d - 1}_x \to \RR_y$ is a $C^1$ function, and its graph has normal vector $\normal$, then
+\begin{equation}\label{nabla as a normal}
+	\nabla f(x) = \frac{\partial_y - \normal(x, f(x))}{\sqrt{1 + |\nabla f(x)|^2}}.
+\end{equation}
+
 \begin{lemma}\label{existence of tubes}
 	Let $N$ be a connected hypersurface in $\RR^d = \RR^{d - 1}_x \times \RR_y$ which is tangent to $\{y = 0\}$ at the origin.
 	If $\|\Two_N\|_{C^0} \leq \log(5/4)$, then for every $(x, y) \in N \cap B_1$,
@@ -664,11 +669,8 @@ To begin the proof we first consider when we can represent the leaves of $\lambd
 \end{lemma}
 \begin{proof}
 	Near $0$, $N$ can be represented a graph $\{y = f(x)\}$, since it is tangent to $\{y = 0\}$.
-	This representation is valid on the component of the set $\{|\nabla f(x)| < \infty\}$ containing $0$, and it is related to the unit normal by
-\begin{equation}\label{nabla as a normal}
-	\nabla f(x) = \frac{\partial_y - \normal(x, f(x))}{\sqrt{1 + |\nabla f(x)|^2}}.
-\end{equation}
-	Taking derivatives of both sides,
+	This representation is valid on the component of the set $\{|\nabla f(x)| < \infty\}$ containing $0$, and it is related to the unit normal by (\ref{nabla as a normal}).
+	Taking derivatives of both sides of (\ref{nabla as a normal}),
 	$$-\nabla^2 f(x) = \frac{\nabla \normal(x, f(x)) \cdot (\partial_x \otimes \partial_x + \nabla f(x) \otimes \partial_y)}{\sqrt{1 + |\nabla f(x)|^2}} + \frac{\nabla^2 f(x) \cdot (\nabla f(x) \otimes (\partial_y - \normal(x, f(x))))}{(1 + |\nabla f|^2)^{3/2}}.$$
 	Here $-\nabla^2$ denotes the negative Hessian, not the Laplacian.
 	We can use (\ref{nabla as a normal}) to bound
@@ -849,19 +851,25 @@ If $-1 < k < \ell < 1$, then by (\ref{bound on du}) and (\ref{Schauder Harnack})
 	|f(\xi, k) - f(\xi, \ell)| \lesssim |u_k(\xi) - u_\ell(\xi)| \lesssim \ell - k.
 \end{equation}
 This shows that $f$ is Lipschitz in the $\eta$ direction on the leaves with constant comparable to $1$, and hence on its entire domain by linear interpolation, proving the claim.
-
-We also need to estimate the co-Lipschitz norm, using (\ref{Schauder Harnack}),
-\begin{equation}\label{f colip}
-	\frac{|f(\xi, \eta_1) - f(\xi, \eta_2)|}{|\eta_1 - \eta_2|} \geq \inf_{k < \ell} \frac{v_{\ell k}(\xi)}{\ell - k} \gtrsim \inf_{k < \ell} \frac{v_{\ell k}(0)}{\ell - k} = 1.
-\end{equation}
-
 We can then estimate using (\ref{f lip})
 $$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \lesssim |\xi_1 - \xi_2| + \Lip(f)(|\xi_1 - \xi_2| + |\eta_1 + \eta_2|)$$
 so that $\Lip(F) \lesssim 1 + \Lip(f) \lesssim 1$.
-One can also use the inverse function theorem and (\ref{f lip}) and (\ref{f colip}) to bound 
-$$\Lip(F^{-1}) \lesssim \Lip(f)\left(1 + \sup_\xi \sup_{\eta_1 < \eta_2} \frac{|\eta_1 - \eta_2|}{|f(\xi, \eta_1) - f(\xi, \eta_2)|}\right) \lesssim 1.$$
-This implies that $F$ is a Lipschitz isomorphism with Lipschitz constants comparable to $1$.
-So the composition of $F$ with the change of coordinates at the start of this proof is a laminar flow box in a small neighborhood of $(0, 0)$ whose image has radius $cr$ for some small $c > 0$, and whose Lipschitz constants are comparable to $O(r^{-1})$.
+
+By the Pythagorean theorem,
+$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \sim |\xi_1 - \xi_2| + |f(\xi_1, \eta_1) - f(\xi_2, \eta_2)|.$$
+Moreover, by (\ref{nabla as a normal}) and (\ref{normal is almost constant}), $\|\partial_\xi f\|_{C^0} \lesssim \delta$, so if we take $\delta$ small enough then 
+$$|f(\xi_1, \eta_1) - f(\xi_2, \eta_2)| \geq |f(\xi_1, \eta_1) - f(\xi_1, \eta_2)| - \|\partial_\xi f\|_{C^0} \cdot |\xi_1 - \xi_2|$$
+implies 
+$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \gtrsim |\xi_1 - \xi_2| + |f(\xi_1, \eta_1) - f(\xi_1, \eta_2)|.$$
+By (\ref{Schauder Harnack})
+$$
+	\frac{|f(\xi, \eta_1) - f(\xi, \eta_2)|}{|\eta_1 - \eta_2|} \geq \inf_{k < \ell} \frac{v_{\ell k}(\xi)}{\ell - k} \gtrsim \inf_{k < \ell} \frac{v_{\ell k}(0)}{\ell - k} = 1,
+$$
+so 
+$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \gtrsim |\xi_1 - \xi_2| + |\eta_1 - \eta_2|.$$
+It follows that $\Lip(F^{-1}) \lesssim 1$, so $F$ is a Lipschitz isomorphism with constants comparable to $1$.
+
+Finally, we compose $F$ with the change of coordinates at the start of this proof to obtain a laminar flow box in a small neighborhood of $(0, 0)$ whose image has radius $O(r)$, and whose Lipschitz constants are comparable to $O(r^{-1})$.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

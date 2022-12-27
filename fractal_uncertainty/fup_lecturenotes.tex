@@ -1,0 +1,400 @@
+\documentclass[reqno,12pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{bbm}
+\usepackage{tikz-cd}
+
+
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Notes on the fractal uncertainty principle}
+\author{Aidan Backus}
+\date{\today}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\DeclareMathOperator*{\Expect}{\mathbf E}
+\DeclareMathOperator{\Var}{\mathrm{Var}}
+\DeclareMathOperator{\Acal}{\mathcal A}
+\DeclareMathOperator{\Bcal}{\mathcal B}
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\cent}{center}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\codim}{codim}
+
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Exc}{Exc}
+\newcommand{\ext}{\mathrm{ext}}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Iso}{Iso}
+\DeclareMathOperator{\argmax}{arg\,max}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Met}{Met}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\Rm}{Rm}
+\DeclareMathOperator{\Hess}{Hess}
+\DeclareMathOperator{\Hol}{Hol}
+\DeclareMathOperator{\Radon}{Radon}
+\DeclareMathOperator*{\Res}{Res}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\singsupp}{sing~supp}
+\DeclareMathOperator{\Spec}{Spec}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Tan}{Tan}
+\newcommand{\tr}{\operatorname{tr}}
+
+\newcommand{\dbar}{\overline \partial}
+
+\DeclareMathOperator{\hull}{hull}
+
+\DeclareMathOperator{\Div}{div}
+\DeclareMathOperator{\Gram}{Gram}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Ell}{Ell}
+\DeclareMathOperator{\WF}{WF}
+
+\newcommand{\Lagrange}{\mathscr L}
+
+\newcommand{\Hilb}{\mathcal H}
+\newcommand{\Homology}{\mathrm H}
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\pic}{\vspace{30mm}}
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{invariant}[theorem]{Invariant}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{defi}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exa}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+\newtheorem{ack}{Acknowledgements}
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+%\usepackage[backend=bibtex,style=numeric]{biblatex}
+%\renewcommand*{\bibfont}{\normalfont\footnotesize}
+%\addbibresource{fup.bib}
+%\renewbibmacro{in:}{}
+%\DeclareFieldFormat{pages}{#1}
+\usepackage[
+    backend=biber,
+    style=alphabetic,
+    giveninits=true
+]{biblatex}
+\addbibresource{fup.bib}
+\renewcommand*{\bibfont}{\footnotesize}
+\renewcommand\UrlFont{\color{black}\rmfamily\itshape}
+\DeclareFieldFormat{pages}{#1}
+\renewbibmacro{in:}{%
+  \ifentrytype{article}
+    {}
+    {\bibstring{in}%
+     \printunit{\intitlepunct}}}
+\DeclareFieldFormat
+  [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+  {title}{\mkbibemph{#1}}
+\DeclareFieldFormat{journaltitle}{#1\isdot}
+\DeclareFieldFormat[article]{volume}{\mkbibbold{#1}}
+\DeclareFieldFormat[article]{number}{\bibstring{number}\addnbspace #1}
+\renewcommand*{\newunitpunct}{\addcomma\space}
+\renewbibmacro*{journal+issuetitle}{%
+  \usebibmacro{journal}%
+  \setunit*{\addspace}%
+  \iffieldundef{series}
+    {}
+    {\newunit
+     \printfield{series}%
+     \setunit{\addspace}}%
+  \printfield{volume}%
+  \setunit{\addspace}%
+  \usebibmacro{issue+date}%
+  \setunit{\addcomma\space}%
+  \printfield{number}%
+  \setunit{\addcolon\space}%
+  \usebibmacro{issue}%
+  \setunit{\addcomma\space}%
+  \printfield{eid}
+  \newunit}
+  
+  \newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents 
+
+\section{Motivation from spectral theory}
+\subsection{Gamow's resonant states}
+Consider an $\alpha$-particle -- that is, a He-4 nucleus that was just ejected from the nucleus of a heavy atom (eg, of U-238).
+The physicist Gamow thought of the $\alpha$-particle as a wavefunction $u$, it solves a Schr\"odinger equation 
+\begin{equation}\label{Schrodinger}
+    (i\partial_t + P)u = 0
+\end{equation}
+on all of $\RR^d$, where $P$ is uniformly elliptic on $\{|x| \gtrsim 1\}$ (and in fact converges to a rescaled Laplacian near infinity) but may degenerate near the origin due to effects of the strong and electromagnetic forces near the U-238 nucleus.
+
+According to quantum mechanics, steady states of (\ref{Schrodinger}) are eigenfunctions of $P$ with $L^2$ norm one.
+But $P$ is basically just the Laplacian, so it has essential spectrum, and so (\ref{Schrodinger}) has no steady states.
+Gamow got around this conundrum by considering functions which are formally eigenfunctions of $P$, as detected by the resolvent of $P$.
+Recall that the resolvent of an operator $P$ is given by 
+$$R_P(z) = (P - z^2)^{-1}$$
+and, using the uniform ellipticity of $P$, it admits an analytic continuation to $\CC$ minus a locally finite set of poles \cite{dyatlov2019mathematical}.
+
+\begin{definition}
+    A \dfn{resonance} of $P$ is a pole of $R_P$ (counted with multiplicity).
+\end{definition}
+
+Resonances $z$ corresponds to particles, called resonant states, which are sort of like formal eigenfunctions of $P$ with eigenvalue $z^2$.
+Such a particle has energy $\Re z$ and half-life $-h/\Im z$. (Here $h := \hbar/\sqrt{2m}$ where $m$ denotes mass.)
+
+In general $P$ may admit lots of resonant states, but if $-\Im z \gg h$, they are not very useful, as they are particles of very short half-life, and there are infinitely many distinct such particles.
+We want a condition which guarantees that there's only finitely many resonant states worth caring about.
+
+\begin{definition}
+    $P$ has an \dfn{essential spectral gap} of size $\beta \geq 0$ if there are only finitely many resonances with $\Im z \geq -\beta$.
+\end{definition}
+
+\subsection{The Dyatlov--Zahl theorem}
+Taking $h \to 0$ is called the \dfn{semiclassical limit} and corresponds to approximating the quantum world by its classical counterparts.
+In that case particles are expected to move along geodesics, if $P$ is the Laplace-Beltrami operator of some Riemannian metric. 
+So the study of resonant states would be especially interesting if we assumed that $P$ was the Laplace-Beltrami operator of a negatively curved manifold, since then the geodesic flow would be chaotic: two particles could start with very similar positions and momenta, and end up in very different places in an exponentially small timeframe.
+
+Let $\Gamma$ be a ``nice'' discrete subgroup of the properly orthochronous Lorentz group $SO^+(1, d + 1)$.
+This is the group of all spacetime symmetries which preserve orientation and the arrow of time.
+In particular it acts on the future unit hyperboloid $\{t = \sqrt{|x|^2 + 1}\}$ by isometries.
+But that hyperboloid is hyperbolic space $\mathbf H^{d + 1}$.
+So we can take the manifold 
+$$M := \mathbf H^{d + 1}/\Gamma$$
+whose fundamental group is then $\Gamma$.
+
+Let's assume that $M$ has infinite ends. 
+It's negatively curved, so its geodesic flow is chaotic, but also some geodesics are trapped, while some escape to infinity.
+Thus we have a highly unpredictable geodesic flow, and the geodesics which do escape correspond to trajectories of resonant states.
+So, if we understand the group $\Gamma$, we should be able to say some interesting things about the resonant states.
+
+Dyatlov--Zahl made the above heuristics rigorous using H\"ormander's theory of Fourier integral operators and singularity propagation \cite{Dyatlov_2016}.
+
+\begin{theorem}[Dyatlov--Zahl '16]
+    Let $\Gamma$ be a convex cocompact discrete subgroup of $SO^+(1, d + 1)$.
+    Let $\Lambda_\Gamma$ be the boundary of an orbit of $\Gamma$ in the sphere at infinity $\mathbf S^d := \partial \mathbf H^{d + 1}$.
+    Let 
+    $$B_{\chi, h} f(y) := h^{d/2} \int_{\mathbf S^d} |y - x|^{2i/h} \chi(x, y) f(x) \dif x$$
+    where $\chi$ has compact support in the off-diagonal of $(\mathbf S^d)^2$.
+    If 
+    $$\|1_{\Lambda_\Gamma + B_h} B_{\chi, h} 1_{\Lambda_\Gamma + B_h}\|_{L^2(\mathbf S^d) \to L^2(\mathbf S^d)} \lesssim_\chi h^\beta,$$
+    then the Laplacian on $\mathbf H^{d + 1}/\Gamma$ has an essential spectral gap $\geq \beta$.
+\end{theorem}
+
+Notice that $B_{\chi, h}$ formally resembles the Fourier transform, since 
+$$|y - x|^{2i/h} = e^{i\Phi(x, y)/h}$$
+where $\Phi(x, y) = \log|x - y|$ is a sort of ``generalized inner product'' which degenerates away from the support of $\chi$.
+We will focus on this model case in the sequel.
+Also notice that $\Lambda_\Gamma$ is a fractal (topologists love these sets).
+
+\section{The fractal uncertainty principle}
+\subsection{Statement of the theorem}
+What does it mean for a set to be fractalline? What do we mean when we say that $\Lambda_\Gamma$ is a fractal?
+Well, we want some sort of self-similarity, and self-similarity at all scales is what the Ahlfors-David condition says:
+
+\begin{definition}
+A compact set $X \subset \RR^d$ of Hausdorff dimension $\delta$ is \dfn{Ahlfors-David regular} if its Hausdorff measure $\mu$ satisfies 
+$$\mu(B(x, r)) \sim r^\delta.$$
+\end{definition}
+
+If $\Gamma$ is as in the Dyatlov--Zahl theorem, then $\Lambda_\Gamma$ is $\delta$-regular for some $\delta \in (0, \delta)$.
+
+\begin{theorem}[fractal uncertainty principle]
+    Let $X$ be $\delta$-regular, $X_h := X + B_h$, and
+    $$\mathscr F_h f(y) := h^{d/2} \int_{\RR^d} e^{-ix \cdot y/h} f(x) \dif x.$$
+    Assuming ???, there exists $\beta \geq \beta_0$ such that 
+    $$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2(\RR^d) \to L^2(\RR^d)} \lesssim h^\beta.$$
+\end{theorem}
+
+Here's how to interpret this theorem.
+Suppose that $f$ rapidly decays away from a small neighborhood $X_h$ of $X$.
+Then $1_{X_h}$ is basically just $f$, and after we take the Fourier transform $\mathscr F_h f \approx \mathscr F_h 1_{X_h} f$, the definition of the fractal uncertainty principle indicates that what's left must avoid $X_h$, in the sense that its contraction with $1_{X_h}$ is tiny in $L^2$.
+
+OK so we need to say what ??? and $\beta_0$ are. First observe that 
+$$\|1_{X_h} \mathscr F_h 1_{X_h}\| \leq \|1_{X_h}\|_{L^\infty}^2 \|\mathscr F_h\|_{L^2 \to L^2} \leq 1 = h^0$$
+by Plancherel's theorem and H\"older's inequality.
+So if FUP is going to be an interesting theorem, we must have $\beta_0 \geq 0$.
+
+Assuming for now that 
+$$\|1_{X_h}\|_{L^2} \lesssim h^{\frac{d - \delta}{2}},$$
+we get 
+\begin{align*}
+    \|1_{X_h} \mathscr F_h 1_{X_h}\|
+    &\leq \|1_{X_h}\|_{L^\infty \to L^2} \|\mathscr F_h\|_{L^1 \to L^\infty} \|1_{X_h}\|_{L^2 \to L^1}, \\
+    &\leq \|1_{X_h}\|_{L^2}^2 \|\mathscr F_h\|_{L^1 \to L^\infty} \\
+    &\lesssim h^{d - \delta} h^{-\frac{d}{2}} = h^{\frac{d}{2} - \delta}.
+\end{align*}
+
+Thus we have 
+$$\beta_0 := \max\left(0, \frac{d}{2} - \delta\right),$$
+the so-called \dfn{Patterson-Sullivan spectral gap}.
+
+Now, what is ???:
+\begin{itemize}
+    \item Dyatlov--Zahl '16 \cite{Dyatlov_2016}: $d = 1$, $\delta = \frac{1}{2}$.
+    \item Bourgain--Dyatlov '18 \cite{Bourgain_2018}: $d = 1$, $\frac{1}{2} \leq \delta < 1$.
+    \item Dyatlov--Jin '18 \cite{Dyatlov_2018}: $d = 1$, $0 < \delta \leq \frac{1}{2}$.
+    \item Han--Schlag '20 \cite{Han_2020}: $\frac{d}{2} \leq \delta < d$, $X = \prod_n X_n$ where $X_n \subset \RR$ is $\delta_n$-regular, $\delta_n \in (0, 1)$.
+    \item Cladek--T. Tao '21 \cite{Cladek_2021}: $d$ odd, $\delta = \frac{d}{2}$.
+    \item Cohen '22 \cite{cohen2022fractal}: $d = 2$, $1 \leq \delta < 2$, $X$ is an arithmetic Cantor set which does not contain a line.
+    \item Backus--Leng--Z. Tao '23: $0 < \delta \leq \frac{d}{2}$ and $X$ is not orthogonal to itself (to be defined later).
+\end{itemize}
+
+Roughly speaking there are three cases:
+\begin{itemize}
+    \item The case $0 < \delta \leq \frac{d}{2}$ is proven using the self-similarity to get lots of cancellations in the Fourier phase; this is called \dfn{Dolgopyat's method}, and this case is called the \dfn{Dyatlov--Jin uncertainty principle}. We'll prove it in detail later.
+    \item The case $\delta = \frac{d}{2}$ is proven using additive combinatorics. This case is called the \dfn{Dyatlov--Zahl uncertainty principle}. We'll sketch some of the ideas here.
+    \item The case $\frac{d}{2} \leq \delta < d$ is proven using complex analytic or algebro-geometric methods. This case is hardest IMO and is called the \dfn{Bourgain--Dyatlov uncertainty principle}.
+\end{itemize}
+
+\subsection{Some examples}
+The above theorem is not quite sharp but there are some improvements that we cannot make to it.
+
+\begin{example}
+    Let $X = [-3, 3]$, $d = 1$. Then $e^{-x^2/2}$ is microlocalized to $X$ at scale $h$ (if $h$ is small enough), so we cannot take $\delta = d$.
+\end{example}
+
+\begin{example}
+    $X = \{0\}$. Then $e^{-|x|^2/(2h)}$ is microlocalized to $X$ at scale $h$, so we cannot take $\delta = 0$.
+\end{example}
+
+\begin{example}
+    Let $X$ be the union of two orthogonal line segments, $d = 2$.
+    Then $e^{-x^2/2-y^2/(2h)}$ is microlocalized to the horizontal line segment and its Fourier transform is microlocalized to the vertical part.
+    So $X$ cannot have too much ``linearly independent additive structure'', whatever on god's green earth that means.
+\end{example}
+
+\section{Sketch of the Dyatlov--Zahl uncertainty principle}
+To illustrate some of the ideas used in the proofs of all three cases, we'll sketch Cladek--Tao's argument, especially in the $d = 1$ case where it is particularly simple.
+
+\subsection{Rescaling to a favorable norm}
+First observe that $X_h \approx \bigcup_{n = 1}^N B(x_n, h)$ where $\{x_n\}$ is a maximal $O(h)$-separated subset of $X$.
+So $|X_h| \sim Nh^d$, but $\mu(B(x_n, h)) \sim h^\delta$ and $\mu(X) \sim 1$, hence $N \sim h^{-\delta}$ and so 
+$$|X_h| \sim h^{d - \delta}.$$
+In particular we have 
+$$\|1_{X_h}\|_{L^p} \sim h^{\frac{d - \delta}{p}}$$
+like we promised earlier.
+
+By H\"older's inequality we have 
+$$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \leq \|1_{X_h}\|_{L^{\frac{8}{3}}} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8} \lesssim h^{\frac{3}{8}(d - \delta)} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}.$$
+By the Riesz-Thorin inequality,
+$$\|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}^2 \leq \|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4}.$$
+The first term is 
+$$\|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \leq \|\mathscr F_h\|_{L^1 \to L^\infty} \|1_{X_h}\|_{L^\infty} \lesssim h^{-d/2} \cdot 1 = h^{-d/2}.$$
+We bound the second term in terms of the Gowers norm of $1_{X_h}$:
+
+\begin{definition}
+    The \dfn{Gowers uniformity space} $U^2$ is defined by 
+    $$\|f\|_{U^2}^4 := \iiint_{\RR^{3d}} f(x) \overline{f(x + y) f(x + z)} f(x + y + z) \dif x \dif y \dif z.$$
+\end{definition}
+
+Let's recall some properties of this space. We have the \dfn{Gowers inverse theorem}
+$$\|f\|_{U^2}^2 = \|f * f\|_{L^2} = \|\hat f\|_{L^4}^2 \leq \|\hat f\|_{L^2} \|\hat f\|_{L^\infty} = \|f\|_{L^2} \|\hat f\|_{L^\infty}.$$
+So the $U^2$ norm of $f$ is capturing how much $f$ correlates with a single wave $e^{ix\xi}$: the bigger the norm, the more $f$ is correlated with a sine wave.
+There are also $U^s$ norms for $s \geq 3$ that measure how much $f$ correlates with $e^{ip(x, \xi)}$ where $p$ is a polynomial of degree $s - 1$.
+
+Anyways, rescaling the Gowers inverse theorem gives us
+$$\|\mathscr F_h (1_{X_h} f)\|_{L^\infty \to L^4} \sim h^{d/4} \|\widehat{1_{X_h} f}\|_{L^4} = h^{d/4} \|1_{X_h} f\|_{U^2}.$$
+We observe that
+$$\mu * 1_{B_h}(x) = \mu(B(x, h)) \sim h^\delta$$
+for $x \in X$, which gives
+$$1_{X_h} f \lesssim h^{-\delta} (\mu * 1_{B_h}) \|f\|_{L^\infty}$$
+and hence
+$$\|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4} \lesssim h^{\frac{d}{4} - \delta} \|\mu * 1_{B_h}\|_{U^2}.$$
+Summing up, we have 
+$$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \lesssim h^{\frac{3}{8}(d - \delta)} h^{-\frac{d}{4}} h^{\frac{d}{8} - \frac{\delta}{2}} \|\mu * 1_{B_h}\|_{U^2}.$$
+
+\printbibliography
+\end{document}
