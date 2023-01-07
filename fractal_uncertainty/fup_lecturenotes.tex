@@ -307,9 +307,12 @@ $$\|1_{X_h} \mathscr F_h 1_{X_h}\| \leq \|1_{X_h}\|_{L^\infty}^2 \|\mathscr F_h\
 by Plancherel's theorem and H\"older's inequality.
 So if FUP is going to be an interesting theorem, we must have $\beta_0 \geq 0$.
 
-Assuming for now that 
+We have $X_h \approx \bigcup_{n = 1}^N B(x_n, h)$ where $\{x_n\}$ is a maximal $O(h)$-separated subset of $X$.
+So $|X_h| \sim Nh^d$, but $\mu(B(x_n, h)) \sim h^\delta$ and $\mu(X) \sim 1$, hence $N \sim h^{-\delta}$ and so 
+$$|X_h| \sim h^{d - \delta}.$$
+In particular we have 
 $$\|1_{X_h}\|_{L^2} \lesssim h^{\frac{d - \delta}{2}},$$
-we get 
+we so
 \begin{align*}
     \|1_{X_h} \mathscr F_h 1_{X_h}\|
     &\leq \|1_{X_h}\|_{L^\infty \to L^2} \|\mathscr F_h\|_{L^1 \to L^\infty} \|1_{X_h}\|_{L^2 \to L^1}, \\
@@ -319,7 +322,7 @@ we get
 
 Thus we have 
 $$\beta_0 := \max\left(0, \frac{d}{2} - \delta\right),$$
-the so-called \dfn{Patterson-Sullivan spectral gap}.
+the so-called \dfn{Patterson-Sullivan exponent}.
 
 Now, what is ???:
 \begin{itemize}
@@ -328,15 +331,15 @@ Now, what is ???:
     \item Dyatlov--Jin '18 \cite{Dyatlov_2018}: $d = 1$, $0 < \delta \leq \frac{1}{2}$.
     \item Han--Schlag '20 \cite{Han_2020}: $\frac{d}{2} \leq \delta < d$, $X = \prod_n X_n$ where $X_n \subset \RR$ is $\delta_n$-regular, $\delta_n \in (0, 1)$.
     \item Cladek--T. Tao '21 \cite{Cladek_2021}: $d$ odd, $\delta = \frac{d}{2}$.
-    \item Cohen '22 \cite{cohen2022fractal}: $d = 2$, $1 \leq \delta < 2$, $X$ is an arithmetic Cantor set which does not contain a line.
+    \item Cohen '22 \cite{cohen2022fractal}: $d = 2$, $1 \leq \delta < 2$, $X$ is an arithmetic Cantor set (to be defined later) which does not contain a line.
     \item Backus--Leng--Z. Tao '23: $0 < \delta \leq \frac{d}{2}$ and $X$ is not orthogonal to itself (to be defined later).
 \end{itemize}
 
 Roughly speaking there are three cases:
 \begin{itemize}
-    \item The case $0 < \delta \leq \frac{d}{2}$ is proven using the self-similarity to get lots of cancellations in the Fourier phase; this is called \dfn{Dolgopyat's method}, and this case is called the \dfn{Dyatlov--Jin uncertainty principle}. We'll prove it in detail later.
-    \item The case $\delta = \frac{d}{2}$ is proven using additive combinatorics. This case is called the \dfn{Dyatlov--Zahl uncertainty principle}. We'll sketch some of the ideas here.
-    \item The case $\frac{d}{2} \leq \delta < d$ is proven using complex analytic or algebro-geometric methods. This case is hardest IMO and is called the \dfn{Bourgain--Dyatlov uncertainty principle}.
+    \item The case $0 < \delta \leq \frac{d}{2}$ is proven using the self-similarity to get lots of cancellations in the Fourier phase; this is called \dfn{Dolgopyat's method}. We'll prove it in detail later.
+    \item The case $\delta = \frac{d}{2}$ is proven using additive combinatorics.
+    \item The case $\frac{d}{2} \leq \delta < d$ is proven using complex analytic or algebro-geometric methods. This case is hardest IMO.
 \end{itemize}
 
 \subsection{Some examples}
@@ -356,45 +359,321 @@ The above theorem is not quite sharp but there are some improvements that we can
     So $X$ cannot have too much ``linearly independent additive structure'', whatever on god's green earth that means.
 \end{example}
 
-\section{Sketch of the Dyatlov--Zahl uncertainty principle}
-To illustrate some of the ideas used in the proofs of all three cases, we'll sketch Cladek--Tao's argument, especially in the $d = 1$ case where it is particularly simple.
-
-\subsection{Rescaling to a favorable norm}
-First observe that $X_h \approx \bigcup_{n = 1}^N B(x_n, h)$ where $\{x_n\}$ is a maximal $O(h)$-separated subset of $X$.
-So $|X_h| \sim Nh^d$, but $\mu(B(x_n, h)) \sim h^\delta$ and $\mu(X) \sim 1$, hence $N \sim h^{-\delta}$ and so 
-$$|X_h| \sim h^{d - \delta}.$$
-In particular we have 
-$$\|1_{X_h}\|_{L^p} \sim h^{\frac{d - \delta}{p}}$$
-like we promised earlier.
-
-By H\"older's inequality we have 
-$$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \leq \|1_{X_h}\|_{L^{\frac{8}{3}}} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8} \lesssim h^{\frac{3}{8}(d - \delta)} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}.$$
-By the Riesz-Thorin inequality,
-$$\|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}^2 \leq \|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4}.$$
-The first term is 
-$$\|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \leq \|\mathscr F_h\|_{L^1 \to L^\infty} \|1_{X_h}\|_{L^\infty} \lesssim h^{-d/2} \cdot 1 = h^{-d/2}.$$
-We bound the second term in terms of the Gowers norm of $1_{X_h}$:
+\section{Model problem: Arithmetic Cantor sets}
+A lot of the ideas of the proof already appear in the case of so-called arithmetic Cantor sets, which are so self-similar that the technicalities simplify a lot.
 
 \begin{definition}
-    The \dfn{Gowers uniformity space} $U^2$ is defined by 
-    $$\|f\|_{U^2}^4 := \iiint_{\RR^{3d}} f(x) \overline{f(x + y) f(x + z)} f(x + y + z) \dif x \dif y \dif z.$$
+    Let $L \geq 3$ be an integer and $A \subset \{1, \dots, L\}^d$ be a nonempty proper subset, which we think of as labelling the $L$-adic subcubes of a given cube.
+    The \dfn{arithmetic Cantor set} generated by $A$ is defined by repeatedly splitting a cube into $L$-adic subcubes, and keeping those closed subcubes which belong to $A$.
 \end{definition}
 
-Let's recall some properties of this space. We have the \dfn{Gowers inverse theorem}
-$$\|f\|_{U^2}^2 = \|f * f\|_{L^2} = \|\hat f\|_{L^4}^2 \leq \|\hat f\|_{L^2} \|\hat f\|_{L^\infty} = \|f\|_{L^2} \|\hat f\|_{L^\infty}.$$
-So the $U^2$ norm of $f$ is capturing how much $f$ correlates with a single wave $e^{ix\xi}$: the bigger the norm, the more $f$ is correlated with a sine wave.
-There are also $U^s$ norms for $s \geq 3$ that measure how much $f$ correlates with $e^{ip(x, \xi)}$ where $p$ is a polynomial of degree $s - 1$.
+\begin{example}
+    The middle-thirds Cantor set is arithmetic, with $L = 3$ and $A = \{1, 3\}$. If $\theta \in (0, 1)$ is irrational, the middle-$\theta$ Cantor set is not arithmetic.
+\end{example}
 
-Anyways, rescaling the Gowers inverse theorem gives us
-$$\|\mathscr F_h (1_{X_h} f)\|_{L^\infty \to L^4} \sim h^{d/4} \|\widehat{1_{X_h} f}\|_{L^4} = h^{d/4} \|1_{X_h} f\|_{U^2}.$$
-We observe that
-$$\mu * 1_{B_h}(x) = \mu(B(x, h)) \sim h^\delta$$
-for $x \in X$, which gives
-$$1_{X_h} f \lesssim h^{-\delta} (\mu * 1_{B_h}) \|f\|_{L^\infty}$$
-and hence
-$$\|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4} \lesssim h^{\frac{d}{4} - \delta} \|\mu * 1_{B_h}\|_{U^2}.$$
-Summing up, we have 
-$$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \lesssim h^{\frac{3}{8}(d - \delta)} h^{-\frac{d}{4}} h^{\frac{d}{8} - \frac{\delta}{2}} \|\mu * 1_{B_h}\|_{U^2}.$$
+At scale $N^{-1} := L^{-k}$, an arithmetic Cantor set looks like $N^{-1} C_{k, A}$ where 
+$$C_{k, A} := \{a_0 + a_1 L + \cdots + a_k L^k: a_i \in A\}.$$
+In partiular it has dimension $\delta := \frac{\log \card A}{d \log L}$.
+Thus, the arithmetic Cantor set satisfies the fractal uncertainty principle if there exists $\varepsilon_0 > 0$ such that the discrete Fourier transform 
+$$\mathcal F_N f(\xi) := N^{-d/2} \sum_{x \in \{1, \dots, N\}^d} \exp\left(2\pi i\frac{x \cdot \xi}{N}\right) f(x)$$
+satisfies 
+\begin{equation}\label{discrete FUP}
+    \|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\|_{\ell^2 \to \ell^2} \lesssim N^{-\beta - \varepsilon_0}
+\end{equation}
+where $\beta := \max(0, \frac{d}{2} - \delta)$ is the Patterson-Sullivan exponent.
+
+\begin{proposition}
+    Suppose that $\delta \in (0, d/2]$ and there exist $x, x', \xi, \xi' \in A$ such that $\langle x - x', \xi - \xi'\rangle \neq 0$ modulo $N$.
+    Then there exists $\varepsilon_0 > 0$ such that the arithmetic Cantor set satisfies the fractal uncertainty principle (\ref{discrete FUP}).
+\end{proposition}
+\begin{proof}
+Since $\delta \leq d/2$, if we can beat the exponent $\frac{d}{2} - \delta$, then we automatically beat the Patterson-Sullivan exponent $\beta$.
+
+We now observe the following \dfn{induction on scale} inequality:
+\begin{equation}\label{arithmetic induction}
+    \|1_{C_{k_1 + k_2, A}} \mathcal F_{N_1 N_2} 1_{C_{k_1 + k_2, A}}\| \leq \|1_{C_{k_1, A}} \mathcal F_{N_1} 1_{C_{k_1, A}}\| \|1_{C_{k_2, A}} \mathcal F_{N_2} 1_{C_{k_2, A}}\|.
+\end{equation}
+It follows from the fact that if we have $u, v \in \ell^2([N]^d)$ and $\xi_1, x_2 \in [N]^d$, we can define $u_{\xi_1} \in \ell^2([N_2]^d)$ and $v_{x_1}([N_1]^d)$ by $u_{\xi_1}(\xi_2) := u(\xi_1 + N_1 \xi_2)$ and $v_{x_2}(x_1) := v(x_2 + N_2 x_1)$, and then we have the \dfn{decimation} formula
+$$\langle \mathcal F_N u, v\rangle = \sum_{\xi_1 \in [N_1]^d} \sum_{x_2 \in [N_2]^d} \exp\left(2\pi i \frac{x_2 \cdot \xi_1}{N}\right) \mathcal F_{N_2} u_{\xi_1}(x_2) \overline{\mathcal F_{N_1} v_{x_2}(\xi_1)}.$$
+The decimation formula is used in the Fast Fourier Transform algorithm to reduce the computation of a Fourier transform to the computation of a Fourier transform over a small cyclic group \cite[Chapter 2]{DBLP:books/daglib/0017733}.
+We omit the proof of the decimation formula, but see \cite[Lemma 3.1]{Dyatlov_2017}.
+Taking $\supp u, \supp v \subseteq C_{k_1 + k_2, A}$, we get $\supp u_{\xi_1} \subseteq C_{k_1, A}$ and $\supp v_{x_2} \subseteq C_{k_2, A}$. So by Cauchy-Schwarz,
+\begin{align*}
+    |\langle \mathcal F_N u, v\rangle|^2
+    &\leq \left(\sum_{\xi_1 \in C_{k_1, A}} \sum_{x_2 \in C_{k_2, A}} |\mathcal F_{N_2} u_{\xi_1}(x_2)|^2\right) \left(\sum_{\xi_1 \in C_{k_1, A}} \sum_{x_2 \in C_{k_2, A}} |\mathcal F_{N_1}^* v_{x_2}(\xi_1)|^2\right) \\
+    &\leq \|1_{C_{k_2, A}} \mathcal F_{N_2} 1_{C_{k_2, A}}\|^2 \|u\|^2 \|1_{C_{k_1, A}} \mathcal F_{N_1} 1_{C_{k_1, A}}\|^2 \|v\|^2,
+\end{align*}
+which proves (\ref{arithmetic induction}).
+
+In particular, if there exists $\varepsilon_1 > 0$ and a scale $L^{-k}$ such that 
+\begin{equation}\label{arithmetic gain at one scale}
+    |1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\| \leq (1 - \varepsilon_1) N^{-\delta - \frac{d}{2}}
+\end{equation}
+then by scale-invariance this estimate holds for scale $L^{-1}$, and by (\ref{arithmetic induction}),
+$$\|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\| \leq \|1_{C_{1, A}} \mathcal F_{L^{-1}} 1_{C_{1, A}}\|^k \leq (1 - \varepsilon_1)^k N^{-\delta - \frac{d}{2}}$$
+and the claim follows with
+$$\varepsilon_0 := -\log_L(1 - \varepsilon_1).$$
+
+So let's suppose that (\ref{arithmetic gain at one scale}) fails, so at every $L$-adic scale, 
+$$\|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\| = N^{-\delta - \frac{d}{2}}.$$
+However, we have 
+$$\|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\| \leq \|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\|_{HS} = \frac{(\card A)^k}{N^{d/2}} = N^{-\delta - \frac{d}{2}}$$
+where $\|\cdot\|_{HS}$ denotes the Hilbert-Schmidt norm (the $\ell^2$ norm of the vector of generalized eigenvalues) and $\|\cdot\|$ denotes the operator norm (the $\ell^\infty$ norm on generalized eigenvalues).
+Thus the $\ell^2$ and $\ell^\infty$ norms of eigenvalues are the same, so $P = 1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}$ has rank $1$.
+In particular, all $2 \times 2$ minors of $P$ vanish.
+
+However, 
+$$P_{x, \xi} = N^{-d/2} 1_{C_{k, A}}(x) 1_{C_{k, A}}(\xi) \exp\left(2\pi i\frac{x \cdot \xi}{N}\right)$$
+so for every $x, x', \xi, \xi' \in C_{k, A}$,
+$$\det \begin{bmatrix}\exp(2\pi ix\cdot \xi/N) & \exp(2\pi ix'\cdot \xi/N) \\ \exp(2\pi ix\cdot \xi'/N) & \exp(2\pi ix'\cdot \xi'/N)\end{bmatrix} = 0$$
+or equivalently,
+$$\exp\left(2\pi i \frac{\langle x - x', \xi - \xi'\rangle}{N}\right) = 1.$$
+In particular $x - x'$ must be orthogonal to $\xi - \xi'$ modulo $N$, a contradiction.
+Therefore there is a scale at which (\ref{arithmetic gain at one scale}) holds.
+\end{proof}
+
+Let's recap the strategy here:
+\begin{enumerate}
+\item By working in the right norm, we witness the part of the Patterson-Sullivan exponent that we're trying to beat trivially, and we just need to get an improvement in that norm.
+\item We discretize the fractal, and make the discretization so self-similar that if we get a multiplicative gain at one scale, we get an exponential gain at all scales.
+\item If we cannot get a multiplicative gain at one scale, then the behavior of the fractal becomes highly constrained, and violates the nonorthogonality assumption.
+\end{enumerate}
+These three steps are exactly the steps that work in the general case! But they become a lot more technical, essentially because a general Ahlfors-David set is only self-similar on average, rather than the perfect self-similarity of the arithmetic Cantor set.
+
+Side remark: There's lots of interesting problems which have only been addressed in the self-similar case. For example we have \cite{https://doi.org/10.48550/arxiv.2107.08276} the following fractal uncertainty principle, which is much stronger than the Dyatlov--Jin uncertainty principle with overwhelming probability:
+
+\begin{theorem}
+    Let $d = 1$ and let $A \subseteq [L]$ be drawn at random.
+    Then with probability $\leq 3L\exp(-\frac{L^{4\varepsilon}}{64})$,
+\begin{equation}\label{random FUP}
+    \log_N \|1_{C_{k, A}} \mathcal F_N 1_{C_{k, A}}\| \leq -\max(0, \frac{1}{2} - \frac{3}{4}\delta - \varepsilon).
+\end{equation}
+\end{theorem}
+
+So it is natural to conjecture that for a ``generic'' Ahlfors-David set the improved bound (\ref{random FUP}) holds.
+To my knowledge even formulating this precisely is wide open.
+
+\section{The Dyatlov--Jin uncertainty principle}
+Let's prove the Dyatlov--Jin uncertainty principle.
+
+\begin{definition}
+A compact set $X$ is \dfn{nonorthogonal} (to itself) on scales $[h, 1]$ if for every $x_0, \xi_0 \in X$ and $h < r_1, r_2 \leq 1$ there exist $x_1, x_2 \in B(x_0, r_1)$ and $\xi_1, \xi_2 \in B(\xi_0, r_2)$ such that 
+$$|(x_1 - x_2, \xi_1 - \xi_2)| \gtrsim r_1 r_2.$$
+This condition is also called the \dfn{nonconcentration property} or the \dfn{local nonintegrability condition} (LNIC).
+\end{definition}
+
+\begin{example}
+Lots of sets are nonorthogonal:
+\begin{enumerate}
+\item If $d = 1$, $\delta > 0$, and $X$ is $\delta$-regular, then $X$ is nonorthogonal.
+\item If $\Gamma$ is a Zariski dense convex cocompact subgroup of $SO^+(1, d + 1)$, then $\Lambda_\Gamma$ is nonorthogonal.
+\item If $X$ is nonorthogonal, then $X_h$ is nonorthogonal on scales $[h, 1]$.
+\item One may check by hand, using self-similarity, that a Sierpinski carpet is nonorthogonal.
+\end{enumerate}
+\end{example}
+
+\begin{theorem}
+Let $X$ be nonorthogonal on scales $[h, 1]$, and suppose that $X$ is the support of a doubling measure $\mu$ (doubling on scales $[h, 1]$). Let 
+$$B_h f(x) := \int_X e^{ix \cdot \xi/h} f(\xi) \dif \mu(\xi).$$
+Then there exists $\varepsilon_0 > 0$ such that 
+$$\|B_h\|_{L^2(\mu) \to L^2(\mu)} \lesssim h^{\varepsilon_0}.$$
+\end{theorem}
+
+We apply this theorem with $X$ replaced by $X_h$ and $\mu(E) := h^{\delta - d} |X \cap E|$, which is a doubling measure if $X$ is $\delta$-regular:
+
+\begin{corollary}
+If $X$ is nonorthogonal and $\delta$-regular, $\delta \in (0, d/2]$, then $X$ satisfies the fractal uncertainty principle.
+\end{corollary}
+
+\subsection{Discretization of compactly supported doubling measures}
+Let $X$ be a compact set, which we will think of as equipped with a doubling measure $\mu$.
+Also fix a parameter $L \geq 3$.
+
+\begin{definition}
+    A \dfn{discretization} of a compact set $X \subseteq \RR^d$ is a set $V(X) = \{V_n(X): n \in \ZZ\}$ of sets, where $V_n(X)$ is a set of subsets of $\RR^d$, called \dfn{tiles}, such that:
+\begin{enumerate}
+    \item $X = \bigcup \{I \cap X: I \in V_n(X)\}$ and the union is disjoint, 
+    \item For every $I \in V_n(X)$ we have $I = \bigcup_k I_k$ for some $I_k \in V_{n + 1}(X)$.
+\end{enumerate}
+\end{definition}
+
+In other words, the discretization turns the set $X$ into the set of paths through a tree, and the set of the $n$th level of vertices is $V_n(X)$.
+If our discretization is ``good'' and $\mu$ is doubling, then there should be some $f(L)$ such that the measure of a child of a tile $I$ should be $\gtrsim f(L) \mu(I)$.
+For example if $\mu$ is a $\delta$-regular measure then $f(L) = L^{-\delta}$.
+
+\begin{example}
+    The \dfn{standard discretization} $V^0(X)$ is defined by letting $V_n^0(X)$ be the set of all $L$-adic cubes of side length $L^{-n}$ which intersect $X$.
+    However, this discretization is not very useful for our purposes because it doesn't ``see'' the doubling nature of $\mu$.
+    For example, we could choose $X = [L^{-1}, 1]$ and $\mu$ Lebesgue measure on $X$, then for $L \gg 1$, $[0, 1]$ has measure $\sim 1$, but its child $[0, L^{-1}]$ has measure zero, despite intersecting $X$.
+\end{example}
+
+\begin{example}
+    If $X$ is an arithmetic Cantor set, then $X$ comes with its own natural choice of discretization: $C_{n, A}$ specifies a set of $L$-adic cubes of side length $L^{-n}$, so let $V_n(X)$ be the set of all $L$-adic cubes specified by $C_{n, A}$.
+    Note that this is just the standard discretization, but it witnesses that $\mu$ is doubling, since each cube has measure $L^\delta$ times the measure of its parent.
+\end{example}
+
+As it turns out, we can modify the standard discretization to get a measure for which the above counterexample on the standard discretization fails:
+
+\begin{proposition}
+Let $L$ be a multiple of $10^3$, and $X$ a compact set.
+There exists a discretization $V(X)$ such that for every tile $I \in V_n(X)$, there exists an $L$-adic cube $I^0 \in V^0_n(X)$ such that 
+$$I^0 (1 - L^{-2/3}) \subseteq I \subseteq I^0 (1 + L^{-2/3}),$$
+and there exists a point $x_0 \in I \cap X$ such that 
+$$\dist(x_0, \partial I) \geq \frac{1}{10} L^{-2/3-n}.$$
+\end{proposition}
+\begin{proof}
+We'll prove this for $d = 1$ for simplicity.
+
+Let's do it at scale $L^{-n}$ first.
+Let $I \in V^0_n(X)$.
+We want to modify $I$ to be a tile $T$ so that there exists $x_0 \in X \cap T$ such that 
+\begin{equation}\label{predator}
+    \dist(x_0, \partial T) \geq \frac{1}{5} L^{-2/3-n}.
+\end{equation}
+To do this, we start with setting $T(I) := I$ for every $I$.
+We say that $T$ is a \dfn{predator} if (\ref{predator}) holds, \dfn{dead} if $X \cap T$ is empty, and otherwise \dfn{prey}.
+
+We now iterate over all prey at scale $L^{-n}$.
+If $T$ is prey, all $x \in T \cap X$ are within $L^{-2/3-n}/5$ of the boundary.
+If $x$ is close to an adjacent predator $S$, we feed a subinterval of $T$ of size $L^{-2/3}/2$ to $S$, so that on that side, $T$ no longer meets $X$.
+Otherwise, $x$ is close to prey or a dead tile, so we feed a subinterval of size $L^{-2/3}/2$ of the prey or dead tile to $T$.
+Then either $T$ is a predator (because it ate one of its neighbors) or it is dead (its neighbors ate it).
+This operation created no new prey, and removed at least one prey, so this process will stop.
+
+After this procedure is complete, every tile is either a predator or dead.
+Let $V_n(X)$ be the set of predators.
+Since $L$ is a multiple of $10^3$ (in particular, $L^{2/3}/10$ is an integer), it only moved entire children of each tile, so the tree structure $V^0_n(X)$ is preserved.
+It never added or removed more than $L^{-2/3}/2$ of the original interval to get the tile, plus $L^{-5/3}/2$ from the previous scale (which is negligible since $L \geq 10^3$).
+
+If $d \geq 2$, we have notions of types of predator, where type $k$ means that the tile has a problem with its $k$-boundary.
+Then we induct backwards, eliminating tiles of type $d - 1$, ..., $1$, $0$ as above.
+(You pick up some small losses doing this, which is why the gain is of size $L^{-n-2/3}/10$ rather than $L^{-n-2/3}/5$).
+We omit the details, because this is technical but the basic idea is already there for $d = 1$.
+\end{proof}
+
+Given $I \in V_n(X)$, we put a probability measure on the set $\{I_a: a \in A\}$ of children of $I$, namely $\Pr(a) := \mu(I_a)/\mu(I)$.
+Let $D_\mu$ be the doubling constant of $\mu$, namely for every cube $I$,
+$$\mu(2I) \leq D_\mu \mu(I).$$
+
+\begin{lemma}
+For any $a$,
+$$\Pr(a) \geq D_\mu^{-\log_2(3L)}.$$
+\end{lemma}
+\begin{proof}
+By definition of $V(X)$, there exist cubes $\tilde I \supseteq I$ and $\tilde I_a \subseteq I_a$ such that $\tilde I \subseteq 3L \tilde I_a$.
+Then 
+\begin{align*}
+    \mu(I) &\leq \mu(\tilde I) \leq D_\mu^{-\log_2(3L)} \mu(\tilde I_a) \leq D_\mu^{-\log_2(3L)} \mu(I_a). \qedhere 
+\end{align*}
+\end{proof}
+
+\begin{proposition}
+Suppose that $X$ is the nonorthogonal support of a compactly supported doubling measure $\mu$ and $X$ is nonorthogonal.
+Given tiles $I \in V_n(X)$ and $J \in V_m(X)$, draw children $I_a, I_{a'}$ and $J_b, J_{b'}$ independently at random, and let $x_a, x_{a'}, \xi_b, \xi_{b'}$ be in their respective tiles. 
+The probability that 
+$$|(x_a - x_{a'}) \cdot (\xi_b - \xi_{b'})| \sim L^{-n-m-4/3}$$
+and 
+$$L^{n+2/3} |x_a - x_{a'}|, L^{m+2/3} |\xi_b - \xi_{b'}| \sim 1$$
+(meant in the limit as $L \to \infty$)
+is at least
+\begin{equation}\label{probability bound}
+    \rho := D_\mu^{-4\log_2(2L)}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+By definition of $V(X)$ and the fact that $L \geq 10^3$, there exist $\underline x \in X \cap I$ and $\underline \xi \in X \cap J$ which are $\sim L^{-n-2/3}$ or $L^{-m-2/3}$-interior to their tiles.
+By nonorthogonality there exist $\tilde x_a, \tilde x_{a'} \in I \cap X$ of distance $\sim L^{-n-2/3}$ to $\underline x$, and $\tilde \xi_b, \tilde \xi_{b'} \in Y \cap J$ of distance $\sim L^{-m-2/3}$ to $\underline \xi$, such that 
+$$|(\tilde x_a - \tilde x_{a'}) \cdot (\tilde \xi_b - \tilde \xi_{b'})| \gtrsim L^{-n-m-4/3}.$$
+In the other direction, Cauchy-Schwarz gives 
+\begin{align*}
+    |(\tilde x_a - \tilde x_{a'}) \cdot (\tilde \xi_b - \tilde \xi_{b'})|
+    &\leq |\tilde x_a - \tilde x_{a'}| \cdot |\tilde \xi_b - \tilde \xi_{b'}| \\
+    &\leq ||\tilde x_a - \underline x| + |\tilde x_{a'} - \underline x|| \cdot ||\tilde \xi_b - \underline \xi| + |\tilde \xi_{b'} - \underline \xi|| \\
+    &\lesssim L^{-n-m-4/3}.
+\end{align*}
+In particular we have $|\tilde x_a - \tilde x_{a'}| \sim L^{-n-2/3}$ and $|\tilde \xi_b - \tilde \xi_{b'}| \sim L^{-m-2/3}$.
+Let $I_a$, etc be the child containing $x_a$.
+If $L$ is large then the diameter of $I_a$ is much smaller than $L^{-n-2/3}$ so we have $|x_a - x_{a'}| \sim L^{-n-2/3}$ and similarly for $\xi_b - \xi_{b'}$, and similarly for the bounds on the dot product. We omit the details of this computation which is basically just two pages of the reverse triangle inequlity.
+
+So there exist $a, a', b, b'$ in which the desired estimates hold.
+However 
+\begin{align*}
+    \Pr(a \cap a' \cap b \cap b') &= \Pr(a) \Pr(a') \Pr(b) \Pr(b') \geq D_\mu^{-4\log_2(3L)} = \rho. \qedhere 
+\end{align*}
+\end{proof}
+
+\subsection{Getting a gain at one scale}
+Let $K = -\log_L h$. We assume that $h$ is a reciprocal integer, and $L$ is a large multiple of $10^3/h$, so $K \geq 0$ is integral.
+In particular, we fix a scale $L^{-n}$, and define $m$ by $n + m + 1 = K$.
+Let $I \in V_n(X)$, $J \in V_m(X)$.
+We set 
+$$F_J(x) = \frac{1}{\mu(J)} \int_J e^{ix \cdot (\xi - \xi_J)/h} f(\xi) \dif \mu(\xi)$$
+where $f \in L^2(\mu)$ is given, and $\xi_J$ is the center of the cube that we used to construct the tile $J$.
+We introduce the norms for $\theta \in (0, 1)$,
+$$\|F\|_{C_\theta(I)} := \max(\|F\|_{C^0(I)}, \theta \diam(I) \|\nabla F\|_{C^0(I_{conv})})$$
+where $I_{conv}$ is the convex hull of the tile $I$. Then for 
+$$\Psi_b(x) := \frac{x \cdot (\xi_J - \xi_{J_b})}{h},$$
+we have (for $\theta := \frac{1}{4}$ and $L \gg 1$)
+\begin{equation}\label{induction on scale Ctheta}
+    \|e^{i\Psi_b} F\|_{C_\theta(I_a)} \leq \|F\|_{C_\theta(I)}
+\end{equation}
+which follows because 
+$$\|\nabla \Psi_b\|_{C^0(I)} \leq \frac{\diam(J)}{h}.$$
+This makes the norms $C_\theta(I)$ useful for getting a gain at every scale.
+The point is that the $C_\theta(I)$ norms are scale-invariant since they have a $\diam(I)$ on the derivative term, while the usual $C^1(I)$ norm is dimensionally inconsistent, so we can't use it for induction on scale.
+
+We have the following gain at one scale.
+(Note that in light of (\ref{probability bound}) $1/\varepsilon_1$ is actually polynomial in $L$!)
+
+\begin{proposition}
+Draw $b$ at random.
+If $L \gg 1$ and $\varepsilon_1 \ll \rho L^{-2/3}$ then 
+$$\|F_J\|_{C_\theta(I)}^2 \leq (1 - \varepsilon_1) \Expect \|F_{J_b}\|_{C_\theta(I)}^2.$$
+\end{proposition}
+
+We interpret this as follows: $F_J$ is an oscillatory integral over $J$, so this estimate shows that $F_J$ is less than the sum of its parts: there must be cancellation between the children of $J$.
+When we induct on this estimate we will get that for tiles $J$ at scale $0$, $\|F_J\|_{C_\theta(I)}^2$ is exponentially small as $K \to \infty$.  
+
+
+% \section{Sketch of the Dyatlov--Zahl uncertainty principle}
+% To illustrate some of the ideas used in the proofs of all three cases, we'll sketch Cladek--Tao's argument, especially in the $d = 1$ case where it is particularly simple.
+
+% \subsection{Rescaling to a favorable norm}
+% First observe that $X_h \approx \bigcup_{n = 1}^N B(x_n, h)$ where $\{x_n\}$ is a maximal $O(h)$-separated subset of $X$.
+% So $|X_h| \sim Nh^d$, but $\mu(B(x_n, h)) \sim h^\delta$ and $\mu(X) \sim 1$, hence $N \sim h^{-\delta}$ and so 
+% $$|X_h| \sim h^{d - \delta}.$$
+% In particular we have 
+% $$\|1_{X_h}\|_{L^p} \sim h^{\frac{d - \delta}{p}}$$
+% like we promised earlier.
+
+% By H\"older's inequality we have 
+% $$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \leq \|1_{X_h}\|_{L^{\frac{8}{3}}} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8} \lesssim h^{\frac{3}{8}(d - \delta)} \|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}.$$
+% By the Riesz-Thorin inequality,
+% $$\|\mathscr F_h 1_{X_h}\|_{L^2 \to L^8}^2 \leq \|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4}.$$
+% The first term is 
+% $$\|\mathscr F_h 1_{X_h}\|_{L^1 \to L^\infty} \leq \|\mathscr F_h\|_{L^1 \to L^\infty} \|1_{X_h}\|_{L^\infty} \lesssim h^{-d/2} \cdot 1 = h^{-d/2}.$$
+% We bound the second term in terms of the Gowers norm of $1_{X_h}$:
+
+% \begin{definition}
+%     The \dfn{Gowers uniformity space} $U^2$ is defined by 
+%     $$\|f\|_{U^2}^4 := \iiint_{\RR^{3d}} f(x) \overline{f(x + y) f(x + z)} f(x + y + z) \dif x \dif y \dif z.$$
+% \end{definition}
+
+% Let's recall some properties of this space. We have the \dfn{Gowers inverse theorem}
+% $$\|f\|_{U^2}^2 = \|f * f\|_{L^2} = \|\hat f\|_{L^4}^2 \leq \|\hat f\|_{L^2} \|\hat f\|_{L^\infty} = \|f\|_{L^2} \|\hat f\|_{L^\infty}.$$
+% So the $U^2$ norm of $f$ is capturing how much $f$ correlates with a single wave $e^{ix\xi}$: the bigger the norm, the more $f$ is correlated with a sine wave.
+% There are also $U^s$ norms for $s \geq 3$ that measure how much $f$ correlates with $e^{ip(x, \xi)}$ where $p$ is a polynomial of degree $s - 1$.
+
+% Anyways, rescaling the Gowers inverse theorem gives us
+% $$\|\mathscr F_h (1_{X_h} f)\|_{L^\infty \to L^4} \sim h^{d/4} \|\widehat{1_{X_h} f}\|_{L^4} = h^{d/4} \|1_{X_h} f\|_{U^2}.$$
+% We observe that
+% $$\mu * 1_{B_h}(x) = \mu(B(x, h)) \sim h^\delta$$
+% for $x \in X$, which gives
+% $$1_{X_h} f \lesssim h^{-\delta} (\mu * 1_{B_h}) \|f\|_{L^\infty}$$
+% and hence
+% $$\|\mathscr F_h 1_{X_h}\|_{L^\infty \to L^4} \lesssim h^{\frac{d}{4} - \delta} \|\mu * 1_{B_h}\|_{U^2}.$$
+% Summing up, we have 
+% $$\|1_{X_h} \mathscr F_h 1_{X_h}\|_{L^2 \to L^2} \lesssim h^{\frac{3}{8}(d - \delta)} h^{-\frac{d}{4}} h^{\frac{d}{8} - \frac{\delta}{2}} \|\mu * 1_{B_h}\|_{U^2}.$$
 
 \printbibliography
 \end{document}

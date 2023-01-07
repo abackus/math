@@ -95,7 +95,7 @@
 
 \newcommand{\Two}{\mathrm{I\!I}}
 
-\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\Lagrange}{\mathcal L}
 \newcommand{\DirQL}{\mathscr D^{\mathrm{ql}}}
 \newcommand{\DirL}{\mathscr D}
 
@@ -207,7 +207,9 @@ A function $u \in BV_\loc(M)$ has \dfn{least gradient}, or is \dfn{$1$-harmonic}
 A set $U$ of locally finite perimeter has \dfn{least perimeter} if $1_U$ has least gradient.
 \end{definition}
 
-Aside from being of intrinsic interest, functions of least gradient arise naturally in applied mathematics via magnetic resonance imaging \cite{Tamasan2019, Joy09} and the continuum-time limit of certain combinatorial games \cite{Kohn06}.
+Functions of least gradient arise naturally in the study of magnetic resonance imaging, the continuum-time limit of certain combinatorial games, and as a model problem for numerical analysis of variational problems in $BV$ \cite{Nachman2009, Joy09, Kohn06, Loisel20}.
+The gradient flow for (\ref{least gradient functional}), \dfn{level set flow}, arises in models of surface tension, as well as a method for continuing the mean curvature flow past its singular times \cite{Evans91, Sethian90, Chen89}.
+We are interested in functions of least gradient on manifolds because of their potential applications to geometric topology, which was proposed in \cite{daskalopoulos2020transverse, daskalopoulosPrep1} and we recall in \S\ref{AppsSec}.
 
 The Euler-Lagrange equation for (\ref{least gradient functional}) is the $1$-Laplace equation\footnote{The precise definition for a weak solution of (\ref{1Laplacian}) is given by \cite{Mazon14}, but we will only work with the functional (\ref{least gradient functional}) and not the equation itself, so we will not state the definition of weak solution here.}
 \begin{equation}\label{1Laplacian}
@@ -228,7 +230,7 @@ Then every set of least perimeter in $M$ is bounded by embedded analytic stable 
 \end{theorem}
 
 %%%%%%%%%%%%%%%%%%%
-\subsection{Applications of the main theorem}
+\subsection{Applications of the main theorem}\label{AppsSec}
 To motivate the study of the level sets of $1$-harmonic functions, we turn to the other side of H\"older duality -- that is, to the $\infty$-Laplacian
 $$\Delta_\infty v := (\nabla^\mu \partial^\nu v) \partial_\mu v \partial_\nu v.$$
 The equation $\Delta_\infty v = 0$ is invariant under target translations $v \mapsto v + y$ and so Noether's theorem associates a conserved flux\footnote{By a \dfn{conserved flux}, we mean a closed $d-1$-form $\psi$; the equation $\dif \psi = 0$ can be viewed as a conservation law.} $\dif u$ to each $\infty$-harmonic function $v$.
@@ -512,6 +514,37 @@ and $u_n \to u$ in $L^1_\loc(M)$, then $u$ has least gradient, and $\dif u_n \to
 \begin{proof}
 The proof is similar to \cite[Teorema 3 and Osservazione 3]{Miranda67}, if we observe that we are allowed to add a term of size $o(1)$ to the right-hand side of the inequalities \cite[(2.8), (2.9), (2.13), and (2.14)]{Miranda67}.
 The fact that the convergence in the weak topology of measures is equivalent to the convergence in the sense of \cite[Osservazione 3]{Miranda67} follows from the portmanteau theorem \cite[Theorem 13.16]{klenke2013probability}.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Lagrangian for minimal surfaces}
+If $N \subset \RR^3$ is an embedded minimal surface, then at least locally, we can realize $N$ as the graph of a function $w: \RR^2 \to \RR$ which solves the minimal surface equation\footnote{We remind the reader that we mean by $\Japan \xi$ the Japanese norm $\sqrt{1 + |\xi|^2}$ of $\xi$.}
+$$L w := \dif^* \left(\frac{\dif w}{\Japan{\dif w}}\right) = 0.$$
+If $N \subset M$ is an embedded minimal hypersurface and $M$ is a Riemannian manifold equipped with a choice of coordinates, however, the minimal surface operator $L$ may be quite complicated \cite[\S7.1]{colding2011course}.
+Here, we give a simple Lagrangian for the minimal surface operator in the case that $M$ is a manifold of constant sectional curvature $K \in \RR$, equipped with coordinates $(x, y) \in \RR^{d - 1}_x \times \RR_y$ in which the metric is diagonal and of the form
+$$g(\partial_{x^i}, \partial_{x^i}) = g(\partial_y, \partial_y) = \frac{1}{(1 + K(|x|^2 + y^2)/4)^2}.$$
+This Lagrangian will be a crucial object of study in both this paper and the sequel \cite{BackusCML}.
+
+\begin{lemma}\label{Plateau setup lemma}
+Introduce the Lagrangian 
+$$\Lagrange(y, \xi) := \frac{\Japan{\xi}}{(1 + K(|x|^2 + y^2)/4)^{d - 1}} \dif x,$$
+for $x \in \RR^{d - 1}$, $y \in \RR$, and $\xi \in T'_x \RR^{d - 1}$.
+Define for $w \in C^1(\Omega)$, $\Omega \subseteq \RR^{d - 1}$, the map $\Psi_w: \Omega \to M$ given by
+$$\Psi_w(x)^i := x^i, \quad \Psi_w(x)^0 := w(x).$$
+Then $(\Psi_w^{-1})^* \Lagrange(w, \dif w)$ is the Riemannian measure on $\Psi_w(\Omega)$.
+In particular, if $w$ is a critical point of $\Lagrange(w, \dif w)$, then $\Psi_w(\Omega)$ is a minimal hypersurface.
+\end{lemma}
+\begin{proof}
+For $(\partial_i)$ the standard frame on $\Omega$, the metric on the image of $\Psi_w$ satisfies
+\begin{align*}
+\Psi_w^*(g|\Psi_w(\Omega))(\partial_i, \partial_j) &= g_{\mu\nu} \partial_i \Psi_w^\mu \partial_j \Psi_w^\nu \\
+&= \frac{\delta_{\mu\nu}}{(1 + K(|x|^2 + w^2)/4)^2} (\partial_i \Psi_w^\mu \partial_j \Psi_w^\nu) \\
+&= \frac{\delta_{ij} + \partial_i w \partial_j w}{(1 + K(|x|^2 + w^2)/4)^2}.
+\end{align*}
+By \cite[(24)]{Petersen2008} we have $\det((\delta_{ij} + \partial_i w \partial_j w)_{ij}) = 1 + |\dif w|^2$, so if $\omega$ denotes the pullback of the Riemannian measure on $\Psi_w(\Omega)$ to $\Omega$, then
+\begin{align*}
+\omega &= \sqrt{\det(\Psi_w^*(g|\Psi_w(\Omega))(\partial_i, \partial_j))} = \frac{\Japan{(w, \dif w)}}{((1 + K(|x|^2 + w^2)/4)^2)^{\frac{d - 1}{2}}}. \qedhere 
+\end{align*}
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1040,33 +1073,11 @@ where $c_1 = c_1(c_0, d) \ll 1$ is to be chosen later, then
 \end{equation}
 \end{proposition}
 
-We introduce the Lagrangian
-$$\Lagrange(y, \xi) := \frac{\Japan{\xi}}{(1 + K(|x|^2 + y^2)/4)^{d - 1}} \dif x,$$
-for $x \in \RR^{d - 1}$, $y \in \RR$, and $\xi \in T'_x \RR^{d - 1}$.
-Here, as always, $\Japan \xi$ denotes the Japanese norm $\sqrt{1 + |\xi|^2}$.
-For $K = 0$ this Lagrangian reduces to the usual minimal surface equation, as studied in \cite[Chapter 6]{Giusti77}.
-
-We first show that critical points of $w \mapsto \Lagrange(w, \dif w)$ define minimal surfaces in $M$.
-To this end we define for $w \in C^1(\Omega)$, $\Omega \subseteq \RR^{d - 1}$, the map $\Psi_w: \Omega \to M$ given by
-$$\Psi_w(x)^i := x^i, \quad \Psi_w(x)^0 := w(x).$$
-
-\begin{lemma}\label{Plateau setup lemma}
-Let $w \in C^1(\Omega)$. Then $(\Psi_w^{-1})^* \Lagrange(w, \dif w)$ is the Riemannian measure on $\Psi_w(\Omega)$.
-\end{lemma}
-\begin{proof}
-For $(\partial_i)$ the standard frame on $\Omega$, the metric on the image of $\Psi_w$ satisfies
-\begin{align*}
-\Psi_w^*(g|\Psi_w(\Omega))(\partial_i, \partial_j) &= g_{\mu\nu} \partial_i \Psi_w^\mu \partial_j \Psi_w^\nu \\
-&= \frac{\delta_{\mu\nu}}{(1 + K(|x|^2 + w^2)/4)^2} (\partial_i \Psi_w^\mu \partial_j \Psi_w^\nu) \\
-&= \frac{\delta_{ij} + \partial_i w \partial_j w}{(1 + K(|x|^2 + w^2)/4)^2}.
-\end{align*}
-By \cite[(24)]{Petersen2008} we have $\det((\delta_{ij} + \partial_i w \partial_j w)_{ij}) = 1 + |\dif w|^2$.
-\end{proof}
-
-We can view the derivative of a function $w: \Omega \to \RR$ as a map $\dif w: \Omega \to \RR^{d - 1}$.
+To set up the proof, recall that we may view the derivative of a function $w: \Omega \to \RR$ as a map $\dif w: \Omega \to \RR^{d - 1}$.
 In particular, it is well-defined to take the average $\avg_\rho \dif w$ of $\dif w$ over the ball $\mathscr B_\rho := \{x \in \RR^{d - 1}: |x| < \rho\}$, c.f. (\ref{averages and flat connections}).
 Here and henceforth we use $\mathscr B$ to refer to balls in $\RR^{d - 1}$, and reserve $B$ for balls in $M$.
 
+Let $\Lagrange$ be the Lagrangian derived in Lemma \ref{Plateau setup lemma}, and $\Psi_w: \RR^{d - 1} \to M$ the graph embedding.
 We now show that $\Lagrange(w, \dif w) - \Lagrange(w, \avg_\rho \dif w)$ is close to the analogous quantity for the euclidean case if $\rho$ is small.
 
 \begin{lemma}
@@ -1127,6 +1138,8 @@ We can moreover replace $\beta$ with some $\beta' \in [\beta, \beta + C|K|\rho^{
 In order to apply Lemma \ref{Miranda43} we must show that we can, after applying a suitable isometry, bound a set $U$ of locally finite perimeter by a set $\Psi_w(\Omega)$ for some suitable $w, \Omega$.
 However, $\Psi_w(\Omega)$ was defined with reference to a choice of coordinates, and one could imagine that the ball $B$ that $\partial U$ embeds into fails to be convex in such coordinates, thus the domain $\Omega$ could fail to be contractible.
 Thus in the Riemannian case we must check that the choice of coordinates does not mangle the convexity of $B$, or equivalently the second fundamental form of $\partial B$.
+
+\todo{Move the $\Two$ computation to the prelims to use in the other paper}
 
 \begin{lemma}\label{convex balls}
 Every ball of radius $\lesssim |K|^{-1/2}$ which contains $O$ appears convex in the Poincar\'e ball model (for $K < 0$) or stereographic projection (for $K > 0$).
