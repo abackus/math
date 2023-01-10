@@ -567,7 +567,7 @@ Then
 \end{align*}
 \end{proof}
 
-\begin{proposition}
+\begin{proposition}\label{good tile select}
 Suppose that $X$ is the nonorthogonal support of a compactly supported doubling measure $\mu$ and $X$ is nonorthogonal.
 Given tiles $I \in V_n(X)$ and $J \in V_m(X)$, draw children $I_a, I_{a'}$ and $J_b, J_{b'}$ independently at random, and let $x_a, x_{a'}, \xi_b, \xi_{b'}$ be in their respective tiles. 
 The probability that 
@@ -625,14 +625,135 @@ The point is that the $C_\theta(I)$ norms are scale-invariant since they have a 
 We have the following gain at one scale.
 (Note that in light of (\ref{probability bound}) $1/\varepsilon_1$ is actually polynomial in $L$!)
 
-\begin{proposition}
+\begin{proposition}[Dolgopyat's inequality]
 Draw $b$ at random.
-If $L \gg 1$ and $\varepsilon_1 \ll \rho L^{-2/3}$ then 
+If $L \gg 1$ and $\varepsilon_1 := \rho/L$ then 
 $$\|F_J\|_{C_\theta(I)}^2 \leq (1 - \varepsilon_1) \Expect \|F_{J_b}\|_{C_\theta(I)}^2.$$
 \end{proposition}
 
-We interpret this as follows: $F_J$ is an oscillatory integral over $J$, so this estimate shows that $F_J$ is less than the sum of its parts: there must be cancellation between the children of $J$.
-When we induct on this estimate we will get that for tiles $J$ at scale $0$, $\|F_J\|_{C_\theta(I)}^2$ is exponentially small as $K \to \infty$.  
+Why is this result called \dfn{Dolgopyat's inequality}?
+The first time a result appeared like this was in a paper of Dolgopyat \cite{Dolgopyat1998OnDO}.
+The ingredients are some sort of fractal or symbolic-dynamical structure, which satisfies some sort of spacing condition like LNIC, and a phase function which is interpreted as ``oscillating much faster'' in some sense than the function it is multiplied with.
+In particular, if Dolgopyat's inequality fails, then it is because we have ``almost equality'' and so $F_J$ cannot be less than the sum of its parts.
+But we have oscillation so this is absurd.
+
+\begin{proof}
+First note that $F_J = \Expect e^{i\Psi_b} F_{J_b}$.
+By Cauchy-Schwarz and (\ref{induction on scale Ctheta}) we have 
+$$\|F_J\|_{C_\theta(I_a)}^2 \leq (\Expect \|F_{J_b}\|_{C_\theta(I)})^2 \leq \Expect \|F_{J_b}\|_{C_\theta(I)}^2 =: R.$$
+Taking expectations we get 
+$$\sigma^2 := \Expect \|F_{J_b}\|_{C_\theta(I)}^2 - \Expect \|F_J\|_{C_\theta(I_a)}^2 \geq \Expect \|F_{J_b}\|_{C_\theta(I)}^2 - (\Expect \|F_{J_b}\|_{C_\theta})^2 = \Var \|F_{J_b}\|_{C_\theta(I)}.$$
+We want to show that $\sigma^2 \geq \varepsilon_1 R$.
+So let's suppose that's not true, hence $\sigma^2 < \varepsilon_1 R$.
+Also let $F_{ab} = F_{J_b}(x_a)$, $\omega_{ab} = \Psi_b(x_a)$, $f_{ab} = e^{i\omega_{ab}} F_{ab}$.
+Then $\Expect |F_{ab}|^2 \leq R$.
+
+Let's draw $a,a',b'$ independently of each other and $b$.
+By our contradiction assumption, $\|F_{J_b}\|_{C_\theta(I)}$ is very nearly independent of $b$.
+We claim that the same holds for $f_{ab}$, which will lead to a contradiction when we condition on the event of Proposition \ref{good tile select} which implies that $f_{ab}, f_{a'b'}$ are uncorrelated.
+
+To make this precise, we first bound
+$$\theta \|\nabla (e^{i\Psi_b}F_{J_b})\|_{C^0} \diam I_a \leq \frac{\|F_{J_b}\|_{C_\theta(I)}}{2}.$$
+From the definition of $C_\theta(I_a)$ and the triangle inequality,
+$$\|F_J\|_{C_\theta(I_a)} \leq \max\left(\|F_J\|_{C^0(I_a)}, \frac{1}{2} \Expect \|F_{J_b}\|_{C_\theta(I)}\right).$$
+Also
+$$\|F_J\|_{C^0(I_a)}^2 \leq \|F_J\|_{C_\theta(I_a)}^2 \leq R$$
+and
+$$\frac{1}{2} \Expect \|F_{J_b}\|_{C_\theta(I)}^2 \leq \frac{R}{2} \leq R + \|F_J\|_{C^0(I_a)},$$
+so
+$$\|F_J\|_{C_\theta(I_a)}^2 \leq \frac{1}{2} \left(R + \|F_J\|_{C^0(I_a)}^2\right).$$
+After taking expectations, we get 
+$$\Expect \|F_J\|_{C^0(I_a)}^2 \geq 2 \Expect \|F_J\|_{C_\theta(I_a)}^2 - R = R - 2\sigma^2.$$
+Therefore, since $|F_J(x_a)| = \|F_J\|_{C^0(I_a)}$,
+$$|\Expect f_{ab}|^2 = \Expect |F_J(x_a)|^2 \geq R - 2\sigma^2.$$
+Since
+$$\Expect |F_{ab}| = \Expect |f_{ab}| \geq |\Expect f_{ab}|,$$
+a Taylor expansion of the square root now gives 
+\begin{equation}\Expect |F_{ab}| \geq (1 - 2\varepsilon_1) \sqrt R. \label{lower bound on EF}\end{equation}
+Moreover, by our contradiction assumption,
+\begin{align*}
+    \Expect |F_{ab}|^2 &= \Expect |f_{ab}|^2 = |\Expect f_{ab}|^2 + \Var f_{ab} \\
+    &\geq R - 2\sigma^2 + \Var f_{ab}.
+\end{align*}
+Rearranging, we obtain
+$$\Var f_{ab} \leq \Expect |F_{ab}|^2 - (1 - 2\varepsilon_1) R.$$
+Then we conclude 
+\begin{equation}
+    \Var f_{ab} \leq \Expect |F_{ab}|^2 - (1 - 2\varepsilon_1) R \leq 2\sigma^2. \label{lower bound on expected argmax}
+\end{equation}
+
+So at this point we have an unconditional bound on $\Var f_{ab}$.
+Let's get some conditional bounds on related quantities that contradict each other.
+We know by Cauchy-Schwarz that $\Expect \|F_{J_b}\|_{C_\theta(I)} \leq R^{1/2}$, so by Chebyshev
+$$\Pr(\|F_{J_b}\|_{C_\theta(I)} \leq 2\sqrt R) > 1 - \varepsilon_1.$$
+We use this and (\ref{lower bound on expected argmax}) to get
+\begin{align*}
+\Expect(|f_{ab} - f_{ab'}|^2|\max(\|F_{J_b}\|_{C_\theta(I)}, \|F_{J_{b'}}\|C_{\theta(I)}) \leq 2\sqrt R) 
+&\leq \sigma^2 + \Expect(|f_{ab} - f_{ab'}|^2) \\
+& \leq \sigma^2 + 2 \Var f_{ab} \leq 5\sigma^2
+\end{align*}
+hence 
+\begin{equation}\label{414}
+\Expect(|f_{ab} - f_{ab'}|^2|\max(\|F_{J_b}\|_{C_\theta(I)}, \|F_{J_{b'}}\|C_{\theta(I)}) \leq 2\sqrt R) \lesssim \sigma^2.
+\end{equation}
+Let $S$ be the intersection of the above event, with the event of Proposition \ref{good tile select}, so (since $\varepsilon_1 \ll \rho$) $\Pr(S) \gtrsim \rho$.
+By the mean value theorem and the definition of $C_\theta$,
+$$|F_{ab} - F_{a'b}| \leq \frac{2R^{1/2}}{\theta} L^{H(I)} |x_a - x_{a'}|.$$
+In particular if $S$ holds, 
+\begin{equation}\label{415}
+|F_{ab} - F_{a'b}| \lesssim R^{1/2} L^{-2/3}.
+\end{equation}
+
+Here's where the contradiction comes in.
+Let $\tau := (x_a - x_{a'}) \cdot (y_b - y_{b'}) = \omega_{ab} - \omega_{ab'} - \omega_{a'b} + \omega_{a'b'}$.
+If $S$ holds, then
+$$|e^{i\tau} - 1| \geq |\tau| \gtrsim L^{-1/3}$$
+but on the other hand, the $L^2$ triangle inequality gives
+$$\Expect(|(e^{i\tau} - 1)F_{ab}|^2|S) \leq 4\Expect(|F_{ab} - F_{a'b}|^2 + |F_{a'b'} - F_{ab'}|^2 + |f_{ab} - f_{ab'}|^2 + |f_{a'b'} - f_{a'b}|^2|S)$$
+where the first two terms are controlled by (\ref{415}) as $\lesssim R/L^{4/3}$ and the latter are controlled by (\ref{414}) and $\Pr(S) \gtrsim \rho$ as $\lesssim \sigma^2/\rho$.
+Summing up,
+\begin{equation}\label{418}
+\Expect(|F_{ab}|^2|S) \lesssim \frac{R}{L^{2/3}} + \frac{L^{2/3} \sigma^2}{\rho}.
+\end{equation}
+On the other hand 
+\begin{align*}
+\Pr(|F_{ab}|^2 \leq R/5) &\leq \Pr(|F_{ab}| \leq \Expect |F_{ab}| - R^{1/2}/2) \\
+&\lesssim R \Var |F_{ab}| = R \Var f_{ab} \leq 2R\sigma^2 \lesssim \varepsilon_1.
+\end{align*}
+So 
+$$\Pr(|F_{ab}|^2 \leq R/5|S) \leq \frac{\Pr(|F_{ab}|^2 \leq R/5)}{\Pr(S)} \lesssim \frac{\varepsilon_1}{\rho} = \frac{1}{L}.$$
+By Markov, 
+$$\Expect(|F_{ab}|^2|S) \geq \frac{R}{5} \Pr(|F_{ab}|^2 \geq R/5|S) = \frac{R}{5}\left(1 - \frac{1}{L}\right) \gtrsim R.$$
+Combining this with (\ref{418}) and our contradiction assumption, we get 
+$$R \lesssim \frac{R}{L^{2/3}} + \frac{L^{2/3} \sigma^2}{\rho} < \frac{R}{L^{2/3}} + \frac{R}{L^{1/3}}$$
+which is absurd if $L \gg 1$.
+\end{proof}
+
+\subsection{Induction}
+Let $E_J: V_{K - H(J)} \to \RR$ be defined by $E_J(I) := \|F_J\|_{C_\theta(I)}$.
+Here $L^{-K} = h$. We put a measure on $V_n$ by $\mu(\{I\}) = \mu(I)$.
+For the base case we take $H(J) = K$, and use Cauchy-Schwarz
+\begin{align*}
+|\nabla F_J(x)| &= \frac{1}{\mu(J)}\int_J i\partial_x \Psi_J(x, y) \exp(i(\Psi_J(x, y))) f(x, y) \\
+&\le \frac{\diam J}{h \mu(J)} \|f\|_{L^2(J)}.
+\end{align*}
+We also have 
+$$\|F_J\|_{C^0} \le \frac{\|f\|_{L^2(J)}}{\sqrt{\mu(J)}}.$$
+In particular, since $\diam J \sim h$,
+$$E_J(I) \lesssim \frac{\|f\|_{L^2(J)}}{\sqrt{\mu(J)}}.$$
+Taking $L^2$ norms of both sides in the variable $I$ using the measure on $V_{K - H(J)}$ and using $\mu(X) \lesssim 1$,
+$$\|E_J\|_{L^2}^2 \lesssim \frac{\|f\|_{L^2(J)}^2}{\mu(J)},$$
+and taking $L^2$ norms of both sides in Dolgopyat's inequality, we get for $H(J) < K$,
+$$\|E_J\|_{L^2}^2 \leq (1 - \varepsilon_1) \frac{\mu(J)}{\mu(J_b)} \Expect \|E_{J_b}\|_{L^2}^2.$$
+So by induction backwards on $H(J)$, we get for $H(J) = 0$,
+$$\|E_J\|_{L^2}^2 \lesssim \frac{(1 - \varepsilon_1)^K}{\mu(J)} \|f\|_{L^2(J)}^2.$$
+Also
+$$\|B_h(1_J f)\|_{L^2}^2 \lesssim \|F_J\|_{L^2}^2 \leq \|E_J\|_{L^2}^2$$
+so summing in the $O(1)$ many $J$ with $H(J) = 0$ which it takes to cover $X$,
+$$\|B_h f\|_{L^2} \lesssim (1 - \varepsilon_1)^{K/2} \|f\|_{L^2}.$$
+If we take $\varepsilon_0 := 0.5 \cdot \log_L (1 - \varepsilon_1)$ then $(1 - \varepsilon_1)^{K/2} = h^{\varepsilon_0}$, which completes the proof of the Dyatlov--Jin uncertainty principle.
+
+
 
 
 % \section{Sketch of the Dyatlov--Zahl uncertainty principle}
