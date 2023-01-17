@@ -1,0 +1,562 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Best curl functions}
+\author{Aidan Backus}
+\date{October 2022}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\Leaves}{\mathscr L}
+\newcommand{\Lagrange}{\mathcal L}
+\newcommand{\Hypspace}{\mathscr H}
+
+\newcommand{\Chain}{\underline C}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\diam}{\mathrm{diam}}
+\newcommand{\Ell}{\mathrm{Ell}}
+\newcommand{\inj}{\mathrm{inj}}
+\newcommand{\Lip}{\mathrm{Lip}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+% \newtheorem{claim}{Claim}[theorem]
+% \renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+\newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,giveninits=true]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{best_curl.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\begin{abstract}
+	Best curl functions
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tableofcontents
+
+\section{Introduction}
+In this paper we study the following related minimization problems for a $1$-form $A$ in a Riemannian $3$-fold $M$ subject to a homological or boundary constraint:
+\begin{enumerate}
+\item Minimize the \dfn{$\infty$-Maxwell energy} $\|\dif A\|_{L^\infty}$.
+\item Minimize the \dfn{curl modulus}
+$$L(A) := \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right|$$
+where $\Chain_2(M)$ denotes the space of oriented $2$-chains in $M$.
+\end{enumerate}
+Note: It might be more natural to replace the second with $\int_\sigma F$. Stokes' theorem guarantees that this works for plaquettes even if $F$ is bad.
+
+The first problem corresponds to the $\infty$-Laplace equation, while the second corresponds to best Lipschitz functions.
+For a discussion of our interest in this problem, see \S\ref{motivation}; for a more precise statement of our results without fluff, see \S\ref{results}.
+
+\subsection{History and motivation} \label{motivation}
+
+\subsection{Main theorems} \label{results}
+\begin{definition}
+A \dfn{$p$-magnetic potential} $A_p$ is a minimizer of the \dfn{$p$-Maxwell energy} $\|\dif A_p\|_{L^p}$, $p \geq 2$.
+\end{definition}
+
+Any $p$-magnetic potential satisfies 
+\begin{equation}\label{pMaxwell}
+	\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0.
+\end{equation}
+In the linear case $p = 2$, (\ref{pMaxwell}) reduces to the (Riemannian) Maxwell equation $\dif^* \dif A_p = 0$, so we call it the \dfn{$p$-Maxwell equation} in general.
+This also motivates the name ``$p$-magnetic potential.''
+
+\begin{definition}
+We call $A$ an \dfn{$\infty$-magnetic potential} if $A$ is the limit in $C^0$ and weakstar $\bigcap_{3 < q < \infty} \dot W^{1, q}$ of a net $(A_p)$ of $p$-magnetic potentials, $p \to \infty$.
+\end{definition}
+
+\begin{definition}
+$A$ has \dfn{best curl} if it is a minimizer of the curl modulus.
+\end{definition}
+
+\subsection{Acknowledgements}
+George, Karen, Tom Goodwillie, Kaya Ferendo, NSF-GRFP, ...
+
+\section{p-Maxwell}
+Need to show that $p$-magnetic potentials actually are weak solutions of $p$-Maxwell.
+Also that we can impose Coulomb gauge.
+
+Also natural to look at the regularity theory, which amounts to trying to prove $\dif^* \dif A_p \in L^2$.
+
+\section{Derivation of p-Maxwell and infinity Maxwell}
+Derivation of p-Maxwell from Fenchel duality and also from Noether's theorem.
+
+\section{The basic theory of infinity Maxwell}
+\begin{proposition}[$\infty$-Maxwell equation]
+Let $A$ be an $\infty$-magnetic potential with regularity $C^2$, and $F := \dif A$. Then 
+$$F^{ij} \partial_i |F|^2 = 0.$$
+\end{proposition}
+\begin{proof}
+It follows from the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001} and chain rule bashing that
+$$F^{ij} F^{ab} \nabla_i F_{ab} = 0$$
+since $p$-magnetic potentials are absolute minimizers.
+The claim now follows because $\nabla$ is a metric connection and $|F|^2$ is a scalar field.
+\end{proof}
+
+However, the regularity hypothesis and the fact that the $\infty$-Maxwell equation is highly degenerate means that this proposition seems pretty useless.
+It might be useful indirectly though.
+For example it seems to follow that $F$ is covariantly constant in the directions cotangent to $F$ though I don't know how to make this precise.
+
+\subsection{Weak solutions}
+Let $A$ be a classical solution of $\infty$-Maxwell. Since $\nabla$ is a metric connection, it is equivalent that 
+$$F^{ij} \partial_i |F|^2 = 0$$
+Since $A$ is classical, we can find a $C^1$ orthonormal frame in which the $(1, 1)$-tensor $(F^i_j)$ is
+$$F = \begin{bmatrix}& 1 \\ -1 \\ && 0\end{bmatrix}$$
+and in this frame the $\infty$-Maxwell system becomes 
+$$\partial_1 |F|^2 = \partial_2 |F|^2 = 0$$
+or in other words $\dif(|F|^2)$ is parallel to $\partial_3$ which is parallel to $(\star F)^\flat$.
+It follows that
+$$\dif(|\dif A|^2) \wedge \dif A = 0.$$
+Multiplying by a test function and integrating by parts, this is equivalent to 
+$$\int_M |\dif A|^2 \dif A \wedge \dif \psi = 0$$
+for every test function $\psi$ which is the condition of weak solution for $\infty$-Maxwell.
+It makes sense for any $A \in W^{1, 3, 1}$.
+
+\begin{conjecture}
+Every $\infty$-magnetic form (in the sense of $p$-approximation) is $\infty$-magnetic in the $W^{1, 3, 1}$ weak sense.
+\end{conjecture}
+
+\subsection{Not every best curl form is infinity magnetic}
+\begin{example}
+For the Neumann problem 
+$$\begin{cases}
+\dif(|\dif A|^2) \wedge \dif A = 0 \\
+\iota^*(\dif A) = \iota^*(\dif x \wedge \dif y)
+\end{cases}$$
+on $\Ball^3$, the solution is $x \dif y$. For the Neumann problem with zero data the solution is $0$.
+However, if we take two disjoint copies of $\Ball^3$, we can take $\tilde A$ to be any compactly supported form on $\Ball^3$ with $\|\dif \tilde A\|_{L^\infty} \leq 1$, and then if we put $\tilde A$ on the copy with zero Neumann data, and $x \dif y$ on the copy with nontrivial Neumann data, then clearly the disjoint union form $A$ has best curl, but also we may choose $\tilde A$ so that it is not $\infty$-magnetic.
+
+I think by taking a connected sum of these two balls (the interior of a dumbbell) with a long enough connector, you could replicate this with a connected $3$-manifold.
+You'd probably want to consider the Dirichlet problem with data $\iota^*(x \dif y)$ and $0$ though, so that you don't have to solve the compatibility condition of $\dif \iota* F = 0$ to glue together the two Neumann data.
+\end{example}
+
+
+\subsection{Scaling considerations}
+The two minimization problems in consideration are invariant under two scalings: 
+\begin{enumerate}
+\item Rescale the entire manifold. Since $\int_\sigma F$ is a topological invariant this works, and in particular it changes $\|F\|_{L^\infty}$ but not the cohomology class of $F$.
+\item $A \mapsto \lambda A$ (since $\infty$-Maxwell is homogeneous cubic). This changes both $\|F\|_{L^\infty}$ and the cohomology class of $F$.
+\end{enumerate}
+In particular, by applying both scalings, we may impose $\|F\|_{L^\infty} = 1$ and $F \in H^2(M, \ZZ)$ simultaneously.
+So we may view $F$ as a curvature on the line bundle $L$ whose Chern class is $c_1(L) := F$, and this is why we may use the gauge theoretic formalism of $F = \dif A$.
+
+\subsection{Plaquettes}
+\begin{definition}
+The \dfn{local curl modulus} of a $1$-form $A$ at $x \in M$ is 
+$$L(A, x) := \limsup_{\varepsilon \to 0} \sup_{\sigma \in \Chain_2(B_\varepsilon(x))} \frac{1}{|\sigma|} \int_{\partial \sigma} A.$$
+\end{definition}
+
+Note 
+$$L(A, x) = \limsup_{\varepsilon \to 0} L_{B_\varepsilon(x)}(A)$$
+but $L_{B_\varepsilon(x)}(A)$ is increasing in $\varepsilon$ (since it's a sup over a set which grows in $\varepsilon$).
+So the limsup is actually a lim and an inf:
+$$L(A, x) = \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(A) = \inf_{\varepsilon > 0} L_{B_\varepsilon(x)}(A)$$
+and in particular $L(A, x) \leq L(A)$.
+
+It's convenient to test the local curl modulus against a more restrictive class of $2$-chains.
+Motivated by lattice gauge theory \cite{Gupta98}, we define:
+
+\begin{definition}
+Fix an orthonormal frame $(\partial_i)$ on the tangent bundle $TM$.
+A \dfn{plaquette} $R_{ij}^\varepsilon(x)$ is the exponential pushforward of a square $[0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j]$ in the tangent space $T_x M$ to $M$.
+\end{definition}
+
+\begin{lemma}
+For $(x, v) \in TM$ let $x + v := \exp_x(v)$, then
+\begin{align*}
+	L(A, x) 
+	&= \sqrt{\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{\varepsilon^2} \left|\int_{\partial R_{ij}^\varepsilon(x)} A\right|^2}\\
+	&= \sqrt{\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{|A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x)|^2}{\varepsilon^2}}.
+\end{align*}
+\end{lemma}
+\begin{proof}[Idea]
+The plaquette has volume form $1 + O(\varepsilon^2)$ in normal coordinates so we might as well assume that it has surface area $\varepsilon^2$.
+Continuity of $A$, and numerical approximation of Riemann integrals on continuous functions, gives the rest of the proof, where we mimic the proof that lattice gauge theories approximate the QCD action.
+\end{proof}
+
+At the time of writing the statement (but not the proof) of this lemma is the only place where we use $d = 3$.
+In general you could take a signed sum over the vertices of a $d-1$-dimensional plaquette.
+
+Following Crandall's paper we want to prove:
+
+\begin{proposition}
+\begin{enumerate}
+\item $L(A, \cdot)$ is upper semicontinuous.
+\item If $\dif A(x)$ exists then $L(A, x) \geq |\dif A(x)|$.
+\item If $L(A, x) = 0$, then $\dif A(x)$ exists and $\dif A(x) = 0$.
+\item If $\sigma \in \Chain_2$ then 
+$$\frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right| \leq \sup_{x \in \sigma} L(A, x).$$
+In particular, $L(A) \leq \sup_{x \in M} L(A, x)$.
+\item $\dif A \in L^\infty$ as distributions iff $\sup_{x \in A} L(A, x) < \infty$, in which case 
+$$\sup_{x \in M} L(A, x) = \|\dif A\|_{L^\infty}, \qquad L(A, x) = \lim_{\varepsilon \to 0} \|\dif A\|_{L^\infty(B_\varepsilon(x))}.$$
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+a is like in Crandall. Looking at plaquettes,
+\begin{align*}
+\dif A_{ij}(x) 
+&= \lim_{\varepsilon \to 0} \frac{A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x)}{\varepsilon} \\
+&= \lim_{\varepsilon \to 0} \varepsilon^{-2} \int_{\partial R_{ij}^\varepsilon} A
+\end{align*}
+which is clearly bounded by $L(A, x)$ proving b and c.
+For d, since $A$ is continuous, we may assume up to an $o(\varepsilon)$ error that $\sigma$ is a sum of plaquettes 
+$$\sigma = \sum_{n = 1}^{N_\varepsilon} R_{i_n j_n}^\varepsilon(x_n)$$
+and then 
+\begin{align*}
+\frac{1}{|\sigma|} \int_\sigma A
+&= \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} \frac{1}{|R_{i_n j_n}^\varepsilon(x_n)|} \int_{\partial R_{i_n j_n}^\varepsilon(x_n)} A \\
+&\leq \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} L(A, x_n) \\
+&\leq \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} \sup_{x \in \sigma} L(A|_{B_\varepsilon(x)}) \\
+&\leq \sup_{x \in \sigma} L(A, x).
+\end{align*}
+Finally for e, let $\varphi$ be a $C^\infty_\cpt$ approximation to the $2$-current $[R]/|R|$ for a plaquette $R = R_{ij}^\varepsilon(x)$. Then 
+$$\int_M \dif A \wedge \varphi = - \int_M A \wedge \dif \varphi = o(1) - \frac{1}{|R|} \int_{\partial R} A.$$
+Also $\|\varphi\|_{L^1} = 1 + o(1)$ so by duality 
+$$\|\dif A\|_{L^\infty} \geq o(1) + \int_M \dif A \wedge \varphi$$
+and we can write any $1$-form in the unit sphere of $L^1$ as a (possibly infinite) convex combination in $L^1$ of approximations to plaquette currents so this estimate is sharp.
+\end{proof}
+
+\begin{corollary}
+\begin{enumerate}
+\item $\sup_{x \in M} L(A, x) = L(A)$.
+\item If $A$ is an $\infty$-magnetic potential, then $A$ has best curl.
+\end{enumerate}
+\end{corollary}
+
+I doubt that the converse should be true, because even though the global curl modulus has Morse index zero, it is a nonlocal energy, while the condition for being an $\infty$-magnetic potential is local (at least if $A \in C^2$), namely the $\infty$-Maxwell equation.
+
+\subsection{The Neumann problem}
+Recall from homological finite element methods:
+
+\begin{definition}
+Let $1 < p < \infty$.
+The \dfn{de Rham-Sobolev complex} consists of Banach spaces $W^{1, p, \ell}$, $\ell \in \{0, \dots, 3\}$, of $\ell$-forms characterized by the norm 
+$$\|\alpha\|_{W^{1, p, \ell}}^p := \|\alpha\|_{L^p}^p + \|\dif \alpha\|_{L^p}^p$$
+and boundary maps 
+$$\dif: W^{1, p, \ell} \to W^{1, p, \ell + 1}.$$
+We also set $W^{1, p, -1} = W^{1, p, 4} = 0$.
+\end{definition}
+
+\begin{proposition}[trace theorem]
+We have surjective trace maps
+\begin{align*}
+\tr_0: W^{1, p, 0}(M) &\to W^{1 - 1/p, p}(\partial M) \\
+\tr_1: W^{1, p, 1}(M) &\to W^{-1/p, p}(\partial M, \Omega^1) \\
+\tr_2: W^{1, p, 2}(M) &\to W^{-1/p, p}(\partial M, \Omega^2)
+\end{align*}
+characterized by the fact that on continuous forms they correspond to pullback by the natural map 
+$$\iota: \partial M \to M$$
+and where $W^{s, p}(N, \mathcal F)$ is defined for a $C^\infty$-locally free sheaf $\mathcal F$ on a manifold $N$, and $s \in \RR$, $1 < p < \infty$, using Fourier integral calculus in the usual way.
+In particular, $\tr_\ell \cdot \dif = \dif \circ \tr_{\ell - 1}$.
+\end{proposition}
+\begin{proof}[Idea]
+In homological FEM, the normal trace of $H(div)(M)$ fields is $W^{-1/2, 2}(\partial M, \Omega^1)$.
+If $F \in H(div)(M)$ then $F \in W^{1, 2, 2}(M)$ and $F \cdot \normal = \iota^* F$ where $\iota: \partial M \to M$.
+Similarly, the tangential trace of $H(curl)(M)$ fields is $W^{-1/2, 2}(\partial M, \Omega^2)$, and $A \times \normal = \iota^* A$.
+I guess surjectivity should be in the FEM literature somewhere.
+\end{proof}
+
+\begin{definition}
+The \dfn{pure gauge part} of a form $A \in L^p(M, \Omega^1)$ is the projection of $A$ onto closed forms.
+\end{definition}
+
+This is well-defined for $M$ closed by ``Lp theory of differential forms'' (and probably in general if we have some boundary data).
+
+\begin{proposition}[Sobolev embedding theorem]
+For $3 < p < \infty$ and $0 \leq \ell \leq 3$, any $\alpha \in W^{1, p, \ell}$ can be written as the sum of an element of $C^{1 - 3/p}(M, \Omega^\ell)$ plus a pure gauge part.
+\end{proposition}
+\begin{proof}[Idea]
+By elliptic regularity and Sobolev 
+$$\|\alpha\|_{C^{1 - 3/p}(M, \Omega^\ell)} \lesssim \|\alpha\|_{W^{1, p}(M, \Omega^\ell)} \lesssim \|\alpha\|_{W^{1, p, \ell}(M)}$$
+if we assume that the pure gauge part is $0$.
+\end{proof}
+
+\begin{proposition}[solving the Neumann problem]
+Let $J \in L^\infty(\partial M, \Omega^2)$ and suppose that $\partial M$ is a closed surface.
+Then there exists an $\infty$-magnetic potential $A$ such that $\dif \iota^* A = J$ as distributions on $\partial M$, and
+$$\|A\|_{W^{1, \infty, 1}}(M) \lesssim \|J\|_{L^\infty(\partial M)}.$$
+\end{proposition}
+\begin{proof}[Proof sketch]
+Let $3 < p < \infty$. The second variation of the $p$-Maxwell energy at a form $A_p$ in a direction $B$ is bounded from below by
+$$(p - 2) \langle \dif A_p, \dif B\rangle^2 + |\dif A_p|^2 \cdot |\dif B|^2 \geq 0$$
+so the Morse index of the $p$-Maxwell energy at $A_p$ is $0$.
+Since $\partial M$ is compact, the natural map $L^\infty \to L^p$ is bounded, and then surjectivity of the trace map implies that if $\tr_2(\dif A_p) = J$ then
+$$\|A_p\|_{W^{1, p, 1}} \lesssim \|\dif A_p\|_{L^p} + \|J\|_{L^\infty} + \|G\|_{L^p}$$
+where $G$ is the pure gauge part of $A_p$, and these bounds are independent of $p$.
+\S8.2.1 of Evans, modified to account for a pure gauge part, implies that the direct method furnishes a $p$-magnetic potential $A_p$ with
+$$\|A_p\|_{W^{1, p, 1}} \lesssim \|J\|_{L^\infty} + \|G\|_{L^p}.$$
+Sobolev implies that $A_p$ is eventually bounded modulo gauge in $C^\theta$ for any $0 \leq \theta < 1$ and in $W^{1, q, 1}$ for any $1 < q < \infty$.
+In particular, $A_p \to A$ in $C^\theta$ and weakstar $W^{1, q, 1}$ along a subsequence.
+So $A$ is $\infty$-magnetic and satisfies the right estimates once we solve away the gauge and take $q \to \infty$.
+Also $\iota^* A$ has regularity $C^\theta \subseteq L^2$ so $\dif (\iota^* A)$ makes sense as an element of $W^{-1, 2}$.
+Since clearly $A_p \to A$ in $L^2$ and $L^\infty \subseteq W^{-1, 2}$ we deduce from $\dif(\iota^* A_p) = \tr_2(\dif A_p) = J$ the boundary claim.
+\end{proof}
+
+\subsection{Elliptic regularity}
+\begin{proposition}[elliptic regularity]
+Let $A$ be an $\infty$-magnetic potential.
+Then there exists a gauge transformation of $A$ whose components are Lipschitz.
+\end{proposition}
+\begin{proof}
+For $3 < p < \infty$, let $\tilde A_p \to A$ solve the Dirichlet problem
+$$\begin{cases}
+	\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0 \\
+	\dif^* A_p = 0 \\
+	\iota^* A_p = \iota^* \tilde A_p
+\end{cases}.$$
+Proceeding as above we get
+$$\|A_p\|_{W^{1, p}(M, \Omega^1)} \lesssim \|A_p\|_{W^{1, p, 1}} \lesssim \|\iota^* \tilde A_p\|_{L^p(\partial M)} \lesssim \|\tilde A_p\|_{W^{1, p, 1}} \lesssim \|A\|_{C^0}.$$
+Using the second variation of the $p$-Maxwell energy and the $L^p$ Hodge theorem, we get a uniqueness theorem: $A_p = \tilde A_p$ modulo pure gauge.
+The closed $1$-forms are a closed subset of $W^{1, p}$ I think. So $A_p \to A$ plus gauge.
+But also $\|A\|_{W^{1, \infty}(M, \Omega)} \lesssim \|A\|_{C^0}$.
+\end{proof}
+
+Since we can recover $A_p$ from $A$ (can we?) it should follow that $A$ is as unique as $A_p$ is.
+
+\section{The maximum curl locus}
+\begin{lemma}
+Let $A$ be $\infty$-magnetic, let $N$ be a hypersurface, and suppose that $\dif A$ is co-bitangent to $N$, that is, $\iota_{\normal_N} \dif A = 0$.
+Then $N$ is minimal.
+\end{lemma}
+\begin{proof}
+Since $A$ is $\infty$-magnetic, if $V$ is tangent to $N$, then (since $V$ is normal to $\normal_N$)
+$$V(|\dif A|^2) = 0.$$
+You can make this precise using the weak formulation if you really want to.
+In particular, $|\dif A|$ is constant along $N$, and without loss of generality it is $1$.
+It follows that $\dif A$ is the area form on $N$, so $\star \dif A = (-1)^s \normal_N^\flat$.
+Then 
+\begin{align*}
+H_N &= \tr(\nabla \normal_N) = (-1)^{s_1} \dif^* \star \dif A = (-1)^{s_2} \dif^2 A = 0. \qedhere
+\end{align*}
+\end{proof}
+
+Now let $S$ be the maximum curl locus of $A$.
+By upper semicontinuity, $S$ is a nonempty closed set.
+If $V, W$ satisfy $V|\dif A| = W|\dif A| = 0$, then $[V, W]|\dif A| = 0$.
+If this can be made sense of in the `weak' framework it follows from Frobenius that $S$ is minimally immersed.
+
+
+\subsection{Calibration theory}
+Here's another way to prove something similar to the above theorem:
+
+\begin{lemma}
+Let $F \in L^\infty(M, \Omega^2)$ satisfy $\|F\|_{L^\infty} = 1$ and $\dif F = 0$.
+Then $F$ is a calibration.
+\end{lemma}
+\begin{proof}
+Let $V$ be a $2$-dimensional subbundle of $TM$; we must show that $F|_V$ is a multiple of the volume form of $V$.
+Actually $F|_V$ is the projection of $F$ to the rank-$1$, $C^\infty$-locally free sheaf $H^0(M, V' \wedge V')$, and since it's rank-$1$ we win.
+\end{proof}
+
+\begin{proposition}
+Suppose that $\|F\|_{L^\infty} = 1$, and $F = \dif A$ where $A$ has best curl.
+Then there is a minimal lamination whose leaves are calibrated submanifolds for $F$.
+\end{proposition}
+\begin{proof}
+Modify \cite[Theorem 5.1]{bangert_cui_2017} to deal with the analytic niceties.
+Note that \cite{bangert_cui_2017} assumes that de Giorgi's lemma extends from euclidean space to manifolds, and doesn't seem to bound the curvature of the leaves...
+\end{proof}
+
+\section{The dual one-harmonic function}
+For simplicity let's assume $H^2(M, \ZZ) = 0$.
+
+Let $A$ be an $\infty$-magnetic potential and let $A_p \to A$ witness that $A$ is $\infty$-magnetic.
+For simplicity we assume that $\|\dif A\|_{L^\infty} = 1$, that is $F := \dif A$ is a calibration.
+Let $3 < p < \infty$, $1/p + 1/q = 1$ (so $1 < q < 3/2$) and
+$$\int_M \star |k_p \dif A_p|^p = k_p$$
+just like in \cite[\S3.2]{daskalopoulos2020transverse}.
+Let $F_p := k_p \dif A_p$ and $U_q := |F_p|^{p - 2} \star F_p$ which is a $1$-form.
+Then 
+$$\dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.$$
+Also 
+$$\lim_{p \to \infty} k_p^{\frac{1}{p} - 1} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
+It follows that $k_p \to 1$.
+Finally, we have $\|U_q\|_{L^1} \to 1$, which implies that $U_q \to U$ in the weak topology of measures for some closed $2$-current $U$.
+Then $U = \dif u$ for some $u \in BV(M)$.
+By the Fenchel relations, $\dif^*(|U_q|^{q - 2} U_q) = 0$, and $\dif U_q = 0$.
+So by the Maz\'on-Rosser-Segura de Le\'on theorem, $u$ is $1$-harmonic.
+
+Question: Does the Fenchel relation imply that $u$ is nonzero?
+What about nonconstant?
+\cite{bangert_cui_2017} implies that there exists $U$ which is calibrated by $F$, and then $U = \dif \tilde u$, but it doesn't seem clear that this $\tilde u$ should be the same as $U$, maybe the uniqueness part of the M-R-SdL theorem explains this.
+
+\begin{lemma}
+For any $\theta \in (0, 1)$,
+	$$\lim_{p \to \infty} \int_{\{|F| \leq \theta\}} \star |F_p|^p = 0.$$
+\end{lemma}
+\begin{proof}
+Integrating the $p$-Maxwell equation 
+$$\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0$$
+by parts 
+\begin{align*}
+	0 &= \int_M \dif \star (|\dif A_p|^{p - 2} \dif A_p) \wedge (A_p - A) \\
+	&= \int_{\partial M} \star(|\dif A_p|^{p - 2} \dif A_p) \wedge \iota^* (A_p - A) - \int_M \star (|\dif A_p|^{p - 2} \dif A_p) \wedge \dif (A_p - A).
+\end{align*}
+Here $\iota^* (A_p - A)$ is well-defined because $A_p - A \in C^0$.
+I guess that $|\dif A_p|^{p - 2} \dif A_p$ should have a trace as well, otherwise we need some kind of smooth approximation.
+Let $J$ be the Neumann data, then 
+$$\dif \iota^*(A_p - A) = J - J = 0$$
+so $\iota^*(A_p - A)$ is pure gauge. In particular, since we may modify the $p$-approximations $A_p$ up to gauge without affecting the result, we may assume that $\iota^*(A_p - A) = 0$.
+Therefore 
+$$\int_M |\dif A_p|^{p - 2} \dif A_p \wedge \star \dif (A_p - A) = 0.$$
+
+We now proceed as in \cite[Lemma 6.3]{daskalopoulos2020transverse}.
+Let $f(p) := \langle F_p, F_p - F\rangle$ and $Y_p := \{f(p) \geq 0\}$.
+Rescaling by $k_p^p$, 
+$$\int_M |F_p|^{p - 2} F_p \wedge \star (F_p - k_p F) = 0$$
+so 
+\begin{align*}
+	\lim_{p \to \infty} \int_M |F_p|^{p - 2} F_p \wedge \star (F_p - k_p F) - \star f(p) 
+	&= \lim_{p \to \infty} \int_M |F_p|^{p - 2} F_p \wedge \star (F - k_p F) \\
+	&\leq \lim_{p \to \infty} (1 - k_p) \int_M |F_p|^{p - 1} \star |F| = 0.
+\end{align*}
+Therefore 
+$$\lim_{p \to \infty} \int_M |F_p|^{p - 2} \star f(p) = 0.$$
+On the other hand, on $M \setminus Y_p$ we have by the elementary \cite[Lemma 6.2]{daskalopoulos2020transverse} that 
+$$
+	-2|F_p|^{p - 2} f(p) \leq |F_p|^{p - 2} (|F|^2 - |F_p|^2) < \frac{2}{p - 2}
+$$
+which implies 
+$$\lim_{p \to \infty} \int_{M \setminus Y_p} |F_p|^{p - 2} \star f(p) = 0.$$
+Therefore 
+$$\lim_{p \to \infty} \int_{Y_p} |F_p|^{p - 2} \star f(p) = 0.$$
+
+To finish the proof we look to \cite[Proposition 6.5]{daskalopoulos2020transverse}...
+\end{proof}
+
+\begin{corollary}
+$\supp \dif v$ is contained in the calibrated lamination associated to any best curl form with the same data as $A$.
+\end{corollary}
+\begin{proof}
+By as in \cite[Theorem 6.1]{daskalopoulos2020transverse}, $\supp \dif v \subseteq \{|F| = \|F\|_{L^\infty}\}$.
+Actually, as in \cite[Corollary 6.8]{daskalopoulos2020transverse} the same argument works as long as $F = \dif \tilde A$ where $\tilde A$ is a best curl competitor of $A$.
+\end{proof}
+
+\subsection{Thurston's K-L theorem}
+\begin{conjecture}
+For $\sigma$ a closed $2$-chain, let
+$$K(\sigma) := \frac{1}{|\sigma|} \int_\sigma \dif A$$
+and let $K := \sup_\sigma K(\sigma)$, where $A$ has best curl (so is only locally a $1$-form).
+Let $L$ be the best curl constant. Then $K = L$.
+\end{conjecture}
+
+This holds if the calibrated lamination has a closed leaf.
+If it doesn't, how can we deform it to have a closed leaf?
+
+
+
+\printbibliography
+
+\end{document}

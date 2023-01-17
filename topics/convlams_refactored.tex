@@ -16,9 +16,9 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Compactness for minimal laminations, and 1-harmonic functions}
+\title{Compactness and regularity for minimal laminations, and 1-harmonic functions}
 \author{Aidan Backus}
-\date{October 2022}
+\date{\today}
 
 \newcommand{\NN}{\mathbf{N}}
 \newcommand{\ZZ}{\mathbf{Z}}
@@ -39,13 +39,16 @@
 
 \newcommand*\dif{\mathop{}\!\mathrm{d}}
 
+\DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\MeasLam}{MeasLam}
 \DeclareMathOperator{\MinLam}{MinLam}
 \DeclareMathOperator{\Lam}{Lam}
 \DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\tr}{tr}
 
 \newcommand{\Leaves}{\mathscr L}
+\newcommand{\Lagrange}{\mathcal L}
 \newcommand{\Hypspace}{\mathscr H}
 
 \newcommand{\Two}{\mathrm{I\!I}}
@@ -59,6 +62,7 @@
 \newcommand{\vol}{\mathrm{vol}}
 
 \newcommand{\diam}{\mathrm{diam}}
+\newcommand{\Ell}{\mathrm{Ell}}
 \newcommand{\inj}{\mathrm{inj}}
 \newcommand{\Lip}{\mathrm{Lip}}
 \newcommand{\Riem}{\mathrm{Riem}}
@@ -142,7 +146,7 @@
 
 \begin{document}
 \begin{abstract}
-We collect several results governing the various modes of convergence for sequences of minimal laminations.
+We collect several results concerning regularity of minimal laminations, and governing the various modes of convergence for sequences of minimal laminations.
 We then apply this theory to prove that a function is 1-harmonic iff it is the Ruelle-Sullivan current of a minimal lamination; this resolves an open problem of Daskalopoulos--Uhlenbeck.
 \end{abstract}
 
@@ -164,37 +168,86 @@ This generalizes a theorem of Daskalopoulos--Uhlenbeck \cite[Theorem 6.1]{daskal
 
 %%%%%%%%%%%%%%%%%
 \subsection{Minimal laminations}\label{Lams sections}
-Let $I \subset \RR$ be an interval, $J \subset \RR^{d - 1}$ a box, and $M$ a Riemannian manifold of dimension $d \geq 2$.
-A (codimension-$1$) \dfn{laminar flow box} is a $C^0$ coordinate chart $F: I \times J \to M$ and a compact set $K \subseteq I$ such that each \dfn{leaf} $F(\{k\} \times J)$ is a $C^2$ complete hypersurface of the image of $F$.
+Throughout this paper, we fix an interval $I \subset \RR$, a box $J \subset \RR^{d - 1}$, and a Riemannian manifold $M = (M, g)$ of dimension $d \geq 2$.
 
-Now let $(F_\alpha, K_\alpha)$ and $(F_\beta, K_\beta)$ be laminar flow boxes.
+\begin{definition}
+A (codimension-$1$) \dfn{laminar flow box} is a $C^0$ coordinate chart $F: I \times J \to M$ and a compact set $K \subseteq I$, such that for each $k \in K$, $F|_{\{k\} \times J}$ is a $C^1$ embedding, and the \dfn{leaf} $F(\{k\} \times J)$ is a $C^1$ complete hypersurface in $F(I \times J)$.
+\end{definition}
+
+\begin{definition}
+Let $(F_\alpha, K_\alpha)$ and $(F_\beta, K_\beta)$ be laminar flow boxes.
 We say that they belong to the same \dfn{laminar atlas} if the transition map $\psi_{\alpha \beta}$ between $F_\alpha$ and $F_\beta$ maps each leaf $\{k\} \times J$, $k \in K_\alpha$, to a leaf $\{\psi_{\alpha \beta}(k)\} \times J$, so that $\psi_{\alpha \beta}$ is a homeomorphism $K_\alpha \to K_\beta$.
+\end{definition}
 
 \begin{definition}
 A \dfn{lamination} $\lambda$ consists of a nonempty closed set $S \subseteq M$, called its \dfn{support}, and a maximal laminar atlas $\{(F_\alpha, K_\alpha): \alpha \in A\}$ such that in the image $U_\alpha$ of each flow box $F_\alpha$,
 $$S \cap U_\alpha = F_\alpha(K_\alpha \times J).$$
 If $\lambda$ is a lamination in the image of a flow box $F$, and $N := F(\{k\} \times J)$ is a leaf of $\lambda$, we call $k$ the \dfn{label} of $N$.
+A \dfn{foliation} is a lamination with support $S = M$.
 \end{definition}
 
 Summarizing the above definitions, a lamination is a nonempty closed set $S$ with a $C^0$ local product structure which realizes it as $K \times J$ for some compact set $K \subset \RR$.
 
-We assume that the leaves of a lamination $\lambda$ are $C^2$ in order to ensure that the second fundamental form and mean curvature of each leaf is well-defined.
-Such laminations are sometimes called $C^2$ \dfn{along leaves} \cite{Morgan88}.
-A related notion, which we shall find useful, is that a lamination $\lambda$ is \dfn{tangentially} $C^r$, in the sense that the flow boxes $F_\alpha$ restrict to $C^r$ embeddings along each leaf $\{k\} \times J$, $k \in K_\alpha$.
-In any case, we will make more precise assertions about regularity in \S\ref{Regularity}.
+\begin{definition}
+We call a lamination $C^r$ (resp. \dfn{Lipschitz}) if its flow boxes are $C^r$ (resp. Lipschitz) coordinate charts, and say that it is \dfn{tangentially $C^r$} if for each flow box $(F, K)$, $F|_{\{k\} \times J}$ is a $C^r$ embedding for $k \in K$.\footnote{Such laminations are also known as $C^r$ \dfn{along leaves} \cite{Morgan88}.}
+\end{definition}
 
-In this paper we shall focus on laminations with minimal leaves.\footnote{Caveat lector: The word ``minimal'' is overloaded. In \cite{casson_bleiler_1988,daskalopoulos2020transverse}, a \dfn{minimal lamination} is a lamination $\lambda$ in which every leaf is dense in $\supp \lambda$.
+In particular, we assume that laminations are $C^0$ and tangentially $C^1$; the latter assertion implies that the flow box can push forward the normal vector to each leaf, and in particular that the mean curvature to each leaf is well-defined as a signed Radon measure.
+
+In this paper we shall focus on laminations with minimal leaves.\footnote{The word ``minimal'' is overloaded. In \cite{casson_bleiler_1988,daskalopoulos2020transverse}, a \dfn{minimal lamination} is a lamination $\lambda$ in which every leaf is dense in $\supp \lambda$.
 We adopt the terminology of \cite{Ohshika90}, which unfortunately clashes with the rest of the literature.}
 
 \begin{definition}
 A lamination $\lambda$ is \dfn{minimal} if its leaves $F_\alpha(\{k\} \times J)$ have zero mean curvature, and is \dfn{geodesic} if, in addition, $d = 2$.
 \end{definition}
 
+%%%%%%%%%%%%%%%%%%
+\subsection{Regularity of minimal laminations}
+The definitions of \S\ref{Lams sections} are tedious to work with, both because one has to prove the existence of flow boxes which flatten sets which may be extremely rough, and because one has no quantitative control on said flow boxes.
+However, if we have curvature bounds on the leaves and on the underlying manifold $M$, our first main theorem drastically changes the story: it shows that the lamination $\lambda$ can be reconstructed from its set of leaves, in such a way that the flow boxes for $\lambda$ are under control in the Lipschitz and tangentially $C^\infty$ sense.
+Here, a sequence converges \dfn{tangentially in $C^\infty$} if it converges in $C^0$ and all higher derivatives tangent to any leaves of $\lambda$ converge in $C^0$ as well.
+
+\begin{mainthm}\label{regularity theorem}
+Let $K := \|\Riem_M\|_{C^0}$ and let $i$ be the injectivity radius of $M$, and suppose that $K < \infty$, $i > 0$.
+Let $\mathcal S$ be a set of disjoint minimal hypersurfaces in $M$, such that for every $N \in \mathcal S$,
+\begin{equation}\label{curvature bound in regularity}
+	\|\Two_N\|_{C^0} \leq A,
+\end{equation}
+and that $\bigcup_{N \in \mathcal S} N$ is a closed subset of $M$. Then:
+\begin{enumerate}
+\item There exists a Lipschitz minimal lamination $\lambda$ whose leaves are exactly the elements of $\mathcal S$.
+\item There exists a Lipschitz line bundle on $M$ which is normal to every leaf of $\lambda$.
+\item There exist constants $L = L(A, K, i) > 0$ and $r = r(A, K, i) > 0$, and a Lipschitz laminar atlas $(F_\alpha)$ for $\lambda$, such that for every $\alpha$,
+\begin{equation}\label{conorm of flow box}
+	\max(\Lip(F_\alpha), \Lip(F_\alpha^{-1})) \leq L,
+\end{equation}
+and the image of $F_\alpha$ contains a ball of radius $r$.
+\item $F_\alpha$ and $F_\alpha^{-1}$ are tangentially $C^\infty$, with seminorms only depending on $A, K, i$.
+\end{enumerate}
+\end{mainthm}
+
+Several similar results to Theorem \ref{regularity theorem} have appeared in the literature already, but Theorem \ref{regularity theorem} significantly strengthens them.
+To our knowledge, the first related result is due to Solomon \cite[Theorem 1.1]{Solomon86}, which we improve on in several ways:
+\begin{enumerate}
+\item \label{foliation to lamination} Solomon's proof is only valid for minimal foliations in $\RR^d$.
+\item We obtain estimates which only depend on the curvatures of the leaves and $M$, and on the injectivity radius $i$; they do not depend on the regularity of a given $C^0$ laminar atlas.
+\item In fact, we do not even assume the existence of a $C^0$ laminar atlas.
+\end{enumerate}
+As Solomon notes, it is easy to extend his proof to minimal foliations of a Riemannian manifold $M$; the key point of (\ref{foliation to lamination}) is that we would like Theorem \ref{regularity theorem} to be true for minimal \emph{laminations}.
+Colding--Minicozzi \cite[Appendix B]{ColdingMinicozziIV} sketched a proof for minimal laminations of a Riemannian manifold which have finitely many leaves by filling in the gaps between the leaves in Solomon's constructions by linear interpolation.
+However, Colding--Minicozzi again assume the existence of a $C^0$ atlas when they implicitly appeal to the argument of Solomon to obtain the existence of normal coordinates in which all leaves are graphical (a key step in the construction); this of course implies that their estimates are dependent on the $C^0$ structure of $\lambda$.
+
+Using completely different techniques, Daskalopoulos--Uhlenbeck \cite[Proposition 7.3]{daskalopoulos2020transverse} obtained a version of Theorem \ref{regularity theorem} without any $C^0$ dependence, under the assumption that $M$ is a closed hyperbolic surface.
+The key point of their argument is that the exponential map sends lines to geodesics, so it provides a much shorter proof of Theorem \ref{regularity theorem}, at the price of only working in dimension $2$.
+
+The main point of our proof of Theorem \ref{regularity theorem} is that the elements of $\mathcal S$ must be ``close to parallel on small scales'', where the scale is governed by $A, K$.
+Otherwise, since the scale is small, we may replace the elements of $\mathcal S$ by their tangent spaces, which would then intersect, contradicting the disjointness of $\mathcal S$.
+Once they are close to parallel, one can show that the normal vector of each leaf is $C^0$-close to a fixed vector field, and we may proceed as in Colding--Minicozzi; this does not require that we assume that the normal vector to $\lambda$ is $C^0$, but only that the normal vector to each leaf is.
+
 
 %%%%%%%%%%%%%%%%%%
 \subsection{Spaces of minimal laminations}\label{LamSpace section}
-Let $M$ be a manifold of constant sectional curvature and dimension $2 \leq d \leq 7$.
-In the literature, there are at least three different topologies on the space of laminations on $M$, which we now recall.
+In the literature, there are at least three different topologies on the space of laminations on a Riemannian manifold $M$, which we now recall.
 
 Thurston's geometric topology \cite[Chapter 8]{thurston1979geometry} says that a lamination $\lambda'$ is close to a lamination $\lambda$ if every leaf of $\lambda$ is close to a leaf of $\lambda'$ at least locally, and the same holds for their normal vectors $\normal$.
 
@@ -217,9 +270,10 @@ To be more precise:
 A sequence $(\lambda_i)$ of laminations \dfn{flow-box converges} in a function space $X$ to $\lambda$ if it converges in Thurston's geometric topology, and there exists a laminar atlas $(F_\alpha)$ for $\lambda$ such that for each $\alpha$, $F_\alpha$ and $(F_\alpha)^{-1}$ are limits in $X$ of flow boxes $F_\alpha^i$, $(F_\alpha^i)^{-1}$ in laminar atlases for $\lambda_i$.
 \end{definition}
 
-The notion of flow-box convergence is mainly useful in the case that $X = C^{1-} := \bigcup_{0 \leq \alpha < 1} C^\alpha$, where $C^\alpha$ are H\"older spaces.
+The notion of flow-box convergence is mainly useful for tangential $C^\infty$ and the Fr\'echet space $C^{1-} := \bigcap_{0 \leq \theta < 1} C^\theta$, where $C^\theta$ are H\"older spaces.
 
-We now define convergence of laminations equipped with transverse measures.
+We now define convergence of laminations equipped with transverse measures.\footnote{We assume that $\supp \mu_\alpha = K_\alpha$, but in \cite{daskalopoulos2020transverse}, it is only assumed that $\supp \mu_\alpha \subseteq K_\alpha$.
+In particular, not every lamination admits a transverse measure.}
 
 \begin{definition}
 Let $\lambda$ be a lamination with atlas $A$.
@@ -228,20 +282,11 @@ $$\mu_\alpha|_{K_\alpha \cap K_\beta} = \psi_{\alpha \beta}^* (\mu_\beta|_{K_\al
 The pair $(\lambda, \mu)$ is called a \dfn{measured lamination}.
 \end{definition}
 
-Caveat lector: we assume that $\supp \mu_\alpha = K_\alpha$, but in \cite{daskalopoulos2020transverse}, it is only assumed that $\supp \mu_\alpha \subseteq K_\alpha$.
-In particular, not every lamination admits a transverse measure.
-
-% The definition of transverse measure in terms of Radon measures on $K_\alpha$ is convenient because $K_\alpha$ is compact.
-% However, the definition is not intrinsic, and this causes problems when considering questions of convergence: the fact that the flow boxes of a convergent sequence of measured laminations converge should be a consequence of, not a part of, the definition.
-
-% To rectify this, we first observe that in the definition of a transverse measure, we cannot define a transverse measure to be a positive measure on the support of $\supp \lambda$.
-% For such a notion of transversality, Lebesgue measure would be transverse to every foliation on $\RR^d$!
-
 Now suppose that $\lambda$ is \dfn{oriented} -- that is, all its transition maps are orientation-preserving.
 Then we can define measure convergence in terms of its Ruelle-Sullivan current \cite{Ruelle75}.
 
 \begin{definition}
-Let $(\lambda, \mu)$ be a measured, oriented, tangentially $C^1$ lamination, and let $(\chi_\alpha)_{\alpha \in A}$ be a subordinate partition of unity.
+Let $(\lambda, \mu)$ be a measured, oriented lamination, and let $(\chi_\alpha)_{\alpha \in A}$ be a subordinate partition of unity.
 The \dfn{Ruelle-Sullivan current} $T_\mu$ associated to $(\lambda, \mu)$ is defined for all compactly supported $d-1$-forms $\varphi$ by
 \begin{equation}\label{RS current}
 \int_M T_\mu \wedge \varphi := \sum_{\alpha \in A} \int_{K_\alpha} \left[\int_{\{k\} \times J} (F_\alpha^{-1})^* (\chi_\alpha \varphi) \right] \dif \mu_\alpha(k).
@@ -249,57 +294,62 @@ The \dfn{Ruelle-Sullivan current} $T_\mu$ associated to $(\lambda, \mu)$ is defi
 \end{definition}
 
 \begin{definition}
-A sequence of measured, tangentially $C^1$ laminations $(\lambda_i, \mu_i)$ \dfn{converges} to $(\lambda, \mu)$ if their local Ruelle-Sullivan currents $T_{\mu_i} \to T_\mu$ converge in the weak topology of measures.
+A sequence of measured laminations $(\lambda_i, \mu_i)$ \dfn{converges} to $(\lambda, \mu)$ if their local Ruelle-Sullivan currents $T_{\mu_i} \to T_\mu$ converge in the weak topology of measures.
 \end{definition}
 
-The convergence of Ruelle-Sullivan currents, which is very convenient to work with analytically, is equivalent to a definition of measure convergence that may be more familiar to topologists, namely convergence of the transverse measure along each transverse curve.
-We recall this fact in Appendix \ref{transverse curves}.
+The convergence of Ruelle-Sullivan currents, which is very convenient to work with analytically, is equivalent to a definition of measure convergence that may be more familiar to topologists, namely convergence of the transverse measure along each transverse curve, as we explain in Appendix \ref{transverse curves}.
 
-How are the above modes of convergence related?
-It is clear from the definitions that flow-box convergence implies Thurston convergence, and it is well-known that measure convergence implies Thurston convergence \cite[Proposition 8.10.3]{thurston1979geometry}.
-We show that flow-box convergence actually sits in the middle of the chain of implications.
+Filling in some of the details of the argument of Colding--Minicozzi \cite[Appendix B]{ColdingMinicozziIV}, it follows from the regularity theorem, Theorem \ref{regularity theorem}, that once we have a bound on the curvatures of the leaves, every sequence of laminations has convergent subsequences in each of the above modes of convergence.
+More precisely we have:
 
 \begin{definition}
 A sequence $(\lambda_n)$ of laminations has \dfn{bounded curvature} if there exists $C > 0$ such that for any $n$ and any leaf $N$ of $\lambda_n$, the second fundamental form satisfies $\|\Two_N\|_{C^0} \leq C$.
 \end{definition}
 
-\begin{theorem}\label{implication theorem}
+\begin{mainthm}\label{compactness theorem}
+Let $(\lambda_n)$ be a sequence of minimal laminations of bounded curvature, and assume that for some compact set $E \Subset M$ and every leaf $N$ of $\lambda_n$, $N \cap E$ is nonempty. Then:
+\begin{enumerate}
+\item A subsequence converges in the $C^{1-}$ and tangentially $C^\infty$ flow box topology, and in particular in Thurston's geometric topology, to a minimal lamination.
+\item If $\mu_n$ is transverse to $\lambda_n$ and there exists $C > 0$ such that $\mu_n(M) \leq C$, then a further subsequence converges in the measure topology.
+\end{enumerate}
+\end{mainthm}
+
+We now use Theorem \ref{compactness theorem} to explain how the above modes of convergence are related.
+It is clear from the definitions that flow-box convergence implies Thurston convergence, and it is well-known that measure convergence implies Thurston convergence \cite[Proposition 8.10.3]{thurston1979geometry}.
+We show that flow-box convergence actually sits in the middle of the chain of implications.
+
+\begin{mainthm}\label{implication theorem}
 Let $M$ be a manifold of constant sectional curvature and dimension $2 \leq d \leq 7$.
 Let $(\lambda_n, \mu_n)$ be measured minimal laminations in $M$, and $(\lambda_n, \mu_n) \to (\lambda, \mu)$.
 Then:
 \begin{enumerate}
 	\item $\lambda_n \to \lambda$ in Thurston's geometric topology.
-	\item If $(\lambda_n)$ has bounded curvature, then $\lambda_n \to \lambda$ in the $C^{1-}$ flow box topology.
+	\item If $(\lambda_n)$ has bounded curvature, then $\lambda_n \to \lambda$ in the $C^{1-}$ and tangentially $C^\infty$ flow box topology.
 \end{enumerate}
-\end{theorem}
+\end{mainthm}
 
-We also complement Theorem \ref{implication theorem} with some compactness results for the above modes of convergence.
-
-\begin{theorem}\label{compactness theorem}
-Let $M$ be a manifold of dimension $2 \leq d \leq 7$.
-Let $(\lambda_n)$ be a sequence of minimal laminations of bounded curvature, and assume that for some compact set $E \Subset M$ and every leaf $N$ of $\lambda_n$, $N \cap E$ is nonempty. Then:
-\begin{enumerate}
-\item A subsequence converges in the $C^{1-}$ flow box topology, and in particular in Thurston's geometric topology, to a minimal lamination.
-\item If $\mu_n$ is transverse to $\lambda_n$ and there exists $C > 0$ such that $\mu_n(M) \leq C$, then a further subsequence converges in the measure topology.
-\end{enumerate}
-\end{theorem}
+In Theorem \ref{implication theorem}, we appeal to the measure-theoretic results of \cite{BackusFLG} in order to justify the regularity of the limit; this is where the hypotheses on the curvature and dimension of $M$ enter.
 
 
 
 %%%%%%%%%%%%%%%%%%
-\subsection{Best Lipschitz and least gradient maps}\label{FLG section}
+\subsection{Application to p-harmonic maps}\label{FLG section}
 Geodesic laminations are of great interest to the Thurston school of geometric topology \cite[Chapter 8]{thurston1979geometry}.
 Later Thurston introduced \dfn{best Lipschitz maps}, namely maps $v: M \to N$ between closed manifolds which minimize their Lipschitz constant $\Lip(v)$ subject to a constraint on their homotopy class.
-These maps define a geodesic lamination whose support is the set of points $x$ so that the local Lipschitz constant of $v$ at $x$ is equal to $\Lip(v)$ \cite{thurston1998minimal}.
 If $M, N$ are hyperbolic surfaces of the same genus $g$, then $\Lip(v)$ is the distance between $M$ and $N$ in \dfn{Thurston's asymmetric metric} on Teichm\"uller space.
-This circle of ideas has been developed by the Thurston school \cite{papadopoulos:hal-00129729} but has recently also made contact with geometric PDE through the work of Daskalopoulos--Uhlenbeck \cite{daskalopoulos2020transverse,daskalopoulosPrep1}.
+This circle of ideas has been developed by the Thurston school (see \cite{papadopoulos:hal-00129729, Gu_ritaud_2017} among others) but has recently also made contact with geometric PDE through the work of Daskalopoulos--Uhlenbeck \cite{daskalopoulos2020transverse,daskalopoulosPrep1}, which we now recall.
 
-To be more precise, if $M$ is a closed hyperbolic manifold, then the Euler-Lagrange equation for best Lipschitz maps $v: M \to \Sph^1$ is the $\infty$-Laplace equation
+Let $M$ be a closed hyperbolic surface.
+The Euler-Lagrange equation for best Lipschitz maps $v: M \to \Sph^1$ is the $\infty$-Laplace equation
 \begin{equation}\label{infinity laplacian}
 	\langle \nabla^2 v, \nabla v \otimes \nabla v\rangle = 0.
 \end{equation}
 Thus, every \dfn{$\infty$-harmonic function} -- that is, a viscosity solution of (\ref{infinity laplacian}) -- is best Lipschitz \cite{daskalopoulos2020transverse}.
-The $\infty$-Laplace equation is invariant under translations $v \mapsto v + y$, so by Noether's theorem, it has a conserved flux $\dif u$.
+From an $\infty$-harmonic function we may associate two pieces of data:
+\begin{enumerate}
+\item The set $\{\dif v = \|\dif v\|_{L^\infty}\}$ where the best Lipschitz constant $\Lip(v)$ is attained is the support of a geodesic lamination, called the \dfn{maximum stretch lamination} $\lambda$.
+\item The $\infty$-Laplace equation is invariant under addition of constants $v \mapsto v + y$, so by Noether's theorem, $v$ is associated to a \dfn{conserved flux} $\dif u$.
+\end{enumerate}
 If $d = 2$, the associated conservation law is the $1$-Laplace equation
 \begin{equation}\label{1Laplacian}
 \dif^* \left(\frac{\dif u}{|\dif u|}\right) = 0.
@@ -309,27 +359,10 @@ A \dfn{$1$-harmonic function}, or variational solution of (\ref{1Laplacian}), is
 	\int_M \star |\dif u| \leq \int_M \star |\dif u + \dif w|
 \end{equation}
 subject to the Dirichlet condition $\supp w \Subset M$.
-
-Formally, the $1$-Laplace equation (\ref{1Laplacian}) asserts that the level sets are minimal surfaces, but one has to verify this rigorously for variational solutions.
-This is the main result of the prequel paper \cite{BackusFLG}:
-
-\begin{theorem}\label{main thm of old paper}
-Let $M$ be a manifold of constant sectional curvature and $2 \leq d \leq 7$.
-Then for every $1$-harmonic function $u: M \to \RR$ and $y \in \RR$, the level set $\partial \{u > y\}$ is an analytic embedded stable minimal hypersurface in $M$.
-\end{theorem}
-\begin{proof}[Proof sketch]
-By a straightfoward modification of \cite[Theorem 1]{BOMBIERI1969}, the superlevel sets $\{u > y\}$ have least perimeter, that is their indicator functions have least gradient.
-The regularity of boundaries of sets of least perimeter was established for $M = \RR^d$ by de Giorgi's lemma \cite{Miranda66} but the proof does not generalize nicely, because it relies on the invariance of tangent vectors under parallel transport in order to define averages of normal vectors to sets of least perimeter.
-In \cite[\S3]{BackusFLG} we establish a suitable method of taking averages of the normal vector provided that $M = \Hyp^d$ or $M = \Sph^d$.
-This allows us to modify the relevant parts of \cite{Miranda66}.
-See \cite[\S1]{BackusFLG} for a more detailed summary of \cite{BackusFLG}.
-\end{proof}
-
-We use Theorem \ref{main thm of old paper} as a regularity result at various points in this paper, which allows us to show that the limiting laminations have smooth leaves (rather than currents for leaves, say).
-However, Theorem \ref{main thm of old paper} is of more interest to this paper rather than just as a regularity lemma; to motivate why, we recall the relationship between best Lipschitz maps, maps of least gradient, and geodesic laminations:
+Daskalopoulos--Uhlenbeck \cite{daskalopoulos2020transverse,daskalopoulosPrep1} showed that the Noetherian flux $\dif u$ is Ruelle-Sullivan for the maximum stretch lamination; more precisely:
 
 \begin{theorem}[Daskalopoulos--Uhlenbeck]\label{DU theorem}
-Let $M$ be a closed hyperbolic surface and $v: M \to \Sph^1$ an $\infty$-harmonic function with maximal stretch geodesic lamination $\lambda$ and conserved flux $T$. Then:
+Let $M$ be a closed hyperbolic surface and $v: M \to \Sph^1$ an $\infty$-harmonic map with maximal stretch geodesic lamination $\lambda$ and conserved flux $T$. Then:
 \begin{enumerate}
 \item $T$ is the Ruelle-Sullivan current for a measured oriented structure on $\lambda$.
 \item There exists a $1$-harmonic, $\pi_1(M)$-equivariant function $u: \Hyp^2 \to \RR$ such that $\dif u$ is a lift of $T$ to the universal cover $\Hyp^2$.
@@ -337,13 +370,11 @@ Let $M$ be a closed hyperbolic surface and $v: M \to \Sph^1$ an $\infty$-harmoni
 \end{enumerate}
 \end{theorem}
 
-We refer to the original paper \cite{daskalopoulos2020transverse} for a more precise statement.
 Inspired by this theorem, Daskalopoulos--Uhlenbeck conjectured that for any $1$-harmonic function on $\Hyp^2$, $\dif u$ should be Ruelle-Sullivan for some (possibly not maximum-stretch) geodesic lamination \cite[Problem 9.4]{daskalopoulos2020transverse}, and conversely that if $T$ is a Ruelle-Sullivan current for some geodesic lamination, then local primitives of $T$ are $1$-harmonic \cite[Conjecture 9.5]{daskalopoulos2020transverse}.
 Of course, if $d \geq 3$, then the level sets will be minimal hypersurfaces rather than geodesics.
+We prove these conjectures:
 
-Using Theorem \ref{compactness theorem}, the stable Bernstein theorem \cite{Schoen2016, Chodosh2021}, and Theorem \ref{main thm of old paper}, we prove the conjectures of Daskalopoulos--Uhlenbeck:
-
-\begin{theorem}\label{main thm}
+\begin{mainthm}\label{main thm}
 Let $M$ be a manifold of constant sectional curvature and dimension $2 \leq d \leq 4$.
 \begin{enumerate}
 \item Let $u$ be a $1$-harmonic function on $M$.
@@ -355,9 +386,37 @@ Then:
 \end{enumerate}
 \item Conversely, if $\lambda$ is a minimal measured oriented lamination with Ruelle-Sullivan current $T$, and $\tilde M \to M$ is the universal cover of $M$, then there exists a $1$-harmonic, $\pi_1(M)$-equivariant function $u: \tilde M \to \RR$, such that $\dif u$ drops to $T$.
 \end{enumerate}
-\end{theorem}
+\end{mainthm}
 
-However, Theorem \ref{main thm} leaves a key point -- the role of the $\infty$-Laplacian -- open, and we have not attempted to address this point here.
+The first step in the proof of Theorem \ref{main thm} is to show that the leaves of $u$ are in fact smooth (here $C^{1+\alpha}$ would suffice), which we accomplished in the companion paper \cite{BackusFLG}:
+
+\begin{theorem}\label{main thm of old paper}
+Let $M$ be a manifold of constant sectional curvature and $2 \leq d \leq 7$.
+Then for every $1$-harmonic function $u: M \to \RR$ and $y \in \RR$, the level set $\partial \{u > y\}$ is an analytic embedded stable minimal hypersurface in $M$.
+\end{theorem}
+\begin{proof}[Proof sketch]
+By a straightfoward modification of \cite[Theorem 1]{BOMBIERI1969}, the superlevel sets $\{u > y\}$ have \dfn{least perimeter}; that is, their indicator functions are $1$-harmonic.
+The regularity of least perimeters in $M = \RR^d$, $d \leq 7$, follows from de Giorgi's lemma \cite{Miranda66} but the proof of de Giorgi's lemma does not generalize nicely, because it relies on the invariance of tangent vectors under parallel transport in order to define averages of normal vectors to sets of least perimeter.
+In \cite[\S3]{BackusFLG} we establish a suitable method of taking averages of the normal vector provided that $M$ has constant sectional curvature.
+This allows us to modify the relevant parts of the proof of de Giorgi's lemma.
+See \cite[\S1]{BackusFLG} for a more detailed summary of \cite{BackusFLG}.
+\end{proof}
+
+We then use the stable Bernstein theorem of Schoen and Chodosh--Li \cite{Schoen2016, Chodosh2021}, which we state below, to deduce from the convexity of the $1$-Dirichlet energy (\ref{least gradient functional}) that the leaves have uniform curvature bounds.
+This essentially reduces Theorem \ref{main thm} to the regularity theorem, Theorem \ref{regularity theorem}.
+
+\begin{theorem}[stable Bernstein theorem]
+	Let $M$ be a manifold of bounded geometry, and dimension $d \in \{2, 3, 4\}$.
+	Then there exists $A \geq 0$ such that for every complete stable minimal hypersurface $N$ in $M$ with trivial normal bundle,
+	$$|\Two_N(P)| \leq \frac{A}{1 + \dist(P, \partial M)}.$$
+\end{theorem}
+\begin{proof}
+	If $d = 2$ this clearly holds with $A = 0$.
+	If $d = 3$ this was proven in \cite{Schoen2016}, and we refer to \cite[Theorem 2.10]{colding2011course} for a modern proof.
+	If $d = 4$ this result can be derived from \cite[Theorem 1]{Chodosh2021} using the sort of techniques discussed in \cite[\S3]{White13}.
+\end{proof}
+
+Unfortunately, Theorem \ref{main thm} leaves a key point -- the role of the $\infty$-Laplacian -- open, and we have not attempted to address this point here.
 The Daskalopoulos--Uhlenbeck theorem was our main motivation for this series of papers; however, our work works in dimensions $d = 3, 4$ while Theorem \ref{DU theorem} is purely a statement about $d = 2$.
 Indeed, the $\infty$-Laplacian gives geodesic laminations, but the $1$-Laplacian gives codimension-$1$ laminations, which are not geodesic if $d \geq 3$, so there is not an obvious generalization of Theorem \ref{DU theorem} for $d = 3, 4$.
 
@@ -370,10 +429,9 @@ Even so, we hope to return to this question in a later work: what is the correct
 \subsection{Outline of the paper}
 In \S\ref{Prelims} we recall preliminaries.
 
-In \S\ref{Regularity} we establish that every $C^0$ minimal lamination has a Lipschitz laminar atlas and a Lipschitz normal bundle, and is tangentially $C^\infty$.
-We will use this regularity frequently through the remainder of the paper.
+In \S\ref{Regularity} we prove the regularity theorem, Theorem \ref{regularity theorem}.
 
-In \S\ref{CompactnessSec} we prove Theorems \ref{implication theorem}, \ref{compactness theorem}, and \ref{main thm}.
+In \S\ref{CompactnessSec} we prove Theorems \ref{compactness theorem} (the compactness theorem), \ref{implication theorem} (the implication theorem), and \ref{main thm} (the equivalence of $1$-harmonic functions and measured minimal laminations) using Theorem \ref{regularity theorem}.
 
 We also include Appendix \ref{transverse curves}, where we explain why our definition of convergence in the weak topology of measures is equivalent to a more standard definition.
 
@@ -381,7 +439,7 @@ We also include Appendix \ref{transverse curves}, where we explain why our defin
 
 \subsection{Acknowledgements}
 I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions.
-I would also like to thank Chao Li for help understanding \cite{Chodosh2021}.
+I would also like to thank Chao Li for help understanding \cite{Chodosh2021}, and Stephen Obinna for suggesting the brief proof of Lemma \ref{cardinality appendix}.
 
 This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
 
@@ -403,40 +461,16 @@ If $X, Y$ are connected Riemannian manifolds, one of which is $1$-dimensional, t
 
 We let $\Leaves \lambda$ denote the set of leaves of a lamination $\lambda$.
 
-%%%%%%%%%%%%%%%%
-% \subsection{Hausdorff distance}
-% In order to measure when two leaves are ``close'', we shall consider the Hausdorff distance on the space of leaves, as defined in \cite[Chapter 4]{nadler2017continuum}.
+We use the Hausdorff notions of limit and limit inferior of a sequence of closed sets \cite[Chapter IV]{nadler2017continuum}:
 
-% \begin{definition}
-% Let $X$ be a compact metric space. The \dfn{Hausdorff distance} between two nonempty closed sets $A, B \subset X$ is
-% \begin{equation}\label{compact hausdorff distance}
-% 	\dist(A, B) := \max\left(\max_{a \in A} \min_{b \in B} \dist(a, b), \max_{b \in B} \min_{a \in A} \dist(a, b)\right).
-% \end{equation}
-% The space of closed subsets of $X$ is the \dfn{hyperspace} $\Hypspace X$.
-% \end{definition}
-
-% \begin{definition}
-% If $X$ is a metrizable space and $(A_n)$ is a sequence of closed subsets of $X$, we define
-% \begin{equation}\label{Hausdorff is the limit set}
-% \lim_{n \to \infty} A_n := \left\{\lim_{n \to \infty} x_n: (x_n) \in \prod_{n=1}^\infty A_n\right\}.
-% \end{equation}
-% \end{definition}
-
-% \begin{proposition}\label{Hausdorff on a CMS}
-% Let $X$ be a compact metric space. Then:
-% \begin{enumerate}
-% \item The topology on $\Hypspace X$ is the topology for the convergence mode (\ref{Hausdorff is the limit set}).
-% \item The topology on $\Hypspace X$ is completely determined by the topology on $X$.
-% \item $\Hypspace X$ is a compact metric space.
-% \end{enumerate}
-% In particular, $\Hypspace$ is a self-map of the set of compact metrizable spaces.
-% \end{proposition}
-% \begin{proof}
-% By \cite[Theorem 4.11]{nadler2017continuum}, a sequence $(A_n)$ of closed subsets of $X$, the limit $A$ in $\Hypspace X$ of $A_n$ is the set of $x \in X$ such that for every $U \ni x$ open, there are $x_n \in A_n$ such that eventually $x_n \in U$.
-% But this is exactly the characterization of $\lim_n A_n$ given by (\ref{Hausdorff is the limit set}).
-% It is also independent of the metric on $X$, so as a metrizable space, $\Hypspace X$ is determined by the metrizable (rather than metric) structure on $X$.
-% The compactness now follows from \cite[Theorem 4.17]{nadler2017continuum}, and the fact that $\Hypspace$ is a self-map of the space of compact metrizable spaces follows.
-% \end{proof}
+\begin{definition}
+Let $X$ be a topological space, and $(Y_n)$ a sequence of closed subsets of $X$.
+\begin{enumerate}
+\item The \dfn{limit inferior} $\liminf_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is eventually nonempty.
+\item The \dfn{limit superior} $\limsup_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is nonempty for infinitely many $n$.
+\item If $\liminf_{n \to \infty} Y_n = \limsup_{n \to \infty} Y_n$, we call that set the \dfn{limit} $\lim_{n \to \infty} Y_n$.
+\end{enumerate}
+\end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{Measure theory}\label{MeasurePrelims}
@@ -445,6 +479,8 @@ Its dual $C_\cpt(X)'$ is canonically isomorphic to the space of signed Radon mea
 The weak topology on $C_\cpt(X)'$ is known as the \dfn{weak topology of measures}.
 Unpacking the definitions, a sequence $(\mu_n)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every continuous function $f: X \to \RR$,
 $$\lim_{n \to \infty} \int_X f \dif \mu_n = \int_X f \dif \mu.$$
+
+\subsubsection{The portmanteau theorem}
 We shall frequently use the following characterization of weak convergence:
 
 \begin{proposition}[portmanteau theorem]
@@ -455,24 +491,41 @@ We shall frequently use the following characterization of weak convergence:
 	\item $\limsup_{n \to \infty} \mu_n(X) \leq \mu(X)$ and for every open $Z \subseteq X$, $\liminf_{n \to \infty} \mu_n(Z) \geq \mu(Z)$.
 	\item For every $W \subseteq X$ with $\mu(\partial W) = 0$, $\lim_{n \to \infty} \mu_n(W) = \mu(W)$.
 \end{enumerate}
-	If $X$ is a manifold, these conditions are equivalent to:
+	If we choose a metric on $X$, then the above conditions imply:
 \begin{enumerate}
 	\setcounter{enumi}{4}
-	\item For every $x \in X$ and almost every $0 < \varepsilon \ll 1$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
+	\item For every $x \in X$ and all but countably many $\varepsilon > 0$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-	See \cite[Theorem 13.16]{klenke2013probability} for the metrizable case.
-	For the manifold case, we just observe that almost every $\varepsilon > 0$ satisfies $\mu(\partial B(x, \varepsilon)) = 0$. Indeed, if not, then we can find a set of real numbers $A$ such that $0$ is a condensation point of $A$, and for every $\varepsilon \in A$, $\mu(\partial B(x, \varepsilon)) > 0$.
-	In particular, for every $\delta > 0$, $A \cap (0, \delta)$ is uncountable, so
-	$$\mu(B(x, \delta)) \geq \sum_{\varepsilon \in A \cap (0, \delta)} \mu(\partial B(x, \delta)) = \infty,$$
-	but since $X$ is a manifold, if $\delta$ is small enough then $B(x, \delta)$ is precompact.
-	This contradicts that $\mu$ is a Radon measure.
+	See \cite[Theorem 13.16]{klenke2013probability} for the equivalence of (1)--(4); \cite{klenke2013probability} deals with subprobability measures, but this is equivalent to measures of bounded total mass by a rescaling.
+
+	We then must show that (4) implies (5); to do so, it suffices to show that for all but countably many $\varepsilon$, $\mu(\partial B(x, \varepsilon)) = 0$.
+	Let
+	$$A := \{\varepsilon > 0: \mu(\partial B(x, \varepsilon)) > 0\}.$$
+	Since the sets $\partial B(x, \varepsilon)$ are disjoint, for every countable $A' \subseteq A$,
+	$$\sum_{\varepsilon \in A'} \mu(\partial B(x, \varepsilon)) \leq \mu(X) < \infty,$$
+	where $\mu(X) < \infty$ since $X$ is compact.
+	It follows from (the contrapositive of) Lemma \ref{cardinality appendix} below that $A$ is countable.
+\end{proof}
+
+\begin{lemma}\label{cardinality appendix}
+Let $S$ be an uncountable set and $f: S \to (0, \infty)$. Then there exists a countable set $S' \subset S$ such that
+$$\sum_{x \in S'} f(x) = \infty.$$
+\end{lemma}
+\begin{proof}
+Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \geq 1$, and $S_0 := f^{-1}([1, \infty))$.
+Since $S$ is uncountable but $\NN$ is countable, it follows from the infinite pigeonhole principle that there exists $n \in \NN$ such that $S_n$ is infinite.
+In particular there exists an infinite countable set $S' \subseteq S_n$, which then satisfies
+\begin{align*}
+\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n} = \infty. \qedhere 
+\end{align*}
 \end{proof}
 
 There are subtleties involved in the portmanteau theorem for noncompact $X$.
 However, this will never be an issue, as we shall only use it locally, in small precompact balls.
 
+\subsubsection{Ruelle-Sullivan currents}
 If $X = M$ is a manifold, then we can consider instead the space $C_\cpt(M, \Omega^\ell)$ of compactly supported continuous $\ell$-forms.
 An $\ell$-\dfn{current} is an element of the dual space $C_\cpt(M, \Omega^\ell)'$.\footnote{Strictly speaking, $C_\cpt(M, \Omega_\ell)'$ is the space of $\ell$-currents of locally finite total variation. However, we will never need to consider $\ell$-currents that do not have locally finite total variation, so we suppress this technicality.}
 We denote the pairing of an $\ell$-current $T$ and an $\ell$-form $\varphi$ by $\int_M T \wedge \varphi$.
@@ -512,7 +565,7 @@ The polar part is well-defined by \cite[Theorem 4.14]{simon1983GMT}.
 % \end{proof}
 
 With the measure-theoretic machinery above in place, we recall some facts about Ruelle-Sullivan currents.
-Let $(\lambda, \mu)$ be a measured, oriented, tangentially $C^1$ lamination.
+Let $(\lambda, \mu)$ be a measured oriented lamination.
 Then the Ruelle-Sullivan current $T_\mu$ is a well-defined closed $d-1$-current \cite[Theorem 8.2]{daskalopoulos2020transverse}. 
 In particular, we may lift $T_\mu$ to the universal cover $\tilde M$, where it is exact \cite[Theorem 8.3]{daskalopoulos2020transverse}.
 Moreover, $T_\mu$ has an intrinsic definition as the unique $d-1$-current with a certain polar decomposition.
@@ -552,7 +605,7 @@ To be more precise, recall that $\mu$ defines a measure on $\supp \lambda$: in e
 % \end{proof}
 
 \begin{lemma}
-For a measured, oriented, tangentially $C^1$ lamination $(\lambda, \mu)$, with Lipschitz normal vector $\normal_\lambda$, the polar decomposition of $T_\mu$ is
+For a measured oriented lamination $(\lambda, \mu)$, with Lipschitz normal vector $\normal_\lambda$, the polar decomposition of $T_\mu$ is
 \begin{equation}\label{polar ruelle sullivan}
 T_\mu = \normal_\lambda \mu.
 \end{equation}
@@ -592,10 +645,8 @@ If $(\lambda_n, \mu_n) \to (\lambda, \mu)$, $x_n \in \supp \lambda_n$ converges 
 	and therefore $\delta = 0$, a contradiction.
 \end{proof}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Calculus of variations}
-We record various well-known facts about $1$-harmonic functions and minimal surfaces.
+\subsubsection{Miranda stability theorem}
+The following compactness theorem for $1$-harmonic functions in the weak topology of measures will frequently be useful.
 
 \begin{proposition}[Miranda stability theorem]
   Suppose that $M$ is a compact manifold, possibly with boundary.
@@ -610,109 +661,133 @@ The forgetful map $BV(M) \to L^1(M)$ is compact, so (\ref{boundedness in Miranda
 The rest of the proof is similar to \cite[Teorema 3 and Osservazione 3]{Miranda67}; see \todo{\cite{BackusFLG}} for the straightforward modifications.
 \end{proof}
 
-% \begin{proposition}[maximum principle]\label{max princip}
-% Let $u$ be a $1$-harmonic function.
-% If $u$ attains a local maximum, then $u$ is constant.
-% \end{proposition}
-% \begin{proof}
-% Let $y$ be a local maximum of $u$; then $\partial \{u \geq y\}$ is a minimal hypersurface by Theorem \ref{main thm of old paper}, or else it is empty. If it is empty, then $M = \{u \geq y\}$ and $u$ is constant, so we exclude this case.
-% In a neighborhood of any point of $\partial \{u \geq y\}$ we may decrease $\int \star |\dif u|$ by decreasing $y$ a small amount, which violates that $u$ has least gradient.
-% \end{proof}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Elliptic estimates on leaves}\label{Leaf estimates}
+We now recall some estimates on leaves of a lamination in normal coordinates, following \cite[\S7.1]{colding2011course}.
+Since the leaves of a lamination clearly become graphs when written in (suitably rotated) flow box coordinates, this establishes estimates on leaves that we shall use throughout the remainder of the paper.
 
-\begin{theorem}[stable Bernstein theorem]
-	Let $M$ be a manifold of bounded geometry, and dimension $d \in \{2, 3, 4\}$.
-	Then there exists $A \geq 0$ such that for every complete stable minimal hypersurface $N$ in $M$ with trivial normal bundle,
-	$$|\Two_N(P)| \leq \frac{A}{1 + \dist(P, \partial M)}.$$
-\end{theorem}
+Let $\mu, \nu, \dots$ range over indices $0, \dots, d - 1$, $i, j, \dots$ range over $1, \dots, d - 1$, $x := (x^1, \dots, x^{d - 1})$, and $y := x^0$.
+Let $g$ be a metric on $\RR^{d - 1}_x \times \RR_y$ satisfying the normal coordinates condition 
+$$g_{\mu\nu} = \delta_{\mu\nu} + O(|x|^2 + y^2)$$
+and a curvature bound $\|\Riem_g\|_{C^0} \leq K_0$ for some $0 < K_0 \leq 1$.
+Under these hypotheses, the Christoffel symbols $\Gamma$ of the Levi-Civita connection $\nabla$ satisfy $|\Gamma| \lesssim K_0(|x|^2 + y^2)$.
+Let $N = \{y = u(x)\}$ for some function $u$ defined on $4\Ball^{d - 1}$.
+By \cite[(7.21)]{colding2011course}, if we define for a $2$-jet $(y, \xi, H)$ on $\RR^{d - 1}$,
+$$h_{ij}(x; y, \xi) := g_{ij}(x, y) + \xi_i g_{j0}(x, y) + \xi_j g_{i0}(x, y) + \xi_i \xi_j g_{00}(x, y),$$
+denote by $(h^{ij})$ the inverse of $(h_{ij})$, and let
+\begin{align*}
+	F(x; y, \xi, H) 
+	&:= h^{ij}(H_{ij} + \Gamma^0_{ij} + \xi_i \Gamma^0_{0j} + \xi_j \Gamma^0_{0i} + \xi_i \xi_j \Gamma^0_{00}) \\
+	&\qquad + \xi_m h^{ij}(\Gamma^m_{ij} + \xi_i \Gamma^m_{0j} + \xi_j \Gamma^m_{0i} + \xi_i \xi_j \Gamma^m_{00})
+\end{align*}
+(where we have taken an Einstein sum)
+then $h^{ij} = \delta^{ij} + O(K_0(|x|^2 + y^2) + |\xi|)$ so we have the estimate
+$$F(x, y, \xi, H) = \tr H + O((K_0 |H| + |\xi|)(|x| + |y| + |\xi|)).$$
+Moreover, if we denote $Pu(x) := F(x, u(x), \dif u(x), \nabla^2 u(x))$, then $Pu = 0$ is the minimal surface equation with respect to the metric $g$.
+For $\|u\|_{C^1} \lesssim 1$, this equation is uniformly elliptic, so that by Schauder estimates \cite[Theorem 6.2]{gilbarg2015elliptic}, for any $r \geq 0$,
+\begin{equation}\label{norms on uk}
+	\|u\|_{C^r(3\Ball^{d - 1})} \lesssim_r 1.
+\end{equation}
+
+\begin{lemma}
+Suppose that $u_2 \geq u_1$ satisfy $Pu_1 = Pu_2 = 0$ on $4\Ball^{d - 1}$ and $v := u_2 - u_1$.
+Then for $K_0 \ll 1$, $\|u_i\|_{C^1} \lesssim 1$, 
+\begin{equation}\label{Schauder Harnack}
+	\|\dif v\|_{C^0(\Ball^{d - 1})} \lesssim \sup_{2\Ball^{d - 1}} v \lesssim \inf_{\Ball^{d - 1}} v.
+\end{equation}
+\end{lemma}
 \begin{proof}
-	If $d = 2$ this clearly holds with $A = 0$.
-	If $d = 3$ this was proven in \cite{Schoen2016}, and we refer to \cite[Theorem 2.10]{colding2011course} for a modern proof.
-	If $d = 4$ this result can be derived from \cite[Theorem 1]{Chodosh2021} using the sort of techniques discussed in \cite[\S3]{White13}.
+Let
+$$Qv := \int_0^1 \frac{\partial F(s)}{\partial H_{ij}} \partial_i \partial_j v + \frac{\partial F(s)}{\partial \xi_i} \partial_i v + \frac{\partial F(s)}{\partial y} v \dif s$$
+where 
+$$F(s) := F(x, su_2(x) + (1 - s)u_1(x), \dif(su_2 + (1 - s) u_1)(x), \nabla^2(su_2 + (1 - s)u_1)(x)).$$
+Then $Q$ is a linear differential operator, and $Qv = 0$ \cite[(7.25)]{colding2011course}.
+The principal symbol $q$ of $Q$ satisfies
+\begin{align*}
+q_{ij} &= \int_0^1 \frac{\partial F(s)}{\partial H_{ij}} \dif s = \int_0^1 h_{ij}(s) \dif s \\
+&= \delta_{ij} + O(K_0(|x|^2 + \|u_1\|_{C^0}^2 + \|u_2\|_{C^0}^2) + \|\dif u_1\|_{C^0} + \|\dif u_2\|_{C^0}).
+\end{align*}
+Then if $K_0$ is chosen smaller than an absolute constant, the first eigenvalue $\lambda_1(q) \geq \frac{1}{2}$ on $3\Ball^{d - 1}$.
+By (\ref{norms on uk}), the coefficients of $Q$ are bounded in $C^1$ on $3\Ball^{d - 1}$.
+The claim now follows from Schauder estimates \cite[Theorem 6.2]{gilbarg2015elliptic} and the Harnack inequality \cite[Corollary 9.25]{gilbarg2015elliptic}.
+\end{proof}
+
+We henceforth assume that $K_0$ meets the hypotheses of the above lemma.
+
+Given a connected oriented hypersurface $N$, we denote by $[N]$ the $d-1$-current defined by 
+$$\int_M [N] \wedge \psi = \int_N \psi.$$
+In particular, if we view $N$ as a lamination with one leaf and transverse measure $\mu$ assigning that leaf mass $1$, then $[N] = T_\mu$ is the Ruelle-Sullivan current for $(N, \mu)$.
+Moreover, if $N = F_* \sigma$ for some simplex $\sigma$ and $C^1$ map $F$, then 
+$$\int_M [N] \wedge \psi = \int_\sigma F^* \psi,$$
+so if $N_1, N_2$ are $C^1$-close, then $F_1^*, F_2^*$ are $C^0$-close, and hence $[N_1], [N_2]$ are close in the weak topology of measures.
+
+\begin{lemma}\label{measured convergence is smooth convergence}
+If $(N_n)$ is a sequence of minimal surfaces with $\|\Two_{N_n}\|_{C^0}$ bounded, and the currents $[N_n]$ converge in the weak topology of measures, then $(N_n)$ converges in $C^\infty$ to a minimal surface.
+\end{lemma}
+\begin{proof}
+By Lemma \ref{convergence of normals}, $(\normal_{N_n}(x_n))$ is a Cauchy sequence whenever $(x_n) \subset \prod_n N_n$ is a Cauchy sequence.
+Since $\|\Two_N\|_{C^0}$ is bounded and the normal vector fields are close near $x := \lim_n x_n$, there is a neighborhood of $x$ which admits normal coordinates $(x, y) \in \RR^{d - 1} \times \RR$ in which
+$$\|\normal_{N_n} - \partial_y\|_{C^0} \leq \frac{1}{2}.$$
+In such coordinates $N_n$ is the graph of some function $u_n: \RR^{d - 1}_x \to \RR_y$ which is bounded in $C^2$ and solves the minimal surface equation $Pu_n = 0$.
+By (\ref{norms on uk}), $(u_n)$ is bounded and hence compact in $C^\infty$.
+So any subsequence $(N_{n_k})$ has a further subsequence $(N_{n_{k_\ell}})$ which converges in $C^\infty$ to some $N$.
+In particular, $[N_n] \to [N]$ in the weak topology of measures, which uniquely determines $N$ independently of the choice of subsequence $(N_{n_k})$.
+Therefore $N_n \to N$ in $C^\infty$. This limit preserves mean curvature and implies that $N$ is a minimal surface.
 \end{proof}
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Regularity of flow boxes}\label{Regularity}
-The goal of this section is to prove the following regularity theorem for minimal laminations that we will use several times.
+\section{Regularity of laminations}\label{Regularity}
+The goal of this section is to prove the regularity theorem, Theorem \ref{regularity theorem}, for minimal laminations.
 The proof is based on \cite[Theorem 1.1]{Solomon86}, which addresses the case that $\lambda$ is a minimal foliation, and does not explictly spell out the quantitative regularity of the laminar atlas.
-Lipschitz regularity is optimal even for the nicest case of a geodesic foliation of $\Hyp^2$ \cite[\S1]{Solomon86}, so this result is sharp.
 
-\begin{proposition}\label{regularity theorem}
-Let $(M, g)$ be a Riemannian manifold of dimension $d \geq 2$ and bounded geometry.
-Let $\lambda$ be a minimal lamination in $M$ such that for some $A > 0$ and every leaf $N \in \Leaves \lambda$,
-\begin{equation}\label{curvature bound in regularity}
-	\|\Two_N\|_{C^0} \leq A.
-\end{equation}
-Then:
-\begin{enumerate}
-\item There exists a Lipschitz line bundle on $M$ which is normal to every leaf of $\lambda$.
-\item There exist constants $L = L(g, A) > 0$ and $r = r(g, A) > 0$, and a Lipschitz laminar atlas $(F_\alpha)$ for $\lambda$, such that for every $\alpha$,
-\begin{equation}\label{conorm of flow box}
-	\max(\Lip(F_\alpha), \Lip(F_\alpha^{-1})) \leq L,
-\end{equation}
-and the image of $F_\alpha$ contains a ball of radius $r$.
-\item $F_\alpha$ is tangentially $C^\infty$, with seminorms only depending on $A, g$.
-\end{enumerate}
-\end{proposition}
-
-To begin the proof we first consider when we can represent the leaves of $\lambda$ as graphs in a uniform way.
-
+ To begin the proof we first consider when we can represent the leaves of $\lambda$ as graphs in a uniform way, or equivalently when we can choose coordinates so that the leaves of $\lambda$ are uniformly far from vertical.
 If $f: \RR^{d - 1}_x \to \RR_y$ is a $C^1$ function, and its graph has normal vector $\normal$, then
 \begin{equation}\label{nabla as a normal}
-	\nabla f(x) = \frac{\partial_y - \normal(x, f(x))}{\sqrt{1 + |\nabla f(x)|^2}}.
+	\normal = \frac{\partial_y - \nabla f}{\sqrt{1 + |\nabla f|^2}},
 \end{equation}
+so by a bootstrapping argument we may approximate $\normal$ by $\partial_y - \nabla f$.
+To be more precise:
 
 \begin{lemma}\label{existence of tubes}
-	Let $N$ be a connected hypersurface in $\RR^d = \RR^{d - 1}_x \times \RR_y$ which is tangent to $\{y = 0\}$ at the origin.
-	If $\|\Two_N\|_{C^0} \leq \log(5/4)$, then for every $(x, y) \in N \cap B_1$,
-	$$\max(|y|, 0.5 \cdot |\normal_N(x, y) - \partial_y|) \leq \|\Two_N\|_{C^0}.$$
+	Let $N$ be a connected $C^2$ hypersurface in $\RR^d = \RR^{d - 1}_x \times \RR_y$ which is tangent to $\{y = 0\}$ at the origin.
+	If $\|\Two_N\|_{C^0} \leq \frac{1}{8}$, then for every $(x, y) \in N \cap B_1$,
+	$$\max(|y|, |\normal(x, y) - \partial_y|) \leq 3\|\Two_N\|_{C^0}.$$
 \end{lemma}
 \begin{proof}
 	Near $0$, $N$ can be represented a graph $\{y = f(x)\}$, since it is tangent to $\{y = 0\}$.
 	This representation is valid on the component of the set $\{|\nabla f(x)| < \infty\}$ containing $0$, and it is related to the unit normal by (\ref{nabla as a normal}).
-	Taking derivatives of both sides of (\ref{nabla as a normal}),
-	$$-\nabla^2 f(x) = \frac{\nabla \normal(x, f(x)) \cdot (\partial_x \otimes \partial_x + \nabla f(x) \otimes \partial_y)}{\sqrt{1 + |\nabla f(x)|^2}} + \frac{\nabla^2 f(x) \cdot (\nabla f(x) \otimes (\partial_y - \normal(x, f(x))))}{(1 + |\nabla f|^2)^{3/2}}.$$
+	Rearranging (\ref{nabla as a normal}),
+	$$\nabla f = \partial_y - \frac{\normal}{\sqrt{1 + |\nabla f|^2}},$$
+	and then taking derivatives,
+	$$-\nabla^2 f(x) = \frac{\nabla \normal(x, f(x)) \cdot (\partial_x \otimes \partial_x + \nabla f(x) \otimes \partial_y)}{\sqrt{1 + |\nabla f(x)|^2}} - \frac{\nabla^2 f(x) \cdot (\nabla f(x) \otimes \normal(x, f(x)))}{(1 + |\nabla f|^2)^{3/2}}.$$
 	Here $-\nabla^2$ denotes the negative Hessian, not the Laplacian.
-	We can use (\ref{nabla as a normal}) to bound
-	$$|\partial_y - \normal(x, f(x))| \leq |\nabla f(x)|\sqrt{1 + |\nabla f(x)|^2} \leq |\nabla f(x)| + |\nabla f(x)|^2.$$
 	Since
 	$$|\partial_x \otimes \partial_x + \nabla f(x) \otimes \partial_y| \leq \sqrt{1 + |\nabla f(x)|^2},$$
 	and $\nabla \normal = \Two_N$, we conclude
 \begin{equation}\label{bound Hessian by Two}
-	|\nabla^2 f(x)| \leq |\Two_N(x, f(x))| + |\nabla^2 f(x)| (|\nabla f(x)|^2 + |\nabla f(x)|^3).
+	|\nabla^2 f(x)| \leq |\Two_N(x, f(x))| + |\nabla^2 f(x)| |\nabla f(x)|.
 \end{equation}
-
 	In order to control the error terms in (\ref{bound Hessian by Two}), we make the \dfn{bootstrap assumption}
 \begin{equation}\label{bootstrap}
-	|\nabla f(x)| \leq 1/4,
+	|\nabla f(x)| \leq \frac{1}{2},
 \end{equation}
 	which is at least valid in some small neighborhood $B_R$ of $0$ since (\ref{nabla as a normal}) and the fact that $N$ is tangent to $\{y = 0\}$ at $0$ imply that $\nabla f(0) = 0$.
-	One can show using Taylor's theorem that (\ref{bootstrap}) implies that 
-	$$\frac{1}{1 - |\nabla f(x)|^2 - |\nabla f(x)|^3} \leq 1 + |\nabla f(x)|,$$
-	so by (\ref{bound Hessian by Two}),
-	$$|\nabla^2 f(x)| \leq \frac{\|\Two_N\|_{C^0}}{1 - |\nabla f(x)|^2 - |\nabla f(x)|^3} \leq \|\Two_N\|_{C^0} \cdot (1 + |\nabla f(x)|).$$
-	If we write $x = (r, \theta)$, then by the mean value theorem, it follows that for $r \leq R$,
+	By (\ref{bound Hessian by Two}),
+$$|\nabla^2 f(x)| \leq 2|\Two_N(x, f(x))|,$$
+	and integrating this inequality one obtains for $|x| \leq R$ that
+\begin{equation}\label{closed bootstrap}
+	|\nabla f(x)| \leq 2|\Two_N(x, f(x))| \leq \frac{1}{4}.
+\end{equation}
+	In particular, since $\nabla f \in C^1$, either $R \geq 1$ or there exists $R' > R$ such that the bootstrap assumption (\ref{bootstrap}) is valid on $B_{R'}$, so (\ref{bootstrap}) is valid with $R = 1$.
+	Integrating (\ref{closed bootstrap}),
+$$|f(x)| \leq 2\|\Two_N\|_{C^0}.$$
+	Moreover, by (\ref{nabla as a normal}) and (\ref{closed bootstrap}),
 \begin{align*}
-	|\nabla f(x)| &\leq \|\Two_N\|_{C^0} \int_0^r 1 + |\nabla f(s, \theta)| \dif s.
-\end{align*}
-	So by Gr\"onwall's inequality,
-\begin{align*}
-	|\nabla f(x)| &\leq r \|\Two_N\|_{C^0} + \|\Two_N\|_{C^0}^2 \int_0^r s \exp(\|\Two_N\|_{C^0} \cdot (r - s)) \dif s \\
-	&= r \|\Two_N\|_{C^0} + \exp(r \|\Two_N\|_{C^0}) - r \|\Two_N\|_{C^0} - 1 \\
-	&= \exp(r \|\Two_N\|_{C^0}) - 1.
-\end{align*}
-	Recalling that $\|\Two_N\|_{C^0} \leq \log(5/4)$, and $r \leq R < 1$, we conclude that on $B_R$, $|\nabla f| < 1/4$.
-	That is, we recover the bootstrap assumption (\ref{bootstrap}) on some ball $B_{R'}$ for some $R' > R$, and hence on the entire ball $B_1$.
-
-	By the mean value theorem again,
-\begin{align*}
-	|f(x)| &\leq \int_0^r |\nabla f(s, \theta)| \dif s \leq \int_0^r \exp(s \|\Two_N\|_{C^0}) - 1 \dif s \\
-	&= \|\Two_N\|_{C^0}^{-1} (\exp(r \|\Two_N\|_{C^0}) - r\|\Two_N\| - 1) \\
-	&\leq r^2 \|\Two_N\|_{C^0}
-\end{align*}
-	where we again used the bound $\|\Two_N\|_{C^0} \leq \log(5/4) < 0.25$ to control the higher-order terms in the Taylor expansion of $\exp(r \|\Two_N\|_{C^0})$. Since $r < 1$ was arbitrary we conclude $\|f\|_{C^0} \leq \|\Two_N\|_{C^0}$. Moreover, by (\ref{nabla as a normal}),
-\begin{align*}
-	|\normal(x, f(x)) - \partial_y| &\leq |\nabla f(x)| \leq 2r \|\Two_N\|_{C^0}. \qedhere
+	|\normal(x, f(x)) - \partial_y| &\leq |\nabla f(x)| + \left|1 - \frac{1}{\sqrt{1 + |\nabla f(x)|^2}}\right| \\
+	&\leq 2\|\Two_N\|_{C^0} + 4\|\Two_N\|_{C^0}^2 \leq 3\|\Two_N\|_{C^0}. \qedhere
 \end{align*}
 \end{proof}
 
@@ -721,43 +796,28 @@ An analogous result was proven by \cite{Solomon86} (without the quantitative dep
 We did not do this, both because \cite{Solomon86} requires that $\lambda$ be a foliation, and because it does not seem particularly easy to recover quantitative bounds from the highly general theory of \cite[Chapter 5]{federer2014geometric}.
 
 \begin{lemma}\label{lams have C0 fields}
-	For every sufficiently small $\delta > 0$ there exist $r = r(\delta, g, A) > 0$ such that for every minimal lamination $\lambda$ satisfying (\ref{curvature bound in regularity}) we can choose normal coordinates $(x, y) \in \RR^{d - 1} \times \RR$ on $B(P, r)$ so that
+	For every sufficiently small $\delta > 0$ there exist $r = r(\delta, g, A) > 0$ such that for every disjoint family of minimal surfaces $\mathcal S$ satisfying the curvature bound (\ref{curvature bound in regularity}), we can choose normal coordinates $(x, y) \in \RR^{d - 1} \times \RR$ on $B(P, r)$ so that
 \begin{equation}\label{normal is basically dy}
-	\|\normal_\lambda - \partial_y\|_{C^0(B(P, r))} \leq \delta.
+	\sup_{N \in \mathcal S} \|\normal_\lambda - \partial_y\|_{C^0(B(P, r))} \leq \delta.
 \end{equation}
 \end{lemma}
 \begin{proof}
 	Suppose not.
-	Then, after rescaling to set $A = 1$, there exist minimal laminations $\lambda_n'$ in $B(P, 1/n)$ such that
-	$$\sup_{N \in \Leaves \lambda_n'} \|\Two_N\|_{C^0} \leq 1,$$
-	but no matter how we rotate normal coordinates based at $P$, (\ref{normal is basically dy}) fails for $\lambda_n'$.
-	By taking normal coordinates and rescaling by $n$, we can find (possibly nonminimal) laminations $\lambda_n$ in $B_1 \subset \RR^d$ such that
-% \begin{sublemma}
-% 	For each $n \geq \inj(g)$ there exists a lamination $\lambda_n$ in $\RR^d$ so that every rotation of $B_1$ fails (\ref{normal is basically dy}), but satisfies
+	Then, after rescaling to set $A = 1$, there exist disjoint families of minimal surfaces $\mathcal S_n'$ in $B(P, 1/n)$ such that
+	$$\sup_{N \in \mathcal S_n'} \|\Two_N\|_{C^0} \leq 1,$$
+	but no matter how we rotate normal coordinates based at $P$, (\ref{normal is basically dy}) fails for $\mathcal S_n'$.
+	By passing to normal coordinates and rescaling by $n$, we can find disjoint families of (possibly nonminimal) surfaces $\mathcal S_n$ in $B_1 \subset \RR^d$ such that
 \begin{equation}\label{bounds on Two in representation}
-	\sup_{N \in \Leaves \lambda_n} \|\Two_N\|_{C^0} \lesssim_g \frac{1}{n^2}
+	\sup_{N \in \mathcal S_n} \|\Two_N\|_{C^0} \lesssim_g \frac{1}{n^2}
 \end{equation}
 	but for every rotation of $\RR^d$, (\ref{normal is basically dy}) fails.
-% \end{sublemma}
+	Here we used the fact that if $\Two_N$ is $C^0$-small, then in normal coordinates and small enough curvature (which holds for $n \gg 1$, because of the rescaling), the second fundamental form of the representation of $N$ in coordinates is $\lesssim \|\Two_N\|_{C^0}$.
 
-% We remark carefully that the lamination in the above sublemma may not be minimal.
-% However this fact will be irrelevant.
-
-% \begin{proof}
-% 	Since $n \geq \inj(g)$ we can pass to the tangent space and rescale $B(P, 1/n)$ to obtain $B_1$. The scaling makes the second fundamental form $\Two_N'$ with respect to $g$ satisfy
-% $$\|\Two_N'\|_{C^0} \leq \frac{e^{-O(n^2)}}{n^2} \lesssim \frac{1}{n^2}.$$
-% 	Here and always all implied constants may depend on $g$.
-% 	In normal coordinates,
-% 	$$g_{\mu \nu} = \delta_{\mu \nu} + \sum_{k=2}^\infty c_k \frac{|x|^k}{n^k},$$
-% 	and differentiating this expression gives that the connection $1$-form $\Gamma$ for the Levi-Civita connection $\nabla_g$ satisfies $|\Gamma| \lesssim n^{-2}$.
-% 	But $\|\Two_N - \Two_N'\|_{C^0} \lesssim \|\Gamma\|_{C^0}$, since $\Two_N - \Two_N'$ is the difference between the euclidean and $\nabla_g$ derivatives of the conormal.
-% \end{proof}
-
-	By Lemma \ref{existence of tubes}, every leaf of $\lambda_n$ is $O(n^{-2})$-close to its tangent spaces in $C^1$.
-	In particular, if $n \gg \delta^{-1/2}$, and the normal vector at some point to $N \in \Leaves \lambda_n$ is $\partial_y$, then
+	By Lemma \ref{existence of tubes} and (\ref{bounds on Two in representation}), for every $n \gg 1$, every member of $\mathcal S_n$ is $O(n^{-2})$-close to its tangent spaces in $C^1$.
+	In particular, if $n \gg \delta^{-1/2}$, and the normal vector at some point to $N \in \mathcal S_n$ is $\partial_y$, then
 	$$\|\normal_N - \partial_y\|_{C^0(B(P, r))} \ll \delta.$$
 	We can always impose this for some $N$ by applying a rotation of $\RR^d$.
-	But by our contradiction assumption, there exists some leaf $N'$ of $\lambda_n$ and some $P \in N'$ so that $|\normal_{N'}(P) - \partial_y| \geq \delta$ and hence if $n$ is large enough,
+	But by our contradiction assumption, there exists some leaf $N'$ of $\mathcal S_n$ and some $P \in N'$ so that $|\normal_{N'}(P) - \partial_y| \geq \delta$ and hence if $n$ is large enough,
 	$$\inf_{N'} |\normal_{N'} - \partial_y| \geq \frac{\delta}{2}.$$
 	By the reverse triangle inequality it follows that
 \begin{equation}\label{discrepancy in normals}
@@ -765,42 +825,29 @@ We did not do this, both because \cite{Solomon86} requires that $\lambda$ be a f
 \end{equation}
 	at least if $\delta$ is smaller than an absolute constant.
 	
-	In order to obtain a contradiction, we may assume that $r$ is small depending on $\delta$, and consider the restriction of $\lambda_n$ to $B_r$.
+	In order to obtain a contradiction, we may assume that $r$ is small depending on $\delta$, and consider the restriction of $\mathcal S_n$ to $B_r$.
 	In particular, we may assume that there are points $P \in N \cap B_r$ and $P' \in N' \cap B_r$ for some $r \ll \delta$.
 	By (\ref{discrepancy in normals}), the angle $\theta$ between the tangent spaces $T_P N$ and $T_{P'} N'$ is $\gtrsim \delta$, but $|P - P'| \ll \delta$.
 	This is only possible if $T_P N$ and $T_{P'} N'$ intersect in some ball $B_{r'}$ for some $r' \ll 1$, say $r' = 1/2$.
 	But then, since $N, N'$ are $O(n^{-2})$-close to $T_P N$ and $T_{P'} N'$ in $C^0$, then $N$ and $N'$ intersect in $B_1$ if $n$ is large enough.
-	However, $N, N'$ were assumed to be leaves of the same lamination $\lambda_n$ in $B_1$, so this is a contradiction.
+	However, $N, N'$ were assumed to be disjoint, so this is a contradiction.
 \end{proof}
 
-\begin{proof}[Proof of Proposition \ref{regularity theorem}]
+We now are ready to prove Theorem \ref{regularity theorem}.
 Fix $\delta > 0$ to be chosen later, and $P \in M$.
-By Lemma \ref{lams have C0 fields}, there exists $r = r(\delta, g, A) > 0$ such that $B(P, r)$ admits cylindrical, normal coordinates $(x, y) \in 3\Ball^{d - 1} \times (-2, 2)$, and
+By Lemma \ref{lams have C0 fields}, if $\delta \leq \delta_*$ for some $\delta_* = \delta_*(g) > 0$, there exists $r = r(\delta, g, A) > 0$ such that $B(P, r)$ admits rescaled normal coordinates $(x, y) \in 5\Ball^{d - 1} \times (-2, 2)$ in which the curvature of the rescaled metric has a $C^0$ norm $\leq K_0$ and
 \begin{equation}\label{normal is almost constant}
-\|\normal - \partial_y\|_{C^0(B(P, r))} < \delta.
+\|\normal - \partial_y\|_{C^0(B(P, r))} \leq \delta.
 \end{equation}
-If $\delta$ is chosen small enough depending on $g$, then we may assume that in $2\Ball^{d - 1} \times (-1, 1)$,
-every leaf is the graph of a function, say $u_k: 3\Ball^{d - 1} \to (-2, 2)$ where $u_k(0) = k$.
-
-If $r$ is chosen small enough depending on $g$ and some $\varepsilon > 0$, then the metric $h$ induced by $g$ on $3\Ball^{d - 1} \times (-2, 2)$ has curvature $\Riem_h$ satisfying $\|\Riem_h\|_{C^0} \leq \varepsilon$.
-Writing $Lu = 0$ for the minimal surface equation on $(2\Ball^{d - 1} \times (-1, 1), h)$, it follows that the ellipticity of $L$ and the scale-invariant H\"older norms of $L$ are bounded independently of $\delta$ if $\varepsilon$ is smaller than some absolute constant.
-Moreover, $Lu_k = 0$ since the graph of $u_k$ is a minimal surface, and we have $\|u_k\|_{C^0} \leq 2$.
-So by a straightforward modification of \cite[Corollary 16.7]{gilbarg2015elliptic}, we have uniformly in $k \in (-1, 1)$ that
-\begin{equation}\label{norms on uk}
-\|u_k\|_{C^2} \lesssim 1.
-\end{equation}
+Moreover,
+$$|\normal \cdot \partial_y| \geq 1 - |\normal - \partial_y| \geq 1 - \delta,$$
+so if we select $\delta := \min(\delta_*, \frac{1}{4})$, then in $5\Ball^{d - 1} \times (-1, 1)$, then every leaf is the graph of a function, say $u_k: 5\Ball^{d - 1} \to (-2, 2)$ where $u_k(0) = k$, and
+$$\|\dif u_k\|_{C^0} \leq \frac{1 - (1 - \delta)^2}{1 - \delta} \leq 1.$$
+If $r$ is chosen small enough depending on $g$, then the metric induced by $g$ on $5\Ball^{d - 1} \times (-2, 2)$ has constant sectional curvature $K$ such that $|K| \leq K_0$.
+Moreover, $\|u_k\|_{C^0} \leq 2$, and $u_k$ has a minimal graph, so the elliptic estimates stated in \S\ref{Leaf estimates} apply to $u_k$ uniformly in $k$.
 
 Now let $-1 < k < \ell < 1$, and let $v_{\ell k} := u_\ell - u_k$.
-Then $v_{\ell k}$ is the difference of two elements of the kernel of $L$, so $v_{\ell k}$ solves a linear elliptic PDE $Q_{\ell k} v_{\ell k} = 0$.
-The ellipticity of $Q_{\ell k}$ and the scale-invariant H\"older norms of $Q_{\ell k}$ only depend on $g$ and $C$, but not on $\ell, k, \delta$.
-These assertions about $Q_{\ell k}$ follow from (\ref{norms on uk}) and a routine modification of \cite[Lemma 1.26]{colding2011course}.
-
-Since the graphs of $u_\ell, u_k$ are leaves of a lamination, $v_{\ell k} > 0$.
-By the Schauder \cite[Theorem 6.2]{gilbarg2015elliptic} and Harnack \cite[Theorem 9.25]{gilbarg2015elliptic} inequalities applied to the elliptic operator $Q_{\ell k}$, it follows that for every $x \in \Ball^{d - 1}$,
-\begin{equation}\label{Schauder Harnack}
-	\|\dif v_{\ell k}\|_{C^0(\Ball^{d - 1})} \lesssim \|v_{\ell k}\|_{C^0(2 \Ball^{d - 1})} \lesssim \inf_{\Ball^{d - 1}} v_{\ell k} \leq v_{\ell k}(x).
-\end{equation}
-In particular, for every $x$,
+By (\ref{Schauder Harnack}) with $v := v_{\ell k}$, for every $x \in \Ball^{d - 1}$,
 \begin{equation}\label{bound on du}
 |\dif u_\ell(x) - \dif u_k(x)| \lesssim |u_\ell(x) - u_k(x)|
 \end{equation}
@@ -817,7 +864,7 @@ Then by (\ref{norms on uk}) and the mean value theorem,
 $$|\normal(X_1) - \normal(Y)| \lesssim |\dif u_{k_1}(x_1) - \dif u_{k_1}(x_2)| \lesssim |X_1 - Y|.$$
 Moreover, by (\ref{vertical Lipschitz}),
 $$|\normal(Y) - \normal(X_2)| \lesssim |u_{k_1}(x) - u_{k_2}(x)| = |Y - X_2|.$$
-If $\delta$ is chosen smaller than some absolute constant, then by (\ref{normal is almost constant}),
+Since $\delta \leq \frac{1}{4}$, by (\ref{normal is almost constant}),
 $$|\sin \angle(X_1 - Y, X_2 - Y)| > 1 - O(\delta)$$
 and we conclude by the Pythagorean theorem that
 $$|Y - X_2|^2 + |X_1 - Y|^2 \lesssim |X_1 - X_2|^2.$$
@@ -825,10 +872,6 @@ In conclusion,
 $$|\normal(X_1) - \normal(X_2)| \lesssim |X_1 - X_2|$$
 which implies that $\normal$ is Lipschitz on $V \cap \supp \lambda$, where $V$ is the neighborhood of $P$ which was mapped to $\Ball^{d - 1} \times (-1, 1)$ by the cylindrical coordinates $(x, y)$.
 In particular, $V$ contains a ball of the form $B(P, s)$, where $s$ only depends on $r$ (and $r$ only depends on $g$ and $A$).
-% Moreover, $|X_1 - X_2| \sim r \dist(X_1, X_2)$ by definition of the coordinates $(x, y)$, so we obtain
-% \begin{equation}\label{lipschitz normal}
-% 	|\Lip(\normal)| \lesssim r^{-1}.
-% \end{equation}
 Taking a Lipschitz extension of $\normal$ to $V$ we obtain the desired Lipschitz normal subbundle.
 
 Following \cite[Appendix B]{ColdingMinicozziIV}, we construct the laminar flow box
@@ -841,11 +884,22 @@ $$f(\xi, \eta) := u_\eta(\xi)$$
 if $u_\eta$ exists, and if $k < \eta < \ell$ and there does not $k < \eta' < \ell$ such that $u_{\eta'}$ exists, then
 $$f(\xi, \eta) := u_k(\xi) + \frac{\eta - k}{\ell - k} v_{\ell k}(\xi)$$
 is the linear interpolant of $u_k$ and $u_\ell$.
-It is clear that $F$ is uniformly tangentially $C^\infty$, since $u_k$ and $v_{\ell k}$ are bounded in $C^\infty$ by elliptic bootstrapping.
+
+By (\ref{norms on uk}), $F$ is bounded in tangential $C^\infty$.
+In particular, if $V$ is a vector field tangent to $\{\eta = k\}$, then the pushforward
+$$F_* V = V^i \partial_{x^i} + (Vf) \partial_y$$
+is well-defined, and pushforwards of such vector fields span the tangent bundle of the graph of $u_k$. 
+The bound
+\begin{equation}\label{xiLip of f}
+	\|\partial_\xi f\|_{C^0} \lesssim \sup_k \|u_k\|_{C^1} \lesssim 1,
+\end{equation}
+a consequence of (\ref{norms on uk}), establishes that $\|F_* V\|_{C^0} \sim \|V\|_{C^0}$, and then 
+$$\|(F_* V) F^{-1}\|_{C^0} \lesssim \|V(F \circ F^{-1})\|_{C^0} \leq \|V\|_{C^0} \sim \|F_* V\|_{C^0}.$$
+Since $V$ was arbitrary we conclude that $F^{-1}$ is bounded in tangential $C^1$, hence in tangential $C^\infty$ by the inverse function theorem. 
 
 It remains to show that $F$ is a Lipschitz isomorphism.
 To do this, we first claim that $\Lip(f) \sim 1$.
-It is clear that $f$ is Lipschitz (in fact, smooth) in the $\xi$ direction, with constant comparable to $\sup_k \|u\|_{C^1} \lesssim 1$ by (\ref{norms on uk}).
+In the $\xi$ direction, we use (\ref{xiLip of f}).
 If $-1 < k < \ell < 1$, then by (\ref{bound on du}) and (\ref{Schauder Harnack}),
 \begin{equation}\label{f lip}
 	|f(\xi, k) - f(\xi, \ell)| \lesssim |u_k(\xi) - u_\ell(\xi)| \lesssim \ell - k.
@@ -855,37 +909,54 @@ We can then estimate using (\ref{f lip})
 $$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \lesssim |\xi_1 - \xi_2| + \Lip(f)(|\xi_1 - \xi_2| + |\eta_1 + \eta_2|)$$
 so that $\Lip(F) \lesssim 1 + \Lip(f) \lesssim 1$.
 
-By the Pythagorean theorem,
-$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \sim |\xi_1 - \xi_2| + |f(\xi_1, \eta_1) - f(\xi_2, \eta_2)|.$$
-Moreover, by (\ref{nabla as a normal}) and (\ref{normal is almost constant}), $\|\partial_\xi f\|_{C^0} \lesssim \delta$, so if we take $\delta$ small enough then 
-$$|f(\xi_1, \eta_1) - f(\xi_2, \eta_2)| \geq |f(\xi_1, \eta_1) - f(\xi_1, \eta_2)| - \|\partial_\xi f\|_{C^0} \cdot |\xi_1 - \xi_2|$$
-implies 
-$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \gtrsim |\xi_1 - \xi_2| + |f(\xi_1, \eta_1) - f(\xi_1, \eta_2)|.$$
-By (\ref{Schauder Harnack})
-$$
-	\frac{|f(\xi, \eta_1) - f(\xi, \eta_2)|}{|\eta_1 - \eta_2|} \geq \inf_{k < \ell} \frac{v_{\ell k}(\xi)}{\ell - k} \gtrsim \inf_{k < \ell} \frac{v_{\ell k}(0)}{\ell - k} = 1,
-$$
-so 
-$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \gtrsim |\xi_1 - \xi_2| + |\eta_1 - \eta_2|.$$
+To obtain a bound on $\Lip(F^{-1})$, we observe that
+\begin{equation}\label{F is coLip in xi}
+|\xi_1 - \xi_2|^2
+\leq |\xi_1 - \xi_2|^2 + |f(\xi_1, \eta_1) - f(\xi_2, \eta_1)|^2 
+= |F(\xi_1, \eta) - F(\xi_2, \eta)|^2.
+\end{equation}
+By Harnack's inequality with $\eta_1 = k$ and $\eta_2 = \ell$, or $k \leq \eta_1 < \eta_2 \leq \ell$ if $\eta_1, \eta_2$ lie in the plaque between leaves $k, \ell$,
+$$\frac{|f(\xi_1, \eta_1) - f(\xi_1, \eta_2)|}{|\eta_1 - \eta_2|} \gtrsim \frac{v_{\ell k}(\xi_1)}{\ell - k} \gtrsim \frac{v_{\ell k}(0)}{\ell - k} = 1$$
+whence by the mean value theorem and (\ref{F is coLip in xi}),
+\begin{align*}
+	|\eta_1 - \eta_2| 
+	&\lesssim |f(\xi_1, \eta_1) - f(\xi_1, \eta_2)| \\
+	&\leq |f(\xi_1, \eta_1) - f(\xi_2, \eta_2)| + \|\partial_\xi f\|_{C^0} |\xi_1 - \xi_2| \\
+	&\leq (1 + \|\partial_\xi f\|_{C^0}) |F(\xi_1, \eta_1) - F(\xi_2, \eta_2)|.
+\end{align*}
+By (\ref{norms on uk}) and the fact that either $\partial_\xi f = \partial_\xi u_\eta$, or there are $k,\ell$ such that $\partial_\xi f$ is the linear interpolation of $\partial_\xi u_k$ and $\partial_\xi u_\ell$, $\|\partial_\xi f\|_{C^0} \lesssim 1$.
+Thus
+$$|F(\xi_1, \eta_1) - F(\xi_2, \eta_2)| \gtrsim |\xi_1 - \xi_2|^2 + |\eta_1 - \eta_2|^2.$$
 It follows that $\Lip(F^{-1}) \lesssim 1$, so $F$ is a Lipschitz isomorphism with constants comparable to $1$.
 
 Finally, we compose $F$ with the change of coordinates at the start of this proof to obtain a laminar flow box in a small neighborhood of $(0, 0)$ whose image has radius $O(r)$, and whose Lipschitz constants are comparable to $O(r^{-1})$.
-\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Proofs of main theorems}\label{CompactnessSec}
-We shall now use Proposition \ref{regularity theorem} to prove Theorems \ref{compactness theorem}, \ref{implication theorem}, and \ref{main thm}.
+We shall now use Theorem \ref{regularity theorem} to prove Theorems \ref{compactness theorem}, \ref{implication theorem}, and \ref{main thm}.
 Throughout, let $M$ be a manifold of constant sectional curvature and dimension $2 \leq d \leq 7$.
 
 \subsection{Compactness}
 We begin by proving Theorem \ref{compactness theorem}.
 
+\subsubsection{Construction of the limiting flow box}
 Let $P \in M$.
-By Proposition \ref{regularity theorem}, there exist $r > 0$ and $L \geq 1$ such that for every large $n \in \NN$, $B(P, r)$ is contained in the image of a flow box $F_n$ for $\lambda_n$ with Lipschitz constant $L$, such that $F_n(0, 0) = P$.
-By the Arzela-Ascoli theorem and the interpolation theorem for H\"older spaces, along a subsequence $F_n \to F$ in $C^{1-}$ for some $C^{1-}$ map $F: I \times J \to B(P, r)$ and some $I \subseteq \RR$, $J \subseteq \RR^{d - 1}$, such that on the image $V$ of $F$, $F^{-1}$ is also $C^{1-}$.
-Moreover, $F(0, 0) = P$, so that $F: I \times J \to V$ is a Lipschitz isomorphism onto a set which contains $P$.
-Since $P$ was arbitrary, it follows that we can find laminar atlases $(F_\alpha^n, K_\alpha^n)$ for each large $n \in \NN$ such that $F_\alpha^n \to F_\alpha$, where the images of $F_\alpha$ and $F_\alpha^n$ are an open cover $(U_\alpha)$ of $M$ independent of $n$, and $(F_\alpha)$ satisfies the usual transition relations.
+By Theorem \ref{regularity theorem}, there exist $r > 0$ and $L \geq 1$ such that for every large $n \in \NN$, $B(P, r)$ is contained in the image of a flow box $F_n$ for $\lambda_n$ with Lipschitz constant $L$, such that $F_n(0, 0) = P$.
+By the Arzela-Ascoli theorem, along a subsequence $F_n \to F$ in $C^0$ for some map $F: I \times J \to B(P, r)$ and some $I \subseteq \RR$, $J \subseteq \RR^{d - 1}$, such that on the image $V$ of $F$, we also have the convergence $F_n^{-1} \to F^{-1}$.
+Moreover, $F(0, 0) = P$, so that $F: I \times J \to V$ is a homeomorphism onto a set which contains $P$.
+Since
+$$\max(\Lip(F), \Lip(F^{-1})) \leq \limsup_{n \to \infty} \max(\Lip(F_n), \Lip(F_n^{-1})) \leq L,$$
+it follows that $\max(\Lip(F), \Lip(F^{-1})) \leq L$, and for any $\theta \in (0, 1)$,
+\begin{align*}
+	\|F - F_n\|_{C^\theta}
+	&\leq \Lip(F - F_n)^\theta \|F - F_n\|_{C^0}^{1 - \theta} \leq (2L)^\theta \|F - F_n\|_{C^0}^{1 - \theta}.
+\end{align*}
+It follows that $F_n \to F$ in $C^\theta$, hence in $C^{1-}$, and similarly for $F^{-1}$.
+Since $(F_n)$ and $(F_n^{-1})$ are bounded in tangential $C^\infty$, a similar compactness argument to the above shows that $F_n \to F$ and $F_n^{-1} \to F^{-1}$ in tangential $C^\infty$.
 
+Since $P$ was arbitrary, it follows that we can find laminar atlases $(F_\alpha^n, K_\alpha^n)$ for each large $n \in \NN$ such that $F_\alpha^n \to F_\alpha$ in $C^{1-}$, where the images of $F_\alpha$ and $F_\alpha^n$ are an open cover $(U_\alpha)$ of $M$ independent of $n$, and $(F_\alpha)$ satisfies the usual transition relations, and $F_\alpha$ is a Lipschitz isomorphism.
+
+\subsubsection{Construction of the limiting lamination}
 We now construct the limiting lamination.
 Let $\Hypspace I$ be the space of closed subsets of $I$ with its Hausdorff distance; since $I$ is a compact metric space, so is $\Hypspace I$ \cite[Theorem 4.17]{nadler2017continuum}, so we may diagonalize so that for every $\alpha$, either $K^n_\alpha \to K_\alpha$ for some nonempty $K_\alpha$ in the Hausdorff distance on $I$, or for all $n \geq n^*(\alpha)$, $K_\alpha^n$ is empty (in which case we define $K_\alpha = \emptyset$).
 
@@ -902,7 +973,10 @@ Then there exists a finite set $A_E \subseteq A$ such that $E \subseteq \bigcup_
 	This is a contradiction since $\lambda_n$ has a leaf.
 \end{proof}
 
-Now let $\psi_{\alpha \beta}$ and $\psi_{\alpha \beta}^n$ be the transition maps, thus $\psi_{\alpha \beta}^n$ induces a map
+In each flow box $F_\alpha$ with $K_\alpha$ nonempty, we thus have the leaves of a lamination, namely $K_\alpha \times J$.
+We now check the transition relations to ensure that they glue to a global lamination; this is straightforward but we include it for completeness.
+
+Thus let $\psi_{\alpha \beta}$ and $\psi_{\alpha \beta}^n$ be the transition maps, thus $\psi_{\alpha \beta}^n$ induces a map
 $$\psi_{\alpha \beta}^n: K_\alpha^n \to K_\beta^n.$$
 By convergence of $(F_\alpha^n)$, $\psi_{\alpha \beta}$ induces a map $K_\alpha \to K_\beta$.
 
@@ -933,12 +1007,11 @@ But then $\psi_{\beta \alpha}(k_\beta)$ must be defined, so $\alpha \in A'$, a c
 Therefore $N$ is complete in $M$.
 
 To prove minimality, let
-$$u_\alpha(k, x) = 1_{k > k_\alpha}$$
-and similarly $u_\alpha^n(k, x) = 1_{k > k_\alpha^n}$ where $(k_\alpha^n) \in \prod_n K_\alpha^n$ converges to $k_\alpha$.
-Then the pullback of $u_\alpha^n$ by $F_\alpha \circ (F_\alpha^n)^{-1}$ converges pointwise away from $F_\alpha^{-1}(N \cap U_\alpha)$ to $u_\alpha$, since $k_\alpha^n \to k_\alpha$.
+$$u_\alpha(k, x) = (F_\alpha)_* 1_{k > k_\alpha}$$
+and similarly $u_\alpha^n(k, x) = (F_\alpha^n)_* 1_{k > k_\alpha^n}$ where $(k_\alpha^n) \in \prod_n K_\alpha^n$ converges to $k_\alpha$.
 Since $F_\alpha \circ (F_\alpha^n)^{-1}$ converges to the identity map in $C^{1-}$, and $F_\alpha^{-1}(N \cap U_\alpha)$ has zero measure, it follows that $u_\alpha^n \to u_\alpha$ almost everywhere, and hence in $L^1(I \times J)$ by the dominated convergence theorem.
-But $u_\alpha^n$ has approximately least gradient in the sense of (\ref{boundedness in Miranda}) with respect to the pullback metric $F_\alpha^* g$, so its limit $u_\alpha$ must have least gradient by the Miranda stability theorem.
-Thus by Theorem \ref{main thm of old paper}, $N \cap U_\alpha$ is minimal.
+But $u_\alpha^n$ has least gradient, so by the Miranda stability theorem, $\dif u_\alpha^n \to \dif u_\alpha$ in the weak topology of measures.
+Clearly $\dif u_\alpha = [N \cap U_\alpha]$ and similarly for $u_\alpha^n$, so by Lemma \ref{measured convergence is smooth convergence}, $N \cap U_\alpha$ is minimal.
 \end{proof}
 
 \begin{lemma}
@@ -953,24 +1026,20 @@ Now if we choose $\alpha$ such that $K_\alpha$ is nonempty, every element of $K_
 So $\supp \lambda$ is nonempty, and since all of its leaves are complete minimal, $\lambda$ is minimal.
 \end{proof}
 
-\begin{lemma}
-	$\lambda_n \to \lambda$ in Thurston's geometric topology.
-\end{lemma}
-\begin{proof}
+\subsubsection{Convergence in Thurston's geometric topology}
+At this stage of the argument we have constructed a limiting lamination with limiting flow boxes; we now check that the convergence occurs in other modes as well.
+
 If $K_\alpha$ is nonempty, then any $k_\alpha \in K_\alpha$ is the limit of some sequence $(k_\alpha^n)_n \in \prod_n K_\alpha^n$ \cite[Theorem 4.11]{nadler2017continuum}.
-Thus $\{k_\alpha\} \times J$ can be written as the set of limits of sequences $(k_\alpha^n, x)_n \in \prod_n K_\alpha^n \times J$, and so any leaf $N$ of $\lambda$ can be written 
-$$N = \left\{\lim_{n \to \infty} P_n: P_n \in N_n\right\}$$
-for some sequence $(N_n) \in \prod_n \Leaves \lambda_n$.
+Thus $\{k_\alpha\} \times J$ can be written as the set of limits of sequences $(k_\alpha^n, x)_n \in \prod_n K_\alpha^n \times J$, and so any leaf $N$ of $\lambda$ takes the form $N = \lim_{n \to \infty} N_n$ for some sequence $(N_n) \in \prod_n \Leaves \lambda_n$.
 In other words, leaves of $\lambda$ are pointwise limits of leaves in $\lambda_n$.
 
 So it suffices to show that for $N \in \Leaves \lambda$, $P \in N$, and $P_n \to P$, where $P_n \in N_n$ and $N_n \in \Leaves \lambda_n$, $\normal_{N_n}(P_n) \to \normal_N(P)$.
-To do this, suppose that $P \in U_\alpha$; $F_\alpha^n$ is close in $C^{1-}$ to $F_\alpha$, and the label $k^n_\alpha$ of $N_n$ is close to the label $k_\alpha$ of $N$.
-So in some neighborhood $B$ of $P$, $N_n \cap B$ is close to $N \cap B$ in $C^{1-}$.
-By assumption, $\|\Two_{N_n \cap B}\|_{C^0} \leq A$ and so $N_n \cap B$ is bounded in $C^2$.
-The interpolation theorem for H\"older spaces then implies that $N_n \cap B$ is close to $N \cap B$ in $C^1$, so $\normal_{N_n}(P_n)$ is close to $\normal_N(P)$.
-\end{proof}
+To do this, suppose that $P \in U_\alpha$; $F_\alpha^n$ is close in tangential $C^\infty$ to $F_\alpha$, and the label $k^n_\alpha$ of $N_n$ is close to the label $k_\alpha$ of $N$.
+In particular, if we consider $N$ and $N_n$ as graphs of functions $u, u_n$ in the coordinates induced by $F_\alpha$, then $u_n \to u$ in $C^\infty$; however, in such coordinates, $u$ is a constant.
+A bootstrapping argument based on (\ref{nabla as a normal}) then shows that, since $\dif u_n \to 0$ in $C^0$, $\normal_{N_n} \to \partial_y = \normal_N$ in $C^0$ near $P$.
 
-Finally, suppose that $\mu_n$ is transverse to $\lambda_n$.
+\subsubsection{Convergence in the measure topology}
+Suppose that $\mu_n$ is transverse to $\lambda_n$.
 After possibly shrinking the $U_\alpha$ slightly for $\alpha \in A_E$, we may assume that they are precompact in $M$ and still form an open cover of $E$.
 Then $K := \bigcup_{\alpha \in A_E} \overline{U_\alpha}$ is compact, so by Prohorov's theorem \cite[Theorem 13.29]{klenke2013probability}, there is a subsequence of $(T_{\mu_n})$ which converges to some $T_\mu|_K$ on $K$.
 Moreover, by the portmanteau theorem,
@@ -979,7 +1048,6 @@ Here the $(\lambda_n)$ in the limit inferior refers to the subsequence which alr
 In particular, the limit inferior is actually a limit and we conclude
 $$\supp T_\mu|_K \subseteq \supp \lambda \cap K.$$
 We may assume that $\mu_\alpha^n \to \mu_\alpha$ weakly for every $\alpha \in A_E$ and some positive Radon measures $\mu_\alpha$ (whose support is necessarily then contained in $K_\alpha$).
-Moreover, $F^n_\alpha \to F_\alpha$ in $C^{1-}$ and $F^n_\alpha$ is bounded in tangential $C^\infty$, so $F_\alpha$ is tangentially $C^\infty$ by interpolation of H\"older spaces, and hence we have the convergence of pullbacks $(F^n_\alpha)^* \to F_\alpha^*$ in $C^0$ for any compactly supported $d-1$-form $\varphi$ on $U_\alpha$.
 Taking the limit as $n \to \infty$ of the equation 
 $$\int_{U_\alpha} T_{\mu_n} \wedge \varphi = \int_I \int_{\{k\} \times J} (F_\alpha^n)^* \varphi \dif \mu_\alpha^n(k),$$
 we conclude that
@@ -995,17 +1063,18 @@ In order to show that convergence in the weak topology of measures implies conve
 Thurston claimed this fact \cite[Proposition 8.10.3]{thurston1979geometry} in case $d = 2$, but he did not justify why the limit is geodesic, or why the convergence respects the normal vectors.
 
 \begin{lemma}\label{limits of measured geodesic lams are geodesic}
-	The set of minimal measured laminations is closed in the weak topology of measures.
+	The set of minimal measured laminations of bounded curvature is closed in the weak topology of measures.
 \end{lemma}
 \begin{proof}
-Let $(\lambda, \mu)$ be a measured lamination and suppose that $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, where $(\lambda_i, \mu_i)$ are measured minimal.
+Let $(\lambda, \mu)$ be a measured lamination and suppose that $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, where $(\lambda_i, \mu_i)$ are measured minimal and of bounded curvature.
 Let $x \in \supp \lambda$ and $r > 0$ such that $B := B(x, r)$ is contractible.
 In $B$, we can write $T_{\mu_i} = \dif u_i$ for some sequence of functions of least gradient $u_i \in BV(B)$.
 Since $u_i$ is only defined up to a constant, we impose $\int_M \star u_i = 0$, so by Poincar\'e's inequality,
 $$\|u_i\|_{L^1(B)} \lesssim r\mu_i(B) \leq 2r \mu(B) < \infty$$
 for $i$ large.
 So by the Miranda stability theorem, there exists a $1$-harmonic function $u$ such that along a subsequence, $\dif u_i \to \dif u$ in the weak topology of measures.
-But then we must have $T = \dif u$, so $\lambda$ is minimal by Theorem \ref{main thm of old paper}.
+Then $T = \dif \mu$, so the leaves of $\lambda$ are level sets of $u$.
+By Theorem \ref{main thm of old paper}, the leaves of $\lambda$ are minimal hypersurfaces, as desired.
 \end{proof}
 
 We are now ready to prove Theorem \ref{implication theorem}.
@@ -1018,7 +1087,7 @@ Indeed, if $x \in \supp \lambda$ then for all $\varepsilon > 0$, $\mu(B(x, \vare
 Then by the portmanteau theorem, for all $n$ large, $\mu_n(B(x, \varepsilon)) > 0$; this proves (\ref{support is nonincreasing}).
 
 By (\ref{support is nonincreasing}), for every $x \in \supp \lambda$, $\varepsilon > 0$, and large $n$, $\supp \lambda_n \cap B(x, \varepsilon)$ is nonempty, and by Lemma \ref{limits of measured geodesic lams are geodesic}, $\lambda$ is a minimal lamination.
-By Proposition \ref{regularity theorem}, $\lambda, \lambda_n$ admit Lipschitz normal vectors, so by Lemma \ref{convergence of normals}, $\lambda_n \to \lambda$ in Thurston's geometric topology.
+By Theorem \ref{regularity theorem}, $\lambda, \lambda_n$ admit Lipschitz normal vectors, so by Lemma \ref{convergence of normals}, $\lambda_n \to \lambda$ in Thurston's geometric topology.
 
 Now suppose that $(\lambda_n)$ has bounded curvature.
 After discarding some leaves of $\lambda_n$ we may assume that $\lambda$ is a maximal limit.
@@ -1030,27 +1099,22 @@ Since $(\lambda_{n_k})$ was arbitrary, it follows that $\lambda_n \to \lambda$ i
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Application to 1-harmonic functions}
 We finally prove Theorem \ref{main thm}.
-We assume that $d \in \{2, 3, 4\}$.
 
+\subsubsection{$1$-harmonic function induces minimal lamination}
 Let $u$ be a $1$-harmonic function on $M$.
 By Theorem \ref{main thm of old paper}, the level sets of $u$ are closed embedded minimal hypersurfaces in $M$; let
 $$Y = \{y \in \RR: \partial \{u > y\} \neq \emptyset\}$$
 index the level sets of $u$.
 
 Let $y, z \in Y$. If $y > z$, then $\{u > y\} \subseteq \{u > z\}$, so $\partial \{u > y\}$ lies on one side of $\partial \{u > z\}$.
-By the maximum principle for minimal surfaces \cite[Corollary 1.28]{colding2011course}, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
+By the maximum principle, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
 Moreover, $\dif u$ is conormal to $\partial \{u > y\}$, so $\partial \{u > y\}$ has trivial normal bundle.
 Therefore by the stable Bernstein theorem, after replacing $M$ with an element of a compact exhaustion $(X_m)$ of $M$, we may assume that for some $A > 0$,
 \begin{equation}\label{curvature estimate on 1 harmonic}
 	\sup_{y \in Y} \|\Two_{\partial \{u > y\}}\|_{C^0} \leq A.
 \end{equation}
-We then choose a dense sequence $(y_n)$ in $Y$ and let $N_n = \partial \{u > y_n\}$.
-Since $N_n$ is closed, $S_n := \bigcup_{k < n} N_k$ is also closed, so $S_n$ is the support of a minimal lamination $\lambda_n$.
-By (\ref{curvature estimate on 1 harmonic}) and Theorem \ref{compactness theorem}, after passing to a subsequence we may find a limit $\lambda$ of $(\lambda_n)$ in the $C^{1-}$ flow box topology.
-Diagonalizing against the compact exhaustion $(X_m)$, we can return to the original manifold $M$.
-
-Every $N_n$ is a leaf of $\lambda$, and if $y \in Y$, then $\partial \{u > y\}$ is approximated by some subsequence of $(N_n)$ and so also is a leaf of $\lambda$.
-Since this property characterizes leaves of $\lambda$, we conclude that the leaves of $\lambda$ are exactly the level sets of $u$.
+Then by Theorem \ref{regularity theorem}, $\supp \dif u \cap X_m$ is the support of a lamination $\lambda_m$ with leaves given by the level sets of $u$.
+Diagonalizing against the compact exhaustion $(X_m)$ and using Theorem \ref{compactness theorem}, we obtain a lamination $\lambda = \lim_m \lambda_m$ on $M$ whose leaves are exactly the level sets of $u$.
 It follows that $\bigcup_{y \in Y} \partial \{u > y\}$ is the support of $\lambda$, that $\lambda$ is minimal, and that $\dif u$ is conormal to $\lambda$.
 In particular, we obtain an orientation on $\lambda$ from $\dif u$.
 
@@ -1065,17 +1129,22 @@ $$\mu'([\alpha', \beta'] \cap K') := u'(\beta', x') - u(\alpha', x') = u(\beta, 
 for some $x_1, x_2 \in J$. Since $\partial_x u = 0$,
 $$u(\beta, x_1) - u(\alpha, x_2) = u(\beta, x_1) - u(\alpha, x_1) = \mu([\alpha, \beta] \cap K).$$
 It follows that $\mu$ is transverse, and by construction $\mu$ lifts to $\star |\dif u|$ in $M$.
-Therefore $\dif u = \normal_\lambda |\dif u|$ is the Ruelle-Sullivan current for the measured oriented structure we just imposed on $\lambda$.
+So by (\ref{polar ruelle sullivan}), $\dif u = \normal_\lambda |\dif u|$ is the Ruelle-Sullivan current for the measured oriented structure we just imposed on $\lambda$.
 
-For the converse, we assume that we are given a measured oriented minimal lamination $\lambda$, which then has a Ruelle-Sullivan current $T$.
+\subsubsection{Minimal lamination induces $1$-harmonic function}
+Suppose that we are given a measured oriented minimal lamination $\lambda$, which then has a Ruelle-Sullivan current $T$.
 Since $\dif T = 0$, we may assume, possibly after replacing $M$ with its universal cover, that $T$ is exact, say $T = \dif u$, and we just need to show that $u$ is $1$-harmonic.
 If this is not true, then we can choose an open set $E \subseteq M$ with $C^\infty$ boundary and a function $v \in BV_\cpt(E)$ such that
 $$\int_E \star |\dif u + \dif v| < \int_E \star |\dif u| < \infty.$$
 Since $v$ has compact support, there exists a collar neighborhood $F \subseteq E$ of $\partial E$ such that for every $y \in \RR$,
-$$\partial \{u > y\} \cap F = \partial^* \{u + v > y\} \cap F.$$
-But by Theorem \ref{main thm of old paper}, the level sets $\partial \{u > y\}$ are stable minimal, so it follows that
-$$|\partial \{u > y\} \cap E| \leq |\partial^* \{u + v > y\} \cap E|.$$
-So by the coarea formula (see \todo{\cite{BackusFLG}} for a proof at this regularity),
+\begin{equation}\label{collar condition}
+	\partial \{u > y\} \cap F = \partial^* \{u + v > y\} \cap F.
+\end{equation}
+Since $\lambda$ is minimal, the coarea formula (see \todo{\cite{BackusFLG}} for a proof at this regularity) implies that $1_{\{u > y\}}$ is a critical point of the $1$-Dirichlet energy (\ref{least gradient functional}).
+However, the $1$-Dirichlet energy is convex, so $1_{\{u > y\}}$ is (stably) $1$-harmonic.
+By (\ref{collar condition}), $1_{\{u + v > y\}} - 1_{\{u > y\}}$ has compact support in $E$, so by the coarea formula,
+$$|\partial \{u > y\} \cap E| = \int_E \star |\dif 1_{\{u > y\}}| \leq \int_E \star |\dif 1_{\{u + v > y\}}| = |\partial^* \{u + v > y\} \cap E|.$$
+Another application of the coarea formula gives
 \begin{align*}
 \int_E \star |\dif u| &= \int_{-\infty}^\infty |\partial \{u > y\} \cap E| \dif y \leq \int_{-\infty}^\infty |\partial^* \{u + v > y\} \cap E| \dif y \\
 &= \int_E \star |\dif u + \dif v| < \int_E \star |\dif u|
@@ -1089,12 +1158,12 @@ which is a contradiction.
 \appendix \section{Transverse cocycles}\label{transverse curves}
 In this appendix, we show that convergence in the weak topology of measures as we have stated it (that is, the weak topology on the space of Ruelle-Sullivan currents) is equivalent to the formulation of Thurston \cite[\S8.6]{thurston1979geometry} that is more familiar to geometric topologists.
 
-We shall loosely follow \cite[\S7.2]{daskalopoulos2020transverse}.
 Let $\lambda$ be an oriented minimal lamination.
-By Proposition \ref{regularity theorem}, $\lambda$ has a global Lipschitz normal vector field $\normal_\lambda$ and is tangentially $C^\infty$.
+By Theorem \ref{regularity theorem}, $\lambda$ has a global Lipschitz normal vector field $\normal_\lambda$ and is tangentially $C^\infty$.
 We shall assume that $\supp \lambda$ is a Lebesgue null set.
-This assumption is harmless, because in the application of interest to geometric topologists, $M$ is a closed hyperbolic surface, and then by the Gauss-Bonnet formula it is indeed true that $\supp \lambda$ is null \cite[\S8.5]{thurston1998minimal}.
+This assumption is harmless, because in the application of interest to geometric topologists, $M$ is a closed hyperbolic surface, and then by the Gauss-Bonnet formula it is indeed true that $\supp \lambda$ is null \cite[\S8.5]{thurston1979geometry}.
 
+We now review preliminaries that were established in \cite[\S7.2]{daskalopoulos2020transverse}.
 A curve $\gamma: I \to M$ is said to be \dfn{positively transverse} to $\lambda$ if $\langle \gamma', \normal_\lambda \rangle > 0$ on $\supp \lambda$; by taking pushforwards by the inverse of a laminar flow box, this is equivalent to the condition of \cite[Definition 7.7]{daskalopoulos2020transverse}.
 We define negatively transverse curves similarly.
 The transverse curve $\gamma$ is \dfn{admissibly transverse} if, in addition, the endpoints of $\gamma$ lie in $M \setminus \supp \lambda$.
@@ -1126,7 +1195,7 @@ Taking exceptional pullbacks, we see that we may view $\mu$ as the data of a Rad
 
 
 \begin{proposition}\label{characterization of measure convergence}
-	Let $(\lambda_n, \mu_n)$ and $(\lambda, \mu)$ be oriented measured minimal laminations. Then $(\lambda_n, \mu_n) \to (\lambda, \mu)$ iff for every positively transverse curve $\gamma$ to $\lambda$ defined in a small neighborhood of $\supp \lambda$:
+	Let $(\lambda_n, \mu_n)$ and $(\lambda, \mu)$ be oriented measured minimal laminations with Lebesgue null supports. Then $(\lambda_n, \mu_n) \to (\lambda, \mu)$ iff for every positively transverse curve $\gamma$ to $\lambda$ defined in a small neighborhood of $\supp \lambda$:
 \begin{enumerate}
 \item $\gamma$ is eventually positively transverse to $\lambda_n$, and 
 \item $\gamma^! \mu_n \to \gamma^! \mu$ in the weak topology of measures.
