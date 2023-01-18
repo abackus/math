@@ -147,16 +147,16 @@
 % \tableofcontents
 
 \section{Introduction}
-In this paper we study the following related minimization problems for a $1$-form $A$ in a Riemannian $3$-fold $M$ subject to a homological or boundary constraint:
+In this paper we study the following related minimization problems for a connection $1$-form $A$ in a Riemannian $3$-fold $M$ subject to a homological or boundary constraint:
 \begin{enumerate}
 \item Minimize the \dfn{$\infty$-Maxwell energy} $\|\dif A\|_{L^\infty}$.
 \item Minimize the \dfn{curl modulus}
-$$L(A) := \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right|$$
+$$L(A) := \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \left|\int_\sigma \dif A\right|$$
 where $\Chain_2(M)$ denotes the space of oriented $2$-chains in $M$.
 \end{enumerate}
-Note: It might be more natural to replace the second with $\int_\sigma F$. Stokes' theorem guarantees that this works for plaquettes even if $F$ is bad.
+Here $\dif A$ denotes the curvature of $A$, so that if $\sigma$ is exact, $\int_{\partial \sigma} A = \int_\sigma \dif A$.
 
-The first problem corresponds to the $\infty$-Laplace equation, while the second corresponds to best Lipschitz functions.
+These problems are both analogous to familiar problems for scalar fields: first problem corresponds to the $\infty$-Laplace equation, while the second corresponds to best Lipschitz functions.
 For a discussion of our interest in this problem, see \S\ref{motivation}; for a more precise statement of our results without fluff, see \S\ref{results}.
 
 \subsection{History and motivation} \label{motivation}
@@ -190,14 +190,33 @@ The utility of the de Rham--Sobolev complex is its trace theorem:
 
 \begin{proposition}[trace theorem]
 Let $N$ be an $\ell$-fold, and let $\iota: N \to M$ be a smooth immersion.
-Then the pullback is a bounded linear operator 
-$$\iota^* W^{1, p} \Omega^\ell(M) \to W^{-\frac{1}{p}, p}(N, \Omega^\ell).$$
+Then for $1 < p < \infty$, the pullback is a bounded linear operator 
+$$\iota^*: W^{1, p} \Omega^\ell(M) \to W^{-\frac{1}{p}, p}(N, \Omega^\ell).$$
 In particular, for every $\alpha \in W^{1, p} \Omega^\ell(M)$ and every $\beta \in W^{1, q}(M, \Omega^{d - \ell - 1})$, where $\frac{1}{p} + \frac{1}{q} = 1$,
 $$\int_N \iota^* \alpha \wedge \iota^* \beta = \int_M \dif \alpha \wedge \beta + \alpha \wedge \dif \beta.$$
 \end{proposition}
 \begin{proof}
 % Modify https://www.math.purdue.edu/~lipeijun/math690_f11/notes/sec4.2.pdf
 \todo{just use electromag notes}
+\end{proof}
+
+Since the space $W^{-\frac{1}{p}, p}$ can be intractible, we use the following consequence on closed submanifolds, or equivalently cycles.
+
+\begin{corollary}\label{trace on cycles}
+Let $N$ be a closed $\ell$-fold, and let $\iota: N \to M$ a smooth immersion.
+Then for $1 < p < \infty$ and $\alpha \in W^{1, p} \Omega^\ell(M)$, the pullback $\iota^* \alpha$ is a signed Radon measure of finite total variation.
+In particular, convergence in $W^{1, p} \Omega^\ell$ implies convergence in the weak topology of measures of the pullbacks.
+\end{corollary}
+\begin{proof}
+Let $\frac{1}{p} + \frac{1}{q} = 1$, so that the dual space of $W^{-\frac{1}{p}, p}$ is $W^{\frac{1}{p}, q}_0$.
+Since $N$ is closed, $W^{\frac{1}{p}, q}_0(N) = W^{\frac{1}{p}, q}(N)$.
+Moreover, $W^{\frac{1}{p}, q}$ is an interpolation space of $W^{1, q}$ and $L^q$, hence 
+$$\|1\|_{W^{\frac{1}{p}, q}}(N) = \|1\|_{L^q(N)} = |N|^{\frac{1}{q}} < \infty.$$
+So for $\alpha \in W^{1, p} \Omega^\ell(M)$, we obtain from the trace theorem
+\begin{align*}
+\|\alpha\|_{L^1(N)} 
+&= \int \star |\alpha| \leq \|\alpha\|_{W^{-\frac{1}{p}, p}(N)} |N|^{\frac{1}{q}} \lesssim \|\alpha\|_{W^{1, p} \Omega^\ell(M)}. \qedhere 
+\end{align*}
 \end{proof}
 
 
@@ -264,7 +283,7 @@ hence the same holds for the infimum.
 
 We put any norm on $H^2(M, \RR)$ (as all are equivalent), hence $|\xi|$ makes sense for $\xi \in H^2(M, \RR)$.
 
-\begin{proposition}
+\begin{proposition}\label{existence for p}
 Assume $p = 2^n$ for some integer $n \geq 2$, and let $\mathscr F$ be a $U(1)$ line bundle.
 Then:
 \begin{enumerate}
@@ -312,23 +331,24 @@ But up to a gauge transformation of $A_p$, we may assume that $B$ is orthogonal 
 Finally, we deduce the $C^{1 + \alpha}$ elliptic regularity from \cite{Uhlenbeck77}.
 \end{proof}
 
-We do NOT get $C^\infty$ regular on sets $\Subset \{|\dif A_p| = 0\}$.
+We do NOT get $C^\infty$ regular on sets $\Subset \{|\dif A_p| = 0\}$, at least not in Coulomb gauge.
 Why?
 Expanding out the $p$-Maxwell equation for $A = A_p$,
 $$0 = \partial^j(|\dif A|^{p - 2} \partial_j A_i) - |\dif A|^{p - 2} \partial_i (\dif^* A) - |\dif A|^{p - 2} [\partial^j, \partial_i] A_j - \partial^j(|\dif A|^{p - 2}) \partial_i A_j.$$
 The first term is an elliptic operator with H\"older coefficients, the second can be gauged away, and the third is H\"older since $[\partial^j, \partial_i]$ is a connection coefficient of the metric.
 But the last term is bad.
-Maybe we can get rid of it using paraproducts?
+\todo{Maybe we can get rid of it using paraproducts?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{p infinity}
+\subsection{best curl forms}
 What follows is the main definition of this paper.
+Let $L(A)$ denote the curl modulus of a $C^0$ connection $1$-form $A$, and let $L_\Omega(A)$ be the curl modulus of the restriction of $A$ to a subdomain $\Omega$.
 
 \begin{definition}
-	Let $A$ be a connection on $\mathscr F$.
+	Let $\mathscr F$ be a $U(1)$ line bundle, and let $A$ be a $C^0$ connection $1$-form on $\mathscr F$.
 \begin{enumerate}
-\item We say that $A$ has \dfn{best curl} if $A$ is a minimizer of its curl modulus.
-\item We say that $A$ has \dfn{absolutely best curl} if, in addition, $A$ has best curl for the Dirichlet problem in each small ball with respect to its own boundary condition. \todo{Make this more precise}
+	\item We say that $A$ has \dfn{best curl} if $A$ is a minimizer of its curl modulus among all connections on $\mathscr F$.
+	\item We say that $A$ has \dfn{absolutely best curl} if for every small open ball $\Omega$, $A$ is a minimizer of $L_\Omega$ among all $1$-forms $B$ with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
 \end{enumerate}
 \end{definition}
 
@@ -339,8 +359,7 @@ The \dfn{local curl modulus} of a $1$-form $A$ at $x \in M$ is
 $$L(A, x) := \limsup_{\varepsilon \to 0} \sup_{\sigma \in \Chain_2(B_\varepsilon(x))} \frac{1}{|\sigma|} \int_{\partial \sigma} A.$$
 \end{definition}
 
-Write $L_\Omega(A)$ for the curl modulus of the restriction of $A$ to a subdomain $\Omega$.
-Then
+One has
 $$L(A, x) = \limsup_{\varepsilon \to 0} L_{B_\varepsilon(x)}(A)$$
 but $L_{B_\varepsilon(x)}(A)$ is increasing in $\varepsilon$ (since it's a supremum over a set which grows in $\varepsilon$).
 So the limit superior is actually a limit and an infimum:
@@ -351,84 +370,131 @@ It's convenient to test the local curl modulus against a more restrictive class 
 Motivated by lattice gauge theory \cite{Gupta98}, we define:
 
 \begin{definition}
-Fix an orthonormal frame $(\partial_i)$ on the tangent bundle $TM$.
-A \dfn{plaquette} $R_{ij}^\varepsilon(x)$ is the exponential pushforward of a square $[0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j]$ in the tangent space $T_x M$ to $M$.
+Fix an orthonormal basis $(\partial_i)$ of the tangent space $T_x M$.
+A \dfn{plaquette} $R_{ij}^\varepsilon(x)$ is the exponential pushforward of a square $[0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j]$ to $M$.
 \end{definition}
 
+We write $x + v := \exp_x(v)$ whenever $v \in T_x M$.
+
 \begin{lemma}
-For $(x, v) \in TM$ let $x + v := \exp_x(v)$, then
-\begin{align*}
-	L(A, x) 
-	&= \sqrt{\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{\varepsilon^2} \left|\int_{\partial R_{ij}^\varepsilon(x)} A\right|^2}\\
-	&= \sqrt{\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{|A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x)|^2}{\varepsilon^2}}.
-\end{align*}
+Let $A$ be a $C^0$ connection $1$-form and $x \in M$. Then as $\varepsilon \to 0$,
+\begin{equation} \label{riemann plaquette}
+	\frac{1}{|R_{ij}^\varepsilon(x)|} \int_{\partial R_{ij}^\varepsilon(x)} A = \frac{A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x)}{\varepsilon} + o(1).
+\end{equation}
 \end{lemma}
-\begin{proof}[Idea]
-The plaquette has volume form $1 + O(\varepsilon^2)$ in normal coordinates so we might as well assume that it has surface area $\varepsilon^2$.
-Continuity of $A$, and numerical approximation of Riemann integrals on continuous functions, gives the rest of the proof, where we mimic the proof that lattice gauge theories approximate the QCD action.
+\begin{proof}
+The metric introduces corrections of size $O(\varepsilon^2)$, so we may discard it and assume that $R_{ij}^\varepsilon$ is a rectangle, bounded by line segments 
+$$\partial R_{ij}^\varepsilon = \gamma_1 + \gamma_2 - \gamma_3 - \gamma_4,$$
+where $\gamma_1$ is the line segment between $x$ and $x + \varepsilon \partial_i$ (say).
+Since $A$ is continuous, 
+$$\int_{\gamma_1} A = \int_0^\varepsilon A_i(x + t\partial_i) \dif t = \varepsilon A_i(x) + o(\varepsilon).$$
+A similar computation holds for the other $\gamma_a$ and implies 
+\begin{align*}
+\int_{\partial R_{ij}^\varepsilon}
+&= \varepsilon A_i(x) + \varepsilon A_j(x + \varepsilon \partial_i) - \varepsilon A_i(x + \varepsilon \partial_j) - \varepsilon A_j(x) + o(\varepsilon) \\
+&= \frac{\varepsilon^2}{\varepsilon}(A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x) + o(1)).
+\end{align*}
+Since $|R_{ij}^\varepsilon| = \varepsilon^2$, we are done.
 \end{proof}
 
-At the time of writing the statement (but not the proof) of this lemma is the only place where we use $d = 3$.
-In general you could take a signed sum over the vertices of a $d-1$-dimensional plaquette.
+\begin{lemma}
+Let $A$ be a $C^0$ connection $1$-form. Then
+\begin{equation}\label{dA is like Lipschitz constant}
+	\|\dif A\|_{L^\infty}^2 = \sup_{x \in M} \lim_{\varepsilon \to 0} \frac{1}{|\partial R^\varepsilon_{ij}(x)|^2} \sum_{i < j} \left|\int_{\partial R^\varepsilon_{ij}(x)} B\right|^2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The proof is similar to \cite[\S5.8.2b]{evans2010partial}, so we just sketch the idea.
+Let $(\chi_\delta)$ be a standard mollifier based at $x$, and
+$$A^\delta_i := A_i * \chi_\delta.$$
+Then $A^\delta$ is a smooth connection $1$-form, $A^\delta \to A$ in $C^0$, and a computation gives 
+$$\limsup_{\delta \to 0} \|\dif A^\delta\|_{C^0} \leq \|\dif A\|_{L^\infty}.$$
+Denoting for a continuous connection $1$-form $B$
+$$|\dif^\varepsilon B(x)|^2 := \frac{1}{|\partial R^\varepsilon_{ij}(x)|} \sum_{i < j} \left|\int_{\partial R^\varepsilon_{ij}(x)} B\right|,$$
+we have
+$$\|\dif^\varepsilon A^\delta\|_{C^0} \leq L(A^\delta) \leq \|\dif A^\delta\|_{C^0}$$
+since $A^\delta$ is smooth. Therefore 
+$$\|\dif^\varepsilon A\|_{L^\infty} \leq \lim_{\delta \to 0} \|\dif^\varepsilon A^\delta\|_{C^0} \leq \limsup_{\delta \to 0} \|\dif A^\delta\|_{C^0} \leq \|\dif A\|_{L^\infty}.$$
+Conversely, $\|\dif^\varepsilon A\|_{C^0} \leq L(A)$, so by a compactness argument we obtain $\dif^\varepsilon A \to F$ in weak $L^2$ for some $2$-form $F$.
+Testing $F$ against a smooth $1$-form $B$, we see that $F = \dif A$.
+\end{proof}
 
-Following Crandall's paper we want to prove:
+We prove the following analogue of \cite[Lemma 4.2]{Crandall2008} for best Lipschitz functions.
 
-\begin{proposition}
+\begin{proposition}\label{crandall}
+Let $A$ be a $C^0$ connection $1$-form. Then:
 \begin{enumerate}
-\item $L(A, \cdot)$ is upper semicontinuous.
-\item If $\dif A(x)$ exists then $L(A, x) \geq |\dif A(x)|$.
-\item If $L(A, x) = 0$, then $\dif A(x)$ exists and $\dif A(x) = 0$.
-\item If $\sigma \in \Chain_2$ then 
+\item $L(A, \cdot)$ is upper semicontinuous. \label{crandall usc}
+\item If $\dif A(x)$ exists then $L(A, x) \geq |\dif A(x)|$. \label{crandall dA bounds LA}
+\item If $L(A, x) = 0$, then $\dif A(x)$ exists and $\dif A(x) = 0$. \label{crandall zero LA implies diffble}
+\item If $\sigma \in \Chain_2$ then
 $$\frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right| \leq \sup_{x \in \sigma} L(A, x).$$
-In particular, $L(A) \leq \sup_{x \in M} L(A, x)$.
-\item $\dif A \in L^\infty$ as distributions iff $\sup_{x \in A} L(A, x) < \infty$, in which case 
+In particular, $L(A) \leq \sup_{x \in M} L(A, x)$. \label{crandall best curl is ABC}
+\item $\dif A \in L^\infty$ as distributions iff $\sup_{x \in A} L(A, x) < \infty$, in which case \label{crandall linfinity}
 $$\sup_{x \in M} L(A, x) = \|\dif A\|_{L^\infty}, \qquad L(A, x) = \lim_{\varepsilon \to 0} \|\dif A\|_{L^\infty(B_\varepsilon(x))}.$$
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-a is like in Crandall. Looking at plaquettes,
+First let $x^n \to x$, so for $n$ large, $\Omega_n := B_{r - |x - x^n|}(x^n) \subseteq B_r(x)$, hence
+$$L(A, x^n) \leq L_{\Omega_n}(A) \leq L_{B_r(x)}(A).$$
+Therefore 
+$$\limsup_{n \to \infty} L(A, x^n) \leq \inf_{r > 0} L_{B_r(x)}(A) = L(A, x),$$
+which proves (\ref{crandall usc}).
+	
+We now bound for a net of plaquettes $R_{ij}^\varepsilon(x)$ using (\ref{riemann plaquette})
+\begin{equation}\label{difference quotients}
+	\limsup_{\varepsilon \to 0} \frac{|A_j(x + \varepsilon \partial_i) - A_j(x) - A_i(x + \varepsilon \partial_j) + A_i(x)|}{\varepsilon}
+= \limsup_{\varepsilon \to 0} \frac{1}{|R_{ij}^\varepsilon(x)|} \left|\int_{\partial R_{ij}^\varepsilon(x)} A\right| \leq L(A, x).
+\end{equation}
+If the first limit superior is actually a limit, then it is the definition of $|\dif A_{ij}(x)|$.
+So if $\dif A_{ij}(x)$ exists we conclude $|\dif A_{ij}(x)| \leq L(A, x)$, which proves (\ref{crandall dA bounds LA}).
+On the other hand, the corresponding limit \emph{inferior} must be nonnegative, so if $L(A, x) = 0$, the first limit superior in (\ref{difference quotients}) is actually a limit and we obtain $\dif A_{ij}(x) = 0$, proving (\ref{crandall zero LA implies diffble}).
+
+Now let $\sigma$ be a $2$-chain.
+We may write $\sigma = \sum_{n=1}^N \sigma_n$ where $\sigma_n$ is a $2$-cell of the form $x^3_n = 0$ for some coordinates $(x^1_n, x^2_n, x^3_n)$.
+In particular, for any $\varepsilon > 0$ we may write $\sigma_n$ as a sum of plaquettes $R_{12}^\delta(x)$ with respect to the coordinates $(x^1_n, x^2_n, x^3_n)$, where $0 < \delta < \varepsilon$ and $x \in \sigma_n$.
+Let us denote such plaquettes as $P_{n1}(\varepsilon), \dots, P_{nK(n, \varepsilon)}(\varepsilon)$. Then for any $\varepsilon > 0$, 
+$$\frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right| \leq \sum_{n=1}^N \sum_{k=1}^{K(n, \varepsilon)} \frac{|P_{nk}(\varepsilon)|}{|\sigma|} \frac{1}{|P_{nk}(\varepsilon)|} \left|\int_{\partial P_{nk}(\varepsilon)} A\right|.$$
+But $P_{nk} \in \Chain_2(B_\varepsilon(x_{nk}(\varepsilon)))$ for some $x_{nk}(\varepsilon) \in \sigma$, so it follows that 
 \begin{align*}
-\dif A_{ij}(x) 
-&= \lim_{\varepsilon \to 0} \frac{A_i(x) + A_j(x + \varepsilon \partial_i) - A_i(x + \varepsilon \partial_j) - A_j(x)}{\varepsilon} \\
-&= \lim_{\varepsilon \to 0} \varepsilon^{-2} \int_{\partial R_{ij}^\varepsilon} A
+\frac{1}{|\sigma|} \left|\int_{\partial \sigma} A\right|
+&\leq \limsup_{\varepsilon \to 0} \sum_{n=1}^N \sum_{k=1}^{K(n, \varepsilon)} \frac{|P_{nk}(\varepsilon)|}{|\sigma|} L(A, x_{nk}(\varepsilon)) \\
+&\leq \limsup_{\varepsilon \to 0} \sup_{x \in \sigma} L(A, x)  \sum_{n=1}^N \sum_{k=1}^{K(n, \varepsilon)} \frac{|P_{nk}(\varepsilon)|}{|\sigma|} \\
+&= \sup_{x \in \sigma} L(A, x)
 \end{align*}
-which is clearly bounded by $L(A, x)$ proving b and c.
-For d, since $A$ is continuous, we may assume up to an $o(\varepsilon)$ error that $\sigma$ is a sum of plaquettes 
-$$\sigma = \sum_{n = 1}^{N_\varepsilon} R_{i_n j_n}^\varepsilon(x_n)$$
-and then 
-\begin{align*}
-\frac{1}{|\sigma|} \int_\sigma A
-&= \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} \frac{1}{|R_{i_n j_n}^\varepsilon(x_n)|} \int_{\partial R_{i_n j_n}^\varepsilon(x_n)} A \\
-&\leq \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} L(A, x_n) \\
-&\leq \sum_{n = 1}^{N_\varepsilon} \frac{|R_{i_n j_n}^\varepsilon(x_n)|}{|R|} \sup_{x \in \sigma} L(A|_{B_\varepsilon(x)}) \\
-&\leq \sup_{x \in \sigma} L(A, x).
-\end{align*}
-Finally for e, let $\varphi$ be a $C^\infty_\cpt$ approximation to the $2$-current $[R]/|R|$ for a plaquette $R = R_{ij}^\varepsilon(x)$. Then 
-$$\int_M \dif A \wedge \varphi = - \int_M A \wedge \dif \varphi = o(1) - \frac{1}{|R|} \int_{\partial R} A.$$
-Also $\|\varphi\|_{L^1} = 1 + o(1)$ so by duality 
-$$\|\dif A\|_{L^\infty} \geq o(1) + \int_M \dif A \wedge \varphi$$
-and we can write any $1$-form in the unit sphere of $L^1$ as a (possibly infinite) convex combination in $L^1$ of approximations to plaquette currents so this estimate is sharp.
+which proves (\ref{crandall best curl is ABC}).
+
+Finally, (\ref{crandall linfinity}) follows from (\ref{dA is like Lipschitz constant}) and (\ref{crandall best curl is ABC}).
 \end{proof}
 
 \begin{corollary}
-\begin{enumerate}
-\item $\sup_{x \in M} L(A, x) = L(A)$.
-\item If $A$ is an $\infty$-magnetic potential, then $A$ has best curl.
-\end{enumerate}
+For a $C^0$ connnection $1$-form $A$, $\sup_{x \in M} L(A, x) = L(A)$.
 \end{corollary}
 
-I doubt that the converse should be true, because even though the global curl modulus has Morse index zero, it is a nonlocal energy, while the condition for being an $\infty$-magnetic potential is local (at least if $A \in C^2$), namely the $\infty$-Maxwell equation.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{p goes to infinity}
+\begin{lemma}
+Let $A, B$ be connection $1$-forms, let $\Omega \subseteq M$ be any smooth subdomain, and let $A_p, B_p$ be the $p$-magnetic potentials in Coulomb gauge on $\Omega$ such that $A_p|_{\partial \Omega} - B_p|_{\partial \Omega}$.
+Then 
+\begin{equation}\label{uniqueness for p}
+	\|A_p - B_p\|_{C^0(\Omega)} \lesssim_p \|A - B\|_{C^0(\partial \Omega)}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+	\todo{The point is that the difference of two $p$-magnetics solves a linear elliptic PDE}.
+	In particular, $P(A_p - B_p) = f$ and by Schauder estimates, we must have $A_p - B_p$ small if $f$ is small.
+\end{proof}
 
-
-
-\begin{theorem}
+\begin{theorem}\label{existence infinity}
 For each dyadic $4 \leq p < \infty$, let $A_p$ be the $p$-magnetic potential on a $U(1)$ line bundle $\mathscr F$, which we assume to be in Coulomb gauge.
 Then there exists a connection $A$ in Coulomb gauge on $\mathscr F$ such that:
 \begin{enumerate}
 \item Along a subsequence, $A_p \to A$ uniformly and $\dif A_p \to \dif A$ weakly in $L^q$ for any $3 < q < \infty$.
-\item $A$ has absolutely best curl.
+\item $A$ has best and absolutely best curl.
 \item One has 
-$$\|A\|_{W^{1, \infty}} \lesssim |c_1(\mathscr F)|.$$
+\begin{equation}\label{Sobolev bounds for infinity}
+	\|A\|_{W^{1, \infty}} \lesssim |c_1(\mathscr F)|.
+\end{equation}
 \end{enumerate}
 \end{theorem}
 \begin{proof}
@@ -449,23 +515,80 @@ We now compute the cohomology class of $F$.
 Since $\dif F = 0$ and
 $$\|F\|_{L^4} \leq |M|^{\frac{1}{4}} \|F\|_{L^\infty},$$
 $\dif A_p \to F$ weakly in $W^{1, 4} \Omega^2$.
-So by the trace theorem, along any $2$-cycle $S$, the pullbacks of $\dif A_p$ converge to the (well-defined) pullback of $F$ weakly in $W^{-\frac{1}{4}, 4}(S, \Omega^2)$.
-Thus for any smooth function $\psi$ on $S$,
-$$\int_S \psi F = \lim_{p \to \infty} \int_S \psi \dif A_p,$$
-and taking $\psi = 1$ we obtain 
+So by Corollary \ref{trace on cycles}, for any $2$-cycle $S$,
 $$\int_S F = \lim_{p \to \infty} 2\pi \langle c_1(\mathscr F), [S] \rangle = 2\pi \langle c_1(\mathscr F), [S]\rangle,$$
 where $[S] \in H_2(M, \ZZ)$ denotes the homology class of $S$.
-Therefore $F$ is the curvature of a connection $A$ on $\mathscr F$, \todo{which must have best curl} since $B$ was arbitrary in (\ref{infinity magnetics have best curl}).
+Therefore $F$ is the curvature of a connection $A$ on $\mathscr F$, which must have best curl by Proposition \ref{crandall}(\ref{crandall linfinity}) since $B$ was arbitrary in (\ref{infinity magnetics have best curl}).
+Moreover, taking the limit as $p \to \infty$ in (\ref{Sobolev bounds for p}), we obtain (\ref{Sobolev bounds for infinity}).
 
-We now estimate using the Sobolev embedding theorem and (\ref{uniform bounds in p by best curl})
-$$\|A_p\|_{C^{\frac{1}{4}}} \lesssim \|A_p\|_{W^{1, 4}} \lesssim \|\dif A_p\|_{L^4} \lesssim |M|^{\frac{1}{4} - \frac{1}{p}} \|\dif A\|_{L^\infty}$$
+We now estimate using the Sobolev embedding theorem, (\ref{uniform bounds in p by best curl}), and H\"older's inequality,
+$$\|A_p\|_{C^{\frac{1}{4}}} \lesssim \|A_p\|_{W^{1, 4}} \lesssim \|\dif A_p\|_{L^4} \leq |M|^{\frac{1}{4} - \frac{1}{p}} \|\dif A\|_{L^\infty}$$
 for $p \geq 4$.
 Passing to a further subsequence, we obtain $A_p \to A$ uniformly, and in particular that $A$ is in Coulomb gauge.
 
-\todo{It remains to show that $A$ has not only best curl, but absolutely best curl. Also the bound in terms of Chern class}
+It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
+By a straightforward modification of Proposition \ref{existence for p}, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
+By (\ref{uniqueness for p}),
+$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
+Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
+$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
+$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Taking $q \to \infty$ we arrive at the conclusion.
 \end{proof}
 
+\begin{definition}
+Let $A$ be the limiting connection $1$-form in Theorem \ref{existence infinity} for a $U(1)$ line bundle $\mathscr F$.
+By an \dfn{$\infty$-magnetic potential}, we mean a gauge transformation of $A$.
+\end{definition}
+
+%%%%%%%%%%%%%%%%%%%%
+
+\section{The maximum curl locus}
+Throughout this section, let $M$ be a closed space form of dimension $3$.
+
+\begin{definition}
+Let $A$ be a connection of best curl on $\mathscr F$.
+The \dfn{maximum curl locus} is the set $L(A, x) = L(A)$.
+\end{definition}
+
+By Proposition \ref{crandall}(\ref{crandall usc}) and the compactness of $M$, the maximum curl locus is a nonempty closed subset of $M$.
+
+The two minimization problems in consideration are invariant under two scalings: 
+\begin{enumerate}
+\item Rescaling the entire manifold, which rescales $\|\dif A\|_{L^\infty}$ but not $c_1(\mathscr F)$.
+\item $A \mapsto \lambda A$. This changes both $\|\dif A\|_{L^\infty}$ and $c_1(\mathscr F)$.
+\end{enumerate}
+In particular, by applying both scalings and using Chern-Weil theory, we may impose the following:
+
+\begin{definition}
+We say that a connection $1$-form $A$ is a \dfn{calibration potential} if it has best curl, and $\|\dif A\|_{L^\infty} = 1$.
+\end{definition}
+
+\todo{This is kind of dumb, why not just declare a calibrated submanifold to be one along $\|\dif A\|_{L^\infty}$ regardless of whether it's $1$?}
+
+\begin{proposition}
+Suppose that $A$ is a calibration potential.
+Then there is a minimal lamination whose leaves are calibrated submanifolds for $\dif A$.
+\end{proposition}
+\begin{proof}
+\todo{Modify \cite[Theorem 5.1]{bangert_cui_2017} to deal with the analytic niceties.}
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The dual $1$-harmonic function}
+\todo{Can't do this until we've dealt with Fenchel duality}
+
+\begin{theorem}
+Let $A$ be an $\infty$-magnetic calibration potential on $\mathscr F$, and let $u$ be a dual $1$-harmonic function to $A$.
+Then $\dif u$ is a Ruelle-Sullivan current for the minimal lamination induced by $\tilde A$.
+\end{theorem}
+
+\todo{Do this for any equivariant best curl $1$-form on the universal cover}
+
+
 %%%%%%%%%%%%%%%%%%%%%
+\appendix \section{Experimental infinity maxwell stuff}
 \subsection{Infinity maxwell equation}
 
 \begin{proposition}[$\infty$-Maxwell equation]
@@ -517,104 +640,9 @@ You'd probably want to consider the Dirichlet problem with data $\iota^*(x \dif 
 \end{example}
 
 
-\subsection{Scaling considerations}
-The two minimization problems in consideration are invariant under two scalings: 
-\begin{enumerate}
-\item Rescale the entire manifold. Since $\int_\sigma F$ is a topological invariant this works, and in particular it changes $\|F\|_{L^\infty}$ but not the cohomology class of $F$.
-\item $A \mapsto \lambda A$ (since $\infty$-Maxwell is homogeneous cubic). This changes both $\|F\|_{L^\infty}$ and the cohomology class of $F$.
-\end{enumerate}
-In particular, by applying both scalings, we may impose $\|F\|_{L^\infty} = 1$ and $F \in H^2(M, \ZZ)$ simultaneously.
-So we may view $F$ as a curvature on the line bundle $L$ whose Chern class is $c_1(L) := F$, and this is why we may use the gauge theoretic formalism of $F = \dif A$.
-
-\subsection{The Neumann problem}
-Recall from homological finite element methods:
-
-\begin{definition}
-Let $1 < p < \infty$.
-The \dfn{de Rham-Sobolev complex} consists of Banach spaces $W^{1, p, \ell}$, $\ell \in \{0, \dots, 3\}$, of $\ell$-forms characterized by the norm 
-$$\|\alpha\|_{W^{1, p, \ell}}^p := \|\alpha\|_{L^p}^p + \|\dif \alpha\|_{L^p}^p$$
-and boundary maps 
-$$\dif: W^{1, p, \ell} \to W^{1, p, \ell + 1}.$$
-We also set $W^{1, p, -1} = W^{1, p, 4} = 0$.
-\end{definition}
-
-\begin{proposition}[trace theorem]
-We have surjective trace maps
-\begin{align*}
-\tr_0: W^{1, p, 0}(M) &\to W^{1 - 1/p, p}(\partial M) \\
-\tr_1: W^{1, p, 1}(M) &\to W^{-1/p, p}(\partial M, \Omega^1) \\
-\tr_2: W^{1, p, 2}(M) &\to W^{-1/p, p}(\partial M, \Omega^2)
-\end{align*}
-characterized by the fact that on continuous forms they correspond to pullback by the natural map 
-$$\iota: \partial M \to M$$
-and where $W^{s, p}(N, \mathcal F)$ is defined for a $C^\infty$-locally free sheaf $\mathcal F$ on a manifold $N$, and $s \in \RR$, $1 < p < \infty$, using Fourier integral calculus in the usual way.
-In particular, $\tr_\ell \cdot \dif = \dif \circ \tr_{\ell - 1}$.
-\end{proposition}
-\begin{proof}[Idea]
-In homological FEM, the normal trace of $H(div)(M)$ fields is $W^{-1/2, 2}(\partial M, \Omega^1)$.
-If $F \in H(div)(M)$ then $F \in W^{1, 2, 2}(M)$ and $F \cdot \normal = \iota^* F$ where $\iota: \partial M \to M$.
-Similarly, the tangential trace of $H(curl)(M)$ fields is $W^{-1/2, 2}(\partial M, \Omega^2)$, and $A \times \normal = \iota^* A$.
-I guess surjectivity should be in the FEM literature somewhere.
-\end{proof}
-
-\begin{definition}
-The \dfn{pure gauge part} of a form $A \in L^p(M, \Omega^1)$ is the projection of $A$ onto closed forms.
-\end{definition}
-
-This is well-defined for $M$ closed by ``Lp theory of differential forms'' (and probably in general if we have some boundary data).
-
-\begin{proposition}[Sobolev embedding theorem]
-For $3 < p < \infty$ and $0 \leq \ell \leq 3$, any $\alpha \in W^{1, p, \ell}$ can be written as the sum of an element of $C^{1 - 3/p}(M, \Omega^\ell)$ plus a pure gauge part.
-\end{proposition}
-\begin{proof}[Idea]
-By elliptic regularity and Sobolev 
-$$\|\alpha\|_{C^{1 - 3/p}(M, \Omega^\ell)} \lesssim \|\alpha\|_{W^{1, p}(M, \Omega^\ell)} \lesssim \|\alpha\|_{W^{1, p, \ell}(M)}$$
-if we assume that the pure gauge part is $0$.
-\end{proof}
-
-\begin{proposition}[solving the Neumann problem]
-Let $J \in L^\infty(\partial M, \Omega^2)$ and suppose that $\partial M$ is a closed surface.
-Then there exists an $\infty$-magnetic potential $A$ such that $\dif \iota^* A = J$ as distributions on $\partial M$, and
-$$\|A\|_{W^{1, \infty, 1}}(M) \lesssim \|J\|_{L^\infty(\partial M)}.$$
-\end{proposition}
-\begin{proof}[Proof sketch]
-Let $3 < p < \infty$. The second variation of the $p$-Maxwell energy at a form $A_p$ in a direction $B$ is bounded from below by
-$$(p - 2) \langle \dif A_p, \dif B\rangle^2 + |\dif A_p|^2 \cdot |\dif B|^2 \geq 0$$
-so the Morse index of the $p$-Maxwell energy at $A_p$ is $0$.
-Since $\partial M$ is compact, the natural map $L^\infty \to L^p$ is bounded, and then surjectivity of the trace map implies that if $\tr_2(\dif A_p) = J$ then
-$$\|A_p\|_{W^{1, p, 1}} \lesssim \|\dif A_p\|_{L^p} + \|J\|_{L^\infty} + \|G\|_{L^p}$$
-where $G$ is the pure gauge part of $A_p$, and these bounds are independent of $p$.
-\S8.2.1 of Evans, modified to account for a pure gauge part, implies that the direct method furnishes a $p$-magnetic potential $A_p$ with
-$$\|A_p\|_{W^{1, p, 1}} \lesssim \|J\|_{L^\infty} + \|G\|_{L^p}.$$
-Sobolev implies that $A_p$ is eventually bounded modulo gauge in $C^\theta$ for any $0 \leq \theta < 1$ and in $W^{1, q, 1}$ for any $1 < q < \infty$.
-In particular, $A_p \to A$ in $C^\theta$ and weakstar $W^{1, q, 1}$ along a subsequence.
-So $A$ is $\infty$-magnetic and satisfies the right estimates once we solve away the gauge and take $q \to \infty$.
-Also $\iota^* A$ has regularity $C^\theta \subseteq L^2$ so $\dif (\iota^* A)$ makes sense as an element of $W^{-1, 2}$.
-Since clearly $A_p \to A$ in $L^2$ and $L^\infty \subseteq W^{-1, 2}$ we deduce from $\dif(\iota^* A_p) = \tr_2(\dif A_p) = J$ the boundary claim.
-\end{proof}
-
-\subsection{Elliptic regularity}
-\begin{proposition}[elliptic regularity]
-Let $A$ be an $\infty$-magnetic potential.
-Then there exists a gauge transformation of $A$ whose components are Lipschitz.
-\end{proposition}
-\begin{proof}
-For $3 < p < \infty$, let $\tilde A_p \to A$ solve the Dirichlet problem
-$$\begin{cases}
-	\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0 \\
-	\dif^* A_p = 0 \\
-	\iota^* A_p = \iota^* \tilde A_p
-\end{cases}.$$
-Proceeding as above we get
-$$\|A_p\|_{W^{1, p}(M, \Omega^1)} \lesssim \|A_p\|_{W^{1, p, 1}} \lesssim \|\iota^* \tilde A_p\|_{L^p(\partial M)} \lesssim \|\tilde A_p\|_{W^{1, p, 1}} \lesssim \|A\|_{C^0}.$$
-Using the second variation of the $p$-Maxwell energy and the $L^p$ Hodge theorem, we get a uniqueness theorem: $A_p = \tilde A_p$ modulo pure gauge.
-The closed $1$-forms are a closed subset of $W^{1, p}$ I think. So $A_p \to A$ plus gauge.
-But also $\|A\|_{W^{1, \infty}(M, \Omega)} \lesssim \|A\|_{C^0}$.
-\end{proof}
 
 Since we can recover $A_p$ from $A$ (can we?) it should follow that $A$ is as unique as $A_p$ is.
 
-\section{The maximum curl locus}
 \begin{lemma}
 Let $A$ be $\infty$-magnetic, let $N$ be a hypersurface, and suppose that $\dif A$ is co-bitangent to $N$, that is, $\iota_{\normal_N} \dif A = 0$.
 Then $N$ is minimal.
@@ -637,26 +665,6 @@ If $V, W$ satisfy $V|\dif A| = W|\dif A| = 0$, then $[V, W]|\dif A| = 0$.
 If this can be made sense of in the `weak' framework it follows from Frobenius that $S$ is minimally immersed.
 
 
-\subsection{Calibration theory}
-Here's another way to prove something similar to the above theorem:
-
-\begin{lemma}
-Let $F \in L^\infty(M, \Omega^2)$ satisfy $\|F\|_{L^\infty} = 1$ and $\dif F = 0$.
-Then $F$ is a calibration.
-\end{lemma}
-\begin{proof}
-Let $V$ be a $2$-dimensional subbundle of $TM$; we must show that $F|_V$ is a multiple of the volume form of $V$.
-Actually $F|_V$ is the projection of $F$ to the rank-$1$, $C^\infty$-locally free sheaf $H^0(M, V' \wedge V')$, and since it's rank-$1$ we win.
-\end{proof}
-
-\begin{proposition}
-Suppose that $\|F\|_{L^\infty} = 1$, and $F = \dif A$ where $A$ has best curl.
-Then there is a minimal lamination whose leaves are calibrated submanifolds for $F$.
-\end{proposition}
-\begin{proof}
-Modify \cite[Theorem 5.1]{bangert_cui_2017} to deal with the analytic niceties.
-Note that \cite{bangert_cui_2017} assumes that de Giorgi's lemma extends from euclidean space to manifolds, and doesn't seem to bound the curvature of the leaves...
-\end{proof}
 
 \section{The dual one-harmonic function}
 For simplicity let's assume $H^2(M, \ZZ) = 0$.
