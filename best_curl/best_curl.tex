@@ -306,35 +306,60 @@ Recalling that, since $\rho$ is a $1$-form, $\star^{-1} \rho = (-1)^{d - 1} \sta
 \end{proof}
 
 In the next proposition we write $\dif A \in L^p(M, \Omega^{d - 1})$ for a $d-2$-form $A$ on $\tilde M$ to mean that $\dif A$ is invariant and drops to a member of $L^p(M, \Omega^{d - 1})$.
+\todo{If $H_{1, \cpt}(\tilde M, \RR) = 0$ for any universal cover, then by Poincar\'e duality we can drop the assumption on $H^{d - 1}$}
 
-\begin{proposition}
+\begin{proposition}\label{convex duality}
 Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, and fix a cohomology class $\rho \in H^1(M, \RR)$.
-Then there exists a cohomology class $\alpha \in H^{d - 2}(M, \RR)$ such that the convex dual problem of the $q$-Laplacian (\ref{preprimal problem}) is equivalent to 
+Suppose that $H^{d - 1}(\tilde M, \RR) = 0$.
+Then there exists a cohomology class $\alpha \in H^{d - 1}(M, \RR)$ such that the convex dual problem of the $q$-Laplacian (\ref{preprimal problem}) is equivalent to 
 \begin{equation}\label{dual problem}
 \Min\left\{\frac{1}{p} \int_{M_{\rm fun}} \star |\dif A|^p: \dif A \in L^p(M, \Omega^{d - 1}), [\dif A] = \alpha\right\}.
 \end{equation}
-\end{proposition}
-
-\begin{proposition}
-Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, and fix a cohomology class $\rho \in H^1(M, \RR)$.
-Let $A$ be a solution of (\ref{dual problem}) and let $u$ be a solution of the $q$-Laplacian. Then
+Now let $u, A$ be solutions of (\ref{preprimal problem}) and (\ref{dual problem}). Then
 \begin{equation}\label{pMaxwell}
 \dif^*(|\dif A|^{p - 2} \dif A) = 0
 \end{equation}
-and we have
-\begin{equation}\label{extremality}
-\dif A = |\dif u|^{q - 2} \star \dif u.
-\end{equation}
+and $u, A$ are related by
+\begin{align}
+\dif A &= |\dif u|^{q - 2} \star \dif u \label{extremality} \\
+\dif u &= -|\dif A|^{p - 2} \star \dif A. \label{inverse extremality}
+\end{align}
 \end{proposition}
+\begin{proof}
+We first solve the $q$-Laplacian (\ref{preprimal problem}) for $u$.
+By convex duality \cite[Chapter III, Theorem 4.2]{Ekeland99} there exists a solution $F$ of (\ref{predual problem}) satisfying (\ref{extremality relations}), hence is characterized by 
+$$\frac{1}{p} \int_M \star |F|^p + \frac{1}{q} \int_M \star |\dif u|^q = \int_M \dif u \wedge F.$$
+Moreover, $F$ satisfies (\ref{EL of hat G}), which uniquely characterizes it; hence (\ref{predual problem}) is uniquely solvable.
+If we instead set
+$$\tilde F = |\dif u|^{q - 2} \star \dif u,$$
+then 
+$$\frac{1}{p} |\tilde F|^p + \frac{1}{q} |\dif u|^q = \frac{1}{p} |\dif u|^{p(q - 1)} + \frac{1}{q} |\dif u|^q = |\dif u|^q$$
+and 
+$$\int_M \dif u \wedge \tilde F = \int_M |\dif u|^{q - 2} \dif u \wedge \star \dif u = \int_M \star |\dif u|^q,$$
+so it follows that 
+$$\frac{1}{p} \int_M \star |\tilde F|^p + \frac{1}{q} \int_M \star |\dif u|^q = \int_M \dif u \wedge \tilde F.$$
+By the uniqueness of (\ref{predual problem}), it follows that $\tilde F = F$ and hence if we define $\dif A := F$, then (\ref{extremality}) holds.
+Here, $A$ is well-defined as a $d-2$-form on $\tilde M$ since we assumed $H^{d - 1}(\tilde M, \RR) = $0.
+Moreover, from (\ref{EL of hat G}) and the fact that $\rho$ is closed, (\ref{pMaxwell}) holds.
+It is clear that the Euler-Lagrange equation of the minimization problem (\ref{dual problem}) is (\ref{pMaxwell}), where $\alpha := [F]$, so $A$ solves (\ref{dual problem}).
+Finally, (\ref{inverse extremality}) follows immediately from (\ref{extremality}) and $\frac{1}{p} + \frac{1}{q} = 1$.
+\end{proof}
 
-\todo{Prove all this. We might need to assume that $H^{d - 1}(\tilde M, \RR) = 0$ but it might also follow from Poincar\'e duality with compact support.}
+Proposition \ref{convex duality} has the following interesting interpretation, which is motivated by the central role that Noether's theorem plays in 0\cite{daskalopoulos2022, daskalopoulos2023}.
+If we define $u_t := u + t$, $t \in \RR$, and apply Noether's theorem \cite[\S8.6.2]{evans2010partial} to the variation $(u_t)$, then we obtain the conservation law 
+\begin{equation}\label{conservation law}
+	\frac{q - 1}{q} \dif^*(|\dif u|^{q - 2} \dif u) = 0.
+\end{equation}
+Applying the extremality relation (\ref{extremality}), we see that (\ref{conservation law}) is exactly the dual PDE (\ref{pMaxwell}).
+This motivates the following definition:
 
-\begin{corollary}
-Let $A$ be a solution of (\ref{dual problem}) and let $u$ be a solution of the $q$-Laplacian. 
-Then $\dif A$ is the Noetherian flux for the invariance of the $q$-Laplacian under addition of constants.
-\end{corollary}
+\begin{definition}
+	Let $A$ be a solution of (\ref{dual problem}) and let $u$ be a solution of the $q$-Laplacian (\ref{preprimal problem}). 
+	We call $A$ a \dfn{Noetherian potential} for $u$ with respect to target translation.
+\end{definition}
 
-
+If $A_p$ is a Noetherian potential for $u_q$ for every $p \gg 1$ and $\frac{1}{p} + \frac{1}{q} = 1$, it may be that in a suitable function space we may take the limit $p \to \infty$ to obtain a $d-2$-form $A$ and a function $u$.
+In this situation, we still call $A$ a Noetherian potential, though this is only literally true in a formal sense.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -342,6 +367,7 @@ Then $\dif A$ is the Noetherian flux for the invariance of the $q$-Laplacian und
 \subsection{p finite}
 Let $M$ be a Riemannian threefold, and fix a $U(1)$ line bundle $\mathscr F \to M$.
 \todo{Most of this is just general theory once you change the $p$s, only once we get to calibrations do we need $d = 3$}.
+Motivated by Proposition \ref{convex duality}, we define:
 
 \begin{definition}
 Let $A_p$ be a connection on $\mathscr F$ and $1 < p < \infty$.
@@ -642,6 +668,50 @@ Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so
 $$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
 Taking $q \to \infty$ we arrive at the conclusion.
 
+We have the following Euler-Lagrange equation for $\infty$-magnetic potentials.
+Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-magnetic potentials have absolutely best curl}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
+As such, we shall not use it in the sequel, but only include it as a curiosity item.
+
+\begin{proposition}[$\infty$-Maxwell equation]
+Suppose that $A$ has absolutely best curl, regularity $C^2$, and no points with $\dif A = 0$. Then for $F := \dif A$,
+\begin{equation}\label{infinityMaxwell}
+	F^{ij} \partial_i |F| = 0.
+\end{equation}
+\end{proposition}
+\begin{proof}
+For a covariant $2$-tensor $T$, let $T^{\rm as}_{ij} := T_{ij} - T_{ji}$ be its antisymmetrization, and let
+$$f(x, T) := |T^{\rm as}|_{g(x)}.$$
+Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
+By the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001},
+\begin{equation}\label{ELA}
+	\left\langle \frac{\partial f}{\partial T}(x, \nabla A(x)), \dif (f(x, \nabla A(x))) \right\rangle = 0.
+\end{equation}
+Now
+$$\dif(f(x, \nabla A(x))) = \dif |\dif A(x)|$$
+and 
+$$\frac{\partial f}{\partial T}(x, \nabla A(x)) = \frac{\nabla A(x)^{\rm as}}{|\nabla A(x)^{\rm as}|} = \frac{\dif A(x)}{|\dif A(x)|}$$
+we conclude the claim after multiplying both sides of (\ref{ELA}) by $|\dif A|$.
+\end{proof}
+
+\begin{corollary}
+Suppose that $A$ has absolutely best curl, regularity $C^2$, and no points with $\dif A = 0$, and $N$ is a surface whose normal vector field is annihilated by $\dif A$.
+Then $N$ is a minimal surface.
+\end{corollary}
+\begin{proof}
+Let $V$ be a tangent vector field to $N$. Then $V|\dif A| = 0$, by the $\infty$-Maxwell equation (\ref{infinityMaxwell}).
+Therefore $|\dif A|$ is constant along $N$, and so $\dif A$ is a constant times the area form $\star \normal_N^\flat$ along $N$.
+So there are constant real numbers $c_1, c_2$ such that the mean curvature $H_N$ satisfies
+\begin{align*}
+H_N &= \tr(\nabla \normal_N^\flat) = c_1 \dif^* \star \dif A = c_2 \dif^2 A = 0. \qedhere
+\end{align*}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{q goes to 1}
+Our next task is to realize an $\infty$-magnetic potential as the Noetherian potential of a $1$-harmonic function.
+
+
 %%%%%%%%%%%%%%%%%%%%
 
 \section{The maximum curl locus}
@@ -691,7 +761,7 @@ This essentially follows from \cite[Theorem 5.1]{bangert_cui_2017}; we make a fe
 By a duality argument, which is purely on the level of homology, one may find a closed minimal $d-1$-current $T$ which is \dfn{calibrated} by $F$ in the sense that
 $$\langle [T], [F]\rangle = \mathbf M(T) \|F\|_{L^\infty}$$
 where $\mathbf M(T)$ is the mass of $T$ \cite[Proposition 2.2]{bangert_cui_2017}.
-We stress that, since the theory of \cite[\S2C]{bangert_cui_2017} is on the level of homology, we need not worry that any of the involed expressions are well-defined at our extremely low regularity.
+We stress that, since the theory of \cite[\S2C]{bangert_cui_2017} is on the level of homology, we need not worry that any of the involved expressions are well-defined at our extremely low regularity.
 Now by \cite[Theorem 1]{AUER20011095} (or perhaps \todo{Cite laminations paper}, since \cite{AUER20011095} appeals to \cite[\S37]{Simon84} which is for euclidean space rather than space forms), the minimal current $T$ induces a measured oriented minimal lamination $\lambda$.
 In particular, if $K$ denotes the space of leaves of $\lambda$ and $K$ denotes its transverse measure,
 $$\langle [T], [F]\rangle = \int_K \int_{N_k} F \dif \mu(k)$$
@@ -716,109 +786,73 @@ By \cite[Example 5.4]{bangert_cui_2017} the maximum curl locus need not equal a 
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{The dual $1$-harmonic function}
-In this section we interpret the lamination of Corollary \ref{best curl lamination} using Fenchel duality.
+In this section we interpret the lamination of Corollary \ref{best curl lamination} using convex duality.
 
 \begin{theorem}
-Let $A$ be an $\infty$-magnetic potential on $\mathscr F$, and let $u$ be a dual $1$-harmonic function to $A$.
-Then $\dif u$ is a Ruelle-Sullivan current for a minimal lamination in the maximum curl locus of $A$.
+Let $A$ be an $\infty$-magnetic potential on $\mathscr F$.
+Then there exists a $1$-harmonic function $u$ on the universal cover $\tilde M$ such that:
+\begin{enumerate}
+\item $A$ is a Noetherian potential for $u$.
+\item $\dif u$ is a Ruelle-Sullivan current for a minimal lamination in the maximum curl locus of $A$.
+\end{enumerate}
 \end{theorem}
 
 \todo{In fact, it's probably true that $\dif u$ gives a minimal lamination which is contained in EVERY maximum curl locus of a best curl connection on $\mathscr F$}
 
 To begin the proof, let $(A_p)$ be a $p$-approximation to $A$.
 Using the scaling techniques of Remark \ref{scalings}, we may assume that $\|\dif A\|_{L^\infty} = 1$; this eases the notational burden somewhat.
+We follow \cite[\S6.1]{daskalopoulos2020transverse}.
+
+We begin by constructing the function $u$.
 For $3 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let
 $$\int_M \star |k_p \dif A_p|^p = k_p$$
 just like in \cite[\S3.2]{daskalopoulos2020transverse}.
 Let $F_p := k_p \dif A_p$ and $U_q := |F_p|^{p - 2} \star F_p$ which is a $1$-form.
 Then 
-$$\dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.$$
-Also 
-$$\lim_{p \to \infty} k_p^{\frac{1}{p} - 1} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
+\begin{equation}\label{dAp wedge Uq}
+\int_M \dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.
+\end{equation}
+Also for $F := \dif A$,
+$$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
 It follows that $k_p \to 1$.
-Finally, we have $\|U_q\|_{L^1} \to 1$, which implies that $U_q \to U$ in the weak topology of measures for some closed $2$-current $U$.
-Then $U = \dif u$ for some $u \in BV(M)$.
-By the Fenchel relations, $\dif^*(|U_q|^{q - 2} U_q) = 0$, and $\dif U_q = 0$.
+
+We now compute
+\begin{equation}\label{Uq is closed}
+	\dif U_q = \dif(|F_p|^{p - 2} \star F_p) = 0
+\end{equation}
+since $F_p$ solves the $p$-Maxwell equation (\ref{predual problem}).
+So we may choose $u_q$ such that $U_q = \dif u_q$ and $u_q(0) = 0$ for some choice of origin $0$ of the universal cover $\tilde M$.
+
+We have the following analogue of \cite[Theorem 4.3]{daskalopoulos2020transverse} with essentially the same proof.
+
+\begin{lemma}
+There exists $u \in BV_\loc(\tilde M)$ and $\rho \in H^1(M, \RR)$ such that:
+\begin{enumerate}
+\item $u$ is $\rho$-equivariant.
+\item $u_q \to u$ weakly in $BV_\loc(\tilde M)$.
+\item $u_q \to u$ in $L^r(M)$ for $1 \leq r < \infty$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+By H\"older's inequality,
+$$\int_M \star |U_q| = \int_M \star |F_p|^{p - 1} \leq |M|^{\frac{1}{p}} \left[\int_M \star |F_p|^p\right]^{\frac{1}{q}}.$$
+Therefore 
+$$\limsup_{q \to 1} \int_M \star |U_q| \leq 1.$$
+On the other hand, (\ref{dAp wedge Uq}) is only possible if
+$$\liminf_{q \to 1} \int_M \star |U_q| \geq 1$$
+and so $\|U_q\|_{L^1} \to 1$.
+Taking limits in (\ref{Uq is closed}) and using a compactness argument, we obtain $U_q \to U$ in the weak topology of measures, for some closed $2$-current $U$.
+We write $\dif u = U$.
+
+Since $U_q, F_p$ are related by the convex duality relation (\ref{inverse extremality}),
+\end{proof}
+
+
+
 So by the Maz\'on-Rosser-Segura de Le\'on theorem, $u$ is $1$-harmonic.
 
 %%%%%%%%%%%%%%%%%%%%%
-\appendix \section{Experimental infinity maxwell stuff}
-\subsection{Infinity maxwell equation}
-
-\begin{proposition}[$\infty$-Maxwell equation]
-Let $A$ be an $\infty$-magnetic potential with regularity $C^2$, and $F := \dif A$. Then 
-$$F^{ij} \partial_i |F|^2 = 0.$$
-\end{proposition}
-\begin{proof}
-It follows from the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001} and chain rule bashing that
-$$F^{ij} F^{ab} \nabla_i F_{ab} = 0$$
-since $p$-magnetic potentials are absolute minimizers.
-The claim now follows because $\nabla$ is a metric connection and $|F|^2$ is a scalar field.
-\end{proof}
-
-However, the regularity hypothesis and the fact that the $\infty$-Maxwell equation is highly degenerate means that this proposition seems pretty useless.
-It might be useful indirectly though.
-For example it seems to follow that $F$ is covariantly constant in the directions cotangent to $F$ though I don't know how to make this precise.
-
-\subsection{Weak solutions}
-Let $A$ be a classical solution of $\infty$-Maxwell. Since $\nabla$ is a metric connection, it is equivalent that 
-$$F^{ij} \partial_i |F|^2 = 0$$
-Since $A$ is classical, we can find a $C^1$ orthonormal frame in which the $(1, 1)$-tensor $(F^i_j)$ is
-$$F = \begin{bmatrix}& 1 \\ -1 \\ && 0\end{bmatrix}$$
-and in this frame the $\infty$-Maxwell system becomes 
-$$\partial_1 |F|^2 = \partial_2 |F|^2 = 0$$
-or in other words $\dif(|F|^2)$ is parallel to $\partial_3$ which is parallel to $(\star F)^\flat$.
-It follows that
-$$\dif(|\dif A|^2) \wedge \dif A = 0.$$
-Multiplying by a test function and integrating by parts, this is equivalent to 
-$$\int_M |\dif A|^2 \dif A \wedge \dif \psi = 0$$
-for every test function $\psi$ which is the condition of weak solution for $\infty$-Maxwell.
-It makes sense for any $A \in W^{1, 3, 1}$.
-
-\begin{conjecture}
-Every $\infty$-magnetic form (in the sense of $p$-approximation) is $\infty$-magnetic in the $W^{1, 3, 1}$ weak sense.
-\end{conjecture}
-
-\subsection{Not every best curl form is infinity magnetic}
-\begin{example}
-For the Neumann problem 
-$$\begin{cases}
-\dif(|\dif A|^2) \wedge \dif A = 0 \\
-\iota^*(\dif A) = \iota^*(\dif x \wedge \dif y)
-\end{cases}$$
-on $\Ball^3$, the solution is $x \dif y$. For the Neumann problem with zero data the solution is $0$.
-However, if we take two disjoint copies of $\Ball^3$, we can take $\tilde A$ to be any compactly supported form on $\Ball^3$ with $\|\dif \tilde A\|_{L^\infty} \leq 1$, and then if we put $\tilde A$ on the copy with zero Neumann data, and $x \dif y$ on the copy with nontrivial Neumann data, then clearly the disjoint union form $A$ has best curl, but also we may choose $\tilde A$ so that it is not $\infty$-magnetic.
-
-I think by taking a connected sum of these two balls (the interior of a dumbbell) with a long enough connector, you could replicate this with a connected $3$-manifold.
-You'd probably want to consider the Dirichlet problem with data $\iota^*(x \dif y)$ and $0$ though, so that you don't have to solve the compatibility condition of $\dif \iota* F = 0$ to glue together the two Neumann data.
-\end{example}
-
-
-
-Since we can recover $A_p$ from $A$ (can we?) it should follow that $A$ is as unique as $A_p$ is.
-
-\begin{lemma}
-Let $A$ be $\infty$-magnetic, let $N$ be a hypersurface, and suppose that $\dif A$ is co-bitangent to $N$, that is, $\iota_{\normal_N} \dif A = 0$.
-Then $N$ is minimal.
-\end{lemma}
-\begin{proof}
-Since $A$ is $\infty$-magnetic, if $V$ is tangent to $N$, then (since $V$ is normal to $\normal_N$)
-$$V(|\dif A|^2) = 0.$$
-You can make this precise using the weak formulation if you really want to.
-In particular, $|\dif A|$ is constant along $N$, and without loss of generality it is $1$.
-It follows that $\dif A$ is the area form on $N$, so $\star \dif A = (-1)^s \normal_N^\flat$.
-Then 
-\begin{align*}
-H_N &= \tr(\nabla \normal_N) = (-1)^{s_1} \dif^* \star \dif A = (-1)^{s_2} \dif^2 A = 0. \qedhere
-\end{align*}
-\end{proof}
-
-Now let $S$ be the maximum curl locus of $A$.
-By upper semicontinuity, $S$ is a nonempty closed set.
-If $V, W$ satisfy $V|\dif A| = W|\dif A| = 0$, then $[V, W]|\dif A| = 0$.
-If this can be made sense of in the `weak' framework it follows from Frobenius that $S$ is minimally immersed.
-
-
+\appendix 
 
 \section{The dual one-harmonic function}
 For simplicity let's assume $H^2(M, \ZZ) = 0$.
