@@ -63,6 +63,9 @@
 \newcommand{\Lip}{\mathrm{Lip}}
 \newcommand{\Riem}{\mathrm{Riem}}
 
+\newcommand{\Min}{\mathrm{Min}}
+\newcommand{\Max}{\mathrm{Max}}
+
 \newcommand{\dfn}[1]{\emph{#1}\index{#1}}
 
 \renewcommand{\Re}{\operatorname{Re}}
@@ -186,76 +189,170 @@ H(\text{curl}) &:= W^{1, 2} \Omega^1 \\
 H(\text{div}) &:= W^{1, 2} \Omega^2.
 \end{align*}
 
-The utility of the de Rham--Sobolev complex is its trace theorem.
-To state it we recall that for $s \geq 0$, $1 < p, q < \infty$ such that $\frac{1}{p} + \frac{1}{q} = 1$, and $V$ a Riemannian vector bundle, the dual space of $W^{s, q}_0(M, V)$ (the traceless part of $W^{s, q}$) is denoted by $W^{-s, p}(M, V')$ where $V'$ denotes the dual bundle.
+The utility of the de Rham--Sobolev complex is its trace theorem, which is well-known for $p = 2$.
+To state it, we recall that for $s \geq 0$, $1 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, and $V$ a Riemannian vector bundle, the dual space of $W^{s, q}_0(M, V)$ (the traceless part of $W^{s, q}$) is $W^{-s, p}(M, V')$ where $V'$ denotes the dual bundle.
 
 \begin{proposition}[trace theorem]
-Let $N$ be an $\ell$-fold, and let $\iota: N \to M$ be a smooth embedding.
-Then for $1 < p < \infty$, the pullback is a bounded linear operator 
-$$\iota^*: W^{1, p} \Omega^\ell(M) \to W^{-\frac{1}{p}, p}(N, \Omega^\ell).$$
-In particular, for every $\alpha \in W^{1, p} \Omega^\ell(M)$ and every $\beta \in W^{1, q}(M, \Omega^{d - \ell - 1})$, where $\frac{1}{p} + \frac{1}{q} = 1$,
+Let $N$ be a smooth embedded hypersurface in $M$, $1 < p < \infty$, and $s > \frac{1}{p}$.
+The pullback is a bounded linear operator 
+$$\iota^*_N: W^{1, p} \Omega^{d - 1}(M) \to W^{-s, p}(N, \Omega^{d - 1}).$$
+In particular, for every $\alpha \in W^{1, p} \Omega^{d - 1}(M)$ and every $f \in W^{1, q}(M)$, where $\frac{1}{p} + \frac{1}{q} = 1$, we have integration by parts:
 \begin{equation}\label{Stokes trace}
-	\int_N \iota^* \alpha \wedge \iota^* \beta = \int_M \dif \alpha \wedge \beta + \alpha \wedge \dif \beta.
+	\int_N f\alpha = \int_M f \dif \alpha + \alpha \wedge \dif f.
 \end{equation}
 \end{proposition}
 \begin{proof}
-It suffices to prove that $\iota^*$ is bounded on smooth $\ell$-forms.
-Let $\alpha \in C^\infty(M, \Omega^\ell)$ and $\beta \in C^\infty(N, \Omega^{d - 1 - \ell})$.
+It suffices to prove that $\iota^*_N$ is bounded on smooth $d - 1$-forms.
+Let $\alpha \in C^\infty(M, \Omega^{d - 1})$ and $f \in C^\infty(N)$.
 Then by Stokes' theorem, (\ref{Stokes trace}) holds.
-By the inverse trace theorem \todo{Cite this} and the fact that $\frac{1}{p} = 1 - \frac{1}{q}$,
-% https://mathoverflow.net/questions/96532/the-inverse-for-the-trace-theorem
-we may extend $\beta$ to a smooth $d - \ell$-form on $M$ such that
-$$\|\beta\|_{W^{1, q}(M, \Omega^{d - 1 - \ell})} \lesssim \|\beta\|_{W^{\frac{1}{p}, q}(N, \Omega^{d - 1 - \ell})}.$$
-We then estimate using H\"older's inequality
+By \todo{prove an inverse trace theorem here}, we may extend $f$ to a smooth function on $M$ such that
+$$\|f\|_{W^{1, q}} \lesssim \|f\|_{W^{s, q}(N)}.$$
+We then estimate using (\ref{Stokes trace}) and H\"older's inequality
 \begin{align*}
-\left|\int_N \iota^* \alpha \wedge \iota^* \beta\right|
-&\leq \|\dif \alpha\|_{L^p} \|\beta\|_{L^q} + \|\alpha\|_{L^p} \|\dif \beta\|_{L^q} \\
-&\leq \|\alpha\|_{W^{1, p} \Omega^\ell} \|\beta\|_{W^{1, q}(M, \Omega^{d - 1 - \ell})} \\
-&\lesssim \|\alpha\|_{W^{1, p} \Omega^\ell} \|\beta\|_{W^{\frac{1}{p}, q}(N, \Omega^{d - 1 - \ell})}. \qedhere
+\left|\int_N f\alpha \right|
+&\leq \|\dif \alpha\|_{L^p} \|f\|_{L^q} + \|\alpha\|_{L^p} \|\dif f\|_{L^q} \\
+&\leq \|\alpha\|_{W^{1, p} \Omega^\ell} \|f\|_{W^{1, q}} \\
+&\lesssim \|\alpha\|_{W^{1, p} \Omega^\ell} \|f\|_W^{{s, q}(N)}. \qedhere
 \end{align*}
 \end{proof}
 
-As $W^{\frac{1}{p}, q}(N, \Omega^{d - 1 - \ell})$ is somewhat intractible, we shall only use the following consequence on closed submanifolds.
+As $W^{-s, q}(N)$ is somewhat intractible, we shall only use the following consequences rather than the trace theorem directly.
 
 \begin{corollary}\label{trace on cycles}
-Let $N$ be a closed $\ell$-fold, and let $\iota: N \to M$ a smooth embedding.
-Then for $1 < p < \infty$ and $\alpha \in W^{1, p} \Omega^\ell(M)$, the pullback $\iota^* \alpha$ is a signed Radon measure of finite total variation.
-In particular, convergence in $W^{1, p} \Omega^\ell$ implies convergence in the weak topology of measures of the pullbacks.
+Let $N$ be a smooth embedded hypersurface in $M$ and $1 < p \leq \infty$.
+\begin{enumerate}
+\item \label{pullback bounded} The pullback is a bounded linear operator
+$$\iota^*_N: W^{1, p} \Omega^{d - 1} \to C^1_\cpt(N)'.$$
+\item \label{integral continuous} For $F \in W^{1, p} \Omega^{d - 1}(M)$, if $N$ is closed, then the integral $\int_N F$ is well-defined as the limit of integrals of smooth approximations of $F$.
+\item \label{cohomology exists} For $F \in L^p(M, \Omega^{d - 1})$, if $N$ is closed and $\dif F = 0$ in the sense of distributions, then $\int_N F$ only depends on the homology class of $F$. In particular, the cohomology class of $F$ is well-defined as the limit of cohomology classes of smooth approximations of $F$.
+\end{enumerate}
 \end{corollary}
 \begin{proof}
-Let $\frac{1}{p} + \frac{1}{q} = 1$, so that the dual space of $W^{-\frac{1}{p}, p}(N)$ is $W^{\frac{1}{p}, q}_0(N) = W^{\frac{1}{p}, q}(N)$ (since $N$ is closed).
-Moreover, $W^{\frac{1}{p}, q}$ is an interpolation space of $W^{1, q}$ and $L^q$, hence 
-$$\|1\|_{W^{\frac{1}{p}, q}(N)} = \|1\|_{L^q(N)} = |N|^{\frac{1}{q}} < \infty.$$
-So for $\alpha \in W^{1, p} \Omega^\ell(M)$, we obtain from the trace theorem
-\begin{align*}
-\|\alpha\|_{L^1(N)} 
-&= \int_N \star |\alpha| \leq \|\alpha\|_{W^{-\frac{1}{p}, p}(N)} |N|^{\frac{1}{q}} \lesssim \|\alpha\|_{W^{1, p} \Omega^\ell(M)}. \qedhere 
-\end{align*}
+Since these statements are local, we may use H\"older's inequality to assume that $p < \infty$.
+By the trace theorem, to prove (\ref{pullback bounded}) we only need only recall that for $\frac{1}{p} < s < 1$ and $\frac{1}{p} + \frac{1}{q} = 1$, $C^1_\cpt(N) \subseteq W^{s, q}(N)$.
+Then (\ref{integral continuous}) follows because if $N$ is closed, then $1 \in C^1_\cpt(N)$.
+
+Finally, to prove (\ref{cohomology exists}), suppose that $\dif F = 0$ as distributions, and choose a sequence $(F_n)$ of smooth approximations of $F$ which converge in $L^p$ and satisfy $\dif F_n = 0$.
+Then $\dif F_n = 0 \to 0 = \dif F$ in $L^p$, so $F_n \to F$ in $W^{1, p} \Omega^{d - 1}$.
+By (\ref{integral continuous}) and Stokes' theorem, $\int_N F$ only depends on the homology class $[N]$ rather than $N$.
+In particular, $\int_N F = \lim_n \langle [N], [F_n]\rangle$, and this limit is well-defined for every homology class $[N] \in H_{d - 1}(M)$.
+So $[F] := \lim_n [F_n]$ exists.
 \end{proof}
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Derivation of p-Maxwell and infinity Maxwell}
-Derivation of p-Maxwell from Fenchel duality and also from Noether's theorem.
+\section{Convex duality for the $q$-Laplacian}
+Let $\Pi: \tilde M \to M$ be the universal covering, $M_{\rm fun} \subseteq \tilde M$ a fundamental domain, and
+$$\rho \in H^1(M, \RR)$$
+a cohomology class.
+Since $H_1(M, \RR)$ is the abelianization of $\pi_1(M)$, $\rho$ is canonically identified with a representation of the fundamental group, which we also call
+$$\rho: \pi_1(M) \to \RR.$$
+If a function $u: \tilde M \to \RR$ is $\rho$-equivariant, we write $[u] = \rho$.
+
+We here consider the problem
+\begin{equation}\label{preprimal problem}
+	\Min\{\|\dif u\|_{L^q(M_{\rm fun})}: u \in W^{1, q}(M_{\rm fun}), [u] = \rho\},
+\end{equation}
+where $1 < q < \infty$.
+Taking Euler-Lagrange equations, we see that (\ref{preprimal problem}) is equivalent to the $q$-Laplacian 
+$$\begin{cases}
+	\dif^*(|\dif u|^{q - 2} \dif u) = 0 \\
+	[u] = \rho.
+\end{cases}$$
+
+To put (\ref{preprimal problem}) in the framework of \cite[Chapter IV]{Ekeland99}, we shall fix a point $0 \in M_{\rm fun}$, choose a representative $1$-form (which we also call $\rho$), and solve 
+$$\begin{cases}
+\dif f = \Pi^* \rho \\
+v(0) = 0.
+\end{cases}$$
+Thus (\ref{preprimal problem}) is equivalent to
+\begin{equation}\label{primal problem}
+	\Min\left\{\frac{1}{q} \int_{M_{\rm fun}} \star|\dif v + \Pi^* \rho|^q: v \in W^{1, q}_0(M_{\rm fun})\right\}
+\end{equation}
+where we set $u = v + f$.
+
+Let
+$$f(\xi) := \frac{1}{q} \int_M \star|\xi + \rho|^q,$$
+defined for $\xi \in L^q(M, \Omega^1)$.
+Since $v$ is traceless in (\ref{primal problem}), it is invariant, so $\dif v$ drops to a $1$-form on $M$, and (\ref{primal problem}) is the problem of minimizing $f(\dif v)$.
+So the Legendre transform
+$$\hat f: L^p(M, \Omega^{d - 1}) \to \RR$$
+of $f$, where $\frac{1}{p} + \frac{1}{q} = 1$, satisfies
+$$\hat f(F) = \frac{1}{p} \int_M \star |F|^p - \int_M \rho \wedge F.$$
+From \cite[III(4.18) and III(4.23)]{Ekeland99}, we immediately conclude:
+
+\begin{lemma}
+The convex dual problem of the $q$-Laplacian (\ref{primal problem}) is the problem 
+\begin{equation}\label{predual problem}
+\Max\left\{\int_M \rho \wedge F - \frac{1}{p} \int_M \star |F|^p: F \in L^p(M, \Omega^{d - 1})\right\}.
+\end{equation}
+Moreover, if $v$ is a solution of (\ref{primal problem}) and $F$ is a solution of the dual problem (\ref{predual problem}), then
+\begin{equation}\label{extremality relations}
+\frac{1}{q} \int_M \star |\dif v + \rho|^q + \frac{1}{p} \int_M \star |F|^p = \int_M \rho \wedge F + \int_M \dif v \wedge F.
+\end{equation}
+\end{lemma}
+
+\begin{lemma}
+Let $F$ be a solution of the dual problem (\ref{predual problem}). Then
+\begin{equation}\label{EL of hat G}
+|F|^{p - 2} F = (-1)^{d - 1} \star \rho.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $(F_t)$ be an arbitrary variation and $\alpha := \frac{\partial F_t}{\partial t}|_{t = 0}$. Then 
+$$0 = \frac{\dif}{\dif t} \hat f(F_t)\bigg|_{t = 0} = \int_M \star |F|^{p - 2} \langle F, \alpha \rangle - \rho \wedge \alpha.$$
+Since $\alpha$ was arbitrary, for every $d-1$-form $\beta$,
+$$|F|^{p - 2} \langle F, \beta\rangle = \star^{-1}(\rho \wedge \beta) = \langle \star^{-1} \rho, \beta\rangle.$$
+Recalling that, since $\rho$ is a $1$-form, $\star^{-1} \rho = (-1)^{d - 1} \star \rho$, and $\beta$ is arbitrary, the claim follows.
+\end{proof}
+
+In the next proposition we write $\dif A \in L^p(M, \Omega^{d - 1})$ for a $d-2$-form $A$ on $\tilde M$ to mean that $\dif A$ is invariant and drops to a member of $L^p(M, \Omega^{d - 1})$.
+
+\begin{proposition}
+Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, and fix a cohomology class $\rho \in H^1(M, \RR)$.
+Then there exists a cohomology class $\alpha \in H^{d - 2}(M, \RR)$ such that the convex dual problem of the $q$-Laplacian (\ref{preprimal problem}) is equivalent to 
+\begin{equation}\label{dual problem}
+\Min\left\{\frac{1}{p} \int_{M_{\rm fun}} \star |\dif A|^p: \dif A \in L^p(M, \Omega^{d - 1}), [\dif A] = \alpha\right\}.
+\end{equation}
+\end{proposition}
+
+\begin{proposition}
+Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, and fix a cohomology class $\rho \in H^1(M, \RR)$.
+Let $A$ be a solution of (\ref{dual problem}) and let $u$ be a solution of the $q$-Laplacian. Then
+\begin{equation}\label{pMaxwell}
+\dif^*(|\dif A|^{p - 2} \dif A) = 0
+\end{equation}
+and we have
+\begin{equation}\label{extremality}
+\dif A = |\dif u|^{q - 2} \star \dif u.
+\end{equation}
+\end{proposition}
+
+\todo{Prove all this. We might need to assume that $H^{d - 1}(\tilde M, \RR) = 0$ but it might also follow from Poincar\'e duality with compact support.}
+
+\begin{corollary}
+Let $A$ be a solution of (\ref{dual problem}) and let $u$ be a solution of the $q$-Laplacian. 
+Then $\dif A$ is the Noetherian flux for the invariance of the $q$-Laplacian under addition of constants.
+\end{corollary}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{p-Maxwell}
+\section{The $p$-Maxwell equation}
 \subsection{p finite}
-Let $M$ be a Riemannian threefold, and fix a cohomology class $\xi \in H^2(M, \ZZ)$.
-Equivalently, we could fix a $U(1)$ line bundle $\mathscr F \to M$ and consider its Chern class $\xi = c_1(\mathscr F)$.
+Let $M$ be a Riemannian threefold, and fix a $U(1)$ line bundle $\mathscr F \to M$.
+\todo{Most of this is just general theory once you change the $p$s, only once we get to calibrations do we need $d = 3$}.
 
 \begin{definition}
 Let $A_p$ be a connection on $\mathscr F$ and $1 < p < \infty$.
 We call $A_p$ a \dfn{$p$-magnetic potential} if it is a minimizer of the \dfn{$p$-Maxwell energy} $\|\dif A_p\|_{L^p}$, $p \geq 2$. among all connections on $\mathscr F$.
 \end{definition}
 
-Instead of connections we could look at $1$-forms on the universal cover such that $\gamma^* A - A$ is closed for every deck transformation $\gamma$.
-But we'll come back to that later.
+\todo{Instead of connections we could look at $1$-forms on the universal cover such that $\gamma^* A - A$ is closed for every deck transformation $\gamma$.}
 
 \begin{lemma}[$p$-Maxwell equation]
 Every $p$-magnetic potential $A_p$ satisfies
-\begin{equation}\label{pMaxwell}
+\begin{equation}
 	\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0
 \end{equation}
 in the weak sense that for every $1$-form $B$,
@@ -481,30 +578,18 @@ which proves (\ref{crandall best curl is ABC}).
 Finally, (\ref{crandall linfinity}) follows from (\ref{dA is like Lipschitz constant}) and (\ref{crandall best curl is ABC}).
 \end{proof}
 
-\begin{corollary}
+\begin{corollary}\label{local curl mod gives global}
 For a $C^0$ connnection $1$-form $A$, $\sup_{x \in M} L(A, x) = L(A)$.
 \end{corollary}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{p goes to infinity}
-\begin{lemma}
-Let $A, B$ be connection $1$-forms, let $\Omega \subseteq M$ be any smooth subdomain, and let $A_p, B_p$ be the $p$-magnetic potentials in Coulomb gauge on $\Omega$ such that $A_p|_{\partial \Omega} - B_p|_{\partial \Omega}$.
-Then 
-\begin{equation}\label{uniqueness for p}
-	\|A_p - B_p\|_{C^0(\Omega)} \lesssim_p \|A - B\|_{C^0(\partial \Omega)}.
-\end{equation}
-\end{lemma}
-\begin{proof}
-	\todo{The point is that the difference of two $p$-magnetics solves a linear elliptic PDE}.
-	In particular, $P(A_p - B_p) = f$ and by Schauder estimates, we must have $A_p - B_p$ small if $f$ is small.
-\end{proof}
-
 \begin{theorem}\label{existence infinity}
 For each dyadic $4 \leq p < \infty$, let $A_p$ be the $p$-magnetic potential on a $U(1)$ line bundle $\mathscr F$, which we assume to be in Coulomb gauge.
 Then there exists a connection $A$ in Coulomb gauge on $\mathscr F$ such that:
 \begin{enumerate}
 \item Along a subsequence, $A_p \to A$ uniformly and $\dif A_p \to \dif A$ weakly in $L^q$ for any $3 < q < \infty$.
-\item $A$ has best and absolutely best curl.
+\item $A$ has best curl.
 \item One has 
 \begin{equation}\label{Sobolev bounds for infinity}
 	\|A\|_{W^{1, \infty}} \lesssim |c_1(\mathscr F)|.
@@ -539,22 +624,23 @@ We now estimate using the Sobolev embedding theorem, (\ref{uniform bounds in p b
 $$\|A_p\|_{C^{\frac{1}{4}}} \lesssim \|A_p\|_{W^{1, 4}} \lesssim \|\dif A_p\|_{L^4} \leq |M|^{\frac{1}{4} - \frac{1}{p}} \|\dif A\|_{L^\infty}$$
 for $p \geq 4$.
 Passing to a further subsequence, we obtain $A_p \to A$ uniformly, and in particular that $A$ is in Coulomb gauge.
-
-It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
-By a straightforward modification of Proposition \ref{existence for p}, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
-By (\ref{uniqueness for p}),
-$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
-Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
-$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
-$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Taking $q \to \infty$ we arrive at the conclusion.
 \end{proof}
 
 \begin{definition}
 Let $A$ be the limiting connection $1$-form in Theorem \ref{existence infinity} for a $U(1)$ line bundle $\mathscr F$.
 By an \dfn{$\infty$-magnetic potential}, we mean a gauge transformation of $A$.
 \end{definition}
+
+\todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
+It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
+By a straightforward modification of Proposition \ref{existence for p}, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
+By quantitative uniqueness
+$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
+Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
+$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
+$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Taking $q \to \infty$ we arrive at the conclusion.
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -563,43 +649,97 @@ Throughout this section, let $M$ be a closed space form of dimension $3$.
 
 \begin{definition}
 Let $A$ be a connection of best curl on $\mathscr F$.
-The \dfn{maximum curl locus} is the set $L(A, x) = L(A)$.
+The \dfn{maximum curl locus} is the set $\{L(A, \cdot) = L(A)\}$.
 \end{definition}
 
 By Proposition \ref{crandall}(\ref{crandall usc}) and the compactness of $M$, the maximum curl locus is a nonempty closed subset of $M$.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The calibrated lamination}
+\begin{remark}\label{scalings}
 The two minimization problems in consideration are invariant under two scalings: 
 \begin{enumerate}
 \item Rescaling the entire manifold, which rescales $\|\dif A\|_{L^\infty}$ but not $c_1(\mathscr F)$.
-\item $A \mapsto \lambda A$. This changes both $\|\dif A\|_{L^\infty}$ and $c_1(\mathscr F)$.
+\item $A \mapsto \lambda A$. This changes both $\|\dif A\|_{L^\infty}$ and $c_1(\mathscr F)$. \todo{Could also rescale the circle inducing the circle bundle. Also this doesn't really have anything to do with the task at hand, and would probably better go elsewhere to explain why we may assume $\dif A \in H^2(M, \ZZ)$}
 \end{enumerate}
-In particular, by applying both scalings and using Chern-Weil theory, we may impose the following:
+In particular, by applying both scalings and using Chern-Weil theory, we may replace any best curl connection by a best curl connection $A$ with $\|\dif A\|_{L^\infty} = 1$, if desired.
+\end{remark}
+
+Recall that in the work of Harvey--Lawson on calibrated geometry \cite{Harvey82}, a \dfn{calibration} on $M$ is a smooth closed $2$-form of $C^0$ norm $1$.
+Owing to the above scale-invariance, and the fact that we do not enjoy the luxury of such high regularity, we shall just mean by a \dfn{calibration} something much weaker: a $2$-form $F \in L^\infty$, such that $\|F\|_{L^\infty} > 0$ and $\dif F = 0$ as distributions.
+This definition is even weaker than the definition of \cite[\S2A]{bangert_cui_2017} which assumed that $F$ is continuous and $\|F\|_{L^\infty} = 1$.
 
 \begin{definition}
-We say that a connection $1$-form $A$ is a \dfn{calibration potential} if it has best curl, and $\|\dif A\|_{L^\infty} = 1$.
+Let $F$ be a calibration and $N \subset M$ an embedded surface with area form $\omega_N$.
+We say that $N$ is a \dfn{calibrated surface} if the pullback of $F$ to $N$ is $\|F\|_{L^\infty} \omega_N$.
 \end{definition}
 
-\todo{This is kind of dumb, why not just declare a calibrated submanifold to be one along $\|\dif A\|_{L^\infty}$ regardless of whether it's $1$?}
+It is clear that a calibration has regularity $H(\text{div}) = W^{1, 2} \Omega^2$.
+So by Corollary \ref{trace on cycles}(\ref{integral continuous}), we may integrate a calibration over any closed surface $N$, or any small ball in a possibly nonclosed surface $N$.
+In particular, the sentence ``$N$ is a calibrated surface'' is well-defined, and it just means that for every sufficiently small relatively open ball $U \subseteq N$,
+$$\int_U F = \|F\|_{L^\infty} |U|.$$
+Even at this generality, every calibrated surface is minimal: if $N'$ is homologous to $N$ relative to $\partial N = \partial N'$, then by Stokes' theorem,
+$$|N'| = \frac{1}{\|F\|_{L^\infty}} \int_{N'} F = \frac{1}{\|F\|_{L^\infty}} \int_N F \leq |N|.$$
+Finally, before stating the next proposition, we need to recall that by Corollary \ref{trace on cycles}(\ref{cohomology exists}), the cohomology class of a calibration is well-defined.
 
-\begin{proposition}
-Suppose that $A$ is a calibration potential.
-Then there is a minimal lamination whose leaves are calibrated submanifolds for $\dif A$.
+\begin{proposition}\label{Bangert Cui}
+Let $F$ be a calibration which minimizes $\|F\|_{L^\infty}$ in its cohomology class.
+Then there exists a measured oriented minimal lamination on $M$ whose leaves are calibrated surfaces with respect to $F$.
 \end{proposition}
 \begin{proof}
-\todo{Modify \cite[Theorem 5.1]{bangert_cui_2017} to deal with the analytic niceties.}
+This essentially follows from \cite[Theorem 5.1]{bangert_cui_2017}; we make a few remarks about how the proof works at this level of generality.
+By a duality argument, which is purely on the level of homology, one may find a closed minimal $d-1$-current $T$ which is \dfn{calibrated} by $F$ in the sense that
+$$\langle [T], [F]\rangle = \mathbf M(T) \|F\|_{L^\infty}$$
+where $\mathbf M(T)$ is the mass of $T$ \cite[Proposition 2.2]{bangert_cui_2017}.
+We stress that, since the theory of \cite[\S2C]{bangert_cui_2017} is on the level of homology, we need not worry that any of the involed expressions are well-defined at our extremely low regularity.
+Now by \cite[Theorem 1]{AUER20011095} (or perhaps \todo{Cite laminations paper}, since \cite{AUER20011095} appeals to \cite[\S37]{Simon84} which is for euclidean space rather than space forms), the minimal current $T$ induces a measured oriented minimal lamination $\lambda$.
+In particular, if $K$ denotes the space of leaves of $\lambda$ and $K$ denotes its transverse measure,
+$$\langle [T], [F]\rangle = \int_K \int_{N_k} F \dif \mu(k)$$
+but 
+$$\mathbf M(T) = \int_K |N_k| \dif \mu(k).$$
+This is only possible if the leaves of $\lambda$ are calibrated surfaces.
 \end{proof}
+
+\begin{corollary}\label{best curl lamination}
+Let $A$ be a connection of best curl.
+Then the maximum curl locus contains a measured oriented minimal lamination.
+\end{corollary}
+\begin{proof}
+By definition, $\dif A$ is a calibration which minimizes $\|\dif A\|_{L^\infty}$ in $c_1(\mathscr F)$.
+Let $\lambda$ be the lamination of Proposition \ref{Bangert Cui}.
+Then $\dif A$ is smooth in the tangent directions to each leaf of $\lambda$, since it is a multiple of the area form on $\lambda$.
+In particular, $|\dif A(x)|$ exists and equals $\|\dif A\|_{L^\infty}$ if $x \in \supp \lambda$.
+The assertion now follows from Proposition \ref{crandall}(\ref{crandall linfinity}) and Corollary \ref{local curl mod gives global}.
+\end{proof}
+
+By \cite[Example 5.4]{bangert_cui_2017} the maximum curl locus need not equal a lamination.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{The dual $1$-harmonic function}
-\todo{Can't do this until we've dealt with Fenchel duality}
+In this section we interpret the lamination of Corollary \ref{best curl lamination} using Fenchel duality.
 
 \begin{theorem}
-Let $A$ be an $\infty$-magnetic calibration potential on $\mathscr F$, and let $u$ be a dual $1$-harmonic function to $A$.
-Then $\dif u$ is a Ruelle-Sullivan current for the minimal lamination induced by $\tilde A$.
+Let $A$ be an $\infty$-magnetic potential on $\mathscr F$, and let $u$ be a dual $1$-harmonic function to $A$.
+Then $\dif u$ is a Ruelle-Sullivan current for a minimal lamination in the maximum curl locus of $A$.
 \end{theorem}
 
-\todo{Do this for any equivariant best curl $1$-form on the universal cover}
+\todo{In fact, it's probably true that $\dif u$ gives a minimal lamination which is contained in EVERY maximum curl locus of a best curl connection on $\mathscr F$}
 
+To begin the proof, let $(A_p)$ be a $p$-approximation to $A$.
+Using the scaling techniques of Remark \ref{scalings}, we may assume that $\|\dif A\|_{L^\infty} = 1$; this eases the notational burden somewhat.
+For $3 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let
+$$\int_M \star |k_p \dif A_p|^p = k_p$$
+just like in \cite[\S3.2]{daskalopoulos2020transverse}.
+Let $F_p := k_p \dif A_p$ and $U_q := |F_p|^{p - 2} \star F_p$ which is a $1$-form.
+Then 
+$$\dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.$$
+Also 
+$$\lim_{p \to \infty} k_p^{\frac{1}{p} - 1} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
+It follows that $k_p \to 1$.
+Finally, we have $\|U_q\|_{L^1} \to 1$, which implies that $U_q \to U$ in the weak topology of measures for some closed $2$-current $U$.
+Then $U = \dif u$ for some $u \in BV(M)$.
+By the Fenchel relations, $\dif^*(|U_q|^{q - 2} U_q) = 0$, and $\dif U_q = 0$.
+So by the Maz\'on-Rosser-Segura de Le\'on theorem, $u$ is $1$-harmonic.
 
 %%%%%%%%%%%%%%%%%%%%%
 \appendix \section{Experimental infinity maxwell stuff}
@@ -684,20 +824,7 @@ If this can be made sense of in the `weak' framework it follows from Frobenius t
 For simplicity let's assume $H^2(M, \ZZ) = 0$.
 
 Let $A$ be an $\infty$-magnetic potential and let $A_p \to A$ witness that $A$ is $\infty$-magnetic.
-For simplicity we assume that $\|\dif A\|_{L^\infty} = 1$, that is $F := \dif A$ is a calibration.
-Let $3 < p < \infty$, $1/p + 1/q = 1$ (so $1 < q < 3/2$) and
-$$\int_M \star |k_p \dif A_p|^p = k_p$$
-just like in \cite[\S3.2]{daskalopoulos2020transverse}.
-Let $F_p := k_p \dif A_p$ and $U_q := |F_p|^{p - 2} \star F_p$ which is a $1$-form.
-Then 
-$$\dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.$$
-Also 
-$$\lim_{p \to \infty} k_p^{\frac{1}{p} - 1} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
-It follows that $k_p \to 1$.
-Finally, we have $\|U_q\|_{L^1} \to 1$, which implies that $U_q \to U$ in the weak topology of measures for some closed $2$-current $U$.
-Then $U = \dif u$ for some $u \in BV(M)$.
-By the Fenchel relations, $\dif^*(|U_q|^{q - 2} U_q) = 0$, and $\dif U_q = 0$.
-So by the Maz\'on-Rosser-Segura de Le\'on theorem, $u$ is $1$-harmonic.
+
 
 Question: Does the Fenchel relation imply that $u$ is nonzero?
 What about nonconstant?
