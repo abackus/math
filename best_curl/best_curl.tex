@@ -178,7 +178,7 @@ For $1 \leq p < \infty$ and $0 \leq \ell \leq d$, let $W^{1, p}_{\rm d}(M, \Omeg
 $$\|\alpha\|_{W^{1, p}_{\rm d}}^p := \|\alpha\|_{L^p}^p + \|\dif \alpha\|_{L^p}^p$$
 is finite.
 For $p = \infty$ we instead define $W^{1, \infty}_{\rm d}(M, \Omega^\ell)$ by the norm 
-$$\|\alpha\|_{W^{1, \infty}_{\rm d}} := \max(\|\alpha\|_{L^\infty} + \|\dif \alpha\|_{L^\infty}).$$
+$$\|\alpha\|_{W^{1, \infty}_{\rm d}} := \max(\|\alpha\|_{L^\infty}, \|\dif \alpha\|_{L^\infty}).$$
 The \dfn{de Rham--Sobolev complex} $W^{1, p}_{\rm d}(M, \Omega^\bullet)$ is the chain complex of such spaces, with boundary maps 
 $$\dif: W^{1, p}_{\rm d}(M, \Omega^\ell) \to W^{1, p}_{\rm d}(M, \Omega^{\ell + 1}).$$
 \end{definition}
@@ -210,14 +210,20 @@ In particular, for every $\alpha \in W^{1, \infty}_{\rm d}(M, \Omega^\ell)$ and 
 \begin{proof}
 Define an $\ell$-current $\iota^* \alpha$ on $\partial M$ by setting, for every $\beta \in C^\infty_\cpt(\partial M, \Omega^{d - 1 - \ell})$,
 \begin{equation}\label{definition of trace}
-\int_{\partial M} \iota^* \alpha \wedge \beta = \int_M \dif \alpha \wedge \beta - \alpha \wedge \dif \beta..
+\int_{\partial M} \iota^* \alpha \wedge \beta = \int_M \dif \alpha \wedge \beta - \alpha \wedge \dif \beta.
 \end{equation}
 To keep notation simple we shall just write $\alpha$ for $\iota^* \alpha$ when it is clear enough.
 
 In (\ref{definition of trace}), we chose a smooth extension of $\beta$ to $M$.
-However, the definition of $\iota^* \alpha$ is independent of the choice of extension: if $\tilde \beta$ was another extension, then $\gamma := \beta - \tilde \beta$ would be traceless; the part of the trace of $\dif \gamma$ which is orthogonal to $\ker \iota^*$ (where $\iota^*$ is here defined on smooth forms) is also traceless, by Stokes' theorem.
-Therefore
-$$\int_M \dif \alpha \wedge \gamma + \alpha \wedge \dif \gamma = 0.$$
+However, the definition of $\iota^* \alpha$ is independent of the choice of extension.
+First, if we replace $\beta$ by $\beta + \gamma$ where $\supp \gamma$ is compact in the interior of $M$, then by Stokes' theorem,
+\begin{align*}
+\int_M \dif \alpha \wedge (\beta + \gamma) - \alpha \wedge \dif (\beta + \gamma)
+&= \int_M \dif \alpha \wedge \beta - \alpha \wedge \dif \beta + \int_M \dif(\alpha \wedge \gamma) \\
+&= \int_M \dif \alpha \wedge \beta - \alpha \wedge \dif \beta.
+\end{align*}
+If we instead replaced $\beta$ by $\beta + \gamma$ where $\gamma$ is traceless, then we could approximate $\gamma$ in $W^{1, 1}$ by compactly supported replacements, and get the same result by dominated convergence.
+
 In particular, we may, by the inverse trace theorem \cite[Teorema 1.II]{Gagliardo1957}, choose the extension $\beta$ to satisfy 
 $$\|\beta\|_{W^{1, 1}(M)} \lesssim \|\beta\|_{L^1(N)}.$$
 Therefore by (\ref{definition of trace}), 
@@ -234,17 +240,28 @@ Therefore by (\ref{definition of trace}),
 Let $N$ be a smooth embedded hypersurface in $M$.
 \begin{enumerate}
 \item \label{pullback bounded} The pullback is a bounded linear operator
-$$\iota^*_N: W^{1, \infty}_{\rm d}(M, \Omega^{d - 1}) \to L^\infty(N).$$
-\item \label{integral continuous} For $\alpha \in W^{1, \infty}_{\rm d}(M, \Omega^{d - 1})$, if $N$ is closed, then the integral $\int_N \alpha$ is well-defined.
-\item \label{cohomology exists} For $\alpha \in L^\infty(M, \Omega^{d - 1})$, if $N$ is closed and $\dif F = 0$ in the sense of distributions, then $\int_N \alpha$ only depends on the homology class of $\alpha$. In particular, the cohomology class of $F$ is well-defined.
+$$\iota^*_N: W^{1, \infty}_{\rm d}(M, \Omega^\ell) \to L^\infty(N, \Omega^\ell).$$
+\item \label{integral continuous} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, if $N$ is closed, then the integral $\int_N F$ is well-defined, and depends continously on $F$ in weak $L^q(M, \Omega^{d - 1})$ for any $1 < q < \infty$.
+\item \label{cohomology exists} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, the cohomology class of $F$ is well-defined, and depends continuously on $F$ in weak $L^q(M, \Omega^{d - 1})$ for any $1 < q < \infty$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
-To prove (\ref{pullback bounded}) we may use a partition of unity to work in a small ball $U$ in $N$, and then we may realize a collar neighborhood $V$ of $U$ in $M$ as a manifold-with-boundary with $\partial V = U$.
+To prove (\ref{pullback bounded}) we may use a partition of unity to work in a small ball $U$ in $N$, and then we may realize a collar neighborhood $V$ of $U$ in $M$ as a manifold-with-boundary with $U \subseteq \partial V$, and choose $\beta \in C^\infty_\cpt(M)$ in (\ref{Stokes trace}) to be a cutoff which is zero on $\partial V$ except along $U$.
 The definition of
-$$\iota^*_U: W^{1, \infty}_{\rm d}(V, \Omega^{d - 1}) \to L^\infty(U, \Omega^{d - 1})$$
+$$\iota^*_U: W^{1, \infty}_{\rm d}(V, \Omega^\ell) \to L^\infty(U, \Omega^\ell)$$
 does not depend on the choice of $V$, since by Stokes' theorem the right-hand side of (\ref{Stokes trace}) will be the same.
-Moreover, (\ref{integral continuous}) and (\ref{cohomology exists}) are immediate consequences of (\ref{pullback bounded}) and Stokes' theorem.
+
+To obtain (\ref{integral continuous}), we first observe that since $F \in L^\infty$ and $\dif F = 0$,
+$$F \in W^{1, \infty}_{\rm d}(M, \Omega^{d - 1})$$
+which is mapped to
+$$L^\infty(N, \Omega^{d - 1}) \subseteq L^1(N, \Omega^{d - 1})$$
+by (\ref{pullback bounded}) and the fact that $N$ is closed.
+To obtain the continuity, we again use a collar neighborhood $V$ of $U$ and a cutoff $\beta$.
+Since $F$ is closed, (\ref{Stokes trace}) reads 
+$$\int_U F = \int_M F \wedge \dif \beta.$$
+Since $\beta \in C^\infty_\cpt$, $\dif \beta \in L^p$ where $\frac{1}{p} + \frac{1}{q} = 1$.
+So if $F_n \to F$ in weak $L^q$, $\int_M F_n \wedge \dif \beta \to \int_M F \wedge \dif \beta$, as desired.
+Letting $N$ range over representatives of every homology class, we conclude (\ref{cohomology exists}) as a consequence of (\ref{integral continuous}).
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -645,12 +662,7 @@ Diagonalizing, we may assume that $\dif A_p \to F$ weakly in $L^q$ for every suc
 \end{equation}
 
 We now compute the cohomology class of $F$.
-Since $\dif F = 0$ and
-$$\|F\|_{L^4} \leq |M|^{\frac{1}{4}} \|F\|_{L^\infty},$$
-$\dif A_p \to F$ weakly in $W^{1, 4} \Omega^2$.
-So by Corollary \ref{trace on cycles}, for any $2$-cycle $S$,
-$$\int_S F = \lim_{p \to \infty} 2\pi \langle c_1(\mathscr F), [S] \rangle = 2\pi \langle c_1(\mathscr F), [S]\rangle,$$
-where $[S] \in H_2(M, \ZZ)$ denotes the homology class of $S$.
+By Corollary \ref{trace on cycles}(\ref{cohomology exists}) and the fact that $\dif A_p \to F$ in $L^q$ and the cohomology class of $\dif A_p$ is $c_1(\mathscr F)$, so is the cohomology class of $F$.
 Therefore $F$ is the curvature of a connection $A$ on $\mathscr F$, which must have best curl by Proposition \ref{crandall}(\ref{crandall linfinity}) since $B$ was arbitrary in (\ref{infinity magnetics have best curl}).
 Moreover, taking the limit as $p \to \infty$ in (\ref{Sobolev bounds for p}), we obtain (\ref{Sobolev bounds for infinity}).
 
@@ -752,13 +764,12 @@ Let $F$ be a calibration and $N \subset M$ an embedded surface with area form $\
 We say that $N$ is a \dfn{calibrated surface} if the pullback of $F$ to $N$ is $\|F\|_{L^\infty} \omega_N$.
 \end{definition}
 
-It is clear that a calibration has regularity $H(\text{div}) = W^{1, 2} \Omega^2$.
-So by Corollary \ref{trace on cycles}(\ref{integral continuous}), we may integrate a calibration over any closed surface $N$, or any small ball in a possibly nonclosed surface $N$.
+By Corollary \ref{trace on cycles}(\ref{integral continuous}), we may integrate a calibration over any closed surface $N$, or any small ball in a possibly nonclosed surface $N$.
 In particular, the sentence ``$N$ is a calibrated surface'' is well-defined, and it just means that for every sufficiently small relatively open ball $U \subseteq N$,
 $$\int_U F = \|F\|_{L^\infty} |U|.$$
 Even at this generality, every calibrated surface is minimal: if $N'$ is homologous to $N$ relative to $\partial N = \partial N'$, then by Stokes' theorem,
 $$|N'| = \frac{1}{\|F\|_{L^\infty}} \int_{N'} F = \frac{1}{\|F\|_{L^\infty}} \int_N F \leq |N|.$$
-Finally, before stating the next proposition, we need to recall that by Corollary \ref{trace on cycles}(\ref{cohomology exists}), the cohomology class of a calibration is well-defined.
+Moreover, by Corollary \ref{trace on cycles}(\ref{cohomology exists}), the cohomology class of a calibration is well-defined.
 
 \begin{proposition}\label{Bangert Cui}
 Let $F$ be a calibration which minimizes $\|F\|_{L^\infty}$ in its cohomology class.
