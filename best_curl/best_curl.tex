@@ -902,21 +902,112 @@ The Thurston lamination of a cohomology class is well-defined.
 \end{proposition}
 
 \todo{Not sure how to prove this, but the point is that our choice of $(u, F)$ isn't allowed to matter.} Maybe it follows because the $p$-lights, which are unique, need to concentrate on a set that doesn't depend on the choice made in the compactness argument. Strictly speaking we don't need this, but I want to talk about THE Thurston lamination...
+OTOH it could be false because maybe there are lots of possible dual measures, and we want the ``equidistributed'' one in some sense.
 
-\begin{theorem}
+\begin{theorem}\label{MCL contains Thurston}
 Let $F$ be a best comass representative of $\rho \in H^2(M, \RR)$.
-Then the maximum comass locus of $F$ is contained in the Thurston lamination associated to $\rho$.
+Then the maximum comass locus of $F$ contains the Thurston lamination associated to $\rho$.
 \end{theorem}
 
 \todo{Prove me, the proof is basically the same as \cite[\S6.1, \S6.2]{daskalopoulos2020transverse}}
-On the first reading, the reader may wish to take $\tilde F = F$, as this already captures the essential ideas.
+On the first reading, the reader may wish to take $F$ to be $\infty$-light, as this already captures the essential ideas.
+Throughout the proof we fix the $p$-light representative $F_p$ of $\rho$.
 
-The main point is this proposition:
+\begin{lemma}
+Let
+$$f_p := 2\langle k_p F_p, k_p F_p - L^{-1} F\rangle.$$
+Then 
+\begin{equation}\label{MCL contains Thurston 1}
+	\lim_{p \to \infty} \int_{\{f_p \geq 0\}} \star |k_p F_p|^{p - 2} f_p = 0.
+\end{equation}
+\end{lemma}
+\begin{proof}
+The proof is very similar to \cite[Lemma 6.3]{daskalopoulos2020transverse}.
+Since $F_p, F$ are cohomologous, there exists a $1$-form $\xi$ such that $\dif \xi = F_p - F$.
+On the other hand, since $F_p$ is $p$-light, an integration by parts gives
+\begin{align*}
+\int_M |F_p|^{p - 2} \langle F_p, F_p - F \rangle = \int_M \langle \dif^*(|F_p|^{p - 2} F_p), \xi\rangle = 0.
+\end{align*}
+In particular,
+\begin{equation}\label{MCL contains Thurston 2}
+	I_p := \int_M \star |k_p F_p|^{p - 2} \langle k_p F_p, k_p F_p - k_p F\rangle = 0.
+\end{equation}
+On the other hand, by the Cauchy-Schwarz inequality, Lemma \ref{normalizations converge}, and the fact that 
+$$\lim_{p \to \infty} \|F_p\|_{L^p} = \|F\|_{L^\infty} = L,$$
+we have
+\begin{align*}
+\lim_{p \to \infty} I_p - \frac{1}{2} \int_M \star |k_p F_p|^{p - 2} f_p 
+&= \lim_{p \to \infty} \int_M \star |k_p F_p|^{p - 2} \left\langle k_p F_p, \left(\frac{1}{L} - k_p\right) F\right\rangle \\
+&\leq \lim_{p \to \infty} k_p^{p - 1} \left(\frac{1}{L} - k_p\right) \int_M \star |F_p|^{p - 1} |F| \\
+&= \lim_{p \to \infty} \frac{1}{L^{p - 1}} \left(\frac{1}{L} - \frac{1}{L}\right)L^p \\
+&= \lim_{p \to \infty} 1 - 1 = 0.
+\end{align*}
+If we plug this into (\ref{MCL contains Thurston 2}), we obtain 
+\begin{equation}\label{MCL contains Thurston 3}
+	\lim_{p \to \infty} \int_M \star |k_p F_p|^{p - 2} f_p = 0.
+\end{equation}
+If $f_p(x) \leq 0$, then by the Cauchy-Schwarz inequality,
+$$|L^{-1} F|(x) \geq |k_p F_p|(x),$$
+so by the Cauchy-Schwarz and Peter-Paul inequalities,
+\begin{align*}
+f_p(x) &\leq 2|L^{-1} F|(x) |k_p F_p|(x) - 2|k_p F_p|^2(x) \\
+&\leq |L^{-1} F|(x)^2 + |k_p F_p|(x)^2 - 2|k_p F_p|^2(x) \\
+&= |L^{-1} F|(x)^2 - |k_p F_p|(x).
+\end{align*}
+So by \cite[Lemma 6.2]{daskalopoulos2020transverse},
+$$|k_p F_p|(x)^{p - 2} f_p(x) < \frac{2}{p - 2}.$$
+Integrating this inequality, 
+$$0 \leq \lim_{p \to \infty} \int_{\{f_p \leq 0\}} |k_p F_p|^{p - 2} f_p \leq \lim_{p \to \infty} \frac{2|M|}{p - 2} = 0.$$
+Therefore, by (\ref{MCL contains Thurston 3}), we deduce (\ref{MCL contains Thurston 1}).
+\end{proof}
 
-\begin{proposition}
-For any $0 < \theta < 1$,
-	$$\lim_{p \to \infty} \int_{\{|F/L| \leq \theta\}} \star |k_p F_p|^p = 0.$$
-\end{proposition}
+\begin{lemma}\label{MCL contains Thurston lemma}
+The set $\{L(F, \cdot) < L\}$ is open, and
+$$\lim_{p \to \infty} \int_{\{L(F, \cdot) < L\}} \star |k_p F_p|^p = 0.$$
+\end{lemma}
+\begin{proof}
+Since $L(F, \cdot)$ is upper semicontinuous, $\{L(F, \cdot) < L\}$ is open.
+We can rewrite it as 
+$$\{L(F, \cdot) < L\} = \bigcup_{0 < \theta < 1} \{L(F, \cdot) < \theta L\}$$
+and then it suffices to fix $\theta$ and show that the integral over $\{L(F, \cdot) < \theta L\}$ is zero.
+We then use the fact that $|F|(x) \leq L(F, x)$ everywhere \todo{Crandall consequence? Justify itand its consequences more carefully} to split
+$$\{L(F, \cdot) < \theta L\} \subseteq A \cup B$$
+where 
+\begin{align*}
+A &:= \{|L^{-1} F|^2 \leq \theta |k_p F_p|^2 + |k_p F_p - L^{-1} F|^2\} \\
+B &:= \{|L^{-1} F|^2 \geq \theta |k_p F_p|^2 + |k_p F_p - L^{-1} F|^2\} \cap \{L(F, \cdot) < \theta L\} .
+\end{align*}
+By (\ref{MCL contains Thurston 1}),
+\begin{align*}
+0 &= \lim_{p \to \infty} \int_{\{f_p \geq 0\}} |k_p F_p|^{p - 2} f_p \\
+&= \lim_{p \to \infty} \int_{\{f_p \geq 0\}} |k_p F_p|^{p - 2}((1 - \theta) |k_p F_p|^2 + \theta |k_p F_p|^2 + |k_p F_p - L^{-1} F|^2 - |L^{-1} F|^2).
+\end{align*}
+But on $A$,
+\begin{align*}
+|L^{-1} F|^2 &\leq \theta |k_p F_p|^2 + |k_p F_p - L^{-1} F|^2 \\
+&\leq |k_p F_p|^2 + |k_p F_p - L^{-1} F|^2 \\
+&= f_p + |L^{-1} F|^2
+\end{align*}
+which implies $f_p \geq 0$ and 
+$$0 \leq \lim_{p \to \infty} \int_A \star |k_p F_p|^p \leq \lim_{p \to \infty} \frac{1}{\theta} \int_{\{f_p \geq 0\}} \star |F_p|^{p - 2} f_p = 0.$$
+Meanwhile, on $B$,
+$$|k_p F_p|^2 \leq |k_p F_p|^2 + \theta^{-1} |k_p F_p - L^{-1} F|^2 \leq \theta^{-1} |L^{-1} F|^2 < \theta.$$
+Therefore $|k_p F_p|^p < \theta^{p/2} = o(1)$ on $B$, as desired.
+\end{proof}
+
+\begin{proof}[Proof of Theorem \ref{MCL contains Thurston}]
+Let $U := \{L(F, \cdot) < L\}$, which is open by Lemma \ref{MCL contains Thurston lemma}.
+So by the portmanteau theorem \todo{Cite it}, H\"older's inequality, and Lemma \ref{MCL contains Thurston lemma},
+\begin{align*}
+\int_U \star |\dif u|
+&\leq \lim_{q \to 1} \int_U \star |\dif u_q| \\
+= \lim_{p \to \infty} \int_U \star |k_p F_p|^{p - 1} \\
+&\leq \lim_{p \to \infty} |M|^{-\frac{1}{p}} \left[\int_U \star |k_p F_p|^p\right]^{\frac{1}{q}} \\
+&= \lim_{p \to \infty} \int_U \star |k_p F_p|^p = 0. \qedhere
+\end{align*}
+\end{proof}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Thurston's \texorpdfstring{$L = K$}{L equals K} theorem}
