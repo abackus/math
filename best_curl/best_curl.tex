@@ -175,6 +175,9 @@ This research was supported by the National Science Foundation's Graduate Resear
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
 \subsection{Notation}
+We write $\Omega^\ell$, $Z^\ell$, and $B^\ell$ for the spaces of $\ell$-forms, closed $\ell$-forms ($\ell$-cocycles), and exact $\ell$-forms ($\ell$-coboundaries) respectively.
+We reserve $H^\ell$ for cohomology and write $W^{s, p}$ for Sobolev spaces.
+
 \subsection{The de Rham--Sobolev complex}
 \begin{definition}
 For $1 \leq p < \infty$ and $0 \leq \ell \leq d$, let $W^{1, p}_{\rm d}(M, \Omega^\ell)$ denote the space of measurable $\ell$-forms $\alpha$ for which the norm
@@ -199,7 +202,9 @@ $$\|\alpha\|_{W^{1, p}}^p := \|\alpha\|_{L^p}^p + \|\dif \alpha\|_{L^p}^p + \|\d
 for the full $W^{1, p}$ norm, using the subscript $W^{1, p}_{\rm d}$ to emphasize the de Rham--Sobolev norm.
 
 The utility of the de Rham--Sobolev complex is the \dfn{normal trace theorem}, which says for $1 < p < \infty$ that the pullback $\iota^*$ to the boundary is bounded \cite[50]{sohr2001navier}
-$$\iota^*: W^{1, p}_{\rm d}(M, \Omega^\ell) \to W^{-\frac{1}{p}, p}(\partial M, \Omega^\ell).$$
+\begin{equation}\label{pNormalTrace}
+	\iota^*: W^{1, p}_{\rm d}(M, \Omega^\ell) \to W^{-\frac{1}{p}, p}(\partial M, \Omega^\ell).
+\end{equation}
 We shall need a version for $W^{1, \infty}_{\rm d}$, which we prove now.
 
 \begin{proposition}[normal trace theorem]
@@ -244,8 +249,8 @@ Let $N$ be a smooth embedded hypersurface in $M$.
 \begin{enumerate}
 \item \label{pullback bounded} The pullback is a bounded linear operator
 $$\iota^*_N: W^{1, \infty}_{\rm d}(M, \Omega^\ell) \to L^\infty(N, \Omega^\ell).$$
-\item \label{integral continuous} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, if $N$ is closed, then the integral $\int_N F$ is well-defined, and depends continously on $F$ in weak $L^q(M, \Omega^{d - 1})$ for any $1 < q < \infty$.
-\item \label{cohomology exists} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, the cohomology class of $F$ is well-defined, and depends continuously on $F$ in weak $L^q(M, \Omega^{d - 1})$ for any $1 < q < \infty$.
+\item \label{integral continuous} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, if $N$ is closed, then the integral $\int_N F$ is well-defined, and depends continuously on $F$ for the weakstar topology on $L^\infty$.
+\item \label{cohomology exists} For $F \in L^\infty(M, \Omega^{d - 1})$ such that $\dif F = 0$, the cohomology class of $F$ is well-defined, and depends  continuously on $F$ for the weakstar topology on $L^\infty$.
 \end{enumerate}
 \end{corollary}
 \begin{proof}
@@ -262,10 +267,51 @@ by (\ref{pullback bounded}) and the fact that $N$ is closed.
 To obtain the continuity, we again use a collar neighborhood $V$ of $U$ and a cutoff $\beta$.
 Since $F$ is closed, (\ref{Stokes trace}) reads 
 $$\int_U F = \int_M F \wedge \dif \beta.$$
-Since $\beta \in C^\infty_\cpt$, $\dif \beta \in L^p$ where $\frac{1}{p} + \frac{1}{q} = 1$.
-So if $F_n \to F$ in weak $L^q$, $\int_M F_n \wedge \dif \beta \to \int_M F \wedge \dif \beta$, as desired.
+Since $\beta \in C^\infty_\cpt$, $\dif \beta \in L^1$, so if $F_n \to F$ in the weakstar topology on $L^\infty$, then $\int_M F_n \wedge \dif \beta \to \int_M F \wedge \dif \beta$, as desired.
 Letting $N$ range over representatives of every homology class, we conclude (\ref{cohomology exists}) as a consequence of (\ref{integral continuous}).
 \end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Convex duality}
+Let us, for a reflexive Banach space $X$, denote by $\hat X$ its dual.
+If $J: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}
+\begin{align*}
+	\hat J: \hat X &\to \RR \cup \{+\infty\}\\
+	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - f(x).
+\end{align*}
+
+\begin{definition}
+Let $Y$ be a reflexive Banach space equipped with a mapping $\Lambda: X \to Y$.
+A function $J: Y \to \RR \cup \{+\infty\}$ is said to be a \dfn{suitable convex function} for our purposes if:
+\begin{enumerate}
+\item $J$ is strictly convex,
+\item $J$ is lower semicontinuous and not identically $+\infty$,
+\item if $|y| \to \infty$ in $Y$, then $J(y) \to +\infty$, and 
+\item there exists a point $x \in X$ such that $J$ is continuous and finite at $\Lambda(x)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}\label{abstract convex analysis}
+Let $X, Y$ be reflexive Banach spaces equipped with a bounded linear operator $\Lambda: X \to Y$ of trivial kernel.
+Let $J: Y \to \RR \cup \{+\infty\}$ be a suitable convex function.
+Then:
+\begin{enumerate}
+\item There exists a unique minimizer $\underline x \in X$ of $J(\Lambda(x))$, and a maximizer $\overline \eta \in \hat Y$ of $-\hat J(-\eta)$.
+\item If $\hat J$ is strictly convex, then $\overline \eta$ is the unique maximizer of $-\hat J(-\eta)$.
+\item We have \dfn{strong duality}
+\begin{equation}\label{abstract strong duality}
+J(\Lambda(\underline x)) = -\hat J(-\overline \eta).
+\end{equation}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+This is the conjunction of several standard results in convex analysis.
+Let $\Gamma_0(Y)$ denote the set introduced in \cite[Chapter I, Definition 3.1]{Ekeland99}.
+Then by \cite[Chapter I, Proposition 3.1]{Ekeland99}, $J \in \Gamma_0(Y)$, so by \cite[Chapter III, Theorem 4.2]{Ekeland99} and \cite[Chapter III, (4.23)]{Ekeland99}, there exist minimizers which satisfy (\ref{abstract strong duality}).
+By \cite[Chapter II, Proposition 1.2]{Ekeland99}, the minimizers of $J$ and $\hat J$ are unique.
+Since $\Lambda$ has trivial kernel, minimizers of $J \circ \Lambda$ are also unique.
+\end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Convex duality for the \texorpdfstring{$q$-Laplacian}{q-Laplacian}}
@@ -280,14 +326,16 @@ We here consider the problem
 \begin{equation}\label{preprimal problem}
 	\Min\{\|\dif u\|_{L^q(M_{\rm fun})}: u \in W^{1, q}(M_{\rm fun}), [u] = \alpha\},
 \end{equation}
-where $1 < q < \infty$.
+where $1 < q < \infty$; we identify two solutions if they agree by a constant.
 Taking Euler-Lagrange equations, we see that (\ref{preprimal problem}) is equivalent to the $q$-Laplacian 
-$$\begin{cases}
+\begin{equation}\label{qLaplace}
+\begin{cases}
 	\dif^*(|\dif u|^{q - 2} \dif u) = 0 \\
 	[u] = \alpha.
-\end{cases}$$
+\end{cases}
+\end{equation}
 
-To put (\ref{preprimal problem}) in the framework of \cite[Chapter IV]{Ekeland99}, we shall fix a point $0 \in M_{\rm fun}$, choose a representative $1$-form (which we also call $\alpha$), and solve 
+To put (\ref{preprimal problem}) in the framework of Proposition \ref{abstract convex analysis}, we shall fix a point $0 \in M_{\rm fun}$, choose a representative $1$-form (which we also call $\alpha$), and solve 
 $$\begin{cases}
 \dif f = \Pi^* \alpha \\
 v(0) = 0.
@@ -299,137 +347,143 @@ Thus (\ref{preprimal problem}) is equivalent to
 where we set $u = v + f$.
 
 Let
-$$f(\xi) := \frac{1}{q} \int_M \star|\xi + \alpha|^q,$$
+$$J(\xi) := \frac{1}{q} \int_M \star|\xi + \alpha|^q,$$
 defined for $\xi \in L^q(M, \Omega^1)$.
-Since $v$ is traceless in (\ref{primal problem}), it is invariant, so $\dif v$ drops to a $1$-form on $M$, and (\ref{primal problem}) is the problem of minimizing $f(\dif v)$.
-So the Legendre transform
-$$\hat f: L^p(M, \Omega^{d - 1}) \to \RR$$
-of $f$, where $\frac{1}{p} + \frac{1}{q} = 1$, satisfies
-$$\hat f(F) = \frac{1}{p} \int_M \star |F|^p - \int_M \alpha \wedge F.$$
-From \cite[III(4.18) and III(4.23)]{Ekeland99}, we immediately conclude:
-
-\begin{lemma}
-The convex dual problem of the $q$-Laplacian (\ref{primal problem}) is the problem 
+Since $v$ is traceless in (\ref{primal problem}), it is invariant, so $\dif v$ drops to a $1$-form on $M$, and (\ref{primal problem}) is the problem of minimizing $J(\dif v)$.
+It is clear that $J$ is a suitable convex function on $L^q(M, \Omega^1)$ when it is equipped with the map
+\begin{equation}\label{derivative on traceless}
+\dif: W^{1, q}_0(M_{\rm fun}) \to L^q(M, \Omega^1),
+\end{equation}
+and moreover the kernel of (\ref{derivative on traceless}) is trivial.
+By \cite[Chapter I, (4.9)]{Ekeland99} and \cite[Chapter I, Remark 4.1]{Ekeland99}, the Legendre transform
+$$\hat J: L^p(M, \Omega^{d - 1}) \to \RR$$
+of $J$, where $\frac{1}{p} + \frac{1}{q} = 1$, satisfies
+\begin{equation}\label{Legendre transform}
+\hat J(F) = \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F
+\end{equation}
+and in particular is strictly convex.
+Thus the convex dual problem of (\ref{primal problem}), namely the problem of maximizing $-\hat J(-F)$, is the problem
 \begin{equation}\label{predual problem}
-\Max\left\{\int_M \alpha \wedge F - \frac{1}{p} \int_M \star |F|^p: F \in L^p(M, \Omega^{d - 1})\right\}.
+\Max\left\{- \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F: F \in L^p(M, \Omega^{d - 1})\right\}.
 \end{equation}
-Moreover, if $v$ is a solution of (\ref{primal problem}) and $F$ is a solution of the dual problem (\ref{predual problem}), then
-\begin{equation}\label{extremality relations}
-\frac{1}{q} \int_M \star |\dif v + \alpha|^q + \frac{1}{p} \int_M \star |F|^p = \int_M \alpha \wedge F + \int_M \dif v \wedge F.
-\end{equation}
-\end{lemma}
 
-\begin{lemma}\label{EulerLagrange}
-Let $F$ be a solution of the dual problem (\ref{predual problem}). Then
-\begin{equation}\label{EL of hat G}
-|F|^{p - 2} F = (-1)^{d - 1} \star \alpha.
-\end{equation}
-\end{lemma}
-\begin{proof}
-Let $(F_t)$ be an arbitrary variation and $G := \frac{\partial F_t}{\partial t}|_{t = 0}$. Then 
-$$0 = \frac{\dif}{\dif t} \hat f(F_t)\bigg|_{t = 0} = \int_M \star |F|^{p - 2} \langle F, G \rangle - \alpha \wedge G.$$
-In particular, for any $G$,
-$$|F|^{p - 2} \langle F, G\rangle = \star^{-1}(\alpha \wedge G) = \langle \star^{-1} \alpha, G\rangle.$$
-Recalling that, since $\alpha$ is a $1$-form, $\star^{-1} \alpha = (-1)^{d - 1} \star \alpha$, and $G$ is arbitrary, the claim follows.
-\end{proof}
+% \begin{lemma}\label{EulerLagrange}
+% A form $F \in L^p(M, \Omega^{d - 1})$ is a solution of (\ref{predual problem}) iff
+% \begin{equation}\label{EL of hat G}
+% |F|^{p - 2} F = (-1)^d \star \alpha.
+% \end{equation}
+% \end{lemma}
+% \begin{proof}
+% Let $(F_t)$ be an arbitrary variation and $G := \frac{\partial F_t}{\partial t}|_{t = 0}$. Then 
+% $$0 = \frac{\dif}{\dif t} \hat f(F_t)\bigg|_{t = 0} = -\int_M \star |F|^{p - 2} \langle F, G \rangle + \alpha \wedge G.$$
+% In particular, for any $G$,
+% $$|F|^{p - 2} \langle F, G\rangle = -\star^{-1}(\alpha \wedge G) = \langle -\star^{-1} \alpha, G\rangle.$$
+% Recalling that, since $\alpha$ is a $1$-form, $-\star^{-1} \alpha = (-1)^d \star \alpha$, and $G$ is arbitrary, it follows that (\ref{predual problem}) implies (\ref{EL of hat G}).
+% The converse follows when one realizes that (\ref{EL of hat G}) has only one solution (this follows from some simple algebra).
+% \end{proof}
+
+In our next proposition we shall need the fact that the cohomology class of a form in $L^p(M, Z^{d - 1})$ is well-defined.
+This follows from (\ref{pNormalTrace}), the fact that $L^p(M, Z^{d - 1}) \subset W^{1, p}_{\rm d}(M, \Omega^{d - 1})$, and the fact that $1 \in W^{\frac{1}{p}, q}(\sigma)$ on any $d-1$-cycle $\sigma$ (so that one can integrate a $W^{-\frac{1}{p}, p}(\sigma, \Omega^{d - 1}))$ form in the distributional sense).
 
 \begin{proposition}\label{convex duality}
-Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$, and fix a cohomology class $\alpha \in H^1(M, \RR)$.
-Then there exists a cohomology class $\rho \in H^{d - 1}(M, \RR)$, such that the convex dual problem of the $q$-Laplacian (\ref{preprimal problem}) is equivalent to 
-\begin{equation}\label{dual problem}
-\Min\left\{\frac{1}{p} \int_{M_{\rm fun}} \star |F|^p: F \in L^p(M, \Omega^{d - 1}), [F] = \rho\right\}.
-\end{equation}
-Now let $u, F$ be solutions of (\ref{preprimal problem}) and (\ref{dual problem}). Then
+Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$.
+Then we have an isomorphism of cohomology groups
+\begin{align*}
+H^1(M, \RR) &\to H^{d - 1}(M, \RR) \\
+\alpha &\mapsto \rho,
+\end{align*}
+so that the convex dual problem of the $\alpha$-equivariant $q$-Laplacian (\ref{qLaplace}) with solution $u: \tilde M \to \RR$ is
 \begin{equation}\label{pMaxwell}
-\dif^*(|F|^{p - 2} F) = 0
+\begin{cases}
+	\dif F = 0, \\
+	\dif^*(|F|^{p - 2} F) = 0, \\
+	[F] = \rho.
+\end{cases}
 \end{equation}
-and $u, F$ are related by
+The problems (\ref{qLaplace}) and (\ref{pMaxwell}) both have unique solutions, and we have the relations
 \begin{align}
-F &= |\dif u|^{q - 2} \star \dif u \label{extremality} \\
-\dif u &= -|F|^{p - 2} \star F. \label{inverse extremality}
+F &= |\dif u|^{q - 2} \star \dif u, \label{extremality} \\
+\dif u &= (-1)^{d - 1} |F|^{p - 2} \star F, \label{inverse extremality}
 \end{align}
-Finally, the map $\alpha \mapsto \rho$ is an isomorphism.
+and the strong duality theorem 
+\begin{equation}\label{strong duality}
+\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p = \int_M \dif u \wedge F.
+\end{equation}
 \end{proposition}
-\todo{This needs to be able to go backwards as well}
 \begin{proof}
-\todo{The uniqueness assertions here are sketchy, also, might've mixed up $\alpha, \rho$ in this proof. Also, we don't know that $\alpha \mapsto \rho$ is an isomorphism yet.}
-We first solve the $q$-Laplacian (\ref{preprimal problem}) for $u$.
-By convex duality \cite[Chapter III, Theorem 4.2]{Ekeland99} there exists a solution $F$ of (\ref{predual problem}) satisfying (\ref{extremality relations}), hence is characterized by 
-$$\frac{1}{p} \int_M \star |F|^p + \frac{1}{q} \int_M \star |\dif u|^q = \int_M \dif u \wedge F.$$
-Moreover, $F$ satisfies (\ref{EL of hat G}), which uniquely characterizes it; hence (\ref{predual problem}) is uniquely solvable.
-If we instead set
-$$\tilde F = |\dif u|^{q - 2} \star \dif u,$$
-then 
-$$\frac{1}{p} |\tilde F|^p + \frac{1}{q} |\dif u|^q = \frac{1}{p} |\dif u|^{p(q - 1)} + \frac{1}{q} |\dif u|^q = |\dif u|^q$$
-and 
-$$\int_M \dif u \wedge \tilde F = \int_M |\dif u|^{q - 2} \dif u \wedge \star \dif u = \int_M \star |\dif u|^q,$$
-so it follows that 
-$$\frac{1}{p} \int_M \star |\tilde F|^p + \frac{1}{q} \int_M \star |\dif u|^q = \int_M \dif u \wedge \tilde F.$$
-By the uniqueness of (\ref{predual problem}), it follows that $\tilde F = F$ and hence if we define $\dif A := F$, then (\ref{extremality}) holds.
-Here, $A$ is well-defined as a $d-2$-form on $\tilde M$ since we assumed $H^{d - 1}(\tilde M, \RR) = $0.
-Moreover, from (\ref{EL of hat G}) and the fact that $\rho$ is closed, (\ref{pMaxwell}) holds.
-It is clear that the Euler-Lagrange equation of the minimization problem (\ref{dual problem}) is (\ref{pMaxwell}), where $\alpha := [F]$, so $A$ solves (\ref{dual problem}).
-Finally, (\ref{inverse extremality}) follows immediately from (\ref{extremality}) and $\frac{1}{p} + \frac{1}{q} = 1$.
+Since $J$ is a suitable convex function, $\hat J$ is strictly convex, and (\ref{derivative on traceless}) has trivial kernel, we may apply Proposition \ref{abstract convex analysis} to see that (\ref{qLaplace}) and (\ref{predual problem}) both have unique solutions $u, F$ which are related by strong duality (\ref{abstract strong duality}) as (\ref{strong duality}).
+By uniqueness, if we exhibit $\tilde F$ defined in terms of $u$ which satisfies (\ref{strong duality}) and is a maximizer of $-\hat J$, then $F = \tilde F$.
+Following \cite[Chapter IV, (2.12)]{Ekeland99}, we define $\tilde F$ to satisfy (\ref{extremality}), so that 
+\begin{align*}
+\int_M \dif u \wedge \tilde F 
+&= \int_M \star |\dif u|^q \\
+&= \frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |\dif u|^p \\
+&= \frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \dif u \wedge \tilde F.
+\end{align*}
+Moreover, if we decompose 
+$$\dif u = \dif v + \alpha$$
+then
+\begin{align*}
+-\hat J(\tilde F)
+&= -\frac{1}{p} \int_M \star |\dif u|^q + \int_M \alpha \wedge |\dif u|^{q - 2} \star \dif u \\
+&= -\frac{1}{p} \int_M \star |\dif u|^q + \int_M \star |\dif u|^q - \int_M \dif v \wedge |\dif u|^{q - 2} \star \dif u \\
+&= \frac{1}{q} \int_M \star |\dif u|^q + \int_M v \dif(|\dif u|^{q - 2} \star \dif u) \\
+&= \frac{1}{q} \int_M \star |\dif u|^q = J(\dif u)
+\end{align*}
+where we used the fact that $\frac{1}{q} = 1 - \frac{1}{p}$, and the fact that $u$ solves the $q$-Laplace equation.
+By strong duality (\ref{abstract strong duality}), it follows that $\tilde F$ is a maximizer of $-\hat J$, and therefore $F = \tilde F$; in particular, $F$ satisfies (\ref{extremality}).
+Since $u$ solves the $q$-Laplace equation, (\ref{extremality}) implies that $\dif F = 0$.
+We then define $\rho := [F]$.
+On the other hand, 
+$$(p - 2)(q - 1) + q - 2 = 0,$$
+so following \cite[Lemma 3.2]{daskalopoulos2020transverse},
+$$|F|^{p - 2} F = |\dif u|^{(p - 2)(q - 1) + q - 2} \star \star \dif u = (-1)^{d - 1} \dif u$$
+which gives (\ref{inverse extremality}) and the equation
+$$\dif^*(|F|^{p - 2} F) = 0.$$
+By reflexivity, the above argument may also be reversed, so that the map $\alpha \mapsto \rho$ is invertible on the level of cohomology.
 \end{proof}
 
-Proposition \ref{convex duality} has the following interesting interpretation, which is motivated by the central role that Noether's theorem plays in \cite{daskalopoulos2022, daskalopoulos2023}.
-If we define $u_t := u + t$, $t \in \RR$, and apply Noether's theorem \cite[\S8.6.2]{evans2010partial} to the variation $(u_t)$, then we obtain the conservation law 
-\begin{equation}\label{conservation law}
-	\frac{q - 1}{q} \dif^*(|\dif u|^{q - 2} \dif u) = 0.
-\end{equation}
-Applying the extremality relation (\ref{extremality}), we see that (\ref{conservation law}) is exactly the dual PDE (\ref{pMaxwell}).
-That is, we have:
+\begin{definition}
+If $u$ is a solution of the $q$-Laplacian, $\frac{1}{p} + \frac{1}{q} = 1$, and $F$ satisfies (\ref{extremality}), we call $u$ the \dfn{conjugate $q$-harmonic} of $F$.
+\end{definition}
 
-\begin{corollary}
-Let $u: M \to \RR$ be a $q$-harmonic function, and let $F$ be a solution of the dual problem (\ref{dual problem}).
-Then $F$ is the Noether conserved current for $u$, induced by the translation symmetry of the target $\RR$.
-\end{corollary}
-
-If $F_p$ is a Noether current for $u_q$ for every $p \gg 1$ and $\frac{1}{p} + \frac{1}{q} = 1$, it may be that in a suitable function space we may take the limit $p \to \infty$ to obtain a $d-1$-form $F$ and a function $u$.
-In this situation, we still call $F$ a Noether current, though this is only literally true in a formal sense.
+If $u_q$ is a conjugate $q$-harmonic for $F_p$ for every $p \gg 1$ and $\frac{1}{p} + \frac{1}{q} = 1$, it may be that in a suitable function space we may take the limit $p \to \infty$ to obtain a $d-1$-form $F$ and a function $u$.
+In this situation, we still call $u$ a conjugate $1$-harmonic, though this is only literally true in a formal sense.
+In particular, since $L^1, L^\infty$ are not reflexive Banach spaces, we do not have uniqueness or an isomorphism theorem -- at least not with the methods we have considered here.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Best comass and \texorpdfstring{$\infty$-longitudinal forms}{infinity-longitudinal forms}}
-\subsection{\texorpdfstring{$p$-longitudinal forms}{p-longitudinal forms}}
-Let $M$ be a Riemannian threefold, and fix a cohomology class $\rho$.
+\section{Best comass and \texorpdfstring{$\infty$-light forms}{infinity-light forms}}
+\subsection{\texorpdfstring{$p$-light forms}{p-light forms}}
+Let $M$ be a closed Riemannian threefold, and fix a cohomology class $\rho$.
 
 \begin{definition}
-Let $p \geq 2$ and let $F_p$ be a closed $2$-form with $[F_p] = \rho$.
-We call $F_p$ a \dfn{$p$-longitudinal form} if it is a minimizer of $\|F_p\|_{L^p}$ among all $2$-forms representing $\rho$.
+Let $1 < p < \infty$ and let $F_p$ be a closed $2$-form with $[F_p] = \rho$.
+We call $F_p$ a \dfn{$p$-light form} if it is a minimizer of $\|F_p\|_{L^p}$ among all $2$-forms representing $\rho$.
 \end{definition}
 
-For $p = 2$, $\dif^* F_2 = 0$, hence $F_2$ is the Poincar\'e dual of a longitudinal vector field, hence the name.
-By (\ref{EulerLagrange}), the Euler-Lagrange equation for $p$-longitudinal forms is (\ref{pMaxwell}).
+We call these forms ``light'' because as $p \to \infty$ they become ``not massive'', in the sense that, as we shall later show, they will define a minimizing sequence for the comass.
+A straightforward differentiation shows that the Euler-Lagrange equations for $p$-light forms are (\ref{pMaxwell}).
 
 \begin{lemma}
-Let $F_p$ be a $p$-longitudinal form, and let $B$ range over closed $2$-forms. Then
-Then 
+Let $F_p$ be a $p$-light form, and let $B$ range over closed $2$-forms cohomologous to $F_p$. Then
 \begin{equation}\label{infinity magnetic rules p magnetic}
 	\|F_p\|_{L^p} \leq |M|^{1/p} \inf_B \|B\|_{L^\infty}.
 \end{equation}
 \end{lemma}
 \begin{proof}
-By H\"older's inequality and the fact that $F_p$ is $p$-longitudinal,
+By H\"older's inequality and the fact that $F_p$ is $p$-light,
 $$\|F_p\|_{L^p} \leq \|B\|_{L^p} \leq |M|^{1/p} \|B\|_{L^\infty},$$
 hence the same holds for the infimum.
 \end{proof}
 
 We put any norm on $H^2(M, \RR)$ (as all are equivalent), hence $|\alpha|$ makes sense for $\alpha \in H^2(M, \RR)$.
 
-Let $L^p(M, Z^2)$ be the space of closed $2$-forms; then, by the $L^p$ Hodge decomposition \cite[Proposition 6.5]{Scott95}, $L^p(M, Z^2)$ is a Banach space with 
-$$\|F\|_{L^p} = \|F\|_{W^{1, p}_{\rm d}}$$
-for $F \in L^p(M, Z^2)$.
-We have trace maps for each $2$-cycle $\sigma$,
-$$L^p(M, Z^2) \to W^{-\frac{1}{p}, p}(\sigma, \Omega^2),$$
-and since $1 \in W^{\frac{1}{p}, q}(\sigma)$, it follows that the cohomology class of any element of $L^p(M, Z^2)$ is well-defined and depends continuously on them in the weak topology of $L^p(M, Z^2)$.
-Since a cohomology class is given by the solution of an affine equation in $L^p(M, Z^2)$, it in particular defines a convex subset of $L^p(M, Z^2)$.
-
 \begin{proposition}\label{existence for p}
-Assume $p \geq 2$ and $\rho \in H^2(M, \RR)$.
+Assume $p > 2$ and $\rho \in H^2(M, \RR)$.
 Then:
 \begin{enumerate}
-\item There exists a unique $p$-longitudinal form $F_p$ whose cohomology class is $\rho$.
+\item There exists a unique $p$-light form $F_p$ whose cohomology class is $\rho$.
 \item One has
 \begin{equation}\label{Sobolev bounds for p}
 	\|F_p\|_{L^p} \lesssim |\rho|.
@@ -439,23 +493,14 @@ The constant is independent of $p$.
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-Let $F_p(\varepsilon)$ be a smooth closed $2$-form with $[F_p(\varepsilon)] = \rho$ such that
-$$\|F_p(\varepsilon)\|_{L^p} \leq \inf_B \|\dif B\|_{L^p} + \varepsilon$$
-where $B$ ranges over all forms cohomologous to $F_p(\varepsilon)$.
-By \cite[\S8.2.2]{evans2010partial}, $\|\cdot\|_{L^p}$ is a weakly lower semicontinuous function on $L^p(M, Z^2)$.
-Therefore, by a compactness argument, we have $F_p(\varepsilon) \to F_p$ along a subsequence in the weakstar topology on $L^p(M, Z^2)$, where
-$$\|F_p\|_{L^p} \leq \liminf_{\varepsilon \to 0} \|F_p(\varepsilon)\|_{L^p}.$$
-Moreover,
-$$[F_p] = \lim_{\varepsilon \to 0} [F_p(\varepsilon)] = \rho$$
-so $F_p$ is a $p$-longitudinal form representing $\rho$.
-From (\ref{pMaxwell}) and \cite{Uhlenbeck77}, we deduce that $F_p$ is H\"older continuous.
-From the uniform convexity of $\|\cdot\|_{L^p}^p$, and the convexity of the cohomology class in $L^p(M, Z^2)$, we conclude the uniqueness of $F_p$.
+The existence and uniqueness follows from Proposition \ref{convex duality} and the fact that the Euler-Lagrange equations for $p$-light forms are given by (\ref{pMaxwell}).
+From (\ref{pMaxwell}), the fact that $p > 2$, and \cite{Uhlenbeck77}, we deduce that $F_p$ is H\"older continuous.
 
-Now select a basis $\xi_1, \dots, \xi_r$ of $H^2(M, \RR)$, and apply the above argument to obtain $p$-longitudinal forms $G_i$ representing $\xi_i$ for each $i \in \{1, \dots, r\}$.
+Now select a basis $\xi_1, \dots, \xi_r$ of $H^2(M, \RR)$, and apply the above argument to obtain $p$-light forms $G_i$ representing $\xi_i$ for each $i \in \{1, \dots, r\}$.
 Then $\|G_i\|_{L^p}$ is bounded indepdendently of $p$ by (\ref{infinity magnetic rules p magnetic}).
 Decompose
 $$\alpha = \sum_{i=1}^r \alpha_i \xi_i.$$
-Using the fact that $F_p$ is $p$-longitudinal and cohomologous to $\sum_i \alpha_i G_i$,
+Using the fact that $F_p$ is $p$-light and cohomologous to $\sum_i \alpha_i G_i$,
 $$\|F_p\|_{L^p} \leq \left\|\sum_{i=1}^r \alpha_i G_i\right\|_{L^p} \leq \sum_{i=1}^r |\alpha_i| \|G_i\|_{L^p} \lesssim |\alpha|$$
 which proves (\ref{Sobolev bounds for p}).
 \end{proof}
@@ -474,6 +519,7 @@ What follows is the main definition of this paper.
 For a closed $2$-form $F$ and a subdomain $\Omega$, we introduce the \dfn{comass} 
 $$L_\Omega(F) := \sup_{\sigma \in \Chain_2(\Omega)} \frac{1}{|\sigma|} \int_\sigma F,$$
 and let $L(F) := L_M(F)$.
+The integral in the definition of comass is well-defined, and depends continuously on $F$ in the weakstar topology on $L^\infty(M)$, by Corollary \ref{trace on cycles}(\ref{integral continuous}) and the fact that $F$ is closed.
 
 \begin{definition}
 	Let $\alpha \in H^2(M, \RR)$ and let $F$ be a closed $2$-form representing $\alpha$.
@@ -499,13 +545,8 @@ So the limit superior is actually a limit and an infimum:
 $$L(F, x) = \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = \inf_{\varepsilon > 0} L_{B_\varepsilon(x)}(F)$$
 and in particular $L(F, x) \leq L(F)$.
 
-It's convenient to test the local curl modulus against a more restrictive class of $2$-chains.
-Motivated by lattice gauge theory \cite{Gupta98}, we define:
-
-\begin{definition}
-Fix an orthonormal basis $(\partial_i)$ of the tangent space $T_x M$.
-A \dfn{plaquette} $R_{ij}^\varepsilon(x)$ is the exponential pushforward of a square $[0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j]$ to $M$.
-\end{definition}
+It's convenient to test the local comass against a more restrictive class of $2$-chains.
+Motivated by lattice gauge theory \cite{Gupta98}, we fix a orthonormal basis $(\partial_i)$ of the tangent space $T_x M$, and define the \dfn{plaquette} $R_{ij}^\varepsilon(x)$ to be the exponential pushforward of a square $[0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j]$ to $M$.
 
 % We write $x + v := \exp_x(v)$ whenever $v \in T_x M$.
 
@@ -530,37 +571,44 @@ A \dfn{plaquette} $R_{ij}^\varepsilon(x)$ is the exponential pushforward of a sq
 % Since $|R_{ij}^\varepsilon| = \varepsilon^2$, we are done.
 % \end{proof}
 
-\begin{lemma}
-Let $F \in L^\infty(M, Z^2)$. Then for almost every $x \in M$,
-\begin{equation}\label{dA is like Lipschitz constant}
-	F_{ij}(x) = \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \int_{R^\varepsilon_{ij}(x)} F.
-\end{equation}
-\end{lemma}
-Here the right-hand side is well-defined by the $W^{1, \infty}_{\rm d}$ normal trace theorem.
-\begin{proof}
-Let $F^\delta \to F$ be an $L^1$ approximation of $F$ by continuous closed $2$-forms.
-For $\varepsilon$ small, we can write $F^\delta = \dif A^\delta$ on a neighborhood of $R^\varepsilon_{ij}(x)$.
-Let us write for $(x, v) \in TM$, $x + v := \exp_x(v)$.
-By Stokes' theorem,
-\begin{align*}
-\lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{R^\varepsilon_{ij}(x)} F^\delta
-&= \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{\partial R^\varepsilon_{ij}(x)} A^\delta \\
-&= \lim_{\varepsilon \to 0} \frac{A_i^\delta(x) + A_j^\delta(x + \varepsilon \partial_i) - A_i^\delta(x + \varepsilon \partial_j) - A_j^\delta(x)}{\varepsilon} \\
-&= F_{ij}^\delta(x).
-\end{align*}
-We then estimate 
-\begin{align*}
-\left|F_{ij}(x) - \frac{1}{|R^\varepsilon_{ij}(x)|^2} \int_{R^\varepsilon_{ij}(x)} F\right|
-&\leq |F_{ij}(x) - F_{ij}^\delta(x)| + \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F - F^\delta\right| + \\
-&\qquad +  \left|F_{ij}(x)^\delta - \frac{1}{|R^\varepsilon_{ij}(x)|^2} \int_{R^\varepsilon_{ij}(x)} F^\delta\right|.
-\end{align*}
-By the Hardy-Littlewood maximal inequality, the convergence (\ref{dA is like Lipschitz constant}) follows.
-\end{proof}
+% \begin{lemma}
+% Let $F \in L^\infty(M, Z^2)$ and fix an orthonormal frame on the tangent bundle. Then for almost every $x \in M$,
+% \begin{equation}\label{dA is like Lipschitz constant}
+% 	F_{ij}(x) = \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{R^\varepsilon_{ij}(x)} F.
+% \end{equation}
+% \end{lemma}
+% \begin{proof}
+% Let $F^\delta \to F$ be an approximation of $F$ by closed, continuous $2$-forms, which converges in the weakstar topology on $L^\infty(M)$ and satisfies $\|F^\delta - F\|_{L^1} \leq \delta$.
+% Let $\kappa > 0$ and consider the set $Z_\kappa$ of all $x \in M$ such that 
+% $$\left|F_{ij}(x) - \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{R^\varepsilon_{ij}(x)} F\right| \geq \kappa.$$
+% We can estimate on $Z_\kappa$,
+% \begin{align*}
+% \kappa
+% &\leq |F_{ij}(x) - F_{ij}^\delta(x)| + \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \left|\int_{R^\varepsilon_{ij}(x)} F - F^\delta\right| \\
+% &\qquad + \lim_{\varepsilon \to 0} \left|F_{ij}(x)^\delta - \frac{1}{|R^\varepsilon_{ij}(x)|^2} \int_{R^\varepsilon_{ij}(x)} F^\delta\right| \\
+% &=: I_1 + I_2 + I_3.
+% \end{align*}
+% By Markov's inequality,
+% $$\left|\left\{I_1 \geq \frac{\kappa}{3}\right\}\right| \lesssim \frac{\delta}{\kappa}.$$
+% We control $I_2$ by selecting $A, A^\delta$ defined near $x$, in Coulomb gauge with $\dif A = F$, $\dif A^\delta = F^\delta$, hence by Stokes' theorem and Poincar\'e's inequality,
+% $$\left|\int_{R^\varepsilon_{ij}(x)} F - F^\delta\right| \leq \int_{\partial R^\varepsilon_{ij}(x)} \star |A - A^\delta| \leq |\partial R^\varepsilon_{ij}(x)| \|A - A^\delta\|_{C^0} \lesssim |\partial R^\varepsilon_{ij}(x)| \varepsilon^{-\frac{1}{4}} \|F - F^\delta\|_{L^4} \lesssim \varepsilon^{\frac{3}{4}} \delta.$$
+% Since $F^\delta \to F$ in the weakstar topology on $L^\infty(M)$, Corollary \ref{trace on cycles}(\ref{integral continuous}) implies that $I_2 \to 0$ as $\delta \to 0$.
+% For $\varepsilon$ small, we can write $F^\delta = \dif A^\delta$ on a neighborhood of $R^\varepsilon_{ij}(x)$.
+% Let us write for $(x, v) \in TM$, $x + v := \exp_x(v)$.
+% By Stokes' theorem,
+% \begin{align*}
+% \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{R^\varepsilon_{ij}(x)} F^\delta
+% &= \lim_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{ij}(x)|} \int_{\partial R^\varepsilon_{ij}(x)} A^\delta \\
+% &= \lim_{\varepsilon \to 0} \frac{A_i^\delta(x) + A_j^\delta(x + \varepsilon \partial_i) - A_i^\delta(x + \varepsilon \partial_j) - A_j^\delta(x)}{\varepsilon} \\
+% &= F_{ij}^\delta(x).
+% \end{align*}
+% Taking $\varepsilon \to 0$ we conclude that $I_3 = 0$.
+% \end{proof}
 
 We prove the following analogue of \cite[Lemma 4.2]{Crandall2008} for best Lipschitz functions.
 
 \begin{proposition}\label{crandall}
-Let $F \in L^\infty$ be a closed $2$-form. Then:
+Let $F \in L^\infty(M, Z^2)$. Then:
 \begin{enumerate}
 \item The local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
 % \item If $F(x)$ exists then $L(F, x) \geq |\dif A(x)|$. \label{crandall dA bounds LA}
@@ -587,7 +635,7 @@ which proves (\ref{crandall usc}).
 % So if $\dif A_{ij}(x)$ exists we conclude $|\dif A_{ij}(x)| \leq L(A, x)$, which proves (\ref{crandall dA bounds LA}).
 % On the other hand, the corresponding limit \emph{inferior} must be nonnegative, so if $L(A, x) = 0$, the first limit superior in (\ref{difference quotients}) is actually a limit and we obtain $\dif A_{ij}(x) = 0$, proving (\ref{crandall zero LA implies diffble}).
 
-Now let $\sigma$ be a $2$-chain.
+Now let $\sigma$ be a $2$-chain and fix an orthonormal frame $(\partial_i)$.
 We may write $\sigma = \sum_{n=1}^N \sigma_n$ where $\sigma_n$ is a $2$-cell of the form $x^3_n = 0$ for some coordinates $(x^1_n, x^2_n, x^3_n)$.
 In particular, for any $\varepsilon > 0$ we may write $\sigma_n$ as a sum of plaquettes $R_{12}^\delta(x)$ with respect to the coordinates $(x^1_n, x^2_n, x^3_n)$, where $0 < \delta < \varepsilon$ and $x \in \sigma_n$.
 Let us denote such plaquettes as $P_{n1}(\varepsilon), \dots, P_{nK(n, \varepsilon)}(\varepsilon)$. Then for any $\varepsilon > 0$, 
@@ -606,24 +654,36 @@ $$L(F, x) \leq L(F) \leq \|F\|_{L^\infty}.$$
 Moreover, (\ref{crandall best curl is ABC}) shows that
 $$L(F) = \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F \leq \sup_{\sigma \in \Chain_2(M)} \sup_{x \in \sigma} L(F, x) = \sup_{x \in M} L(F, x).$$
 Finally we must estimate $\|F\|_{L^\infty} \leq L(F)$.
-By (\ref{dA is like Lipschitz constant}),
-$$\|F\|_{L^\infty}^2 \leq \sup_{x \in M} \limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2.$$
-Here the left-hand side is a supremum over almost all of $M$, while the right-hand side is a supremum over all of $M$, including those points for which the limit does not exist as $\varepsilon \to 0$ (but the limit superior does exist).
-Now we select for each $x \in M$, a subsequence of $\varepsilon \to 0$ which attains the limit superior, and choose a frame $(\partial_i)$ so that (possibly along a further subsequence), the averaged values of $F_{ij}(x)$ are $0$ unless $i,j$ are $1,2$.
-Then most of the terms in the sum go away, and we are left with 
-$$\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2 = \limsup_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{12}(x)|^2} \left|\int_{R^\varepsilon_{12}(x)} F\right|^2.$$
-We then set $\sigma_\varepsilon(x) := R^\varepsilon_{12}(x)$ as defined in this frame.
-In particular, 
+To this end, let
+$$S_{ij}^\varepsilon(x) := \exp_x([0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j] \times [-\varepsilon \partial_i \times \partial_j, \varepsilon \partial_i \times \partial_j]).$$
+Then $S_{ij}^\varepsilon(x)$ has uniformly bounded eccentricity as $\varepsilon \to 0$ in normal coordinates, so by the Lebesgue differentiation theorem, for almost every $x \in M$,
+$$|F(x)|^2 = \lim_{\varepsilon \to 0} \frac{1}{2\varepsilon} \left|\sum_{i < j} \frac{1}{|R_{ij}^\varepsilon(x)|} \int_{S_{ij}^\varepsilon(x)} F\right|^2.$$
+In normal coordinates we have the factorization 
+$$S_{ij}^\varepsilon(x) = R_{ij}^\varepsilon(x),$$
+so by Fubini's theorem, 
 \begin{align*}
-	\|F\|_{L^\infty} &\leq \sup_{x \in M} \sup_{\varepsilon > 0} \frac{1}{|\sigma_\varepsilon(x)|} \left|\int_{\sigma_\varepsilon(x)} F\right| \leq \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F = L(F). \qedhere 
+|F(x)|^2 
+&= \lim_{\varepsilon \to 0} \frac{1}{2\varepsilon} \left|\int_{-\varepsilon}^\varepsilon \sum_{i < j} \frac{1}{|R_{ij}^\varepsilon(x)|} \int_{R_{ij}^\varepsilon(x)} F\right|^2 \leq \frac{1}{2\varepsilon} \left|\int_{-\varepsilon}^\varepsilon L(F)\right|^2 \\
+& = L(F)^2. \qedhere
 \end{align*}
+% By (\ref{dA is like Lipschitz constant}),
+% $$\|F\|_{L^\infty}^2 \leq \sup_{x \in M} \limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2.$$
+% Here the left-hand side is a supremum over almost all of $M$, while the right-hand side is a supremum over all of $M$, including those points for which the limit does not exist as $\varepsilon \to 0$ (but the limit superior does exist).
+% Now we select for each $x \in M$, a subsequence of $\varepsilon \to 0$ which attains the limit superior, and choose a frame $(\partial_i)$ so that (possibly along a further subsequence), the averaged values of $F_{ij}(x)$ are $0$ unless $i,j$ are $1,2$.
+% Then most of the terms in the sum go away, and we are left with 
+% $$\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2 = \limsup_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{12}(x)|^2} \left|\int_{R^\varepsilon_{12}(x)} F\right|^2.$$
+% We then set $\sigma_\varepsilon(x) := R^\varepsilon_{12}(x)$ as defined in this frame.
+% In particular, 
+% \begin{align*}
+% 	\|F\|_{L^\infty} &\leq \sup_{x \in M} \sup_{\varepsilon > 0} \frac{1}{|\sigma_\varepsilon(x)|} \left|\int_{\sigma_\varepsilon(x)} F\right| \leq \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F = L(F). \qedhere 
+% \end{align*}
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$p \to \infty$}{The limit as p goes to infinity}}
 \begin{theorem}\label{existence infinity}
 Let $\rho \in H^2(M, \RR)$.
-For each $p \geq 2$, let $F_p$ be the $p$-longitudinal form representing $\rho$. Then:
+For each $p \geq 2$, let $F_p$ be the $p$-light form representing $\rho$. Then:
 \begin{enumerate}
 \item There exists a closed $2$-form $F$ such that $F_p \to F$ weakly in $L^q$ along a subsequence, for any $3 < q < \infty$.
 \item $F$ is a best comass representation of $\rho$.
@@ -652,12 +712,12 @@ Moreover, taking the limit as $p \to \infty$ in (\ref{Sobolev bounds for p}), we
 \end{proof}
 
 \begin{definition}
-The limiting $2$-form $F$ in Theorem \ref{existence infinity} is called an \dfn{$\infty$-longitudinal form}.
+The limiting $2$-form $F$ in Theorem \ref{existence infinity} is called an \dfn{$\infty$-light form}.
 \end{definition}
 
 \todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
 It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
-By a straightforward modification of Proposition \ref{existence for p}, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
+By a straightforward modification of the existence theorem, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
 By quantitative uniqueness
 $$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
 Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
@@ -666,8 +726,8 @@ Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so
 $$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
 Taking $q \to \infty$ we arrive at the conclusion.
 
-We have the following Euler-Lagrange equation for $\infty$-longitudinal forms.
-Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-longitudinal forms have absolutely best comass}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
+We have the following Euler-Lagrange equation for $\infty$-light forms.
+Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-light forms have absolutely best comass}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
 As such, we shall not use it in the sequel, but only include it as a curiosity item.
 
 \begin{proposition}
@@ -708,19 +768,67 @@ H_N &= \tr(\nabla \normal_N^\flat) = c_1 \dif^* \star F = c_2 \dif F = 0. \qedhe
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$q \to 1$}{The limit as q goes to 1}}
-Our next task is to realize an $\infty$-comass form as the Noether current of a $1$-harmonic function.
+We now construct the $1$-harmonic conjugate of an $\infty$-light form.
+However, we cannot naively take limits in Proposition \ref{convex duality}, because $(L^1, L^\infty)$ (or even $(L^\infty, BV)$) is not a dual pair of reflexive Banach spaces, and because (\ref{inverse extremality}) may blow up as $p \to \infty$.
+Instead, we have to renormalize the $q$-harmonic conjugates of $p$-light forms, as in \cite[\S3.2]{daskalopoulos2020transverse}.
+
+To this end, fix a class $\rho \in H^2(M, \RR)$ and denote by $L$ the comass of a best comass representative of $\rho$.
+Also let $k_p$ be defined by 
+$$k_p^{1 - p} = \int_M \star |F_p|^p$$
+where $F_p$ is the $p$-light representative of $\rho$.
+
+\begin{definition}
+The \dfn{renormalized $q$-harmonic conjugate} of a $p$-light form $F_p$ is the function $u_q: \tilde M \to \RR$ which has mean zero on $M_{\rm fun}$ and solves
+$$\dif u_q = (-1)^{d - 1} k_p^{p - 1} |F_p|^{p - 2} \star F_p.$$
+\end{definition}
+
+\begin{lemma}\label{normalizations converge}
+As $p \to \infty$, $k_p \to 1/L$.
+\end{lemma}
+\begin{proof}
+We follow \cite[Lemma 3.4]{daskalopoulos2020transverse}.
+One has 
+$$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|F_p\|_{L^p}.$$
+Since $F_p$ converges in the weakstar topology of $L^\infty(M, Z^2)$ to a form of best comass, this limit is at most $L$.
+If it is strictly less than $L$, then there exist $p$-light forms with comass strictly than $L$, a contradiction.
+Taking logarithms we see that $q^{-1} \log k_p \to -\log L$, and since $q \to 1$ the claim follows.
+\end{proof}
 
 \begin{proposition}
-Let $\alpha \in H^2(M, \RR)$ and let $\tilde M \to M$.
-For $\frac{1}{p} + \frac{1}{q} = 1$ and $p \geq 2$, let $F_p$ be the $p$-longitudinal representative of $\alpha$, and let $u_q$ be the $q$-harmonic function on $\tilde M$ whose Noether current is $F_p$.
-Then there exists $\rho \in H^1(M, \RR)$ and a limiting function $u \in BV_\loc(\tilde M)$, such that:
+Let $\rho \in H^2(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
+For $2 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let $u_q$ be the renormalized $q$-harmonic conjugate of the $p$-light representative of $\rho$.
+Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ such that:
 \begin{enumerate}
 \item $u$ is $1$-harmonic.
-\item $u$ is $\rho$-equivariant.
 \item As $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r$ for $1 \leq r < \infty$.
-\item The homology class $[\dif u]$ of the $d-1$-current $\dif u$ is the Poincar\'e dual of $\rho$.
+\item Let $F$ be the $\infty$-light representative of $\rho$, with best comass $L$. We have the strong duality theorem 
+\begin{equation}\label{1 strong duality}
+	L \int_M \star |\dif u| = \int_M \dif u \wedge F
+\end{equation}
+and, $|\dif u|$-almost everywhere,
+\begin{equation}\label{1 extremality}
+L |\dif u| = \langle \dif u, \star F\rangle.
+\end{equation}
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+We first compute using Lemma \ref{normalizations converge}
+\begin{equation}\label{Lqs of qLaplace converge}
+\lim_{q \to 1} \int_M \star |\dif u_q|^q = \lim_{p \to \infty} k_p^p \int_M \star |F_p|^p = \lim_{p \to \infty} k_p = \frac{1}{L}.
+\end{equation}
+So by H\"older's inequality,
+$$\lim_{q \to 1} \int_M \star |\dif u_q| \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \int_M \star |\dif u_q|^q = \frac{1}{L}.$$
+By Poincar\'e's inequality, $(u_q)$ is then bounded in $W^{1, 1}_\loc(\tilde M) \cap L^\infty_\loc(\tilde M)$ as $q \to 1$, so it converges along a subsequence to an element $u$ of the double dual $BV_\loc(\tilde M)$ of $W^{1, 1}_\loc(\tilde M)$, and also in $L^r_\loc(\tilde M)$ for any $1 \leq r < \infty$.
+As the limit of $\pi_1(M)$-equivariant functions, $u$ is also $\pi_1(M)$-equivariant.
+In particular $\dif u$ drops to a current on $M$.
+
+Renormalizing (\ref{strong duality}), we obtain 
+$$\frac{k_p^{-p}}{q} \int_M \star |\dif u_q|^q + \frac{1}{p} \int_M \star |F_p|^p = k_p^{1 - p} \int_M \dif u_q \wedge F_p.$$
+Multiplying by $k_p^p$ and taking limits, we conclude (\ref{1 strong duality}).
+However, $\|F/L\|_{L^\infty} \leq 1$, so this is only possible if $X := (\star F)^\sharp/L$ satisfies, $|\dif u|$-almost everywhere,
+$$|\dif u| = (X, \dif u).$$
+Therefore (\ref{1 extremality}) holds, and since $\dif F = 0$ implies $\nabla \cdot X = 0$, we conclude that $u$ is $1$-harmonic, c.f. \cite{Mazon14} \todo{or put this in the prelims?}.
+\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%
 
@@ -728,26 +836,17 @@ Then there exists $\rho \in H^1(M, \RR)$ and a limiting function $u \in BV_\loc(
 Throughout this section, let $M$ be a closed space form of dimension $3$.
 
 \begin{definition}
-Let $A$ be a connection of best curl on $\mathscr F$.
-The \dfn{maximum comass locus} is the set $\{L(A, \cdot) = L(A)\}$.
+Let $F$ be a form of best comass.
+The \dfn{maximum comass locus} is the set $\{L(F, \cdot) = L(F)\}$.
 \end{definition}
 
-By Proposition \ref{crandall}(\ref{crandall usc}) and the compactness of $M$, the maximum curl locus is a nonempty closed subset of $M$.
+By Proposition \ref{crandall}(\ref{crandall usc}) and the compactness of $M$, the maximum comass locus is a nonempty closed subset of $M$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{The calibrated lamination}
-\begin{remark}\label{scalings}
-The two minimization problems in consideration are invariant under two scalings: 
-\begin{enumerate}
-\item Rescaling the entire manifold, which rescales $\|\dif A\|_{L^\infty}$ but not $c_1(\mathscr F)$.
-\item $A \mapsto \lambda A$. This changes both $\|\dif A\|_{L^\infty}$ and $c_1(\mathscr F)$. \todo{Could also rescale the circle inducing the circle bundle. Also this doesn't really have anything to do with the task at hand, and would probably better go elsewhere to explain why we may assume $\dif A \in H^2(M, \ZZ)$}
-\end{enumerate}
-In particular, by applying both scalings and using Chern-Weil theory, we may replace any best curl connection by a best curl connection $A$ with $\|\dif A\|_{L^\infty} = 1$, if desired.
-\end{remark}
-
 Recall that in the work of Harvey--Lawson on calibrated geometry \cite{Harvey82}, a \dfn{calibration} on $M$ is a smooth closed $2$-form of $C^0$ norm $1$.
 Owing to the above scale-invariance, and the fact that we do not enjoy the luxury of such high regularity, we shall just mean by a \dfn{calibration} something much weaker: a $2$-form $F \in L^\infty$, such that $\|F\|_{L^\infty} > 0$ and $\dif F = 0$ as distributions.
-This definition is even weaker than the definition of \cite[\S2A]{bangert_cui_2017} which assumed that $F$ is continuous and $\|F\|_{L^\infty} = 1$.
+This definition is even weaker than the definition of \cite[\S2A]{bangert_cui_2017} which assumed that $F$ is continuous and $\|F\|_{C^0} = 1$.
 
 \begin{definition}
 Let $F$ be a calibration and $N \subset M$ an embedded surface with area form $\omega_N$.
@@ -755,9 +854,8 @@ We say that $N$ is a \dfn{calibrated surface} if the pullback of $F$ to $N$ is $
 \end{definition}
 
 By Corollary \ref{trace on cycles}(\ref{integral continuous}), we may integrate a calibration over any closed surface $N$, or any small ball in a possibly nonclosed surface $N$.
-In particular, the sentence ``$N$ is a calibrated surface'' is well-defined, and it just means that for every sufficiently small relatively open ball $U \subseteq N$,
-$$\int_U F = \|F\|_{L^\infty} |U|.$$
-Even at this generality, every calibrated surface is minimal: if $N'$ is homologous to $N$ relative to $\partial N = \partial N'$, then by Stokes' theorem,
+In particular, the sentence ``$N$ is a calibrated surface'' is well-defined.
+Moreover, every calibrated surface is minimal: if $N'$ is homologous to $N$ relative to $\partial N = \partial N'$, then by Stokes' theorem,
 $$|N'| = \frac{1}{\|F\|_{L^\infty}} \int_{N'} F = \frac{1}{\|F\|_{L^\infty}} \int_N F \leq |N|.$$
 Moreover, by Corollary \ref{trace on cycles}(\ref{cohomology exists}), the cohomology class of a calibration is well-defined.
 
@@ -777,191 +875,75 @@ $$\langle [T], [F]\rangle = \int_K \int_{N_k} F \dif \mu(k)$$
 but 
 $$\mathbf M(T) = \int_K |N_k| \dif \mu(k).$$
 This is only possible if the leaves of $\lambda$ are calibrated surfaces.
+\todo{Need to justify this more carefully, using properties of the local comass. It could be the case that $\int_{N_k} F$ is discontinuous in $k$!}
 \end{proof}
 
 \begin{corollary}\label{best comass lamination}
-Let $F$ be $\infty$-longitudinal.
+Let $F$ be $\infty$-light.
 Then the maximum comass locus contains a measured oriented minimal lamination.
 \end{corollary}
-\begin{proof}
-By definition, $\dif A$ is a calibration which minimizes $\|\dif A\|_{L^\infty}$ in $c_1(\mathscr F)$.
-Let $\lambda$ be the lamination of Proposition \ref{Bangert Cui}.
-Then $\dif A$ is smooth in the tangent directions to each leaf of $\lambda$, since it is a multiple of the area form on $\lambda$.
-In particular, $|\dif A(x)|$ exists and equals $\|\dif A\|_{L^\infty}$ if $x \in \supp \lambda$.
-The assertion now follows from Proposition \ref{crandall}.
-\end{proof}
 
 By \cite[Example 5.4]{bangert_cui_2017} the maximum comass locus need not equal a lamination.
+This is a more severe defect than in the theory developed in \cite{Thurston98,daskalopoulos2020transverse} where the maximum stretch locus is a lamination, but may not be globally measured and oriented.
+The issue is that the kernel bundle of $F$ need not be integrable, since it is a vector bundle of rank $2$.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{The dual \texorpdfstring{$1$-harmonic}{1-harmonic} function}
 In this section we interpret the lamination of Corollary \ref{best comass lamination} using convex duality.
+By \todo{Cite laminations paper}, to each $1$-harmonic function $u$, we may associated a measured oriented minimal lamination $\lambda_u$, whose Ruelle-Sullivan current is $\dif u$, and whose leaves are the level sets of $u$.
+
+\begin{definition}
+Let $\rho \in H^2(M, \RR)$, let $F$ be an $\infty$-light representative of $\rho$, and let $u$ be a $1$-harmonic conjugate of $F$.
+The \dfn{Thurston lamination} $\lambda$ associated to $\rho$ is $\lambda := \lambda_u$.
+\end{definition}
+
+\begin{proposition}
+The Thurston lamination of a cohomology class is well-defined.
+\end{proposition}
+
+\todo{Not sure how to prove this, but the point is that our choice of $(u, F)$ isn't allowed to matter.} Maybe it follows because the $p$-lights, which are unique, need to concentrate on a set that doesn't depend on the choice made in the compactness argument. Strictly speaking we don't need this, but I want to talk about THE Thurston lamination...
 
 \begin{theorem}
-Let $F$ be an $\infty$-longitudinal form, which is the Noether current of a $1$-harmonic function $u$, and let $\lambda_u$ be the measured oriented lamination induced by $u$.
-Moreover, let $\tilde F$ be any best comass form cohomologous to $F$.
-Then the calibrated lamination of $\tilde F$ contains $\lambda_u$.
+Let $F$ be a best comass representative of $\rho \in H^2(M, \RR)$.
+Then the maximum comass locus of $F$ is contained in the Thurston lamination associated to $\rho$.
 \end{theorem}
 
+\todo{Prove me, the proof is basically the same as \cite[\S6.1, \S6.2]{daskalopoulos2020transverse}}
+On the first reading, the reader may wish to take $\tilde F = F$, as this already captures the essential ideas.
 
-To begin the proof, let $(A_p)$ be a $p$-approximation to $A$.
-Using the scaling techniques of Remark \ref{scalings}, we may assume that $\|\dif A\|_{L^\infty} = 1$; this eases the notational burden somewhat.
-We follow \cite[\S6.1]{daskalopoulos2020transverse}.
+The main point is this proposition:
 
-We begin by constructing the function $u$.
-For $3 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let
-$$\int_M \star |k_p \dif A_p|^p = k_p$$
-just like in \cite[\S3.2]{daskalopoulos2020transverse}.
-Let $F_p := k_p \dif A_p$ and $U_q := |F_p|^{p - 2} \star F_p$ which is a $1$-form.
-Then 
-\begin{equation}\label{dAp wedge Uq}
-\int_M \dif A_p \wedge U_q = k_p^{-1} \int_M \star |F_p|^p = 1.
-\end{equation}
-Also for $F := \dif A$,
-$$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|\dif A_p\|_{L^p} = \|F\|_{L^\infty} = 1.$$
-It follows that $k_p \to 1$.
+\begin{proposition}
+For any $0 < \theta < 1$,
+	$$\lim_{p \to \infty} \int_{\{|F/L| \leq \theta\}} \star |k_p F_p|^p = 0.$$
+\end{proposition}
 
-We now compute
-\begin{equation}\label{Uq is closed}
-	\dif U_q = \dif(|F_p|^{p - 2} \star F_p) = 0
-\end{equation}
-since $F_p$ solves the $p$-Maxwell equation (\ref{predual problem}).
-So we may choose $u_q$ such that $U_q = \dif u_q$ and $u_q(0) = 0$ for some choice of origin $0$ of the universal cover $\tilde M$.
+%%%%%%%%%%%%%%%%%%%%%%
+\section{Thurston's \texorpdfstring{$L = K$}{L equals K} theorem}
+If $\lambda$ is a measured oriented lamination, then we denote by $[\lambda] \in H_1(M, \RR)$ its homology class, and by $|\lambda|$ its area; namely, if $(\chi_n)$ is a partition of unity subordinate to a measured $\lambda$-laminar atlas $(\Phi_n, K_n)$ \todo{Explain this in the prelims},
+$$|\lambda| = \int_{K_n} \int_{\{k\} \times \RR^2} \Phi_n^*(\star \chi_n) \dif \mu_{\lambda, n}(k).$$
 
-We have the following analogue of \cite[Theorem 4.3]{daskalopoulos2020transverse} with essentially the same proof.
-
-\begin{lemma}
-There exists $u \in BV_\loc(\tilde M)$ and $\rho \in H^1(M, \RR)$ such that:
+\begin{theorem}
+	Let $\rho \in H^2(M, \RR)$, and let 
+	$$K := \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|},$$
+	where $\lambda$ ranges over measured oriented laminations. Then:
 \begin{enumerate}
-\item $u$ is $\rho$-equivariant.
-\item $u_q \to u$ weakly in $BV_\loc(\tilde M)$.
-\item $u_q \to u$ in $L^r(M)$ for $1 \leq r < \infty$.
+	\item The supremum in $K$ is attained by the Thurston lamination associated to $\rho$.
+	\item Let $L$ be the best comass constant of $\rho$. Then $L = K$.
 \end{enumerate}
-\end{lemma}
-\begin{proof}
-By H\"older's inequality,
-$$\int_M \star |U_q| = \int_M \star |F_p|^{p - 1} \leq |M|^{\frac{1}{p}} \left[\int_M \star |F_p|^p\right]^{\frac{1}{q}}.$$
-Therefore 
-$$\limsup_{q \to 1} \int_M \star |U_q| \leq 1.$$
-On the other hand, (\ref{dAp wedge Uq}) is only possible if
-$$\liminf_{q \to 1} \int_M \star |U_q| \geq 1$$
-and so $\|U_q\|_{L^1} \to 1$.
-Taking limits in (\ref{Uq is closed}) and using a compactness argument, we obtain $U_q \to U$ in the weak topology of measures, for some closed $2$-current $U$.
-We write $\dif u = U$.
-
-Since $U_q, F_p$ are related by the convex duality relation (\ref{inverse extremality}),
-\end{proof}
-
-
-
-So by the Maz\'on-Rosser-Segura de Le\'on theorem, $u$ is $1$-harmonic.
-
-%%%%%%%%%%%%%%%%%%%%%
-\section{\texorpdfstring{$L = K$}{L equals K}}
-Let $\alpha \in H^2(M, \RR)$.
-For measured oriented laminations $\lambda$, let 
-$$K(\lambda) := \frac{\langle \alpha, [\lambda]\rangle}{|\lambda|}$$
-where $[\lambda]$ is the homology class of (the Ruelle-Sullivan current for) $\lambda$ and $|\lambda|$ is the area of $\lambda$,
-$$|\lambda| := \int_I |\{k\} \times J| \dif \mu_\lambda(k).$$
-Let $K$ be the supremum of $K(\lambda)$ over all $\lambda$.
-Let $L$ be the best comass constant.
-
-\begin{theorem}[$L = K$]
-Let $F$ be an $\infty$-longitudinal form which is the Noether current of a $1$-harmonic function $u$ with lamination $\lambda_u$.
-Then
-$$K = K(\lambda_u) = L(F) = L.$$
 \end{theorem}
 
-%%%%%%%%%%%%%%%%%%%%%
-\appendix 
-
-\section{The dual one-harmonic function}
-For simplicity let's assume $H^2(M, \ZZ) = 0$.
-
-Let $A$ be an $\infty$-magnetic potential and let $A_p \to A$ witness that $A$ is $\infty$-magnetic.
-
-
-Question: Does the Fenchel relation imply that $u$ is nonzero?
-What about nonconstant?
-\cite{bangert_cui_2017} implies that there exists $U$ which is calibrated by $F$, and then $U = \dif \tilde u$, but it doesn't seem clear that this $\tilde u$ should be the same as $U$, maybe the uniqueness part of the M-R-SdL theorem explains this.
-
-\begin{lemma}
-For any $\theta \in (0, 1)$,
-	$$\lim_{p \to \infty} \int_{\{|F| \leq \theta\}} \star |F_p|^p = 0.$$
-\end{lemma}
-\begin{proof}
-Integrating the $p$-Maxwell equation 
-$$\dif^*(|\dif A_p|^{p - 2} \dif A_p) = 0$$
-by parts 
-\begin{align*}
-	0 &= \int_M \dif \star (|\dif A_p|^{p - 2} \dif A_p) \wedge (A_p - A) \\
-	&= \int_{\partial M} \star(|\dif A_p|^{p - 2} \dif A_p) \wedge \iota^* (A_p - A) - \int_M \star (|\dif A_p|^{p - 2} \dif A_p) \wedge \dif (A_p - A).
-\end{align*}
-Here $\iota^* (A_p - A)$ is well-defined because $A_p - A \in C^0$.
-I guess that $|\dif A_p|^{p - 2} \dif A_p$ should have a trace as well, otherwise we need some kind of smooth approximation.
-Let $J$ be the Neumann data, then 
-$$\dif \iota^*(A_p - A) = J - J = 0$$
-so $\iota^*(A_p - A)$ is pure gauge. In particular, since we may modify the $p$-approximations $A_p$ up to gauge without affecting the result, we may assume that $\iota^*(A_p - A) = 0$.
-Therefore 
-$$\int_M |\dif A_p|^{p - 2} \dif A_p \wedge \star \dif (A_p - A) = 0.$$
-
-We now proceed as in \cite[Lemma 6.3]{daskalopoulos2020transverse}.
-Let $f(p) := \langle F_p, F_p - F\rangle$ and $Y_p := \{f(p) \geq 0\}$.
-Rescaling by $k_p^p$, 
-$$\int_M |F_p|^{p - 2} F_p \wedge \star (F_p - k_p F) = 0$$
-so 
-\begin{align*}
-	\lim_{p \to \infty} \int_M |F_p|^{p - 2} F_p \wedge \star (F_p - k_p F) - \star f(p) 
-	&= \lim_{p \to \infty} \int_M |F_p|^{p - 2} F_p \wedge \star (F - k_p F) \\
-	&\leq \lim_{p \to \infty} (1 - k_p) \int_M |F_p|^{p - 1} \star |F| = 0.
-\end{align*}
-Therefore 
-$$\lim_{p \to \infty} \int_M |F_p|^{p - 2} \star f(p) = 0.$$
-On the other hand, on $M \setminus Y_p$ we have by the elementary \cite[Lemma 6.2]{daskalopoulos2020transverse} that 
-$$
-	-2|F_p|^{p - 2} f(p) \leq |F_p|^{p - 2} (|F|^2 - |F_p|^2) < \frac{2}{p - 2}
-$$
-which implies 
-$$\lim_{p \to \infty} \int_{M \setminus Y_p} |F_p|^{p - 2} \star f(p) = 0.$$
-Therefore 
-$$\lim_{p \to \infty} \int_{Y_p} |F_p|^{p - 2} \star f(p) = 0.$$
-
-To finish the proof we look to \cite[Proposition 6.5]{daskalopoulos2020transverse}...
-\end{proof}
-
-\begin{corollary}
-$\supp \dif v$ is contained in the calibrated lamination associated to any best curl form with the same data as $A$.
-\end{corollary}
-\begin{proof}
-By as in \cite[Theorem 6.1]{daskalopoulos2020transverse}, $\supp \dif v \subseteq \{|F| = \|F\|_{L^\infty}\}$.
-Actually, as in \cite[Corollary 6.8]{daskalopoulos2020transverse} the same argument works as long as $F = \dif \tilde A$ where $\tilde A$ is a best curl competitor of $A$.
-\end{proof}
-
-\subsection{Thurston's K-L theorem}
-\begin{conjecture}
-For $\sigma \in H_2(M, \RR)$ nontrivial, let $\lambda_\sigma$ denote the minimal measured lamination of homology class $\sigma$.
-Let 
-$$K = \sup_\sigma \frac{1}{|\lambda_\sigma|} \int_{\lambda_\sigma} \dif A.$$
-Let $L$ be the best curl constant. Then 
-$$L = K.$$
-\end{conjecture}
-
-This is nontrivial because $K$ is a supremum over cycles while the curl modulus is a supremum over chains.
-
-\begin{lemma}
-\begin{equation}\label{pSecondVariation}
-	p \int_M (p - 2) |F_p|^{p - 4} \star \langle F_p, \dif B\rangle^2 + \star |F_p|^{p - 2} |\dif B|^2.
-	\end{equation}
-	\end{lemma}
-	\begin{proof}
-	Let $A_p(t) := A_p + tB$; then 
-	\begin{align*}
-		\frac{\dif}{\dif t} \int_M \star |\dif A_p(t)|^p
-		&= p \int_M \star |\dif A_p(t)|^{p - 2} \langle\dif A_p(t), \dif B\rangle.
-	\end{align*}
-	Setting $t = 0$, (\ref{pMaxwell}) follows.
-	We now differentiate again in $t$ to deduce (\ref{pSecondVariation}).
-	\end{proof}
+\todo{Prove this. Here's a sketch:}
+We can identify the space of measured oriented laminations with the equivariant part of $BV_\loc(\tilde M)/\RR$.
+Then for any rep $F$ of $\rho$,
+$$K = \sup_v \frac{\int \dif v \wedge F}{\int |\dif v|}$$
+and in fact we may assume that $F$ is $\infty$-light.
+But $F = \pm L \star \frac{\dif u}{|\dif u|}$ for the $1$-harmonic conjugate $u$.
+So 
+$$K = L \sup_v \frac{\int \langle \dif u, \dif v/|\dif v|\rangle}{\int |\dif v|}$$
+and it's pretty obvious that this is maximized by $v = u$, with $K = L$.
+However, there's a technicality, which is that the conjugate formula for $F$ only holds $|\dif u|$-almost everywhere.
+So we need to validate all this in a sense which is integrated against $|\dif u|$.
 
 \printbibliography
 
