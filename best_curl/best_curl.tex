@@ -182,7 +182,9 @@ Since (\ref{max flow mean cut}) asserts a form of convex duality between $\infty
 
 A surface $N \subseteq M$ is \dfn{calibrated} by a closed $2$-form $F$ if $\|F\|_{L^\infty} \leq 1$ and the pullback of $F$ to $N$ is the area form on $N$ \cite{Harvey82}.
 In that case, the mean curvature of $N$ is 
-$$H_N = \nabla \cdot \normal_N = \nabla \cdot (\star F)^\sharp = \star \dif F = 0,$$
+\begin{equation}\label{calibrated surfaces are minimal}
+H_N = \nabla \cdot \normal_N = \nabla \cdot (\star F)^\sharp = \star \dif F = 0,
+\end{equation}
 so that $N$ is minimal. 
 In particular, if a lamination $\lambda$ is calibrated by $F$ (in the sense that every leaf of $\lambda$ is calibrated), then $\lambda$ is minimal.
 
@@ -484,7 +486,7 @@ However, $F \in L^\infty$, so $F$ is both only defined almost everywhere, and no
 So as a proxy for $|F|$, which may fail to be defined on a null set, we use the local comass, which is defined everywhere.
 
 \begin{definition}
-The \dfn{local comass} of a $2$-form $F$ at $x \in M$ is 
+The \dfn{local comass} of a closed $2$-form $F$ at $x \in M$ is 
 $$L(F, x) := \limsup_{\varepsilon \to 0} \sup_{\sigma \in \Chain_2(B_\varepsilon(x))} \frac{1}{|\sigma|} \int_\sigma F.$$
 \end{definition}
 
@@ -493,84 +495,158 @@ $$L(F, x) = \limsup_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F)$$
 but $L_{B_\varepsilon(x)}(F)$ is increasing in $\varepsilon$ (since it's a supremum over a set which grows in $\varepsilon$).
 So the limit superior is actually a limit and an infimum:
 $$L(F, x) = \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = \inf_{\varepsilon > 0} L_{B_\varepsilon(x)}(F)$$
-and in particular $L(F, x) \leq L(F)$.
+and in particular $L(F, x) \leq L(F)$. Thus we have the following analogue of \cite[Lemma 4.3(a)]{Crandall2008}:
 
-It's convenient to test the local comass against a more restrictive class of $2$-chains.
-Motivated by lattice gauge theory \cite{Gupta98}, if $S \subseteq T_x M$ is a hyperplane, we define the \dfn{plaquette} $P_{S, \varepsilon}$ at scale $\varepsilon > 0$ to be 
-$$P_{v, \varepsilon} := (\exp_x)_*(S) \cap B_\varepsilon(x).$$
-Plaquettes satisfy their own version of the Lebesgue differentiation theorem.
-To state it, recall that for a covector $\xi \in T_x' M$, we obtain a foliation of the tangent space $T_x M$ into hyperplanes, namely $\ker \xi + t\xi^\sharp$ for $t \in \RR$.
-
-\begin{lemma}
-Let $F \in L^\infty(M, Z^2)$.
-Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$ such that
-$$|F(x)| = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F\right] \dif t.$$
-\end{lemma}
+\begin{proposition}
+For $F \in L^\infty(M, Z^2)$, the local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
+\end{proposition}
 \begin{proof}
-First suppose that $F$ is continuous. We claim that the lemma holds with $\xi = \star F/|F|$.
-In fact, $\lambda_{\xi, \varepsilon} := (P_{\ker \xi + t\xi^\sharp, \varepsilon})_{t \in \RR}$ is a foliation of $B_\varepsilon(x)$ into plaquettes, such that $F(x)$ lies in the span of the area element of $P_{\ker \xi, \varepsilon}$ at $x$.
-So if $\varepsilon$ is small, then the projection of $F$ to the area bundle of $\lambda_{\xi, \varepsilon}$ must be close to $F$ (since $F$ is continuous).
-In particular, if $|F(x)| = F_I(x)$ for some $d-1$-index $I$, then by Fubini's theorem, the double integral is approximately equal to $\int_{B_\varepsilon(x)} \star F_I$, and so the double integral must approximate $F_I(x) |B_\varepsilon(x)|$ as $\varepsilon \to 0$.
-But we can always choose coordinates so that such a $d-1$-index exists at a single point, so the claim holds.
-
-We now set for a closed $2$-form $G$ and a covector $\eta$,
-$$A(G, \eta, \varepsilon) := \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \eta + t\eta^\sharp, \varepsilon}} G\right] \dif t.$$
-Let $G$ be a continuous closed $2$-form to be chosen later, and $\eta := \star G/|G|$.
-Then we can bound for any $\xi$,
+Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $L(F, x^n) \leq L_{B_r(x)}(F)$ and so
 \begin{align*}
-|A(F, \xi, \varepsilon) - |F(x)||
-&\leq |A(F, \xi, \varepsilon) - A(G, \xi, \varepsilon)| + |A(G, \xi, \varepsilon) - A(G, \eta, \varepsilon)| \\
-&\qquad + |A(G, \eta, \varepsilon) - |G(x)|| + ||F(x)| - |G(x)||\\
-&=: I_1 + I_2 + I_3 + I_4.
+\limsup_{n \to \infty} L(F, x^n) &\leq \inf_{r > 0} L_{B_r(x)}(F) = L(F, x). \qedhere 
 \end{align*}
-We also fix $\alpha > 0$.
-
-To treat $I_1$, let $\mathcal M$ be the Hardy-Littlewood maximal operator and let $\Pi_\xi$ be the projection onto the area bundle of $\lambda_{\xi, \varepsilon}$.
-Then 
-\begin{align*}
-I_1
-&= \left|\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F - G \dif t\right| \\
-&= \left|\dashint_{B_\varepsilon(x)} \Pi_\xi(F - G)\right| \leq \dashint_{B_\varepsilon(x)} \star |F - G| \\
-&\leq \mathcal M|F-G|(x).
-\end{align*}
-By the Hardy-Littlewood maximal inequality, 
-$$|\{|I_1| > \alpha\}| \leq |\{\mathcal M |F - G| > \alpha\}| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
-
-Next we observe that, up to a correction term which is $o(1)$ as $\varepsilon \to 0$ arising from the metric, the integral of $G$ over $P_{\ker \xi + t\xi^\sharp}$ is just a rotation of $G$ integrated over $P_{\ker \eta + t\eta^\sharp}$.
-Therefore $I_2 \leq O(|\xi - \eta|) + o(1)$.
-Moreover, by the continuous case of this lemma, $I_3 = o(1)$.
-Finally we bound $I_4$ using the reverse triangle inequality and Markov's inequality as 
-$$|\{I_4 > \alpha\}| \leq |\{|F(x) - G(x)| > \alpha\}| \leq \frac{\|F - G\|_{L^1}}{\alpha}.$$
-
-Let
-$$E_{\alpha, \xi} := \left\{\limsup_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F(x)|| > 3\alpha\right\}.$$
-Let $\delta > 0$ and choose $G$ so that $\|F - G\|_{L^1} \leq \alpha \delta$.
-Then choose $\xi = \xi_\alpha$ so that $I_2 \leq \alpha$.
-Taking the limit $\varepsilon \to 0$,
-$$|E_{\alpha, \xi_\alpha}| \leq |\{I_1 > \alpha\}| + |\{I_4 > \alpha\}| \lesssim \delta.$$
-
 \end{proof}
 
-As a consequence of the plaquette Lebesgue differentiation theorem, we obtain an analogue for the comass of a familiar result about the Lipschitz seminorm \cite[Lemma 4.2]{Crandall2008}.
+It's convenient to test the local comass against a more restrictive class of $2$-chains.
+For a tangent plane $S \subseteq T_x M$ and $\varepsilon > 0$, let
+$$P_{S, \varepsilon} := (\exp_x)_*(S) \cap B_\varepsilon(x).$$
+Following the terminology of lattice gauge theory (see for example \cite{Gupta98}), we refer to $P_{S, \varepsilon}$ as a \dfn{plaquette} at scale $\varepsilon$.
+
+The utility of plaquettes is that, for a covector $\xi \in T_x' M$, we obtain a foliation of the tangent space $T_x M$ into planes, namely $(\ker \xi + t\xi^\sharp)_{t \in \RR}$.
+Pushing forward this foliation by the exponential map, we obtain a foliation
+$$\lambda_{\xi, \varepsilon} := (P_{\ker \xi + t\xi^\sharp, \varepsilon})_{t \in \RR}$$
+of $B_\varepsilon(x)$ into plaquettes which are approximately conormal to $\xi$ in the limit $\varepsilon \to 0$.
+Using this foliation and Fubini's theorem, we can turn integrals of $F$ over surfaces, which are Lebesgue null, into integrals over balls, which satisfy the Lebesgue differentiation theorem.
+From these considerations and the Hardy-Littlewood maximal inequality, we deduce that plaquettes satisfy their own version of the Lebesgue differentiation theorem, at least on average.
+
+\begin{lemma}[plaquette Lebesgue differentation theorem]
+Let $F \in L^\infty(M, Z^2)$.
+Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$, which depends measurably on $x$, such that
+\begin{equation}\label{plaquette LDT}
+|F(x)| = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F\right] \dif t
+\end{equation}
+where $\dif t$ is the disintegration of the Riemannian measure with respect to $\lambda_{\eta, \varepsilon}$.
+\end{lemma}
+\begin{proof}
+To fix notation, define for any closed $2$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
+$$A(G, \eta, \varepsilon) := \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \eta + t\eta^\sharp, \varepsilon}} G\right] \dif t.$$
+Also let 
+$$\Pi_\eta: T' B_\varepsilon(x) \wedge T' B_\varepsilon(x) \to T' \lambda_{\eta, \varepsilon} \wedge T' \lambda_{\eta, \varepsilon}$$
+be the projection from the bundle of antisymmetric $2$-tensors on $B_\varepsilon(x)$ to those which are cotangent to $\lambda_{\eta, \varepsilon}$.
+Thus, if $G$ and $P := P_{\ker \eta + t\eta^\sharp, \varepsilon}$ are cooriented, then
+\begin{equation}\label{cooriented integral is area integral of norm}
+	\int_P G = \int_P |\Pi_\eta G| \dif A
+\end{equation}
+where $\dif A$ is the area element on the leaves of the foliation.
+Finally, let $\mathcal M$ be the Hardy-Littlewood maximal operator.
+
+We first treat the case that $F$ is continuous and has no zeroes.
+Fix $x \in M$; we claim that (\ref{plaquette LDT}) holds with $\xi = \star F(x)/|F(x)|$.
+In fact, for every $\varepsilon > 0$, $\xi$ is conormal to $P_{\ker \xi, \varepsilon}$, and hence $\lambda_{\xi, \varepsilon}$, at $x$.
+Thus, by definition of $\xi$, $\Pi_\xi F(x) = F(x)$, so by continuity of $F$,
+\begin{equation}\label{continuous forms are almost their projections}
+	\|\Pi_\xi F - F\|_{C^0(B_\varepsilon(x))} \ll 1
+\end{equation}
+as $\varepsilon \to 0$.
+By (\ref{cooriented integral is area integral of norm}), the fact that the Hodge star coorients $F$ and $\xi$, and Fubini's theorem,
+\begin{align*}
+A(F, \xi, \varepsilon)
+&= \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi F| \dif A \dif t
+= \dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|.
+\end{align*}
+By (\ref{continuous forms are almost their projections}) and the fact that $|F|$ is continuous (so $x$ is a Lebesgue point of $|F|$),
+\begin{align*}
+\dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|
+&= \dashint_{B_\varepsilon(x)} \star |F| + o(1) = |F(x)| + o(1).
+\end{align*}
+Taking the limit $\varepsilon \to 0$, we deduce (\ref{plaquette LDT}) for $x$.
+
+Now let $F \in L^\infty(M, Z^2)$, and split $M$ into measurable sets $M = \{F \neq 0\} \sqcup \{F = 0\}$.
+We now treat $\{F = 0\}$; choose an arbitrary measurable section $\xi$ of the cosphere bundle of $M$ along $\{F = 0\}$.
+We bound using (\ref{cooriented integral is area integral of norm}) and Fubini's theorem
+$$|A(F, \xi(x), \varepsilon)| \leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |F| \dif A \dif t = \dashint_{B_\varepsilon(x)} \star |F|.$$
+Almost every $x$ such that $F(x) = 0$ is a Lebesgue point of $|F|$, and for such $x$,
+$$0 \leq \limsup_{\varepsilon \to 0} |A(F, \xi(x), \varepsilon)| \leq \lim_{\varepsilon \to 0} \dashint_{B_\varepsilon(x)} \star |F| = |F(x)| = 0.$$
+This implies (\ref{plaquette LDT}) on almost all of $\{F \neq 0\}$.
+
+So we may assume that $F(x) \neq 0$ almost everywhere.
+Let $\alpha > 0$ be arbitrary and $\xi := \star F/|F|$.
+Let $G$ be a continuous, nowhere zero, closed $2$-form to be chosen later, and $\eta := \star G/|G|$.
+We split up
+\begin{align*}
+|A(F, \xi(x), \varepsilon) - |F(x)||
+&\leq |A(F, \xi(x), \varepsilon) - A(G, \xi(x), \varepsilon)| + |A(G, \xi(x), \varepsilon) - A(G, \eta(x), \varepsilon)| \\
+&\qquad + |A(G, \eta(x), \varepsilon) - |G(x)|| + ||F(x)| - |G(x)||\\
+&=: I_1 + I_2 + I_3 + I_4.
+\end{align*}
+
+To treat $I_1$, we apply (\ref{cooriented integral is area integral of norm}):
+\begin{align*}
+I_1
+&= \left|\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F - G \dif t\right| 
+\leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t.
+\end{align*}
+By Fubini's theorem, 
+\begin{align*}
+\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t
+&= \dashint_{B_\varepsilon(x)} \star|\Pi_\xi(F - G)| \leq \dashint_{B_\varepsilon(x)} \star |F - G|.
+\end{align*}
+Therefore $I_1 \leq \mathcal M|F - G|(x)$.
+So by the Hardy-Littlewood maximal inequality, for any $\varepsilon > 0$,
+$$|\{I_1 > \alpha\}| \leq |\{\mathcal M |F - G| > \alpha\}| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
+
+Next, to bound $I_2$, we pull back everything into the tangent space at $x$.
+We put tildes over balls or Hodge stars to indicate that they are taken with respect to the euclidean metric on $T_x M$.
+After accepting a correction of size $O(\varepsilon)$ arising from the metric on $M$, 
+$$I_2 = \frac{1}{\varepsilon^d |\Ball^d|} \left|\int_{-\varepsilon}^\varepsilon \left[\int_{\ker \xi + t\xi^\sharp \cap \tilde B_\varepsilon} - \int_{\ker \eta + t\eta^\sharp \cap \tilde B_\varepsilon}\right] G \dif t\right| + O(\varepsilon)$$
+which we can rewrite as
+$$I_2 = \left|\dashint_{\tilde B_\varepsilon(0)} \tilde \star [(G, \xi(x)^\sharp) - (G, \eta(x)^\sharp)]\right| + O(\varepsilon) \leq \dashint_{\tilde B_\varepsilon(0)} \tilde \star |G| \cdot |\xi(x) - \eta(x)| + O(\varepsilon).$$
+Since $G$ is continuous, on $\tilde B_\varepsilon(0)$, $|G| = |G(x)| + o(1)$ as $\varepsilon \to 0$.
+Therefore by the reverse triangle inequality,
+\begin{align*}
+I_2
+&\leq |G(x)| |\xi(x) - \eta(x)| + o(1) \\
+&= |G(x)| \left|\frac{G(x)}{|G(x)|} - \frac{F(x)}{|F(x)|}\right| + o(1) \\
+&= \left|G(x) - \frac{|G(x)|}{|F(x)|} F(x)\right| + o(1) \\
+&= |G(x) - F(x)| + \left|1 - \frac{|G(x)|}{|F(x)|}\right| |F(x)| + o(1)\\
+&= |G(x) - F(x)| + ||F(x)| - |G(x)|| + o(1) \\
+&\leq 2|G(x) - F(x)| + o(1).
+\end{align*}
+By Markov's inequality, we conclude that 
+$$\left|\left\{\liminf_{\varepsilon \to 0} I_2 > \alpha\right\}\right| \leq \left|\left\{|F - G| > \frac{\alpha}{2}\right\}\right| \leq \frac{2\|F - G\|_{L^1}}{\alpha}.$$
+
+Since we already proved the plaquette Lebesgue differentiation theorem for continuous, nonzero $G$, we know that $I_3 = o(1)$, or in other words 
+$$\left|\left\{\liminf_{\varepsilon \to 0} I_3 > \alpha\right\}\right| = 0.$$
+Finally we bound $I_4$ for any $\varepsilon > 0$ using the reverse triangle inequality and Markov's inequality as 
+$$|\{I_4 > \alpha\}| \leq |\{|F(x) - G(x)| > \alpha\}| \leq \frac{\|F - G\|_{L^1}}{\alpha}.$$
+
+Adding up $I_1, \dots, I_4$, we conclude that 
+$$\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\}\right| \leq \sum_{i=1}^4 \left|\left\{\liminf_{\varepsilon \to 0} I_i > \alpha\right\}\right| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
+We now choose $G$ so that $\|F - G\|_{L^1} \leq \alpha^2$ and take $\alpha \to 0$ to conclude that
+$$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 0\right\}\right| = 0$$
+as desired.
+\end{proof}
+
+As a consequence of the plaquette Lebesgue differentiation theorem, we obtain an analogue for the comass of a familiar result about the Lipschitz seminorm \cite[Lemma 4.3]{Crandall2008}.
 
 \begin{proposition}\label{crandall}
 Let $F \in L^\infty(M, Z^2)$. Then:
 \begin{enumerate}
-\item The local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
 % \item If $F(x)$ exists then $L(F, x) \geq |\dif A(x)|$. \label{crandall dA bounds LA}
 % \item If $L(A, x) = 0$, then $\dif A(x)$ exists and $\dif A(x) = 0$. \label{crandall zero LA implies diffble}
-\item If $\sigma \in \Chain_2$ then \label{crandall best curl is ABC}
-$$\frac{1}{|\sigma|} \int_\sigma F \leq \max_{x \in \sigma} L(F, x).$$
-\item One has $|F(x)| \leq L(F, x)$ almost everywhere. \label{crandall LDT}
+\item For almost every $x \in M$,
+$$|F(x)| \leq L(F, x).$$
+\label{crandall LDT}
 \item The local comass is bounded, and \label{crandall linfinity}
 $$L(F) = \max_{x \in M} L(F, x) = \|F\|_{L^\infty}.$$
+\item Let $\iota^* F$ be the pullback of $F$ to a $2$-chain $\sigma$. Then
+$$\|\iota^* F\|_{L^\infty(\sigma)} \leq \|F\|_{L^\infty}.$$
+\label{crandall normal trace is contraction}
+\item If $\sigma \in \Chain_2$ then \label{crandall best curl is ABC}
+$$\frac{1}{|\sigma|} \int_\sigma F \leq \max_{x \in \sigma} L(F, x).$$
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-First let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $L(F, x^n) \leq L_{B_r(x)}(F)$ and so
-$$\limsup_{n \to \infty} L(F, x^n) \leq \inf_{r > 0} L_{B_r(x)}(F) = L(F, x),$$
-which proves (\ref{crandall usc}).
-	
 % We now bound for a net of plaquettes $R_{ij}^\varepsilon(x)$ using (\ref{riemann plaquette})
 % \begin{equation}\label{difference quotients}
 % 	\limsup_{\varepsilon \to 0} \frac{|A_j(x + \varepsilon \partial_i) - A_j(x) - A_i(x + \varepsilon \partial_j) + A_i(x)|}{\varepsilon}
@@ -580,54 +656,58 @@ which proves (\ref{crandall usc}).
 % So if $\dif A_{ij}(x)$ exists we conclude $|\dif A_{ij}(x)| \leq L(A, x)$, which proves (\ref{crandall dA bounds LA}).
 % On the other hand, the corresponding limit \emph{inferior} must be nonnegative, so if $L(A, x) = 0$, the first limit superior in (\ref{difference quotients}) is actually a limit and we obtain $\dif A_{ij}(x) = 0$, proving (\ref{crandall zero LA implies diffble}).
 
-Now let $\sigma$ be a $2$-chain and $\varepsilon > 0$.
-Then we may write $\sigma = \sum_{n=1}^N \sigma_n(\varepsilon)$ where $\sigma_n(\varepsilon)$ is a $2$-simplex such that $\sigma_n(\varepsilon) \in \Chain_2(B_\varepsilon(x_n(\varepsilon)))$ for some $x_n(\varepsilon) \in \sigma$, and the $\sigma_n(\varepsilon)$ are almost disjoint.
-Then 
-$$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} \frac{1}{|\sigma_n(\varepsilon)|} \left|\int_{\sigma_n(\varepsilon)} F\right| \leq \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F).$$
-Since this inequality is true for every $\varepsilon$, it remains true in the limit superior as $\varepsilon \to 0$:
-$$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq \limsup_{\varepsilon \to 0} \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F).$$
-Let $(y_m(\varepsilon))_{m \in \NN}$ be a maximizing sequence for $L_{B_\varepsilon(\cdot)}(F)$ subject to $y_m(\varepsilon) \in \sigma$.
-Such a sequence exists, since we trivially have
-$$\sup_{x \in \sigma} L_{B_\varepsilon(x)}(F) \leq \|F\|_{L^\infty} < \infty.$$
-After passing to a subsequence in $m$, we may assume that $y_m(\varepsilon) \to y(\varepsilon)$ for some $y(\varepsilon) \in \sigma$.
-Then for $m$ large depending on $\varepsilon$, $y_m(\varepsilon) \in B_{2\varepsilon}(y(\varepsilon))$, and it follows that
-$$\limsup_{\varepsilon \to 0} \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F) \leq \limsup_{\varepsilon \to 0} \lim_{m \to \infty} L_{B_\varepsilon(y_m(\varepsilon))}(F) \leq \limsup_{\varepsilon \to 0} L_{B_{2\varepsilon}(y(\varepsilon))}(F).$$
-We then pass to a subsequence in $\varepsilon$ along which the limit superior is obtained, and then a further subsequence along which $y(\varepsilon) \to y$ for some $y \in \sigma$.
-Let $\delta > 0$; then $B_{2\varepsilon}(y(\varepsilon)) \subseteq B_\delta(y)$ for any sufficiently small $\varepsilon$.
-In conclusion,
-$$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq L_{B_\delta(y)}(F).$$
-Taking a limit superior in $\delta$, we conclude (\ref{crandall best curl is ABC}).
-
-Now let
-$$S_{ij}^\varepsilon(x) := \exp_x([0, \varepsilon \partial_i] \times [0, \varepsilon \partial_j] \times [-\varepsilon \partial_i \times \partial_j, \varepsilon \partial_i \times \partial_j]).$$
-Then $S_{ij}^\varepsilon(x)$ has uniformly bounded eccentricity as $\varepsilon \to 0$ in normal coordinates, so by the Lebesgue differentiation theorem, for almost every $x \in M$,
-$$|F(x)|^2 = \lim_{\varepsilon \to 0} \frac{1}{2\varepsilon} \left|\sum_{i < j} \frac{1}{|R_{ij}^\varepsilon(x)|} \int_{S_{ij}^\varepsilon(x)} F\right|^2.$$
-In normal coordinates we have the factorization 
-$$S_{ij}^\varepsilon(x) = R_{ij}^\varepsilon(x) \times [-\varepsilon, \varepsilon],$$
-so by Fubini's theorem, 
-\begin{align*}
-|F(x)|^2 
-&= \lim_{\varepsilon \to 0} \frac{1}{2\varepsilon} \left|\int_{-\varepsilon}^\varepsilon \sum_{i < j} \frac{1}{|R_{ij}^\varepsilon(x)|} \int_{R_{ij}^\varepsilon(x)} F\right|^2 \leq \frac{1}{2\varepsilon} \left|\int_{-\varepsilon}^\varepsilon L(F, x)\right|^2 \\
-& = L(F, x)^2.
-\end{align*}
-This proves (\ref{crandall LDT}).
-
-To prove (\ref{crandall linfinity}) we recall that trivially,
-$$L(F, x) \leq L(F) \leq \|F\|_{L^\infty}.$$
-Moreover, (\ref{crandall best curl is ABC}) shows that
-$$L(F) = \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F \leq \sup_{\sigma \in \Chain_2(M)} \sup_{x \in \sigma} L(F, x) = \sup_{x \in M} L(F, x).$$
-Finally we apply (\ref{crandall LDT}) to bound $\|F\|_{L^\infty} \leq \sup_{x \in M} L(F, x)$.
-% By (\ref{dA is like Lipschitz constant}),
-% $$\|F\|_{L^\infty}^2 \leq \sup_{x \in M} \limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2.$$
-% Here the left-hand side is a supremum over almost all of $M$, while the right-hand side is a supremum over all of $M$, including those points for which the limit does not exist as $\varepsilon \to 0$ (but the limit superior does exist).
-% Now we select for each $x \in M$, a subsequence of $\varepsilon \to 0$ which attains the limit superior, and choose a frame $(\partial_i)$ so that (possibly along a further subsequence), the averaged values of $F_{ij}(x)$ are $0$ unless $i,j$ are $1,2$.
-% Then most of the terms in the sum go away, and we are left with 
-% $$\limsup_{\varepsilon \to 0} \sum_{i < j} \frac{1}{|R^\varepsilon_{ij}(x)|^2} \left|\int_{R^\varepsilon_{ij}(x)} F\right|^2 = \limsup_{\varepsilon \to 0} \frac{1}{|R^\varepsilon_{12}(x)|^2} \left|\int_{R^\varepsilon_{12}(x)} F\right|^2.$$
-% We then set $\sigma_\varepsilon(x) := R^\varepsilon_{12}(x)$ as defined in this frame.
-% In particular, 
+% Now let $\sigma$ be a $2$-chain and $\varepsilon > 0$.
+% Then we may write $\sigma = \sum_{n=1}^N \sigma_n(\varepsilon)$ where $\sigma_n(\varepsilon)$ is a $2$-simplex such that $\sigma_n(\varepsilon) \in \Chain_2(B_\varepsilon(x_n(\varepsilon)))$ for some $x_n(\varepsilon) \in \sigma$, and the $\sigma_n(\varepsilon)$ are almost disjoint.
+% Then 
+% $$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} \frac{1}{|\sigma_n(\varepsilon)|} \left|\int_{\sigma_n(\varepsilon)} F\right| \leq \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F).$$
+% Since this inequality is true for every $\varepsilon$, it remains true in the limit superior as $\varepsilon \to 0$:
+% $$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq \limsup_{\varepsilon \to 0} \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F).$$
+% Let $(y_m(\varepsilon))_{m \in \NN}$ be a maximizing sequence for $L_{B_\varepsilon(\cdot)}(F)$ subject to $y_m(\varepsilon) \in \sigma$.
+% Such a sequence exists, since we trivially have
+% $$\sup_{x \in \sigma} L_{B_\varepsilon(x)}(F) \leq \|F\|_{L^\infty} < \infty.$$
+% After passing to a subsequence in $m$, we may assume that $y_m(\varepsilon) \to y(\varepsilon)$ for some $y(\varepsilon) \in \sigma$.
+% Then for $m$ large depending on $\varepsilon$, $y_m(\varepsilon) \in B_{2\varepsilon}(y(\varepsilon))$, and it follows that
 % \begin{align*}
-% 	\|F\|_{L^\infty} &\leq \sup_{x \in M} \sup_{\varepsilon > 0} \frac{1}{|\sigma_\varepsilon(x)|} \left|\int_{\sigma_\varepsilon(x)} F\right| \leq \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F = L(F). \qedhere 
+% \limsup_{\varepsilon \to 0} \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} L_{B_{\varepsilon}(x_n(\varepsilon))}(F)
+% &\leq \limsup_{\varepsilon \to 0} \sum_{n=1}^{N_\varepsilon} \frac{|\sigma_n(\varepsilon)|}{|\sigma|} \lim_{m \to \infty} L_{B_\varepsilon(y_m(\varepsilon))}(F) \\
+% &\leq \limsup_{\varepsilon \to 0} \lim_{m \to \infty} L_{B_\varepsilon(y_m(\varepsilon))}(F) \\
+% &\leq \limsup_{\varepsilon \to 0} L_{B_{2\varepsilon}(y(\varepsilon))}(F).
 % \end{align*}
+% We then pass to a subsequence in $\varepsilon$ along which the limit superior is obtained, and then a further subsequence along which $y(\varepsilon) \to y$ for some $y \in \sigma$.
+% Let $\delta > 0$; then $B_{2\varepsilon}(y(\varepsilon)) \subseteq B_\delta(y)$ for any sufficiently small $\varepsilon$, hence 
+% $$\limsup_{\varepsilon \to 0} L_{B_{2\varepsilon}(y(\varepsilon))}(F) \leq L_{B_\delta(y)}(F).$$
+% Plugging everything in and taking a limit superior in $\delta$,
+% $$\frac{1}{|\sigma|} \left|\int_\sigma F\right| \leq \limsup_{\delta \to 0} L_{B_\delta(y)}(F) = L(F, y),$$
+% implying (\ref{crandall best curl is ABC}).
+
+To prove (\ref{crandall LDT}), we bound for almost every $x \in M$ using the plaquette Lebesgue differentiation theorem
+\begin{align*}
+|F(x)|
+&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F \dif t \\
+&\leq \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |P_{\ker \xi + t\xi^\sharp, \varepsilon}| \dif t.
+\end{align*}
+Since $\dif t$ is the disintegration of the Riemannian measure with respect to the foliation $\lambda_{\xi, \varepsilon}$ of $B_\varepsilon(x)$,  it follows that 
+$$\int_{-\infty}^\infty |P_{\ker \xi + t\xi^\sharp, \varepsilon}| \dif t = |B_\varepsilon(x)|.$$
+Therefore
+$$|F(x)| \leq \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = L(F, x).$$
+
+To prove (\ref{crandall linfinity}) and (\ref{crandall normal trace is contraction}) we bound 
+\begin{equation}\label{crandall inequality collapse 1}
+\sup_{x \in M} L(F, x) \leq L(F) \leq \sup_{\sigma \in \Chain_2(M)} \|\iota_\sigma^* F\|_{L^\infty(\sigma)}.
+\end{equation}
+By the normal trace theorem, for any $\sigma \in \Chain_2(M)$,
+\begin{equation}\label{normal trace theorem in crandall}
+\|\iota_\sigma^* F\|_{L^\infty(\sigma)} \lesssim \|F\|_{L^\infty},
+\end{equation}
+but a priori the implied constant could depend on $\sigma$; we claim that it does not.
+Since $M$ is compact, it has bounded geometry, so any dependence on $\sigma$ would be because (\ref{normal trace theorem in crandall}) failed to be scale-invariant.
+However, $L^\infty$ norms are scale-invariant, so the undesirable case does not hold.
+So, by (\ref{crandall LDT}),
+\begin{equation}\label{crandall inequality collapse 2}
+\sup_{\sigma \in \Chain_2(M)} \|\iota_\sigma^* F\|_{L^\infty(\sigma)} \lesssim \|F\|_{L^\infty} \leq \sup_{x \in M} L(F, x).
+\end{equation}
+Therefore all inequalities in (\ref{crandall inequality collapse 1}), (\ref{crandall inequality collapse 2}) are actually equality, with implied constant $1$, proving (\ref{crandall linfinity}) and (\ref{crandall normal trace is contraction}).
+From (\ref{crandall normal trace is contraction}) we immediately deduce (\ref{crandall best curl is ABC}).
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -696,7 +776,7 @@ Let $\rho \in H^2(M, \RR)$.
 For each $p \geq 2$, let $F_p$ be the $p$-light form representing $\rho$. Then there exists a closed $2$-form $F$ such that:
 \begin{enumerate}
 \item $F_p \to F$ weakly in $L^q$ along a subsequence, for any $3 < q < \infty$.
-\item $F$ is a best comass representation of $\rho$.
+\item $F$ is a best comass representative of $\rho$.
 % \item One has 
 % \begin{equation}\label{Sobolev bounds for infinity}
 % 	\|F\|_{L^\infty} \lesssim |\rho|.
@@ -724,56 +804,6 @@ So by Proposition \ref{crandall}(\ref{crandall linfinity}) and the fact that $B$
 \begin{definition}
 The limiting $2$-form $F$ in Proposition \ref{existence infinity} is called an \dfn{$\infty$-light form}.
 \end{definition}
-
-\todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
-It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
-By a straightforward modification of the existence theorem, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
-By quantitative uniqueness
-$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
-Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
-$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
-$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Taking $q \to \infty$ we arrive at the conclusion.
-
-We have the following Euler-Lagrange equation for $\infty$-light forms.
-Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-light forms have absolutely best comass}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
-As such, we shall not use it in the sequel, but only include it as a curiosity item.
-
-\begin{proposition}
-Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$. Then
-\begin{equation}\label{infinityMaxwell}
-	F^{ij} \partial_i |F| = 0.
-\end{equation}
-\end{proposition}
-\begin{proof}
-For a covariant $2$-tensor $T$, let $T^{\rm as}$ be its antisymmetrization, and let
-$$f(x, T) := |T^{\rm as}|_{g(x)}.$$
-Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be Coulomb gauge and therefore $C^2$.
-Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
-By the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001},
-\begin{equation}\label{ELA}
-	\left\langle \frac{\partial f}{\partial T}(x, \nabla A(x)), \dif (f(x, \nabla A(x))) \right\rangle = 0.
-\end{equation}
-Now
-$$\dif(f(x, \nabla A(x))) = \dif |\dif A(x)|$$
-and 
-$$\frac{\partial f}{\partial T}(x, \nabla A(x)) = \frac{\nabla A(x)^{\rm as}}{|\nabla A(x)^{\rm as}|} = \frac{\dif A(x)}{|\dif A(x)|}$$
-we conclude the claim after multiplying both sides of (\ref{ELA}) by $|\dif A|$.
-\end{proof}
-
-\begin{corollary}
-Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$, and $N$ is a surface whose normal vector field is annihilated by $F$.
-Then $N$ is a minimal surface.
-\end{corollary}
-\begin{proof}
-Let $V$ be a tangent vector field to $N$. Then $V(|F|) = 0$, by (\ref{infinityMaxwell}).
-Therefore $|F|$ is constant along $N$, and so $F$ is a constant times the area form $\star \normal_N^\flat$ along $N$.
-So there are constant real numbers $c_1, c_2$ such that the mean curvature $H_N$ satisfies
-\begin{align*}
-H_N &= \tr(\nabla \normal_N^\flat) = c_1 \dif^* \star F = c_2 \dif F = 0. \qedhere
-\end{align*}
-\end{proof}
 
 
 %%%%%%%%%%%%%%%%%%%%
@@ -840,6 +870,58 @@ $$|\dif u| = (X, \dif u).$$
 Therefore (\ref{1 extremality}) holds, and since $\dif F = 0$ implies $\nabla \cdot X = 0$, we conclude from \cite{Mazon14} that $u$ is $1$-harmonic.
 \end{proof}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The \texorpdfstring{$\infty$-light equation}{infinity-light equation}}
+We have the following Euler-Lagrange equation for $\infty$-light forms.
+Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-light forms have absolutely best comass}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
+As such, we shall not use it in the sequel, but only include it as a curiosity item.
+
+
+\todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
+It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
+By a straightforward modification of the existence theorem, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
+By quantitative uniqueness
+$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
+Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
+$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
+$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+Taking $q \to \infty$ we arrive at the conclusion that $F$ has absolutely best comass.
+
+\begin{proposition}
+Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$. Then
+\begin{equation}\label{infinityMaxwell}
+	F^{ij} \partial_i |F| = 0.
+\end{equation}
+\end{proposition}
+\begin{proof}
+For a covariant $2$-tensor $T$, let $T^{\rm as}$ be its antisymmetrization, and let
+$$f(x, T) := |T^{\rm as}|_{g(x)}.$$
+Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be Coulomb gauge and therefore $C^2$.
+Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
+By the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001},
+\begin{equation}\label{ELA}
+	\left\langle \frac{\partial f}{\partial T}(x, \nabla A(x)), \dif (f(x, \nabla A(x))) \right\rangle = 0.
+\end{equation}
+Now
+$$\dif(f(x, \nabla A(x))) = \dif |\dif A(x)|$$
+and 
+$$\frac{\partial f}{\partial T}(x, \nabla A(x)) = \frac{\nabla A(x)^{\rm as}}{|\nabla A(x)^{\rm as}|} = \frac{\dif A(x)}{|\dif A(x)|}.$$
+We conclude the claim after multiplying both sides of (\ref{ELA}) by $|\dif A|$.
+\end{proof}
+
+\begin{corollary}
+Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$, and $N$ is a surface whose normal vector field is annihilated by $F$.
+Then $N$ is a minimal surface.
+\end{corollary}
+\begin{proof}
+Let $V$ be a tangent vector field to $N$. Then $V(|F|) = 0$, by (\ref{infinityMaxwell}).
+Therefore $|F|$ is constant along $N$, but $F$ is a continuous section of the area bundle of $N$, which is a real line bundle.
+It follows that $F$ is constant along $N$, and $F/|F|$ is the area form on $N$.
+In other words, $N$ is calibrated by $F$, and the claim follows from (\ref{calibrated surfaces are minimal}).
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%%%
 
 \section{The maximum comass locus}
@@ -850,7 +932,7 @@ Let $F$ be a form of best comass.
 The \dfn{maximum comass locus} is the set $\{L(F, \cdot) = L(F)\}$.
 \end{definition}
 
-By Proposition \ref{crandall}(\ref{crandall usc}) and the compactness of $M$, the maximum comass locus is a nonempty closed subset of $M$.
+By Proposition \ref{crandall usc} and the compactness of $M$, the maximum comass locus is a nonempty closed subset of $M$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{The calibrated lamination}
@@ -1016,7 +1098,8 @@ Then by H\"older's inequality and Lemma \ref{MCL contains Thurston lemma},
 = \lim_{p \to \infty} \int_U \star |k_p F_p|^p = 0.
 \end{align*}
 Since $\dif u$ is the Ruelle-Sullivan current for the Thurston lamination $\lambda$, $\lambda$ is contained in the best comass locus of $F$. 
-In particular, if $N$ is a leaf of $\lambda$, then the pullback of $F/L$ is, by (\ref{1 extremality}), equal to $\star \normal_N^\flat$, which is the area form of $N$.
+Moreover, if $N$ is a leaf of $\lambda$, then the restriction of $F/L$ is, by (\ref{1 extremality}), equal to $\star \normal_N^\flat$, which is the area form of $N$.
+In other words, $F/L$ calibrates $N$.
 \end{proof}
 
 
@@ -1038,9 +1121,11 @@ If $\lambda$ is a measured oriented lamination, then we denote by $[\lambda] \in
 Fix the $\infty$-light form $F$ representing $\rho$, and let $u$ be its $1$-harmonic conjugate.
 
 We first prove $K \leq L$.
-Let $\lambda$ be a measured oriented lamination; then, since $F$ represents $\rho$,
-$$\langle \rho, [\lambda]\rangle = \int_M F \wedge T_\lambda \leq \int_M \star |F| \cdot |T_\lambda| \leq \|F\|_{L^\infty} \int_M \star |T_\lambda|.$$
-By Proposition \ref{crandall}(\ref{crandall linfinity}), $\|F\|_{L^\infty} = L$; by definition, $\int_M \star |T_\lambda| = |\lambda|$.
+Let $\lambda$ be a measured oriented lamination; then, since $F$ represents $\rho$ and the Ruelle-Sullivan current $T_\lambda$ represents $[\lambda]$,
+$$\langle \rho, [\lambda]\rangle = \int_M F \wedge T_\lambda.$$
+Let $\mu_\lambda$ be the transverse measure to $\lambda$ and $\mathscr L_\lambda$ the space of leaves of $\lambda$; then, by definition of $T_\lambda$ and the definition of comass,
+$$\int_M F \wedge T_\lambda = \int_{\mathscr L_\lambda} \int_N F \dif \mu_\lambda(N) \leq L(F) \int_{\mathscr L_\lambda} |N| \dif \mu_\lambda(N) = L(F) |\lambda|.$$
+By Proposition \ref{crandall}(\ref{crandall linfinity}), $F$ has best comass $L(F) = L$.
 Since $\lambda$ was arbitrary, it holds that $K \leq L$.
 
 Let $\lambda$ be the Thurston lamination, so $T_\lambda = \dif u$.
