@@ -90,9 +90,9 @@
 \newtheorem{mainthm}{Theorem}
 \renewcommand{\themainthm}{\Alph{mainthm}}
 
-% \newtheorem{claim}{Claim}[theorem]
-% \renewcommand{\theclaim}{\thetheorem\Alph{claim}}
-\newtheorem*{claim}{Claim}
+\newtheorem{claim}{Claim}[theorem]
+\renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+% \newtheorem*{claim}{Claim}
 
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
@@ -557,8 +557,124 @@ Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$, w
 \end{equation}
 where $\dif t$ is the disintegration of the Riemannian measure with respect to $\lambda_{\eta, \varepsilon}$.
 \end{lemma}
+\begin{proof}
+To fix notation, define for any closed $2$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
+$$A(G, \eta, \varepsilon) := \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \eta + t\eta^\sharp, \varepsilon}} G\right] \dif t.$$
+Also let 
+$$\Pi_\eta: T' B_\varepsilon(x) \wedge T' B_\varepsilon(x) \to T' \lambda_{\eta, \varepsilon} \wedge T' \lambda_{\eta, \varepsilon}$$
+be the projection from the bundle of antisymmetric $2$-tensors on $B_\varepsilon(x)$ to those which are cotangent to $\lambda_{\eta, \varepsilon}$.
+Thus, if $G$ and $P := P_{\ker \eta + t\eta^\sharp, \varepsilon}$ are cooriented, then
+\begin{equation}\label{cooriented integral is area integral of norm}
+	\int_P G = \int_P |\Pi_\eta G| \dif A
+\end{equation}
+where $\dif A$ is the area element on the leaves of the foliation.
 
-We defer the proof of Lemma \ref{PLDT} to \S\ref{proof of PLDT}, as it is rather technical.
+\begin{claim}
+Lemma \ref{PLDT} holds if $F$ is continuous and everywhere nonzero, and $\xi := \star F/F$.
+\end{claim}
+\begin{proof}[Proof of claim]
+For $\varepsilon > 0$, $\xi$ is conormal to $P_{\ker \xi, \varepsilon}$, and hence $\lambda_{\xi, \varepsilon}$, at $x$.
+Thus, by definition of $\xi$, $\Pi_\xi F(x) = F(x)$, so by continuity of $F$,
+\begin{equation}\label{continuous forms are almost their projections}
+	\|\Pi_\xi F - F\|_{C^0(B_\varepsilon(x))} \ll 1
+\end{equation}
+as $\varepsilon \to 0$.
+By (\ref{cooriented integral is area integral of norm}), the fact that the Hodge star coorients $F$ and $\xi$, and Fubini's theorem,
+\begin{align*}
+A(F, \xi, \varepsilon)
+&= \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi F| \dif A \dif t
+= \dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|.
+\end{align*}
+By (\ref{continuous forms are almost their projections}) and the fact that $|F|$ is continuous (so $x$ is a Lebesgue point of $|F|$),
+\begin{align*}
+\dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|
+&= \dashint_{B_\varepsilon(x)} \star |F| + o(1) = |F(x)| + o(1).
+\end{align*}
+Taking the limit $\varepsilon \to 0$, we deduce (\ref{plaquette LDT}) for $x$.
+\end{proof}
+
+Now let $F \in L^\infty(M, Z^2)$, and split $M$ into measurable sets $M = \{F \neq 0\} \sqcup \{F = 0\}$.
+
+\begin{claim}
+Lemma \ref{PLDT} holds on almost all of $\{F = 0\}$ for any measurable section $\xi$ of the cosphere bundle of $M$.
+\end{claim}
+\begin{proof}[Proof of claim]
+We bound using (\ref{cooriented integral is area integral of norm}) and Fubini's theorem
+$$|A(F, \xi(x), \varepsilon)| \leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |F| \dif A \dif t = \dashint_{B_\varepsilon(x)} \star |F|.$$
+Almost every $x$ such that $F(x) = 0$ is a Lebesgue point of $|F|$, and for such $x$,
+$$0 \leq \limsup_{\varepsilon \to 0} |A(F, \xi(x), \varepsilon)| \leq \lim_{\varepsilon \to 0} \dashint_{B_\varepsilon(x)} \star |F| = |F(x)| = 0.$$
+This implies (\ref{plaquette LDT}) on almost all of $\{F \neq 0\}$.
+\end{proof}
+
+So we may assume that $F(x) \neq 0$ almost everywhere.
+Let $\xi := \star F/|F|$.
+Let $G$ be a continuous, nowhere zero, closed $2$-form to be chosen later, and $\eta := \star G/|G|$.
+
+\begin{claim}
+For every $\alpha > 0$,
+$$\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\}\right| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
+\end{claim}
+\begin{proof}[Proof of claim]
+We split up
+\begin{align*}
+|A(F, \xi(x), \varepsilon) - |F(x)||
+&\leq |A(F, \xi(x), \varepsilon) - A(G, \xi(x), \varepsilon)| + |A(G, \xi(x), \varepsilon) - A(G, \eta(x), \varepsilon)| \\
+&\qquad + |A(G, \eta(x), \varepsilon) - |G(x)|| + ||F(x)| - |G(x)||\\
+&=: I_1 + I_2 + I_3 + I_4.
+\end{align*}
+
+To treat $I_1$, we apply (\ref{cooriented integral is area integral of norm}):
+\begin{align*}
+I_1
+&= \left|\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F - G \dif t\right| 
+\leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t.
+\end{align*}
+By Fubini's theorem, 
+\begin{align*}
+\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t
+&= \dashint_{B_\varepsilon(x)} \star|\Pi_\xi(F - G)| \leq \dashint_{B_\varepsilon(x)} \star |F - G|.
+\end{align*}
+Therefore $I_1 \leq \mathcal M|F - G|(x)$.
+So by the Hardy-Littlewood maximal inequality, for any $\varepsilon > 0$,
+$$|\{I_1 > \alpha\}| \leq |\{\mathcal M |F - G| > \alpha\}| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
+
+Next, to bound $I_2$, we pull back everything into the tangent space at $x$.
+We put tildes over balls or Hodge stars to indicate that they are taken with respect to the euclidean metric on $T_x M$.
+After accepting a correction of size $O(\varepsilon)$ arising from the metric on $M$, 
+$$I_2 = \frac{1}{\varepsilon^d |\Ball^d|} \left|\int_{-\varepsilon}^\varepsilon \left[\int_{\ker \xi + t\xi^\sharp \cap \tilde B_\varepsilon} - \int_{\ker \eta + t\eta^\sharp \cap \tilde B_\varepsilon}\right] G \dif t\right| + O(\varepsilon)$$
+which we can rewrite as
+$$I_2 = \left|\dashint_{\tilde B_\varepsilon(0)} \tilde \star [(G, \xi(x)^\sharp) - (G, \eta(x)^\sharp)]\right| + O(\varepsilon) \leq \dashint_{\tilde B_\varepsilon(0)} \tilde \star |G| \cdot |\xi(x) - \eta(x)| + O(\varepsilon).$$
+Since $G$ is continuous, on $\tilde B_\varepsilon(0)$, $|G| = |G(x)| + o(1)$ as $\varepsilon \to 0$.
+Therefore by the reverse triangle inequality,
+\begin{align*}
+I_2
+&\leq |G(x)| |\xi(x) - \eta(x)| + o(1) \\
+&= |G(x)| \left|\frac{G(x)}{|G(x)|} - \frac{F(x)}{|F(x)|}\right| + o(1) \\
+&= \left|G(x) - \frac{|G(x)|}{|F(x)|} F(x)\right| + o(1) \\
+&= |G(x) - F(x)| + \left|1 - \frac{|G(x)|}{|F(x)|}\right| |F(x)| + o(1)\\
+&= |G(x) - F(x)| + ||F(x)| - |G(x)|| + o(1) \\
+&\leq 2|G(x) - F(x)| + o(1).
+\end{align*}
+By Markov's inequality, we conclude that 
+$$\left|\left\{\liminf_{\varepsilon \to 0} I_2 > \alpha\right\}\right| \leq \left|\left\{|F - G| > \frac{\alpha}{2}\right\}\right| \leq \frac{2\|F - G\|_{L^1}}{\alpha}.$$
+
+Since we already proved the plaquette Lebesgue differentiation theorem for continuous, nonzero $G$, we know that $I_3 = o(1)$, or in other words 
+$$\left|\left\{\liminf_{\varepsilon \to 0} I_3 > \alpha\right\}\right| = 0.$$
+Finally we bound $I_4$ for any $\varepsilon > 0$ using the reverse triangle inequality and Markov's inequality as 
+$$|\{I_4 > \alpha\}| \leq |\{|F(x) - G(x)| > \alpha\}| \leq \frac{\|F - G\|_{L^1}}{\alpha}.$$
+
+Adding up $I_1, \dots, I_4$, we conclude that 
+\begin{align*}
+\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\}\right| \leq \sum_{i=1}^4 \left|\left\{\liminf_{\varepsilon \to 0} I_i > \alpha\right\}\right| &\lesssim \frac{\|F - G\|_{L^1}}{\alpha}. \qedhere 
+\end{align*}
+\end{proof}
+
+We now choose $G$ so that $\|F - G\|_{L^1} \leq \delta \alpha^3$ for any $\delta > 0$, so that (after applying the claim with $\alpha = \frac{1}{m}$)
+$$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 0\right\}\right| \leq \sum_{m=1}^\infty \left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > \frac{1}{m}\right\}\right| \lesssim \sum_{m=1}^\infty \frac{\delta}{m^2} \lesssim \delta.$$
+Taking $\delta \to 0$, we conclude Lemma \ref{PLDT}.
+\end{proof}
+
+
 As a consequence of the plaquette Lebesgue differentiation theorem, we obtain an analogue for the comass of a familiar result about the Lipschitz seminorm \cite[Lemma 4.3]{Crandall2008}.
 
 \begin{proposition}\label{crandall}
@@ -631,120 +747,7 @@ Therefore the inequalities collapse, proving (\ref{crandall linfinity}).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Proof of the plaquette Lebesgue differentiation theorem}\label{proof of PLDT}
 
-To fix notation, define for any closed $2$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
-$$A(G, \eta, \varepsilon) := \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \eta + t\eta^\sharp, \varepsilon}} G\right] \dif t.$$
-Also let 
-$$\Pi_\eta: T' B_\varepsilon(x) \wedge T' B_\varepsilon(x) \to T' \lambda_{\eta, \varepsilon} \wedge T' \lambda_{\eta, \varepsilon}$$
-be the projection from the bundle of antisymmetric $2$-tensors on $B_\varepsilon(x)$ to those which are cotangent to $\lambda_{\eta, \varepsilon}$.
-Thus, if $G$ and $P := P_{\ker \eta + t\eta^\sharp, \varepsilon}$ are cooriented, then
-\begin{equation}\label{cooriented integral is area integral of norm}
-	\int_P G = \int_P |\Pi_\eta G| \dif A
-\end{equation}
-where $\dif A$ is the area element on the leaves of the foliation.
 
-\begin{lemma}
-Lemma \ref{PLDT} holds if $F$ is continuous and everywhere nonzero, and $\xi := \star F/F$.
-\end{lemma}
-\begin{proof}
-For $\varepsilon > 0$, $\xi$ is conormal to $P_{\ker \xi, \varepsilon}$, and hence $\lambda_{\xi, \varepsilon}$, at $x$.
-Thus, by definition of $\xi$, $\Pi_\xi F(x) = F(x)$, so by continuity of $F$,
-\begin{equation}\label{continuous forms are almost their projections}
-	\|\Pi_\xi F - F\|_{C^0(B_\varepsilon(x))} \ll 1
-\end{equation}
-as $\varepsilon \to 0$.
-By (\ref{cooriented integral is area integral of norm}), the fact that the Hodge star coorients $F$ and $\xi$, and Fubini's theorem,
-\begin{align*}
-A(F, \xi, \varepsilon)
-&= \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi F| \dif A \dif t
-= \dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|.
-\end{align*}
-By (\ref{continuous forms are almost their projections}) and the fact that $|F|$ is continuous (so $x$ is a Lebesgue point of $|F|$),
-\begin{align*}
-\dashint_{B_\varepsilon(x)} \star |\Pi_\xi F|
-&= \dashint_{B_\varepsilon(x)} \star |F| + o(1) = |F(x)| + o(1).
-\end{align*}
-Taking the limit $\varepsilon \to 0$, we deduce (\ref{plaquette LDT}) for $x$.
-\end{proof}
-
-Now let $F \in L^\infty(M, Z^2)$, and split $M$ into measurable sets $M = \{F \neq 0\} \sqcup \{F = 0\}$.
-
-\begin{lemma}
-Lemma \ref{PLDT} holds on almost all of $\{F = 0\}$ for any measurable section $\xi$ of the cosphere bundle of $M$.
-\end{lemma}
-\begin{proof}
-We bound using (\ref{cooriented integral is area integral of norm}) and Fubini's theorem
-$$|A(F, \xi(x), \varepsilon)| \leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |F| \dif A \dif t = \dashint_{B_\varepsilon(x)} \star |F|.$$
-Almost every $x$ such that $F(x) = 0$ is a Lebesgue point of $|F|$, and for such $x$,
-$$0 \leq \limsup_{\varepsilon \to 0} |A(F, \xi(x), \varepsilon)| \leq \lim_{\varepsilon \to 0} \dashint_{B_\varepsilon(x)} \star |F| = |F(x)| = 0.$$
-This implies (\ref{plaquette LDT}) on almost all of $\{F \neq 0\}$.
-\end{proof}
-
-So we may assume that $F(x) \neq 0$ almost everywhere.
-Let $\xi := \star F/|F|$.
-Let $G$ be a continuous, nowhere zero, closed $2$-form to be chosen later, and $\eta := \star G/|G|$.
-
-\begin{lemma}
-There exists $G$ such that for every $\alpha > 0$,
-$$\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\}\right| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
-\end{lemma}
-\begin{proof}
-We split up
-\begin{align*}
-|A(F, \xi(x), \varepsilon) - |F(x)||
-&\leq |A(F, \xi(x), \varepsilon) - A(G, \xi(x), \varepsilon)| + |A(G, \xi(x), \varepsilon) - A(G, \eta(x), \varepsilon)| \\
-&\qquad + |A(G, \eta(x), \varepsilon) - |G(x)|| + ||F(x)| - |G(x)||\\
-&=: I_1 + I_2 + I_3 + I_4.
-\end{align*}
-
-To treat $I_1$, we apply (\ref{cooriented integral is area integral of norm}):
-\begin{align*}
-I_1
-&= \left|\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F - G \dif t\right| 
-\leq \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t.
-\end{align*}
-By Fubini's theorem, 
-\begin{align*}
-\frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} |\Pi_\xi(F - G)| \dif A \dif t
-&= \dashint_{B_\varepsilon(x)} \star|\Pi_\xi(F - G)| \leq \dashint_{B_\varepsilon(x)} \star |F - G|.
-\end{align*}
-Therefore $I_1 \leq \mathcal M|F - G|(x)$.
-So by the Hardy-Littlewood maximal inequality, for any $\varepsilon > 0$,
-$$|\{I_1 > \alpha\}| \leq |\{\mathcal M |F - G| > \alpha\}| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
-
-Next, to bound $I_2$, we pull back everything into the tangent space at $x$.
-We put tildes over balls or Hodge stars to indicate that they are taken with respect to the euclidean metric on $T_x M$.
-After accepting a correction of size $O(\varepsilon)$ arising from the metric on $M$, 
-$$I_2 = \frac{1}{\varepsilon^d |\Ball^d|} \left|\int_{-\varepsilon}^\varepsilon \left[\int_{\ker \xi + t\xi^\sharp \cap \tilde B_\varepsilon} - \int_{\ker \eta + t\eta^\sharp \cap \tilde B_\varepsilon}\right] G \dif t\right| + O(\varepsilon)$$
-which we can rewrite as
-$$I_2 = \left|\dashint_{\tilde B_\varepsilon(0)} \tilde \star [(G, \xi(x)^\sharp) - (G, \eta(x)^\sharp)]\right| + O(\varepsilon) \leq \dashint_{\tilde B_\varepsilon(0)} \tilde \star |G| \cdot |\xi(x) - \eta(x)| + O(\varepsilon).$$
-Since $G$ is continuous, on $\tilde B_\varepsilon(0)$, $|G| = |G(x)| + o(1)$ as $\varepsilon \to 0$.
-Therefore by the reverse triangle inequality,
-\begin{align*}
-I_2
-&\leq |G(x)| |\xi(x) - \eta(x)| + o(1) \\
-&= |G(x)| \left|\frac{G(x)}{|G(x)|} - \frac{F(x)}{|F(x)|}\right| + o(1) \\
-&= \left|G(x) - \frac{|G(x)|}{|F(x)|} F(x)\right| + o(1) \\
-&= |G(x) - F(x)| + \left|1 - \frac{|G(x)|}{|F(x)|}\right| |F(x)| + o(1)\\
-&= |G(x) - F(x)| + ||F(x)| - |G(x)|| + o(1) \\
-&\leq 2|G(x) - F(x)| + o(1).
-\end{align*}
-By Markov's inequality, we conclude that 
-$$\left|\left\{\liminf_{\varepsilon \to 0} I_2 > \alpha\right\}\right| \leq \left|\left\{|F - G| > \frac{\alpha}{2}\right\}\right| \leq \frac{2\|F - G\|_{L^1}}{\alpha}.$$
-
-Since we already proved the plaquette Lebesgue differentiation theorem for continuous, nonzero $G$, we know that $I_3 = o(1)$, or in other words 
-$$\left|\left\{\liminf_{\varepsilon \to 0} I_3 > \alpha\right\}\right| = 0.$$
-Finally we bound $I_4$ for any $\varepsilon > 0$ using the reverse triangle inequality and Markov's inequality as 
-$$|\{I_4 > \alpha\}| \leq |\{|F(x) - G(x)| > \alpha\}| \leq \frac{\|F - G\|_{L^1}}{\alpha}.$$
-
-Adding up $I_1, \dots, I_4$, we conclude that 
-\begin{align*}
-\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\}\right| \leq \sum_{i=1}^4 \left|\left\{\liminf_{\varepsilon \to 0} I_i > \alpha\right\}\right| &\lesssim \frac{\|F - G\|_{L^1}}{\alpha}. \qedhere 
-\end{align*}
-\end{proof}
-
-We now choose $G$ so that $\|F - G\|_{L^1} \leq \alpha^2$ and take $\alpha \to 0$ to conclude that
-$$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 0\right\}\right| = 0$$
-as desired.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$\infty$-light forms}{Infinity-light forms}}
