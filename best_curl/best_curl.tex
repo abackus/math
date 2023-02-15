@@ -149,37 +149,112 @@
 \section{Introduction}
 In this paper we study the problem of minimization of the \dfn{comass}
 \begin{equation}\label{comass}
-L(F) := \sup_{\sigma \in \Chain_2(M)} \frac{1}{|\sigma|} \int_\sigma F
+L(F) := \sup_{\sigma \in \Chain_{d - 1}(M)} \frac{1}{|\sigma|} \int_\sigma F
 \end{equation}
-of a closed $2$-form in a Riemannian $3$-fold $M$, subject to a constraint on the cohomology of $F$.
-Here $\Chain_2(M)$ denotes the space of oriented $2$-chains in $M$, and $|\sigma|$ is the area of $\sigma$.
-This problem is the analogue on $3$-manifolds of the problem of finding a best Lipschitz map on a surface.
+of a closed $d-1$-form in a closed Riemannian $d$-fold $M$, subject to a constraint on the cohomology of $F$.
+Here $\Chain_{d - 1}(M)$ denotes the space of oriented $d - 1$-chains in $M$, and $|\sigma|$ is the $d-1$-area of $\sigma$.
 
-Sayeth Thurston \cite[Abstract]{Thurston98}:
+Many of our results shall be local, and so one could just as well view much of this paper as concerned with the Dirichlet problem for minimizers of (\ref{comass}).
+To be more concrete, one could view the results of this paper as concerned with properties with vector fields $X$ on a domain in $\RR^3$ which minimize $\|\nabla \times X\|_{L^\infty}$ subject to a Dirichlet condition.
+However, because of the topological applications that we will elaborate upon below, we will stick to the more abstract formulation of the problem at hand, namely that of forms of best comass:
+
+\begin{definition}
+A closed $d-1$-form $F$ has \dfn{best comass} if it minimizes its comass (\ref{comass}) in its cohomology class.
+\end{definition}
+
+Forms of best comass may be viewed as generalizations of (derivatives of) best Lipschitz maps from a surface to $\Sph^1$, which were recently studied by Daskalopolous--Uhlenbeck \cite{daskalopoulos2020transverse}.
+Daskalopolous--Uhlenbeck were motivated by Thurston's asymmetric metric on Teichm\"uller space \cite{Thurston98}, which we now recall.
+
+\subsection{Review of Thurston's Teichm\"uller theory}
+Given a closed oriented surface $S$, we view $S$ as the underlying topological space of two hyperbolic manifolds $M, N$.
+Thurston considers \dfn{best Lipschitz} maps $f: M \to N$ -- that is, maps $f: M \to N$ which are homotopic to the identiy on $S$ and which minimize the Lipschitz constant in their homotopy class. 
+The best Lipschitz constant is denoted $L$, and \dfn{Thurston's asymmetric metric} is the Finsler metric $\log L$ on the Teichm\"uller space of hyperbolic manifolds with underlying topological space $S$.
+There is another characterization of Thurston's asymmetric metric, which originally motivated Thurston's work on Teichm\"uller theory \cite[Theorem 8.5]{Thurston98}:
+
+\begin{theorem}[Thurston]
+Let $M, N$ be closed hyperbolic surfaces, with underlying topological space $S$.
+Given a nontrivial homotopy class of loops $\gamma \in \pi_1(S) \setminus \{0\}$, let $\gamma_M$ be a geodesic representative of $\gamma$ in $M$.
+Let
+$$K := \sup_{\gamma \in \pi_1(S) \setminus \{0\}} \frac{|\gamma_N|}{|\gamma_M|}.$$
+Then $L = K$.
+\end{theorem}
+
+Thurston's proof of $L = K$ is purely one of geometric topology.
+However, solutions of the $\infty$-Laplace equation 
+$$\nabla^2_{\nabla v, \nabla v} v = 0$$
+are best Lipschitz \cite{Crandall2008}, so $L$ can be viewed as concerned with the $\infty$-Laplacian.
+Dually, $K$ can be viewed as a maximization over measured geodesic laminations (rather than geodesics), which are naturally identified with solutions of the $1$-Laplace equation \todo{cite me}
+$$\dif^* \left(\frac{\dif u}{|\dif u|}\right) = 0.$$
+Thus it is natural to think that there should be a PDE proof of $L = K$.
+Thurston himself conjectured this \cite[Abstract]{Thurston98}:
+
 \begin{quote}
-I currently think that a characterization of minimal stretch maps should be possible in a considerably more general context ... and it should be feasible with a simpler proof based on more general principles -- in particular, the max flow min cut principle, convexity, and $L^0 \leftrightarrow L^\infty$ duality.
+I currently think that a characterization of minimal stretch\footnote{that is, best Lipschitz} maps should be possible in a considerably more general context ... and it should be feasible with a simpler proof based on more general principles -- in particular, the max flow min cut principle, convexity, and $L^0 \leftrightarrow L^\infty$\footnote{Here, $L^0$ denotes the space of Radon measures. However, the natural norm to put on $L^0$ is the total variation norm, which scales like $L^1$; this is why $L^0$ can be viewed as ``dual'' in some sense to $L^\infty$.} duality.
 \end{quote}
 
-Let $3 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$.
-We call a closed $2$-form \dfn{$p$-light} if it minimizes the $L^p$ norm, among all cohomologous forms.
-We say that it has \dfn{best comass} if it minimizes the comass (\ref{comass}).
-This problem is one of convex optimization, so it has a dual problem, namely the $q$-Laplacian.
-Our first main theorem is a combination of Propositions \ref{existence infinity} and \ref{existence 1}.
+Inspired by Thurston's conjecture, Daskalopolous--Uhlenbeck used PDE methods to prove a version of $L = K$ for maps from a surface to $\Sph^1$ \cite{daskalopoulos2020transverse} and then generalized these methods to prove $L = K$ for maps between surfaces \cite{daskalopoulos2022,daskalopoulos2023}.
 
-\begin{mainthm}
-Let $\rho \in H^2(M, \RR)$ be a cohomology class.
+%%%%%%%%%%%%%%
+
+\subsection{Main results}
+We seek to apply the methods of Daskalopolous--Uhlenbeck's proof of $L = K$ \cite{daskalopoulos2020transverse, daskalopoulos2022, daskalopoulos2023} to prove a version of $L = K$ for forms of best comass.
+We will especially stress the role of the ``max flow min cut principle'' alluded to by Thurston.
+
+\subsubsection{Existence of $\infty$-light forms}
+In \cite{daskalopoulos2020transverse}, Daskalopolous--Uhlenbeck view $\infty$-harmonic functions as a special kind of best Lipschitz functions.
+So we begin by constructing a privileged class of forms of best comass, called ``$\infty$-light forms'', which are analogous to $\infty$-harmonic functions.
+
+Fix a closed Riemannian manifold $M$ of dimension $d$, let $d < p < \infty$, and $\frac{1}{p} + \frac{1}{q} = 1$.
+We call a closed $2$-form $F$ \dfn{$p$-light} if it minimizes the $L^p$ norm, among all cohomologous forms.
+We call such forms ``light'' to emphasize that they are a minimizing sequence for the comass (thus ``not heavy" or ``not massive'').
+Given a $p$-light form, the $\pi_1(M)$-equivariant function $u$ on the universal cover such that
+$$\dif u = (-1)^{d - 1} |F|^{p - 2} \star F$$
+is $q$-harmonic -- in other words, $u$ is a solution of the $q$-Laplace equation 
+$$\dif^*(|\dif u|^{q - 2} \dif u) = 0.$$
+
+A $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ on the universal cover is \dfn{$1$-harmonic} if it is a minimizer of its total variation 
+$$\int_M \star |\dif u| := \sup_{\|\varphi\|_{C^0} \leq 1} \int_M \dif u \wedge \varphi$$
+among all perturbations of $u$ by a $\pi_1(M)$-invariant function.
+Equivalently, $u$ is $1$-harmonic if 
+$$\dif^* \left(\frac{\dif u}{|\dif u|}\right) = 0$$
+in the very weak sense that there exists an $L^\infty$ divergence-free vector field $X$ such that $\|X\|_{L^\infty} \leq 1$ and
+$$|\dif u| = (\dif u, X)$$
+in the sense of Radon measures \cite{Mazon14}.
+
+\begin{mainthm}\label{existence of infinity light forms}
+Let $\rho \in H^{d - 1}(M, \RR)$ be a cohomology class.
 Let $(F_p, u_q)$ be the family of dual pairs of $p$-light forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$.
-Then there exists a pair $(F, u)$ such that as $p \to \infty$, $F_p \to F$ weakly in $L^r$ for any $3 < r < \infty$, and $u_q \to u$ weakly in $BV$.
+Then there exists a pair $(F, u)$ such that as $p \to \infty$, $F_p \to F$ weakly in $L^r$ for any $d < r < \infty$, and $u_q \to u$ weakly in $BV$.
 Moreover, $F$ has best comass in $\rho$, $u$ is $1$-harmonic, and we have the duality relation 
 \begin{equation}\label{max flow mean cut}
-L|\dif u| = \langle \dif u, \star F\rangle,
+L|\dif u| = \langle \dif u, \star F\rangle
 \end{equation}
-$|\dif u|$-almost everywhere, where $L$ is the best comass constant.
+in the sense of Radon measures, where $L$ is the best comass constant.
 \end{mainthm}
 
-We call $F$ an \dfn{$\infty$-light form}.
-Since (\ref{max flow mean cut}) asserts a form of convex duality between $\infty$-light forms and $1$-harmonic functions, we view it as the analogue of the max flow min cut principle alluded to by Thurston.
+This is a combination of Propositions \ref{existence infinity} and \ref{existence 1}, and allows us to take limits as $p \to \infty$, $q \to 1$.
 
+\begin{definition}
+We call the best comass form $F$ in Theorem \ref{existence of infinity light forms} an \dfn{$\infty$-light form}.
+\end{definition}
+
+Since (\ref{max flow mean cut}) asserts a form of convex duality between $\infty$-light forms and $1$-harmonic functions, we view it as the analogue of the max flow min cut principle alluded to by Thurston.
+We elaborate on this point in Appendix \ref{Max Flow Min Cut}.
+
+Most of the technical work in this paper are preliminaries for the proof of Theorem \ref{existence of infinity light forms}.
+To be precise, we have two technical preliminaries:
+\begin{enumerate}
+\item We need to identify the comass with $\|F\|_{L^\infty}$, just as one needs to identify the Lipschitz constant with the $L^\infty$ norm of the derivative in \cite{Crandall2008,daskalopoulos2020transverse}. For continuous $F$, this is clear; in general, we have to reduce to the continuous case using the Hardy-Littlewood maximal inequality.
+\item It is easy to deduce an analogue of (\ref{max flow mean cut}) for $q$-harmonic functions where $q > 1$, but it is not so easy to take the limit as $q \to 1$. To justify taking the limit, we avoid working directly with $q$-harmonic functions, and instead work with solutions of the heat equation whose Cauchy data is $q$-harmonic.
+\end{enumerate}
+We should stress that we do not want to work with the $L^\infty$ norm $\|F\|_{L^\infty}$ directly.
+The reason is that we are interested at the points where $F$ attains its comass, but $\{|F| = \|F\|_{L^\infty}\}$ is just a measurable set, which may even be Lebesgue null.
+Thus on the level of measure theory, $\{|F| = \|F\|_{L^\infty}\}$ is indistinguishable from the empty set!
+However, as in the case of Lipschitz functions \cite{Crandall2008,daskalopoulos2020transverse}, one can define the set of points where $F$ attains its comass to be a certain closed set which is invariant under modification of $F$ on a Lebesgue null set.
+
+%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Forms of best comass calibrate Thurston laminations}
 A surface $N \subseteq M$ is \dfn{calibrated} by a closed $2$-form $F$ if $\|F\|_{L^\infty} \leq 1$ and the pullback of $F$ to $N$ is the area form on $N$ \cite{Harvey82}.
 In that case, the mean curvature of $N$ is 
 \begin{equation}\label{calibrated surfaces are minimal}
@@ -189,35 +264,111 @@ so that $N$ is minimal.
 In particular, if a lamination $\lambda$ is calibrated by $F$ (in the sense that every leaf of $\lambda$ is calibrated), then $\lambda$ is minimal.
 
 If $F$ calibrates a surface $N$, then it is clear from the definitions that $N$ is contained in the locus on which $F$ attains its comass.
-If $F$ is a continuous form of best comass, then $F/L$ calibrates a minimal lamination \cite{bangert_cui_2017}.
-On the other hand, every $1$-harmonic function $u$ defines a minimal lamination $\lambda$ with Ruelle-Sullivan current $\dif u$ \todo{Cite me}.
+If $F$ is a continuous form of best comass, and $L$ is the best comass constant, then $F/L$ calibrates a minimal lamination \cite{bangert_cui_2017}.
+On the other hand, if $M$ is a space form of dimension $2 \leq d \leq 4$, then every $1$-harmonic function $u$ defines a minimal lamination $\lambda$ with Ruelle-Sullivan current $\dif u$ \todo{Cite me}.
 The lamination $\lambda$ induced by the $1$-harmonic conjugate of an $\infty$-light form $F$ plays the role of Thurston's canonical lamination \cite{Thurston98}, so we call it a \dfn{Thurston lamination} associated to $[F]$.
-Our next theorem, Theorem \ref{MCL contains Thurston}, is similar to \cite[Theorem 5.1]{bangert_cui_2017}, but it does not require that $F$ is continuous,shows that the lamination $\lambda$ calibrated by a form of best comass $F$ as only dependent on the cohomology class $[F]$, and identifies $\lambda$ as a familiar object that was already studied in \cite{daskalopoulos2020transverse}.
+
+Our next theorem is similar to \cite[Theorem 5.1]{bangert_cui_2017}.
+However, we do not require that $F$ is continuous, and we identify the calibrated lamination $\lambda$ as a familiar object -- it is Thurston's canonical lamination!
 
 \begin{mainthm}
-Let $\lambda$ be a Thurston lamination associated to $\rho \in H^2(M, \RR)$, and let $F$ be a form of best comass representing $\rho$.
+Suppose that $M$ is a closed space form of dimension $2 \leq d \leq 4$.
+Let $\lambda$ be a Thurston lamination associated to $\rho \in H^{d - 1}(M, \RR)$, and let $F$ be a form of best comass representing $\rho$.
 Then $F/L$ calibrates $\lambda$. 
 \end{mainthm}
 
-For a measured oriented lamination $\lambda$, we let $[\lambda] \in H_2(M, \RR)$ be the homology class of the associated Ruelle-Sullivan current, and $|\lambda|$ its area -- that is, the mass of the current.
-The next theorem is Theorem \ref{L equals K}, and is an analogue of the $L = K$ theorem of Thurston.
+This is Theorem \ref{MCL contains Thurston}.
+Since the \dfn{best comass locus} where $F$ attains its comass is a well-defined closed set, and in \todo{cite me} we already worked out the details of the proof that $\lambda$ is well-defined, all that is left to do is to show that $\lambda$ is contained in the best comass locus.
+Here we are able to follow the strategy of \cite[\S6]{daskalopoulos2020transverse}: we show that the $q$-harmonic approximations to the $1$-harmonic dual of $F$ are exponentially small away from the best comass locus in the limit $p \to \infty$.
 
-\begin{mainthm}
-Let $\rho \in H^2(M, \RR)$, let $L$ be the best comass constant of $\rho$, and let $K$ be the supremum of $\langle \rho, [\lambda]\rangle/|\lambda|$, taken over all measured oriented laminations $\lambda$.
+%%%%%%%%%%%%%%%%
+\subsubsection{\texorpdfstring{$L = K$}{L equals K}}
+Let $\lambda$ be a measured oriented lamination.
+Then $\lambda$ defines a closed $d-1$-current -- the \dfn{Ruelle-Sullivan current} $T_\lambda$ -- by 
+$$\int_M T_\lambda \wedge \varphi := \int_{\mathscr L_\lambda} \int_N \varphi \dif \mu_\lambda(N).$$
+Here $\mathscr L_\lambda$ is the space of leaves of $\lambda$, and $\mu_\lambda$ is the transverse measure on the space of leaves.
+Since $\lambda$ defines a closed $d-1$-current, it has a homology class $[\lambda] \in H_{d - 1}(M, \RR)$.
+It also has an \dfn{area} $|\lambda|$, which is the total mass of $T_\lambda$:
+$$|\lambda| = \sup_{\|\varphi\|_{C^0} \leq 1} \int_M T_\lambda \wedge \varphi.$$
+
+The next theorem is Theorem \ref{L equals K}, and is an analogue of the $L = K$ theorem of Thurston.
+It is essentially immediate from the above results and the duality statement (\ref{max flow mean cut}).
+
+\begin{mainthm}\label{L is K}
+Suppose that $M$ is a closed space form of dimension $2 \leq d \leq 4$.
+Let $\rho \in H^{d - 1}(M, \RR)$, let $L$ be the best comass constant of $\rho$, and let $K$ be the supremum of $\langle \rho, [\lambda]\rangle/|\lambda|$, taken over all measured oriented laminations $\lambda$.
 Then $L = K$, and the supremum in $K$ is attained by any Thurston lamination for $\rho$.
 \end{mainthm}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A gauge-theoretic interpretation}
+In order to understand the analogy between best comass $2$-forms on threefolds and best Lipschitz functions on surfaces, it is convenient to introduce the formalism of gauge theory.
+We shall not need this in the sequel, but include it for the reader's interest and intuition.
+
+We begin with the $\Sph^1$-valued $L = K$ theorem of Daskalopolous--Uhlenbeck \cite[Theorem 5.8]{daskalopoulos2020transverse}.
+To state it, recall that if $\rho \in H^1(M, \ZZ)$, then $\rho$ defines a morphism of groups
+$$\rho: \pi_1(M) \to \ZZ = \pi_1(\Sph^1)$$
+by the Hurcewiz theorem.
+Since $\Sph^1$ is aspherical, it follows that $H^1(M, \ZZ)$ can be viewed as the space $[M, \Sph^1]$ of homotopy classes of maps $M \to \Sph^1$.
+
+By \cite[\S2.1]{daskalopoulos2020transverse}, if $F$ is a best comass representative of $\rho$, then there exists a map $A: M \to \Sph^1$ such that $F = \dif A$ (and $A$ has homotopy class $\rho$).
+Since $F$ has best comass, $A$ is best Lipschitz.
+There is a gauge ambiguity caused by the symmetry of $\Sph^1$: \cite{daskalopoulos2020transverse} treats two maps $A, A'$ as the same if $A - A'$ is a constant angle.
+Of especial interest among the best Lipschitz maps are the $\infty$-harmonic maps $M \to \Sph^1$, which are obtained by taking the limit of $p$-harmonic functions as $p \to \infty$.
+
+\begin{theorem}[Daskalopolous--Uhlenbeck]
+Let $M$ be a closed hyperbolic surface and $\rho \in H^1(M, \ZZ)$.
+Let $L$ be the best Lipschitz constant of the homotopy class $\rho$.
+Identify $\gamma \in \pi_1(M) \setminus \{0\}$ with its geodesic representative.
+Let
+$$K := \sup_{\gamma \in \pi_1(M) \setminus \{0\}} \frac{\langle \rho, \gamma\rangle}{|\gamma|}.$$
+Then $L = K$.
+\end{theorem}
+
+Since geodesics are dense in the space of measured oriented geodesic laminations, we can replace the supremum in the definition of $K$ with a supremum over measured oriented geodesic laminations; then, since the supremum over measured oriented laminations is clearly attained by a \emph{geodesic} such lamination, we can replace $K$ with 
+$$K = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|}$$
+where $\lambda$ ranges over measured oriented (but possibly nongeodesic) laminations.
+Thus Theorem \ref{L is K} is a generalization of \cite[Theorem 5.8]{daskalopoulos2020transverse}, where we take $d = 2$ and $\rho$ an integral class.
+
+If $d = 3$ or $d = 4$, it is not so clear how to identify $H^{d - 1}(M, \ZZ)$ with a homotopy class of maps.
+However, for $d = 3$ it is natural to view $H^2(M, \ZZ)$ as the space of line bundles on $M$, by identifying a line bundle $\mathscr L_\rho$ with its Chern class $\rho = c_1(\mathscr L)$.
+As such, we fix an integral class $\rho \in H^2(M, \ZZ)$, and let $F$ be a best comass representative of $\rho$.
+Then there locally exists a $1$-form $A$ such that $\dif A = F$.
+As in \cite{daskalopoulos2020transverse}, there is a gauge ambiguity, and we must identify two $1$-forms if they differ by a closed $1$-form.
+
+If $F$ is $\infty$-light, then we can find approximations $A_p$ which solve the \dfn{$p$-Maxwell equation}
+$$\dif^* (|\dif A_p|^{p - 2} \dif A_p) = 0.$$
+The $1$-forms $A_p$ and their limit $A$ can be viewed as global objects, namely (the Christoffel symbols of globally defined) connections on $\mathscr L_\rho$.
+We could call $A$ a \dfn{best curvature} connection, since it minimizes the $L^\infty$ norm of the curvature among all connections on $\mathscr L$.
+
+\todo{Do we want to write down the equivariance relations? They're the same as for a connection, except that it's not true that the differences in the transition functions are integers.}
+
+Since the best comass problem can be viewed as the best curvature problem on a line bundle, it is natural to make the following conjecture, which we shall not address in this paper.
+
+\begin{conjecture}
+For any compact gauge group $\mathbf G$, and $\mathbf G$-bundle $\mathscr E$, there exists a minimizer of the $L^\infty$ norm of the curvature among all connections on $\mathscr E$.
+Moreover, one can find a minimizer by taking suitable weak limits of solutions of the \dfn{$p$-Yang-Mills equation}
+$$\dif_A^* (|\dif A|^{p - 2} \dif A) = 0$$
+where $\dif_A$ is the covariant derivative whose Christoffel symbols are given by $A$. 
+\end{conjecture}
+
+
+
+
+
 %%%%%%%%%%%%%%%%%%%%%
-\subsection{Outline of the paper}
+\subsection{Outline of the paper} \todo{Do this later}
 
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{Notation}
 We write $\Omega^\ell$, $Z^\ell$, and $B^\ell$ for the spaces of $\ell$-forms, closed $\ell$-forms ($\ell$-cocycles), and exact $\ell$-forms ($\ell$-coboundaries) respectively.
-We reserve $H^\ell$ for cohomology and write $W^{s, p}$ for Sobolev spaces.
+We reserve $H^\ell$ for cohomology and write $W^{s, p}$ for Sobolev spaces. \todo{Do this later}
  
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{Acknowledgements}
-George, Karen, Tom Goodwillie, Kaya Ferendo ...
+I would like to thank Georgios Daskalopolous and Karen Uhlenbeck for suggesting this project, providing helpful comments, and providing me with an early draft of the manuscript \cite{daskalopoulos2023} which was a major source of inspiration for this work.
+I also would like to thank Tom Goodwillie, Kaya Ferendo, Tainara Borges, and Haram Ko for helpful discussions.
 
 This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
 
@@ -284,20 +435,23 @@ This research was supported by the National Science Foundation's Graduate Resear
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Best comass and \texorpdfstring{$\infty$-light forms}{infinity-light forms}}
-\subsection{Forms of best comass}
+\section{Comass}
+In this section we study the basic properties of the comass.
+We show that it is well-defined, equals the $L^\infty$ norm, and is attained on a nonempty closed set.
+Throughout, we fix a closed Riemannian manifold $M$ of dimension $d$ and metric $g$.
+
 \begin{definition}
-For a closed $2$-form $F$ and a subdomain $\Omega$, the \dfn{comass} of $F$ in $\Omega$ is
-$$L_\Omega(F) := \sup_{\sigma \in \Chain_2(\Omega)} \frac{1}{|\sigma|} \int_\sigma F.$$
+For a closed $d-1$-form $F$ and a subdomain $\Omega \subseteq M$, the \dfn{comass} of $F$ in $\Omega$ is
+$$L_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{|\sigma|} \int_\sigma F.$$
 We let $L(F) := L_M(F)$.
 \end{definition}
 
-This definition is well-defined if $F$ is continuous, or has a trace along every $2$-simplex.
+The comass $L_\Omega(F)$ is well-defined if $F$ is continuous, or has a trace along every $d - 1$-simplex.
 We use the following proposition to take traces of $F$ whenever $F \in L^\infty$:
 
 \begin{proposition}
-Let $\Delta$ be the standard $d$-simplex, $\tau$ a $d-1$-face of $\Delta$, and $d < p < \infty$.
-Then $F \mapsto \int_\tau F$ extends to a continuous linear functional on $L^p(\Delta, Z^{d - 1})$.
+Let $\Sigma$ be the standard $d$-simplex, $\tau$ a $d-1$-face of $\Sigma$, and $d < p < \infty$.
+Then $F \mapsto \int_\tau F$ extends to a continuous linear functional on $L^p(\Sigma, Z^{d - 1})$.
 Moreover,
 \begin{equation}\label{integral over chain is linfinity}
 	\frac{1}{|\tau|} \int_\tau F \leq \|F\|_{L^\infty}.
@@ -305,9 +459,11 @@ Moreover,
 \end{proposition}
 \begin{proof}
 We first show that $F \mapsto \int_\tau F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
-Let $F, F' \in C^\infty(\Delta, Z^{d - 1})$.
-Since $\Delta$ is contractible, there exist $A, A'$ such that $\dif A = F$ and $\dif A' = F'$, and such that $A, A'$ are in Coulomb gauge (that is, coclosed).
-By elliptic regularity and Sobolev embedding ($p > d$),
+Let $F, F' \in C^\infty(\Sigma, Z^{d - 1})$.
+Since $H^{d - 1}(\Sigma, \RR) = 0$, there exist $A, A'$ such that $\dif A = F$ and $\dif A' = F'$, and such that $A, A'$ are in Coulomb gauge (that is, $\dif^* A = \dif^* A' = 0$).
+Then 
+$$|\Delta (A - A')| = |\dif^* (F - F')| \leq |\nabla (F - F')|,$$
+so by elliptic regularity and Sobolev embedding ($p > d$),
 $$\|A - A'\|_{C^0} \lesssim \|\nabla(A - A')\|_{L^p} \lesssim \|F - F'\|_{L^p}.$$
 So by Stokes' theorem,
 $$\left|\int_\tau F - F'\right| = \left|\int_{\partial \tau} A - A'\right| \lesssim \|A - A'\|_{C^0} \lesssim \|F - F'\|_{L^p}.$$
@@ -324,26 +480,24 @@ Taking $\varepsilon \to 0$ we see that
 \end{align*}
 \end{proof}
 
-In particular, since any $2$-chain $\sigma$ can be written as the sums of $2$-simplices $\tau$ which can then be viewed as faces of contractible $d$-simplices $\Delta$, the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > 3$, and each such integral depends continuously on $F$ in $L^p$.
+In particular, since any $d-1$-chain $\sigma$ can be written as the sums of $d-1$-simplices $\tau$ which can then be viewed as faces of contractible $d$-simplices $\Sigma$, the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
 
 \begin{definition}
-	Let $\rho \in H^2(M, \RR)$ and let $F$ be a closed $2$-form representing $\rho$.
+	Let $\rho \in H^{d - 1}(M, \RR)$ and let $F$ be a closed $d-1$-form representing $\rho$.
 \begin{enumerate}
 	\item We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all $F$ representing $\rho$.
 	\item We say that $F$ has \dfn{absolutely best comass} if it has best comass, and for every small open ball $\Omega$, $F$ is a minimizer of $L_\Omega$ among all closed $2$-forms $B$ with $B|_{\partial \Omega} = F|_{\partial \Omega}$.
 \end{enumerate}
 \end{definition}
 
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Local comass}
 We will be interested in the points at which $F$ attains its comass.
 One could pose this problem as the problem of computing the locus $\{|F| = \|F\|_{L^\infty}\}$.
 However, $F$ is both only defined almost everywhere, and not norm-approximable by smooth functions.
 So as a proxy for $|F|$, which may fail to be defined on a null set, we use the local comass, which is defined everywhere.
 
 \begin{definition}
-The \dfn{local comass} of a closed $2$-form $F$ at $x \in M$ is 
-$$L(F, x) := \limsup_{\varepsilon \to 0} \sup_{\sigma \in \Chain_2(B_\varepsilon(x))} \frac{1}{|\sigma|} \int_\sigma F.$$
+The \dfn{local comass} of a closed $d - 1$-form $F$ at $x \in M$ is 
+$$L(F, x) := \limsup_{\varepsilon \to 0} \sup_{\sigma \in \Chain_{d - 1}(B_\varepsilon(x))} \frac{1}{|\sigma|} \int_\sigma F.$$
 \end{definition}
 
 One has
@@ -354,7 +508,7 @@ $$L(F, x) = \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = \inf_{\varepsilon
 and in particular $L(F, x) \leq L(F)$. Thus we have the following analogue of \cite[Lemma 4.3(a)]{Crandall2008}:
 
 \begin{proposition}
-For $F \in L^\infty(M, Z^2)$, the local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
+For $F \in L^\infty(M, Z^{d - 1})$, the local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
 \end{proposition}
 \begin{proof}
 Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $L(F, x^n) \leq L_{B_r(x)}(F)$ and so
@@ -363,20 +517,20 @@ Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $L(F, x^n) 
 \end{align*}
 \end{proof}
 
-It's convenient to test the local comass against a more restrictive class of $2$-chains.
-For a tangent plane $S \subseteq T_x M$ and $\varepsilon > 0$, let
+It's convenient to test the local comass against a more restrictive class of $d- 1$-chains.
+For a $d-1$-plane $S \subseteq T_x M$ and $\varepsilon > 0$, let
 $$P_{S, \varepsilon} := (\exp_x)_*(S) \cap B_\varepsilon(x).$$
-We refer to $P_{S, \varepsilon}$ as a \dfn{diskette} at scale $\varepsilon$.\footnote{The terminology serves to remind ourselves to how we want to test the $2$-form $F$ against small disks, analogous to how in lattice gauge theory one tests $2$-forms against small squares (or plaques) called plaquettes \cite{Gupta98}.}
+We refer to $P_{S, \varepsilon}$ as a \dfn{diskette} at scale $\varepsilon$.\footnote{The terminology serves to remind ourselves to how we want to test the $d - 1$-form $F$ against small disks, analogous to how in lattice gauge theory one tests $2$-forms against small squares (or plaques) called plaquettes \cite{Gupta98}.}
 
 The utility of diskettes is that, for a covector $\xi \in T_x' M$, we obtain a foliation of the tangent space $T_x M$ into planes, namely $(\ker \xi + t\xi^\sharp)_{t \in \RR}$.
 Pushing forward this foliation by the exponential map, we obtain a foliation
 $$\lambda_{\xi, \varepsilon} := (P_{\ker \xi + t\xi^\sharp, \varepsilon})_{t \in \RR}$$
 of $B_\varepsilon(x)$ into diskettes which are approximately conormal to $\xi$ in the limit $\varepsilon \to 0$.
-Using this foliation and Fubini's theorem, we can turn integrals of $F$ over surfaces, which are Lebesgue null, into integrals over balls, which satisfy the Lebesgue differentiation theorem.
+Using this foliation and Fubini's theorem, we can turn integrals of $F$ over $d-1$-surfaces, which are Lebesgue null, into integrals over balls, which satisfy the Lebesgue differentiation theorem.
 From these considerations and the Hardy-Littlewood maximal inequality, we deduce that diskettes satisfy their own version of the Lebesgue differentiation theorem, at least on average.
 
 \begin{proposition}[diskette Lebesgue differentiation theorem]\label{PLDT}
-Let $F \in L^\infty(M, Z^2)$.
+Let $F \in L^\infty(M, Z^{d - 1})$.
 Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$, which depends measurably on $x$, such that
 \begin{equation}\label{diskette LDT}
 |F(x)| = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F\right] \dif t
@@ -384,11 +538,11 @@ Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$, w
 where $\dif t$ is the disintegration of the Riemannian measure with respect to $\lambda_{\xi, \varepsilon}$.
 \end{proposition}
 
-To set up the proof, we define for any closed $2$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
+To set up the proof, we define for any closed $d - 1$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
 $$A(G, \eta, \varepsilon) := \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \eta + t\eta^\sharp, \varepsilon}} G\right] \dif t.$$
 Also let 
-$$\Pi_\eta: T' B_\varepsilon(x) \wedge T' B_\varepsilon(x) \to T' \lambda_{\eta, \varepsilon} \wedge T' \lambda_{\eta, \varepsilon}$$
-be the projection from the bundle of antisymmetric $2$-tensors on $B_\varepsilon(x)$ to those which are cotangent to $\lambda_{\eta, \varepsilon}$.
+$$\Pi_\eta: T' B_\varepsilon(x)^{\wedge (d - 1)} \to T' \lambda_{\eta, \varepsilon}^{\wedge (d - 1)}$$
+be the projection from the bundle of antisymmetric $d - 1$-tensors on $B_\varepsilon(x)$ to those which are cotangent to $\lambda_{\eta, \varepsilon}$.
 Thus, if $G$ and $P := P_{\ker \eta + t\eta^\sharp, \varepsilon}$ are cooriented, then
 \begin{equation}\label{cooriented integral is area integral of norm}
 	\int_P G = \int_P |\Pi_\eta G| \dif A
@@ -432,7 +586,7 @@ Taking the limit $\varepsilon \to 0$, we deduce (\ref{diskette LDT}) for $x$.
 
 \begin{lemma}\label{PLDT bound mass}
 Suppose that $F \neq 0$ almost everywhere.
-Let $\xi := \star F/|F|$, and let $G$ be a continuous, nowhere zero, closed $2$-form.
+Let $\xi := \star F/|F|$, and let $G$ be a continuous, nowhere zero, closed $d - 1$-form.
 For every $\alpha > 0$,
 $$\left|\left\{\liminf_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 4\alpha\right\} \cap \{F \neq 0\}\right| \lesssim \frac{\|F - G\|_{L^1}}{\alpha}.$$
 \end{lemma}
@@ -495,7 +649,7 @@ Adding up $I_1, \dots, I_4$, we conclude that
 We write $M = \{F = 0\} \sqcup \{F \neq 0\}$.
 By Lemma \ref{PLDT nonzero}, the claim holds on almost all of $\{F = 0\}$, so we may assume that $F \neq 0$ almost everywhere.
 In particular, $\xi := \star F/|F|$ is well-defined almost everywhere.
-We choose a continuous, everywhere nonzero, closed $2$-form $G$ so that $\|F - G\|_{L^1} \leq \delta \alpha^3$ for any $\delta > 0$, so that, after applying Lemma \ref{PLDT bound mass} with $\alpha = \frac{1}{m}$,
+We choose a continuous, everywhere nonzero, closed $d - 1$-form $G$ so that $\|F - G\|_{L^1} \leq \delta \alpha^3$ for any $\delta > 0$, so that, after applying Lemma \ref{PLDT bound mass} with $\alpha = \frac{1}{m}$,
 $$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 0\right\}\right| \leq \sum_{m=1}^\infty \left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > \frac{1}{m}\right\}\right| \lesssim \sum_{m=1}^\infty \frac{\delta}{m^2} \lesssim \delta.$$
 The claim follows when we take $\delta \to 0$.
 \end{proof}
@@ -503,7 +657,7 @@ The claim follows when we take $\delta \to 0$.
 As a consequence of the diskette Lebesgue differentiation theorem, we obtain an analogue for the comass of a familiar result about the Lipschitz seminorm \cite[Lemma 4.3]{Crandall2008}.
 
 \begin{proposition}\label{crandall}
-Let $F \in L^\infty(M, Z^2)$. Then:
+Let $F \in L^\infty(M, Z^{d - 1})$. Then:
 \begin{enumerate}
 % \item If $F(x)$ exists then $L(F, x) \geq |\dif A(x)|$. \label{crandall dA bounds LA}
 % \item If $L(A, x) = 0$, then $\dif A(x)$ exists and $\dif A(x) = 0$. \label{crandall zero LA implies diffble}
@@ -570,25 +724,32 @@ This proves (\ref{crandall linfinity}).
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Analysis of the \texorpdfstring{$q$-Laplacian as $q \to 1$}{q-Laplacian}}
-It is well-known that one can obtain a $1$-harmonic function $u$ by taking limits of $q$-harmonic functions $u_q$ as $q \to 1$, as in \cite{Mazon14}.
+\section{Analysis of the \texorpdfstring{$q$-Laplacian as $q \to 1$}{q-Laplacian}}\label{qLaplace theory}
+It is well-known that one can obtain a $1$-harmonic function $u$ by taking limits of $q$-harmonic functions $u_q$ as $q \to 1$ \cite{Mazon14}.
 However, it does not immediately follow that $\|\dif u_q\|_{L^q}$ converges to the total variation of $u$, because it is not clear that $|\dif u_q|^q - |\dif u_q|$ is small in $L^1$ as $q \to 1$; essentially, this is because we know that $\dif u_q \in L^q$ but not that $\dif u_q$ lies in the Orcliz space $L^q \log L$.
 In this section, we regularize the $q$-harmonic function $u_q$ using a truncated heat kernel, and use this to estimate the total variation of $u$ in terms of $\|\dif u_q\|_{L^q}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A truncated heat kernel}
+\subsection{A truncated heat kernel}\label{truncated heat kernel}
 Let
-$$\tilde H_t(r, \theta) = (4\pi t)^{-\frac{d}{2}} \exp\left(-\frac{r^2}{4t}\right)$$
+$$\tilde H_t(x) = (4\pi t)^{-\frac{d}{2}} \exp\left(-\frac{|x|^2}{4t}\right)$$
 be the heat kernel on $\RR^d$.
-Choose a smooth radial function $H_t$ on $\RR^d$ such that $H_t = \tilde H_t$ on $r \leq t^{1/4}$, $0 \leq H_t \leq \tilde H_t$ for $r \in [t^{1/4}, 2t^{1/4}]$, and $H_t = 0$ for $r \geq 2 t^{1/4}$.
-For $f \in C^0_\cpt(\RR^d)$, we let $f(t) := H_t * f$, so that $t \mapsto f(t)$ is an approximate solution of the heat equation.
-However, this truncated heat kernel preserves compact support: if $\supp f \subseteq B_\delta(0)$, then
-$$\supp f(t) \subseteq B_{\delta + 2t^{1/4}}(0).$$
-On the other hand, since $H_t$ is close to the true heat kernel $\tilde H_t$ in every $L^p$ space, many of the same estimates apply.
+Choose a smooth radial function $H_t$ on $\RR^d$ such that $H_t = \tilde H_t$ on $|x| \leq t^{1/4}$, $0 \leq H_t \leq \tilde H_t$ for $|x| \in [t^{1/4}, 2t^{1/4}]$, and $H_t = 0$ for $|x| \geq 2 t^{1/4}$.
+For $f \in L^2(\RR^d)$, we let $f(t) := H_t * f$, so that $t \mapsto f(t)$ is an approximate solution of the heat equation.
+
+We shall use the truncated heat kernel $H_t$ as a mollifier with two special properties:
+\begin{enumerate}
+\item The truncated heat equation preserves compact support: if $\supp f \subseteq B_\delta(0)$, then
+\begin{equation}\label{support bounds on heat kernel}
+\supp f(t) \subseteq B_{\delta + 2t^{1/4}}(0).
+\end{equation}
+\item The truncated heat equation satisfies similar $L^p$ estimates to the heat equation.
+\end{enumerate}
+It is very important that implied constants in this section do not depend on the parameter $q$, because we are eventually going to take $q \to 1$.
 
 \begin{lemma}\label{approximation by heat kernels}
-Uniformly in $q \in [1, \infty]$ and $0 < t \ll 1$,
-$$\|H_t - \tilde H_t\|_{L^q} \lesssim e^{-d/\sqrt t}.$$
+Uniformly in $0 < t \ll 1$,
+$$\|H_t - \tilde H_t\|_{L^q} \lesssim t^{\frac{2 - d}{4q}} \exp\left(-\frac{1}{4 \sqrt t}\right).$$
 \end{lemma}
 \begin{proof}
 From the definitions,
@@ -596,52 +757,74 @@ $$|H_t - \tilde H_t| \leq 1_{r^4 > t} \tilde H_t,$$
 so we integrate 
 \begin{align*}
 \|H_t - \tilde H_t\|_{L^q}^q
-&\leq \int_{\RR^d} 1_{|x|^4 > t} \tilde H_t(x)^q \dif x \lesssim t^{-\frac{d}{2}} \int_{\RR^d} 1_{|x|^4 > t} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x.
+&\leq \int_{\{|x|^4 > t\}} \tilde H_t(x)^q \dif x \sim t^{-\frac{d}{2}} \int_{\{|x|^4 > t\}} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x.
 \end{align*}
-With the change of variables $y = x \sqrt{\frac{q}{4t}}$, we obtain 
+With the changes of variables $y = x \sqrt{\frac{q}{4t}}$ and $y = (r, \theta)$, and putting $a^2 = \frac{q}{4 \sqrt t}$, we obtain 
 \begin{align*}
-t^{-\frac{d}{2}} \int_{\RR^d} 1_{|x|^4 > t} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x
-&= q^{\frac{d}{2}} \int_{\RR^d} 1_{|y|^2 > \frac{q}{4\sqrt t}} e^{-|y|^2} \dif y \lesssim q^{\frac{d}{2}} \exp\left(-\frac{dq}{\sqrt t}\right).
+t^{-\frac{d}{2}} \int_{\{|x|^4 > t\}} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x
+&= \left(\frac{4}{q}\right)^{\frac{d}{2}} \int_{\{|y|^2 > \frac{q}{4\sqrt t}\}} e^{-|y|^2} \dif y \sim q^{-\frac{d}{2}} \int_a^\infty e^{-r^2} r^{d - 1} \dif r.
 \end{align*}
-\todo{Write down the details of the last step, it's very important that this error term is controlled}
-Taking $q$th roots, and recalling that $q^{a/q} \sim_a 1$, we conclude the lemma.
+To evaluate this last integral, let
+$$\Gamma(w, z) := \int_z^\infty s^{w - 1} e^{-s} \dif s$$
+be the upper incomplete $\Gamma$-function, so that \todo{cite me} $\Gamma(w, z) \sim z^{w - 1} e^{-z}$ as $z \to +\infty$.
+With the change of variable $s = r^2$, we obtain 
+$$\int_a^\infty e^{-r^2} r^{d - 1} \dif r = \frac{1}{2} \int_{a^2}^\infty e^{-s} s^{\frac{d}{2} - 1} \dif s = \frac{1}{2} \Gamma\left(\frac{d}{2}, \frac{q}{4 \sqrt t}\right) \sim \left(\frac{q}{\sqrt t}\right)^{\frac{d}{2} - 1} \exp\left(-\frac{q}{4 \sqrt t}\right).$$
+In particular,
+$$\|H_t - \tilde H_t\|_{L^q} \lesssim q^{-\frac{1}{q}} t^{\frac{2 - d}{4q}} \exp\left(-\frac{1}{4 \sqrt t}\right).$$
+The claim follows from $q^{1/q} \sim 1$.
 \end{proof}
 
 \begin{lemma}
 For $\frac{1}{p} + \frac{1}{q} = 1$, $q \in [1, \infty]$, and $0 < t \ll 1$,
-$$\|H_t\|_{L^q} \sim t^{-\frac{d}{2p}}.$$
+\begin{equation}\label{Lq norm of truncated heat kernel}
+	\|H_t\|_{L^q} \sim t^{-\frac{d}{2p}}.
+\end{equation}
 \end{lemma}
 \begin{proof}
-We have $t^{-\frac{d}{2p}} \gg e^{-d/\sqrt t}$, so by Lemma \ref{approximation by heat kernels}, it suffices to prove the same estimate for $\tilde H_t$. But this is standard:
+We have $t^{-\frac{d}{2p}} \gg t^{-\frac{2 - d}{4q}} e^{-1/4 \sqrt t}$, so by Lemma \ref{approximation by heat kernels}, it suffices to prove the same estimate for $\tilde H_t$. But this is standard:
 \begin{align*}
 \|\tilde H_t\|_{L^q} &\sim t^{-\frac{d}{2}} \left[\int_{\RR^d} e^{-\frac{q|x|^2}{4t}} \dif x\right]^{\frac{1}{q}} \sim \frac{t^{d/2q}}{q^{d/2q}t^{d/2}} \sim t^{\frac{d}{2q} - \frac{d}{2}} = t^{-\frac{d}{2p}}. \qedhere
 \end{align*}
 \end{proof}
 
 \begin{lemma}
-One has $f(t) \to f$ in $C^0$ as $t \to 0$.
+For $f \in L^1$,
+\begin{equation}\label{heat flow is contraction}
+	\|f(t)\|_{L^1} \leq \|f\|_{L^1}.
+\end{equation}
 \end{lemma}
 \begin{proof}
-By Lemma \ref{approximation by heat kernels}, Young's inequality, and the standard fact that $\tilde H_t * f = f + o(1)$ in $C^0$ as $t \to 0$,
+We first bound 
+$$|f(t, x)| = \left|\int_{\RR^d} H_t(x - y) f(y) \dif y\right| \leq \int_{\RR^d} H_t(x - y) |f(y)| \dif y.$$
+So by Fubini's theorem and the fact that $\|H_t\|_{L^1} \leq \|\tilde H_t\|_{L^1} = 1$,
 \begin{align*}
-\|f - f(t)\|_{C^0}
-& \leq \|f - \tilde H_t * f\|_{C^0} + \|\tilde H_t * f - f(t)\|_{C^0} \leq o(1) + \|\tilde H_t - H_t\|_{L^1} \|f\|_{C^0} = o(1). \qedhere
+\int_{\RR^d} |f(t, x)| \dif x
+&\leq \iint_{\RR^{d + d}} H_t(x - y) |f(y)| \dif y \dif x \\
+&= \int_{\RR^d} |f(y)| \int_{\RR^d} H_t(x - y) \dif x \dif y \\
+&= \int_{\RR^d} |f(y)| \dif y. \qedhere
 \end{align*}
 \end{proof}
 
-\todo{Follow the following outline}
-\begin{enumerate}
-	\item $f - f(t)$ is small in $L^q$ because it's controlled by $\|(H_{s_1} - H_{s_2}) * f\|_{L^q}$ where $s_1, s_2 \in (0, t]$
-	\item By a partition of unity argument, define $f(t)$ for $f$ a $1$-form on $M$
-	\item New subsection - Use Young's inequality to estimate $\|\dif u_q(t)\|_{L^q \log_+ L}$ in terms of $\|\dif u_q\|_{L^q}$
-	\item Use the Fubini trick to estimate $\||\dif u_q(t)|^q - |\dif u_q(t)|\|_{L^1}$ in $L^1$ 
-	\item Since $u_q(t_q)$ and $u_q$ are co-Cauchy in $BV$ for suitable $t_q \to 0$, conclude that $\|\dif u_q\|_{L^q}$ is a Cauchy sequence.
-\end{enumerate}
-
+We now cover $M$ by coordinate charts $B(x_\alpha, 2r_\alpha)$ in which $\sqrt{\det g} = 1$, and such that $(B(x_\alpha, r_\alpha))$ is an open cover of $M$.
+Let $(\chi_\alpha)$ be a subordinate partition of unity to $(B(x_\alpha, r_\alpha))$.
+Then for $f \in L^2(M)$, we let
+$$f(t) = \sum_\alpha (\chi_\alpha f)(t).$$
+Here the convolution in the definition of $(\chi_\alpha f)(t)$ is taken in the coordinates on $B(x_\alpha, r_\alpha)$.
+If $t$ is smaller than some $t_0$ which only depends on $M$, then (\ref{support bounds on heat kernel}) implies that $(\chi_\alpha f)(t)$ is supported on $B(x_\alpha, 2r_\alpha)$, hence is a well-defined function of compact support on $M$.
+In the sequel, we shall use without comment that the $L^1$ norm of a function can be computed in each coordinate patch and summing using the inclusion-exclusion principle, by hypothesis on $\sqrt{\det g}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Taking the limit}
+\subsection{Convergence of representations of \texorpdfstring{$\pi_1(M)$}{the fundamental group}}
+Let $\tilde M \to M$ be the universal cover of $M$.
+Following \cite[\S4]{daskalopoulos2020transverse}, we use the Hurcewiz theorem to identify $1$-dimensional representations
+$$\alpha: \pi_1(M) \to \RR$$
+of the fundamental group with cohomology classes $H^1(M, \RR)$.
+If we have an $\alpha$-equivariant function $u$ on $\tilde M$, thus for every $\gamma \in \pi_1(M)$,
+$$\gamma^* u = u + \langle \alpha, \gamma\rangle,$$
+we write $[u] = \alpha$.
+Taking derivatives, we see that $\gamma^* \dif u = \dif u$, so $\dif u$ drops to a closed $1$-form (or perhaps better a closed $d-1$-current) on $M$ whose cohomology class is $\alpha$.
+
 \begin{lemma}\label{L1 convergence preserves pi1}
 Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\pi_1(M)$-equivariant functions on $\tilde M$ which converge in $L^1_\loc(\tilde M)$ to a function $u$ as $q \to 1$.
 Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
@@ -672,6 +855,8 @@ Taking $q \to 1$ and applying (\ref{equivariance q}), we conclude that $\|\gamma
 The claim follows when we recall $\alpha = [u]$, $\alpha_q = [u_q]$.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Convergence of \texorpdfstring{$q$-harmonic functions}{q-harmonic functions}}
 \begin{proposition}\label{qharmonics converge}
 For each $1 < q < 2$, let $u_q$ be a $q$-harmonic, $\pi_1(M)$-equivariant function on $\tilde M$, so that
 $$\|u_q\|_{W^{1, q}} \lesssim 1.$$
@@ -690,50 +875,91 @@ In particular, $\dif u_q \to \dif u$ in the weak topology of measures and $u_q \
 As the limit of $\pi_1(M)$-equivariant functions, $u$ is also $\pi_1(M)$-equivariant by Lemma \ref{L1 convergence preserves pi1}.
 In particular, $\dif u$ drops to a current on $M$.
 
-It remains to show (\ref{convergence of Lq norms to TV})
+It remains to show (\ref{convergence of Lq norms to TV}).
+In one direction we use the portmanteau theorem and H\"older's inequality to control
+\begin{align*}
+\int_M \star |\dif u|& = \lim_{q \to 1} \int_M \int_M \star |\dif u_q| 
+\leq \liminf_{q \to 1} |M|^{\frac{1}{p}} \|\dif u_q\|_{L^q} = \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
+\end{align*}
+Now let $u_q(t)$ be as \S\ref{truncated heat kernel}.
+Recall that convolution operators and constant-coefficient differential operators commute, hence in each coordinate patch,
+\begin{equation}\label{derivative solves the heat equation too}
+(\dif u_q)(t) = \dif (u_q(t)).
+\end{equation}
+
+Since $u_q$ is $q$-harmonic, for any $0 < t < t_0$,
+$$\int_M \star |\dif u_q|^q \leq \int_M \star |\dif u_q(t)|^q.$$
+By the fundamental theorem of calculus, 
+$$\int_M \star |\dif u_q(t)|^q = \int_M \star |\dif u_q(t)| + \int_M \int_1^q \frac{\partial}{\partial r} |\dif u_q(t, x)|^r \dif r \dif x.$$
+We then have by (\ref{heat flow is contraction}) that
+$$\int_M \star |\dif u_q(t)| \leq \int_M \star |\dif u_q|.$$
+Recall that for $1 \leq r < 2$ and $t \geq 0$, $t^r \log t \leq t^2$.
+We bound the integral in $r$ as
+\begin{align*}
+\int_1^q \frac{\partial}{\partial r} |\dif u_q(t, x)|^r \dif r
+&= \int_1^q |\dif u_q(t, x)|^r \log |\dif u_q(t, x)|^r \dif r 
+\leq (q - 1) |\dif u_q(t, x)|^2.
+\end{align*}
+Define $r, s \in [1, \infty]$ by 
+$$\frac{1}{q} + \frac{1}{r} = \frac{3}{2}, \quad \frac{1}{r} + \frac{1}{s} = 1.$$
+Then, since $q \geq 1$, $r \geq 2$, so $s \leq 2$.
+By Young's inequality and (\ref{Lq norm of truncated heat kernel}),
+$$\|\dif u_q(t)\|_{L^2} \leq \|H_t\|_{L^r} \|\dif u_q\|_{L^q} \sim t^{-\frac{d}{2s}} \|\dif u_q\|_{L^q} \leq t^{-d/4} \|\dif u_q\|_{L^q}.$$
+We now set $t_q := (q - 1)^{1/d}$.
+By the above considerations, there exist $C > 0$ and $1 < q_0 < 2$ which only depend on $M$ such that for any $1 < q \leq q_0$,
+\begin{align*}
+\int_M \star |\dif u_q|^q 
+&\leq \int_M \star |\dif u_q(t_q)| + C(q - 1)t_q^{-d/2} \|\dif u_q\|_{L^q}^2 \\
+&\leq \int_M \star |\dif u_q| + C\sqrt{q - 1} \|\dif u_q\|_{L^q}^2.
+\end{align*}
+Since $C$ is independent of $q$, we may take the limit $q \to 1$ and apply the portmanteau theorem to deduce that 
+\begin{align*}
+\limsup_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q &\leq \lim_{q \to 1} \int_M \star |\dif u_q| = \int_M \star |\dif u|. \qedhere 
+\end{align*}
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\texorpdfstring{$\infty$-light forms}{Infinity-light forms}}
-Let $M$ be a closed Riemannian threefold and fix a cohomology class $\rho$.
+\subsection{\texorpdfstring{$p$-light forms}{p-light forms}}
+As before, let $M$ be a closed Riemannian manifold of dimension $d$, equipped with a cohomology class $\rho \in H^{d - 1}(M, \RR)$.
+In this section, we construct a representative $F$ of best comass of $\rho$, and a $1$-harmonic conjugate to $F$.
+We begin by constructing a minimizing sequence for the comass as $p \to \infty$.
 
-\subsection{\texorpdfstring{$p$-light forms and the $q$-Laplacian}{p-light forms and the q-Laplacian}}
 \begin{definition}
-Let $1 < p < \infty$ and let $F_p$ be a closed $2$-form with $[F_p] = \rho$.
-We call $F_p$ a \dfn{$p$-light form} if it is a minimizer of $\|F_p\|_{L^p}$ among all $2$-forms representing $\rho$.
+Let $1 < p < \infty$ and let $F_p$ be a closed $d - 1$-form with $[F_p] = \rho$.
+We call $F_p$ a \dfn{$p$-light form} if it is a minimizer of $\|F_p\|_{L^p}$ among all $d - 1$-forms representing $\rho$.
 \end{definition}
 
-We call these forms ``light'' because as $p \to \infty$ they become ``not massive'', in the sense that, as we shall later show, they will define a minimizing sequence for the comass.
-
-Taking $p$th powers of the $L^p$ norm, we see that a closed $2$-form is $p$-light iff it is a minimizer of
+Taking $p$th powers of the $L^p$ norm, we see that a closed $d - 1$-form is $p$-light iff it is a minimizer of
 $$J_p(F) := \frac{1}{p} \int_M \star |F|^p.$$
 
 \begin{proposition}
-A $2$-form $F \in L^p(M, \Omega^2)$ is $p$-light iff it solves the system
+A $d - 1$-form $F \in L^p(M, \Omega^{d - 1})$ is $p$-light iff it solves the system
 \begin{equation}\label{pMaxwell}
 \begin{cases}
 	\dif F = 0, \\
 	\dif^*(|F|^{p - 2} F) = 0
 \end{cases}
 \end{equation}
-in the distributional sense. Moreover, the restriction of $J_p$ to any cohomology class in $L^p(M, Z^2)$ is uniformly strictly convex.
+in the distributional sense. Moreover, the restriction of $J_p$ to any cohomology class in $L^p(M, Z^{d - 1})$ is uniformly strictly convex.
 \end{proposition}
 \begin{proof}
-Let us take variations of $J_p$ in the space $L^p(M, Z^2)$ of closed $2$-forms of finite $J_p$ energy.
-Let $G$ be an exact $2$-form (so $F + tG$ is cohomologous to $F$), so that
+Let us take variations of $J_p$ in the space $L^p(M, Z^{d - 1})$ of closed $d-1$-forms of finite $J_p$-energy.
+Let $G$ be an exact $d - 1$-form (so $F + tG$ is cohomologous to $F$), so that
 $$\frac{\dif}{\dif t} J_p(F + tG) = \frac{1}{p} \int_M \star \frac{\partial}{\partial t} |F + tG|^p = \int_M \star |F + tG|^{p - 2} \langle F + tG, G\rangle.$$
 Setting $t = 0$, and writing $G = \dif B$, we obtain 
 $$0 = \int_M \star |F|^{p - 2} \langle F, \dif B\rangle = \int_M \star \langle \dif^*(|F|^{p - 2} F), B\rangle.$$
+This equation holds for every $d - 2$-form $B$.
 Thus the Euler-Lagrange equations for $J_p$ are (\ref{pMaxwell}).
 The second variation is 
 $$\frac{\dif^2}{\dif t^2} J_p(F + tG)\bigg|_{t = 0} = (p - 2) \int_M \star |F|^{p - 4} \langle F, G\rangle^2 + \int_M \star |F|^{p - 2} |G|^2.$$
 By the Cauchy-Schwarz inequality,
 $$(p - 2) \int_M \star |F|^{p - 4} \langle F, G\rangle^2 + \int_M \star |F|^{p - 2} |G|^2 \geq (p - 1) \int_M \star |F|^{p - 2} |G|^2.$$
 This implies uniform strict convexity for $p > 1$.
-The restriction to a cohomology class remains strictly convex, since cohomology classes are closed affine subspaces of $L^p(M, Z^2)$ and hence are themselves closed and convex.
+The restriction to a cohomology class remains strictly convex, since cohomology classes are closed affine subspaces of $L^p(M, Z^{d - 1})$ and hence are themselves closed and convex.
 \end{proof}
 
-Arguing as in the proof of existence of $p$-harmonic function (see \cite[\S8.2]{evans2010partial} for the general theory, or \cite[\S2.1]{daskalopoulos2020transverse} for $p$-harmonic maps $M \to \Sph^1$ which is closely analogous to our case), one can easily check that there exists a unique $p$-light form in every cohomology class on the closed manifold $M$.
+Arguing as in the proof of existence of $p$-harmonic functions (see \cite[\S8.2]{evans2010partial} for the general theory, or \cite[\S2.1]{daskalopoulos2020transverse} for $p$-harmonic maps $M \to \Sph^1$ which is closely analogous to our case), one can easily check that there exists a unique $p$-light form in every cohomology class on the closed manifold $M$.
 We omit the details, both because the argument is standard, and because we shall give a separate proof in Appendix \ref{Max Flow Min Cut}.
 
 By \cite{Uhlenbeck77}, every $p$-light form is H\"older continuous. However, the continuity degenerates as $p \to \infty$, so we shall not be able to apply this fact in the sequel.
@@ -746,12 +972,6 @@ Let $F$ be a $p$-light form, let
 and let $u$ be the primitive of $\dif u$ on the universal cover $\tilde M$, which is normalized to have zero mean on a fundamental domain $M_{\rm fun}$.
 Then $u$ is called the \dfn{$q$-harmonic conjugate} of the $p$-light form $F$, where $\frac{1}{p} + \frac{1}{q} = 1$.
 \end{definition}
-
-If $u$ is the $q$-harmonic conjugate of a $p$-light form $F$, then $u$ is $\pi_1(M)$-equivariant, since $\dif u$ drops to a $1$-form on $M$ and hence is $\pi_1(M)$-invariant.
-To be more precise, there exists a representation $\alpha: \pi_1(M) \to \RR$ of the fundamental group such that for any $\gamma \in \pi_1(M)$,
-$$\gamma^* u = u + \alpha(\gamma).$$
-Throughout this paper, we use the Hurcewiz theorem to identify real-valued representations of $\pi_1(M)$ with cohomology classes in $H^1(M, \RR)$, and write $[u] = \alpha$ to mean that $[u]$ is $\alpha$-equivariant.
-The assertion that $[u] = \alpha$ is equivalent to the assertion that $\dif u$ is $\pi_1(M)$-invariant and drops to a form of class $\alpha$ on $M$.
 
 Let $u$ be the $q$-harmonic conjugate of $F$.
 By Poincar\'e's inequality,
@@ -831,8 +1051,11 @@ We also compute
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{Existence of $\infty$-light forms}{Existence of infinity-light forms}}
+We now take the limit $p \to \infty$ to obtain a privileged form of best comass.
+To do so, we shall need the $p$-light forms to be uniformly bounded in the following sense.
+
 \begin{lemma}
-Let $F_p$ be a $p$-light form, and let $B$ range over closed $2$-forms cohomologous to $F_p$. Then
+Let $F_p$ be a $p$-light form, and let $B$ range over closed $d - 1$-forms cohomologous to $F_p$. Then
 \begin{equation}\label{infinity magnetic rules p magnetic}
 	\|F_p\|_{L^p} \leq |M|^{1/p} \inf_B \|B\|_{L^\infty}.
 \end{equation}
@@ -844,10 +1067,10 @@ hence the same holds for the infimum.
 \end{proof}
 
 \begin{proposition}\label{existence infinity}
-Let $\rho \in H^2(M, \RR)$.
-For each $p \geq 2$, let $F_p$ be the $p$-light form representing $\rho$. Then there exists a closed $2$-form $F$ such that:
+Let $\rho \in H^{d - 1}(M, \RR)$.
+For each $p \geq 2$, let $F_p$ be the $p$-light form representing $\rho$. Then there exists a closed $d - 1$-form $F$ such that:
 \begin{enumerate}
-\item $F_p \to F$ weakly in $L^r$ along a subsequence, for any $3 < r < \infty$.
+\item $F_p \to F$ weakly in $L^r$ along a subsequence, for any $d < r < \infty$.
 \item $F$ is a best comass representative of $\rho$.
 % \item One has 
 % \begin{equation}\label{Sobolev bounds for infinity}
@@ -857,12 +1080,12 @@ For each $p \geq 2$, let $F_p$ be the $p$-light form representing $\rho$. Then t
 \end{proposition}
 \begin{proof}
 We roughly follow \cite[\S3]{Lindqvist14}.
-Let $r > 3$, and let $B$ be an $L^\infty$ representative of $\rho$.
+Let $r > d$, and let $B$ be an $L^\infty$ representative of $\rho$.
 By H\"older's inequality and (\ref{infinity magnetic rules p magnetic}),
 \begin{equation}\label{uniform bounds in p by best curl}
 	\|F_p\|_{L^r} \leq |M|^{\frac{1}{r} - \frac{1}{p}} \|F_p\|_{L^p} \leq |M|^{\frac{1}{r}} \|B\|_{L^\infty}.
 \end{equation}
-Thus a compactness argument gives $F_p \to F$ for some $2$-form $F$, weakly in $L^r$, and 
+Thus a compactness argument gives $F_p \to F$ for some $d - 1$-form $F$, weakly in $L^r$, and 
 $$\|F\|_{L^r} \leq \liminf_{p \to \infty} \|F_p\|_{L^r} \leq |M|^{\frac{1}{r}} \|B\|_{L^\infty}.$$
 Diagonalizing, we may assume that $F_p \to F$ weakly in $L^r$ for every such $r$, and taking $r \to \infty$, we conclude 
 \begin{equation}\label{infinity magnetics have best curl}
@@ -874,11 +1097,10 @@ So by Proposition \ref{crandall}(\ref{crandall linfinity}) and the fact that $B$
 \end{proof}
 
 \begin{definition}
-The $2$-form $F$ of best comass in Proposition \ref{existence infinity} is called an \dfn{$\infty$-light form}.
+The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called an \dfn{$\infty$-light form}.
 \end{definition}
 
-It seems likely that the $\infty$-light form representing a cohomology class is unique.
-However, this is not obvious, and we do not prove it, since this will not cause us any difficulties later.
+The existence of $\infty$-light (or even just best comass) representatives of each cohomology class implies the following useful lemma.
 
 \begin{lemma}\label{p lights approximate L}
 Let $F_p$ be the $p$-light representative of $\rho$, and $L$ the best comass of $\rho$. Then 
@@ -893,19 +1115,33 @@ Therefore
 $$\limsup_{p \to \infty} \|F_p\|_{L^p} \leq L.$$
 To prove the converse, suppose that 
 $$\liminf_{p \to \infty} \|F_p\|_{L^p} \leq \tilde L < L.$$
-Along a subsequence which attains the limit inferior, $F_p$ converges weakly in every $L^r$, $3 < r < \infty$, to an $\infty$-light form $\tilde F$ such that (by H\"older's inequality)
+Along a subsequence which attains the limit inferior, $F_p$ converges weakly in every $L^r$, $d < r < \infty$, to an $\infty$-light form $\tilde F$ such that (by H\"older's inequality)
 $$\|\tilde F\|_{L^r} \leq \liminf_{p \to \infty} \|F_p\|_{L^r} \leq \liminf_{p \to \infty} |M|^{\frac{1}{r}} \|\tilde F\|_{L^\infty} \leq |M|^{\frac{1}{r}} \tilde L.$$
 Taking $r \to \infty$, we obtain $L(\tilde F) < L$, which contradicts the fact that $L$ is the best comass.
 \end{proof}
+
+We now make some remarks on $\infty$-light forms that we shall not need in the sequel.
+There is an Euler-Lagrange equation for $C^1$ absolutely best comass forms, which we state in Appendix \ref{EulerLagrange}.
+By analogy with $\infty$-harmonic functions, one expects the following:
+
+\begin{conjecture}
+For every $\rho \in H^{d - 1}(M, \RR)$ there exists a unique $\infty$-light representative $F$ of $\rho$.
+Moreover, $F$ has absolutely best comass.
+\end{conjecture}
+
+The proof seems not so obvious.
+Since the comass is not a local functional in the sense of \cite{Crandall2008}, and is certainly not strictly convex, the usual lines of attack are ruled out.
+This is already a problem for proving that $\infty$-harmonic functions are unique and absolutely best Lipschitz, but the $\infty$-Laplacian has a good notion of viscosity solution, and in particular a maximum principle, enabling proofs of both claims \cite{Lindqvist14}.
+Of course, the notions of viscosity solution and maximum principle are of no use in \emph{systems} of PDE, and in particular are useless for studying $\infty$-light forms.
 
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$1$-harmonic conjugates of $\infty$-light forms}{One-harmonic conjugates of infinity-light forms}}
 We now construct the $1$-harmonic conjugate of an $\infty$-light form.
-We cannot naively take limits in, because (\ref{inverse extremality}) may blow up as $p \to \infty$.
-Instead, we have to renormalize the $q$-harmonic conjugates of $p$-light forms, as in \cite[\S3.2]{daskalopoulos2020transverse}.
+We cannot naively take limits, however, because (\ref{inverse extremality}) may blow up as $p \to \infty$.
+Instead, we have to renormalize the $q$-harmonic conjugates of $p$-light forms, as in \cite[\S3.2]{daskalopoulos2020transverse}, and then apply the theory of \S\ref{qLaplace theory}.
 
-To this end, fix a class $\rho \in H^2(M, \RR)$ and denote by $L$ the comass of a best comass representative of $\rho$.
+To this end, fix a class $\rho \in H^{d - 1}(M, \RR)$ and denote by $L$ the comass of a best comass representative of $\rho$.
 Also let $k_p$ be defined by 
 $$k_p^{1 - p} = \int_M \star |F_p|^p$$
 where $F_p$ is the $p$-light representative of $\rho$.
@@ -926,12 +1162,12 @@ Taking logarithms we see that $q^{-1} \log k_p \to -\log L$, and since $q \to 1$
 \end{proof}
 
 \begin{proposition}\label{existence 1}
-Let $\rho \in H^2(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
+Let $\rho \in H^{d - 1}(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
 For $2 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let $u_q$ be the renormalized $q$-harmonic conjugate of the $p$-light representative of $\rho$.
 Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ such that:
 \begin{enumerate}
 \item $u$ is $1$-harmonic.
-\item As $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r$ for $1 \leq r < \infty$.
+\item As $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r_\loc(\tilde M)$ for $1 \leq r < \frac{d}{d - 1}$.
 \item Let $F$ be the $\infty$-light representative of $\rho$, with best comass $L$. We have the \dfn{max flow min cut principle} that, as Radon measures,
 \begin{equation}\label{1 extremality}
 \dif u \wedge F = L \star |\dif u|.
@@ -942,6 +1178,11 @@ Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ su
 We first compute using Lemma \ref{normalizations converge}
 \begin{equation}\label{Lqs of qLaplace converge}
 \lim_{q \to 1} \int_M \star |\dif u_q|^q = \lim_{p \to \infty} k_p^p \int_M \star |F_p|^p = \lim_{p \to \infty} k_p = \frac{1}{L}.
+\end{equation}
+So by Proposition \ref{qharmonics converge}, there exists a $\pi_1(M)$-equivariant function $u$ such that, along a subsequence, $u_q \to u$ weakly $BV_\loc(\tilde M)$ and strongly in $L^r_\loc(\tilde M)$.
+Moreover, $[\dif u_q] \to [\dif u]$, and
+\begin{equation}\label{why we used heat}
+	\int_M \star |\dif u| = \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
 \end{equation}
 
 Renormalizing (\ref{strong duality}), we obtain 
@@ -954,20 +1195,13 @@ We want to take the limit as $p \to \infty$ in (\ref{1 strong duality before lim
 \begin{equation}\label{1 strong duality}
 	L \int_M \star |\dif u| = \int_M \dif u \wedge F.
 \end{equation}
-
-First,
-$$\left|\frac{1}{q} \int_M \star |\dif u_q|^q - \int_M \star |\dif u|\right| \leq \left|\frac{\|\dif u_q\|_{L^q}^q}{q} - \|\dif u_q\|_{L^1}\right| + \left|\int_M \star |\dif u_q| - \int_M \star |\dif u|\right| =: I_1 + I_2.$$
-By H\"older's inequality and the fact that $\|\dif u_q\|_{L^q}$ remains bounded as $q \to 1$ (by (\ref{Lqs of qLaplace converge})), $I_1 \to 0$.
-By the portmanteau theorem \todo{cite it} and the fact that $\dif u_q \to u_q$ in the weak topology of measures, $\int_M \star |\dif u_q| \to \int_M \star |\dif u|$, hence $I_2 \to 0$.
-Therefore 
-$$\lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q = \int_M \star |\dif u|.$$
-Second, by Lemma \ref{normalizations converge},
-$$\lim_{p \to \infty} \frac{k_p}{p} \int_M \star |F_p|^p = \lim_{p \to \infty} \frac{k_p}{p} = \frac{0}{L} = 0.$$
-Third, let $\alpha_q := [u_q]$, so that $\alpha_q$ is the cohomology class of $\dif u_q$.
-Then, by Lemma \ref{normalizations converge},
-$$\lim_{p \to \infty} k_p \int_M \dif u_q \wedge F_p = \frac{1}{L} \lim_{p \to \infty} \int_M \alpha_q \wedge \rho.$$
-By Lemma \ref{L1 convergence preserves pi1}, $\alpha_q \to [u] =: \alpha$, so 
-$$\lim_{p \to \infty} \int_M \alpha_q \wedge \rho = \int_M \alpha \wedge \rho = \int_M \dif u \wedge F,$$
+We already know that (\ref{why we used heat}) holds.
+By Lemma \ref{normalizations converge},
+$$\lim_{p \to \infty} \frac{k_p}{p} \int_M \star |F_p|^p = \lim_{p \to \infty} \frac{k_p}{p} = \frac{0}{L} = 0,$$
+and
+$$\lim_{p \to \infty} k_p \int_M \dif u_q \wedge F_p = \frac{1}{L} \lim_{p \to \infty} \int_M [\dif u_q] \wedge \rho.$$
+Since $[\dif u_q] \to [\dif u]$, we obtain
+$$\lim_{p \to \infty} \int_M [\dif u_q] \wedge \rho = \int_M \alpha \wedge \rho = \int_M \dif u \wedge F,$$
 as desired.
 Taking the limit in (\ref{1 strong duality before limits}) completes the proof of (\ref{1 strong duality}).
 
@@ -1002,42 +1236,11 @@ and $\|X\|_{L^\infty} \leq 1$.
 Moreover, by (\ref{1 extremality}), $X$ is normal to the level sets of $u$, and hence is a witness that $u$ is $1$-harmonic \cite{Mazon14}.
 \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{A gauge-theoretic interpretation}
-In order to understand the analogy between best comass $2$-forms on threefolds and best Lipschitz functions on surfaces, it is convenient to introduce the formalism of gauge theory.
-We shall not need this in the sequel, but include it for the reader's interest and intuition.
-
-Fix an \emph{integral} class $\rho \in H^2(M, \ZZ)$.
-Let $F$ be a best comass $2$-form representing $\rho$.
-Then there locally exists a $1$-form $A$ such that $\dif A = F$.
-If $F$ is $\infty$-light, then we can find approximations $A_p$ which solve the $p$-Maxwell equation 
-$$\dif^* (|\dif A_p|^{p - 2} \dif A_p) = 0$$
-and so could be called \dfn{$p$-magnetic potentials}.
-The $p$-magnetic potentials, and their limit, the \dfn{$\infty$-magnetic potential} $A$, are naturally viewed as (the Christoffel symbols of globally defined) connections on the line bundle $\mathscr L$ whose Chern class is $c_1(\mathscr L) = \rho$.
-In particular, $A$ is only defined up to a gauge transformation.
-We could call $A$ a \dfn{best curvature} connection, since it minimizes the $L^\infty$ norm of the curvature among all connections on $\mathscr L$.
-
-\todo{Do we want to write down the equivariance relations? They're the same as for a connection, except that it's not true that the differences in the transition functions are integers.}
-
-To compare with the case of best Lipschitz functions on surfaces, now suppose that $M$ is a surface and $\rho \in H^1(M, \ZZ)$.
-As in \cite[\S2.1]{daskalopoulos2020transverse}, if $F$ is a closed $1$-form which minimizes its $L^\infty$ norm, then there exists a map $A: M \to \Sph^1$ such that $F = \dif A$.
-The map $A$ is called \dfn{best Lipschitz} because it minimizes the Lipschitz norm among all maps $M \to \Sph^1$ of the same degree.
-Again there is a gauge ambiguity: \cite{daskalopoulos2020transverse} treats two maps $A, A'$ as the same if $A - A'$ is a constant angle.
-Of especial interest among the best Lipschitz maps are the $\infty$-harmonic maps $M \to \Sph^1$, which are approximated by solutions of the $p$-Laplace equation.
-
-Since the best comass problem can be viewed as the best curvature problem on a line bundle, it is natural to make the following conjecture, which we shall not address in this paper.
-
-\begin{conjecture}
-For any compact gauge group $\mathbf G$, and $\mathbf G$-bundle $\mathscr E$, there exists a minimizer of the $L^\infty$ norm of the curvature among all connections on $\mathscr E$.
-Moreover, one can find a minimizer by taking suitable weak limits of solutions of the \dfn{$p$-Yang-Mills equation}
-$$\dif_A^* (|\dif A|^{p - 2} \dif A) = 0$$
-where $\dif_A$ is the covariant derivative whose Christoffel symbols are given by $A$. 
-\end{conjecture}
-
 %%%%%%%%%%%%%%%%%%%%
 
 \section{The maximum comass locus}
-Throughout this section, let $M$ be a closed space form of dimension $3$.
+Throughout this section, let $M$ be a closed space form of dimension $2 \leq d \leq 4$ equipped with a cohomology class $\rho \in H^{d - 1}(M, \RR)$.
+We study the set on which a best comass representative of $\rho$ attains its comass, which turns out to contain a measured oriented minimal lamination which only depends on $\rho$.
 
 \begin{definition}
 Let $F$ be a form of best comass.
@@ -1046,16 +1249,31 @@ The \dfn{maximum comass locus} is the set $\{L(F, \cdot) = L(F)\}$.
 
 By Proposition \ref{crandall usc} and the compactness of $M$, the maximum comass locus is a nonempty closed subset of $M$.
 
-By \todo{Cite laminations paper}, to each $1$-harmonic function $u$, we may associated a measured oriented minimal lamination $\lambda_u$, whose Ruelle-Sullivan current is $\dif u$, and whose leaves are the level sets of $u$.
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Calibration of Thurston laminations}
+We recall the main result of \todo{Cite laminations paper}:
+
+\begin{theorem}
+Let $u$ be a $1$-harmonic function on a Riemannian manifold of constant sectional curvature and dimension $2 \leq d \leq 4$.
+Then there exists a measured oriented minimal lamination $\lambda_u$, whose leaves are the level sets $\partial \{u > y\}$ of $u$, and whose Ruelle-Sullivan current is $\dif u$.
+\end{theorem}
+
+Let $u$ be a $\pi_1(M)$-equivariant $1$-harmonic function on $\tilde M$.
+Then $\dif u$ drops to a $d-1$-current on $M$, which is still the Ruelle-Sullivan current of a measured oriented minimal lamination on $M$, which we still call $\lambda_u$.
+
+One may associate a measured oriented geodesic lamination $\lambda$ associated to a homotopy class $\rho \in [M, N]$, where $M, N$ are closed hyperbolic surfaces of the same genus; we call $\lambda$ a \dfn{Thurston lamination}.
+Every best Lipschitz representative of $\rho$ attains its Lipschitz constant on (a superlamination of) the Thurston lamination, which also realizes the supremum in Thurston's asymmetric metric $\log K$ \cite{Thurston98}.
+
+We claim that the lamination induced by the $1$-harmonic conjugate of an $\infty$-light form enjoys the same boons as the Thurston lamination of a homotopy class of surface-to-surface maps.
+Thus we define:
 
 \begin{definition}
-Let $\rho \in H^2(M, \RR)$, let $F$ be an $\infty$-light representative of $\rho$, and let $u$ be a $1$-harmonic conjugate of $F$.
-A \dfn{Thurston lamination} $\lambda$ associated to $\rho$ is $\lambda := \lambda_u$.
+Let $\rho \in H^{d - 1}(M, \RR)$, let $F$ be an $\infty$-light representative of $\rho$, and let $u$ be a $1$-harmonic conjugate of $F$.
+Then we call $\lambda_u$ a \dfn{Thurston lamination} associated to $\rho$.
 \end{definition}
 
-\subsection{Calibration of Thurston laminations}
 \begin{theorem}\label{MCL contains Thurston}
-Let $F$ be a best comass representative of $\rho \in H^2(M, \RR)$.
+Let $F$ be a best comass representative of $\rho \in H^{d - 1}(M, \RR)$.
 Then the maximum comass locus of $F$ contains any Thurston lamination $\lambda$ associated to $\rho$.
 In particular, if $L$ is the best comass of $\rho$, then $F/L$ calibrates $\lambda$.
 \end{theorem}
@@ -1167,16 +1385,15 @@ Then by H\"older's inequality and Lemma \ref{MCL contains Thurston lemma},
 Since $\dif u$ is the Ruelle-Sullivan current for the Thurston lamination $\lambda$, $\lambda$ is contained in the best comass locus of $F$. 
 Moreover, if $N$ is a leaf of $\lambda$, then the restriction of $F/L$ is, by (\ref{1 extremality}), equal to $\star \normal_N^\flat$, which is the area form of $N$.
 In other words, $F/L$ calibrates $N$.
+\todo{Fix the proof of calibration if $F$ is not $\infty$-light, or add that as a hypothesis}
 \end{proof}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{Thurston's \texorpdfstring{$L = K$}{L equals K} theorem}
-If $\lambda$ is a measured oriented lamination, then we denote by $[\lambda] \in H_2(M, \RR)$ its homology class, and by $|\lambda|$ its area; namely, the mass of its Ruelle-Sullivan current $T_\lambda$.
-
 \begin{theorem}\label{L equals K}
-	Let $\rho \in H^2(M, \RR)$, and let 
+	Let $\rho \in H^{d - 1}(M, \RR)$, and let 
 	$$K := \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|},$$
 	where $\lambda$ ranges over measured oriented laminations. Then:
 \begin{enumerate}
@@ -1343,21 +1560,21 @@ By reflexivity, the above argument may also be reversed, so that the map $\alpha
 \todo{Cite those glaciology papers which already include this duality}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The \texorpdfstring{$\infty$-light equation}{infinity-light equation}}
-We have the following Euler-Lagrange equation for $\infty$-light forms.
-Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, \todo{and because we did not show that $\infty$-light forms have absolutely best comass}, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
+\section{The \texorpdfstring{$\infty$-Maxwell equation}{infinity-Maxwell equation}}\label{EulerLagrange}
+We have the following Euler-Lagrange equation for forms with absolutely best comass.
+Because of the lack of a good analogue for viscosity solutions for $\infty$-elliptic systems, and because we did not show that $\infty$-light forms have absolutely best comass, the equation can only really be interpreted in a formal sense, at least as far as we are aware.
 As such, we did not use it in the main body of this paper, but only include it as a curiosity item.
 
-\todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
-It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
-By a straightforward modification of the existence theorem, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
-By quantitative uniqueness
-$$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
-Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
-$$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
-$$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
-Taking $q \to \infty$ we arrive at the conclusion that $F$ has absolutely best comass.
+% \todo{If we knew that $p$-Maxwell had good quantitative uniqueness, then we would have}
+% It remains to show that $A$ has absolutely best curl, so let $\Omega$ be a small ball and $B$ a $1$-form with $B|_{\partial \Omega} = A|_{\partial \Omega}$.
+% By a straightforward modification of the existence theorem, there exists a $p$-magnetic potential $B_p$ in Coulomb gauge with $B_p|_{\partial \Omega} = A|_{\partial \Omega}$ and $B \in C^{1 + \alpha}$.
+% By quantitative uniqueness
+% $$\|B_p - A\|_{C^0(\Omega)} \leq \|B_p - A_p\|_{C^0(\Omega)} + o(1) \lesssim \|A - A_p\|_{C^0(\partial \Omega)} + o(1) \ll 1.$$
+% Therefore $B_p \to A$ uniformly, and for $3 < q < p < \infty$ with $p$ dyadic,
+% $$\|\dif B_p\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B_p\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q} -\frac{1}{p}} \|\dif B\|_{L^p(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+% Then along a subsequence, $\dif B_p \to \dif A$ in $L^q(\Omega)$, so 
+% $$\|\dif A\|_{L^q(\Omega)} \leq |\Omega|^{\frac{1}{q}} \|\dif B\|_{L^\infty(\Omega)}.$$
+% Taking $q \to \infty$ we arrive at the conclusion that $F$ has absolutely best comass.
 
 \begin{proposition}
 Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$. Then
@@ -1368,9 +1585,9 @@ Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points wit
 \begin{proof}
 For a covariant $2$-tensor $T$, let $T^{\rm as}$ be its antisymmetrization, and let
 $$f(x, T) := |T^{\rm as}|_{g(x)}.$$
-Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be Coulomb gauge and therefore $C^2$.
+Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be in Coulomb gauge and therefore $C^2$.
 Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
-By the Euler-Lagrange-Aronsson formula \cite[Theorem 5.2]{Barron2001},
+By \cite[Theorem 5.2]{Barron2001},
 \begin{equation}\label{ELA}
 	\left\langle \frac{\partial f}{\partial T}(x, \nabla A(x)), \dif (f(x, \nabla A(x))) \right\rangle = 0.
 \end{equation}
@@ -1380,6 +1597,8 @@ and
 $$\frac{\partial f}{\partial T}(x, \nabla A(x)) = \frac{\nabla A(x)^{\rm as}}{|\nabla A(x)^{\rm as}|} = \frac{\dif A(x)}{|\dif A(x)|}.$$
 We conclude the claim after multiplying both sides of (\ref{ELA}) by $|\dif A|$.
 \end{proof}
+
+The $\infty$-Maxwell equation has the following natural interpretation.
 
 \begin{corollary}
 Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$, and $N$ is a surface whose normal vector field is annihilated by $F$.
