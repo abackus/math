@@ -573,18 +573,75 @@ This proves (\ref{crandall linfinity}).
 \section{Analysis of the \texorpdfstring{$q$-Laplacian as $q \to 1$}{q-Laplacian}}
 It is well-known that one can obtain a $1$-harmonic function $u$ by taking limits of $q$-harmonic functions $u_q$ as $q \to 1$, as in \cite{Mazon14}.
 However, it does not immediately follow that $\|\dif u_q\|_{L^q}$ converges to the total variation of $u$, because it is not clear that $|\dif u_q|^q - |\dif u_q|$ is small in $L^1$ as $q \to 1$; essentially, this is because we know that $\dif u_q \in L^q$ but not that $\dif u_q$ lies in the Orcliz space $L^q \log L$.
-Still, we are able to regularize the $q$-harmonic function $u_q$ using the heat equation and obtain the following key proposition.
+In this section, we regularize the $q$-harmonic function $u_q$ using a truncated heat kernel, and use this to estimate the total variation of $u$ in terms of $\|\dif u_q\|_{L^q}$.
 
-\begin{proposition}\label{qharmonics converge}
-For each $1 < q < 2$, let $u_q$ be a $q$-harmonic, $\pi_1(M)$-equivariant function on $\tilde M$, so that
-$$\|u_q\|_{W^{1, q}} \lesssim 1.$$
-Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(M)$ such that, as $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r$ for $1 \leq r < \frac{d}{d - 1}$.
-Moreover, $[u_q] \to [u]$ and
-\begin{equation}\label{convergence of Lq norms to TV}
-\lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q = \int_M \star |\dif u|.
-\end{equation}
-\end{proposition}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A truncated heat kernel}
+Let
+$$\tilde H_t(r, \theta) = (4\pi t)^{-\frac{d}{2}} \exp\left(-\frac{r^2}{4t}\right)$$
+be the heat kernel on $\RR^d$.
+Choose a smooth radial function $H_t$ on $\RR^d$ such that $H_t = \tilde H_t$ on $r \leq t^{1/4}$, $0 \leq H_t \leq \tilde H_t$ for $r \in [t^{1/4}, 2t^{1/4}]$, and $H_t = 0$ for $r \geq 2 t^{1/4}$.
+For $f \in C^0_\cpt(\RR^d)$, we let $f(t) := H_t * f$, so that $t \mapsto f(t)$ is an approximate solution of the heat equation.
+However, this truncated heat kernel preserves compact support: if $\supp f \subseteq B_\delta(0)$, then
+$$\supp f(t) \subseteq B_{\delta + 2t^{1/4}}(0).$$
+On the other hand, since $H_t$ is close to the true heat kernel $\tilde H_t$ in every $L^p$ space, many of the same estimates apply.
 
+\begin{lemma}\label{approximation by heat kernels}
+Uniformly in $q \in [1, \infty]$ and $0 < t \ll 1$,
+$$\|H_t - \tilde H_t\|_{L^q} \lesssim e^{-d/\sqrt t}.$$
+\end{lemma}
+\begin{proof}
+From the definitions,
+$$|H_t - \tilde H_t| \leq 1_{r^4 > t} \tilde H_t,$$
+so we integrate 
+\begin{align*}
+\|H_t - \tilde H_t\|_{L^q}^q
+&\leq \int_{\RR^d} 1_{|x|^4 > t} \tilde H_t(x)^q \dif x \lesssim t^{-\frac{d}{2}} \int_{\RR^d} 1_{|x|^4 > t} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x.
+\end{align*}
+With the change of variables $y = x \sqrt{\frac{q}{4t}}$, we obtain 
+\begin{align*}
+t^{-\frac{d}{2}} \int_{\RR^d} 1_{|x|^4 > t} \exp\left(-\frac{q|x|^2}{4t}\right) \dif x
+&= q^{\frac{d}{2}} \int_{\RR^d} 1_{|y|^2 > \frac{q}{4\sqrt t}} e^{-|y|^2} \dif y \lesssim q^{\frac{d}{2}} \exp\left(-\frac{dq}{\sqrt t}\right).
+\end{align*}
+\todo{Write down the details of the last step, it's very important that this error term is controlled}
+Taking $q$th roots, and recalling that $q^{a/q} \sim_a 1$, we conclude the lemma.
+\end{proof}
+
+\begin{lemma}
+For $\frac{1}{p} + \frac{1}{q} = 1$, $q \in [1, \infty]$, and $0 < t \ll 1$,
+$$\|H_t\|_{L^q} \sim t^{-\frac{d}{2p}}.$$
+\end{lemma}
+\begin{proof}
+We have $t^{-\frac{d}{2p}} \gg e^{-d/\sqrt t}$, so by Lemma \ref{approximation by heat kernels}, it suffices to prove the same estimate for $\tilde H_t$. But this is standard:
+\begin{align*}
+\|\tilde H_t\|_{L^q} &\sim t^{-\frac{d}{2}} \left[\int_{\RR^d} e^{-\frac{q|x|^2}{4t}} \dif x\right]^{\frac{1}{q}} \sim \frac{t^{d/2q}}{q^{d/2q}t^{d/2}} \sim t^{\frac{d}{2q} - \frac{d}{2}} = t^{-\frac{d}{2p}}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{lemma}
+One has $f(t) \to f$ in $C^0$ as $t \to 0$.
+\end{lemma}
+\begin{proof}
+By Lemma \ref{approximation by heat kernels}, Young's inequality, and the standard fact that $\tilde H_t * f = f + o(1)$ in $C^0$ as $t \to 0$,
+\begin{align*}
+\|f - f(t)\|_{C^0}
+& \leq \|f - \tilde H_t * f\|_{C^0} + \|\tilde H_t * f - f(t)\|_{C^0} \leq o(1) + \|\tilde H_t - H_t\|_{L^1} \|f\|_{C^0} = o(1). \qedhere
+\end{align*}
+\end{proof}
+
+\todo{Follow the following outline}
+\begin{enumerate}
+	\item $f - f(t)$ is small in $L^q$ because it's controlled by $\|(H_{s_1} - H_{s_2}) * f\|_{L^q}$ where $s_1, s_2 \in (0, t]$
+	\item By a partition of unity argument, define $f(t)$ for $f$ a $1$-form on $M$
+	\item New subsection - Use Young's inequality to estimate $\|\dif u_q(t)\|_{L^q \log_+ L}$ in terms of $\|\dif u_q\|_{L^q}$
+	\item Use the Fubini trick to estimate $\||\dif u_q(t)|^q - |\dif u_q(t)|\|_{L^1}$ in $L^1$ 
+	\item Since $u_q(t_q)$ and $u_q$ are co-Cauchy in $BV$ for suitable $t_q \to 0$, conclude that $\|\dif u_q\|_{L^q}$ is a Cauchy sequence.
+\end{enumerate}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Taking the limit}
 \begin{lemma}\label{L1 convergence preserves pi1}
 Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\pi_1(M)$-equivariant functions on $\tilde M$ which converge in $L^1_\loc(\tilde M)$ to a function $u$ as $q \to 1$.
 Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
@@ -615,7 +672,16 @@ Taking $q \to 1$ and applying (\ref{equivariance q}), we conclude that $\|\gamma
 The claim follows when we recall $\alpha = [u]$, $\alpha_q = [u_q]$.
 \end{proof}
 
-\begin{proof}[Proof of Proposition \ref{qharmonics converge}]
+\begin{proposition}\label{qharmonics converge}
+For each $1 < q < 2$, let $u_q$ be a $q$-harmonic, $\pi_1(M)$-equivariant function on $\tilde M$, so that
+$$\|u_q\|_{W^{1, q}} \lesssim 1.$$
+Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(M)$ such that, as $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r$ for $1 \leq r < \frac{d}{d - 1}$.
+Moreover, $[u_q] \to [u]$ and
+\begin{equation}\label{convergence of Lq norms to TV}
+\lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q = \int_M \star |\dif u|.
+\end{equation}
+\end{proposition}
+\begin{proof}
 We first apply the assumption that $(u_q)$ is bounded in $W^{1, q}$.
 By H\"older's inequality,
 $$\lim_{q \to 1} \int_M \star |\dif u_q| \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \int_M \star |\dif u_q|^q \lesssim 1.$$
