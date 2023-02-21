@@ -538,7 +538,7 @@ Then for almost every $x \in M$ there exists a unit covector $\xi \in T_x' M$, w
 \begin{equation}\label{diskette LDT}
 |F(x)| = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \left[\int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F\right] \dif t
 \end{equation}
-where $\dif t$ is the disintegration of the Riemannian measure with respect to $\lambda_{\xi, \varepsilon}$.
+where $\dif t$ is the disintegration of the Riemannian measure on $B_\varepsilon(x)$ with respect to $\lambda_{\xi, \varepsilon}$.
 \end{proposition}
 
 To set up the proof, we define for any closed $d - 1$-form $G$, covector $\eta \in T'_x M$, and $\varepsilon > 0$,
@@ -621,7 +621,7 @@ $$|\{I_1 > \alpha\}| \leq |\{\mathcal M |F - G| > \alpha\}| \lesssim \frac{\|F -
 Next, to bound $I_2$, we pull back everything into the tangent space at $x$.
 We put tildes over balls or Hodge stars to indicate that they are taken with respect to the euclidean metric on $T_x M$.
 After accepting a correction of size $O(\varepsilon)$ arising from the metric on $M$, 
-$$I_2 = \frac{1}{\varepsilon^d |\Ball^d|} \left|\int_{-\varepsilon}^\varepsilon \left[\int_{\ker \xi + t\xi^\sharp \cap \tilde B_\varepsilon} - \int_{\ker \eta + t\eta^\sharp \cap \tilde B_\varepsilon}\right] G \dif t\right| + O(\varepsilon)$$
+$$I_2 = \frac{1}{\varepsilon^d |\Ball^d|} \left|\int_{-\varepsilon}^\varepsilon \left[\int_{\ker \xi + t\xi^\sharp \cap \tilde B_\varepsilon(0)} - \int_{\ker \eta + t\eta^\sharp \cap \tilde B_\varepsilon(0)}\right] G \dif t\right| + O(\varepsilon)$$
 which we can rewrite as
 $$I_2 = \left|\dashint_{\tilde B_\varepsilon(0)} \tilde \star [(G, \xi(x)^\sharp) - (G, \eta(x)^\sharp)]\right| + O(\varepsilon) \leq \dashint_{\tilde B_\varepsilon(0)} \tilde \star |G| \cdot |\xi(x) - \eta(x)| + O(\varepsilon).$$
 Since $G$ is continuous, on $\tilde B_\varepsilon(0)$, $|G| = |G(x)| + o(1)$ as $\varepsilon \to 0$.
@@ -652,7 +652,12 @@ Adding up $I_1, \dots, I_4$, we conclude that
 We write $M = \{F = 0\} \sqcup \{F \neq 0\}$.
 By Lemma \ref{PLDT nonzero}, the claim holds on almost all of $\{F = 0\}$, so we may assume that $F \neq 0$ almost everywhere.
 In particular, $\xi := \star F/|F|$ is well-defined almost everywhere.
-We choose a continuous, everywhere nonzero, closed $d - 1$-form $G$ so that $\|F - G\|_{L^1} \leq \delta \alpha^3$ for any $\delta > 0$, so that, after applying Lemma \ref{PLDT bound mass} with $\alpha = \frac{1}{m}$,
+
+Let $\delta, \alpha > 0$.
+We can then choose a continuous, everywhere nonzero, closed $d - 1$-form $G$ so that $\|F - G\|_{L^1} \leq \delta \alpha^3$.
+After applying Lemma \ref{PLDT bound mass}, we get 
+$$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > \alpha\right\}\right| \lesssim \delta \alpha^2.$$
+Taking $\alpha = \frac{1}{m}$, we conclude
 $$\left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > 0\right\}\right| \leq \sum_{m=1}^\infty \left|\left\{\lim_{\varepsilon \to 0} |A(F, \xi, \varepsilon) - |F|| > \frac{1}{m}\right\}\right| \lesssim \sum_{m=1}^\infty \frac{\delta}{m^2} \lesssim \delta.$$
 The claim follows when we take $\delta \to 0$.
 \end{proof}
@@ -714,9 +719,9 @@ We bound for almost every $x \in M$ using the diskette Lebesgue differentiation 
 \begin{align*}
 |F(x)|
 &= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{P_{\ker \xi + t\xi^\sharp, \varepsilon}} F \dif t \\
-&\leq \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |P_{\ker \xi + t\xi^\sharp, \varepsilon}| \dif t.
+&\leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |P_{\ker \xi + t\xi^\sharp, \varepsilon}| \dif t.
 \end{align*}
-Since $\dif t$ is the disintegration of the Riemannian measure with respect to the foliation $\lambda_{\xi, \varepsilon}$ of $B_\varepsilon(x)$,  it follows that 
+Since $\dif t$ is the disintegration of the Riemannian measure with respect to the foliation $\lambda_{\xi, \varepsilon}$ of $B_\varepsilon(x)$,
 $$\int_{-\infty}^\infty |P_{\ker \xi + t\xi^\sharp, \varepsilon}| \dif t = |B_\varepsilon(x)|.$$
 Therefore
 $$|F(x)| \leq \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = L(F, x).$$
@@ -797,14 +802,9 @@ For $f \in L^1$,
 \end{equation}
 \end{lemma}
 \begin{proof}
-We first bound 
-$$|f(t, x)| = \left|\int_{\RR^d} H_t(x - y) f(y) \dif y\right| \leq \int_{\RR^d} H_t(x - y) |f(y)| \dif y.$$
-So by Fubini's theorem and the fact that $\|H_t\|_{L^1} \leq \|\tilde H_t\|_{L^1} = 1$,
+By Young's inequality
 \begin{align*}
-\int_{\RR^d} |f(t, x)| \dif x
-&\leq \iint_{\RR^{d + d}} H_t(x - y) |f(y)| \dif y \dif x \\
-&= \int_{\RR^d} |f(y)| \int_{\RR^d} H_t(x - y) \dif x \dif y \\
-&= \int_{\RR^d} |f(y)| \dif y. \qedhere
+	\|f(t)\|_{L^1} &\leq \|H_t\|_{L^1} \|f\|_{L^1} \leq \|\tilde H_t\|_{L^1} \|f\|_{L^1} \leq \|f\|_{L^1}. \qedhere
 \end{align*}
 \end{proof}
 
@@ -846,7 +846,7 @@ Moreover, since $u_q \to u$ in $L^1_\loc$, $\|u_q\|_{L^1(M_{\rm fun})} \leq 2\|u
 But then 
 $$\|u_q\|_{L^1(\gamma_* M_{\rm fun})} = \|\gamma^* u_q\|_{L^1(M_{\rm fun})} \geq \langle \alpha_q, \gamma\rangle - \|u_q\|_{L^1(M_{\rm fun})} \geq \langle \alpha_q, \gamma\rangle - 2\|u\|_{L^1(M_{\rm fun})}$$
 and taking $q \to 1$ we conclude that $(u_q)$ is not compact in $L^1(\gamma_* M_{\rm fun})$, contradicting the convergence in $L^1_\loc(\tilde M)$.
-So $\alpha_q \to \alpha$ for some $\alpha \in H^1(M, \RR)$.
+So $\alpha_q \to \alpha$ for some $\alpha \in H^1(M, \RR)$ along a subsequence.
 
 For any $q > 1$,
 \begin{align*}
@@ -854,8 +854,8 @@ For any $q > 1$,
 &\leq \dashint_{M_{\rm fun}} \star (|\gamma^* u_q - u_q - \langle \alpha_q, \gamma\rangle| + |\gamma^* u_q - u_q| + |\gamma^* u - u|) \\
 &\qquad + |\langle \alpha_q - \alpha, \gamma\rangle|.
 \end{align*}
-Taking $q \to 1$ and applying (\ref{equivariance q}), we conclude that $\|\gamma^* u - u - \langle \alpha, \gamma\rangle\|_{L^1} = 0$.
-The claim follows when we recall $\alpha = [u]$, $\alpha_q = [u_q]$.
+Taking $q \to 1$ and applying (\ref{equivariance q}), we conclude that $\|\gamma^* u - u - \langle \alpha, \gamma\rangle\|_{L^1} = 0$, hence $u$ is $\alpha$-equivariant.
+Thus $\alpha$ is uniquely defined and $\alpha_q \to \alpha$ along the entire subsequence.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%
