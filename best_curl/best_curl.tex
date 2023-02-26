@@ -947,28 +947,28 @@ There is an Euler-Lagrange equation for $C^1$ absolutely best comass forms.
 \begin{proposition}
 Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$. Then
 \begin{equation}\label{infinityMaxwell}
-	F^{ij} \partial_i |F| = 0.
+	F^{ij} F^{k\ell} \nabla_j F_{k \ell} = 0.
 \end{equation}
 \end{proposition}
 \begin{proof}
 For a covariant $2$-tensor $T$, let $T^{\rm as}$ be its antisymmetrization, and let
-$$f(x, T) := |T^{\rm as}|_{g(x)}.$$
+$$f(x, T) := |T^{\rm as}|_{g(x)}^2.$$
 Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be in Coulomb gauge and therefore $C^2$ by a variant of (\ref{Sobolev}).
 Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
 By \cite[Theorem 5.2]{Barron2001},
 \begin{equation}\label{ELA}
-	\left\langle \frac{\partial f}{\partial T}(x, \nabla A(x)), \dif (f(x, \nabla A(x))) \right\rangle = 0.
+	\frac{\partial f}{\partial T_{ij}}(x, \nabla A(x)) \partial_j (f(x, \nabla A(x))) = 0.
 \end{equation}
-Now
-$$\dif(f(x, \nabla A(x))) = \dif |\dif A(x)|$$
-and 
-$$\frac{\partial f}{\partial T}(x, \nabla A(x)) = \frac{\nabla A(x)^{\rm as}}{|\nabla A(x)^{\rm as}|} = \frac{\dif A(x)}{|\dif A(x)|}.$$
-We conclude the claim after multiplying both sides of (\ref{ELA}) by $|\dif A|$.
+We then compute
+\begin{align*}
+\partial_j (f(x, \nabla A(x))) &= \nabla_j |\dif A|^2 = 2 \langle \dif A, \nabla_j \dif A\rangle = F^{k\ell} \nabla_j F_{k\ell} \\
+\frac{\partial f}{\partial T_{ij}}(x, \nabla A(x)) &= (\nabla A^{\rm as})^{ij} = F^{ij}. \qedhere
+\end{align*}
 \end{proof}
 
 This equation is somewhat easier to visualize if $d = 3$ and we view $F = \dif X^\flat$ for a vector field $X$.
 Then (\ref{infinityMaxwell}) is equivalent to 
-$$(\nabla \times X) \times (\nabla |\nabla \times X|) = 0.$$
+$$(\nabla \times X) \times \nabla_{\nabla \times X} (\nabla \times X) = 0.$$
 
 By analogy with $\infty$-harmonic functions, one expects the following:
 
@@ -1003,8 +1003,12 @@ Then, with implied constant independent of $q$,
 \begin{proof}
 We bound
 \begin{align*}
-\|H_t\|_{L^q} &\sim t^{-\frac{d}{2}} \left[\int_{\RR^d} e^{-\frac{q|x|^2}{4t}} \dif x\right]^{\frac{1}{q}} \sim \frac{t^{d/2q}}{q^{d/2q}t^{d/2}} \sim t^{\frac{d}{2q} - \frac{d}{2}} = t^{-\frac{d}{2p}}. \qedhere
+\|H_t\|_{L^q}
+&= (4\pi t)^{-\frac{d}{2}} \left[\int_{\RR^d} e^{-\frac{q|x|^2}{4t}} \dif x\right]^{\frac{1}{q}} \\
+&= (4\pi t)^{-\frac{d}{2}} (t/q)^{\frac{d}{2q}} \left[\int_{\RR^d} e^{-\frac{|y|^2}{4}} \dif y\right]^{\frac{1}{q}} \\
+&= (4\pi t)^{-\frac{d}{2}} (t/q)^{\frac{d}{2q}} (4\pi)^{\frac{d}{2q}} = (4\pi t)^{-\frac{d}{2p}} q^{-\frac{d}{2q}}.
 \end{align*}
+The claim follows when we recall that $(4\pi)^{-\frac{d}{2p}} \sim$ and $q^{\frac{1}{q}} \sim 1$ uniformly in $q \in [1, \infty]$.
 % To prove (\ref{tail bound on heat kernel}),
 % % we introduce the \dfn{incomplete $\Gamma$-function}
 % % $$\Gamma(w, z) := \int_z^\infty s^{w - 1} e^{-s} \dif s,$$
@@ -1205,20 +1209,19 @@ We bound the integral in $r$ as
 \end{align*}
 Define $r, s \in [1, \infty]$ by 
 $$\frac{1}{q} + \frac{1}{r} = \frac{3}{2}, \quad \frac{1}{r} + \frac{1}{s} = 1.$$
-Then, since $q \geq 1$, $r \geq 2$, so $s \leq 2$.
-By Young's inequality and (\ref{lq norm of heat kernel}),
+By Young's inequality and (\ref{lq norm of heat kernel}), for $0 < t < 1$,
 \begin{align*}
 \int_{U_\alpha} \int_1^q \frac{\partial}{\partial r} |\dif u_q(t, x)|^r \dif r \dif V(x)
 &\leq (q - 1) \int_{V_\alpha} |\dif u_q(t, x)|^2 \sqrt{\det g(x)} \dif x \\
 &\leq (q - 1) \|H_t\|_{L^r(\RR^d)}^2 \|\dif u_q\|_{L^q(V_\alpha)}^2 \|\det g\|_{L^\infty(V_\alpha)}^{1/2} \\
 &\lesssim (q - 1) t^{-d/s} \|\dif u_q\|_{L^q(U_\alpha)}^2 \\
-&\lesssim (q - 1) t^{-d/2} \|\dif u_q\|_{L^q(U_\alpha)}^2.
+&\leq (q - 1) t^{-d} \|\dif u_q\|_{L^q(U_\alpha)}^2.
 \end{align*}
-We now set $t_q := (q - 1)^{1/d}$, so that $(q - 1) t_q^{-d/2} = \sqrt{q - 1}$.
+We now set $t_q := (q - 1)^{\frac{1}{2d}}$, so that $(q - 1) t_q^{-d} = \sqrt{q - 1}$.
 By the above considerations, there exists $C > 0$ which only depends on $M$ such that for any $1 < q \leq 2$,
 \begin{align*}
 \int_M \star |\dif u_q|^q 
-&\leq \int_M \star |\dif u_q(t_q)| + C\left((q - 1)t_q^{-d/2} + t_q^{1/4}\right) \|\dif u_q\|_{L^q}^2 \\
+&\leq \int_M \star |\dif u_q(t_q)| + C\left((q - 1)t_q^{-d} + t_q^{1/4}\right) \|\dif u_q\|_{L^q}^2 \\
 &\leq \int_M \star |\dif u_q| + C\sqrt{q - 1} \|\dif u_q\|_{L^q}^2.
 \end{align*}
 Since $C$ is independent of $q$, we may take the limit $q \to 1$ and apply the portmanteau theorem to deduce that 
@@ -1646,7 +1649,7 @@ By \cite[Chapter II, Proposition 1.2]{Ekeland99}, the minimizers of $J$ and $\ha
 Since $\Lambda$ has trivial kernel, minimizers of $J \circ \Lambda$ are also unique.
 \end{proof}
 
-One of the most famous corollaries of (\ref{abstract strong duality}) is the \dfn{max flow min cut theorem} of discrete optimization \todo{Cite the Algorithms book}.
+One of the most famous corollaries of (\ref{abstract strong duality}) is the \dfn{max flow min cut theorem} of discrete optimization \cite[Chapter 7]{umesh2006algorithms}.
 Since it seems rather unlikely that Thurston meant that $L = K$ should be a graph-theoretic fact, we interpret his assertion that ``a characterization of minimum stretch maps should be possible ... based on more general principles -- in particular the max flow min cut principle ...'' to refer to the more abstract formula (\ref{abstract strong duality}).
 
 We now specialize to the problem at hand.
