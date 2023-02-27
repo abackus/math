@@ -213,7 +213,7 @@ is $q$-harmonic -- in other words, $u$ is a solution of the $q$-Laplace equation
 $$\dif^*(|\dif u|^{q - 2} \dif u) = 0.$$
 
 A $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ on the universal cover is \dfn{$1$-harmonic} if it is a minimizer of its total variation 
-$$\int_M \star |\dif u| := \sup_{\|\varphi\|_{C^0} \leq 1} \int_M \dif u \wedge \varphi$$
+$$\|\dif u\|_{TV} := \sup_{\|\varphi\|_{C^0} \leq 1} \int_M \dif u \wedge \varphi$$
 among all perturbations of $u$ by a $\pi_1(M)$-invariant function.
 Equivalently, $u$ is $1$-harmonic if 
 $$\dif^* \left(\frac{\dif u}{|\dif u|}\right) = 0$$
@@ -349,18 +349,14 @@ where $\dif_A$ is the covariant derivative whose Christoffel symbols are given b
 \subsection{Outline of the paper} \todo{Do this later}
 
 %%%%%%%%%%%%%%%%%%%%%
-\subsection{Notation and preliminaries}
+\subsection{Notation}
 We say that an $\ell$-form $F \in L^1_\loc(M, \Omega^\ell)$ is \dfn{closed} if for every smooth, compactly supported closed $d - \ell$-form $\varphi$, $\int_M F \wedge \varphi = 0$.
 We do not assume that $F$ is continuous.
 
 We write $\Omega^\ell$, $Z^\ell$, and $B^\ell$ for the spaces of $\ell$-forms, closed $\ell$-forms ($\ell$-cocycles), and exact $\ell$-forms ($\ell$-coboundaries) respectively.
-We reserve $H^\ell$ for cohomology and write $W^{s, p}$ for Sobolev spaces. \todo{Do this later}
+We reserve $H^\ell$ for cohomology and write $W^{s, p}$ for Sobolev spaces.
 
-We say that a $d-2$-form $A$ is in \dfn{Coulomb gauge} if $\dif^* A = 0$.
-If $F = \dif A$, then it follows that $F = (\dif + \dif^*) A$, and since the Dirac operator $\dif + \dif^*$ is elliptic, for $p > d$ we get from Sobolev embedding and elliptic regularity that
-\begin{equation}\label{Sobolev}
-	\|A\|_{C^0} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
-\end{equation}
+We let $\dif V = \star 1$ be the volume form on $N$, and for an $\ell$-rectifiable set $\tau$, we let $\dif S_\tau$ denote the Hausdorff measure on $\tau$ induced by $\dif V$.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{Acknowledgements}
@@ -443,24 +439,43 @@ $$L_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{|\sigma|} \in
 We let $L(F) := L_M(F)$.
 \end{definition}
 
-The comass $L_\Omega(F)$ is well-defined if $F$ is continuous, or has a trace along every $d - 1$-simplex.
-We use the following proposition to take traces of $F$ whenever $F \in L^\infty$:
+\begin{definition}
+	Let $\rho \in H^{d - 1}(M, \RR)$ and let $F$ be a closed $d-1$-form representing $\rho$.
+\begin{enumerate}
+	\item We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all $F$ representing $\rho$.
+	\item We say that $F$ has \dfn{absolutely best comass} if it has best comass, and for every small open ball $\Omega$, $F$ is a minimizer of $L_\Omega$ among all closed forms $B$ with $B|_{\partial \Omega} = F|_{\partial \Omega}$.
+\end{enumerate}
+\end{definition}
 
-\begin{proposition}\label{integration is welldefined}
-Let $\tau$ be a contractible $d-1$-rectifiable set, and $d < p < \infty$.
-Then $F \mapsto \int_\tau F$ extends to a continuous linear functional on $L^p(M, Z^{d - 1})$.
+%%%%%%%%%%%%%%%%%%%
+\subsection{Trace theorem}
+The comass $L_\Omega(F)$ is well-defined if $F$ is continuous, or has a trace along every $d - 1$-simplex.
+We now prove that we may take traces of an $L^\infty$ $d - 1$ form, provided that it is closed.
+
+We say that a $d-2$-form $A$ is in \dfn{Coulomb gauge} if $\dif^* A = 0$.
+If $F = \dif A$, then it follows that $F = (\dif + \dif^*) A$, and since the Dirac operator $\dif + \dif^*$ is elliptic, for $p > d$ we get from Sobolev embedding and elliptic regularity that
+\begin{equation}\label{Sobolev}
+	\|A\|_{C^0} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
+\end{equation}
+
+\begin{proposition}[trace theorem]\label{integration is welldefined}
+Let $\tau$ be a contractible $d-1$-rectifiable set and finite $d-1$-dimensional Hausdorff measure, and let $\psi \in C^1(M)$.
+Then for any $d < p < \infty$, $F \mapsto \int_\tau \psi F$ extends to a continuous linear functional on $L^p(M, Z^{d - 1})$.
 Moreover,
 \begin{equation}\label{integral over chain is linfinity}
-	\frac{1}{|\tau|} \int_\tau F \leq \|F\|_{L^\infty}.
+	\int_\tau F \leq \|F\|_{L^\infty} \int_\tau \psi \dif S_\tau.
 \end{equation}
 \end{proposition}
 \begin{proof}
-We first show that $F \mapsto \int_\tau F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
+It suffices to show this result if $\tau$ is a $C^1$ $d-1$-simplex, with $d-2$-rectifiable boundary $\gamma$.
+In the general case, we can write $\tau$ as the union of a set which is null for $d-1$-dimensional Hausdorff measure, and a countable sum of $C^1$ $d-1$-simplices with $d-2$-rectifiable boundaries. 
+
+We first show that $F \mapsto \int_\tau \psi F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
 Let $\Sigma$ be a contractible open neighborhood of $\tau$.
 Let $F, F' \in C^\infty(\Sigma, Z^{d - 1})$.
-Since $H^{d - 1}(\Sigma, \RR) = 0$, there exist $A, A'$ in Coulomb gauge such that $\dif A = F$ and $\dif A' = F'$, and then by Stokes' theorem and (\ref{Sobolev}),
-$$\left|\int_\tau F - F'\right| = \left|\int_{\partial \tau} A - A'\right| \lesssim \|A - A'\|_{C^0} \lesssim \|F - F'\|_{L^p}.$$
-By a mollification argument, $F \mapsto \int_\tau F$ is a continuous linear functional on $L^p(\Sigma, Z^{d - 1})$.
+Since $H^{d - 1}(\Sigma, \RR) = 0$, there exist $A, A'$ in Coulomb gauge such that $\dif A = F$ and $\dif A' = F'$, and then by integration by parts and (\ref{Sobolev}),
+$$\left|\int_\tau \psi(F - F')\right| \leq \left|\int_\tau \dif \psi \wedge (A - A')\right| \left|\int_\gamma \psi(A - A')\right| \lesssim_{\tau, \psi} \|A - A'\|_{C^0} \lesssim \|F - F'\|_{L^p}.$$
+By a mollification argument, $F \mapsto \int_\tau \psi F$ is a continuous linear functional on $L^p(\Sigma, Z^{d - 1})$.
 
 Suppose now that $F \in L^\infty$ and choose a sequence of mollifiers $\chi_\varepsilon$ such that $\|\chi_\varepsilon\|_{L^1} = 1$.
 Let $F_\varepsilon := F * \chi_\varepsilon$, so that $F_\varepsilon \to F$ in $L^p$ for any $d < p < \infty$.
@@ -468,21 +483,49 @@ By Young's inequality,
 $$\|F_\varepsilon\|_{C^0} \leq \|F\|_{L^\infty} \|\chi_\varepsilon\|_{L^1} \leq \|F\|_{L^\infty}.$$
 Taking $\varepsilon \to 0$ we see that
 \begin{align*}
-\frac{1}{|\tau|} \int_\tau F 
-&= \lim_{\varepsilon \to 0} \frac{1}{|\tau|} \int_\tau F_\varepsilon \leq \lim_{\varepsilon \to 0} \|F_\varepsilon\|_{C^0} \leq \|F\|_{L^\infty}. \qedhere
+\int_\tau \psi F 
+&= \lim_{\varepsilon \to 0} \int_\tau \psi F_\varepsilon \leq \lim_{\varepsilon \to 0} \|F_\varepsilon\|_{C^0} \int_\tau \psi \dif S_\tau \leq \|F\|_{L^\infty} \int_\tau \psi \dif S_\tau. \qedhere
 \end{align*}
 \end{proof}
 
-Writing a $d-1$-chain $\sigma$ as the sum of contractible $d-1$-rectifiable sets $\tau$, it follows the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
+Writing a $d-1$-chain $\sigma$ as the sum of contractible $d-1$-rectifiable sets $\tau$, and taking $\psi := 1$, it follows the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
+It will later be useful to instead take $\psi$ to be an element of a partition of unity.
 
-\begin{definition}
-	Let $\rho \in H^{d - 1}(M, \RR)$ and let $F$ be a closed $d-1$-form representing $\rho$.
-\begin{enumerate}
-	\item We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all $F$ representing $\rho$.
-	\item We say that $F$ has \dfn{absolutely best comass} if it has best comass, and for every small open ball $\Omega$, $F$ is a minimizer of $L_\Omega$ among all closed $2$-forms $B$ with $B|_{\partial \Omega} = F|_{\partial \Omega}$.
-\end{enumerate}
-\end{definition}
+We shall also need to be able to plug in forms of best comass in the coarea formula.
+To state it, we recall that if $u \in BV(M)$, then its superlevel sets $\{u > y\}$ have locally finite perimeter.
+In particular, they have a reduced boundary, which is the set of points for which the polar decomposition of $\dif 1_{\{u > y\}}$ is well-defined.
+Since $\{u > y\}$ has locally finite perimeter, its reduced boundary $\partial^* \{u > y\}$ is $d-1$-rectifiable.
+See \cite[Chapters 1-4]{Giusti77} for careful proofs of these facts when $M$ is flat, or \todo{Cite laminations paper} for sketches of how to extend the proofs to the Riemannian setting.
 
+\begin{proposition}[coarea formula]
+Let $u \in BV(M)$, and let $F \in L^p(M, Z^{d - 1})$ where $p > d$. Then 
+\begin{equation}\label{coarea formula}
+\int_M \dif u \wedge F = \int_{-\infty}^\infty \int_{\partial^* \{u > y\}} F \dif y.
+\end{equation}
+\end{proposition}
+\begin{proof}
+The reduced boundary $\partial^* \{u > y\}$ is $d-1$-rectifiable, so by the trace theorem, both sides of (\ref{coarea formula}) depend continuously on $F$ in $L^p$.
+Therefore we may assume that $F$ is continuous.
+
+Let $\mu := \star |\dif u|$ be the total variation measure and $\normal$ its polar part.
+\begin{equation}\label{pre coarea formula}
+\int_M \dif u \wedge F = \int_M \langle \star \normal, F\rangle \dif \mu.
+\end{equation}
+We can approximate $u$ weakly in $BV$ by $C^1$ functions; both sides of (\ref{pre coarea formula}) depend continuously on $u$ in weak $BV$, so we may assume that $u$ is smooth.
+Moreover, the left-hand side of (\ref{coarea formula}) is unaffected by replacing $M$ with a smaller domain on which $u$ has almost no critical points, and by Sard's theorem, $u$ has almost no critical values, which therefore do not contribute to the right-hand side of (\ref{coarea formula}).
+In particular, we may assume that $u$ has no critical points.
+
+But if $u$ is smooth and has no critical points, then $\partial^* \{u > y\} = \{u = y\}$ is a smooth $d-1$-surface with conormal $1$-form $\normal$, and we conclude the theorem by Fubini's theorem and the change-of-variables formula:
+\begin{align*}
+\int_M \langle \star \normal, F\rangle \dif \mu
+&= \int_{-\infty}^\infty \int_{\{u = y\}} \langle \star \normal, F\rangle \dif S_{\{u = y\}} \dif y
+= \int_{-\infty}^\infty \int_{\{u = y\}} F \dif y. \qedhere
+\end{align*}
+\end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Local comass}
 We will be interested in the points at which $F$ attains its comass.
 One could pose this problem as the problem of computing the locus $\{|F| = \|F\|_{L^\infty}\}$.
 However, $F$ is both only defined almost everywhere, and not norm-approximable by smooth functions.
@@ -707,12 +750,20 @@ We now prove (\ref{crandall LDT}).
 We may work locally, and choose coordinates $(y^i)$ in which $\sqrt{\det g} = 1$.
 Let $I$ be the increasing $d-1$-index with $d$ removed.
 By the Lebesgue differentiation theorem and Fubini's theorem, there exists a null set $Z \subset M$ such that for every $x \notin Z$,
-$$F_I(x) = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{B_\varepsilon(x)} F_I(y) \dif y = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F_I(y) \dif y^1 \cdots \dif y^{d - 1} \dif t$$
+\begin{align*}
+F_I(x) 
+&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{B_\varepsilon(x)} F_I(y) \dif y \\
+&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F_I(y) \dif y^1 \cdots \dif y^{d - 1} \dif t
+\end{align*}
 where we used the fact that $\sqrt{\det g} = 1$.
 Now $\partial_{y^1}, \dots, \partial_{y^{d - 1}}$ are tangent to $\{y^d = t\}$, so as forms on $\{y^d = t\}$,
 $$F_I(y) \dif y^1 \cdots \dif y^{d - 1} = F.$$
 So
-$$F_I(x) = \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F \dif t \leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |\{y^d = t\} \cap B_\varepsilon(x)| \dif t.$$
+\begin{align*}
+F_I(x) 
+&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F \dif t \\
+&\leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |\{y^d = t\} \cap B_\varepsilon(x)| \dif t.
+\end{align*}
 By Fubini's theorem,
 $$F_I(x) \leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} |B_\varepsilon(x)| = L(F, x).$$
 Moreover, by \todo{Cite minimal laminations paper}, $Z$ is independent of the choice of coordinates.
@@ -1149,7 +1200,7 @@ Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\
 Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
 Moreover, if $\dif u_q \to \dif u$ in the weak topology of measures on $M$ and $\dif u_q \in L^q$, then
 \begin{equation}\label{q to 1 Holder}
-\lim_{q \to 1} \int_M \star |\dif u| \leq \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
+\|\dif u\|_{TV} \leq \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
 \end{equation}
 \end{lemma}
 \begin{proof}
@@ -1181,31 +1232,7 @@ Finally we prove (\ref{q to 1 Holder}).
 Suppose that $\dif u_q \to \dif u$ in the weak topology of measures and $\dif u_q$ in $L^q$.
 Under those hypotheses, we may use the portmanteau theorem and H\"older's inequality to estimate (where $\frac{1}{p} + \frac{1}{q} = 1$)
 \begin{align*}
-\int_M \star |\dif u| &= \lim_{q \to 1} \int_M \star |\dif u_q| \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \|\dif u_q\|_{L^q} = \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q. \qedhere
-\end{align*}
-\end{proof}
-
-We also need the following form of the coarea formula, which we apply locally in $M$ (so $\{u > y\}$ is well-defined):
-
-\begin{lemma}[coarea formula]
-Let $u \in BV(M)$, and let $F \in L^p(M, Z^{d - 1})$ where $p > d$. Then 
-\begin{equation}\label{coarea formula}
-\int_M \dif u \wedge F = \int_{-\infty}^\infty \int_{\partial \{u > y\}} F \dif y.
-\end{equation}
-\end{lemma}
-\begin{proof}
-Let
-$$\iota_y: \partial \{u > y\} \to M$$
-be the inclusion map and let $\dif S_y$ be the area element on $\partial \{u > y\}$.
-Since $\partial \{u > y\}$ is the boundary of a set of locally finite perimeter and $F \in L^p(M, Z^{d - 1})$, by Proposition \ref{integration is welldefined} we may integrate $F$ over $\partial \{u > y\}$.
-Let $\normal := \dif u/|\dif u|$ be the polar part of $\dif u$.
-Then $\normal|_{\partial \{u > y\}}$ is the conormal $1$-form to $\partial \{u > y\}$, so 
-$$\iota_y^* (\star (\normal \wedge F)) \dif S_y = \iota^*_y F.$$
-By \todo{cite first paper} we have 
-\begin{align*}
-\int_M \dif u \wedge F 
-&= \int_M |\dif u| \normal \wedge F = \int_{-\infty}^\infty \int_{\partial \{u > y\}} \iota_y^* (\star (\normal \wedge F)) \dif S_y \dif y \\
-&= \int_{-\infty}^\infty \int_{\partial \{u > y\}} \iota_y^* F \dif y. \qedhere
+\|\dif u\|_{TV} &= \lim_{q \to 1} \|\dif u_q\|_{L^1} \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \|\dif u_q\|_{L^q} = \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q. \qedhere
 \end{align*}
 \end{proof}
 
@@ -1244,12 +1271,12 @@ Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ su
 \end{enumerate}
 \end{proposition}
 \begin{proof}
-We first compute using Lemma \ref{normalizations converge}
-\begin{equation}\label{Lqs of qLaplace converge}
-\lim_{q \to 1} \int_M \star |\dif u_q|^q = \lim_{p \to \infty} k_p^p \int_M \star |F_p|^p = \lim_{p \to \infty} k_p = \frac{1}{L}.
-\end{equation}
-By H\"older's inequality,
-$$\lim_{q \to 1} \int_M \star |\dif u_q| \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \int_M \star |\dif u_q|^q \lesssim 1.$$
+We first compute using H\"older's inequality and Lemma \ref{normalizations converge}
+\begin{align*}
+\lim_{q \to 1} \|\dif u_q\|_{L^1}
+&\leq \lim_{q \to 1} |M|^{\frac{1}{p}} \left[\int_M \star |\dif u_q|^q\right]^{\frac{1}{q}} = \lim_{p \to \infty} \left[k_p^p \int_M \star |F_p|^p\right]^{\frac{1}{q}} \\
+&= \lim_{p \to \infty} k_p^{\frac{1}{q}} = \lim_{p \to \infty} k_p = \frac{1}{L}.
+\end{align*}
 So by Rellich's theorem, $(u_q)$ is weakly compact in $BV$ and strongly compact in $L^r$ for $1 \leq r < \frac{d}{d - 1}$.
 In particular, $\dif u_q \to \dif u$ in the weak topology of measures and $u_q \to u$ weakly in $BV$ and strongly in $L^r$.
 As the limit of $\pi_1(M)$-equivariant functions, $u$ is also $\pi_1(M)$-equivariant by Lemma \ref{L1 convergence preserves pi1}.
@@ -1260,25 +1287,25 @@ Renormalizing (\ref{strong duality}), we obtain
 $$\frac{k_p^{-p}}{q} \int_M \star |\dif u_q|^q + \frac{1}{p} \int_M \star |F_p|^p = k_p^{1 - p} \int_M \dif u_q \wedge F_p.$$
 Multiplying by $k_p^p$, we have 
 \begin{equation}\label{1 strong duality before limits}
-	\frac{1}{q} \int_M \star |\dif u_q|^q + \frac{k_p}{p} \int_M \star |F_p|^p = k_p \int_M \dif u_q \wedge F_p.
+	\frac{1}{q} \int_M \star |\dif u_q|^q + \frac{k_p^p}{p} \int_M \star |F_p|^p = k_p \int_M \dif u_q \wedge F_p.
 \end{equation}
 
 We next claim that
 \begin{equation}\label{1 strong duality}
-	L \int_M \star |\dif u| \leq \int_M \dif u \wedge F.
+	L \|\dif u\|_{TV} \leq \int_M \dif u \wedge F.
 \end{equation}
 First, we have from (\ref{q to 1 Holder}) and (\ref{1 strong duality before limits}) that
-$$\int_M \star |\dif u| \leq \lim_{p \to \infty} k_p \int_M \dif u_q \wedge F_p - \lim_{p \to \infty} \frac{k_p}{p} \int_M \star |F_p|^p.$$
+$$\|\dif u\|_{TV} \leq \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q = \lim_{p \to \infty} k_p \int_M \dif u_q \wedge F_p - \lim_{p \to \infty} \frac{k_p^p}{p} \int_M \star |F_p|^p.$$
 By Lemma \ref{normalizations converge},
-$$\lim_{p \to \infty} \frac{k_p}{p} \int_M \star |F_p|^p = \lim_{p \to \infty} \frac{k_p}{p} = \frac{0}{L} = 0,$$
+$$\lim_{p \to \infty} \frac{k_p^p}{p} \int_M \star |F_p|^p = \lim_{p \to \infty} \frac{k_p}{p} = \frac{0}{L} = 0,$$
 and
 $$\lim_{p \to \infty} k_p \int_M \dif u_q \wedge F_p = \frac{1}{L} \lim_{p \to \infty} \int_M [\dif u_q] \wedge \rho.$$
 Since $[\dif u_q] \to [\dif u]$, we obtain
 $$\lim_{p \to \infty} \int_M [\dif u_q] \wedge \rho = \int_M \alpha \wedge \rho = \int_M \dif u \wedge F,$$
 completing the proof of (\ref{1 strong duality}).
 
-By (\ref{coarea formula}), we have for any contractible open set $U$,
-$$\int_U \dif u \wedge F = \int_{-\infty}^\infty \int_{U \cap \partial \{u > y\}} F \dif y \leq L \int_{-\infty}^\infty |U \cap \partial \{u > y\}| \dif y = L \int_U \star |\dif u|.$$
+By the coarea formula (\ref{coarea formula}), we have for any contractible open set $U$,
+$$\int_U \dif u \wedge F = \int_{-\infty}^\infty \int_{U \cap \partial \{u > y\}} F \dif y \leq L \int_{-\infty}^\infty |U \cap \partial \{u > y\}| \dif y = L \|\dif u\|_{TV}.$$
 Since $U$ was arbitrary, as Radon measures, we obtain
 \begin{equation}\label{one sided extremality}
 \dif u \wedge F \leq L \star |\dif u|.
@@ -1390,12 +1417,6 @@ Let $(\mu_\alpha)$ denote the transverse measure with respect to this atlas.
 Then 
 $$|\lambda| = \int_M T_\lambda \wedge F = \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha F \dif \mu_\alpha(k).$$
 
-Here we should point out that $\int_{\{k\} \times J} \chi_\alpha F$ is well-defined: $\{k\} \times J$ is a cube, so its pushforward by $\Psi_\alpha$ is a contractible $d-1$-cell $\sigma_{\alpha, k}$ in $M$ such that $\chi_\alpha|_{\sigma_{\alpha, k}}$ has compact support on the interior of $\sigma_{\alpha, k}$.
-In particular, in a neighborhood of $\sigma_{\alpha, k}$, $F = \dif A$ for some $A$, which we may assume to be in Coulomb gauge, and hence continuous by (\ref{Sobolev}).
-Then if $F$ is continuous,
-$$\int_{\sigma_{\alpha, k}} \chi_\alpha F = \int_{\sigma_{\alpha, k}} \chi_\alpha \dif A = -\int_{\sigma_{\alpha, k}} \dif \chi_\alpha \wedge A,$$
-which clearly does not depend on the choice of $A$, and extends by density to general calibrations $F$.
-
 We know that 
 $$\int_M \chi_\alpha \star |T_\lambda| = \int_I \int_{\{k\} \times J} \star_{\{k\} \times J} \chi_\alpha \dif \mu_\alpha(k),$$
 so summing in $\alpha$, we obtain 
@@ -1470,7 +1491,7 @@ Then:
 \begin{proof}
 Let $G$ be the $\infty$-light form which is cohomologous to $F$ whose dual $1$-harmonic function $u$ defines the Thurston lamination $\lambda$.
 Then by the max flow min cut principle (\ref{1 extremality}), 
-$$|\lambda| = \int_M \star |\dif u| = \frac{1}{L} \int_M \dif u \wedge G$$
+$$|\lambda| = \|\dif u\|_{TV} = \frac{1}{L} \int_M \dif u \wedge G$$
 so $G/L$ calibrates $\lambda$ by Proposition \ref{calibration condition}.
 Then by Proposition \ref{properties of calibrated laminations}, $F/L$ calibrates $\lambda$, and the maximum comass locus of $F/L$ contains $\lambda$.
 However, the maximum comass locus is preserved by rescaling.
@@ -1607,15 +1628,14 @@ Let $\lambda$ be a measured oriented lamination; then, since $F$ represents $\rh
 $$\langle \rho, [\lambda]\rangle = \int_M F \wedge T_\lambda.$$
 Let $(\chi_\alpha)$ be a partition of unity subordinate to a laminar atlas for $\lambda$, and let $(\mu_\alpha)$ be the associated transverse measure. Then 
 $$\int_M F \wedge T_\lambda = \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha F \dif \mu_\alpha(k).$$
-Now $\int_{\{k\} \times J} \chi_\alpha F$ depends continuously on $F$ in $L^p(M)$ for any $p$ by Proposition \ref{integration is welldefined} and the fact that $F \mapsto \chi_\alpha F$ is a continuous self-map of $L^p(M)$, so since the same is true if $F$ is continuous, if $\dif S_k$ denotes the area form on $\{k\} \times J$,
-$$\int_{\{k\} \times J} \chi_\alpha F \leq \|F\|_{L^\infty} \int_{\{k\} \times J} \chi_\alpha \dif S_k.$$
-But $F$ has best comass $\|F\|_{L^\infty} = L$, so 
-$$\frac{\langle \rho, [\lambda] \rangle}{|\lambda|} \leq \frac{L}{|\lambda|} \sum_\alpha \int_I \int_{\{k\} \times J} \dif S_k \dif \mu_\alpha(k) = L.$$
+Since $F$ has best comass,
+$$\frac{\langle \rho, [\lambda] \rangle}{|\lambda|}
+\leq \frac{\|F\|_{L^\infty}}{|\lambda|} \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha \dif S_k \dif \mu_\alpha(k) = L.$$
 Since $\lambda$ was arbitrary, it holds that $K \leq L$.
 
 Let $\lambda$ be the Thurston lamination, so $T_\lambda = \dif u$.
 Then by the max flow min cut principle (\ref{1 extremality}),
-$$\langle \rho, [\lambda]\rangle = \int_M F \wedge \dif u = L \int_M \star |\dif u| = L|\lambda|.$$
+$$\langle \rho, [\lambda]\rangle = \int_M F \wedge \dif u = L \|\dif u\|_{TV} = L|\lambda|.$$
 Dividing both sides by $|\lambda|$ and applying the direction we already proved,
 $$K \leq L \leq \frac{\langle \rho, [\lambda]\rangle}{|\lambda|} \leq K$$
 which is only possible if $L = K$ and $\lambda$ is a maximizer.
