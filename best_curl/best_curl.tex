@@ -426,20 +426,14 @@ This research was supported by the National Science Foundation's Graduate Resear
 In this section we study the basic properties of the comass.
 We show that it is well-defined, equals the $L^\infty$ norm, and has a local version which is upper semicontinuous.
 Along the way we establish some tools from geometric measure theory that we shall need in the sequel.
-Throughout, we fix a closed Riemannian manifold $M$ of dimension $d$ and metric $g$.
+Throughout, we fix a Riemannian manifold $M$ (possibly not closed) of dimension $d$ and metric $g$.
 
 \begin{definition}
 For a closed $d-1$-form $F$ and a subdomain $\Omega \subseteq M$, the \dfn{comass} of $F$ in $\Omega$ is
 $$L_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{|\sigma|} \int_\sigma F.$$
 We let $L(F) := L_M(F)$.
-\end{definition}
 
-\begin{definition}
-	Let $\rho \in H^{d - 1}(M, \RR)$ and let $F$ be a closed $d-1$-form representing $\rho$.
-\begin{enumerate}
-	\item We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all $F$ representing $\rho$.
-	\item We say that $F$ has \dfn{absolutely best comass} if it has best comass, and for every small open ball $\Omega$, $F$ is a minimizer of $L_\Omega$ among all closed forms $B$ with $B|_{\partial \Omega} = F|_{\partial \Omega}$.
-\end{enumerate}
+We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all forms cohomologous to $F$.
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%
@@ -448,13 +442,16 @@ The comass $L_\Omega(F)$ is well-defined if $F$ is continuous, or has a trace al
 We now prove that we may take traces of an $L^\infty$ $d - 1$ form, provided that it is closed.
 
 We say that a $d-2$-form $A$ is in \dfn{Coulomb gauge} if $\dif^* A = 0$.
-If $F = \dif A$, then it follows that $F = (\dif + \dif^*) A$, and since the Dirac operator $\dif + \dif^*$ is elliptic, for $p > d$ we get from Sobolev embedding and elliptic regularity that
+If $F = \dif A$, then it follows that $F = (\dif + \dif^*) A$, and since the Dirac operator $\dif + \dif^*$ is elliptic, for $p > d$ we get from Sobolev embedding and elliptic regularity \cite[\S4]{Scott95} that
 \begin{equation}\label{Sobolev}
 	\|A\|_{C^0} \lesssim \|\nabla A\|_{L^p} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
 \end{equation}
 
+Recall that an \dfn{integral current} is an current of integer multiplicity (in the sense of \cite[\S27]{Simon84}) whose exterior derivative has integer multiplicity.
+Since integral $\ell$-currents are ``morally'' $\ell$-chains, if $\tau$ is an integral $\ell$-current, we write $\int_\tau F$ for the pairing of $\tau$ with an $\ell$-form $F$.
+
 \begin{proposition}[trace theorem]\label{integration is welldefined}
-Let $\tau$ be a $d-1$-rectifiable set, and $\psi \in C^1(M)$.
+Let $\tau$ be an integral $d-1$-current, and $\psi \in C^1(M)$.
 Then for any $d < p < \infty$, $F \mapsto \int_\tau \psi F$ extends to a continuous linear functional on $L^p(M, Z^{d - 1})$.
 Moreover,
 \begin{equation}\label{integral over chain is linfinity}
@@ -462,24 +459,15 @@ Moreover,
 \end{equation}
 \end{proposition}
 \begin{proof}
-We first show that $F \mapsto \int_\tau \psi F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
-By \cite[Remark 11.7]{Simon84}, we can write $\tau$ as the disjoint union of a $\mathcal H^{d - 1}$-null set (which we may then assume is empty) and countably many $C^1$ hypersurfaces $(\tau_i)$.
-By subdividing further we may assume that $\tau_i$ is contractible.
-Each hypersurface $\tau_i$ may not have a well-defined boundary, but it does admit a $C^1$ compact exhaustion $(\chi_i^j)_{j \geq 1}$ with $\supp \chi_i^j$ contractible.
-Let $\chi_i^0 = 0$.
-
-Let $F, G \in C^\infty(\Sigma, Z^{d - 1})$ and $\Sigma_i^j$ a contractible neighborhood of $\supp \chi_i^j$ in $M$.
-After shrinking $\Sigma_i^j$ suitably we may assume that for each $x \in M$, the number of $\Sigma_i^j$ containing $x$ is at most a constant which only depends on $\tau$.
-Since $\Sigma_i^j$ is contractible, there exist $d-2$-forms $A_{ij}, B_{ij}$ in Coulomb gauge on $\Sigma_i^j$ such that $\dif A_{ij} = F$ and $\dif B_{ij} = G$.
-\todo{Reduce to the case that there only finitely many active $i,j$. We don't want the constant to depend on $i,j$.}
-then by integration by parts and (\ref{Sobolev}),
+After replacing $\psi$ with $\psi \chi_\alpha$ for $(\chi_\alpha)$ a suitable partition of unity, we may assume that $M$ is contractible.
+We show that $F \mapsto \int_\tau \psi F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
+If $F, G \in C^\infty(M, Z^{d - 1})$ and we select $A, B$ in Coulomb gauge with $\dif A = F$, $\dif B = G$, we have from integration by parts and (\ref{Sobolev}),
 \begin{align*}
 	\left|\int_\tau \psi(F - G)\right| 
-	&\leq \sum_{i,j=1}^\infty \left|\int_{\tau_i} (\chi_i^j - \chi_i^{j - 1}) \psi_i (F - G)\right| \\
-	&\leq \sum_{i,j=1}^\infty \left|\int_{\tau_i} (\chi_i^j - \chi_i^{j - 1}) \dif \psi_i \wedge (A_{ij} - B_{ij})\right| + \sum_{i,j=1}^\infty \left|\int_{\tau_i} \psi_i \dif (\chi_i^j - \chi_i^{j - 1}) \wedge (A_{ij} - B_{ij})\right| \\
-	&\lesssim_{\tau, \psi} \sum_{i,j=1}^\infty \|A_{ij} - B_{ij}\|_{C^0(\Sigma_i^j)} \lesssim_\tau \|F - G\|_{L^p}.
+	&\leq \left|\int_{\partial \tau} \psi (A - B)\right| + \left|\int_\tau \dif \psi \wedge (A - B)\right| \\
+	&\lesssim_{\tau, \psi} \|A - B\|_{C^0} \lesssim \|F - G\|_{L^p}.
 \end{align*}
-By a mollification argument, $F \mapsto \int_\tau \psi F$ is a continuous linear functional on $L^p(\Sigma, Z^{d - 1})$.
+So by a mollification argument, $F \mapsto \int_\tau \psi F$ is a continuous linear functional on $L^p(M, Z^{d - 1})$.
 
 Suppose now that $F \in L^\infty$ and choose a sequence of mollifiers $\chi_\varepsilon$ such that $\|\chi_\varepsilon\|_{L^1} = 1$.
 Let $F_\varepsilon := F * \chi_\varepsilon$, so that $F_\varepsilon \to F$ in $L^p$ for any $d < p < \infty$.
@@ -492,14 +480,20 @@ Taking $\varepsilon \to 0$ we see that
 \end{align*}
 \end{proof}
 
-Taking $\psi := 1$, and recalling that chains are rectifiable, it follows the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
+Taking $\psi := 1$, it follows the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
 It will later be useful to instead take $\psi$ to be an element of a partition of unity.
 
 We shall also need to be able to plug in forms of best comass in the coarea formula.
-To state it, we recall that if $u \in BV(M)$, then its superlevel sets $\{u > y\}$ have locally finite perimeter.
-In particular, they have a reduced boundary, which is the set of points for which the polar decomposition of $\dif 1_{\{u > y\}}$ is well-defined.
-Since $\{u > y\}$ has locally finite perimeter, its reduced boundary $\partial^* \{u > y\}$ is $d-1$-rectifiable.
-See \cite[Chapters 1-4]{Giusti77} for careful proofs of these facts when $M$ is flat, or \todo{Cite laminations paper} for sketches of how to extend the proofs to the Riemannian setting.
+To state it, we recall that if $u \in BV(M)$, then almost all of its superlevel sets $\{u > y\}$ have locally finite perimeter \cite[Theorem 1.23]{Giusti77}.
+In particular, each superlevel set has a reduced boundary $\partial^* \{u > y\}$, which is the set of points for which the polar decomposition of $\dif 1_{\{u > y\}}$ is well-defined \cite[Chapter 3]{Giusti77}.
+
+Let $\mu$ be the total variation measure of $\dif u$, and let $\normal$ be the conormal $1$-form to the level sets of $u$, hence $\dif u = \normal \mu$.
+Then for any open set $U$,
+\begin{equation}\label{TV coarea formula}
+\mu(U) = \int_{-\infty}^\infty |\partial^* \{u > y\} \cap U| \dif y.
+\end{equation}
+If $M$ is flat then (\ref{TV coarea formula}) follows from \cite[Theorem 1.23]{Giusti77}, and in \todo{Cite laminations paper} we sketched a proof in the Riemannian setting.
+Since (for almost every $y$) $\{u > y\}$ has locally finite perimeter, $\tau_y := \partial^* \{u > y\}$ is an exact current of integer multiplicity \cite[Theorem 14.3]{Simon84}, and in particular is integral.
 
 \begin{proposition}[coarea formula]
 Let $u \in BV(M)$, and let $F \in L^p(M, Z^{d - 1})$ where $p > d$. Then 
@@ -508,26 +502,14 @@ Let $u \in BV(M)$, and let $F \in L^p(M, Z^{d - 1})$ where $p > d$. Then
 \end{equation}
 \end{proposition}
 \begin{proof}
-The reduced boundary $\partial^* \{u > y\}$ is $d-1$-rectifiable, so by the trace theorem, the right-hand side of (\ref{coarea formula}) depends continuously on $F$ in $L^p$.
-The left-hand side of (\ref{coarea formula}) depends continuously on $F$ because it only depends on the cohomology class of $F$, which by the trace theorem depends continuously on $F$ in $L^p$.
-Therefore we may assume that $F$ is continuous.
-
-Let $\mu := \star |\dif u|$ be the total variation measure and $\normal$ its polar part.
-\todo{Why can we assume that $u \in C^1$?}
-\begin{equation}\label{pre coarea formula}
-\int_M \dif u \wedge F = \int_M \langle \star \normal, F\rangle \dif \mu.
-\end{equation}
-We can approximate $u$ weakly in $BV$ by $C^1$ functions; both sides of (\ref{pre coarea formula}) depend continuously on $u$ in weak $BV$, so we may assume that $u$ is smooth.
-Moreover, the left-hand side of (\ref{coarea formula}) is unaffected by replacing $M$ with a smaller domain on which $u$ has almost no critical points, and by Sard's theorem, $u$ has almost no critical values, which therefore do not contribute to the right-hand side of (\ref{coarea formula}).
-In particular, we may assume that $u$ has no critical points.
-
-But if $u$ is smooth and has no critical points, then $\partial^* \{u > y\} = \{u = y\}$ is a smooth $d-1$-surface with conormal $1$-form $\normal$, and we conclude the theorem by Fubini's theorem and the change-of-variables formula:
+If $F$ is continuous, then $\langle\star \normal, F\rangle \in L^\infty_\loc(\mu)$, so we can compute using (\ref{TV coarea formula})
 \begin{align*}
-\int_M \langle \star \normal, F\rangle \dif \mu
-&= \int_{-\infty}^\infty \int_{\{u = y\}} \langle \star \normal, F\rangle \dif S_{\{u = y\}} \dif y
-= \int_{-\infty}^\infty \int_{\{u = y\}} F \dif y. \qedhere
+\int_M \dif u \wedge F = \int_M \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y} F \dif y.
 \end{align*}
+By the trace theorem, $\int_{\tau_y} F$ depends continuously on $F$ in $L^p(M, Z^{d - 1})$ for almost every $y$.
+So by a mollification argument, (\ref{coarea formula}) holds for every $F$.
 \end{proof}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -773,7 +755,7 @@ $$\|\tilde F\|_{L^r} \leq \liminf_{p \to \infty} \|F_p\|_{L^r} \leq \liminf_{p \
 Taking $r \to \infty$, we obtain $L(\tilde F) < L$, which contradicts the fact that $L$ is the best comass.
 \end{proof}
 
-By analogy with $\infty$-harmonic maps, one expects $\infty$-tight forms to be unique, have absolutely best comass, and solve the Euler-Lagrange equations (\ref{infinity Maxwell}).
+By analogy with $\infty$-harmonic maps, one expects $\infty$-tight forms to be unique, solve the Euler-Lagrange equations (\ref{infinity Maxwell}), and have \dfn{absolutely best comass} in the sense that they have best comass in \emph{every} open subset of $M$ with smooth boundary.
 However, we shall not prove this here; it should follow from the various conjectures of \S\ref{analytic goals}, if they are indeed true.
 Thus we conjecture:
 
