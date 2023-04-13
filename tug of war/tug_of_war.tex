@@ -78,6 +78,7 @@
 
 \newcommand{\loc}{\mathrm{loc}}
 \newcommand{\cpt}{\mathrm{cpt}}
+\newcommand{\euc}{\mathrm{euc}}
 
 \def\Japan#1{\left \langle #1 \right \rangle}
 
@@ -152,9 +153,7 @@ Viscosity solutions don't work
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-We have motivated the definition of tight forms by geometric topology.
-However, we expect them to be analytically interesting as well.
-Here we propose a program to study tight forms analytically, which we hope to carry out in a later work.
+Let's do $\dim M = 3$ for simplicity.
 
 First recall that $\infty$-harmonic maps $v: M \to \Sph^1$ solve the $\infty$-Laplace equation 
 \begin{equation}\label{infinity laplacian}
@@ -168,43 +167,133 @@ for every vector field $X$ (in particular, the coordinate vector fields).
 Locally we have $F = \dif A$ and so this equation is of the same form as (\ref{infinity laplacian}).
 However, viscosity solutions are defined in terms of the maximum principle and so are only suitable for systems in diagonal form, as in \cite{Ishii92}.
 
-There is an equivalent notion of solution to viscosity solution for the $\infty$-Laplace equation, that of a \dfn{tug-of-war solution}.
-There exists a continuous-time stochastic game called tug-of-war such that a function is a viscosity solution of (\ref{infinity laplacian}) iff it is a value function of tug-of-war \cite{Peres_2008}.
-While the notion of ``value differential form" (as opposed to value function) is somewhat conceptually awkward, it is not unworkable, and since it is exactly the trilinear structure of (\ref{infinity laplacian}) which is used in the proof of equivalence of viscosity and tug-of-war solutions, a notion of tug-of-war solution of (\ref{infinity Maxwell}) should be in reach.
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Variational solutions}
+We introduce the \dfn{$p$-Maxwell equation}
+$$\dif^*(|\dif A|^{p - 2} \dif A) = 0$$
+which is elliptic \emph{up to a gauge transformation}. 
+In particular for a domain $U$ and a continuous $1$-form $B$ on $\partial U$ there exists a continuous $1$-form $A$ on $U$ with $\iota_{\partial U}^* A = B$ which solves the $p$-Maxwell equation.
+If we in addition impose that $A$ is in Coulomb gauge 
+$$\dif^* A = 0$$
+then $A \in W^{1, p}$ is H\"older continuous ($p > d$) and is uniquely determined, since in particular $A$ is $p$-harmonic.
 
-\section{Derivation of the \texorpdfstring{$\infty$-Maxwell}{infinity-Maxwell} equation}
+Let $B \in C^\infty(\partial U, \Omega^1)$ be given and $A_p$ be the solution of the $p$-Maxwell equation with $\iota_{\partial U}^* A_p = B$, which we assume to be in Coulomb gauge.
+Then 
+$$\|\nabla A_p\|_{L^p} \lesssim \|(\dif + \dif^*) A_p\|_{L^p} \lesssim \|B\|_{C^0}.$$
+Then we obtain a limiting form $A$, with the limit taken weakly in $W^{1, q}$, $d < q < \infty$, and strongly in $C^\alpha$, $0 \leq \alpha < 1$.
 
-\subsection{The \texorpdfstring{$\infty$-Maxwell equation}{infinity-Maxwell equation}}
-We now consider the Euler-Lagrange equation for $\infty$-tight forms.
-We shall not need this material in the sequel, but it could make for a very interesting future research project.
+\begin{definition}
+We call $A$ a \dfn{variational solution of the $\infty$-Maxwell equation}
+$$\langle\langle \nabla \dif A, \dif A\rangle, \dif A\rangle = 0$$
+where the inner contraction is between the two $\dif A$s and the outer contraction is between $\nabla$ and an index of $\dif A$, or in other words:
+$${(\dif A)_i}^j (\dif A)^{k\ell} \nabla_j (\dif A)_{k \ell} = 0.$$
+\end{definition}
+
+To derive this equation we write the $p$-Maxwell equation in nondivergence form
+$$0 = \dif(|\dif A|^{p - 2} \star \dif A) = \dif(|\dif A|^{p - 2}) \wedge \star \dif A - |\dif A|^{p - 2} \dif(\star \dif A).$$
+Since $\nabla$ is a metric connection,
+$$\partial_j (|\dif A|^{p - 2}) = (p - 2) |\dif A|^{p - 4} (\dif A)^{k \ell} \nabla_j (\dif A)_{k \ell}$$
+and from the definition of $\star$ it follows that
+$$(\star \dif(|\dif A|^{p - 2}) \wedge \star \dif A)_i = \pm (p - 2) |\dif A|^{p - 4} (\dif A)^{k \ell} \nabla_j (\dif A)_{k \ell} {(\dif A)_i}^j.$$
+Dividing through we get the renormalized nondivergence form $p$-Maxwell equation 
+$${(\dif A)_i}^j (\dif A)^{k\ell} \nabla_j (\dif A)_{k \ell} = \pm \frac{(\dif^* \dif A)_i}{(p - 2) |\dif A|^2}.$$
+If $\dif^* \dif A/|\dif A|^2$ grows only sublinearly as $p \to \infty$, then it follows that the limiting equation is the $\infty$-Maxwell equation.
+But this only makes sense variationally.
+
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Absolutely best comass}
+\begin{definition}
+$\dif A$ has \dfn{absolutely best comass} if for every open ball $D \subseteq U$ and every $B \in C^\infty(D, \Omega^1)$ with $A|_{\partial D} = B|_{\partial D}$,
+one has
+$$L(\dif A) \leq L(\dif B).$$
+\end{definition}
+
+This condition is gauge-invariant.
+Indeed, if $\dif \chi$ is a gauge transformation, then it does not affect the comass and we can add it to $B$.
+Note that we take the full trace on $\partial D$, rather than the pullback, since this is still gauge invariant.
 
 \begin{proposition}
-Suppose that $F$ has absolutely best comass, regularity $C^1$, and no points with $F = 0$. Then
-\begin{equation}\label{infinity Maxwell}
-	F^{ij} F^{k\ell} \nabla_j F_{k \ell} = 0.
-\end{equation}
+Suppose that $A \in C^2(U, \Omega^1)$ and $\dif A$ has absolutely best comass.
+Then $A$ is a classical solution of the $\infty$-Maxwell equation.
 \end{proposition}
 \begin{proof}
 For a covariant $2$-tensor $T$, let $T^{\rm as}$ be its antisymmetrization, and let
 $$f(x, T) := |T^{\rm as}|_{g(x)}^2.$$
-Working locally, we may write $F = \dif A$ for some $A$, which we may assume to be in Coulomb gauge and therefore $C^2$ by \todo{elliptic regularity}.
-Since $A$ has absolutely best curl and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
+Since $A$ has absolutely best comass and $(\nabla A)^{\rm as} = \dif A$, $A$ is an absolute minimizer (see \cite[Definition 5.1]{Barron2001}) of the essential supremum of $f(\cdot, \nabla A)$.
 By \cite[Theorem 5.2]{Barron2001},
 \begin{equation}\label{ELA}
 	\frac{\partial f}{\partial T_{ij}}(x, \nabla A(x)) \partial_j (f(x, \nabla A(x))) = 0.
 \end{equation}
 We then compute
 \begin{align*}
-\partial_j (f(x, \nabla A(x))) &= \nabla_j |\dif A|^2 = 2 \langle \dif A, \nabla_j \dif A\rangle = F^{k\ell} \nabla_j F_{k\ell} \\
-\frac{\partial f}{\partial T_{ij}}(x, \nabla A(x)) &= (\nabla A^{\rm as})^{ij} = F^{ij}. \qedhere
+\partial_j (f(x, \nabla A(x))) &= \nabla_j |\dif A|^2 = 2 \langle \dif A, \nabla_j \dif A\rangle = (\dif A)^{k\ell} \nabla_j (\dif A)_{k\ell} \\
+\frac{\partial f}{\partial T_{ij}}(x, \nabla A(x)) &= (\nabla A^{\rm as})^{ij} = (\dif A)^{ij}. \qedhere
 \end{align*}
 \end{proof}
 
-For the sake of discussion, let $d = 3$.
-Then (\ref{infinity Maxwell}) is the $L^\infty$ analogue of the Maxwell equation $\dif^* F = 0$ (where $F$ is a closed $2$-form), so we call it the \dfn{$\infty$-Maxwell equation}.
-It is somewhat easier to visualize if $d = 3$ and we view $F = \dif X^\flat$ for a vector field $X$.
-Then the $\infty$-Maxwell equation is equivalent to
-$$(\nabla \times X) \times \nabla_{\nabla \times X} (\nabla \times X) = 0.$$
+\begin{conjecture}
+If $A$ is Lipschitz and $\dif A$ has absolutely best comass, then $A$ is a variational solution of the $\infty$-Maxwell equation.
+\end{conjecture}
+
+Let's now prove the converse.
+Let $\cdot_\euc$ denote the euclidean version of something in some coordinates.
+
+\begin{definition}
+A form $A$ is in \dfn{flat Coulomb gauge} with respect to some coordinates if $\dif^*_\euc A = 0$.
+\end{definition}
+
+\begin{lemma}[comparison principle]
+Suppose that $A, B$ are in flat Coulomb gauge and solve the $p$-Maxwell equation, $3 < p < \infty$, on a neighborhood of $\overline D$, and on $\partial D$, $A_i \leq B_i$.
+Then on $\overline D$, $A_i \leq B_i$.
+\end{lemma}
+\begin{proof}
+We follow \cite[Theorem 2.15]{lindqvist2019notes} which is analogous for the $p$-Laplacian.
+Since $p > 3$ and
+$$\|A\|_{C^0} \lesssim \|\nabla A\|_{L^p} \lesssim \|(\dif + \dif_\euc^*) A\|_{L^p} = \|\dif A\|_{L^p},$$
+$A$ is continuous.
+Let $\varepsilon > 0$, so either
+$$V_i(\varepsilon) := \{A_i > B_i + \varepsilon\}$$
+is empty, or it is nonempty and satisfies $V_i(\varepsilon) \Subset D$.
+If the claim fails, then there exist $j, \varepsilon$ such that $V_i(\varepsilon)$ is nonempty; we let 
+$$V := \bigcup_i V_i(\varepsilon)$$
+which is then nonempty and satisfies $V \Subset D$. 
+
+Let
+$$w_i := \max(A_i - B_i + \varepsilon, 0)$$
+which is a $1$-form with support $\overline V$, and if we test it against the $p$-Maxwell equation, we get
+$$\int_V \star \langle |\dif A|^{p - 2} \dif A - |\dif B|^{p - 2} \dif B, \dif A - \dif B\rangle = 0.$$
+By the Cauchy-Schwarz and Young inequalities, the integrand is nonnegative, and positive iff $\dif A \neq \dif B$.
+Therefore $\dif A = \dif B$ on almost all of $V$.
+Since $A, B$ are in flat Coulomb gauge and have the same full trace on $\partial D$, the flat Hodge decomposition implies that $v := A - B$ is flatly harmonic on $D$.
+On $D \setminus \overline V$, $v_i \leq \varepsilon$, and $v$ is continuous, so $v_i \leq \varepsilon$ on $\partial V$.
+By the (trivial, by flatness) Weitzenb\"ock formula, $v_i$ is flatly harmonic, so by the maximum principle, $v_i \leq \varepsilon$ on $\overline V$.
+But then $A_i \leq B_i + \varepsilon$ on $\overline V$, so $V$ is empty, a contradiction.
+\end{proof}
+
+\begin{proposition}
+Let $A$ be a variational solution of the $\infty$-Maxwell equation.
+Then $\dif A$ has absolutely best comass.
+\end{proposition}
+\begin{proof}
+We follow \cite[Theorem 5]{lindqvist2015notes}.
+Let $A_p$ solve the $p$-Maxwell equation in $U$ with $\iota_{\partial U}^* A_p = \iota^*_{\partial U} A$, let $D \subseteq U$ be a small ball, and let $B_p$ solve the $p$-Maxwell equation in $D$ with $B_p|_{\partial D} = A|_{\partial D}$.
+
+We claim that $B_p \to A$ in $C^0(\overline D)$.
+Let $\varepsilon > 0$; then for $p$ large enough, $\|A_p - A\|_{C^0} \leq \varepsilon$, hence
+$$\|B_p - A\|_{C^0} \leq \|B_p - A_p\|_{C^0} + \|A_p - A\|_{C^0} \leq \|B_p - A_p\|_{C^0} + \varepsilon.$$
+On $\partial D$, $(B_p)_i \leq (A_p)_i + \varepsilon$, so by the comparison principle, the same holds on $\overline D$.
+In particular, 
+$$\|B_p - A_p\|_{C^0} \leq \sqrt 3 \varepsilon.$$
+So $\|B_p - A\|_{C^0} \leq (1 + \sqrt 3) \varepsilon$ as desired.
+
+Now let $B \in C^\infty(D, \Omega^1)$ be arbitrary with $B|_{\partial D} = A|_{\partial D}$.
+Then for any $\varepsilon > 0$, any $q$ large enough depending on $\varepsilon, U$, and any $p \geq q$,
+$$\|\dif B_p\|_{L^q} \leq (1 + \varepsilon) \|\dif B_p\|_{L^p} \leq (1 + \varepsilon) \|\dif B\|_{L^p} \leq (1 + 2\varepsilon) \|\dif B\|_{C^0}$$
+by H\"older's inequality and the fact that $B_p$ is a variational solution of the $p$-Maxwell equation.
+In particular, $\dif B_p \to \dif A$ weakly in $W^{1, q}$, hence by Fatou's lemma
+$$\|\dif A\|_{L^q(D)} \leq \|\dif B_p\|_{L^q} \leq (1 + 2\varepsilon) \|\dif B\|_{C^0} = (1 + 2\varepsilon) L(\dif B).$$
+Taking $\varepsilon \to 0$ (hence $q \to \infty$) we conclude that $L(\dif A) \leq L(\dif B)$.
+\end{proof}
 
 \printbibliography
 \end{document}
