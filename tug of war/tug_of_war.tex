@@ -67,6 +67,7 @@
 \newcommand{\inj}{\mathrm{inj}}
 \newcommand{\Lip}{\mathrm{Lip}}
 \newcommand{\Riem}{\mathrm{Riem}}
+\newcommand{\Ric}{\mathrm{Ric}}
 
 \newcommand{\Min}{\mathrm{Min}}
 \newcommand{\Max}{\mathrm{Max}}
@@ -178,29 +179,57 @@ $$\dif^* A = 0$$
 then $A \in W^{1, p}$ is H\"older continuous ($p > 3$) and is uniquely determined, since in particular $A$ is $p$-harmonic.
 
 \subsection{Continuity of the data-to-solution map}
+Let's assume $\Ric_M \leq 0.$
 
 \begin{proposition}
-Let $D$ be a small ball.
-Let $u, v$ be solutions of the $p$-Maxwell equation on $D$ such that $u - v \in C^0(\overline D)$.
+Let $D$ be a small open set in $M$.
+Let $u, v$ be continuous solutions of the $p$-Maxwell equation in Coulomb gauge on a neighborhood of $\overline D$.
 Then
 $$\|u - v\|_{C^0(\overline D)} \leq \|u - v\|_{C^0(\partial D)}.$$
 \end{proposition}
 \begin{proof}
-Let $\varepsilon > 0$ and suppose that
-$$\|u - v\|_{C^0(\overline D)} \geq \|u - v\|_{C^0(\partial D)} + \varepsilon.$$
-Consider normal coordinates based at the center of $D$, and the metric components $g_{ij}$ arising from them.
-Then for $\varepsilon' := \varepsilon/C$, where $C > 0$ depends on $g_{ij}$, there exists $i$ such that for $M_i := \|u_i - v_i\|_{C^0(\partial D)}$,
-$$\|u_i - v_i\|_{C^0(\overline D)} \geq M_i + \varepsilon'.$$
-Therefore (possibly after reversing the order of $u, v$) we may assume that for some $i$,
-$$u_i \geq v_i + M_i + \varepsilon'$$
-and hence 
-$$V := \bigcup_{i=1}^3 \{u_i \geq v_i + M_i + \varepsilon'\}$$
-is nonempty.
-By continuity of $u, v$, and the fact that $u_i \leq v_i + M_i$ on $\partial D$, $V \Subset D$.
+Suppose towards contradiction that
+$$\|u - v\|_{C^0(\overline D)} > \|u - v\|_{C^0(\partial D)} =: M,$$
+and consider the open set
+$$V := \{|u - v| > M\}$$
+which is then nonempty and satisfies $V \Subset D$ and $|u - v||_{\partial V} = M$.
 
-We now introduce the $1$-form $w$, which in components is 
-$$w_i := \max(v_i - u_i + M_i + \varepsilon', 0).$$
+We now let $\varepsilon > 0$ and choose a smooth $1$-form $\varphi$ on $D$ of unit length such that on $\overline V$,
+$$\left|\varphi - \frac{u - v}{|u - v|}\right| < \varepsilon.$$
+This is possible because $u - v$ has no zeroes near $\overline V$.
+We can then introduce 
+$$w := u - v - M\varphi$$
+so that on $\partial V$, we can estimate by the Cauchy-Schwarz and Young inequalities
+\begin{align*}
+|w|^2 &= |u - v|^2 + M^2 - 2\langle u - v, M\varphi\rangle  \\
+&= 2M^2 - 2\langle u - v, u - v\rangle + 2M \langle u - v, \frac{u - v}{|u - v|} + \varphi\rangle \\
+&\leq 0 + 2M^2 \varepsilon = 2M^2 \varepsilon.
+\end{align*}
 
+Let
+$$\psi := |\dif u|^{p - 2} \dif u - |\dif v|^{p - 2} \dif v.$$
+Integrating the $p$-Maxwell equation by parts,
+$$0 = \int_V \langle \dif^* \psi, w\rangle \dif V = \int_{\partial V} \langle \psi, w\rangle \dif S - \int_V \langle \psi, \dif u - \dif v\rangle \dif V.$$
+Then Cauchy-Schwarz implies that 
+$$\left|\int_V \langle \psi, \dif u - \dif v\rangle \dif V\right| = \left|\int_{\partial V} \langle \psi, w\rangle \dif S\right| \leq 2M^2 \varepsilon \|\psi\|_{L^1(\partial V)}.$$
+But the left-hand side of this inequality is independent of $\varepsilon$, so we actually have 
+$$\int_V \langle |\dif u|^{p - 2} \dif u - |\dif v|^{p - 2} \dif v, \dif u - \dif v\rangle \dif V = 0.$$
+By the Cauchy-Schwarz and Young inequalities,
+$$\langle |\dif u|^{p - 2} \dif u - |\dif v|^{p - 2} \dif v, \dif u - \dif v\rangle \geq |\dif u|^p + |\dif v|^p - |\dif u|^p - |\dif v|^p = 0.$$
+So we must have $\dif u = \dif v$ almost everywhere in $V$.
+Since we are given $\dif^* u = \dif^* v$, $\gamma := u - v$ is harmonic.
+Moreover, $|\gamma| = M$ on $\partial V$.
+
+To obtain a contradiction, we show that $|\gamma|^2$ is subharmonic. In fact,
+$$\Delta |\gamma|^2 = \nabla^\alpha(\partial_\alpha |\gamma|^2) = \nabla^\alpha (\gamma^\beta \nabla_\alpha \gamma_\beta) = |\nabla \gamma|^2 + \langle \gamma, \nabla^* \nabla \gamma\rangle \geq \langle \gamma, \nabla^* \nabla \gamma\rangle$$
+where $\nabla^* \nabla$ is Bochner's Laplacian.
+By the Weitzenb\"ock formula,
+$$\langle \gamma, \nabla^* \nabla \gamma\rangle = \Delta \gamma - \Ric(\gamma^\sharp, \gamma^\sharp) \geq \Delta \gamma$$
+where $\Delta$ is Hodge's Laplacian and we used the fact that $\Ric \leq 0$.
+In conclusion, we have 
+$$\Delta |\gamma|^2 \geq 0$$
+so by the maximum principle, $|\gamma| \leq M$ on $V$.
+In particular, $|u - v| \leq V$. This is a contradiction.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
