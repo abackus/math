@@ -471,11 +471,11 @@ Let $S$ be an uncountable set and $f: S \to (0, \infty)$. Then there exists a co
 $$\sum_{x \in S'} f(x) = \infty.$$
 \end{lemma}
 \begin{proof}
-Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \geq 1$, and $S_0 := f^{-1}([1, \infty))$.
+Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \in \NN$ (where we take the convention $1/n = \infty$).
 Since $S$ is uncountable but $\NN$ is countable, it follows from the infinite pigeonhole principle that there exists $n \in \NN$ such that $S_n$ is infinite.
 In particular there exists an infinite countable set $S' \subseteq S_n$, which then satisfies
 \begin{align*}
-\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n} = \infty. \qedhere 
+\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n + 1} = \infty. \qedhere 
 \end{align*}
 \end{proof}
 
@@ -590,6 +590,7 @@ so that $X$ cannot be divergence-free.
 
 This issue can be avoided by allowing $\nabla u/|\nabla u|$ to be divergence-free on a neighborhood of $\supp \nabla u$.
 This is arguably a more natural definition, since the solutions of a PDE should form a sheaf.
+Indeed, what we refer to as a ``$1$-harmonic function'' is a section of the sheafification of the presheaf of $1$-harmonic functions in the sense of \cite{Mazon14}.
 
 \begin{definition}\label{1harmonic dfn}
 A \dfn{$1$-harmonic function} is a function $u \in BV_\loc(M)$ such that $\nabla u/|\nabla u|$ extends to a divergence-free vector field $X$ on a neighborhood of $\supp \nabla u$, such that $\|X\|_{L^\infty} \leq 1$.
@@ -618,20 +619,6 @@ It is folklore that the same result holds for Riemannian manifolds; for complete
 Suppose that $\dim M \leq 7$, $M$ is a compact manifold, possibly with boundary, and $u: M \to \RR$ is a function of least gradient.
 Then every superlevel set $\partial \{u > y\}$ of $u$ is bounded by complete stable embedded minimal hypersurfaces.
 \end{theorem}
-
-The stability here is taken with respect to normal variations which are compactly supported on the interior of $M$.
-We apply the stability to obtain interior curvature estimates:
-
-\begin{theorem}[stable Bernstein theorem]
-	Let $M$ be a manifold of bounded geometry, possibly with boundary, such that $\dim M \leq 4$.
-	Then there exists $A \geq 0$ such that for every complete stable minimal immersion $N \to M$ of codimension $1$ and trivial normal bundle,
-	$$|\Two_N(P)| \leq \frac{A}{\dist(P, \partial M)}.$$
-\end{theorem}
-
-This estimate only has content when $\dim M = 3, 4$.
-If $\dim M = 3$ it was proven by Schoen \cite{Schoen2016} and Colding and Minicozzi \cite{ColdingMinicozziParametric}; see also \cite[Theorem 2.10]{colding2011course}.
-If $\dim M = 4$ the stable Bernstein theorem was recently proven by Chodosh and Li \cite{Chodosh2021}.
-The statement here is not quite the formulation of Chodosh and Li, but it is clear that our formulation reduces to \cite[Theorem 1]{Chodosh2021} using the point-picking argument of \cite[\S5]{Chodosh2021}.
 
 The following compactness theorem for $1$-harmonic functions in the weak topology of measures will frequently be useful.
 It is a straightforward consequence of the compactness of the forgetful map $BV(M) \to L^1(M)$ and the proof of \cite[Osservazione 3]{Miranda67}, and we omit the details.
@@ -1103,7 +1090,93 @@ Since $(\lambda_{n_k})$ was arbitrary, it follows that $\lambda_n \to \lambda$ i
 
 %%%%%%%%%%%%%%%%%%%%
 \section{Application to \texorpdfstring{$1$-harmonic}{one-harmonic} functions}\label{1harmonic sec}
-We finally prove Theorem \ref{main thm}. Suppose that $2 \leq \dim M \leq 4$.
+The purpose of this section is to prove Theorem \ref{main thm}, and explore some of its consequences.
+Throughout, we shall assume that $2 \leq \dim M \leq 4$, as we shall appeal to the stable Bernstein theorem (Theorem \ref{stable Bernstein}) in the proof that a $1$-harmonic function induces a minimal lamination.
+
+%%%%%%%%%%%%%
+\subsection{Stability and calibration of minimal surfaces}
+Here we collect some results about minimal surfaces that will be useful in the proof of Theorem \ref{main thm}.
+
+\subsubsection{Stability}
+We begin with an estimate on the curvature of a stable minimal surface.
+Since, by Theorem \ref{main thm of old paper}, the level sets of a function of least gradient are stable, we can in particular obtain estimates on the curvature of the level sets of a function of least gradient.
+If $\dim M = 3$, the stable Bernstein theorem was proven by Schoen \cite{Schoen2016} and Colding and Minicozzi \cite{ColdingMinicozziParametric}; see also \cite[Theorem 2.10]{colding2011course}.
+If $\dim M = 4$ the stable Bernstein theorem was recently proven by Chodosh and Li \cite{Chodosh2021}.
+The statement here is not quite the formulation of Chodosh and Li, but it is clear that our formulation reduces to \cite[Theorem 1]{Chodosh2021} using the point-picking argument of \cite[\S5]{Chodosh2021}.
+
+\begin{theorem}[stable Bernstein theorem]\label{stable Bernstein}
+	Let $M$ be a manifold of bounded geometry, possibly with boundary, such that $2 \leq \dim M \leq 4$.
+	Then there exists $A \geq 0$ such that for every complete stable minimal immersion $N \to M$ of codimension $1$ and trivial normal bundle,
+	$$|\Two_N(P)| \leq \frac{A}{\dist(P, \partial M)}.$$
+\end{theorem}
+
+This estimate only has content when $\dim M = 3, 4$.
+If one proved it for $\dim M = 5, 6, 7$, then Theorem \ref{main thm} would follow for such dimensions.
+
+In the converse direction, it will be occasionally useful to know that $1$-harmonic functions have stability radii bounded from below independently of the function.
+
+\begin{lemma} \label{LLG implies LG}
+Let $u$ be a $1$-harmonic function, $x \in M$, and $r > 0$ is at most the injectivity radius of $M$ at $x$.
+Then $u|_{B(x, r)}$ has least gradient.
+\end{lemma}
+\begin{proof}
+Let $(U_\alpha)$ be an open cover of $B(x, r)$ by sets in which $u$ has least gradient, and let $(u_t)$ be a variation of $u$ for the Dirichlet problem for the total variation energy $J$.
+Since $\overline{B(x, r)}$ is a complete contractible manifold-with-boundary, one can show that $J$ is convex.
+By taking a partition of unity, we may write $u_t = \sum_\alpha u_t^\alpha$ where $u_t^\alpha$ is a variation of $u$ for the Dirichlet problem on $U_\alpha$.
+Then at $t = 0$,
+$$\partial_t J(u_t^\alpha) = \partial_t \int_{B(x, r)} \star |\dif u_t^\alpha| = \partial_t \int_{U_\alpha} \star |\dif u_t^\alpha| = 0.$$
+Summing in $\alpha$, we see that $\partial_t J(u_t) = 0$.
+So $u$ is a critical point of the convex function $J$, and hence is a minimum.
+\end{proof}
+
+\subsubsection{Calibration}
+A submanifold $N \subseteq M$ is \dfn{calibrated} if its area form extends to a closed form $\varphi$ on $M$ with $\|\varphi\|_{C^0} \leq 1$; in that case $N$ is area-minimizing among all submanifolds homologous to $N$ relative to $\partial N$ \cite{Harvey82}.
+It appears to be folklore that a minimal submanifold locally admits a calibration \cite{Bryant17}; for the sake of completeness we give a proof here.
+
+\begin{lemma}\label{minimal implies locally calibrated}
+Let $N \subseteq M$ be an embedded minimal submanifold.
+Then there exists an open cover $\mathcal U$ of $M$ such that for $U \in \mathcal U$, $N \cap U$ is a calibrated submanifold of $U$.
+\end{lemma}
+\begin{proof}
+By the Nash embedding theorem, we have an embedding
+$$\iota: M \to \RR^p \times \RR^q,$$
+where $p := \dim N$ and $q \in \NN$ is sufficiently large.
+Given $P \in N$ we may apply a rigid motion of $\RR^p \times \RR^q$ so that $P$ is identified with $0$ and $\RR^p \times \{0\}$ is identified with $T_P N$.
+Then there exists a neighborhood $V \ni x$ and an open set $\Omega \subseteq \RR^p$ such that $N \cap V$ is the graph of a function
+$$f: \Omega \to \RR^q.$$
+Let $\omega$ be the area form on $N$, which, by using $\iota$, we may view as a map from $N$ to the $p$th exterior power of $\RR^p \times \RR^q$.
+
+We claim that the extension
+$$\overline \omega(x, y) = \omega(x, f(x))$$
+to all of $\Omega \times \RR^q$ is a closed $p$-form.
+To see why, we denote an ascending $p$-index as $(\alpha, \beta)$ where $\alpha_i \in \{1, \dots, p\}$ and $\beta_i \in \{p + 1, \dots, p + q\}$.
+Then
+$$\dif \overline \omega = \sum_{\alpha, \beta} \sum_{m = 1}^p \frac{\partial \overline \omega_{\alpha \beta}}{\partial x^m} \dif x^m \wedge \dif x^\alpha \wedge \dif y^\beta +  \sum_{\alpha, \beta} \sum_{n = 1}^q \frac{\partial \overline \omega_{\alpha \beta}}{\partial y^n} \dif y^n \wedge \dif x^\alpha \wedge \dif y^\beta.$$
+But $\partial_{y^n} \overline \omega_{\alpha \beta} = 0$ and
+$$\frac{\partial \overline \omega_{\alpha \beta}}{\partial x^m}(x, y) = \frac{\partial \omega_{\alpha \beta}}{\partial x^m}(x, f(x)).$$
+So 
+$$\dif \overline \omega(x, y) = \sum_{\alpha, \beta} \sum_{m = 1}^p \frac{\partial \omega_{\alpha \beta}}{\partial x^m}(x, f(x)) \dif x^m \wedge \dif x^\alpha \wedge \dif y^\beta = \dif \omega(x, f(x)).$$
+But since $N$ is minimal, its mean curvature satisfies 
+$$0 = H_N = \nabla \cdot \normal_N = \star \dif \omega,$$
+so $\omega$, and hence $\overline \omega$, is closed.
+
+Let $\varphi := \iota^* \overline \omega$, which is then a closed $p$-form on $U := (\Omega \times \RR^q) \cap M$.
+If $v_1, \dots, v_p$ are unit tangent vectors to $M$ at $(x, y)$, then we can view as them as elements of $\RR^p \times \RR^q$, and then
+$$\langle \varphi(x, y), v_1 \wedge \cdots \wedge v_p\rangle = \langle \omega(x, f(x)), v_1 \wedge \cdots \wedge v_p\rangle \leq 1,$$
+since $\omega$, being an area form, has unit comass.
+Therefore $\|\varphi\|_{C^0} = 1$, so $\varphi$ is a calibration on $U$, which witnesses that $N \cap U$ is a calibrated submanifold of $U$.
+\end{proof}
+
+\begin{lemma}\label{minimal implies 1 harmonic}
+Let $N$ be a minimal hypersurface which bounds an open set $U$.
+Then $1_U$ is $1$-harmonic.
+\end{lemma}
+\begin{proof}
+Since $N = \supp \nabla 1_U$, it suffices to find an open cover $\mathcal V$ of a tubular neighborhood of $N$ such that for $V \in \mathcal V$, $1_U|_V$ is $1$-harmonic.
+We let $\mathcal V$ be the open cover given by Lemma \ref{minimal implies locally calibrated}.
+Then for $V \in \mathcal V$, there exists a calibration $\varphi$ of $N \cap V$ in $V$.
+The Poincar\'e dual vector field $X := (\star \varphi)^\flat$ is a divergence-free extension of the normal vector $\nabla 1_U/|\nabla 1_U|$ of $N \cap V$ to $V$, and $\|X\|_{C^0} \leq 1$, so $X$ witness that $1_U|_V$ is $1$-harmonic.
+\end{proof}
 
 
 %%%%%%%%%%%%%%
@@ -1143,39 +1216,6 @@ So by (\ref{polar ruelle sullivan}), $\dif u = \normal_\lambda |\dif u|$ is the 
 %%%%%%%%%%%%%%%%
 
 \subsection{Minimal lamination induces \texorpdfstring{$1$-harmonic}{one-harmonic} function}
-In order to complete the proof of Theorem \ref{main thm}, we use the following lemmata.
-
-\begin{lemma}\label{minimal implies 1 harmonic}
-Let $N$ be a minimal hypersurface which bounds an open set $U$.
-Then $1_U$ is $1$-harmonic.
-\end{lemma}
-\begin{proof}
-Let $\varphi$ be the area $d-1$-form on $N$.
-Let $\mathcal T$ be a sufficiently small tubular neighborhood of $N$ that the map $\Pi: \mathcal T \to N$ sending $x \in \mathcal T$ to the closest point to $x$ is well-defined.
-Since $N$ has codimension $1$, $\|\Pi^* \varphi\|_{C^0} = 1$ \cite{Bryant17}.
-Moreover, by minimality,
-$$\dif(\Pi^* \varphi) = \Pi^* (\dif \varphi) = \Pi^* (\star H_N) = 0.$$
-In other words, $\Pi^* \varphi$ is a calibration.
-The Poincar\'e dual vector field to the calibration
-$$X := (\star(\Pi^* \varphi))^\sharp$$
-is divergence-free and satisfies $\|X\|_{C^0} = 1$.
-Moreover, the trace of $\pm X$ along $N = \supp \nabla 1_U$ is $\nabla 1_U/|\nabla 1_U|$, so $\pm X$ witnesses that $1_U$ is $1$-harmonic.
-\end{proof}
-
-\begin{lemma} \label{LLG implies LG}
-Let $u$ be a function of locally least gradient, $x \in M$, and $r > 0$ is at most the injectivity radius of $M$ at $x$.
-Then $u|_{B(x, r)}$ has least gradient.
-\end{lemma}
-\begin{proof}
-Let $(U_\alpha)$ be an open cover of $B(x, r)$ by sets in which $u$ has least gradient, and let $(u_t)$ be a variation of $u$ for the Dirichlet problem for the total variation energy $J$.
-This makes sense, because $r$ is small enough.
-By taking a partition of unity, we may write $u_t = \sum_\alpha u_t^\alpha$ where $u_t^\alpha$ is a variation of $u$ for the Dirichlet problem on $U_\alpha$.
-Then at $t = 0$,
-$$\partial_t J(u_t^\alpha) = \partial_t \int_{B(x, r)} \star |\dif u_t^\alpha| = \partial_t \int_{U_\alpha} \star |\dif u_t^\alpha| = 0.$$
-Summing in $\alpha$, we see that $\partial_t J(u_t) = 0$.
-So $u$ is a critical point of the convex function $J$, and hence is a minimum.
-\end{proof}
-
 Suppose that we are given a measured oriented minimal lamination $\lambda$, which then has a Ruelle-Sullivan current $T$.
 Since $\dif T = 0$, we may assume, possibly after replacing $M$ with its universal cover, that $T$ is exact, say $T = \dif u$, and we must show that $u$ has locally least gradient.
 If this is not true, then by \cite[Theorem 2.2]{Sternberg93}, we can choose a small open ball $E \subseteq M$ and a function $v \in BV_\cpt(E)$ such that
@@ -1186,7 +1226,7 @@ Since $v$ has compact support, there exists a collar neighborhood $F \subset E$ 
 \end{equation}
 Here $\partial^*$ is the reduced boundary operator (see \cite[Chapter 3]{Giusti77} or \cite[\S2]{BackusFLG}).
 
-The function $1_{\{u > y\}}$ is $1$-harmonic by Lemma \ref{minimal implies 1 harmonic} so it has locally least gradient, and therefore has least gradient in $E$ by Lemma \ref{LLG implies LG}.
+The function $1_{\{u > y\}}$ is $1$-harmonic by Lemma \ref{minimal implies 1 harmonic}, so by Lemma \ref{LLG implies LG}, $1_{\{u > y\}}|_E$ has least gradient.
 By (\ref{collar condition}), $1_{\{u + v > y\}} - 1_{\{u > y\}}$ has compact support in $E$, so 
 $$\int_E \star |\dif 1_{\{u > y\}}| \leq \int_E \star |\dif 1_{\{u + v > y\}}|.$$
 Since $1_{\{u > y\}}$ has least gradient in $E$, we estimate using the coarea formula (see \cite[Proposition 2.5]{BackusFLG} for a proof at this regularity)
@@ -1202,7 +1242,7 @@ This completes the proof of Theorem \ref{main thm}.
 Let us explore some consequences of the lamination perspective on $1$-harmonic functions.
 
 \subsubsection{Nonuniqueness of the Dirichlet problem}
-We first recall that the Dirichlet problem for the $1$-Laplacian need not have a unique solution.\footnote{The formulation of the Dirichlet problem is subtle. Here we take the relaxation formulation of \cite[Definition 2.3]{Mazon14}, though the same argument should work for any reasonable formulation.}
+We first recall that the Dirichlet problem for the $1$-Laplacian need not have a unique solution \cite[Example 2.7]{Mazon14}.\footnote{The formulation of the Dirichlet problem is subtle. Here we take the relaxation formulation of \cite[Definition 2.3]{Mazon14}, though the same argument should work for any reasonable formulation.}
 However, Maz\'on, Rossi, and Segura de Le\'on \cite[Remark 2.8]{Mazon14} conjectured that two solutions of the Dirichlet problem will have the same ``frame of superlevel sets,'' a notion they do not define.
 In view of Theorem \ref{main thm} it is natural to interpret their conjecture to mean that the (unmeasured) lamination associated to a $1$-harmonic function is uniquely determined by the Dirichlet data.
 For this interpretation, their conjecture is false:
@@ -1235,7 +1275,7 @@ Up to addition of additive constants, this decomposition is unique.
 By considering the minimal lamination associated to $u$, we obtain a laminar atlas $(F_\alpha)$.
 We then prove the decomposition in a single flow box $F_\alpha: U_\alpha \to V_\alpha$, where
 $$U_\alpha = I \times J \subset \RR_x \times \RR^{d - 1}_y.$$
-We may assume that $V_\alpha$ is contained in a ball so small that $u|_{V_\alpha}$ has least gradient.
+We use Lemma \ref{LLG implies LG} to assume that $V_\alpha$ is contained in a ball so small that $u|_{V_\alpha}$ has least gradient.
 
 In the flow box coordinates, $u(x, y) = \tilde u^\alpha(x)$ for some $\tilde u_\alpha: I \to \RR$. 
 Since $\dif \tilde u^\alpha$ is the transverse measure, it is a Radon measure, so $\tilde u^\alpha$ has bounded variation and hence we have the Lebesgue decomposition on an interval \cite[Corollary 3.33]{Ambrosio2000FunctionsOB} 
