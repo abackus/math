@@ -383,19 +383,28 @@ We would also like to highlight a possible application of Theorem \ref{main thm}
 The associated parabolic flow to (\ref{1Laplacian}) is known as \dfn{level set flow} and acts on the level sets of a smooth submersion $u$ by mean curvature flow.
 As such, it arises as a model of interfaces with minimal area, as a means of continuing mean curvature flow past its singular times, and in the \dfn{level set method} of computing minimal surfaces \cite{Evans91,Sethian90,Chen89,Thomas05}.
 Since Theorem \ref{main thm} is concerned exactly with the level sets of a $1$-harmonic function, it would be very interesting to apply it to rigorously justify the level set method, and in particular to understand the limiting behavior of level set flow, even in the case that $u$ is not a smooth submersion.
+%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Notation and conventions}
+The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian measure.
+We denote the musical isomorphisms by $\sharp, \flat$.
+If $U$ is an open set, we write $|U| := \int_U \star 1$ for the volume of $U$, but if $U$ is a submanifold or rectifiable set of positive codimension, we instead write $|U|$ for its surface measure.
+We write $\normal_N$ for the normal vector (or conormal $1$-form) for a hypersurface $N$, $\nabla_N$ for the Levi-Civita connection, and $\Two_N := \nabla_N \normal_N$ for the second fundamental form.
+
+We consider the following manifolds: $\Ball^d$ is the unit ball in $\RR^d$, $\Sph^d$ the unit sphere in $\RR^{d + 1}$, and $\Hyp^d$ is the hyperbolic space.
+
+For a map $F: X \to Y$ between metric spaces, we write $\Lip(F)$ for its Lipschitz constant.
+If $X, Y$ are connected Riemannian manifolds, one of which is $1$-dimensional, then we have $\Lip(F) = \|\dif F\|_{L^\infty}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Outline of the paper}
-In \S\ref{Prelims} we recall preliminaries.
-
-In \S\ref{Regularity} we prove the regularity theorem, Theorem \ref{regularity theorem}.
-We also establish some technical lemmata useful elsewhere in the paper.
-
-In \S\ref{CompactnessSec} we prove Theorems \ref{compactness theorem} (the compactness theorem) and explore the consequences for how the different modes of convergence are related to each other.
-
-In \S\ref{1harmonic sec} we prove Theorem \ref{main thm} (the equivalence of $1$-harmonic functions and measured minimal laminations) and some applications to $1$-harmonic functions.
-
-% We also include Appendix \ref{transverse curves}, where we explain why our definition of convergence in the weak topology of measures is equivalent to a more standard definition.
+The rest of the paper is organized as follows:
+\begin{itemize}
+\item In \S\ref{Regularity}, we establish some curvature bounds on disjoint families of minimal surfaces, and use them to prove the regularity theorem, Theorem \ref{regularity theorem}.
+\item In \S\ref{Prelims}, we develop basic facts about the measure topology, and $1$-harmonic functions, that we shall use throughout the remainder of the paper. This section is independent of \S\ref{Regularity}.
+\item In \S\ref{CompactnessSec}, we prove the compactness theorem, Theorem \ref{compactness theorem} (the compactness theorem) and explore the consequences for how the different modes of convergence are related to each other. This section applies both \S\ref{Regularity} and \S\ref{Prelims}.
+\item In \S\ref{1harmonic sec}, we prove the equivalence of $1$-harmonic functions and measured oriented minimal laminations, Theorem \ref{main thm}, and apply it to prove sundry facts about $1$-harmonic functions. This section relies on \S\ref{Regularity} and \S\ref{Prelims}, but it is independent of \S\ref{CompactnessSec}.
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -409,228 +418,72 @@ This research was supported by the National Science Foundation's Graduate Resear
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Preliminaries}\label{Prelims}
-\subsection{Notation and conventions}
-The operator $\star$ is the Hodge star, thus $\star 1$ is the Riemannian measure.
-We denote the musical isomorphisms by $\sharp, \flat$.
-If $U$ is an open set, we write $|U| := \int_U \star 1$ for the volume of $U$, but if $U$ is a submanifold or rectifiable set of positive codimension, we instead write $|U|$ for its surface measure.
-We write $\normal_N$ for the normal vector (or conormal $1$-form) for a hypersurface $N$, $\nabla_N$ for the Levi-Civita connection, and $\Two_N := \nabla_N \normal_N$ for the second fundamental form.
 
-We consider the following manifolds: $\Ball^d$ is the unit ball in $\RR^d$, $\Sph^d$ the unit sphere in $\RR^{d + 1}$, and $\Hyp^d$ is the hyperbolic space.
+% %%%%%%%%%%%%%%%%%%%%
+% \subsection{Measured convergence on closed hyperbolic surfaces}
+% Thurston studied measured geodesic laminations on closed hyperbolic surfaces.
+% In that setting, he gave a different definition of measure convergence \cite[\S8.10]{thurston1979geometry}.
+% We shall show that his definition is equivalent to ours \emph{in the setting of closed hyperbolic surfaces}.
+% Under those hypotheses, each measured geodesic lamination has null support \cite[\S8.5]{thurston1979geometry}.
 
-For a map $F: X \to Y$ between metric spaces, we write $\Lip(F)$ for its Lipschitz constant.
-If $X, Y$ are connected Riemannian manifolds, one of which is $1$-dimensional, then we have $\Lip(F) = \|\dif F\|_{L^\infty}$.
+% Following \cite[\S7]{daskalopoulos2020transverse}, given an oriented geodesic lamination $\lambda$ on the closed hyperbolic surface $M$, we say that an oriented curve $\gamma$ is \dfn{good} if $\gamma$ is transverse to every geodesic in $\lambda$, $\partial \gamma$ does not meet $\supp \lambda$, and $\langle \gamma', \normal_\lambda\rangle$ does not change sign.
+% By taking double covers of a train track neighborhood of a geodesic lamination $\lambda$, we may always assume that $\lambda$ is oriented.
 
-We use the Hausdorff notions of limit and limit inferior of a sequence of closed sets \cite[Chapter IV]{nadler2017continuum}:
-
-\begin{definition}
-Let $X$ be a topological space, and $(Y_n)$ a sequence of closed subsets of $X$.
-\begin{enumerate}
-\item The \dfn{limit inferior} $\liminf_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is eventually nonempty.
-\item The \dfn{limit superior} $\limsup_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is nonempty for infinitely many $n$.
-\item If $\liminf_{n \to \infty} Y_n = \limsup_{n \to \infty} Y_n$, we call that set the \dfn{limit} $\lim_{n \to \infty} Y_n$.
-\end{enumerate}
-\end{definition}
-
-%%%%%%%%%%%%%%%%%%%%%
-\subsection{Weak topology of measures}
-Let $X$ be a metrizable space, and let $C_\cpt(X)$ be the space of compactly supported continuous functions $f: X \to \RR$.
-Its dual $C_\cpt(X)'$ is canonically isomorphic to the space of signed Radon measures on $X$, where the bilinear pairing is given by integration.
-The weak topology on $C_\cpt(X)'$ is known as the \dfn{weak topology of measures}.
-Unpacking the definitions, a sequence $(\mu_n)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every continuous function $f: X \to \RR$,
-$$\lim_{n \to \infty} \int_X f \dif \mu_n = \int_X f \dif \mu.$$
-
-\begin{proposition}[portmanteau theorem]
-	Let $(\mu_n)$ be a sequence of positive Radon measures on a compact metrizable space $X$ with $\mu_n(X) \lesssim 1$, and let $\mu$ be a Radon measure on $X$. The following are equivalent:
-\begin{enumerate}
-	\item $\mu_n \to \mu$ in the weak topology of measures.
-	\item $\liminf_{n \to \infty} \mu_n(X) \geq \mu(X)$ and for every closed $Y \subseteq X$, $\limsup_{n \to \infty} \mu_n(Y) \leq \mu(Y)$.
-	\item $\limsup_{n \to \infty} \mu_n(X) \leq \mu(X)$ and for every open $Z \subseteq X$, $\liminf_{n \to \infty} \mu_n(Z) \geq \mu(Z)$.
-	\item For every $W \subseteq X$ with $\mu(\partial W) = 0$, $\lim_{n \to \infty} \mu_n(W) = \mu(W)$.
-\end{enumerate}
-	If we choose a metric on $X$, then the above conditions imply:
-\begin{enumerate}
-	\setcounter{enumi}{4}
-	\item For every $x \in X$ and all but countably many $\varepsilon > 0$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-	See \cite[Theorem 13.16]{klenke2013probability} for the equivalence of (1)--(4); \cite{klenke2013probability} deals with subprobability measures, but this is equivalent to measures of bounded total mass by a rescaling.
-
-	We then must show that (4) implies (5); to do so, it suffices to show that for all but countably many $\varepsilon$, $\mu(\partial B(x, \varepsilon)) = 0$.
-	Let
-	$$A := \{\varepsilon > 0: \mu(\partial B(x, \varepsilon)) > 0\}.$$
-	Since the sets $\partial B(x, \varepsilon)$ are disjoint, for every countable $A' \subseteq A$,
-	$$\sum_{\varepsilon \in A'} \mu(\partial B(x, \varepsilon)) \leq \mu(X) < \infty,$$
-	where $\mu(X) < \infty$ since $X$ is compact.
-	It follows from (the contrapositive of) Lemma \ref{cardinality appendix} below that $A$ is countable.
-\end{proof}
-
-\begin{lemma}\label{cardinality appendix}
-Let $S$ be an uncountable set and $f: S \to (0, \infty)$. Then there exists a countable set $S' \subset S$ such that
-$$\sum_{x \in S'} f(x) = \infty.$$
-\end{lemma}
-\begin{proof}
-Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \in \NN$ (where we take the convention $1/n = \infty$).
-Since $S$ is uncountable but $\NN$ is countable, it follows from the infinite pigeonhole principle that there exists $n \in \NN$ such that $S_n$ is infinite.
-In particular there exists an infinite countable set $S' \subseteq S_n$, which then satisfies
-\begin{align*}
-\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n + 1} = \infty. \qedhere 
-\end{align*}
-\end{proof}
-
-There are subtleties involved in the portmanteau theorem for noncompact $X$.
-However, this will never be an issue, as we shall only use it locally, in small precompact balls.
-
-\subsection{Ruelle-Sullivan currents}\label{RS prelims}
-If $X = M$ is a manifold, then we can consider instead the space $C_\cpt(M, \Omega^\ell)$ of compactly supported continuous $\ell$-forms.
-An $\ell$-\dfn{current} is an element of the dual space $C_\cpt(M, \Omega^\ell)'$ \cite{simon1983GMT}.\footnote{Strictly speaking, $C_\cpt(M, \Omega_\ell)'$ is the space of $\ell$-currents of locally finite total variation. However, we will never need to consider $\ell$-currents that do not have locally finite total variation, so we suppress this technicality.}
-We denote the pairing of an $\ell$-current $T$ and an $\ell$-form $\varphi$ by $\int_M T \wedge \varphi$.
-Again we have the \dfn{weak topology of measures} on the space of $\ell$-currents.
-
-To any $\ell$-current $T$ we may associate a positive Radon measure, its \dfn{total variation} $\star |T|$, which satisfies for any function $f$,
-$$\int_M f \star |T| := \sup_{|\varphi| \leq |f|} \int_M T \wedge \varphi,$$
-and a $|T|$-measurable $d - \ell$-form $\psi$, the \dfn{polar part} \cite[Theorem 4.14]{simon1983GMT}, which satisfies $T = \psi |T|$, $|T|$-almost everywhere.
-Moreover, if $\psi \mapsto -\int_M T \wedge \dif \psi$ is an $\ell - 1$-current, then it is the \dfn{exterior derivative} $\dif T$.
-We write $\|T\|_{TV} := \int_M \star |T|$ for the total variation norm.
-
-With the measure-theoretic machinery above in place, we recall some facts about Ruelle-Sullivan currents.
-Let $(\lambda, \mu)$ be a measured oriented lamination.
-Then the Ruelle-Sullivan current $T_\mu$ is a well-defined closed $d-1$-current \cite[Theorem 8.2]{daskalopoulos2020transverse}. 
-In particular, we may lift $T_\mu$ to the universal cover $\tilde M$, where it is exact \cite[Theorem 8.3]{daskalopoulos2020transverse}.
-Moreover, $T_\mu$ has an intrinsic definition as the unique $d-1$-current with a certain polar decomposition.
-To be more precise, recall that $\mu$ defines a measure on $\supp \lambda$: in each flow box $F_\alpha$, an open set $U$ has measure
-\begin{equation}\label{transverse measure of an open set}
-\mu(U) := \int_{K_\alpha} |F_\alpha(\{k\} \times J) \cap U| \dif \mu_\alpha(k).
-\end{equation}
-
+% \begin{lemma}
+% Let $\lambda$ be an oriented geodesic lamination in a closed hyperbolic surface and $\gamma$ a transverse curve to $\lambda$.
+% Then, possibly after extending $\gamma$ slightly, $\gamma$ subdivides into finitely many good subcurves with respect to $\lambda$.
+% \end{lemma}
 % \begin{proof}
-% We first claim that the right-hand side of (\ref{RS current}) is always finite, and is continuous in $\varphi$.
-% In fact, possibly after refining $(\chi_\alpha)$, we may assume that it is a locally finite partition of unity.
-% In particular, we just need to check the continuity in a single flow box:
-% $$\left|\int_{K_\alpha} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* (\chi_\alpha \varphi) \right] \dif \mu_\alpha(k)\right| \leq \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} |(F_\alpha^{-1})^* (\chi_\alpha \varphi)| \dif \mu_\alpha(k).$$
-% The inner integral is controlled by $\|\varphi\|_{C^0(U_\alpha)} \cdot |U_\alpha|$ where $U_\alpha$ is the image of $F_\alpha$.
-% The outer integral is then well-defined because it is against a Radon measure.
-
-% We next observe that the choice of partition of unity is irrelevant, thus if $\varphi$ has compact support in $U_\alpha \cap U_\beta$, then
-% \begin{equation}\label{well-defined of Ruelle-Sullivan}
-% \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k) = \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k).
-% \end{equation}
-% Indeed,
-% \begin{align*}
-% \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)
-% &= \int_{K_\beta} (F_\alpha F_\beta^{-1})^* \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)\right] \\
-% &= \int_{K_\beta} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi\right] (F_\alpha F_\beta^{-1})^* \dif \mu_\beta(k) \\
-% &= \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k)
-% \end{align*}
-% where the last equation is because of the measure-preserving nature of the transition maps; this proves (\ref{well-defined of Ruelle-Sullivan}).
-
-% Finally, if a $d-2$-form $\psi$ has compact support in a single flow box, then
-% $$\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \dif \psi = \int_{\RR^{d - 1} \times \{k\}} \dif((F_\alpha^{-1})^* \psi) = 0$$
-% by Stokes' theorem, so
-% \begin{align*}
-% \int_M \dif T_\mu \wedge \psi &= -\int_M T_\mu \wedge \dif \psi \\
-% &= -\int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \dif \psi \dif \mu_\alpha(k) = 0. \qedhere
-% \end{align*}
+% By extending $\gamma$ we may assume that $\partial \gamma$ does not meet the null set $\supp \lambda$.
+% Thus $\gamma$ is an \dfn{admissible transversal} in the sense of \cite[\S7]{daskalopoulos2020transverse}.
+% So by \cite[Lemma 7.9]{daskalopoulos2020transverse}, $\gamma$ is the sum of finitely many good $\lambda$-good curves.
 % \end{proof}
 
-\begin{lemma}
-For a measured oriented lamination $(\lambda, \mu)$, with Lipschitz normal vector $\normal_\lambda$, the polar decomposition of $T_\mu$ is
-\begin{equation}\label{polar ruelle sullivan}
-T_\mu = \normal_\lambda \mu.
-\end{equation}
-\end{lemma}
-\begin{proof}
-For an open set $U \subseteq M$ in a flow box $F_\alpha$, the total variation satisfies
-$$\int_U \star |T_\mu| = \sup_{\|\varphi\|_{C^0} \leq 1} \int_{K_\alpha} \int_{\{k\} \times J} \varphi \dif \mu_\alpha(k)$$
-where the supremum ranges over $d-1$-forms $\varphi$ with compact support in $U$.
-However, $\star \normal_\lambda^\flat$ is the Riemannian measure on $F_\alpha(\{k\} \times J)$, so
-$$\int_{\{k\} \times J} \varphi \leq \int_{\{k\} \times J} (F_\alpha^{-1})^*(\star \normal_\lambda^\flat).$$
-Since $\|\normal^\lambda\|_{C^0} = 1$, it follows that a sequence of cutoffs of $\star \normal_\lambda^\flat$ to more and more of $U$ is a maximizing sequence.
-Therefore $\normal_\lambda$ is the polar part of (\ref{polar ruelle sullivan}), and
-$$\int_U \star |T_\mu| = \int_{K_\alpha} \int_{\{k\} \times J} (F_\alpha^{-1})^*(1_U \star \normal_\lambda^\flat) \dif \mu_\alpha(k).$$
-The inner integral is the Riemannian measure of $F_\alpha(\{k\} \times J) \cap U$, so by (\ref{transverse measure of an open set}), $|T_\mu| = \mu$.
-\end{proof}
+% If $\gamma: I \to M$ is a $\lambda$-good curve, and $\mu$ is a transverse measure to $\lambda$ with Ruelle-Sullivan current $\dif u$, then we can define a Radon measure $\gamma^! \mu$ on $I$, by declaring that for any interval $[\alpha, \beta] \subseteq I$ with $\gamma_*([\alpha, \beta])$ a simply connected $\lambda$-good curve,
+% $$\mu([\alpha, \beta]) = |u(\gamma(\beta)) - u(\gamma(\alpha))|.$$
+% We call $\gamma^! \mu$ the \dfn{exceptional pullback} of $\mu$ by $\gamma$, since normally measures push forward, rather than pull back; it is straightforward to check that the exceptional pullback is a well-defined Radon measure.
 
-The above computation motivates the definition of Ruelle-Sullivan current of a \emph{nonorientable} lamination.
-To be more precise, if $\lambda$ is a nonorientable lamination with normal vector field $\normal_\lambda$, then we can view $\normal_\lambda$ as a section of a (necessarily twisted) line bundle $L$ over $M$.
-We can then define $T_\mu$ to be $\normal_\lambda \mu$, which makes sense as a distributional section of $L$, and can be tested against any continuous $d-1$-form on $M$ whose support is contained in a contractible set.
-In particular, we shall speak of the Ruelle-Sullivan current of any measured lamination, even if it is nonorientable.
+% The exceptional pullback allows us to define Thurston's notion of measured convergence \cite[\S8.10]{thurston1979geometry}.
+% To avoid confusion with our definition of the measure topology we refer to it as the ``transverse cocycle topology", following the terminology of \cite[\S7.2]{daskalopoulos2020transverse}.
 
-\begin{lemma}\label{convergence of normals}
-If $(\lambda_n, \mu_n) \to (\lambda, \mu)$, $x_n \in \supp \lambda_n$ converges to $x \in \supp \lambda$, and $(\lambda_n), \lambda$ have continuous normal vector fields $(\normal_n), \normal$, then $\normal_n(x_n) \to \normal(x)$ pointwise.
-\end{lemma}
-\begin{proof}
-	Choose a continuous $d-1$-form $\varphi$ which extends $\star \normal^\flat$.
-	Then for every $\varepsilon > 0$,
-	$$\int_{B(x, \varepsilon)} T_\mu \wedge \varphi = \mu(B(x, \varepsilon))$$
-	so by the portmanteau theorem, for almost every $\varepsilon > 0$,
-	\begin{equation}\label{epsilon is a continuity set}
-		\lim_{n \to \infty} \frac{\int_{B(x, \varepsilon)} T_{\mu_n} \wedge \varphi}{\mu_n(B(x, \varepsilon))} = \frac{\int_{B(x, \varepsilon)} T_\mu \wedge \varphi}{\mu(B(x, \varepsilon))} = 1.
-	\end{equation}
-	On the other hand, if we assume that there exist $\delta, \varepsilon > 0$ and a coordinate system such that for every $y \in \supp \lambda_n \cap B(x, \varepsilon)$,
-	$$|\normal_n - \normal| \geq \delta,$$
-	then possibly after shrinking $\varepsilon$ we may assume that (\ref{epsilon is a continuity set}) holds, hence by (\ref{polar ruelle sullivan}),
-	$$\int_{B(x, \varepsilon)} T_{\mu_n} \wedge \varphi = \int_{B(x, \varepsilon)} \normal_n^\flat \wedge \star \normal^\flat \dif \mu_i \leq (1 - O(\delta)) \mu_n(B(x, \varepsilon))$$
-	and therefore $\delta = 0$, a contradiction.
-\end{proof}
+% \begin{definition}
+% Let $(\lambda, \mu)$ be a measured oriented geodesic lamination, $\varepsilon > 0$, $\gamma_1, \dots, \gamma_k$ good curves with respect to $\lambda$, and $f_1, \dots, f_k$ continuous functions on $I$.
+% Let
+% \begin{equation}
+% \mathscr N = \mathscr N(\lambda, \mu, \varepsilon, \gamma_1, \dots, \gamma_k, f_1, \dots, f_k) \label{cocycle basic open set}
+% \end{equation}
+% be the set of measured oriented geodesic laminations $(\lambda', \mu')$ such that for every $i = 1, \dots, k$, $\gamma_i$ is $\lambda'$-good, and
+% $$\left|\int_I f_i \dif(\gamma_i^! \mu - \gamma_i^! \mu')\right| < \varepsilon.$$
+% Then $\mathscr N$ is a basic open set in the \dfn{transverse cocycle topology}.
+% \end{definition}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\texorpdfstring{$1$-harmonic}{One-harmonic} functions}
-The appropriate notion of solution of a $1$-harmonic function on a bounded Lipschitz domain in $\RR^d$ was introduced by Maz\'on, Rossi, and Segura de Le\'on \cite{Mazon14}: a function $u \in BV(U)$ is $1$-harmonic if $\nabla u/|\nabla u|$ extends off the support of $\nabla u$ to a divergence-free vector field $X$ on $U$ with $\|X\|_{L^\infty} \leq 1$.
-Unfortunately this notion is not quite suitable on a closed manifold:
+% We could develop the theory of exceptional pullback measures for more general laminations and foliations, but this would take us too far afield, as it would require a more careful application of the geometric measure theory of the $BV_\loc$ function $u$.
+% Thus we content ourselves to proving:
 
-\begin{example}
-Let $u$ be the indicator function of the upper hemisphere $\Sph^3_+$ of $\Sph^3$.
-Then the only level set of $u$ is the equatorial $\Sph^2$, which is a minimal surface, so $u$ ``should'' be $1$-harmonic.
-However, by the divergence theorem, if $X$ is an extension of $\nabla u/|\nabla u|$, then
-$$\int_{\Sph^3_+} \nabla \cdot X \dif V = \int_{\Sph^2} \dif A = |\Sph^2|$$
-so that $X$ cannot be divergence-free.
-\end{example}
+% \begin{proposition}
+% Let $M$ be a closed hyperbolic surface.
+% A sequence $(\lambda_n, \mu_n)$ converges in the measure topology to $(\lambda, \mu)$ iff it converges in the transverse cocycle topology.
+% \end{proposition}
+% \begin{proof}
+% Suppose that $(\lambda_n, \mu_n) \to (\lambda, \mu)$ in the measure topology, and let $\mathscr N$ be the basic open set for the transverse cocycle topology given by (\ref{cocycle basic open set}).
+% We must show that for $n$ large enough, $(\lambda_n, \mu_n) \in \mathscr N$.
 
-This issue can be avoided by allowing $\nabla u/|\nabla u|$ to be divergence-free on a neighborhood of $\supp \nabla u$.
-This is arguably a more natural definition, since the solutions of a PDE should form a sheaf.
-Indeed, what we refer to as a ``$1$-harmonic function'' is a section of the sheafification of the presheaf of $1$-harmonic functions in the sense of \cite{Mazon14}.
+% Since $\gamma_i$ is $\lambda$-good, from Lemma \ref{convergence of normals}, for $n \geq N$ (where $N \in \NN$ is independent of $i$, since $k$ is finite), $\gamma_i$ is $\lambda_n$-good.
+% Now let
+% $$Z := \supp \lambda \cup \bigcup_{n \geq N} \supp \lambda_n.$$
+% Then $Z$ is null, and since the $\gamma_i$ are transverse to $Z$, Fubini's theorem implies that $\gamma_i^{-1}(\gamma_i \cap Z)$ is Lebesgue null in $I$.
 
-\begin{definition}\label{1harmonic dfn}
-A \dfn{$1$-harmonic function} is a function $u \in BV_\loc(M)$ such that $\nabla u/|\nabla u|$ extends to a divergence-free vector field $X$ on a neighborhood of $\supp \nabla u$, such that $\|X\|_{L^\infty} \leq 1$.
-\end{definition}
+% Let $u_n, u$ be the primitives of the Ruelle-Sullivan currents for $\mu_n, \mu$, chosen so that for some $x \in M$, $u_n(x) = u(x) = 0$.
+% Along any subsequence, there is a further subsequence on which $u_n \to u$ almost everywhere, and in particular since $u_n, u$ are locally constant on $M \setminus Z$, we actually can conclude that $u_n \to u$ pointwise on $M \setminus Z$.
+% Therefore, for almost every point of $I$, $u_n \to u$ pointwise.
+% So $\gamma_i^! \mu_n \to \gamma_i^! \mu$ weakly.
+% It follows that for $n$ large enough depending on $\varepsilon$, $(\lambda_n, \mu_n) \in \mathscr N$.
 
-A function $u$ on a ball $U$ has \dfn{least gradient} if it is a minimizer of the total variation $\|\dif u\|_{TV(U)}$ among all $BV$ functions with the same trace along $\partial U$.
-A subset $V \subset U$ has \dfn{least perimeter} if $1_V$ has least gradient.
-Conversely, if $u$ has least gradient, then every superlevel set $\{u > y\}$ has least perimeter \cite[Theorem 1]{BOMBIERI1969}.
-We say that $u$ has \dfn{locally least gradient} if we can cover $M$ by open sets $U$ such that $u|_U$ has least gradient.
-A straightforward modification of \cite[Theorem 1.1]{Mazon14} gives:
-
-\begin{theorem}
-A function $u \in BV_\loc(M)$ is $1$-harmonic iff it has locally least gradient.
-\end{theorem}
-
-\begin{example}
-It is possible to have locally least gradient but not least gradient.
-Again we consider the indicator function $u$ of the upper hemisphere of $\Sph^3$.
-It is clear that $u$ is $1$-harmonic and hence has locally least gradient, but since $\Sph^3$ is a closed manifold, the trace of $u$ is $0$ and so the competition class of $u$ contains the trivial function, which is the only function of least gradient on $\Sph^3$.
-\end{example}
-
-The de Giorgi--Miranda regularity theorem \cite{deGiorgi61,Miranda66} asserts that every set of least perimeter in an open subset of $\RR^d$, $d \leq 7$, is bounded by stable minimal hypersurfaces.
-It is folklore that the same result holds for Riemannian manifolds; for completeness, in the companion paper \cite{BackusFLG} we established the de Giorgi--Miranda theorem in this generality, hence:
-
-\begin{theorem}\label{main thm of old paper}
-Suppose that $\dim M \leq 7$, $M$ is a compact manifold, possibly with boundary, and $u: M \to \RR$ is a function of least gradient.
-Then every superlevel set $\partial \{u > y\}$ of $u$ is bounded by complete stable embedded minimal hypersurfaces.
-\end{theorem}
-
-The following compactness theorem for $1$-harmonic functions in the weak topology of measures will frequently be useful.
-It is a straightforward consequence of the compactness of the forgetful map $BV(M) \to L^1(M)$ and the proof of \cite[Osservazione 3]{Miranda67}, and we omit the details.
-
-\begin{proposition}\label{MirandaStability}
-  Suppose that $M$ is a compact manifold, possibly with boundary.
-	If a sequence of functions $(u_n)$ (not necessarily of the same trace) is bounded in $L^1(M)$ and satisfies
-\begin{equation}\label{boundedness in Miranda}
-	\limsup_{n \to \infty} \int_M \star |\dif u_n| \leq \liminf_{n \to \infty} \inf_{v|_{\partial M} = 0} \int_M \star |\dif(u_n + v)| < \infty,
-\end{equation}
-	then there exists a $1$-harmonic function $u$ such that along a subsequence, $u_n \to u$ in $L^1(M)$ and $\dif u_n \to \dif u$ in the weak topology of measures.
-\end{proposition}
+% Conversely, if $(\lambda_n, \mu_n) \to (\lambda, \mu)$ in the transverse cocycle topology, and $\varphi$ is a $d-1$-form, we can approximate in the weak topology of measures the projection of $\varphi$ to the volume bundle of $\lambda$ by $\varphi^\ell := \sum_i f_i [\gamma_i]$ where $[\gamma_i]$ is the $d-1$-current given by integration along the curve $\gamma_i$.
+% Without loss of generality, $\gamma_i$ is $\lambda$-good, and therefore also $\lambda_n$-good.
+% Then
+% $$\int_M T_{\mu_n} \wedge \varphi^\ell \to \int_M T_\mu \wedge \varphi^\ell.$$ 
+% \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Regularity of laminations}\label{Regularity}
@@ -686,30 +539,6 @@ The claim now follows from Schauder estimates \cite[Theorem 6.2]{gilbarg2015elli
 \end{proof}
 
 For the remainder of the paper we fix a constant $K_0$ satisfying the hypotheses of the above lemma.
-
-We shall need the following lemma in the proof of Theorem \ref{compactness theorem}, which is convenient to state now.
-Given a connected oriented hypersurface $N$, we denote by $[N]$ the $d-1$-current defined by 
-$$\int_M [N] \wedge \psi = \int_N \psi.$$
-In particular, if we view $N$ as a lamination with one leaf and transverse measure $\mu$ assigning that leaf mass $1$, then $[N] = T_\mu$ is the Ruelle-Sullivan current for $(N, \mu)$.
-Moreover, if $N = F_* \sigma$ for some simplex $\sigma$ and $C^1$ map $F$, then 
-$$\int_M [N] \wedge \psi = \int_\sigma F^* \psi,$$
-so if $N_1, N_2$ are $C^1$-close, then $F_1^*, F_2^*$ are $C^0$-close, and hence $[N_1], [N_2]$ are close in the weak topology of measures.
-
-\begin{lemma}\label{measured convergence is smooth convergence}
-Let $C > 0$, let $(N_n)$ be a sequence of minimal surfaces with $\|\Two_{N_n}\|_{C^0} \leq C$, and let $N$ be a surface.
-If $[N_n] \to [N]$ in the weak topology of measures, then $N$ is a minimal surface.
-\end{lemma}
-\begin{proof}
-Let $p \in N = \supp [N]$; as in Lemma \ref{supports shrink in the limit} there exist $p_n \in N_n$ with $p_n \to p$.
-Then by Lemma \ref{convergence of normals}, $\normal_{N_n}(p_n) \to \normal_N(p)$.
-By assumption, $\|\nabla \normal_{N_n}\|_{C^0} \leq C$; moreover, we can choose normal coordinates $(x, y) \in \RR^{d - 1} \times \RR$ at $p$ with $\partial_y|_p = \normal_N(p)$.
-So in a neighborhood of $p$, for every $n$ large, $\normal_{N_n}$ is $C^0$ close to $\partial_y$.
-In particular, $N_n$ are the graphs of functions $u_n: \RR^{d - 1}_x \to \RR_y$ which are bounded in $C^1$ and solve $Pu_n = 0$.
-By (\ref{norms on uk}), $(u_n)$ is precompact in $C^\infty$.
-Similarly, $N$ is the graph of some $u$, and along a subsequence $u_{n_k} \to \tilde u$ in $C^\infty$ for some $\tilde u$, which then has a graph $\tilde N$.
-In particular, $[N_{n_k}] \to [\tilde N]$ in the weak topology of measures; it follows that $\tilde N = N$, so $\tilde u = u$.
-Therefore $u_{n_k} \to u$ in $C^\infty$, hence $Pu = 0$.
-\end{proof}
 
 \subsection{A preliminary choice of coordinates}
 We now construct normal coordinates in which the leaves of $\lambda$ are $C^1$-close to hyperplanes $\{y = y_0\}$.
@@ -900,9 +729,272 @@ It follows that $\Lip(F^{-1}) \lesssim 1$, so $F$ is a Lipschitz isomorphism wit
 Finally, we compose $F$ with the change of coordinates at the start of this proof to obtain a laminar flow box in a small neighborhood of $(0, 0)$ whose image has radius $O(r)$, and whose Lipschitz constants are comparable to $O(r^{-1})$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The measure topology}\label{Prelims}
+\subsection{Preliminaries}
+Let $X$ be a metrizable space, and let $C_\cpt(X)$ be the space of compactly supported continuous functions $f: X \to \RR$.
+Its dual $C_\cpt(X)'$ is canonically isomorphic to the space of signed Radon measures on $X$, where the bilinear pairing is given by integration.
+The weak topology on $C_\cpt(X)'$ is known as the \dfn{weak topology of measures}.
+Unpacking the definitions, a sequence $(\mu_n)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every continuous function $f: X \to \RR$,
+$$\lim_{n \to \infty} \int_X f \dif \mu_n = \int_X f \dif \mu.$$
+
+\begin{proposition}[portmanteau theorem]
+	Let $(\mu_n)$ be a sequence of positive Radon measures on a compact metrizable space $X$ with $\mu_n(X) \lesssim 1$, and let $\mu$ be a Radon measure on $X$. The following are equivalent:
+\begin{enumerate}
+	\item $\mu_n \to \mu$ in the weak topology of measures.
+	\item $\liminf_{n \to \infty} \mu_n(X) \geq \mu(X)$ and for every closed $Y \subseteq X$, $\limsup_{n \to \infty} \mu_n(Y) \leq \mu(Y)$.
+	\item $\limsup_{n \to \infty} \mu_n(X) \leq \mu(X)$ and for every open $Z \subseteq X$, $\liminf_{n \to \infty} \mu_n(Z) \geq \mu(Z)$.
+	\item For every $W \subseteq X$ with $\mu(\partial W) = 0$, $\lim_{n \to \infty} \mu_n(W) = \mu(W)$.
+\end{enumerate}
+	If we choose a metric on $X$, then the above conditions imply:
+\begin{enumerate}
+	\setcounter{enumi}{4}
+	\item For every $x \in X$ and all but countably many $\varepsilon > 0$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+	See \cite[Theorem 13.16]{klenke2013probability} for the equivalence of (1)--(4); \cite{klenke2013probability} deals with subprobability measures, but this is equivalent to measures of bounded total mass by a rescaling.
+
+	We then must show that (4) implies (5); to do so, it suffices to show that for all but countably many $\varepsilon$, $\mu(\partial B(x, \varepsilon)) = 0$.
+	Let
+	$$A := \{\varepsilon > 0: \mu(\partial B(x, \varepsilon)) > 0\}.$$
+	Since the sets $\partial B(x, \varepsilon)$ are disjoint, for every countable $A' \subseteq A$,
+	$$\sum_{\varepsilon \in A'} \mu(\partial B(x, \varepsilon)) \leq \mu(X) < \infty,$$
+	where $\mu(X) < \infty$ since $X$ is compact.
+	It follows from (the contrapositive of) Lemma \ref{cardinality appendix} below that $A$ is countable.
+\end{proof}
+
+\begin{lemma}\label{cardinality appendix}
+Let $S$ be an uncountable set and $f: S \to (0, \infty)$. Then there exists a countable set $S' \subset S$ such that
+$$\sum_{x \in S'} f(x) = \infty.$$
+\end{lemma}
+\begin{proof}
+Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \in \NN$ (where we take the convention $1/n = \infty$).
+Since $S$ is uncountable but $\NN$ is countable, it follows from the infinite pigeonhole principle that there exists $n \in \NN$ such that $S_n$ is infinite.
+In particular there exists an infinite countable set $S' \subseteq S_n$, which then satisfies
+\begin{align*}
+\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n + 1} = \infty. \qedhere 
+\end{align*}
+\end{proof}
+
+There are subtleties involved in the portmanteau theorem for noncompact $X$.
+However, this will never be an issue, as we shall only use it locally, in small precompact balls.
+
+\subsection{Ruelle-Sullivan currents}\label{RS prelims}
+If $X = M$ is a manifold, then we can consider instead the space $C_\cpt(M, \Omega^\ell)$ of compactly supported continuous $\ell$-forms.
+An $\ell$-\dfn{current} is an element of the dual space $C_\cpt(M, \Omega^\ell)'$ \cite{simon1983GMT}.\footnote{Strictly speaking, $C_\cpt(M, \Omega_\ell)'$ is the space of $\ell$-currents of locally finite total variation. However, we will never need to consider $\ell$-currents that do not have locally finite total variation, so we suppress this technicality.}
+We denote the pairing of an $\ell$-current $T$ and an $\ell$-form $\varphi$ by $\int_M T \wedge \varphi$.
+Again we have the \dfn{weak topology of measures} on the space of $\ell$-currents.
+
+To any $\ell$-current $T$ we may associate a positive Radon measure, its \dfn{total variation} $\star |T|$, which satisfies for any function $f$,
+$$\int_M f \star |T| := \sup_{|\varphi| \leq |f|} \int_M T \wedge \varphi,$$
+and a $|T|$-measurable $d - \ell$-form $\psi$, the \dfn{polar part} \cite[Theorem 4.14]{simon1983GMT}, which satisfies $T = \psi |T|$, $|T|$-almost everywhere.
+Moreover, if $\psi \mapsto -\int_M T \wedge \dif \psi$ is an $\ell - 1$-current, then it is the \dfn{exterior derivative} $\dif T$.
+We write $\|T\|_{TV} := \int_M \star |T|$ for the total variation norm.
+
+With the measure-theoretic machinery above in place, we recall some facts about Ruelle-Sullivan currents.
+Let $(\lambda, \mu)$ be a measured oriented lamination.
+Then the Ruelle-Sullivan current $T_\mu$ is a well-defined closed $d-1$-current \cite[Theorem 8.2]{daskalopoulos2020transverse}. 
+In particular, we may lift $T_\mu$ to the universal cover $\tilde M$, where it is exact \cite[Theorem 8.3]{daskalopoulos2020transverse}.
+Moreover, $T_\mu$ has an intrinsic definition as the unique $d-1$-current with a certain polar decomposition.
+To be more precise, recall that $\mu$ defines a measure on $\supp \lambda$: in each flow box $F_\alpha$, an open set $U$ has measure
+\begin{equation}\label{transverse measure of an open set}
+\mu(U) := \int_{K_\alpha} |F_\alpha(\{k\} \times J) \cap U| \dif \mu_\alpha(k).
+\end{equation}
+
+% \begin{proof}
+% We first claim that the right-hand side of (\ref{RS current}) is always finite, and is continuous in $\varphi$.
+% In fact, possibly after refining $(\chi_\alpha)$, we may assume that it is a locally finite partition of unity.
+% In particular, we just need to check the continuity in a single flow box:
+% $$\left|\int_{K_\alpha} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* (\chi_\alpha \varphi) \right] \dif \mu_\alpha(k)\right| \leq \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} |(F_\alpha^{-1})^* (\chi_\alpha \varphi)| \dif \mu_\alpha(k).$$
+% The inner integral is controlled by $\|\varphi\|_{C^0(U_\alpha)} \cdot |U_\alpha|$ where $U_\alpha$ is the image of $F_\alpha$.
+% The outer integral is then well-defined because it is against a Radon measure.
+
+% We next observe that the choice of partition of unity is irrelevant, thus if $\varphi$ has compact support in $U_\alpha \cap U_\beta$, then
+% \begin{equation}\label{well-defined of Ruelle-Sullivan}
+% \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k) = \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k).
+% \end{equation}
+% Indeed,
+% \begin{align*}
+% \int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)
+% &= \int_{K_\beta} (F_\alpha F_\beta^{-1})^* \left[\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \varphi \dif \mu_\alpha(k)\right] \\
+% &= \int_{K_\beta} \left[\int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi\right] (F_\alpha F_\beta^{-1})^* \dif \mu_\beta(k) \\
+% &= \int_{K_\beta} \int_{\RR^{d - 1} \times \{k\}} (F_\beta^{-1})^* \varphi \dif \mu_\beta(k)
+% \end{align*}
+% where the last equation is because of the measure-preserving nature of the transition maps; this proves (\ref{well-defined of Ruelle-Sullivan}).
+
+% Finally, if a $d-2$-form $\psi$ has compact support in a single flow box, then
+% $$\int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \dif \psi = \int_{\RR^{d - 1} \times \{k\}} \dif((F_\alpha^{-1})^* \psi) = 0$$
+% by Stokes' theorem, so
+% \begin{align*}
+% \int_M \dif T_\mu \wedge \psi &= -\int_M T_\mu \wedge \dif \psi \\
+% &= -\int_{K_\alpha} \int_{\RR^{d - 1} \times \{k\}} (F_\alpha^{-1})^* \dif \psi \dif \mu_\alpha(k) = 0. \qedhere
+% \end{align*}
+% \end{proof}
+
+\begin{lemma}
+For a measured oriented lamination $(\lambda, \mu)$, with Lipschitz normal vector $\normal_\lambda$, the polar decomposition of $T_\mu$ is
+\begin{equation}\label{polar ruelle sullivan}
+T_\mu = \normal_\lambda \mu.
+\end{equation}
+\end{lemma}
+\begin{proof}
+For an open set $U \subseteq M$ in a flow box $F_\alpha$, the total variation satisfies
+$$\int_U \star |T_\mu| = \sup_{\|\varphi\|_{C^0} \leq 1} \int_{K_\alpha} \int_{\{k\} \times J} \varphi \dif \mu_\alpha(k)$$
+where the supremum ranges over $d-1$-forms $\varphi$ with compact support in $U$.
+However, $\star \normal_\lambda^\flat$ is the Riemannian measure on $F_\alpha(\{k\} \times J)$, so
+$$\int_{\{k\} \times J} \varphi \leq \int_{\{k\} \times J} (F_\alpha^{-1})^*(\star \normal_\lambda^\flat).$$
+Since $\|\normal^\lambda\|_{C^0} = 1$, it follows that a sequence of cutoffs of $\star \normal_\lambda^\flat$ to more and more of $U$ is a maximizing sequence.
+Therefore $\normal_\lambda$ is the polar part of (\ref{polar ruelle sullivan}), and
+$$\int_U \star |T_\mu| = \int_{K_\alpha} \int_{\{k\} \times J} (F_\alpha^{-1})^*(1_U \star \normal_\lambda^\flat) \dif \mu_\alpha(k).$$
+The inner integral is the Riemannian measure of $F_\alpha(\{k\} \times J) \cap U$, so by (\ref{transverse measure of an open set}), $|T_\mu| = \mu$.
+\end{proof}
+
+The above computation motivates the definition of Ruelle-Sullivan current of a \emph{nonorientable} lamination.
+To be more precise, if $\lambda$ is a nonorientable lamination with normal vector field $\normal_\lambda$, then we can view $\normal_\lambda$ as a section of a (necessarily twisted) line bundle $L$ over $M$.
+We can then define $T_\mu$ to be $\normal_\lambda \mu$, which makes sense as a distributional section of $L$, and can be tested against any continuous $d-1$-form on $M$ whose support is contained in a contractible set.
+In particular, we shall speak of the Ruelle-Sullivan current of any measured lamination, even if it is nonorientable.
+
+\begin{lemma}\label{convergence of normals}
+If $(\lambda_n, \mu_n) \to (\lambda, \mu)$, $x_n \in \supp \lambda_n$ converges to $x \in \supp \lambda$, and $(\lambda_n), \lambda$ have continuous normal vector fields $(\normal_n), \normal$, then $\normal_n(x_n) \to \normal(x)$ pointwise.
+\end{lemma}
+\begin{proof}
+	Choose a continuous $d-1$-form $\varphi$ which extends $\star \normal^\flat$.
+	Then for every $\varepsilon > 0$,
+	$$\int_{B(x, \varepsilon)} T_\mu \wedge \varphi = \mu(B(x, \varepsilon))$$
+	so by the portmanteau theorem, for almost every $\varepsilon > 0$,
+	\begin{equation}\label{epsilon is a continuity set}
+		\lim_{n \to \infty} \frac{\int_{B(x, \varepsilon)} T_{\mu_n} \wedge \varphi}{\mu_n(B(x, \varepsilon))} = \frac{\int_{B(x, \varepsilon)} T_\mu \wedge \varphi}{\mu(B(x, \varepsilon))} = 1.
+	\end{equation}
+	On the other hand, if we assume that there exist $\delta, \varepsilon > 0$ and a coordinate system such that for every $y \in \supp \lambda_n \cap B(x, \varepsilon)$,
+	$$|\normal_n - \normal| \geq \delta,$$
+	then possibly after shrinking $\varepsilon$ we may assume that (\ref{epsilon is a continuity set}) holds, hence by (\ref{polar ruelle sullivan}),
+	$$\int_{B(x, \varepsilon)} T_{\mu_n} \wedge \varphi = \int_{B(x, \varepsilon)} \normal_n^\flat \wedge \star \normal^\flat \dif \mu_i \leq (1 - O(\delta)) \mu_n(B(x, \varepsilon))$$
+	and therefore $\delta = 0$, a contradiction.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{$1$-harmonic}{One-harmonic} functions}
+The appropriate notion of solution of a $1$-harmonic function on a bounded Lipschitz domain in $\RR^d$ was introduced by Maz\'on, Rossi, and Segura de Le\'on \cite{Mazon14}: a function $u \in BV(U)$ is $1$-harmonic if $\nabla u/|\nabla u|$ extends off the support of $\nabla u$ to a divergence-free vector field $X$ on $U$ with $\|X\|_{L^\infty} \leq 1$.
+Unfortunately this notion is not quite suitable on a closed manifold:
+
+\begin{example}
+Let $u$ be the indicator function of the upper hemisphere $\Sph^3_+$ of $\Sph^3$.
+Then the only level set of $u$ is the equatorial $\Sph^2$, which is a minimal surface, so $u$ ``should'' be $1$-harmonic.
+However, by the divergence theorem, if $X$ is an extension of $\nabla u/|\nabla u|$, then
+$$\int_{\Sph^3_+} \nabla \cdot X \dif V = \int_{\Sph^2} \dif A = |\Sph^2|$$
+so that $X$ cannot be divergence-free.
+\end{example}
+
+This issue can be avoided by allowing $\nabla u/|\nabla u|$ to be divergence-free on a neighborhood of $\supp \nabla u$.
+This is arguably a more natural definition, since the solutions of a PDE should form a sheaf.
+Indeed, what we refer to as a ``$1$-harmonic function'' is a section of the sheafification of the presheaf of $1$-harmonic functions in the sense of \cite{Mazon14}.
+
+\begin{definition}\label{1harmonic dfn}
+A \dfn{$1$-harmonic function} is a function $u \in BV_\loc(M)$ such that, on a neighborhood of any point of $\supp \nabla u$, $\nabla u/|\nabla u|$ extends to a divergence-free vector field $X$ such that $\|X\|_{L^\infty} \leq 1$.
+\end{definition}
+
+A function $u$ on a ball $U$ has \dfn{least gradient} if it is a minimizer of the total variation $\|\dif u\|_{TV(U)}$ among all $BV$ functions with the same trace along $\partial U$.
+A subset $V \subset U$ has \dfn{least perimeter} if $1_V$ has least gradient.
+Conversely, if $u$ has least gradient, then every superlevel set $\{u > y\}$ has least perimeter \cite[Theorem 1]{BOMBIERI1969}.
+We say that $u$ has \dfn{locally least gradient} if we can cover $M$ by open sets $U$ such that $u|_U$ has least gradient.
+A straightforward modification of \cite[Theorem 1.1]{Mazon14} gives:
+
+\begin{theorem}
+A function $u \in BV_\loc(M)$ is $1$-harmonic iff it has locally least gradient.
+\end{theorem}
+
+\begin{example}
+It is possible to have locally least gradient but not least gradient.
+Again we consider the indicator function $u$ of the upper hemisphere of $\Sph^3$.
+It is clear that $u$ is $1$-harmonic and hence has locally least gradient, but since $\Sph^3$ is a closed manifold, the trace of $u$ is $0$ and so the competition class of $u$ contains the trivial function, which is the only function of least gradient on $\Sph^3$.
+\end{example}
+
+The de Giorgi--Miranda regularity theorem \cite{deGiorgi61,Miranda66} asserts that every set of least perimeter in an open subset of $\RR^d$, $d \leq 7$, is bounded by stable minimal hypersurfaces.
+It is folklore that the same result holds for Riemannian manifolds; for completeness, in the companion paper \cite{BackusFLG} we established the de Giorgi--Miranda theorem in this generality, hence:
+
+\begin{theorem}\label{main thm of old paper}
+Suppose that $\dim M \leq 7$, $M$ is a compact manifold, possibly with boundary, and $u: M \to \RR$ is a function of least gradient.
+Then every superlevel set $\partial \{u > y\}$ of $u$ is bounded by complete stable embedded minimal hypersurfaces.
+\end{theorem}
+
+The following compactness theorem for $1$-harmonic functions in the weak topology of measures will frequently be useful.
+It is a straightforward consequence of the compactness of the forgetful map $BV(M) \to L^1(M)$ and the proof of \cite[Osservazione 3]{Miranda67}, and we omit the details.
+
+\begin{proposition}\label{MirandaStability}
+  Suppose that $M$ is a compact manifold, possibly with boundary.
+	If a sequence of functions $(u_n)$ (not necessarily of the same trace) is bounded in $L^1(M)$ and satisfies
+\begin{equation}\label{boundedness in Miranda}
+	\limsup_{n \to \infty} \int_M \star |\dif u_n| \leq \liminf_{n \to \infty} \inf_{v|_{\partial M} = 0} \int_M \star |\dif(u_n + v)| < \infty,
+\end{equation}
+	then there exists a $1$-harmonic function $u$ such that along a subsequence, $u_n \to u$ in $L^1(M)$ and $\dif u_n \to \dif u$ in the weak topology of measures.
+\end{proposition}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Compactness of the space of laminations}\label{CompactnessSec}
-\subsection{Construction of the limiting flow box}
-We now begin the construction of Theorem \ref{compactness theorem}.
+In this section we prove Theorem \ref{compactness theorem}, the compactness theorem.
+We then apply it to explore the implications between the different modes of convergence.
+
+\subsection{The Hausdorff topology}
+Throughout this section we use the Hausdorff topology on closed subsets of a topological space \cite[Chapter IV]{nadler2017continuum}:
+
+\begin{definition}
+Let $X$ be a topological space, and $(Y_n)$ a sequence of closed subsets of $X$.
+\begin{enumerate}
+\item The \dfn{limit inferior} $\liminf_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is eventually nonempty.
+\item The \dfn{limit superior} $\limsup_{n \to \infty} Y_n$ is the set of all $x \in X$ such that for every open neighborhood $U \ni x$, $U \cap Y_n$ is nonempty for infinitely many $n$.
+\item If $\liminf_{n \to \infty} Y_n = \limsup_{n \to \infty} Y_n$, we call that set the \dfn{limit} $\lim_{n \to \infty} Y_n$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}
+Suppose that $\lambda_n \to \lambda$ in the weak topology of measures or Thurston's geometric topology.
+Then 
+\begin{equation}\label{supports shrink in the limit}
+\supp \lambda \subseteq \liminf_{n \to \infty} \supp \lambda_n.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $x \in \supp \lambda$.
+If the convergence is in the weak topology of measures, let $\mu, \mu_n$ be the transverse measures.
+Then by the portmanteau theorem, for any $\varepsilon > 0$,
+$$\liminf_{n \to \infty} \mu_n(B(x, \varepsilon)) \geq \mu(B(x, \varepsilon)) > 0$$
+so $\mu_n(B(x, \varepsilon)) \gtrsim 1$.
+So for any $\varepsilon$ we can find $n$ and $x_n \in \supp \lambda_n \cap B(x, \varepsilon)$.
+If instead the convergence is in the Thurston topology, we pass to a subsequence which realizes the limit inferior in (\ref{supports shrink in the limit}).
+Then by definition of a basic open set, for every $\varepsilon > 0$ we can find $n$ and $x_n$ such that $x_n \in \supp \lambda_n \cap B(x, \varepsilon)$.
+Either way, we conclude (\ref{supports shrink in the limit}).
+\end{proof}
+
+Given a connected oriented hypersurface $N$, we denote by $[N]$ the $d-1$-current defined by 
+$$\int_M [N] \wedge \psi = \int_N \psi.$$
+In particular, if we view $N$ as a lamination with one leaf and transverse measure $\mu$ assigning that leaf mass $1$, then $[N] = T_\mu$ is the Ruelle-Sullivan current for $(N, \mu)$.
+Moreover, if $N = F_* \sigma$ for some simplex $\sigma$ and $C^1$ map $F$, then 
+$$\int_M [N] \wedge \psi = \int_\sigma F^* \psi,$$
+so if $N_1, N_2$ are $C^1$-close, then $F_1^*, F_2^*$ are $C^0$-close, and hence $[N_1], [N_2]$ are close in the weak topology of measures.
+
+\begin{lemma}\label{measured convergence is smooth convergence}
+Let $C > 0$, let $(N_n)$ be a sequence of minimal surfaces with $\|\Two_{N_n}\|_{C^0} \leq C$, and let $N$ be a surface.
+If $[N_n] \to [N]$ in the weak topology of measures, then $N$ is a minimal surface.
+\end{lemma}
+\begin{proof}
+Let $p \in N = \supp [N]$; by (\ref{supports shrink in the limit}), there exist $p_n \in N_n$ with $p_n \to p$.
+Then by Lemma \ref{convergence of normals}, $\normal_{N_n}(p_n) \to \normal_N(p)$.
+By assumption, $\|\nabla \normal_{N_n}\|_{C^0} \leq C$; moreover, we can choose normal coordinates $(x, y) \in \RR^{d - 1} \times \RR$ at $p$ with $\partial_y|_p = \normal_N(p)$.
+So in a neighborhood of $p$, for every $n$ large, $\normal_{N_n}$ is $C^0$ close to $\partial_y$.
+In particular, $N_n$ are the graphs of functions $u_n: \RR^{d - 1}_x \to \RR_y$ which are bounded in $C^1$ and solve $Pu_n = 0$.
+By (\ref{norms on uk}), $(u_n)$ is precompact in $C^\infty$.
+Similarly, $N$ is the graph of some $u$, and along a subsequence $u_{n_k} \to \tilde u$ in $C^\infty$ for some $\tilde u$, which then has a graph $\tilde N$.
+In particular, $[N_{n_k}] \to [\tilde N]$ in the weak topology of measures; it follows that $\tilde N = N$, so $\tilde u = u$.
+Therefore $u_{n_k} \to u$ in $C^\infty$, hence $Pu = 0$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%
+
+\subsection{Proof of Theorem \texorpdfstring{\ref{compactness theorem}}{B}}
+\subsubsection{Construction of the limiting flow box}
 Let $P \in M$, and let $(\lambda_n)$ be a sequence of minimal laminations of bounded curvature, such that every leaf of every lamination meets a compact set.
 
 By Theorem \ref{regularity theorem}, there exist $r > 0$ and $L \geq 1$ such that for every large $n \in \NN$, $B(P, r)$ is contained in the image of a flow box $F_n$ for $\lambda_n$ with Lipschitz constant $L$, such that $F_n(0, 0) = P$.
@@ -920,9 +1012,12 @@ Since $(F_n)$ and $(F_n^{-1})$ are bounded in tangential $C^\infty$, a similar c
 
 Since $P$ was arbitrary, it follows that we can find laminar atlases $(F_\alpha^n, K_\alpha^n)$ for each large $n \in \NN$ such that $F_\alpha^n \to F_\alpha$ in $C^{1-}$, where the images of $F_\alpha$ and $F_\alpha^n$ are an open cover $(U_\alpha)$ of $M$ independent of $n$, and $(F_\alpha)$ satisfies the usual transition relations, and $F_\alpha$ is a Lipschitz isomorphism.
 
-\subsection{Construction of the limiting lamination}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Construction of the limiting lamination}
 We now construct the limiting lamination.
-Let $\Hypspace I$ be the space of closed subsets of $I$ with its Hausdorff distance; since $I$ is a compact metric space, so is $\Hypspace I$ \cite[Theorem 4.17]{nadler2017continuum}, so we may diagonalize so that for every $\alpha$, either $K^n_\alpha \to K_\alpha$ for some nonempty $K_\alpha$ in the Hausdorff distance on $I$, or for all $n \geq n^*(\alpha)$, $K_\alpha^n$ is empty (in which case we define $K_\alpha = \emptyset$).
+We employ the Hausdorff hyperspace $\Hypspace I$ of closed subsets of $I$ to accomplish this.
+Since $I$ is a compact metric space, so is $\Hypspace I$ \cite[Theorem 4.17]{nadler2017continuum}, so we may diagonalize so that for every $\alpha$, either $K^n_\alpha \to K_\alpha$ for some nonempty $K_\alpha$ in the Hausdorff distance on $I$, or for all $n \geq n^*(\alpha)$, $K_\alpha^n$ is empty (in which case we define $K_\alpha = \emptyset$).
 
 In order to ensure that the laminations $\lambda_n$ do not escape to infinity, fix a compact set $E \subseteq M$ such that every leaf of every $\lambda_n$ meets $E$.
 Then there exists a finite set $A_E \subseteq A$ such that $E \subseteq \bigcup_{\alpha \in A_E} U_\alpha$.
@@ -990,10 +1085,9 @@ Now if we choose $\alpha$ such that $K_\alpha$ is nonempty, every element of $K_
 So $\supp \lambda$ is nonempty, and since all of its leaves are complete minimal, $\lambda$ is minimal.
 \end{proof}
 
-\subsection{Convergence}
-At this stage of the argument we have constructed a limiting lamination with limiting flow boxes; we now check that the convergence occurs in other modes as well.
+\subsubsection{Convergence in Thurston's geometric topology}
+At this stage of the argument we have constructed a limiting lamination with limiting flow boxes; we now check that the sequence of laminations actually converges to the limiting lamination.
 
-\subsubsection{Thurston's geometric topology}
 If $K_\alpha$ is nonempty, then any $k_\alpha \in K_\alpha$ is the limit of some sequence $(k_\alpha^n)_n \in \prod_n K_\alpha^n$ \cite[Theorem 4.11]{nadler2017continuum}.
 Thus $\{k_\alpha\} \times J$ can be written as the set of limits of sequences $(k_\alpha^n, x)_n \in \prod_n K_\alpha^n \times J$, and so any leaf $N$ of $\lambda$ takes the form $N = \lim_{n \to \infty} N_n$ for some sequence $(N_n) \in \prod_n \Leaves \lambda_n$, where $\Leaves \lambda_n$ is the set of leaves of $\lambda_n$.
 In other words, leaves of $\lambda$ are pointwise limits of leaves in $\lambda_n$.
@@ -1003,7 +1097,7 @@ To do this, suppose that $P \in U_\alpha$; $F_\alpha^n$ is close in tangential $
 In particular, if we consider $N$ and $N_n$ as graphs of functions $u, u_n$ in the coordinates induced by $F_\alpha$, then $u_n \to u$ in $C^\infty$; however, in such coordinates, $u$ is a constant.
 A bootstrapping argument based on (\ref{nabla as a normal}) then shows that, since $\dif u_n \to 0$ in $C^0$, $\normal_{N_n} \to \partial_y = \normal_N$ in $C^0$ near $P$.
 
-\subsubsection{The measure topology}
+\subsubsection{Convergence in the measure topology}
 Suppose that $\mu_n$ is transverse to $\lambda_n$.
 After possibly shrinking the $U_\alpha$ slightly for $\alpha \in A_E$, we may assume that they are precompact in $M$ and still form an open cover of $E$.
 Then $K := \bigcup_{\alpha \in A_E} \overline{U_\alpha}$ is compact, so by Prohorov's theorem \cite[Theorem 13.29]{klenke2013probability}, there is a subsequence of $(T_{\mu_n})$ which converges to some $T_\mu|_K$ on $K$.
@@ -1044,25 +1138,6 @@ Then $T = \dif \mu$, so the leaves of $\lambda$ are level sets of $u$.
 By Theorem \ref{main thm of old paper} and the fact that $\dim M \leq 7$, the leaves of $\lambda$ are minimal hypersurfaces, as desired.
 \end{proof}
 
-\begin{lemma}
-Suppose that $\lambda_n \to \lambda$ in the weak topology of measures or Thurston's geometric topology.
-Then 
-\begin{equation}\label{supports shrink in the limit}
-\supp \lambda \subseteq \liminf_{n \to \infty} \supp \lambda_n.
-\end{equation}
-\end{lemma}
-\begin{proof}
-Let $x \in \supp \lambda$.
-If the convergence is in the weak topology of measures, let $\mu, \mu_n$ be the transverse measures.
-Then by the portmanteau theorem, for any $\varepsilon > 0$,
-$$\liminf_{n \to \infty} \mu_n(B(x, \varepsilon)) \geq \mu(B(x, \varepsilon)) > 0$$
-so $\mu_n(B(x, \varepsilon)) \gtrsim 1$.
-So for any $\varepsilon$ we can find $n$ and $x_n \in \supp \lambda_n \cap B(x, \varepsilon)$.
-If instead the convergence is in the Thurston topology, we pass to a subsequence which realizes the limit inferior in (\ref{supports shrink in the limit}).
-Then by definition of a basic open set, for every $\varepsilon > 0$ we can find $n$ and $x_n$ such that $x_n \in \supp \lambda_n \cap B(x, \varepsilon)$.
-Either way, we conclude (\ref{supports shrink in the limit}).
-\end{proof}
-
 \begin{proposition}
 Suppose that $\dim M \leq 7$.
 Let $(\lambda_n, \mu_n)$ be measured minimal laminations in $M$, and $(\lambda_n, \mu_n) \to (\lambda, \mu)$.
@@ -1087,17 +1162,14 @@ Since $(\lambda_{n_k})$ was arbitrary, it follows that $\lambda_n \to \lambda$ i
 \end{proof}
 
 
-
 %%%%%%%%%%%%%%%%%%%%
 \section{Application to \texorpdfstring{$1$-harmonic}{one-harmonic} functions}\label{1harmonic sec}
 The purpose of this section is to prove Theorem \ref{main thm}, and explore some of its consequences.
 Throughout, we shall assume that $2 \leq \dim M \leq 4$, as we shall appeal to the stable Bernstein theorem (Theorem \ref{stable Bernstein}) in the proof that a $1$-harmonic function induces a minimal lamination.
 
 %%%%%%%%%%%%%
-\subsection{Stability and calibration of minimal surfaces}
-Here we collect some results about minimal surfaces that will be useful in the proof of Theorem \ref{main thm}.
-
-\subsubsection{Stability}
+\subsection{Stability of minimal surfaces}
+Here we collect some results about the stability of minimal surfaces that will be useful in the proof of Theorem \ref{main thm}.
 We begin with an estimate on the curvature of a stable minimal surface.
 Since, by Theorem \ref{main thm of old paper}, the level sets of a function of least gradient are stable, we can in particular obtain estimates on the curvature of the level sets of a function of least gradient.
 If $\dim M = 3$, the stable Bernstein theorem was proven by Schoen \cite{Schoen2016} and Colding and Minicozzi \cite{ColdingMinicozziParametric}; see also \cite[Theorem 2.10]{colding2011course}.
@@ -1129,75 +1201,36 @@ Summing in $\alpha$, we see that $\partial_t J(u_t) = 0$.
 So $u$ is a critical point of the convex function $J$, and hence is a minimum.
 \end{proof}
 
-\subsubsection{Calibration}
-A submanifold $N \subseteq M$ is \dfn{calibrated} if its area form extends to a closed form $\varphi$ on $M$ with $\|\varphi\|_{C^0} \leq 1$; in that case $N$ is area-minimizing among all submanifolds homologous to $N$ relative to $\partial N$ \cite{Harvey82}.
-It appears to be folklore that a minimal submanifold locally admits a calibration \cite{Bryant17}; for the sake of completeness we give a proof here.
-
-\begin{lemma}\label{minimal implies locally calibrated}
-Let $N \subseteq M$ be an embedded minimal submanifold.
-Then there exists an open cover $\mathcal U$ of $M$ such that for $U \in \mathcal U$, $N \cap U$ is a calibrated submanifold of $U$.
-\end{lemma}
-\begin{proof}
-By the Nash embedding theorem, we have an embedding
-$$\iota: M \to \RR^p \times \RR^q,$$
-where $p := \dim N$ and $q \in \NN$ is sufficiently large.
-Given $P \in N$ we may apply a rigid motion of $\RR^p \times \RR^q$ so that $P$ is identified with $0$ and $\RR^p \times \{0\}$ is identified with $T_P N$.
-Then there exists a neighborhood $V \ni x$ and an open set $\Omega \subseteq \RR^p$ such that $N \cap V$ is the graph of a function
-$$f: \Omega \to \RR^q.$$
-Let $\omega$ be the area form on $N$, which, by using $\iota$, we may view as a map from $N$ to the $p$th exterior power of $\RR^p \times \RR^q$.
-
-We claim that the extension
-$$\overline \omega(x, y) = \omega(x, f(x))$$
-to all of $\Omega \times \RR^q$ is a closed $p$-form.
-To see why, we denote an ascending $p$-index as $(\alpha, \beta)$ where $\alpha_i \in \{1, \dots, p\}$ and $\beta_i \in \{p + 1, \dots, p + q\}$.
-Then
-$$\dif \overline \omega = \sum_{\alpha, \beta} \sum_{m = 1}^p \frac{\partial \overline \omega_{\alpha \beta}}{\partial x^m} \dif x^m \wedge \dif x^\alpha \wedge \dif y^\beta +  \sum_{\alpha, \beta} \sum_{n = 1}^q \frac{\partial \overline \omega_{\alpha \beta}}{\partial y^n} \dif y^n \wedge \dif x^\alpha \wedge \dif y^\beta.$$
-But $\partial_{y^n} \overline \omega_{\alpha \beta} = 0$ and
-$$\frac{\partial \overline \omega_{\alpha \beta}}{\partial x^m}(x, y) = \frac{\partial \omega_{\alpha \beta}}{\partial x^m}(x, f(x)).$$
-So 
-$$\dif \overline \omega(x, y) = \sum_{\alpha, \beta} \sum_{m = 1}^p \frac{\partial \omega_{\alpha \beta}}{\partial x^m}(x, f(x)) \dif x^m \wedge \dif x^\alpha \wedge \dif y^\beta = \dif \omega(x, f(x)).$$
-But since $N$ is minimal, its mean curvature satisfies 
-$$0 = H_N = \nabla \cdot \normal_N = \star \dif \omega,$$
-so $\omega$, and hence $\overline \omega$, is closed.
-
-Let $\varphi := \iota^* \overline \omega$, which is then a closed $p$-form on $U := (\Omega \times \RR^q) \cap M$.
-If $v_1, \dots, v_p$ are unit tangent vectors to $M$ at $(x, y)$, then we can view as them as elements of $\RR^p \times \RR^q$, and then
-$$\langle \varphi(x, y), v_1 \wedge \cdots \wedge v_p\rangle = \langle \omega(x, f(x)), v_1 \wedge \cdots \wedge v_p\rangle \leq 1,$$
-since $\omega$, being an area form, has unit comass.
-Therefore $\|\varphi\|_{C^0} = 1$, so $\varphi$ is a calibration on $U$, which witnesses that $N \cap U$ is a calibrated submanifold of $U$.
-\end{proof}
-
 \begin{lemma}\label{minimal implies 1 harmonic}
 Let $N$ be a minimal hypersurface which bounds an open set $U$.
 Then $1_U$ is $1$-harmonic.
 \end{lemma}
 \begin{proof}
-Since $N = \supp \nabla 1_U$, it suffices to find an open cover $\mathcal V$ of a tubular neighborhood of $N$ such that for $V \in \mathcal V$, $1_U|_V$ is $1$-harmonic.
-We let $\mathcal V$ be the open cover given by Lemma \ref{minimal implies locally calibrated}.
-Then for $V \in \mathcal V$, there exists a calibration $\varphi$ of $N \cap V$ in $V$.
-The Poincar\'e dual vector field $X := (\star \varphi)^\flat$ is a divergence-free extension of the normal vector $\nabla 1_U/|\nabla 1_U|$ of $N \cap V$ to $V$, and $\|X\|_{C^0} \leq 1$, so $X$ witness that $1_U|_V$ is $1$-harmonic.
+Since $N$ is minimal, it is locally area-minimizing, in the sense that we can find an open cover $\mathcal V$ of a tubular neighborhood $T$ of $N$, such that for $V \in \mathcal V$, $N \cap V$ is minimal for the Dirichlet problem in $V$.
+This follows from \cite[\S2]{Lawlor96} and the references therein.
+In particular, $1_U|_V$ has least gradient, so $1_U$ has locally least gradient on $T$.
+Since $1_U|_{M \setminus T}$ is constant, it follows that $1_U$ is $1$-harmonic.
 \end{proof}
 
-
 %%%%%%%%%%%%%%
-
-\subsection{\texorpdfstring{$1$-harmonic}{One-harmonic} function induces minimal lamination}
+\subsection{Proof of Theorem \texorpdfstring{\ref{main thm}}{C}}
+\subsubsection{\texorpdfstring{$1$-harmonic}{One-harmonic} function induces minimal lamination}
 Let $u$ be a $1$-harmonic function on $M$.
-By shrinking $M$ we may assume that $u$ has least gradient.
-By Theorem \ref{main thm of old paper}, the level sets of $u$ are complete embedded stable minimal hypersurfaces in $M$; let
+The statement is local, so we may always replace $M$ with a small open set.
+In particular, we may assume that $u$ has least gradient, so that by Theorem \ref{main thm of old paper}, the level sets of $u$ are complete embedded stable minimal hypersurfaces in $M$.
+Let
 $$Y = \{y \in \RR: \partial \{u > y\} \neq \emptyset\}$$
 index the level sets of $u$.
 
 Let $y, z \in Y$. If $y > z$, then $\{u > y\} \subseteq \{u > z\}$, so $\partial \{u > y\}$ lies on one side of $\partial \{u > z\}$.
 By the maximum principle, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
 Moreover, $\dif u$ is conormal to $\partial \{u > y\}$, so $\partial \{u > y\}$ has trivial normal bundle.
-Since the stable Bernstein theorem gives interior estimates, after we replace $M$ by a compact exhaustion $(X_m)$ of its interior, we may apply the stable Bernstein theorem to see that for some $A > 0$,
+By the stable Bernstein theorem,
 \begin{equation}\label{curvature estimate on 1 harmonic}
 	\sup_{y \in Y} \|\Two_{\partial \{u > y\}}\|_{C^0} \leq A.
 \end{equation}
-Then by Theorem \ref{regularity theorem}, $\supp \dif u \cap X_m$ is the support of a lamination $\lambda_m$ with leaves given by the level sets of $u$.
-Diagonalizing against the compact exhaustion $(X_m)$ and using Theorem \ref{compactness theorem}, we obtain a lamination $\lambda = \lim_m \lambda_m$ on $M$ whose leaves are exactly the level sets of $u$.
-It follows that $\bigcup_{y \in Y} \partial \{u > y\}$ is the support of $\lambda$, that $\lambda$ is minimal, and that $\dif u$ is conormal to $\lambda$.
+Then by Theorem \ref{regularity theorem}, $\supp \dif u$ is the support of a lamination $\lambda$ with leaves given by the level sets of $u$.
+It follows that $\lambda$ is minimal and $\dif u$ is conormal to $\lambda$.
 In particular, we obtain an orientation on $\lambda$ from $\dif u$.
 
 We now construct the transverse measure to $\lambda$.
@@ -1215,7 +1248,7 @@ So by (\ref{polar ruelle sullivan}), $\dif u = \normal_\lambda |\dif u|$ is the 
 
 %%%%%%%%%%%%%%%%
 
-\subsection{Minimal lamination induces \texorpdfstring{$1$-harmonic}{one-harmonic} function}
+\subsubsection{Minimal lamination induces \texorpdfstring{$1$-harmonic}{one-harmonic} function}
 Suppose that we are given a measured oriented minimal lamination $\lambda$, which then has a Ruelle-Sullivan current $T$.
 Since $\dif T = 0$, we may assume, possibly after replacing $M$ with its universal cover, that $T$ is exact, say $T = \dif u$, and we must show that $u$ has locally least gradient.
 If this is not true, then by \cite[Theorem 2.2]{Sternberg93}, we can choose a small open ball $E \subseteq M$ and a function $v \in BV_\cpt(E)$ such that
