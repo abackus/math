@@ -45,6 +45,7 @@
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\Teich}{Teich}
 \DeclareMathOperator{\tr}{tr}
@@ -686,7 +687,91 @@ so $N$ (hence $\lambda$) is not $F$-calibrated.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{\texorpdfstring{$\infty$-tight forms}{Infinity-tight forms}}\label{tight forms sec}
+\section{\texorpdfstring{$\infty$-tight forms and the $1$-Laplacian}{Infinity-tight forms and the one-Laplacian}}\label{tight forms sec}
+\subsection{Preliminaries on convex optimization}
+We follow \cite{Ekeland99}.
+For a reflexive Banach space $X$, we denote by $\hat X$ its dual.
+If $J: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}, the convex function
+\begin{align*}
+	\hat J: \hat X &\to \RR \cup \{+\infty\}\\
+	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - J(x).
+\end{align*}
+
+\begin{proposition}[convex duality]\label{abstract convex analysis}
+Let $X, Y$ be reflexive Banach spaces equipped with a bounded linear operator $\Lambda: X \to Y$ of trivial kernel.
+Let $J: Y \to \RR \cup \{+\infty\}$ satisfy:
+\begin{enumerate}
+\item $J$ and $\hat J$ are strictly convex,
+\item $J$ is lower semicontinuous and not identically $+\infty$,
+\item if $|y| \to \infty$ in $Y$, then $J(y) \to +\infty$, and 
+\item there exists a point $x \in X$ such that $J$ is continuous and finite at $\Lambda(x)$.
+\end{enumerate}
+Then:
+\begin{enumerate}
+\item There exists a unique minimizer $\underline x \in X$ of $J(\Lambda(x))$, and a unique maximizer $\overline \eta \in \hat Y$ of $-\hat J(-\eta)$.
+\item We have \dfn{strong duality}
+\begin{equation}\label{abstract strong duality}
+J(\Lambda(\underline x)) = -\hat J(-\overline \eta).
+\end{equation}
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+This is the conjunction of several standard results in convex analysis.
+Let $\Gamma_0(Y)$ denote the set introduced in \cite[Chapter I, Definition 3.1]{Ekeland99}.
+Then by \cite[Chapter I, Proposition 3.1]{Ekeland99}, $J \in \Gamma_0(Y)$, so by \cite[Chapter III, Theorem 4.2]{Ekeland99} and \cite[Chapter III, (4.23)]{Ekeland99}, there exist minimizers which satisfy (\ref{abstract strong duality}).
+By \cite[Chapter II, Proposition 1.2]{Ekeland99}, the minimizers of $J$ and $\hat J$ are unique.
+Since $\Lambda$ has trivial kernel, minimizers of $J \circ \Lambda$ are also unique.
+\end{proof}
+
+One of the most famous corollaries of Proposition \ref{abstract convex analysis} is the \dfn{max flow min cut theorem} of discrete convex optimization \cite[Chapter 7]{umesh2006algorithms}.
+It is profitable to view Proposition \ref{abstract convex analysis} as a vast generalization of the max flow min cut theorem.
+
+We now turn to the problem at hand.
+Let $M$ be a closed oriented manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, $M_{\rm fun} \subset \tilde M$ a fundamental domain of $\Gamma$, $1 < q < \infty$, and $Y := L^q(M, Z^1)$, where $Z^\ell \subseteq \Omega^\ell$ denotes the sheaf of \emph{closed} $\ell$-forms.
+By Poincar\'e duality and the Hurcewiz theorem, we have canonical isomorphisms
+$$H_{d - 1}(M, \RR) = H^1(M, \RR) = \Hom(\Gamma, \RR).$$
+Sometimes we are interested specifically in integral representations; in that case, we can use the fact that $\Sph^1$ is a $K(\ZZ, 1)$-space to further identify 
+$$H^1(M, \ZZ) = \Hom(\Gamma, \ZZ) = [M, \Sph^1].$$
+
+Given a representation
+$$\alpha: \Gamma \to \RR,$$
+let $X$ be the space of $\alpha$-equivariant functions on $\tilde M$, with the $W^{1, q}(M_{\rm fun})$ norm, modulo constants.
+By subtracting off a primitive $\tilde u$ of a representative $1$-form $\dif \tilde u$ of $\alpha$, we may identify $X$ with $W^{1, q}_0(M_{\rm fun})$.
+Then $\Lambda := \dif$ carries $X$ into $Y$.
+We are interested in solving the $q$-Laplace equation
+$$\dif^* (|\dif u|^{q - 2} \dif u) = 0$$
+for $u \in X$, which is the Euler-Lagrange equation of the function
+$$J_q(\varphi) := \frac{1}{q} \int_M \star |\varphi|^q,$$
+where $\varphi := \dif u \in Y$.
+Using the methods of \cite[Chapter I, \S4]{Ekeland99} one can easily show that $J_q$ is strictly convex and (with $1/p + 1/q = 1$) its Legendre transform is the strictly convex function
+$$\hat J_q(F) = \frac{1}{p} \int_M \star |F|^p + \int_M \dif \tilde u \wedge F$$
+where $F \in \hat Y$.
+
+\todo{Rewrite this duality to make it so $\hat Y = L^pZ^{d - 1}$}
+
+The convex dual problem to the $q$-Laplacian is the problem of maximizing
+$$-\hat J_q(-F) = -\frac{1}{p} \int_M \star |F|^p + \int_M \dif \tilde u \wedge F$$
+among \emph{closed} forms $F$.
+
+$$\frac{1}{q} \int_M \star |\dif u|^q = -\int_M \star |F|^p + \int_M \dif u \wedge F.$$
+Thus by Proposition \ref{abstract convex analysis}:
+
+
+% \begin{definition}
+% \begin{enumerate}
+% \item A \dfn{flow network} is a finite directed graph $(V, E)$, distinct \dfn{source} and \dfn{sink} vertices $s, t \in V$, and a \dfn{capacity} function $c: E \to \RR_+$.
+% \item A \dfn{flow} through a flow network $(V, E, s, t, c)$ is a function $f: E \to \RR_+$ with $f \leq c$, which is \dfn{divergence-free} in the sense that for every vertex $v \in V \setminus \{s, t\}$, if $e_i$ are the edges into $v$ and $f_j$ are the edges out of $v$, then $\sum_i c(e_i) = \sum_j c(f_j)$.
+% \item A \dfn{cut} of a flow network $(V, E, s, t, c)$ is a partition $V = S \sqcup T$, where $s \in S$ and $t \in T$.
+% \end{enumerate}
+% \end{definition}
+
+% \begin{theorem}[max flow min cut]
+% Let $(V, E, s, t, c)$ be a flow network.
+
+% Since it seems rather unlikely that Thurston meant that $L = K$ should be a graph-theoretic fact, we interpret his assertion that ``a characterization of minimum stretch maps should be possible ... based on more general principles -- in particular the max flow min cut principle ...'' to refer to the more abstract formula (\ref{abstract strong duality}).
+
+
+
 \subsection{\texorpdfstring{$p$-tight forms}{p-tight forms}}
 As before, let $M$ be a closed Riemannian manifold of dimension $d$, equipped with a cohomology class $\rho \in H^{d - 1}(M, \RR)$.
 In this section, we construct a representative $F$ of best comass of $\rho$, and a $1$-harmonic conjugate to $F$.
@@ -1169,45 +1254,6 @@ Identifying the $\gamma_j$ with their geodesic representatives, and taking a bes
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix 
 \section{Max flow, min cut}\label{Max Flow Min Cut}
-Let us interpret the duality between the $q$-Laplacian and $p$-tight forms as a version of the max flow min cut principle. 
-\todo{Move this to the main part of the paper and make the isomorphism of cohomology groups be more explicit}
-
-For a reflexive Banach space $X$, we denote by $\hat X$ its dual.
-If $J: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}
-\begin{align*}
-	\hat J: \hat X &\to \RR \cup \{+\infty\}\\
-	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - J(x).
-\end{align*}
-
-\begin{proposition}\label{abstract convex analysis}
-Let $X, Y$ be reflexive Banach spaces equipped with a bounded linear operator $\Lambda: X \to Y$ of trivial kernel.
-Let $J: Y \to \RR \cup \{+\infty\}$ satisfy:
-\begin{enumerate}
-\item $J$ and $\hat J$ are strictly convex,
-\item $J$ is lower semicontinuous and not identically $+\infty$,
-\item if $|y| \to \infty$ in $Y$, then $J(y) \to +\infty$, and 
-\item there exists a point $x \in X$ such that $J$ is continuous and finite at $\Lambda(x)$.
-\end{enumerate}
-Then:
-\begin{enumerate}
-\item There exists a unique minimizer $\underline x \in X$ of $J(\Lambda(x))$, and a unique maximizer $\overline \eta \in \hat Y$ of $-\hat J(-\eta)$.
-\item We have \dfn{strong duality}
-\begin{equation}\label{abstract strong duality}
-J(\Lambda(\underline x)) = -\hat J(-\overline \eta).
-\end{equation}
-\end{enumerate}
-\end{proposition}
-\begin{proof}
-This is the conjunction of several standard results in convex analysis.
-Let $\Gamma_0(Y)$ denote the set introduced in \cite[Chapter I, Definition 3.1]{Ekeland99}.
-Then by \cite[Chapter I, Proposition 3.1]{Ekeland99}, $J \in \Gamma_0(Y)$, so by \cite[Chapter III, Theorem 4.2]{Ekeland99} and \cite[Chapter III, (4.23)]{Ekeland99}, there exist minimizers which satisfy (\ref{abstract strong duality}).
-By \cite[Chapter II, Proposition 1.2]{Ekeland99}, the minimizers of $J$ and $\hat J$ are unique.
-Since $\Lambda$ has trivial kernel, minimizers of $J \circ \Lambda$ are also unique.
-\end{proof}
-
-One of the most famous corollaries of (\ref{abstract strong duality}) is the \dfn{max flow min cut theorem} of discrete optimization \cite[Chapter 7]{umesh2006algorithms}.
-Since it seems rather unlikely that Thurston meant that $L = K$ should be a graph-theoretic fact, we interpret his assertion that ``a characterization of minimum stretch maps should be possible ... based on more general principles -- in particular the max flow min cut principle ...'' to refer to the more abstract formula (\ref{abstract strong duality}).
-
 We now specialize to the problem at hand.
 Let $\alpha \in H^1(M, \RR)$ be a cohomology class.
 Recall that we write $[u] = \alpha$ to mean that $u$ is an $\alpha$-equivariant function on $\tilde M$.
