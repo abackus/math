@@ -46,6 +46,7 @@
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\coker}{coker}
 \DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\Teich}{Teich}
 \DeclareMathOperator{\tr}{tr}
@@ -688,73 +689,107 @@ so $N$ (hence $\lambda$) is not $F$-calibrated.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{\texorpdfstring{$\infty$-tight forms and the $1$-Laplacian}{Infinity-tight forms and the one-Laplacian}}\label{tight forms sec}
-\subsection{Preliminaries on convex optimization}
+\subsection{Convex optimization}
 We follow \cite{Ekeland99}.
 For a reflexive Banach space $X$, we denote by $\hat X$ its dual.
-If $J: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}, the convex function
+If $I: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}, the convex function
 \begin{align*}
-	\hat J: \hat X &\to \RR \cup \{+\infty\}\\
-	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - J(x).
+	\hat I: \hat X &\to \RR \cup \{+\infty\}\\
+	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - I(x).
 \end{align*}
+In this setting, we have the following form of the convex duality theorem.
 
-\begin{proposition}[convex duality]\label{abstract convex analysis}
-Let $X, Y$ be reflexive Banach spaces equipped with a bounded linear operator $\Lambda: X \to Y$ of trivial kernel.
-Let $J: Y \to \RR \cup \{+\infty\}$ satisfy:
+\begin{theorem}[convex duality]\label{abstract convex analysis}
+Let 
+$$\Lambda : X \to Y$$
+be a bounded linear map between reflexive Banach spaces.
+Let $I: Y \to \RR \cup \{+\infty\}$ satisfy:
 \begin{enumerate}
-\item $J$ and $\hat J$ are strictly convex,
-\item $J$ is lower semicontinuous and not identically $+\infty$,
-\item if $|y| \to \infty$ in $Y$, then $J(y) \to +\infty$, and 
-\item there exists a point $x \in X$ such that $J$ is continuous and finite at $\Lambda(x)$.
+\item $I$ and $\hat I$ are strictly convex,
+\item $I$ is lower semicontinuous,
+\item if $|y| \to \infty$ in $Y$, then $I(y) \to +\infty$, and 
+\item there exists a point $x \in X$ such that $I$ is continuous and finite at $\Lambda(x)$.
 \end{enumerate}
 Then:
 \begin{enumerate}
-\item There exists a unique minimizer $\underline x \in X$ of $J(\Lambda(x))$, and a unique maximizer $\overline \eta \in \hat Y$ of $-\hat J(-\eta)$.
+\item There exists a minimizer $\underline x \in X$ of $I(\Lambda(x))$, unique modulo $\ker \Lambda$.
+\item There exists a unique maximizer $\overline \eta \in \coker \Lambda$ of $-\hat I(-\eta)$.
 \item We have \dfn{strong duality}
 \begin{equation}\label{abstract strong duality}
-J(\Lambda(\underline x)) = -\hat J(-\overline \eta).
+I(\Lambda(\underline x)) = -\hat I(-\overline \eta).
 \end{equation}
 \end{enumerate}
-\end{proposition}
+\end{theorem}
 \begin{proof}
-This is the conjunction of several standard results in convex analysis.
-Let $\Gamma_0(Y)$ denote the set introduced in \cite[Chapter I, Definition 3.1]{Ekeland99}.
-Then by \cite[Chapter I, Proposition 3.1]{Ekeland99}, $J \in \Gamma_0(Y)$, so by \cite[Chapter III, Theorem 4.2]{Ekeland99} and \cite[Chapter III, (4.23)]{Ekeland99}, there exist minimizers which satisfy (\ref{abstract strong duality}).
-By \cite[Chapter II, Proposition 1.2]{Ekeland99}, the minimizers of $J$ and $\hat J$ are unique.
-Since $\Lambda$ has trivial kernel, minimizers of $J \circ \Lambda$ are also unique.
+This is largely a special case of \cite[Chapter IV, Theorem 4.2]{Ekeland99}.
+Let $\mathscr P, \mathscr P^*$ be as in the statement of that theorem.
+Then $\mathscr P$ is the problem of minimizing $J(x, \Lambda x)$ where $J(x, y) := I(y)$.
+The Legendre transform of $J$ satisfies 
+$$\hat J(\xi, \eta) = \begin{cases} \hat I(\eta), & \xi = 0, \\
+	+\infty, &\xi \neq 0,
+\end{cases}$$
+and $\mathscr P^*$ is the problem of maximizing
+$$-\hat J(\Lambda^* \eta, -\eta) = \begin{cases}
+	-\hat I(-\eta), &\eta \in \ker \Lambda^*, \\
+	-\infty, &\eta \notin \ker \Lambda^*,
+\end{cases}$$
+where $\Lambda^*$ is the adjoint of $\Lambda$.
+Then most of the various assertions of this theorem follow immediately from \cite[Chapter IV, Theorem 4.2]{Ekeland99}.
+The fact that $\overline \eta \in \coker \Lambda$ follows from the facts that $\overline \eta$ is a solution of $\mathscr P^*$, but any solution of $\mathscr P^*$ must be a member of $\ker \Lambda^* = \coker \Lambda$. 
+To establish uniqueness, we use \cite[Chapter II, Proposition 1.2]{Ekeland99}, the fact that $\hat I$ is strictly convex, and the fact that we may view $I \circ \Lambda$ as a strictly convex function on the reflexive Banach space $X/\ker \Lambda$.
 \end{proof}
 
-One of the most famous corollaries of Proposition \ref{abstract convex analysis} is the \dfn{max flow min cut theorem} of discrete convex optimization \cite[Chapter 7]{umesh2006algorithms}.
-It is profitable to view Proposition \ref{abstract convex analysis} as a vast generalization of the max flow min cut theorem.
+One of the most famous corollaries of Theorem \ref{abstract convex analysis} is the \dfn{max flow min cut theorem} of discrete convex optimization \cite[Chapter 7]{umesh2006algorithms}, and we sometimes call consequences of Theorem \ref{abstract convex analysis} ``max flow min cut theorems,'' even if they are not combinatorial in nature.
 
+\subsection{Max flow min cut for the \texorpdfstring{$q$-Laplacian}{q-Laplacian}}
 We now turn to the problem at hand.
-Let $M$ be a closed oriented manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, $M_{\rm fun} \subset \tilde M$ a fundamental domain of $\Gamma$, $1 < q < \infty$, and $Y := L^q(M, Z^1)$, where $Z^\ell \subseteq \Omega^\ell$ denotes the sheaf of \emph{closed} $\ell$-forms.
+Let $M$ be a closed oriented manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, and let $M_{\rm fun} \subset \tilde M$ be a fundamental domain of $\Gamma$.
 By Poincar\'e duality and the Hurcewiz theorem, we have canonical isomorphisms
 $$H_{d - 1}(M, \RR) = H^1(M, \RR) = \Hom(\Gamma, \RR).$$
-Sometimes we are interested specifically in integral representations; in that case, we can use the fact that $\Sph^1$ is a $K(\ZZ, 1)$-space to further identify 
+Sometimes we are interested specifically in integral representations; in that case, we can use the fact that $\Sph^1$ is homotopic to $K(\ZZ, 1)$ to further identify 
 $$H^1(M, \ZZ) = \Hom(\Gamma, \ZZ) = [M, \Sph^1].$$
 
 Given a representation
 $$\alpha: \Gamma \to \RR,$$
-let $X$ be the space of $\alpha$-equivariant functions on $\tilde M$, with the $W^{1, q}(M_{\rm fun})$ norm, modulo constants.
-By subtracting off a primitive $\tilde u$ of a representative $1$-form $\dif \tilde u$ of $\alpha$, we may identify $X$ with $W^{1, q}_0(M_{\rm fun})$.
-Then $\Lambda := \dif$ carries $X$ into $Y$.
-We are interested in solving the $q$-Laplace equation
+which we always identify with some smooth $1$-form (which we also call $\alpha$) representing the cohomology class corresponding to the representation $\alpha$, and $q \in (1, \infty)$,
+we are interested in the $q$-Laplace equation
 $$\dif^* (|\dif u|^{q - 2} \dif u) = 0$$
-for $u \in X$, which is the Euler-Lagrange equation of the function
-$$J_q(\varphi) := \frac{1}{q} \int_M \star |\varphi|^q,$$
-where $\varphi := \dif u \in Y$.
-Using the methods of \cite[Chapter I, \S4]{Ekeland99} one can easily show that $J_q$ is strictly convex and (with $1/p + 1/q = 1$) its Legendre transform is the strictly convex function
-$$\hat J_q(F) = \frac{1}{p} \int_M \star |F|^p + \int_M \dif \tilde u \wedge F$$
-where $F \in \hat Y$.
+for an $\alpha$-equivariant function $u$ (thus for any $\gamma \in \Gamma$, $u(\gamma(x)) - u(x) = \alpha(\gamma)$).
 
-\todo{Rewrite this duality to make it so $\hat Y = L^pZ^{d - 1}$}
+Let $X$ be the space of locally $W^{1, q}(\tilde M)$ functions $u$ which are $\Gamma$-equivariant in the sense that for $\gamma \in \Gamma$, $\gamma^* \dif u = \dif u$, let $Y := L^q(M, \Omega^1)$, and let $p$ be the H\"older conjugate exponent to $q$.
+Then $\Lambda := (\dif: X \to Y)$ is a bounded linear map, whose cokernel can be identified with the kernel of
+$$\dif: L^p(M, \Omega^{d - 1}) \to W^{-1, p}(M)$$
+using the perfect pairing 
+\begin{align*}
+	L^p(M, \Omega^{d - 1}) \times Y &\to \RR \\
+	(F, \varphi) &\mapsto \int_M \varphi \wedge F 
+\end{align*}
+to identify $\hat Y$ with $L^p(M, \Omega^{d - 1})$.
 
-The convex dual problem to the $q$-Laplacian is the problem of maximizing
-$$-\hat J_q(-F) = -\frac{1}{p} \int_M \star |F|^p + \int_M \dif \tilde u \wedge F$$
-among \emph{closed} forms $F$.
+One can easily show that the $q$-Laplace equation is the Euler-Lagrange equation of $I \circ \dif$, where $I: Y \to \RR \cup \{+\infty\}$ is defined to be 
+$$I(\varphi) := \frac{1}{q} \int_M \star |\varphi|^q$$
+if $\varphi$ is cohomologous to $\alpha$, and otherwise 
+$$I(\varphi) := +\infty.$$
+Using the methods of \cite[Chapter I, \S4]{Ekeland99} one can show that
+$$\hat I(F) = \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F$$
+defined for $F \in \coker \Lambda$, and the dual problem to the $q$-Laplacian is the problem of maximizing $-\hat I(-F)$.
 
-$$\frac{1}{q} \int_M \star |\dif u|^q = -\int_M \star |F|^p + \int_M \dif u \wedge F.$$
-Thus by Proposition \ref{abstract convex analysis}:
+\begin{proposition}[max flow min cut for the $q$-Laplacian]
+Given a representation $\alpha: \Gamma \to \RR$, and H\"older conjugate exponents $1 < p, q < \infty$, there exists an $\alpha$-equivariant $q$-harmonic function $u: \tilde M \to \RR$, unique modulo constants, and a unique minimizer $F$ of 
+$$J_p(F) := \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F$$
+among all closed $d - 1$-forms on $M$.
+Moreover, we have
+\begin{equation}\label{strong duality}
+	\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p = \int_M \dif u \wedge F.
+\end{equation}
+\end{proposition}
+\begin{proof}
+By \cite[Lemma 1]{Loisel_2020}, $I$ and $\hat I$ are both strictly convex.
+So the various assertions of this proposition mostly follow from Theorem \ref{abstract convex analysis} and the above discussion.
+The uniqueness of $u$ follows from the fact that $\ker \Lambda$ is the space of constant functions on $\tilde M$, and (\ref{strong duality}) follows from (\ref{abstract strong duality}).
+\end{proof}
+
+\todo{Solve this by inspection, motivated by DU20, and conclude that $F$ is the unique $p$-tight form in its cohomology class. Establish that the kernel of $\alpha \mapsto \rho$ is trivial, so we obtain an isomorphism between $H_{d - 1}$ and $H^{d - 1}$. Add Karen's example of a genus $2$ surface wrapping around a circle to explain the importance of $\Sph^1 \sim K(\ZZ, 1)$.}
 
 
 % \begin{definition}
@@ -847,9 +882,7 @@ in the sense of distributions.
 F = |\dif u|^{q - 2} \star \dif u. \label{extremality} \\
 \end{equation}
 \item One has the \dfn{max flow min cut principle}
-\begin{equation}\label{strong duality}
-\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p = \int_M \dif u \wedge F.
-\end{equation}
+
 \end{enumerate}
 \end{proposition}
 
