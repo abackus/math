@@ -330,8 +330,6 @@ We also state a few natural conjectures about $\infty$-tight and $p$-tight forms
 In \S\ref{MCL sec}, we study the maximum comass locus of a form of best comass, and the measured stretch lamination associated to its cohomology class.
 By applying the results of the previous two sections, we prove Theorem \ref{lams are calibrated}.
 
-Finally, in Appendix \ref{Max Flow Min Cut}, we explain how the relationship between a $p$-tight form and its $q$-harmonic conjugate can be viewed as a form of the max flow min cut principle.
-
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{Acknowledgements}
@@ -697,6 +695,7 @@ If $I: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{L
 	\hat I: \hat X &\to \RR \cup \{+\infty\}\\
 	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - I(x).
 \end{align*}
+We identify the cokernel of a linear map $\Lambda$ with the kernel of its adjoint.
 In this setting, we have the following form of the convex duality theorem.
 
 \begin{theorem}[convex duality]\label{abstract convex analysis}
@@ -713,7 +712,7 @@ Let $I: Y \to \RR \cup \{+\infty\}$ satisfy:
 Then:
 \begin{enumerate}
 \item There exists a minimizer $\underline x \in X$ of $I(\Lambda(x))$, unique modulo $\ker \Lambda$.
-\item There exists a unique maximizer $\overline \eta \in \coker \Lambda$ of $-\hat I(-\eta)$.
+\item There exists a unique maximizer $\overline \eta$ of $-\hat I(-\eta)$ subject to the constraint $\eta \in \coker \Lambda$.
 \item We have \dfn{strong duality}
 \begin{equation}\label{abstract strong duality}
 I(\Lambda(\underline x)) = -\hat I(-\overline \eta).
@@ -735,15 +734,17 @@ $$-\hat J(\Lambda^* \eta, -\eta) = \begin{cases}
 \end{cases}$$
 where $\Lambda^*$ is the adjoint of $\Lambda$.
 Then most of the various assertions of this theorem follow immediately from \cite[Chapter IV, Theorem 4.2]{Ekeland99}.
-The fact that $\overline \eta \in \coker \Lambda$ follows from the facts that $\overline \eta$ is a solution of $\mathscr P^*$, but any solution of $\mathscr P^*$ must be a member of $\ker \Lambda^* = \coker \Lambda$. 
+The fact that $\overline \eta \in \coker \Lambda$ follows from the facts that $\overline \eta$ is a solution of $\mathscr P^*$, but any solution of $\mathscr P^*$ must be a member of $\ker \Lambda^*$. 
 To establish uniqueness, we use \cite[Chapter II, Proposition 1.2]{Ekeland99}, the fact that $\hat I$ is strictly convex, and the fact that we may view $I \circ \Lambda$ as a strictly convex function on the reflexive Banach space $X/\ker \Lambda$.
 \end{proof}
 
 One of the most famous corollaries of Theorem \ref{abstract convex analysis} is the \dfn{max flow min cut theorem} of discrete convex optimization \cite[Chapter 7]{umesh2006algorithms}, and we sometimes call consequences of Theorem \ref{abstract convex analysis} ``max flow min cut theorems,'' even if they are not combinatorial in nature.
 
+%%%%%%%%%%%%%%%
+
 \subsection{Max flow min cut for the \texorpdfstring{$q$-Laplacian}{q-Laplacian}}
 We now turn to the problem at hand.
-Let $M$ be a closed oriented manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, and let $M_{\rm fun} \subset \tilde M$ be a fundamental domain of $\Gamma$.
+Let $M$ be a closed oriented Riemannian manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, and let $M_{\rm fun} \subset \tilde M$ be a fundamental domain of $\Gamma$.
 By Poincar\'e duality and the Hurcewiz theorem, we have canonical isomorphisms
 $$H_{d - 1}(M, \RR) = H^1(M, \RR) = \Hom(\Gamma, \RR).$$
 Sometimes we are interested specifically in integral representations; in that case, we can use the fact that $\Sph^1$ is homotopic to $K(\ZZ, 1)$ to further identify 
@@ -776,7 +777,7 @@ defined for $F \in \coker \Lambda$, and the dual problem to the $q$-Laplacian is
 
 \begin{proposition}[max flow min cut for the $q$-Laplacian]
 Given a representation $\alpha: \Gamma \to \RR$, and H\"older conjugate exponents $1 < p, q < \infty$, there exists an $\alpha$-equivariant $q$-harmonic function $u: \tilde M \to \RR$, unique modulo constants, and a unique minimizer $F$ of 
-$$J_p(F) := \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F$$
+$$J_{p, \alpha}(F) := \frac{1}{p} \int_M \star |F|^p - \int_M \alpha \wedge F$$
 among all closed $d - 1$-forms on $M$.
 Moreover, we have
 \begin{equation}\label{strong duality}
@@ -785,75 +786,82 @@ Moreover, we have
 \end{proposition}
 \begin{proof}
 By \cite[Lemma 1]{Loisel_2020}, $I$ and $\hat I$ are both strictly convex.
+Moreover, $\coker \Lambda$ is the space of closed $L^p$ $d - 1$-forms on $M$, and $\ker \Lambda$ is the space of constant functions on $\tilde M$.
 So the various assertions of this proposition mostly follow from Theorem \ref{abstract convex analysis} and the above discussion.
-The uniqueness of $u$ follows from the fact that $\ker \Lambda$ is the space of constant functions on $\tilde M$, and (\ref{strong duality}) follows from (\ref{abstract strong duality}).
 \end{proof}
 
-\todo{Solve this by inspection, motivated by DU20, and conclude that $F$ is the unique $p$-tight form in its cohomology class. Establish that the kernel of $\alpha \mapsto \rho$ is trivial, so we obtain an isomorphism between $H_{d - 1}$ and $H^{d - 1}$. Add Karen's example of a genus $2$ surface wrapping around a circle to explain the importance of $\Sph^1 \sim K(\ZZ, 1)$.}
+Motivated by \cite[\S3.1]{daskalopoulos2020transverse}, it is natural to guess that 
+\begin{equation}\label{dual solution}
+F := |\dif u|^{q - 2} \star \dif u
+\end{equation}
+is the solution of the dual problem of minimizing $J_{p, \alpha}$.
+In order to prove that this is true, we shall need that for H\"older conjugates $1 \leq p, q \leq \infty$,
+\begin{equation}\label{holder cancellation}
+	(p - 2)(q - 1) + (q - 2) = 2 - q.
+\end{equation}
 
+\begin{lemma}
+Suppose that $u: \tilde M \to \RR$ is an $\alpha$-equivariant $q$-harmonic function, and suppose that $F$ satisfies (\ref{dual solution}).
+Then $F$ is a closed $d - 1$-form, which minimizes $J_{p, \alpha}$ among all closed $d - 1$-forms.
+Moreover, $F$ solves the PDE 
+\begin{equation}\label{pMaxwell}
+\begin{cases}
+	\dif F = 0 \\
+	\dif^* (|F|^{p - 2} F) = 0.
+\end{cases}
+\end{equation}
+\end{lemma}
+\begin{proof}
+We first show that $\dif F = 0$.
+In fact, 
+$$\star \dif F = \star \dif(|\dif u|^{q - 2} \star \dif u) = \pm \dif^*(|\dif u|^{q - 2} \dif u) = 0.$$
+So by the max flow min cut principle, to prove that $F$ is a minimizer, it suffices to show that (\ref{strong duality}) holds.
+One can easily compute 
+$$|F|^p = |\dif u|^{(q - 1)p} = |\dif u|^q,$$
+so by Stokes' theorem and the fact that $\alpha$ is cohomologous to $\dif u$,
+\begin{align*}
+\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p&
+= \left[\frac{1}{p} + \frac{1}{q}\right] \int_M \star |\dif u|^q
+= \int_M \dif u \wedge |\dif u|^{q - 2} \star \dif u \\
+&= \int_M \alpha \wedge F.
+\end{align*}
+Finally, we use (\ref{holder cancellation}) to prove
+\begin{align*}
+\dif^*(|F|^{p - 2} F) &= \dif^*(|\dif u|^{(p - 2)(q - 1)} |\dif u|^{q - 2} \star \dif u) = \dif^*(\star \dif u) \\
+&= \pm \star \dif^2 u = 0. \qedhere 
+\end{align*}
+\end{proof}
 
-% \begin{definition}
-% \begin{enumerate}
-% \item A \dfn{flow network} is a finite directed graph $(V, E)$, distinct \dfn{source} and \dfn{sink} vertices $s, t \in V$, and a \dfn{capacity} function $c: E \to \RR_+$.
-% \item A \dfn{flow} through a flow network $(V, E, s, t, c)$ is a function $f: E \to \RR_+$ with $f \leq c$, which is \dfn{divergence-free} in the sense that for every vertex $v \in V \setminus \{s, t\}$, if $e_i$ are the edges into $v$ and $f_j$ are the edges out of $v$, then $\sum_i c(e_i) = \sum_j c(f_j)$.
-% \item A \dfn{cut} of a flow network $(V, E, s, t, c)$ is a partition $V = S \sqcup T$, where $s \in S$ and $t \in T$.
-% \end{enumerate}
-% \end{definition}
-
-% \begin{theorem}[max flow min cut]
-% Let $(V, E, s, t, c)$ be a flow network.
-
-% Since it seems rather unlikely that Thurston meant that $L = K$ should be a graph-theoretic fact, we interpret his assertion that ``a characterization of minimum stretch maps should be possible ... based on more general principles -- in particular the max flow min cut principle ...'' to refer to the more abstract formula (\ref{abstract strong duality}).
-
-
+%%%%%%%%%%%%%%%%
 
 \subsection{\texorpdfstring{$p$-tight forms}{p-tight forms}}
-As before, let $M$ be a closed Riemannian manifold of dimension $d$, equipped with a cohomology class $\rho \in H^{d - 1}(M, \RR)$.
-In this section, we construct a representative $F$ of best comass of $\rho$, and a $1$-harmonic conjugate to $F$.
-We begin by constructing a minimizing sequence for the comass as $p \to \infty$.
+We next scrutinize the PDE (\ref{pMaxwell}).
+If $p = 2$ and $d = 3$, then these equations are those satisfied by a steady-state electromagnetic tensor in vacuum.
+On the other hand, as $p \to \infty$, the solutions of these equations converge to a minimizer of the comass.
+This motivates the below terminology:
 
 \begin{definition}
-Let $1 < p < \infty$ and let $F_p$ be a closed $d - 1$-form with $[F_p] = \rho$.
-We call $F_p$ a \dfn{$p$-tight form} if it is a minimizer of
-$$J_p(F) := \frac{1}{p} \int_M \star |F|^p$$
-among all $d - 1$-forms representing $\rho$.
+Let $1 < p < \infty$.
+We call the equation (\ref{pMaxwell}) the \dfn{$p$-Maxwell equation}.
+A \dfn{$p$-tight form} is a solution of the $p$-Maxwell equation.
 \end{definition}
 
 \begin{proposition}
-A $d - 1$-form $F \in L^p(M, \Omega^{d - 1})$ is $p$-tight iff it solves the system
-\begin{equation}\label{pMaxwell}
-\begin{cases}
-	\dif F = 0, \\
-	\dif^*(|F|^{p - 2} F) = 0
-\end{cases}
-\end{equation}
-in the distributional sense. Moreover, the restriction of $J_p$ to any cohomology class is strictly convex.
+Suppose that $M$ is a closed oriented Riemannian manifold.
+Then there is a unique $p$-tight form in each cohomology class in $H^{d - 1}(M, \RR)$.
+Moreover, $p$-tight forms are minimizers of the strictly convex functional
+$$J_p(F) := \int_M \star |F|^p$$
+among all forms cohomologous to them.
 \end{proposition}
 \begin{proof}
-Let us take variations of $J_p$ in the space of $L^p$ closed $d-1$-forms.
-Let $B$ be a $d-2$-form (so $F + t \dif B$ is cohomologous to $F$), so that
+Strict convexity of $J_p$ on a cohomology class follows from an argument similar to \cite[Lemma 1]{Loisel_2020} and the existence and uniqueness of a minimizer then is a consequence of the direct method of the calculus of variations as in \cite[Chapter II]{Ekeland99}.
+To compute the Euler-Lagrange equations for $J_p$, let $B$ be a $d-2$-form (so $F + t \dif B$ is cohomologous to $F$), so that for a minimizer $F$ of $J_p$,
 $$\frac{\dif}{\dif t} J_p(F + t \dif B) = \frac{1}{p} \int_M \star \frac{\partial}{\partial t} |F + t \dif B|^p = \int_M \star |F + t \dif B|^{p - 2} \langle F + t \dif B, \dif B\rangle.$$
 Setting $t = 0$, we obtain 
 $$0 = \int_M \star |F|^{p - 2} \langle F, \dif B\rangle = \int_M \star \langle \dif^*(|F|^{p - 2} F), B\rangle.$$
 This equation holds for every $d - 2$-form $B$.
 Thus the Euler-Lagrange equations for $J_p$ are (\ref{pMaxwell}).
-
-To obtain the convexity, let $F, G$ be representatives of a class $\rho \in H^{d - 1}(M, \RR)$ and $t \in [0, 1]$. Then
-\begin{align*}
-J_p(tF + (1 - t)G)
-&= \frac{1}{p} \int_M \star |tF + (1 - t)G|^p \leq \frac{1}{p} \int_M \star t|F|^p + \star (1 - t)|G|^p\\
-& = tJ_p(F) + (1 - t)J_p(G),
-\end{align*}
-with equality iff $F = G$ almost everywhere (as in \cite[Lemma 1]{Loisel_2020}).
-Moreover,
-$$[tF + (1 - t)G] = t[F] + (1 - t)[G] = (t + 1 - t)\rho = \rho,$$
-so that $J_p$ is specifically convex when restricted to the class $\rho$.
 \end{proof}
-
-Arguing as in the proof of existence of $p$-harmonic functions (see \cite[\S8.2]{evans2010partial} for the general theory, or \cite[\S2.1]{daskalopoulos2020transverse} for $p$-harmonic maps $M \to \Sph^1$ which is closely analogous to our case), one can easily check that there exists a unique $p$-tight form in every cohomology class on the closed manifold $M$.
-We omit the details, both because the argument is standard, and because we shall give a separate proof in Appendix \ref{Max Flow Min Cut}.
-
-\todo{Merge this with the appendix, lots of redundancy here}
 
 \begin{definition}
 Let $F$ be a $p$-tight form, let
@@ -868,44 +876,37 @@ Let $u$ be the $q$-harmonic conjugate of $F$.
 By Poincar\'e's inequality,
 $$\|u\|_{W^{1, q}(M_{\rm fun})}^q \lesssim \int_M \star |\dif u|^q = \int_M \star |F|^{(p - 1)q} = \int_M \star |F|^p < \infty$$
 since $F$ is $p$-tight; that is, we have $F \in L^p$ and $u \in W^{1, q}$.
-From this, and H\"older's inequality, it follows that all expressions in the next proposition are well-defined.
 
-\begin{proposition}
+We derived the $p$-Maxwell equation as the dual equation to the $q$-Laplace equation.
+We now assert that this process can be inverted.
+
+\begin{lemma}
 Let $1 < p, q < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$.
 Let $F$ be a $p$-tight form, and let $u$ be its $q$-harmonic conjugate. Then:
 \begin{enumerate}
-\item $u$ is $q$-harmonic:
-$$\dif^*(|\dif u|^{q - 2} \dif u) = 0$$
-in the sense of distributions.
+\item $u$ is $q$-harmonic.
 \item One has 
 \begin{equation}
 F = |\dif u|^{q - 2} \star \dif u. \label{extremality} \\
 \end{equation}
-\item One has the \dfn{max flow min cut principle}
-
+\item One has the duality formula (\ref{strong duality}).
 \end{enumerate}
-\end{proposition}
-
-We give a more highbrow proof of the same proposition in Appendix \ref{Max Flow Min Cut}, which also justifies why (\ref{strong duality}) should be called the ``max flow min cut principle.''
-However, we think there is value in providing a straightforward proof from first principles.
-
+\end{lemma}
 \begin{proof}
-We first compute 
-$$(q - 2)(p - 1) + p = 2,$$
-so that
+We first use (\ref{holder cancellation}) to prove
 $$|\dif u|^{q - 2} \star \dif u = (-1)^{d - 1} |F|^{(q - 2)(p - 1)} \star \star |F|^{p - 2} F = |F|^{(q - 2)(p - 1) - (p - 2)} F = F.$$
-Thus we have (\ref{extremality}), and moreover,
+Thus we have (\ref{extremality}), and moreover
 $$\dif \star (|\dif u|^{q - 2} \dif u) = \dif F = 0$$
 so that $u$ is $q$-harmonic.
-We also compute 
+We also compute
 \begin{align*}
 \int_M \star |F|^p &= \int_M \star |\dif u|^{(q - 1)p} = \int_M \star |\dif u|^q = \int_M \dif u \wedge |\dif u|^{q - 2} \star \dif u = \int_M \dif u \wedge F. \qedhere 
 \end{align*}
 \end{proof}
 
-\begin{proposition}
+\begin{corollary}
 Every $p$-tight form is locally H\"older continuous.
-\end{proposition}
+\end{corollary}
 \begin{proof}
 Let $F$ be $p$-tight and let $u$ be its $q$-harmonic conjugate.
 By \cite[Theorem 2]{DIBENEDETTO1983827}, $\dif u$ is H\"older continuous.
@@ -956,7 +957,7 @@ So by Proposition \ref{crandall}(\ref{crandall linfinity}) and the fact that $B$
 \end{proof}
 
 \begin{definition}
-The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called an \dfn{$\infty$-tight form}.
+The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called an \dfn{$\infty$-tight form}, or simply a \dfn{tight form}.
 \end{definition}
 
 The existence of $\infty$-tight (or even just best comass) representatives of each cohomology class implies the following useful lemma.
@@ -980,13 +981,13 @@ Taking $r \to \infty$, we obtain $L(\tilde F) < L$, which contradicts the fact t
 \end{proof}
 
 By analogy with $\infty$-harmonic maps, one expects $\infty$-tight forms to be unique and have \dfn{absolutely best comass} in the sense that they have best comass in \emph{every} open subset of $M$ with smooth boundary.
-One can show formally that the Euler-Lagrange equations for a smooth form $\dif A$ of absolutely best comass are
+One can show formally that the Euler-Lagrange equations for a smooth form $F$ of absolutely best comass are
 \begin{equation}\label{infinity Maxwell}
-\nabla_i (\dif A)_{jk} {(\dif A)^i}_\ell (\dif A)^{jk} = 0.
+\nabla_i F_{jk} {F^i}_\ell F^{jk} = 0.
 \end{equation}
-Indeed, one can write the $p$-tight equation in nondivergence form
-$$(p - 2) |\dif A|^{p - 4} \nabla_i (\dif A)_{jk} {(\dif A)^i}_\ell (\dif A)^{jk} + |\dif A|^{p - 2} (\dif^* \dif A)_\ell = 0,$$
-renormalize by dividing by $(p - 2) |\dif A|^{p - 4}$, and take the limit as $p \to \infty$ to obtain (\ref{infinity Maxwell}).
+Indeed, one can write the $p$-Maxwell equation in nondivergence form
+$$(p - 2) |F|^{p - 4} \nabla_i F_{jk} {F^i}_\ell F^{jk} + |F|^{p - 2} (\dif^* F)_\ell = 0,$$
+renormalize by dividing by $(p - 2) |F|^{p - 4}$, and take the limit as $p \to \infty$ to obtain (\ref{infinity Maxwell}).
 
 Recently Katzourakis \cite{Katzourakis2018OnAV} has introduced a generalization notion of viscosity solutions, called \dfn{contact solutions}, for strongly coupled systems of degenerate PDE in nondivergence form.
 As the correct notion of solution for the $\infty$-Laplace equation is viscosity solution, it is natural to expect that the natural notion of solution of (\ref{infinity Maxwell}) is contact solution.
@@ -1001,7 +1002,7 @@ Moreover, $F$ has absolutely best comass, and when written locally as $F = \dif 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$1$-harmonic conjugates of $\infty$-tight forms}{One-harmonic conjugates of infinity-tight forms}}
 We now construct the $1$-harmonic conjugate of an $\infty$-tight form.
-Since (\ref{inverse extremality}) may blow up as $p \to \infty$, we have to renormalize the $q$-harmonic conjugates of $p$-tight forms before taking the limit $q \to 1$, as in \cite[\S3.2]{daskalopoulos2020transverse}.
+Since (\ref{inverse extremality}) may blow up as $p \to \infty$, we have to renormalize the $q$-harmonic conjugates of $p$-tight forms before taking the limit $q \to 1$, as in \cite[\S3.2]{daskalopoulos2020transverse}. \todo{Include Karen's example somewhere}
 
 We begin by showing that $L^1$ convergence preserves the equivariance properties of functions.
 To make this precise, let $\tilde M \to M$ be the universal cover of $M$.
@@ -1284,76 +1285,6 @@ Identifying the $\gamma_j$ with their geodesic representatives, and taking a bes
 % and we conclude $x \notin \MCL(F)$.
 % \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix 
-\section{Max flow, min cut}\label{Max Flow Min Cut}
-We now specialize to the problem at hand.
-Let $\alpha \in H^1(M, \RR)$ be a cohomology class.
-Recall that we write $[u] = \alpha$ to mean that $u$ is an $\alpha$-equivariant function on $\tilde M$.
-
-We here consider the $q$-Laplacian
-\begin{equation}\label{preprimal problem}
-	\Min\{\|\dif u\|_{L^q(M_{\rm fun})}: u \in W^{1, q}(M_{\rm fun}), [u] = \alpha\},
-\end{equation}
-where $1 < q < \infty$; we identify two solutions if they agree by a constant.
-To put (\ref{preprimal problem}) in the framework of Proposition \ref{abstract convex analysis}, we shall fix a point $0 \in M_{\rm fun}$, choose a representative $1$-form (which we also call $\alpha$), and find $f \in C^\infty(\tilde M)$ such that $\dif f = \Pi^*\alpha$ and $f(0) = 0$.
-Thus (\ref{preprimal problem}) is equivalent to
-\begin{equation}\label{primal problem}
-	\Min\left\{\frac{1}{q} \int_{M_{\rm fun}} \star|\dif v + \Pi^* \alpha|^q: v \in W^{1, q}_0(M_{\rm fun})\right\}
-\end{equation}
-where we set $u = v + f$.
-
-Let
-$$J(\xi) := \frac{1}{q} \int_M \star|\xi + \alpha|^q,$$
-defined for $\xi \in L^q(M, \Omega^1)$.
-Since $v$ is traceless in (\ref{primal problem}), it is invariant, so $\dif v$ drops to a $1$-form on $M$, and (\ref{primal problem}) is the problem of minimizing $J(\dif v)$.
-It is clear that $J$ meets the hypotheses of Proposition \ref{abstract convex analysis} with regards to the linear map
-\begin{equation}\label{derivative on traceless}
-\dif: X := W^{1, q}_0(M_{\rm fun}) \to L^q(M, \Omega^1) =: Y.
-\end{equation}
-By \cite[Chapter I, (4.9)]{Ekeland99} and \cite[Chapter I, Remark 4.1]{Ekeland99}, the Legendre transform
-$$\hat J: \hat Y = L^p(M, \Omega^{d - 1}) \to \RR$$
-of $J$, where $\frac{1}{p} + \frac{1}{q} = 1$, satisfies
-\begin{equation}\label{Legendre transform}
-\hat J(F) = \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F
-\end{equation}
-and in particular is strictly convex.
-Thus the convex dual problem of (\ref{primal problem}), namely the problem of maximizing $-\hat J(-F)$, is the problem
-\begin{equation}\label{predual problem}
-\Max\left\{- \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F: F \in L^p(M, \Omega^{d - 1})\right\}.
-\end{equation}
-
-\begin{proposition}\label{convex duality}
-Let $1 < p, q < \infty$ satisfy $\frac{1}{p} + \frac{1}{q} = 1$.
-Then we have an isomorphism of cohomology groups
-$$H^1(M, \RR) \ni \alpha \mapsto \rho \in H^{d - 1}(M, \RR),$$
-so that the convex dual problem of the $\alpha$-equivariant $q$-Laplacian (\ref{preprimal problem}) with solution $u: \tilde M \to \RR$ is the $p$-tight problem (\ref{pMaxwell}) subject to $[F] = \rho$.
-The problems (\ref{preprimal problem}) and (\ref{pMaxwell}) both have unique solutions, and we have the relations (\ref{extremality}) and (\ref{inverse extremality}), and the strong duality theorem (\ref{strong duality}).
-\end{proposition}
-\begin{proof}
-By Proposition \ref{abstract convex analysis}, (\ref{preprimal problem}) and (\ref{predual problem}) both have unique solutions $u, F$ which are related by strong duality (\ref{abstract strong duality}) as (\ref{strong duality}).
-By uniqueness, if we exhibit $\tilde F$ defined in terms of $u$ which satisfies (\ref{strong duality}) and is a maximizer of $-\hat J$, then $F = \tilde F$.
-Following \cite[Chapter IV, (2.12)]{Ekeland99}, we define $\tilde F$ to satisfy (\ref{extremality}), so that (since $\star |\dif u|^q = \dif u \wedge \tilde F$)
-\begin{align*}
-\int_M \dif u \wedge \tilde F 
-= \frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \dif u \wedge \tilde F.
-\end{align*}
-Moreover, if we decompose $\dif u = \dif v + \alpha$, then
-\begin{align*}
--\hat J(\tilde F)
-&= -\frac{1}{p} \int_M \star |\dif u|^q + \int_M \alpha \wedge |\dif u|^{q - 2} \star \dif u \\
-&= -\frac{1}{p} \int_M \star |\dif u|^q + \int_M \star |\dif u|^q - \int_M \dif v \wedge |\dif u|^{q - 2} \star \dif u \\
-&= \frac{1}{q} \int_M \star |\dif u|^q = J(\dif u)
-\end{align*}
-where we used the fact that $u$ solves the $q$-Laplace equation in the sense of distributions.
-By strong duality (\ref{abstract strong duality}), it follows that $\tilde F$ is a maximizer of $-\hat J$, and therefore $F = \tilde F$; in particular, $F$ satisfies (\ref{extremality}).
-Since $u$ solves the $q$-Laplace equation, (\ref{extremality}) implies that $\dif F = 0$.
-We then define $\rho := [F]$.
-On the other hand, $(p - 2)(q - 1) + q - 2 = 0$, so
-$$|F|^{p - 2} F = |\dif u|^{(p - 2)(q - 1) + q - 2} \star \star \dif u = (-1)^{d - 1} \dif u$$
-which gives (\ref{inverse extremality}).
-By reflexivity, the above argument may also be reversed, so that the map $\alpha \mapsto \rho$ is invertible on the level of cohomology.
-\end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{The \texorpdfstring{$\infty$-Maxwell equation}{infinity-Maxwell equation}}\label{EulerLagrange}
