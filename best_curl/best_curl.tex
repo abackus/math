@@ -71,6 +71,9 @@
 \newcommand{\MCL}{\mathrm{MCL}}
 \newcommand{\Riem}{\mathrm{Riem}}
 
+\newcommand{\Mass}{\mathbf M}
+\newcommand{\Comass}{\mathbf L}
+
 \newcommand{\Min}{\mathrm{Min}}
 \newcommand{\Max}{\mathrm{Max}}
 
@@ -355,32 +358,30 @@ We assume that $\ell$-forms are $L^1_\loc$, but \emph{not} that they are continu
 To avoid confusion, we write $H^\ell$ for de Rham cohomology, but \emph{never} a Sobolev space (which shall only be denoted by $W^{\ell, p}$), nor a Hausdorff measure (which shall be denoted $\mathcal H^\ell$).
 We let $\dif V = \star 1$ be the volume form on $M$, and for an $\ell$-rectifiable set $\tau$, we let $\dif S_\tau := \dif \mathcal H^\ell|_\tau$.
 
-A \dfn{geometric $\ell$-vector} is a tensor of the form $v_1 \wedge \cdots v_\ell$, where $v_i$ are tangent vectors.
-The \dfn{absolute value} $|\varphi|$ of an $\ell$-covector $\varphi$ is the supremum of $F(v)$, taken over all \emph{geometric} $\ell$-vectors $v$.
+An \dfn{$\ell$-blade} is the wedge product $v = v_1 \wedge \cdots \wedge v_\ell$ of vectors $v_1, \dots, v_\ell$.
+The \dfn{comass} $|\varphi|$ of an $\ell$-covector $\varphi$ is the supremum of $\langle \varphi, v\rangle/|v|$, taken over all nonzero $\ell$-blades.
 
-By an $\ell$-\dfn{current} $T$ we mean a continuous linear functional on the space $C^0_\cpt(M, \Omega^\ell)$ of continuous $\ell$-forms of compact support.
-Note carefully that this excludes currents which do not have locally finite variation.
-We write $\int_M T \wedge \varphi$ for the dual pairing of a current and a form.
-The duality norm of $T$ is its \dfn{total variation}, namely for an open set $U \subseteq M$,
-$$\|T\|_{TV(U)} := \sup_{\substack{\supp \varphi \Subset U \\ \|\varphi\|_{C^0} \leq 1}} \int_U T \wedge \varphi.$$
-A function $u$ has \dfn{locally bounded variation} if $\dif u$ extends to a continuous linear functional on $C^0_\cpt(M, \Omega^\ell)$.
-In that case we write $u \in BV_\loc(M)$.
+By an $\ell$-\dfn{current of locally finite mass} $T$ we mean a continuous linear functional on the space $C^0_\cpt(M, \Omega^\ell)$ of continuous $\ell$-forms of compact support.
+We write $\int_M T \wedge \varphi$ or $\int_T \varphi$ for the dual pairing of a current and a form.
+The duality norm of $T$ is its \dfn{mass}, namely for an open set $U \subseteq M$,
+$$\Mass_U(T) := \sup_{\substack{\supp \varphi \Subset U \\ \|\varphi\|_{C^0} \leq 1}} \int_U T \wedge \varphi.$$
+If $\dif T$ is an $\ell - 1$-current of locally finite mass, we say that $T$ is \dfn{locally normal}.
+In particular, a locally normal $d$-current is the same thing as a function of locally bounded variation, and a locally normal $0$-current is the same thing as a signed Radon measure.
 
 We showed that the null set in the statement of the Lebesgue differentiation theorem, when applied to a section of a trivialized tensor bundle, does not depend on the choice of trivialization \cite[Proposition 2.1]{BackusFLG}:
 
 \begin{proposition}\label{invariance of LDT}
 Let $F$ be a $L^1_\loc$ section of a tensor bundle over $M$, and let $\mu$ be a Radon measure on $M$.
-Then there exists a diffeomorphism-invariant $\mu$-null set $Z \subset M$ such that for any coordinate system on $M$, and any index $I$, and any $x \notin Z$,
+Then there exists a diffeomorphism-invariant $\mu$-null set $Z \subset M$ such that for any coordinate system on $M$, any multiindex $I$, and any $x \notin Z$,
 $$F_I(x) = \lim_{r \to 0} \frac{1}{\mu(B_r(x))} \int_{B_r(x)} F_I(y) \dif \mu(y).$$
 \end{proposition}
 
 Suppose that an open set $U \subset M$ has \dfn{locally finite perimeter} in the sense that its indicator function $1_U$ has locally bounded variation.
-Then $U$ has a \dfn{reduced boundary} $\partial^* U$, which, as a current, is the negative exterior derivative of $1_U$; see \cite[Chapter 3]{Giusti77}.
-In particular, the superlevel sets $\{u > y\}$ of a function $u \in BV_\loc(M)$ have locally finite perimeter \cite[Theorem 1.23]{Giusti77}.
+Then $U$ has a \dfn{reduced boundary} $\partial^* U$, the set of points at which the conormal $1$-form to $\partial^* U$ exists.
 We carefully wrote down the coarea formula at this level of regularity on curved domains \cite[Proposition 2.5]{BackusFLG}:
 
 \begin{proposition}\label{coarea}
-Let $\mu(U) := \|\dif u\|_{TV(U)}$ be the total variation measure of a function $u \in BV_\loc(M)$.
+Let $\mu(U) := \Mass_U(\dif u)$ be the total variation measure of a function $u \in BV_\loc(M)$.
 Then 
 $$\mu(U) = \int_{-\infty}^\infty |\partial^* \{u > y\} \cap U| \dif y.$$
 \end{proposition}
@@ -388,15 +389,17 @@ $$\mu(U) = \int_{-\infty}^\infty |\partial^* \{u > y\} \cap U| \dif y.$$
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$1$-harmonic functions}{One-harmonic functions} and minimal laminations}
 We now recall the correct formulation of weak solutions to the $1$-Laplace equation 
-$$\dif^*\left(\frac{\dif u}{|\dif u|}\right) = 0.$$
-The formulation essentially says that $\dif u/|\dif u|$ extends to a coclosed $d-1$-current, even if $|\dif u|$ is a singular Radon measure.
-We must allow for this case, because we want the indicator function of a set bounded by a minimal surface to be $1$-harmonic.
-The definition we give here is the sheafification of the definition of $1$-harmonic function due to Maz\'on, Rossi, and Segura de Le\'on \cite{Mazon14}, and already appeared in \cite{BackusCML}.
+$$\dif^*\left(\frac{\dif u}{|\dif u|}\right) = 0$$
+which we introduced in \cite{BackusCML}.
+The formulation essentially says that $\dif u/|\dif u|$ locally looks like a coclosed $d-1$-current, even if $|\dif u|$ is a singular Radon measure.
 
 \begin{definition}
-A \dfn{$1$-harmonic function} on $M$ is a function $u \in BV_\loc(M)$ such that there exists a divergence-free vector field $X$ on a neighborhood of $\supp \dif u$, with $\|X\|_{L^\infty} \leq 1$, and such that, in the sense of Radon measures,
-$$(\dif u, X) = |\dif u|.$$
+A \dfn{$1$-harmonic function} on $M$ is a function $u \in BV_\loc(M)$ such that we can cover $\supp u$ by open sets $U_\alpha$ equipped with vector fields $X_\alpha$, such that as Radon measures on $U_\alpha$,
+$$(\dif u, X_\alpha) = |\dif u|.$$
 \end{definition}
+
+There need not exist a global vector field $X$ with the above properties; the indicator function of the northern hemisphere in $\Sph^2$ is $1$-harmonic, but does not admit such a vector field $X$ by the divergence theorem.
+Thus this definition is the ``sheafification'' of the definition due to Maz\'on, Rossi, and Segura de Le\'on \cite{Mazon14}.
 
 \begin{definition}
 Let $B$ be a ball in $M$.
@@ -440,14 +443,15 @@ Then $\mathcal S$ is the set of leaves of a Lipschitz minimal lamination $\lambd
 In particular, if $\lambda$ is oriented, then there is a Lipschitz vector field on $M$ whose restriction to each $N \in \mathcal S$ is the normal vector to $N$.
 \end{theorem}
 
+We now recall the notion of Ruelle-Sullivan current that was introduced by \cite{Ruelle75} and studied in the context of geodesic laminations in \cite[\S8]{daskalopoulos2020transverse}.
+The motivation of the definition is that if $\lambda$ is a $d - 1$-chain, then $T_\lambda$ is just integration along $\lambda$.
+
 \begin{definition}
 A lamination $\lambda$ with atlas $(F_\alpha, K_\alpha)$ is \dfn{measured} if it is equipped with positive Radon measures $\mu_\alpha$ with $\supp \mu_\alpha = K_\alpha$, such that the transition maps $F_\beta^{-1} \circ F_\alpha$ are measure-preserving.
 The \dfn{Ruelle-Sullivan current} of a measured oriented lamination $\lambda$ with atlas $(F_\alpha, K_\alpha, \mu_\alpha)$ is the $d-1$-current $T_\lambda$ satisfying, for any partition of unity $(\chi_\alpha)$ subordinate to the open cover $(F_\alpha(I \times J))$,
 $$\int_M T_\lambda \wedge \varphi = \sum_\alpha \int_{K_\alpha} \int_{\{k\} \times J} F_\alpha^* (\chi_\alpha \varphi) \dif \mu_\alpha(k).$$
-The \dfn{homology class} $[\lambda]$ and \dfn{mass} $|\lambda|$ of a measured oriented lamination $\lambda$ are the homology class and mass of its Ruelle-Sullivan current.
+The \dfn{homology class} $[\lambda]$ and \dfn{mass} $\Mass(\lambda)$ of a measured oriented lamination $\lambda$ are the homology class and mass of its Ruelle-Sullivan current.
 \end{definition}
-
-In particular, if $\lambda$ is simply a $d-1$-chain of finitely many hypersurfaces, then $T_\lambda$ is the current defined by integration of a $d-1$-form along the chain.
 
 We are now ready to state \cite[Theorem C]{BackusCML}:
 
@@ -460,126 +464,212 @@ Then a function $u \in BV_\loc(M)$ is $1$-harmonic iff $\dif u$ is the Ruelle-Su
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Comass}\label{comass sec}
-In this section we study the basic properties of the comass.
-We show that it is well-defined, equals the $L^\infty$ norm, and has a local version which is upper semicontinuous.
-Along the way we establish some tools from geometric measure theory that we shall need in the sequel.
+\section{\texorpdfstring{$d - 1$-forms}{(d - 1)-forms} of finite comass}\label{comass sec}
+In this section we establish some tools from geometric measure theory adapted to closed $L^\infty$ $d - 1$-forms.
 Throughout, we fix a Riemannian manifold $M$ (possibly not closed) of dimension $d$ and metric $g$.
 
 \begin{definition}
-For a closed $d-1$-form $F$ and a subdomain $\Omega \subseteq M$, the \dfn{comass} of $F$ in $\Omega$ is
-$$L_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{|\sigma|} \int_\sigma F.$$
-We let $L(F) := L_M(F)$.
-
-We say that $F$ has \dfn{best comass} if $F$ is a minimizer of $L$ among all forms cohomologous to $F$.
+The \dfn{comass} of a closed $d - 1$-form $F$ in a domain $\Omega$ is $\|F\|_{L^\infty(\Omega)}$.
+We say that $F$ has \dfn{best comass} if $F$ is a minimizer of its comass among all forms cohomologous to $F$.
 \end{definition}
 
 %%%%%%%%%%%%%%%%%%%
 \subsection{Trace theorem}
-The comass $L_\Omega(F)$ is well-defined if $F$ is continuous, or has a trace along every $d - 1$-simplex.
-We now prove that we may take traces of an $L^\infty$ $d - 1$ form, provided that it is closed.
+We would like to be able to compute the comass of a form $F$ by integration of $F$ along chains.
+Unfortunately, $F$ may only be defined almost everywhere, and then it is not clear that such an integral is well-defined; nor is it clear that the cohomology class of $F$ is well-defined (so that the notion of ``best comass'' makes no sense).
+Here we show that for closed forms $F$ in $L^p$ and suitable chains $\sigma$, $\int_\sigma F$ is well-defined.
 
-We say that a $d-2$-form $A$ is in \dfn{Coulomb gauge} if $\dif^* A = 0$.
-If $F = \dif A$, then it follows that $F = (\dif + \dif^*) A$, and since the Dirac operator $\dif + \dif^*$ is elliptic, for $p > d$ we get from Sobolev embedding and elliptic regularity \cite[\S4]{Scott95} that
+The trace theorem is based on the fact that de Rham complex satisfies elliptic regularity in the following sense:
+
+\begin{lemma}
+Let $A$ be a coclosed $\ell - 1$-form, and $F = \dif A$.
+Then, if $F \in L^p$ where $1 \leq p \leq \infty$, then 
+\begin{equation}\label{elliptic}
+\|A\|_{W^{1, p}} \lesssim \|F\|_{L^p}.
+\end{equation}
+In particular, if $p > d$ then there exists $\alpha > 0$ such that
 \begin{equation}\label{Sobolev}
-	\|A\|_{C^0} \lesssim \|\nabla A\|_{L^p} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
+\|A\|_{C^\alpha} \lesssim \|F\|_{L^p}.
 \end{equation}
-
-Recall that an \dfn{integral current} is an current of integer multiplicity (in the sense of \cite[\S27]{Simon84}) whose exterior derivative has integer multiplicity.
-Since integral $\ell$-currents are ``morally'' $\ell$-chains, if $\tau$ is an integral $\ell$-current, we write $\int_\tau F$ for the pairing of $\tau$ with an $\ell$-form $F$.
-
-\begin{proposition}[trace theorem]\label{integration is welldefined}
-Let $\tau$ be an integral $d-1$-current, and $\psi \in C^1(M)$.
-Then for any $d < p \leq \infty$, $F \mapsto \int_\tau \psi F$ extends to a continuous linear functional on the space of $L^p$ closed $d-1$-forms.
-Moreover,
-\begin{equation}\label{integral over chain is linfinity}
-	\int_\tau F \leq \|F\|_{L^\infty} \int_\tau \psi \dif S_\tau.
-\end{equation}
-\end{proposition}
+\end{lemma}
 \begin{proof}
-After replacing $\psi$ with $\psi \chi_\alpha$ for $(\chi_\alpha)$ a suitable partition of unity, we may assume that $M$ is contractible.
-We show that for $d < p < \infty$, $F \mapsto \int_\tau \psi F$ is continuous for the $L^p$ norm on smooth closed $d-1$-forms.
-If $F, G$ are closed and smooth and we select $A, B$ in Coulomb gauge with $\dif A = F$, $\dif B = G$, we have from integration by parts and (\ref{Sobolev}),
+By assumption, $F = (\dif + \dif^*) A$.
+By elliptic regularity of the Dirac operator $\dif + \dif^*$ \cite[\S4]{Scott95},
+\begin{align*}
+	\|\nabla A\|_{L^p} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
+\end{align*}
+This proves (\ref{elliptic}), and (\ref{Sobolev}) follows from the Sobolev embedding theorem \cite[\S5.6, Theorem 4]{evans2010partial}.
+\end{proof}
+
+We shall need the following technical lemma, which asserts that we can locally find a mollifier which preserves the sheaf of closed forms.
+
+\begin{lemma}\label{mollification of closed forms}
+Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
+Let $1 \leq p < \infty$ and let $F$ be an $L^p$ closed $\ell$-form.
+Then there exist smooth closed $\ell$-forms $F_n$ such that $F_n \to F$ in $L^p$.
+Moreover, if $F \in L^\infty$, then
+\begin{equation}\label{heat kernel contracts sup norm}
+\|F_n\|_{C^0} \leq \|F\|_{L^\infty}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Without loss of generality, $M = (\Ball^d, g)$ where $g$ is a Riemannian metric of bounded geometry.
+If $\varphi$ is a form and $\chi$ is a function on $\RR^d$, we define the convolution $\chi * \varphi$ by $(\chi * \varphi)_I := \chi * \varphi_I$ for every multiindex $I$.
+Every convolution operator commutes with $\dif$, so after convolution with a standard mollifier $\chi_n$ as in \cite[Appendix C, Theorem 6]{evans2010partial}, $F_n := (\chi_n * F)|_{\Ball^d}$ is a closed $\ell$-form and $F_n \to F$ in $L^p(\Ball^d)$ and almost everywhere.
+Since $g$ has bounded geometry, $\sqrt{\det g} \sim 1$, so the norms $L^p(\Ball^d)$ and $L^p(M)$ are comparable.
+
+Now suppose that $F \in L^\infty$.
+By Young's inequality and the fact that $\|\chi_n\|_{L^1} = 1$,
+\begin{align*}
+\|F_n\|_{C^0} &\leq \|F\|_{L^\infty} \|\chi_n\|_{L^1} = \|F\|_{L^\infty}. \qedhere
+\end{align*}
+\end{proof}
+
+The natural setting for our trace theorem is the integral currents, as we shall want to be able to integrate a closed $L^p$ $d - 1$-form along the level sets of a $BV$ function; see \cite[\S27]{Simon84} for a more careful exposition.
+
+\begin{definition}
+The \dfn{approximate $\ell$-blade bundle} of an $\ell$-rectifiable set $N$ is the bundle of $\ell$-blades over the approximate tangent bundle of $N$.
+An $\ell$-current $\sigma$ is \dfn{rectifiable} if there exists an $\ell$-rectifiable set $N$, and a $\dif S_N$-measurable section $v$ of the appproximate $\ell$-blade bundle of $N$, such that for any $C^0_\cpt$ $\ell$-form $\varphi$,
+$$\int_\sigma \varphi = \int_N \langle \varphi, v\rangle \dif S_N,$$
+and $|v|$ is $\ZZ$-valued.
+The rectifiable current $\sigma$ is \dfn{integral} if, in addition, $\partial T$ is rectifiable.
+\end{definition}
+
+\begin{lemma}\label{local trace theorem}
+Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
+Let $\tau$ be an integral $d - 1$-current and $\psi \in C^1(M)$.
+Then for any $d < p < \infty$, $F \mapsto \int_\tau \psi F$ is a continuous linear function on the space of $L^p$ closed $d - 1$-forms.
+\end{lemma}
+\begin{proof}
+Firtst suppose that $F, G$ are closed $C^1$ $d - 1$-forms.
+Then, since $H^{d - 1}(M, \RR) = 0$, there exist coclosed $d - 2$-forms $A, B$ such that $\dif A = F$, $\dif B = G$.
+We have from integration by parts and (\ref{Sobolev}),
 \begin{align*}
 	\left|\int_\tau \psi(F - G)\right| 
 	&\leq \left|\int_{\partial \tau} \psi (A - B)\right| + \left|\int_\tau \dif \psi \wedge (A - B)\right| \\
 	&\lesssim_{\tau, \psi} \|A - B\|_{C^0} \lesssim \|F - G\|_{L^p}.
 \end{align*}
-So by a mollification argument, $F \mapsto \int_\tau \psi F$ is a continuous linear functional on the $L^p$ closed forms.
 
-Suppose now that $F \in L^\infty$.
-The estimate (\ref{integral over chain is linfinity}) is diffeomorphism-invariant, so we may work in coordinates and hence assume that $M$ is an open subset of $\RR^d$.
-Choose a sequence of mollifiers $\chi_\varepsilon$ such that $\|\chi_\varepsilon\|_{L^1} = 1$.
-Introduce the convolution $F_\varepsilon := F * \chi_\varepsilon$, so that $F_\varepsilon \to F$ in $L^p$ for any $d < p < \infty$.
-By Young's inequality, 
-$$\|F_\varepsilon\|_{C^0} \leq \|F\|_{L^\infty} \|\chi_\varepsilon\|_{L^1} \leq \|F\|_{L^\infty}.$$
-Taking $\varepsilon \to 0$ we see that
-\begin{align*}
-\int_\tau \psi F 
-&= \lim_{\varepsilon \to 0} \int_\tau \psi F_\varepsilon \leq \lim_{\varepsilon \to 0} \|F_\varepsilon\|_{C^0} \int_\tau \psi \dif S_\tau \leq \|F\|_{L^\infty} \int_\tau \psi \dif S_\tau. \qedhere
-\end{align*}
+Now suppose that $F, G$ need not be $C^1$.
+By Lemma \ref{mollification of closed forms}, the $C^1$ closed $d - 1$-forms are dense in the space of $L^p$ closed $d - 1$-forms, so the desired estimate holds by approximating $F, G$ by $C^1$ closed $d - 1$-forms.
 \end{proof}
 
-Taking $\psi := 1$, it follows the integral in the definition of comass is well-defined as long as $F \in L^p$, $p > d$, and each such integral depends continuously on $F$ in $L^p$.
-It will later be useful to instead take $\psi$ to be an element of a partition of unity.
-
-Let $u \in BV(M)$; then the reduced level sets $\partial^* \{u > y\}$ are exact currents of integer multiplicity, since they are reduced boundaries of sets of locally finite perimeter \cite[Theorem 14.3]{Simon84}; therefore the reduced level sets are integral currents.
-
-\begin{proposition}[coarea formula]
-Let $u \in BV(M)$, let $U \subseteq M$ be an open set, and let $F \in L^\infty(M, \Omega^{d - 1})$ satisfy $\dif F = 0$.
-Then for almost every $y \in \RR$, $\int_{\partial^* \{u > y\} \cap U} F$ depends continuously on $F$ in $L^p$.
-In particular,
-\begin{equation}\label{coarea formula}
-\int_U \dif u \wedge F = \int_{-\infty}^\infty \int_{\partial^* \{u > y\} \cap U} F \dif y.
+\begin{proposition}[trace theorem]\label{integration is welldefined}
+Let $\tau$ be a compactly supported integral $d-1$-current.
+Then for any $d < p \leq \infty$ and $\psi \in C^1(M)$, $F \mapsto \int_\tau \psi F$ extends to a continuous linear functional on the space of $L^p$ closed $d-1$-forms.
+In particular, the cohomology class of $F$ is well-defined.
+Moreover, if $F \in L^\infty$, then for every $\psi \in C^0(M)$,
+\begin{equation}\label{integral over chain is linfinity}
+	\int_\tau \psi F \leq \|F\|_{L^\infty} \|\psi\|_{L^1(\tau)}.
 \end{equation}
 \end{proposition}
 \begin{proof}
-Let $\tau_y := \partial^* \{u > y\}$, let $\mu$ be the total variation measure of $\dif u$, and let $\normal$ be the conormal $1$-form to $\partial^* \{u > y\}$, hence $\dif 1_{\{u > y\}} = \normal \mu$.
-If $F$ is continuous, then $\langle\star \normal, 1_U F\rangle \in L^\infty_\loc(\mu)$, so we can compute using Proposition \ref{coarea}:
+We can find a partition of unity $(\chi_\alpha)$ subordinate to an open cover $(U_\alpha)$ such that $U_\alpha$ is bi-Lipschitz diffeomorphic to $\Ball^d$.
+Then we may replace $(U_\alpha)$ by a finite subcover $U_1, \dots, U_n$ of a neighborhood of $\supp \tau$.
+Applying Lemma \ref{local trace theorem} with $\psi$ replaced by $\psi \chi_k$, we obtain for $F, G$ closed $L^p$ $d - 1$-forms and $p < \infty$,
+$$\left|\int_\tau \psi(F - G)\right| \leq \sum_{k = 1}^n \left|\int_\tau \psi \chi_k (F - G)\right| \lesssim_\tau \|F - G\|_{L^p}$$
+which gives the continuity in $L^p$.
+
+We now handle the case $p = \infty$.
+Let $d < q < \infty$ and let $U$ be a small neighborhood of $\supp \tau$; since $\supp \tau$ is compact, if $F, G \in L^\infty$, then $F, G \in L^q(U)$ and 
+$$\left|\int_\tau \psi(F - G)\right| \lesssim_\tau \|F\|_{L^q(U)} \lesssim_{U, q} \|F\|_{L^\infty}.$$
+This gives the continuity in $L^\infty$.
+We then use Lemma \ref{mollification of closed forms} to find smooth closed $d - 1$-forms $F_{k, m}$ on $U_k$ such that $F_{k, m} \to F|_{U_k}$ in $L^q(U_k)$ and
+$$\|F_{k, m}\|_{C^0} \leq \|F\|_{L^\infty}.$$
+So by the triangle inequality, if $\psi \in C^1(M)$,
 \begin{align*}
-\int_U \dif u \wedge F = \int_U \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, 1_U F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y} 1_U F \dif y.
+\int_\tau \psi F 
+&= \sum_{k = 1}^n \int_\tau \psi \chi_k F 
+= \sum_{k = 1}^n \lim_{m \to \infty} \int_\tau \psi \chi_k F_{k, m} \\
+&\leq \lim_{m \to \infty} \|F_{k, m}\|_{C^0} \int_\tau \psi \sum_{k = 1}^n \chi_k \dif S_\tau 
+\leq \|F\|_{L^\infty} \int_\tau \psi \dif S_\tau.
 \end{align*}
-By the trace theorem, $\int_{\tau_y} F$ depends continuously on $F$ in $L^p$ for almost every $y$, so by a mollification argument, (\ref{coarea formula}) holds for every $F$.
+By approximating a $C^0$ test function $\psi$ by $C^1$ functions, we obtain the result for $\psi \in C^0$.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Coarea formula}
+Let $u \in BV(M)$.
+Then $\dif u$ may fail to be absolutely continuous, in which case the Radon measure $\dif u \wedge F$ may be ill-defined for a measurable $d - 1$-form $F$.
+We assert now that there is a reasonable definition of $\dif u \wedge F$ if $F$ is closed and $L^\infty$.
 
+\begin{lemma}\label{reduced level sets are integral currents}
+Let $u \in BV(M)$.
+Then for almost every $y \in \RR$, integration along the reduced level set $\partial^* \{u > y\}$ defines an integral $d - 1$-current.
+\end{lemma}
+\begin{proof}
+By Proposition \ref{coarea}, for almost every $y \in \RR$, $\{u > y\}$ has locally finite perimeter.
+So by the de Giorgi structure theorem \cite[Theorem 14.3]{Simon84}, $\partial^* \{u > y\}$ is an oriented rectifiable $d - 1$-cycle.
+So integration along $\partial^* \{u > y\}$ defines a closed rectifiable, and hence integral, $d - 1$-current.
+\end{proof}
+
+\begin{definition}
+Let $u \in BV(M)$ and $F$ a closed $L^\infty$ $d - 1$-form.
+We obtain a Radon measure $\dif u \wedge F$ by defining, for every $\psi \in C^0_\cpt(M)$,
+\begin{equation}\label{coarea formula}
+\int_M \psi \dif u \wedge F := \int_{-\infty}^\infty \int_{\partial^* \{u > y\}} \psi F \dif y.
+\end{equation}
+\end{definition}
+
+The integral on the right-hand side of (\ref{coarea formula}) makes sense by (\ref{integral over chain is linfinity}) and Lemma \ref{reduced level sets are integral currents}, which also shows that it depends continuously on $\psi$ in $C^0_\cpt$ (hence $\dif u \wedge F$ is a well-defined Radon measure).
+Thus it only remains to show that the right-hand side of (\ref{coarea formula}) does not contradict the usual definition of $\dif u \wedge F$ for a continuous $F$:
+
+\begin{lemma}
+Let $u \in BV(M)$ and $F$ a closed, continuous $d - 1$-form.
+Then (\ref{coarea formula}) is compatible with the usual definition of $\dif u \wedge F$.
+In particular, we have the cohomological formula
+$$\int_M \dif u \wedge F = \langle [\dif u], [F]\rangle.$$
+\end{lemma}
+\begin{proof}
+Let $\tau_y := \partial^* \{u > y\}$ be the reduced level set, $\mu(U) := \Mass_U(\dif u)$ the total variation measure of $\dif u$, and $\normal$ the polar part of $\dif u$.
+Since $F$ is continuous, $\langle\star \normal, F\rangle \in L^\infty(\mu)$, so we can compute using Proposition \ref{coarea}:
+\begin{align*}
+\int_U \dif u \wedge F &= \int_U \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, 1_U  F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y \cap U} F \dif y. \qedhere
+\end{align*}
+\end{proof}
+
+It would appear that the definition (\ref{coarea formula}) can be viewed microlocally as a special case of the H\"ormander product of the distributions $|\dif u|$ and $\langle \star \normal, F\rangle$, as in \cite[Theorem 8.2.10]{hörmander1990analysis}.
+However, developing the relevant microlocal analysis, including a suitable $C^0$ analogue of the wavefront set, would take us too far afield, so we do not explore this theory here.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local comass}
 We will be interested in the points at which $F$ attains its comass.
 One could pose this problem as the problem of computing the locus $\{|F| = \|F\|_{L^\infty}\}$.
-However, $F$ is both only defined almost everywhere, and not norm-approximable by smooth functions.
+However, $|F(x)|$, the comass of the $d - 1$-covector $F(x)$, is both only defined for almost every $x$, and not norm-approximable by smooth functions.
 So as a proxy for $|F|$, which may fail to be defined on a null set, we use the local comass, which is defined everywhere.
 
 \begin{definition}
+For an open set $\Omega \subseteq M$ and a a closed $d - 1$-form $F$, define 
+$$\Comass_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{\Mass(\sigma)} \int_\sigma F.$$
 The \dfn{local comass} of a closed $d - 1$-form $F$ at $x \in M$ is 
-$$L(F, x) = \limsup_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F).$$
+$$\Comass(F, x) = \limsup_{\varepsilon \to 0} \Comass_{B_\varepsilon(x)}(F).$$
 \end{definition}
 
-Since $L_{B_\varepsilon(x)}(F)$ is a supremum over a set which grows in $\varepsilon$, it is increasing in $\varepsilon$, so the limit superior is actually a limit and an infimum:
-$$L(F, x) = \lim_{\varepsilon \to 0} L_{B_\varepsilon(x)}(F) = \inf_{\varepsilon > 0} L_{B_\varepsilon(x)}(F).$$
-In particular, $L(F, x) \leq L(F)$.
+By the trace theorem, $\Comass_\Omega(F)$ is well-defined (but possibly $+\infty$).
+Since $\Comass_{B_\varepsilon(x)}(F)$ is a supremum over a set which grows in $\varepsilon$, it is increasing in $\varepsilon$, so the limit superior is actually a limit and an infimum:
+$$\Comass(F, x) = \lim_{\varepsilon \to 0} \Comass_{B_\varepsilon(x)}(F) = \inf_{\varepsilon > 0} \Comass_{B_\varepsilon(x)}(F).$$
+In particular, if we write $\Comass(F) := \Comass_M(F)$, then $\Comass(F, x) \leq \Comass(F)$.
 
-The comass enjoys many of the same properties as the Lipschitz constant, including \cite[Lemma 4.3]{Crandall2008}:
+The local comass was defined in an analogous manner to the local Lipschitz constant.
+As such, it enjoys many of the same properties, including those endowed on the local Lipschitz constant by \cite[Lemma 4.3]{Crandall2008}:
 
 \begin{proposition}\label{crandall}
-Let $F \in L^\infty(M, \Omega^{d - 1})$ satisfy $\dif F = 0$. Then:
+Let $F$ be a closed $L^\infty$ $d - 1$-form. Then:
 \begin{enumerate}
-\item The local comass $L(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
-\item For almost every $x \in M$,
-$$|F(x)| \leq L(F, x).$$
-\label{crandall LDT}
+\item The local comass $\Comass(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
+\item For almost every $x \in M$, \label{crandall LDT}
+$$|F(x)| \leq \Comass(F, x).$$
 \item The local comass is bounded, and \label{crandall linfinity}
-$$L(F) = \sup_{x \in M} L(F, x) = \|F\|_{L^\infty}.$$
+$$\Comass(F) = \sup_{x \in M} \Comass(F, x) = \|F\|_{L^\infty}.$$
 \item If $\sigma \in \Chain_{d - 1}(M)$ then \label{crandall best curl is ABC}
-$$\frac{1}{|\sigma|} \int_\sigma F \leq \sup_{x \in \sigma} L(F, x).$$
+$$\int_\sigma F \leq \Mass(\sigma) \sup_{x \in \sigma} \Comass(F, x).$$
 \end{enumerate}
 \end{proposition}
 \begin{proof}
 We first prove (\ref{crandall usc}).
-Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $L(F, x^n) \leq L_{B_r(x)}(F)$ and so
+Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $\Comass(F, x^n) \leq \Comass_{B_r(x)}(F)$ and so
 \begin{align*}
-\limsup_{n \to \infty} L(F, x^n) &\leq \inf_{r > 0} L_{B_r(x)}(F) = L(F, x).
+\limsup_{n \to \infty} \Comass(F, x^n) &\leq \inf_{r > 0} \Comass_{B_r(x)}(F) = \Comass(F, x).
 \end{align*}
 
 We now prove (\ref{crandall LDT}).
@@ -588,78 +678,28 @@ Let $I$ be the increasing $d-1$-index with $d$ removed.
 By the Lebesgue differentiation theorem and Fubini's theorem, there exists a null set $Z \subset M$, which does not depend on $(y^i)$ by Proposition \ref{invariance of LDT}, such that for every $x \notin Z$,
 \begin{align*}
 F_I(x) 
-&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{B_\varepsilon(x)} F_I(y) \dif y \\
-&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F_I(y) \dif y^1 \cdots \dif y^{d - 1} \dif t
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{B_\varepsilon(x)} F_I(y) \dif y \\
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F_I(y) \dif y^1 \wedge \cdots \wedge \dif y^{d - 1} \wedge \dif t
 \end{align*}
 where we used the fact that $\sqrt{\det g} = 1$.
-Now $\partial_{y^1}, \dots, \partial_{y^{d - 1}}$ are tangent to $\{y^d = t\}$, so as forms on $\{y^d = t\}$,
-$$F_I(y) \dif y^1 \cdots \dif y^{d - 1} = F.$$
+Now $\partial_{y^1} \wedge \cdots \wedge \partial_{y^{d - 1}}$ is the oriented unit $d - 1$-blade tangent to $\{y^d = t\}$, so as forms on $\{y^d = t\}$,
+$$F_I(y) \dif y^1 \wedge \cdots \wedge \dif y^{d - 1} = F.$$
 So
 \begin{align*}
 F_I(x) 
-&= \lim_{\varepsilon \to 0} \frac{1}{|B_\varepsilon(x)|} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F \dif t \\
-&\leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} \int_{-\infty}^\infty |\{y^d = t\} \cap B_\varepsilon(x)| \dif t.
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F \dif t \\
+&\leq \lim_{\varepsilon \to 0} \frac{\Comass_{B_\varepsilon(x)}(F)}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty |\{y^d = t\} \cap B_\varepsilon(x)| \dif t.
 \end{align*}
 By Fubini's theorem,
-$$F_I(x) \leq \lim_{\varepsilon \to 0} \frac{L_{B_\varepsilon(x)}(F)}{|B_\varepsilon(x)|} |B_\varepsilon(x)| = L(F, x).$$
+$$F_I(x) \leq \lim_{\varepsilon \to 0} \frac{\Comass_{B_\varepsilon(x)}(F)}{\Mass(B_\varepsilon(x))} \Mass(B_\varepsilon(x)) = \Comass(F, x).$$
 For every $x \in M$ we may select coordinates in which $|F(x)| = F_I(x)$, and then if $x \notin Z$, we conclude that (\ref{crandall LDT}) holds for $x$.
 
 If we combine (\ref{crandall LDT}) with (\ref{integral over chain is linfinity}), then
-$$\sup_{x \in M} L(F, x) \leq L(F) \leq \|F\|_{L^\infty} \leq \sup_{x \in M} L(F, x).$$
+$$\sup_{x \in M} \Comass(F, x) \leq \Comass(F) \leq \|F\|_{L^\infty} \leq \sup_{x \in M} \Comass(F, x).$$
 The inequalities collapse, proving (\ref{crandall linfinity}).
 In particular, for each $\sigma \in \Chain_{d - 1}(M)$, we obtain (\ref{crandall best curl is ABC}):
 \begin{align*}
-\frac{1}{|\sigma|} \int_\sigma F &\leq \inf_{\Omega \supset \sigma} \sup_{x \in \Omega} L(F, x) = \sup_{x \in \sigma} L(F, x). \qedhere
-\end{align*}
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\texorpdfstring{$L^\infty$}{L-infinity} calibrations}
-In our formulation, it is more natural to study calibrations which are merely $L^\infty$ rather than $C^0$, and require that the comass $L(F) \leq 1$.
-By Proposition \ref{integration is welldefined}, it is still meaningful to ask if a $d-1$-surface is $F$-calibrated, even if $F$ is discontinuous.
-We extend this definition to laminations:
-
-\begin{definition}
-Let $\lambda$ be a lamination and $F$ a calibration. We say that $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
-\end{definition}
-
-It is clear from (\ref{calibrated surfaces are minimal}) that a $F$-calibrated lamination is minimal.
-Moreover, if $M$ is closed and $F$ is a closed $d-1$ form, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just $\langle [F], [\lambda]\rangle$.
-
-\begin{proposition}\label{calibration condition}
-Let $F$ be a calibration on a closed Riemannian manifold $M$.
-Let $T_\lambda$ be the Ruelle-Sullivan current of a measured oriented lamination $\lambda$, and suppose that 
-\begin{equation}\label{calibration by Ruelle Sullivan}
-\int_M T_\lambda \wedge F = |\lambda|.
-\end{equation}
-Then $\lambda$ is $F$-calibrated (and in particular minimal).
-\end{proposition}
-\begin{proof}
-Let $(\chi_\alpha)$ be a locally finite partition of unity subordinate to an open cover $(U_\alpha)$ of flow boxes for $\lambda$, and let $(\mu_\alpha)$ be the transverse measure.
-After refining $(U_\alpha)$ we may assume that $U_\alpha$ is contractible, and after shrinking $U_\alpha$ we may assume that $\chi_\alpha > 0$ on $U_\alpha$.
-Then for some hypersurfaces $\sigma_{\alpha,k}$,
-$$|\lambda| = \int_M T_\lambda \wedge F = \sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha F \dif \mu_\alpha(k).$$
-Let $\dif S_{\alpha,k}$ be the surface measure on $\sigma_{\alpha,k}$. Then
-$$\int_M \chi_\alpha \star |T_\lambda| = \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha \dif S_{\alpha,k} \dif \mu_\alpha(k),$$
-so summing in $\alpha$, we obtain 
-\begin{equation}\label{calibration condition contr}
-\sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha F \dif \mu_\alpha(k) = |\lambda| = \sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha \dif S_{\alpha,k} \dif \mu_\alpha(k).
-\end{equation}
-
-We claim that $\lambda$ is \dfn{almost calibrated} in the sense that for every $\alpha$ and $\mu_\alpha$-almost every $k$, $\sigma_{\alpha, k}$ is calibrated.
-If this is not true, then we may select $\beta$ and $K \subseteq I$ with $\mu_\beta(K) > 0$, such that for every $k \in K$, $\int_{\sigma_{\beta, k}} F < |\sigma_{\beta, k}|$.
-Since $0 < \chi_\beta \leq 1$ and $F/\dif S_{\beta, k} \leq 1$ on $\sigma_{\beta, k}$, this is only possible if 
-$$\int_{\sigma_{\beta, k}} \chi_\beta F < \int_{\sigma_{\beta, k}} \chi_\beta \dif S_{\beta, k}.$$
-Integrating over $K$, and using the fact that in general we have $\int_{\sigma_{\alpha, k}} \chi_\alpha F \leq \int_{\sigma_{\alpha, k}} \chi_\alpha \dif S_{\alpha, k}$, we conclude that 
-$$\sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha F \dif \mu_\alpha(k) < \sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha \dif S_{\alpha, k} \dif \mu_\alpha(k)$$
-which contradicts (\ref{calibration condition contr}).
-
-To upgrade $\lambda$ from an almost calibrated lamination to a calibrated lamination, given $\sigma_{\alpha, k}$ we choose $k_j$ such that $\sigma_{\alpha, k_j}$ is calibrated and $k_j \to k$.
-Since we may write $F = \dif A$ near $\sigma_{\alpha, k}$ for some $A$ in Coulomb gauge, and 
-$$\int_{\sigma_{\alpha, k}} F = \int_{\partial \sigma_{\alpha, k}} A,$$
-the facts that $k_j \to k$ and that $A$ is continuous by (\ref{Sobolev}) imply 
-\begin{align*}
-|\sigma_{\alpha, k}| &= \lim_{j \to \infty} |\sigma_{\alpha, k_j}| = \lim_{j \to \infty} \int_{\sigma_{\alpha, k_j}} F = \lim_{j \to \infty} \int_{\partial \sigma_{\alpha, k_j}} A = \int_{\partial \sigma_{\alpha, k}} A = \int_{\sigma_{\alpha, k}} F. \qedhere 
+\int_\sigma F &\leq \Mass(\sigma) \inf_{\Omega \supset \sigma} \sup_{x \in \Omega} \Comass(F, x) = \Mass(\sigma) \sup_{x \in \sigma} \Comass(F, x). \qedhere
 \end{align*}
 \end{proof}
 
@@ -669,7 +709,64 @@ The \dfn{maximum comass locus} is the set
 $$\MCL(F) := \{L(F, \cdot) = L(F)\}.$$
 \end{definition}
 
-By Proposition \ref{crandall}(\ref{crandall usc}), if $M$ is a closed manifold, then the maximum comass locus is a nonempty closed subset of $M$.
+By Proposition \ref{crandall}(\ref{crandall usc}), if $M$ is a closed manifold, then $\MCL(F)$ is a nonempty closed subset of $M$.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{\texorpdfstring{$L^\infty$}{L-infinity} calibrations}
+The purpose of this paper is to study calibrated laminations.
+If the calibration $F$ is continuous, then the theory of \cite{bangert_cui_2017} of calibrated laminations applies; however, we are not aware of general existence results on continuous calibrations, only measurable calibrations \cite{Federer1974}.
+Thus, we now introduce $L^\infty$ calibrations of laminations.
+
+\begin{definition}
+A \dfn{calibration} is a closed $d - 1$-form $F$ such that $\Comass(F) = 1$.
+An integral $d - 1$-current $\sigma$ is $F$-\dfn{calibrated} if 
+$$\Mass(\sigma) = \int_\sigma F.$$
+\end{definition}
+
+\begin{definition}
+Let $\lambda$ be a lamination and $F$ a calibration.
+We say that $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
+\end{definition}
+
+The fundamental theorem of calibrated geometry \cite{Harvey82} implies that a calibrated integral current is minimal, so every calibrated lamination is minimal.
+Moreover, if $M$ is closed and $F$ is a closed $d-1$ form, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just $\langle [F], [\lambda]\rangle$.
+
+\begin{proposition}\label{calibration condition}
+Let $F$ be a calibration on a closed Riemannian manifold $M$.
+Let $T_\lambda$ be the Ruelle-Sullivan current of a measured oriented lamination $\lambda$, and suppose that 
+\begin{equation}\label{calibration by Ruelle Sullivan}
+\int_M T_\lambda \wedge F = \Mass(\lambda).
+\end{equation}
+Then $\lambda$ is $F$-calibrated (and in particular minimal).
+\end{proposition}
+\begin{proof}
+Let $(\chi_\alpha)$ be a locally finite partition of unity subordinate to an open cover $(U_\alpha)$ of flow boxes for $\lambda$, and let $(\mu_\alpha)$ be the transverse measure.
+After refining $(U_\alpha)$ we may assume that $U_\alpha$ is contractible, and after shrinking $U_\alpha$ we may assume that $\chi_\alpha > 0$ on $U_\alpha$.
+Then for some hypersurfaces $\sigma_{\alpha,k}$,
+$$\Mass(\lambda) = \int_M T_\lambda \wedge F = \sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha F \dif \mu_\alpha(k).$$
+Let $\dif S_{\alpha,k}$ be the surface measure on $\sigma_{\alpha,k}$. Then
+$$\int_M \chi_\alpha \star |T_\lambda| = \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha \dif S_{\alpha,k} \dif \mu_\alpha(k),$$
+so summing in $\alpha$, we obtain 
+\begin{equation}\label{calibration condition contr}
+\sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha F \dif \mu_\alpha(k) = \Mass(\lambda) = \sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha \dif S_{\alpha,k} \dif \mu_\alpha(k).
+\end{equation}
+
+We claim that $\lambda$ is \dfn{almost calibrated} in the sense that for every $\alpha$ and $\mu_\alpha$-almost every $k$, $\sigma_{\alpha, k}$ is calibrated.
+If this is not true, then we may select $\beta$ and $K \subseteq I$ with $\mu_\beta(K) > 0$, such that for every $k \in K$, $\int_{\sigma_{\beta, k}} F < \Mass(\sigma_{\beta, k})$.
+Since $0 < \chi_\beta \leq 1$ and $F/\dif S_{\beta, k} \leq 1$ on $\sigma_{\beta, k}$, this is only possible if 
+$$\int_{\sigma_{\beta, k}} \chi_\beta F < \int_{\sigma_{\beta, k}} \chi_\beta \dif S_{\beta, k}.$$
+Integrating over $K$, and using the fact that in general we have $\int_{\sigma_{\alpha, k}} \chi_\alpha F \leq \int_{\sigma_{\alpha, k}} \chi_\alpha \dif S_{\alpha, k}$, we conclude that 
+$$\sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha F \dif \mu_\alpha(k) < \sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha \dif S_{\alpha, k} \dif \mu_\alpha(k)$$
+which contradicts (\ref{calibration condition contr}).
+
+To upgrade $\lambda$ from an almost calibrated lamination to a calibrated lamination, given $\sigma_{\alpha, k}$ we choose $k_j$ such that $\sigma_{\alpha, k_j}$ is calibrated and $k_j \to k$.
+Since we may write $F = \dif A$ near $\sigma_{\alpha, k}$ for some coclosed $d - 2$-form $A$, and 
+$$\int_{\sigma_{\alpha, k}} F = \int_{\partial \sigma_{\alpha, k}} A,$$
+the facts that $k_j \to k$ and that $A$ is continuous by (\ref{Sobolev}) imply 
+\begin{align*}
+\Mass(\sigma_{\alpha, k}) &= \lim_{j \to \infty} \Mass(\sigma_{\alpha, k_j}) = \lim_{j \to \infty} \int_{\sigma_{\alpha, k_j}} F = \lim_{j \to \infty} \int_{\partial \sigma_{\alpha, k_j}} A = \int_{\partial \sigma_{\alpha, k}} A = \int_{\sigma_{\alpha, k}} F. \qedhere 
+\end{align*}
+\end{proof}
 
 \begin{proposition}\label{properties of calibrated laminations}
 Suppose that $M$ is a closed Riemannian manifold, $F$ is a calibration, and $\lambda$ is a measured oriented $F$-calibrated lamination.
@@ -683,12 +780,12 @@ Then:
 \begin{proof}
 Every leaf of $\lambda$ is $F$-calibrated, hence minimal, so $\lambda$ is also minimal.
 Moreover, (\ref{calibration by Ruelle Sullivan}) only depends on the cohomology class of $F$, not $F$ itself, so $\lambda$ is $G$-calibrated.
-Finally, let $S$ be the maximum comass locus of $F$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
+Finally, let $S := \MCL(F)$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
 Since $S$ is closed, there exists $\varepsilon > 0$ such that $B_\varepsilon(x)$ does not meet $S$.
 Moreover, $\sigma := N \cap B_\varepsilon(x)$ is a $d-1$-chain in $B_\varepsilon(x)$, so by Proposition \ref{crandall}(\ref{crandall best curl is ABC}),
-$$\frac{1}{|\sigma|} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} L(F, y) < L = 1.$$
+$$\frac{1}{\Mass(\sigma)} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} L(F, y) < L = 1.$$
 But then 
-$$\int_N F = \int_\sigma F + \int_{N \setminus B_\varepsilon(x)} F < |\sigma| + |N \cap B_\varepsilon(x)| = |N|,$$
+$$\int_N F = \int_\sigma F + \int_{N \setminus B_\varepsilon(x)} F < \Mass(\sigma) + \Mass(N \setminus B_\varepsilon(x)) = \Mass(N),$$
 so $N$ (hence $\lambda$) is not $F$-calibrated.
 \end{proof}
 
@@ -1067,6 +1164,8 @@ $$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|F_p\|_{L^p} = L
 Taking logarithms we see that $q^{-1} \log k_p \to -\log L$, and since $q \to 1$ the claim follows.
 \end{proof}
 
+We remind the reader of the definition (\ref{coarea formula}) of the Radon measure $\dif u \wedge F$.
+
 \begin{proposition}\label{existence 1}
 Let $\rho \in H^{d - 1}(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
 For $2 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let $u_q$ be the renormalized $q$-harmonic conjugate of the $p$-tight representative of $\rho$.
@@ -1074,7 +1173,7 @@ Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ su
 \begin{enumerate}
 \item $u$ is $1$-harmonic.
 \item As $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r_\loc(\tilde M)$ for $1 \leq r < \frac{d}{d - 1}$.
-\item Let $F$ be the $\infty$-tight representative of $\rho$, with best comass $L$. We have the \dfn{max flow min cut principle} that, as Radon measures,
+\item Let $F$ be the $\infty$-tight representative of $\rho$, with best comass $L$. We have the \dfn{max flow min cut principle} that
 \begin{equation}\label{1 extremality}
 \dif u \wedge F = L \star |\dif u|.
 \end{equation}
@@ -1101,7 +1200,7 @@ Multiplying by $k_p^p$, we have
 \end{equation}
 
 Let $\mu$ be the total variation measure of $\dif u$.
-We claim that as Radon measures,
+We claim that
 \begin{equation}\label{1 strong duality}
 	L\mu(M) \leq \int_M \dif u \wedge F.
 \end{equation}
@@ -1117,7 +1216,7 @@ completing the proof of (\ref{1 strong duality}).
 
 By the coarea formula (\ref{coarea formula}), we have for any open set $U$,
 $$\int_U \dif u \wedge F = \int_{-\infty}^\infty \int_{U \cap \partial \{u > y\}} F \dif y \leq L \int_{-\infty}^\infty |U \cap \partial \{u > y\}| \dif y = L \mu(U).$$
-Since $\mu$ is a finite Borel measure, every Borel set $E$ can be $\mu$-approximated from without open sets, hence
+Since $\mu$ is a Radon measure and $M$ is compact, every Borel set $E$ can be $\mu$-approximated from without by open sets, hence
 \begin{equation}\label{one sided extremality}
 \int_E \dif u \wedge F \leq L \mu(E).
 \end{equation}
