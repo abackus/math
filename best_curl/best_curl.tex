@@ -17,7 +17,7 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Minimal laminations calibrated by tight $2$-forms}
+\title{Convex duality between minimal laminations and tight calibrations}
 \author{Aidan Backus}
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
@@ -154,12 +154,14 @@
 We introduce a family of closed $d-1$-forms on Riemannian $d$-manifolds which minimize their comass (or $L^\infty$ norm) in their cohomology class, which we call \dfn{tight}.
 Tight forms have properties similar to (gradients of) $\infty$-harmonic maps between surfaces: they are convex duals of $1$-harmonic functions and attain their comass on a measured oriented minimal lamination $\mu$.
 We show that $\mu$ has properties analogous to a measured sublamination of Thurston's canonical lamination.
+\todo{Rewrite this}
 \end{abstract}
 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
+\todo{Rewrite all this once we actually know what this paper accomplishes}
 In this paper we shall propose a generalization of Thurston's Teichm\"uller theory to a broader class of manifolds than hyperbolic surfaces.
 To motivate this, let us first recall Thurston's Teichm\"uller theory.
 
@@ -365,6 +367,8 @@ By an $\ell$-\dfn{current of locally finite mass} $T$ we mean a continuous linea
 We write $\int_M T \wedge \varphi$ or $\int_T \varphi$ for the dual pairing of a current and a form.
 The duality norm of $T$ is its \dfn{mass}, namely for an open set $U \subseteq M$,
 $$\Mass_U(T) := \sup_{\substack{\supp \varphi \Subset U \\ \|\varphi\|_{C^0} \leq 1}} \int_U T \wedge \varphi.$$
+We write $\Mass(T) := \Mass_M(T)$.
+If $T$ represents a simplex $\sigma$, then $\Mass(T)$ is the surface area of $\sigma$.
 If $\dif T$ is an $\ell - 1$-current of locally finite mass, we say that $T$ is \dfn{locally normal}.
 In particular, a locally normal $d$-current is the same thing as a function of locally bounded variation, and a locally normal $0$-current is the same thing as a signed Radon measure.
 
@@ -381,9 +385,8 @@ Then $U$ has a \dfn{reduced boundary} $\partial^* U$, the set of points at which
 We carefully wrote down the coarea formula at this level of regularity on curved domains \cite[Proposition 2.5]{BackusFLG}:
 
 \begin{proposition}\label{coarea}
-Let $\mu(U) := \Mass_U(\dif u)$ be the total variation measure of a function $u \in BV_\loc(M)$.
-Then 
-$$\mu(U) = \int_{-\infty}^\infty |\partial^* \{u > y\} \cap U| \dif y.$$
+For any function $u \in BV_\loc(M)$ and open set $U \subset M$ with smooth boundary,
+$$\Mass_U(\dif u) = \int_{-\infty}^\infty |\partial^* \{u > \lambda\} \cap U| \dif \lambda.$$
 \end{proposition}
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -404,7 +407,7 @@ Thus this definition is the ``sheafification'' of the definition due to Maz\'on,
 \begin{definition}
 Let $B$ be a ball in $M$.
 A function $u \in BV(B)$ has \dfn{least gradient} in $B$ if $u$ minimizes its total variation in the sense that for every function $v \in BV_\cpt(B)$,
-$$\|\dif u\|_{TV(B)} \leq \|\dif u + \dif v\|_{TV(B)}.$$
+$$\Mass_B(\dif u) \leq \Mass_B(\dif u + \dif v).$$
 A function has \dfn{locally least gradient} if one can cover $M$ by balls in which $u$ has least gradient.
 \end{definition}
 
@@ -589,47 +592,124 @@ By approximating a $C^0$ test function $\psi$ by $C^1$ functions, we obtain the 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Coarea formula}
-Let $u \in BV(M)$.
-Then $\dif u$ may fail to be absolutely continuous, in which case the Radon measure $\dif u \wedge F$ may be ill-defined for a measurable $d - 1$-form $F$.
-We assert now that there is a reasonable definition of $\dif u \wedge F$ if $F$ is closed and $L^\infty$.
+We next seek to make sense of the Radon measure (or $0$-current of locally finite mass) $\dif u \wedge F$ when $u \in BV_\loc(M)$ and $F$ is a closed $L^\infty$ $d - 1$-form.
+A priori the expression $\dif u \wedge F$ is nonsensical, as $\dif u$ may fail to be absolutely continuous, while $F$ need not be defined on a Lebesgue null set.
+We thus view $\dif u \wedge F$ as the product of distributions $|\dif u|(\normal^\flat \wedge F)$ where $\normal^\flat := \dif u/|\dif u|$ is the polar part of $\dif u$.
+Unfortunately the product of an arbitrary pair of distributions need not be defined and so we must show that in this case it is defined.
+
+We begin by reviewing the theory of distributions following \cite{hörmander1990analysis}.
+To ease the burden of notation we let $\dif x$ and similar expressions denote the volume form on $M$, and identify functions $f$ with their respective distributions $\star f$.
+Let $\mathscr D$ be the presheaf $C^\infty_\cpt$, and let $\mathscr D'$ be the sheaf of distributions; see \cite[Chapter II]{hörmander1990analysis} for the definitions.
+We shall write $\int_M \chi(x) f(x) \dif x$ to denote the pairing of $f \in \mathscr D'$ and $\chi$ in $\mathscr D$.
+Let
+$$\delta: M \to M \times M$$
+be the diagonal morphism.
+The diagonal morphism induces a pullback map 
+$$\delta^*: D_\delta \to \mathscr D'(M)$$
+where $D_\delta \supseteq \mathscr D(M \times M)$ is the maximal subspace of $\mathscr D'(M \times M)$ to which $\delta$ extends as a continuous linear map.
+If $f, g \in \mathscr D'(M)$, then the tensor product $f \otimes g \in \mathscr D'(M \times M)$ is defined by its action on tensors $\varphi \otimes \psi \in \mathscr D(M \times M)$ of rank $1$ by
+$$\iint_{M \times M} (f \otimes g)(x, y) (\varphi \otimes \psi)(x, y) \dif x \dif y = \int_M f(x) \varphi(x) \dif x \int_M g(y) \psi(y) \dif y$$
+and then extended to all of $\mathscr D(M \times M)$ by density of tensors of finite rank \cite[\S5.1]{hörmander1990analysis}.
+The product of two distributions $f, g$ is defined by 
+$$fg := \delta^*(f \otimes g)$$
+whenever $f \otimes g \in D_\delta$ \cite[\S8.2]{hörmander1990analysis}.
 
 \begin{lemma}\label{reduced level sets are integral currents}
 Let $u \in BV(M)$.
-Then for almost every $y \in \RR$, integration along the reduced level set $\partial^* \{u > y\}$ defines an integral $d - 1$-current.
+Then for almost every $\lambda \in \RR$, integration along the reduced level set $\partial^* \{u > \lambda\}$ defines an integral $d - 1$-current.
 \end{lemma}
 \begin{proof}
-By Proposition \ref{coarea}, for almost every $y \in \RR$, $\{u > y\}$ has locally finite perimeter.
-So by the de Giorgi structure theorem \cite[Theorem 14.3]{Simon84}, $\partial^* \{u > y\}$ is an oriented rectifiable $d - 1$-cycle.
-So integration along $\partial^* \{u > y\}$ defines a closed rectifiable, and hence integral, $d - 1$-current.
+By Proposition \ref{coarea}, for almost every $\lambda \in \RR$, $\{u > \lambda\}$ has locally finite perimeter.
+So by the de Giorgi structure theorem \cite[Theorem 14.3]{Simon84}, $\partial^* \{u > \lambda\}$ is an oriented rectifiable $d - 1$-cycle.
+So integration along $\partial^* \{u > \lambda\}$ defines a closed rectifiable, and hence integral, $d - 1$-current.
 \end{proof}
 
-\begin{definition}
-Let $u \in BV(M)$ and $F$ a closed $L^\infty$ $d - 1$-form.
-We obtain a Radon measure $\dif u \wedge F$ by defining, for every $\psi \in C^0_\cpt(M)$,
+\begin{proposition}[coarea formula]
+Let $u \in BV(M)$ and let $F$ be a closed $L^\infty$ $d - 1$-form.
+Let $\normal^\flat$ be the polar part of $\dif u$ and, for $\lambda \in \RR$, let $\tau_\lambda$ be the reduced level set of $u$.
+Then:
+\begin{enumerate}
+\item $|\dif u| \otimes (\normal^\flat \wedge F) \in D_\delta$, so that $\dif u \wedge F$ is a well-defined distribution.
+\item The distribution $\dif u \wedge F$ has locally finite mass, hence is a Radon measure.
+\item For every $\chi \in C^0_\cpt(M)$, we have the coarea formula
 \begin{equation}\label{coarea formula}
-\int_M \psi \dif u \wedge F := \int_{-\infty}^\infty \int_{\partial^* \{u > y\}} \psi F \dif y.
+\int_M \chi \dif u \wedge F = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda.
 \end{equation}
-\end{definition}
-
-The integral on the right-hand side of (\ref{coarea formula}) makes sense by (\ref{integral over chain is linfinity}) and Lemma \ref{reduced level sets are integral currents}, which also shows that it depends continuously on $\psi$ in $C^0_\cpt$ (hence $\dif u \wedge F$ is a well-defined Radon measure).
-Thus it only remains to show that the right-hand side of (\ref{coarea formula}) does not contradict the usual definition of $\dif u \wedge F$ for a continuous $F$:
-
-\begin{lemma}
-Let $u \in BV(M)$ and $F$ a closed, continuous $d - 1$-form.
-Then (\ref{coarea formula}) is compatible with the usual definition of $\dif u \wedge F$.
-In particular, we have the cohomological formula
-$$\int_M \dif u \wedge F = \langle [\dif u], [F]\rangle.$$
-\end{lemma}
+\end{enumerate}
+\end{proposition}
 \begin{proof}
-Let $\tau_y := \partial^* \{u > y\}$ be the reduced level set, $\mu(U) := \Mass_U(\dif u)$ the total variation measure of $\dif u$, and $\normal$ the polar part of $\dif u$.
-Since $F$ is continuous, $\langle\star \normal, F\rangle \in L^\infty(\mu)$, so we can compute using Proposition \ref{coarea}:
+Let $\eta_\varepsilon$ be a smooth approximation to the the Dirac mass along $\delta_*(M)$.
+For $f, g, \chi \in \mathscr D(M)$, one has 
+\begin{equation}\label{construction of distribution product 1}
+\int_M \chi(x) \delta^*(f \otimes g)(x) \dif x
+= \lim_{\varepsilon \to 0} \iint_{M \times M} \chi(x) \eta_\varepsilon(x, y) f(x) g(y) \dif x \dif y.
+\end{equation}
+The right-hand side of (\ref{construction of distribution product 1}) clearly makes sense even if $f$ is a Radon measure, since $\chi \eta_\varepsilon(\cdot, y)$ is compactly supported and continuous for each $y$.
+Thus we may plug in $f = |\dif u|$ and appeal to Proposition \ref{coarea} to write $x = (\lambda, z)$ where $u(x) = \lambda$ and $z$ is a coordinate on $\tau_\lambda$, in which case we have 
 \begin{align*}
-\int_U \dif u \wedge F &= \int_U \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, 1_U  F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y \cap U} F \dif y. \qedhere
+&\iint_{M \times M} \chi(x) \eta_\varepsilon(x, y) |\dif u|(x) g(y) \dif x \dif y \\
+&\qquad = \int_M \int_{-\infty}^\infty \int_{\tau_\lambda} \chi(\lambda, z) \eta_\varepsilon(\lambda, z, y) g(y) \dif S_{\tau_\lambda}(z) \dif \lambda \dif y.
 \end{align*}
+Applying (\ref{construction of distribution product 1}) and the fact that $\eta_\varepsilon(\lambda, z, \cdot)$ converges in the sense of distributions to the Dirac mass at $(\lambda, z)$,
+\begin{equation}\label{construction of distribution product 2}
+\int_M \chi(x) \delta^*(|\dif u| \otimes g)(x) \dif x = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi(\lambda, z) g(\lambda, z) \dif S_{\tau_\lambda}(z) \dif \lambda.
+\end{equation}
+For almost every $\lambda$, $\tau_\lambda$ is an integral $d - 1$-current by Lemma \ref{reduced level sets are integral currents}, so for such $\lambda$, the trace theorem allows us to plug in the pullback of $F$ to $\tau_\lambda$ for $g(\lambda, \cdot)$ in (\ref{construction of distribution product 2}).
+But that pullback is $\langle \star \normal^\flat, F\rangle$.
+Thus we may plug in $F(\lambda, z)$ for $g(\lambda, z) \dif S_{\tau_\lambda}(z)$.
+We then have by (\ref{construction of distribution product 2})
+\begin{equation}\label{construction of distribution product 3}
+\int_M \chi(x) \delta^*(|\dif u| \otimes \langle \star \normal^\flat, F\rangle)(x) \dif x = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda.
+\end{equation}
+The right-hand side of (\ref{construction of distribution product 3}) converges provided that $\chi \in \mathscr D(M)$.
+Therefore $|\dif u| \otimes \langle \star \normal^\flat, F\rangle \in D_\delta$.
+Plugging in 
+$$\delta^*(|\dif u| \otimes \langle \star \normal^\flat, F\rangle)(x) \dif x = \dif u \wedge F$$
+into (\ref{construction of distribution product 3}), we see that $\dif u \wedge F$ is a distribution, and (\ref{coarea formula}) holds for $\chi \in \mathscr D(M)$.
+
+We next apply (\ref{integral over chain is linfinity}) and Proposition \ref{coarea} to estimate the right-hand side of (\ref{construction of distribution product 3}).
+Let $U$ be a small open neighborhood of $\supp \chi$.
+Then
+\begin{align*}
+\left|\int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda\right|
+&\leq \|F\|_{L^\infty} \int_{-\infty}^\infty \int_{\tau_\lambda} |\chi| \dif S_{\tau_\lambda} \dif \lambda \\
+&= \|F\|_{L^\infty} \int_M |\chi| \star |\dif u| \\
+&\leq \|F\|_{L^\infty} \|\chi\|_{C^0} \Mass_U(\dif u) < \infty.
+\end{align*}
+Therefore the right-hand side of (\ref{construction of distribution product 3}) converges even for $\chi \in C^0_\cpt(M)$.
+Therefore $\dif u \wedge F$ is a Radon measure and (\ref{coarea formula}) holds for $\chi \in C^0_\cpt(M)$.
 \end{proof}
 
-It would appear that the definition (\ref{coarea formula}) can be viewed microlocally as a special case of the H\"ormander product of the distributions $|\dif u|$ and $\langle \star \normal, F\rangle$, as in \cite[Theorem 8.2.10]{hörmander1990analysis}.
-However, developing the relevant microlocal analysis, including a suitable $C^0$ analogue of the wavefront set, would take us too far afield, so we do not explore this theory here.
+% Then $\dif u$ may fail to be absolutely continuous, in which case the Radon measure $\dif u \wedge F$ may be ill-defined for a measurable $d - 1$-form $F$.
+% We assert now that there is a reasonable definition of $\dif u \wedge F$ if $F$ is closed and $L^\infty$.
+
+% \begin{definition}
+% Let $u \in BV(M)$ and $F$ a closed $L^\infty$ $d - 1$-form.
+% We obtain a Radon measure $\dif u \wedge F$ by defining, for every $\psi \in C^0_\cpt(M)$,
+% \begin{equation}
+% \int_M \psi \dif u \wedge F := \int_{-\infty}^\infty \int_{\partial^* \{u > y\}} \psi F \dif y.
+% \end{equation}
+% \end{definition}
+
+% The integral on the right-hand side of (\ref{coarea formula}) makes sense by (\ref{integral over chain is linfinity}) and Lemma \ref{reduced level sets are integral currents}, which also shows that it depends continuously on $\psi$ in $C^0_\cpt$ (hence $\dif u \wedge F$ is a well-defined Radon measure).
+% Thus it only remains to show that the right-hand side of (\ref{coarea formula}) does not contradict the usual definition of $\dif u \wedge F$ for a continuous $F$:
+
+% \begin{lemma}
+% Let $u \in BV(M)$ and $F$ a closed, continuous $d - 1$-form.
+% Then (\ref{coarea formula}) is compatible with the usual definition of $\dif u \wedge F$.
+% In particular, we have the cohomological formula
+% $$\int_M \dif u \wedge F = \langle [\dif u], [F]\rangle.$$
+% \end{lemma}
+% \begin{proof}
+% Let $\tau_y := \partial^* \{u > y\}$ be the reduced level set, $\mu(U) := \Mass_U(\dif u)$ the total variation measure of $\dif u$, and $\normal$ the polar part of $\dif u$.
+% Since $F$ is continuous, $\langle\star \normal, F\rangle \in L^\infty(\mu)$, so we can compute using Proposition \ref{coarea}:
+% \begin{align*}
+% \int_U \dif u \wedge F &= \int_U \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, 1_U  F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y \cap U} F \dif y. \qedhere
+% \end{align*}
+% \end{proof}
+
+% It would appear that the definition (\ref{coarea formula}) can be viewed microlocally as a special case of the H\"ormander product of the distributions $|\dif u|$ and $\langle \star \normal, F\rangle$, as in \cite[Theorem 8.2.10]{hörmander1990analysis}.
+% However, developing the relevant microlocal analysis, including a suitable $C^0$ analogue of the wavefront set, would take us too far afield, so we do not explore this theory here.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local comass}
@@ -721,15 +801,11 @@ Thus, we now introduce $L^\infty$ calibrations of laminations.
 A \dfn{calibration} is a closed $d - 1$-form $F$ such that $\Comass(F) = 1$.
 An integral $d - 1$-current $\sigma$ is $F$-\dfn{calibrated} if 
 $$\Mass(\sigma) = \int_\sigma F.$$
+A lamination $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
 \end{definition}
 
-\begin{definition}
-Let $\lambda$ be a lamination and $F$ a calibration.
-We say that $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
-\end{definition}
-
-The fundamental theorem of calibrated geometry \cite{Harvey82} implies that a calibrated integral current is minimal, so every calibrated lamination is minimal.
-Moreover, if $M$ is closed and $F$ is a closed $d-1$ form, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just $\langle [F], [\lambda]\rangle$.
+The fundamental theorem of calibrated geometry \cite{Harvey82} asserts that a calibrated integral current is minimal, so every calibrated lamination is minimal.
+Moreover, if $M$ is closed, $\lambda$ is a lamination, and $F$ is a calibration, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just $\langle [F], [\lambda]\rangle$.
 
 \begin{proposition}\label{calibration condition}
 Let $F$ be a calibration on a closed Riemannian manifold $M$.
@@ -783,7 +859,7 @@ Moreover, (\ref{calibration by Ruelle Sullivan}) only depends on the cohomology 
 Finally, let $S := \MCL(F)$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
 Since $S$ is closed, there exists $\varepsilon > 0$ such that $B_\varepsilon(x)$ does not meet $S$.
 Moreover, $\sigma := N \cap B_\varepsilon(x)$ is a $d-1$-chain in $B_\varepsilon(x)$, so by Proposition \ref{crandall}(\ref{crandall best curl is ABC}),
-$$\frac{1}{\Mass(\sigma)} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} L(F, y) < L = 1.$$
+$$\frac{1}{\Mass(\sigma)} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} \Comass(F, y) < \Comass(F) = 1.$$
 But then 
 $$\int_N F = \int_\sigma F + \int_{N \setminus B_\varepsilon(x)} F < \Mass(\sigma) + \Mass(N \setminus B_\varepsilon(x)) = \Mass(N),$$
 so $N$ (hence $\lambda$) is not $F$-calibrated.
@@ -945,8 +1021,8 @@ Finally, we use (\ref{holder cancellation}) to prove
 
 \subsection{\texorpdfstring{$p$-tight forms}{p-tight forms}}
 We next scrutinize the PDE (\ref{pMaxwell}).
-If $p = 2$ and $d = 3$, then these equations are those satisfied by a steady-state electromagnetic tensor in vacuum.
-On the other hand, as $p \to \infty$, the solutions of these equations converge to a minimizer of the comass.
+If $p = 2$ and $d = 3$, then these equations are exactly the Maxwell equations in vacuum for a static magnetic strength tensor, and the functional $J_2$ below can be interpreted as the magnetic potential energy.
+On the other hand, as $p \to \infty$, the solutions of these equations converge to a minimizer of the comass; if $d = 2$, a minimizer of the comass is sometimes called \dfn{tight} \cite{farre23}.
 This motivates the below terminology:
 
 \begin{definition}
@@ -959,7 +1035,7 @@ A \dfn{$p$-tight form} is a solution of the $p$-Maxwell equation.
 Suppose that $M$ is a closed oriented Riemannian manifold.
 Then there is a unique $p$-tight form in each cohomology class in $H^{d - 1}(M, \RR)$.
 Moreover, $p$-tight forms are minimizers of the strictly convex functional
-$$J_p(F) := \int_M \star |F|^p$$
+$$J_p(F) := \frac{1}{p} \int_M \star |F|^p$$
 among all forms cohomologous to them.
 \end{proposition}
 \begin{proof}
@@ -1063,27 +1139,33 @@ So by Proposition \ref{crandall}(\ref{crandall linfinity}) and the fact that $B$
 \end{proof}
 
 \begin{definition}
-The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called an \dfn{$\infty$-tight form}, or simply a \dfn{tight form}.
+The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called a \dfn{tight form}, or an \dfn{$\infty$-tight form}.
 \end{definition}
 
-The existence of $\infty$-tight (or even just best comass) representatives of each cohomology class implies the following useful lemma.
+The existence of tight (or even just best comass) representatives of each cohomology class implies the following useful lemma.
+For a reference on the stable norm, we refer the reader to \cite{AUER20011095}.
+
+\begin{definition}
+The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma$ is the infimum of $\Mass(N)$ among all representative chains $N$.
+The \dfn{costable norm} $\Comass(\rho)$ of a cohomology class $\rho$ is the infimum among $\Comass(F) = \|F\|_{L^\infty}$ among all representative forms $F$.
+\end{definition}
 
 \begin{lemma}\label{p tights approximate L}
-Let $F_p$ be the $p$-tight representative of $\rho$, and $L$ the best comass of $\rho$. Then 
-$$\lim_{p \to \infty} \|F_p\|_{L^p} = L.$$
+Let $F_p$ be the $p$-tight representative of $\rho$. Then 
+$$\lim_{p \to \infty} \|F_p\|_{L^p} = \Comass(\rho).$$
 \end{lemma}
 \begin{proof}
 We follow \cite[Lemma 2.7]{daskalopoulos2020transverse}.
-Let $F$ be an $\infty$-tight representative of $\rho$, so by Proposition \ref{crandall}(\ref{crandall linfinity}), $\|F\|_{L^\infty} = L$.
+Let $F$ be a tight representative of $\rho$, so $\|F\|_{L^\infty} = \Comass(\rho)$.
 Since $F_p$ is $p$-tight, H\"older's inequality implies 
-$$\|F_p\|_{L^p} \leq \|F\|_{L^p} \leq |M|^{\frac{1}{p}} L.$$
+$$\|F_p\|_{L^p} \leq \|F\|_{L^p} \leq |M|^{\frac{1}{p}} \Comass(\rho).$$
 Therefore 
-$$\limsup_{p \to \infty} \|F_p\|_{L^p} \leq L.$$
-To prove the converse, suppose that 
-$$\liminf_{p \to \infty} \|F_p\|_{L^p} \leq \tilde L < L.$$
-Along a subsequence which attains the limit inferior, $F_p$ converges weakly in every $L^r$, $d < r < \infty$, to an $\infty$-tight form $\tilde F$ such that (by H\"older's inequality)
-$$\|\tilde F\|_{L^r} \leq \liminf_{p \to \infty} \|F_p\|_{L^r} \leq \liminf_{p \to \infty} |M|^{\frac{1}{r}} \|\tilde F\|_{L^\infty} \leq |M|^{\frac{1}{r}} \tilde L.$$
-Taking $r \to \infty$, we obtain $L(\tilde F) < L$, which contradicts the fact that $L$ is the best comass.
+$$\limsup_{p \to \infty} \|F_p\|_{L^p} \leq \Comass(\rho).$$
+To prove the converse, suppose that for some $\varepsilon > 0$,
+$$\liminf_{p \to \infty} \|F_p\|_{L^p} \leq \Comass(\rho) - \varepsilon < \Comass(\rho).$$
+Along a subsequence which attains the limit inferior, $F_p$ converges weakly in every $L^r$, $d < r < \infty$, to a tight form $\tilde F$ such that (by H\"older's inequality)
+$$\|\tilde F\|_{L^r} \leq \liminf_{p \to \infty} \|F_p\|_{L^r} \leq \liminf_{p \to \infty} |M|^{\frac{1}{r}} \|\tilde F\|_{L^\infty} \leq |M|^{\frac{1}{r}} (\Comass(\rho) - \varepsilon).$$
+Taking $r \to \infty$, we obtain $\Comass(\tilde F) < \Comass(\rho)$, which contradicts the definition of the costable norm $\Comass(\rho)$.
 \end{proof}
 
 
@@ -1107,7 +1189,7 @@ Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\
 Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
 Moreover, if $\dif u_q \to \dif u$ in the weak topology of measures on $M$ and $\dif u_q \in L^q$, then
 \begin{equation}\label{q to 1 Holder}
-\|\dif u\|_{TV} \leq \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
+\Mass(\dif u) \leq \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
 \end{equation}
 \end{lemma}
 \begin{proof}
@@ -1137,9 +1219,11 @@ Thus $\alpha$ is uniquely defined and $\alpha_q \to \alpha$ along the entire sub
 
 Finally we prove (\ref{q to 1 Holder}).
 Suppose that $\dif u_q \to \dif u$ in the weak topology of measures and $\dif u_q$ in $L^q$.
-Under those hypotheses, we may use the portmanteau theorem and H\"older's inequality to estimate (where $\frac{1}{p} + \frac{1}{q} = 1$)
+Then
+$$\|\dif u_q\|_{L^1} = \Mass(\dif u_q).$$
+So we may use the portmanteau theorem and H\"older's inequality to estimate (where $\frac{1}{p} + \frac{1}{q} = 1$)
 \begin{align*}
-\|\dif u\|_{TV} &= \lim_{q \to 1} \|\dif u_q\|_{L^1} \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \|\dif u_q\|_{L^q} = \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q. \qedhere
+\Mass(\dif u) &= \lim_{q \to 1} \Mass(\dif u_q) \leq \lim_{q \to 1} |M|^{\frac{1}{p}} \|\dif u_q\|_{L^q} = \lim_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q. \qedhere
 \end{align*}
 \end{proof}
 
@@ -1155,16 +1239,14 @@ $$\dif u_q = (-1)^{d - 1} k_p^{p - 1} |F_p|^{p - 2} \star F_p.$$
 \end{definition}
 
 \begin{lemma}\label{normalizations converge}
-As $p \to \infty$, $k_p \to 1/L$.
+As $p \to \infty$, $k_p \to \Comass(\rho)^{-1}$.
 \end{lemma}
 \begin{proof}
 We follow \cite[Lemma 3.4]{daskalopoulos2020transverse}.
 By Lemma \ref{p tights approximate L},
-$$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|F_p\|_{L^p} = L.$$
-Taking logarithms we see that $q^{-1} \log k_p \to -\log L$, and since $q \to 1$ the claim follows.
+$$\lim_{p \to \infty} k_p^{-\frac{1}{q}} = \lim_{p \to \infty} \|F_p\|_{L^p} = \Comass(\rho).$$
+Taking logarithms we see that $q^{-1} \log k_p \to -\log \Comass(\rho)$, and since $q \to 1$ the claim follows.
 \end{proof}
-
-We remind the reader of the definition (\ref{coarea formula}) of the Radon measure $\dif u \wedge F$.
 
 \begin{proposition}\label{existence 1}
 Let $\rho \in H^{d - 1}(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
@@ -1173,13 +1255,14 @@ Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ su
 \begin{enumerate}
 \item $u$ is $1$-harmonic.
 \item As $q \to 1$ along a subsequence, $u_q \to u$ weakly in $BV_\loc(\tilde M)$ and strongly in $L^r_\loc(\tilde M)$ for $1 \leq r < \frac{d}{d - 1}$.
-\item Let $F$ be the $\infty$-tight representative of $\rho$, with best comass $L$. We have the \dfn{max flow min cut principle} that
+\item Let $F$ be a tight representative of $\rho$. We have the \dfn{max flow min cut principle} that
 \begin{equation}\label{1 extremality}
-\dif u \wedge F = L \star |\dif u|.
+\dif u \wedge F = \Comass(\rho) \star |\dif u|.
 \end{equation}
 \end{enumerate}
 \end{proposition}
 \begin{proof}
+Let $L := \Comass(\rho)$.
 We first compute using H\"older's inequality and Lemma \ref{normalizations converge}
 \begin{align*}
 \lim_{q \to 1} \|\dif u_q\|_{L^1}
@@ -1199,7 +1282,7 @@ Multiplying by $k_p^p$, we have
 	\frac{1}{q} \int_M \star |\dif u_q|^q + \frac{k_p^p}{p} \int_M \star |F_p|^p = k_p \int_M \dif u_q \wedge F_p.
 \end{equation}
 
-Let $\mu$ be the total variation measure of $\dif u$.
+Let $\mu(U) := \Mass_U(\dif u)$ be the total variation measure of $\dif u$.
 We claim that
 \begin{equation}\label{1 strong duality}
 	L\mu(M) \leq \int_M \dif u \wedge F.
@@ -1261,29 +1344,30 @@ Then $\dif u$ drops to a $d-1$-current on $M$, which is still the Ruelle-Sulliva
 Thus the following definition makes sense.
 
 \begin{definition}
-Let $\rho \in H^{d - 1}(M, \RR)$, let $F$ be an $\infty$-tight representative of $\rho$, and let $u$ be a $1$-harmonic conjugate of $F$.
+Let $\rho \in H^{d - 1}(M, \RR)$, let $F$ be a tight representative of $\rho$, and let $u$ be a $1$-harmonic conjugate of $F$.
 Then we call $\lambda_u$ a \dfn{measured stretch lamination} associated to $\rho$.
 \end{definition}
 
 \begin{proposition}\label{MCL contains Thurston}
-Let $F$ be a best comass representative of $\rho \in H^{d - 1}(M, \RR)$, let $L := L(F)$ be the best comass of $\rho$, and let $\lambda$ be a measured stretch lamination associated to $\rho$.
-Then $F/L$ calibrates $\lambda$. In particular, the maximum comass locus of $F$ contains $\lambda$.
+Let $F$ be a best comass representative of $\rho \in H^{d - 1}(M, \RR)$, where $\Comass(\rho) = 1$, and let $\lambda$ be a measured stretch lamination associated to $\rho$.
+Then $F$ calibrates $\lambda$. In particular, $\MCL(F) \supseteq \supp \lambda$.
 \end{proposition}
 \begin{proof}
-Let $G$ be the $\infty$-tight form which is cohomologous to $F$ whose dual $1$-harmonic function $u$ defines the measured stretch lamination $\lambda$.
+Let $G$ be the tight form which is cohomologous to $F$ whose dual $1$-harmonic function $u$ defines the measured stretch lamination $\lambda$.
 Then by the max flow min cut principle (\ref{1 extremality}), 
-$$|\lambda| = \|\dif u\|_{TV} = \frac{1}{L} \int_M \dif u \wedge G$$
-so $G/L$ calibrates $\lambda$ by Proposition \ref{calibration condition}.
-Then by Proposition \ref{properties of calibrated laminations}, $F/L$ calibrates $\lambda$, and the maximum comass locus of $F/L$ contains $\lambda$.
-However, the maximum comass locus is preserved by rescaling.
+$$\Mass(\lambda) = \Mass(\dif u) = \int_M \dif u \wedge G$$
+so $G$ calibrates $\lambda$ by Proposition \ref{calibration condition}.
+Then by Proposition \ref{properties of calibrated laminations}, $F$ calibrates $\lambda$ and $\MCL(F) \supseteq \supp \lambda$.
 \end{proof}
 
 \begin{proposition}\label{L equals K}
-	Let $\rho \in H^{d - 1}(M, \RR)$ have measured stretch lamination $\mu$ and best comass constant $L$, and let $\lambda$ range over measured oriented laminations. Then 
-	$$L = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|} = \frac{\langle \rho, [\mu]\rangle}{|\mu|}.$$
+	Let $\rho \in H^{d - 1}(M, \RR)$ have measured stretch lamination $\mu$, and let $\lambda$ range over measured oriented laminations. Then 
+	$$\Comass(\rho) = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{\Mass(\lambda)} = \frac{\langle \rho, [\mu]\rangle}{\Mass(\mu)}.$$
 \end{proposition}
 \begin{proof}
-Fix the $\infty$-tight form $F$ representing $\rho$, and let $u$ be its $1$-harmonic conjugate.
+Fix a tight form $F$ representing $\rho$, and let $u$ be its $1$-harmonic conjugate.
+Let $L := \Comass(\rho)$ and
+$$K :=  \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|}.$$
 
 We first prove $K \leq L$.
 Let $\lambda$ be a measured oriented lamination; then, since $F$ represents $\rho$ and the Ruelle-Sullivan current $T_\lambda$ represents $[\lambda]$,
@@ -1291,27 +1375,22 @@ $$\langle \rho, [\lambda]\rangle = \int_M F \wedge T_\lambda.$$
 Let $(\chi_\alpha)$ be a partition of unity subordinate to a laminar atlas for $\lambda$, and let $(\mu_\alpha)$ be the associated transverse measure. Then 
 $$\int_M F \wedge T_\lambda = \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha F \dif \mu_\alpha(k).$$
 Since $F$ has best comass,
-$$\frac{\langle \rho, [\lambda] \rangle}{|\lambda|}
-\leq \frac{\|F\|_{L^\infty}}{|\lambda|} \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha \dif S_k \dif \mu_\alpha(k) = L.$$
+$$\frac{\langle \rho, [\lambda] \rangle}{\Mass(\lambda)}
+\leq \frac{\|F\|_{L^\infty}}{\Mass(\lambda)} \sum_\alpha \int_I \int_{\{k\} \times J} \chi_\alpha \dif S_k \dif \mu_\alpha(k) = L.$$
 Since $\lambda$ was arbitrary, it holds that $K \leq L$.
 
 By the max flow min cut principle (\ref{1 extremality}),
-$$\langle \rho, [\mu]\rangle = \int_M F \wedge \dif u = L \|\dif u\|_{TV} = L|\mu|.$$
-Dividing both sides by $|\mu|$ and applying the direction we already proved,
-$$K \leq L \leq \frac{\langle \rho, [\mu]\rangle}{|\mu|} \leq K$$
+$$\langle \rho, [\mu]\rangle = \int_M F \wedge \dif u = L \Mass(\dif u) = L \Mass(\mu).$$
+Dividing both sides by $\Mass(\mu)$ and applying the direction we already proved,
+$$K \leq L \leq \frac{\langle \rho, [\mu]\rangle}{\Mass(\mu)} \leq K$$
 which is only possible if $L = K$ and $\mu$ is a maximizer.
 \end{proof}
 
 We now interpret Proposition \ref{L equals K} in terms of duality of norms.
 The fact that the dual norm to the best comass is the stable norm was already well-known \cite[Theorem 3.8]{AUER20011095} but it is interesting to note that it immediately follows from Proposition \ref{L equals K}.
 
-\begin{definition}
-The \dfn{stable norm} of a homology class $\alpha$ is
-$$\|\alpha\|_s := \inf_{[\sigma] = \alpha} |\sigma|.$$
-\end{definition}
-
 \begin{corollary}
-View $H_{d - 1}(M, \RR)$ and $H^{d - 1}(M, \RR)$ as Banach spaces, equipped with the stable norm and the best comass respectively.
+View $H_{d - 1}(M, \RR)$ and $H^{d - 1}(M, \RR)$ as Banach spaces, equipped with the stable and costable norms respectively.
 Then $H_{d - 1}$ and $H^{d - 1}$ are mutually dual.
 \end{corollary}
 \begin{proof}
@@ -1319,7 +1398,7 @@ Since $H^{d - 1}(M, \RR)$ is finite-dimensional and therefore reflexive \cite[Th
 Since we may view the homologically area-minimizing representative of a homology class as a measured oriented minimal lamination, every homology class contains a measured oriented minimal lamination which is homologically area-minimizing.
 Therefore, for any $\rho \in H^{d - 1}(M, \RR)$, we obtain from Proposition \ref{L equals K} that
 \begin{align*}
-L(\rho) &= \sup_\lambda \frac{\langle \rho, [\lambda] \rangle}{|\lambda|} = \sup_{\alpha \in H_{d - 1}(M, \RR)} \frac{\langle \rho, \alpha\rangle}{\|\alpha\|_s}. \qedhere 
+L(\rho) &= \sup_\lambda \frac{\langle \rho, [\lambda] \rangle}{\Mass(\lambda)} = \sup_{\alpha \in H_{d - 1}(M, \RR)} \frac{\langle \rho, \alpha\rangle}{\Mass(\alpha)}. \qedhere 
 \end{align*}
 \end{proof}
 
@@ -1328,8 +1407,8 @@ Every closed area-minimizing hypersurface can be calibrated.
 \end{corollary}
 \begin{proof}
 Let $\alpha$ be the homology class of a closed area-minimizing hypersurface $N$.
-By duality between the stable norm and the best comass, and local compactness of $H^{d - 1}(M, \RR)$, there is a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $L(\rho) = 1$ and, if $F$ is a best comass representative of $\rho$,
-$$|N| = \|\alpha\|_s = \langle \rho, \alpha\rangle = \int_N F.$$
+By duality between the stable norm and the best comass, and local compactness of $H^{d - 1}(M, \RR)$, there is a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$ and, if $F$ is a best comass representative of $\rho$,
+$$|N| = \Mass(\alpha) = \langle \rho, \alpha\rangle = \int_N F.$$
 Therefore $F$ calibrates $N$.
 \end{proof}
 
@@ -1350,7 +1429,7 @@ S(N) = \max_{\substack{\dif F = 0 \\ L(F) \leq 1}} \int_N F.
 \begin{proof}
 By Corollary \ref{existence of calibrations}, there exists a calibration $F$ of the area-minimizing hypersurface $N'$ homologous to $N$, and by Stokes' theorem, 
 $$S(N) = |N'| = \int_{N'} F = \int_N F.$$
-To see that $F$ is the maximum among all forms with $\dif F = 0$ and $L(F) \leq 1$, let $G$ be another such form; then
+To see that $F$ is the maximum among all calibrations, let $G$ be another such form; then
 \begin{align*}
 \int_N G &= \int_{N'} G \leq |N'| = S(N). \qedhere 
 \end{align*}
@@ -1491,46 +1570,45 @@ Moreover, the following are equivalent for a closed $d-1$-form $F$:
 \begin{enumerate}
 \item $F$ has absolutely best comass.
 \item $F$ is tight.
-\item $F$ solves the $\infty$-Maxwell equation (\ref{infinity Maxwell}).
+\item $F$ is a contact solution of the $\infty$-Maxwell equation (\ref{infinity Maxwell}).
 \end{enumerate}
 \end{conjecture}
 
 The theory of contact solutions is still nascent, and the \emph{uniqueness} theory of contact solutions appears to be out of reach at the time of writing.
 So we shall not attempt to prove this conjecture here.
-Instead, we shall explore consequences of the $\infty$-Maxwell equation for \dfn{classical tight forms} -- that is $C^2$ solutions of the $\infty$-Maxwell equation.
-In this we follow the footsteps of Aronsson in his celebrated paper on classical $\infty$-harmonic functions \cite{Aronsson68}.
+\todo{Prove part of this conjecture, at least that the $p$-tight forms are contact solutions.}
 
-%%%%%%%
-\subsection{Integral hypersurfaces of classical tight forms}
-We have the following analogue of \cite[Lemma 1]{Aronsson68}.
+% %%%%%%%
+% \subsection{Integral hypersurfaces of classical tight forms}
+% We have the following analogue of \cite[Lemma 1]{Aronsson68}.
 
-\begin{proposition}
-Let $F$ be a classical tight form with no zeroes, and let $N$ be an integral hypersurface of $F$.
-Then $N$ is a minimal hypersurface.
-\end{proposition}
-\begin{proof}
-Since $F/|F|$ is the area form on $N$, it suffices to show that $|F|$ is constant along $N$; if so, then $\dif(F/|F|) = |F|^{-1} \dif F = 0$.
-However, 
-\end{proof}
+% \begin{proposition}
+% Let $F$ be a classical tight form with no zeroes, and let $N$ be an integral hypersurface of $F$.
+% Then $N$ is a minimal hypersurface.
+% \end{proposition}
+% \begin{proof}
+% Since $F/|F|$ is the area form on $N$, it suffices to show that $|F|$ is constant along $N$; if so, then $\dif(F/|F|) = |F|^{-1} \dif F = 0$.
+% However, 
+% \end{proof}
 
-%%%%%%%
-\subsection{Eikonal calibrations}
-Recall that that the \dfn{eikonal equation} on scalar fields $u$ is the PDE 
-$$|\dif u| = 1.$$
-If $u$ solves the eikonal equation, then $u$ also is $\infty$-harmonic \cite[\S]{Aronsson68}; this motivates us to study forms that satisfy the analogous condition.
+% %%%%%%%
+% \subsection{Eikonal calibrations}
+% Recall that that the \dfn{eikonal equation} on scalar fields $u$ is the PDE 
+% $$|\dif u| = 1.$$
+% If $u$ solves the eikonal equation, then $u$ also is $\infty$-harmonic \cite[\S]{Aronsson68}; this motivates us to study forms that satisfy the analogous condition.
 
-\begin{definition}
-An \dfn{eikonal calibration} is a $d-1$-form $F$ solving 
-\begin{equation}\label{eikonal}
-\begin{cases}
-\dif F = 0 \\
-|F| = 1.
-\end{cases}
-\end{equation}
-\end{definition}
+% \begin{definition}
+% An \dfn{eikonal calibration} is a $d-1$-form $F$ solving 
+% \begin{equation}\label{eikonal}
+% \begin{cases}
+% \dif F = 0 \\
+% |F| = 1.
+% \end{cases}
+% \end{equation}
+% \end{definition}
 
-An eikonal calibration is classically tight, since 
-$$0 = \partial_i (|F|^2) = \langle \nabla F, F\rangle_i = \nabla_i F_J F^J.$$
+% An eikonal calibration is classically tight, since 
+% $$0 = \partial_i (|F|^2) = \langle \nabla F, F\rangle_i = \nabla_i F_J F^J.$$
 
 
 \printbibliography
