@@ -161,92 +161,130 @@ We show that $\mu$ has properties analogous to a measured sublamination of Thurs
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-\todo{Rewrite all this once we actually know what this paper accomplishes}
-In this paper we shall propose a generalization of Thurston's Teichm\"uller theory to a broader class of manifolds than hyperbolic surfaces.
-To motivate this, let us first recall Thurston's Teichm\"uller theory.
+The classical \dfn{max flow min cut theorem} asserts that in a discrete flow network $\mathcal G$, the maximal flow through $\mathcal G$ is equal to the \dfn{minimal cut} of $\mathcal G$, namely the minimal total capacity of any set of edges which divide $\mathcal G$ into a source component and a sink component; this theorem is a concrete form of the duality theorem for convex optimization.
+As we shall survey below, various continuous versions of the max flow min cut theorem have since appeared, which usually replace the maximal flow by a \dfn{calibration} (a closed $d - 1$-form, or equivalently a divergence-free vector field, of $L^\infty$ norm $1$), and the minimal cut by a minimal submanifold.
+In particular, Bangert and Cui have shown that given a continuous calibration $F$, there exists a minimal lamination calibrated by $F$ \cite[Theorem 5.1]{bangert_cui_2017}.
 
-Let $M$ be a closed Riemannian $d$-fold, $N$ another Riemannian manifold, and $\rho \in [M, N]$ a homotopy class.
-A map $f: M \to N$ of class $\rho$ is \dfn{best Lipschitz} if it minimizes its Lipschitz constant, or maximum stretch,
-$$\Lip(f) := \sup_{x, y \in M} \frac{\dist(f(x), f(y))}{\dist(x, y)},$$
-among all maps in $\rho$.
-If $M, N$ are closed hyperbolic surfaces with the same underlying topological space $S$, $\rho$ is the homotopy class of the identity $\id_S$, and $L(M, N)$ the best Lipschitz constant of $\rho$, then $\log L$ is a Finsler metric on Teichm\"uller space $\Teich(S)$, called \dfn{Thurston's asymmetric metric} \cite{Thurston98, Papadopoulos15}.
-Thurston's asymmetric metric is a particularly appealing geometry on Teichm\"uller space because of its intimate connection with the structure of geodesic laminations on $M, N$ \cite{Gu_ritaud_2017}:
+We shall prove a particularly strong version of the Bangert--Cui max flow min cut theorem on closed Riemannian manifolds of dimension $\leq 4$.
+We only need to assume that the calibration $F$ is measurable; moreover, by it shall follow from our methods that the calibrated lamination is Lipschitz.
+We use the approach of $p$-harmonic duality which was pioneered by Daskalopolous and Uhlenbeck in the context of best Lipschitz maps \cite{daskalopoulos2020transverse,daskalopoulos2022,daskalopoulos2023}.
+To be more precise, we pick out a special class of calibrations, which we call \dfn{tight forms}, which are the variational solutions of a suitable generalization of the $\infty$-Laplace equation.
+Tight forms are necessarily convex duals of $1$-harmonic functions, and as $1$-harmonic functions induce minimal laminations \cite[Theorem C]{BackusCML}, the main theorem follows.
 
-\begin{theorem}\label{existence of Thurston lamination}
-Let $S$ be a closed oriented surface of genus $\geq 2$, $M, N \in \Teich(S)$, and $\mathcal F$ the set of best Lipschitz maps $M \to N$ homotopic to $\id_S$.
-Then there exists a measured oriented geodesic lamination $\mu$ such that:
-\begin{enumerate}
-\item For $f \in \mathcal F$, let $\lambda_f$ be the set on which $f$ attains its Lipschitz constant. Then $\lambda_f$ is (the support of) a geodesic lamination.
-\item Let $\lambda$ ranges over the set of measured laminations. Then
+%%%%%%%%%%%%%%%
+\subsection{Max flow min cut theorems}
+So that we may compare it with its continuous form, we recall the classical max flow min cut theorem \cite[Chapter 7]{umesh2006algorithms}.
+A \dfn{flow network} $\mathcal G = (G, c, s, t)$ consists of a finite directed graph $G$, a \dfn{capacity} $c: E(G) \to \RR_+$ on the edges of $G$, a \dfn{source} vertex $s \in V(G)$, and a \dfn{sink} vertex $t \in V(G)$.
+A \dfn{flow} through $\mathcal G$ is a function $f: E(G) \to \RR_+$ such that for each vertex except $s, t$, the sum of $f(e)$ over incoming edges $e$ equals the sum of $f(e)$ over the outgoing edges $e$; we write $\|f\|$ for the sum of $f(e)$ over edges $e$ leaving $s$.
+A \dfn{cut} of $G$ is a partition $V(G) = S \sqcup T$ such that $s \in S$ and $t \in T$; $\|(S, T)\|$ is the sum over all edges $e$ from $S$ to $T$ of $c(e)$.
+
+\begin{theorem}[max flow min cut, graphs]
+Let $\mathcal G$ be a flow network. Then 
+$$\max_f \|f\| = \min_{(S, T)} \|(S, T)\|.$$
+In particular, if $f$ is a maximal flow and $(S, T)$ is a minimal cut, then $\|(S, T)\|$ equals the sum of $f(e)$ over all edges $e$ from $S$ to $T$.
+\end{theorem}
+
+Given a Riemannian manifold $M$ diffeomorphic to $\Sph^{d - 1} \times [-1, 1]$ (for example), and a scale $0 < \varepsilon \ll 1$, we can discretize $M$ at scale $\varepsilon$ to get a flow network, where most of the vertices are tiles at scale $\varepsilon$, but the source $s$ is the entire sphere $\Sph^{d - 1} \times \{-1\}$ and the sink $t$ is the other sphere $\Sph^{d - 1} \times \{+1\}$.
+Then a flow corresponds to a divergence-free vector field (which for our purposes will be more convenient to view as a closed $d - 1$-form) of $L^\infty$ norm $1$ and a cut corresponds to a hypersurface which partitions $M$ into two open sets, one containing $s$ and the other $t$.
+If $C$ is any cut, $\overline C$ is a minimal cut, and $F$ is a flow, then by Stokes' theorem and the triangle inequality,
+\begin{equation}\label{one sided max flow min cut}
+\int_C F = \int_{\overline C} F \leq |\overline C|.
+\end{equation}
+Thus the sum of any flow over any cut is bounded by the size of a minimal cut.
+We refer to \cite[Appendix A]{Freedman_2016} for a more precise version of the above discretization.
+\todo{Draw a picture of this}
+
+The continuous max flow min cut theorem is the assertion that the bound (\ref{one sided max flow min cut}) is sharp: the sum of the max flow over any cut must equal the area of a minimal cut.
+In other words, the continuous max flow min cut theorem asserts that we can find a closed $d - 1$-form $F$ such that $\|F\|_{L^\infty} = 1$ and for any cut $C$,
+$$\int_C F = |\overline C|.$$
+
+A form of the above sketchy theorem was established by Federer \cite[\S4.15]{Federer1974}.
+In the modern formulation of Federer's theorem, we introduce the stable norm on homology:
+
+\begin{definition}
+The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma \in H_{d - 1}(M, \RR)$ is the infimum of the mass $\Mass(N)$ among all representative chains $N$.
+The \dfn{costable norm} $\Comass(\rho)$ of a cohomology class $\rho \in H^{d - 1}(M, \RR)$ is the infimum of $\|F\|_{L^\infty}$ among all representative forms $F$.
+\end{definition}
+
+\begin{theorem}[max flow min cut, Federer's version]\label{Federer}
+Let $M$ be a closed Riemannian manifold and $\sigma \in H_{d - 1}(M, \RR)$.
+Then there exists a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) \leq 1$, and 
+$$\Mass(\sigma) = \langle \rho, \sigma\rangle.$$
+\end{theorem}
+
+In particular, if we interpret representatives of $\sigma$ is ``cuts'', a closed minimal hypersurface representing $\sigma$ is a minimal cut.
+Meanwhile, a representative $d - 1$-form $F$ of $\rho$ such that $\|F\|_{L^\infty} = \Comass(\rho)$ is a maximal flow.
+By a doubling argument, Theorem \ref{Federer} implies the max flow min cut theorem for $M \cong \Sph^{d - 1} \times [-1, 1]$ outlined above, at least under the nondegeneracy condition that there is a closed minimal hypersurface homologous to a boundary component which does not meet $\partial M$ and has strictly less area than either boundary component.
+For this reason, we shall henceforth content ourselves to consider closed manifolds, and leave the doubling arguments for manifolds with boundary to the reader.\footnote{On the other hand, there are honest differences in the theory for manifolds with infinite ends, which we shall not attempt to address here. For example, a manifold with cusps may have a homology class whose stable norm is $0$!}
+
+Federer's theorem has found myriad applications, including in computational geometry \cite{sullivan1990crystalline} and string theory \cite{Freedman_2016}; both references here observe that Federer has essentially proven a max flow min cut theorem.
+Under the assumption $d \leq 4$, our main theorem implies Theorem \ref{Federer}.
+
+Another form of the max flow min cut theorem was introduced by Thurston in his work on best Lipschitz maps \cite{Thurston98}.
+A \dfn{best Lipschitz map} $u$ is a map which minimizes its Lipschitz constant, among all maps homotopic to $u$.
+Thurston's motivation was to define a Finsler metric on the Teichm\"uller space $\widetilde{\mathscr M_g}$: the \dfn{Thurston asymmetric distance} between two hyperbolic structures on a closed surface $S$ of genus $g \geq 2$ is the Lipschitz constant of a best Lipschitz map homotopic to $\id_S$.
+Thurston's asymmetric metric is a particularly appealing geometry on $\widetilde{\mathscr M_g}$ because of its intimate connection with the structure of geodesic laminations on hyperbolic surfaces \cite{Thurston98, Gu_ritaud_2017}:
+
+\begin{theorem}[max flow min cut, Thurston's version]\label{existence of thurston lamination}
+Let $f: M \to N$ be a homeomorphism of closed hyperbolic surfaces.
+Then there exists a best Lipschitz map $u$ homotopic to $f$, and a measured geodesic lamination $\mu$ on $M$, such that $\mu$ pushes forward to a measured geodesic lamination on $N$, and
 \begin{equation}\label{L is K}
-L(M, N) = \sup_\lambda \frac{|\lambda|_N}{|\lambda|_M} = \frac{|\mu|_N}{|\mu|_M}.
+	\Lip(u) = \frac{\Mass(u_* \mu)}{\Mass(\mu)} = \sup_\lambda \frac{\Mass(u_* \lambda)}{\Mass(\lambda)},
 \end{equation}
-\item For $f \in \mathcal F$, $\mu$ is a sublamination of $\lambda_f$.
-\end{enumerate}
+the supremum taken over all measured laminations $\lambda$ on $M$.
 \end{theorem}
 
-The measured lamination $\mu$ is a sublamination of a maximal geodesic lamination $\tilde \mu$ on which $f$ attains its Lipschitz constant.
-The lamination $\tilde \mu$, which may contained spiraling geodesics and hence need not equal $\mu$\footnote{If $\mu = \tilde \mu$, then the intersection of every isolated leaf of $\tilde \mu$ with a small ball must have locally finitely many connected components, since the transverse measure is Radon. However, a spiraling isolated geodesic $\gamma$ whose $\omega$-limit set is a geodesic $\Gamma$ must pass through any small ball containing a point of $\Gamma$ infinitely many times.}, is called \dfn{Thurston's canonical lamination} associated to $M, N$.
+Thurston established Theorem \ref{existence of thurston lamination} in a tour de force of geometric topology, but he conjectured that a proof of his result ``should be feasible with a simpler proof based on more general principles -- in particular, the max flow min cut principle, convexity, and $L^0 \leftrightarrow L^\infty$ duality'' \cite[Abstract]{Thurston98}.
 
-We should like to generalize Thurston's Teichm\"uller theory to apply not just to geodesic laminations on surfaces, but more general minimal laminations on more general manifolds.
-In Thurston's case, the main point is to associate a geodesic lamination in $M$ to each homotopy class of maps $\rho \in [M, N]$, by considering the set on which a best Lipschitz representative of $\rho$ attains its Lipschitz constant.
-Hence it is natural to pose the following vague problem:
+Theorem \ref{existence of thurston lamination} does not follow from our main theorem; however, the analogous result for maps from closed hyperbolic surfaces to $\Sph^1$, which was proven by Daskalopolous and Uhlenbeck \cite{daskalopoulos2020transverse}, is a corollary of our main result.
+The main idea of \cite{daskalopoulos2020transverse} is that a special class of best Lipschitz maps are the $\infty$-harmonic maps, which in turn are dual to $1$-harmonic functions (or equivalently, geodesic laminations).
+In fact, we closely follow \cite{daskalopoulos2020transverse} for much of the proof, as we also heavily use $p$-harmonic maps to $\Sph^1$.
+As Daskalopolous and Uhlenbeck have given a proof of a version of Theorem \ref{existence of thurston lamination} using similar methods \cite{daskalopoulos2022,daskalopoulos2023}, it may be possible to adapt our results to manifold-valued maps.
 
-\begin{problem}
-	Let $M$ be a closed Riemannian manifold.
-	Find a minimax problem, which takes as data a topological class $\rho$ on $M$, and whose solution attains its maximum on a lamination in $M$.
-\end{problem}
+The statement in the literature that we are aware of, which is closest to our main theorem, is due to Bangert and Cui \cite{bangert_cui_2017}.
+To emphasize the analogy with best Lipschitz maps, we call a form \dfn{best comass} if it minimizes its comass:
 
-If $M$ is a closed hyperbolic surface and $\rho \in H^1(M)$ is a (de Rham) cohomology class, this was accomplished by Daskalopolous and Uhlenbeck \cite{daskalopoulos2020transverse}:
+\begin{definition}
+The \dfn{comass} of a closed $d - 1$-form $F$ is $\|F\|_{L^\infty}$.
+A form $F$ is \dfn{best comass} if it minimizes its comass among all forms cohomologous to $F$.
+\end{definition}
 
-\begin{theorem}[Daskalopolous--Uhlenbeck]\label{DU20}
-Let $M$ be a closed hyperbolic surface and $\rho \in H^1(M)$.
-Then there exists a best Lipschitz map $f: M \to \Sph^1$ such that $\dif f = \rho$, and a geodesic lamination $\mu$ such that:
-\begin{enumerate}
-\item $f$ is a variational\footnote{that is, arising as the limit of $p$-harmonic maps} solution of the $\infty$-Laplace equation
-\begin{equation}\label{infinity laplacian}
-	\langle \nabla^2 f, \nabla f \otimes \nabla f\rangle = 0.
+\begin{definition}
+A \dfn{calibration} is a measurable closed $d - 1$-form $F$, such that $\|F\|_{L^\infty} = 1$.
+Given a calibration $F$, a hypersurface $N$ is $F$-\dfn{calibrated} if the pullback of $F$ to $N$ is the area form on $N$.
+\end{definition}
+
+Observe that a best comass form is a calibration iff the costable norm of its cohomology class is $1$.
+Moreover, the fundamental theorem of calibrated geometry \cite{Harvey82} asserts that every $F$-calibrated hypersurface $N$ is minimal (assuming that the pullback exists in the sense of the trace theorem).
+In fact, the mean curvature of $N$ satisfies
+\begin{equation}\label{calibrated surfaces are minimal}
+H_N = \nabla \cdot \normal_N = \nabla \cdot (\star F)^\sharp = \star \dif F = 0.
 \end{equation}
-\item Every best Lipschitz map $\tilde f$ with $\dif \tilde f = \rho$ attains its Lipschitz constant on $\mu$.
-\item The Noether current $\dif u$ associated to the invariance of (\ref{infinity laplacian}) under rotation of $\Sph^1$ is a transverse measure to $\mu$ and is locally the derivative of a function of least gradient.
-\end{enumerate}
+With these preliminaries in mind, we may now state the Bangert--Cui theorem \cite[Theorem 5.1]{bangert_cui_2017}:
+
+\begin{theorem}[max flow min cut, Bangert and Cui's version]\label{BangertCui}
+Let $F$ be a continuous best comass calibration on a closed Riemannian manifold of dimension $\leq 7$.
+Then there exists a measured oriented minimal lamination $\lambda$ such that every leaf of $\lambda$ is $F$-calibrated.
+In particular, 
+$$\Mass(\lambda) = \langle [\lambda], [F]\rangle.$$
 \end{theorem}
 
-Here, a \dfn{function of least gradient} is a critical point of the total variation of the derivative, and can equivalently be viewed as solutions of the $1$-Laplace equation
-$$\dif^* \left(\frac{\dif u}{|\dif u|}\right) = 0$$
-in a suitable weak sense.
-Two highlights of this theorem are the connection between Teichm\"uller theory and the endpoint behavior of the $p$-Laplacian, and the duality between the $1$-Laplacian and the $\infty$-Laplacian (arising here through Noether's theorem).
+The idea of Theorem \ref{BangertCui} is to use Theorem \ref{Federer} to find a homology class $\sigma$ dual to $[F]$, and then consider a minimizing representative $\lambda$ of $\sigma$, so that $\Mass(\lambda)$ is the stable norm of $\sigma$.
+However, most calibrations which appear in nature are measurable and not necessarily continuous \cite[\S1]{bangert_cui_2017}, and it is natural to restrict to \emph{Lipschitz} laminations \cite[Remark 2.3]{bangert_cui_2017}.
+Moreover, Bangert and Cui appeal to the regularity theory of minimal hypersurfaces on $\RR^d$ \cite[\S37]{Simon84}; as is common in the literature, they suppress the detail of generalizing the regularity theory to Riemannian manifolds.
+\todo{Also Auer and Bangert never appeared??}
+Thus, it is natural to strengthen Theorem \ref{BangertCui} to not require that $F$ is continuous, to show that the lamination is Lipschitz \todo{and get rid of the BS}.
 
-In fact, the role of duality in the study of best Lipschitz maps was conjectured by Thurston \cite[Abstract]{Thurston98}, who wrote:
-
-\begin{quote}
-I currently think that a characterization of minimal stretch\footnote{that is, best Lipschitz} maps should be possible in a considerably more general context ... and it should be feasible with a simpler proof based on more general principles -- in particular, the max flow min cut principle, convexity, and $L^0 \leftrightarrow L^\infty$ duality.
-\end{quote}
-
-Motivated by Theorem \ref{DU20} and Thurston's conjecture, Daskalopolous and Uhlenbeck later went on to study $\infty$-harmonic maps between closed hyperbolic surfaces, and Lie algebra-valued $1$-harmonic maps associated to them, and reproved by PDE techniques multiple theorems that Thurston had proven using geometric topology \cite{daskalopoulos2022,daskalopoulos2023}.
-
-In this paper, we generalize Theorem \ref{DU20} to closed Riemannian manifolds of dimension $2 \leq d \leq 4$ (though we are mainly interested in the case $d = 3$).
-Again we have a minimax problem -- the problem of finding a $d-1$-form $F$ of ``best comass'' with a prescribed cohomology class -- which is dual to the $1$-Laplacian; the form $F$ calibrates a minimal lamination of codimension $1$.
-In previous work, we used the variational characterization of $1$-harmonic functions to show that the level sets of a $1$-harmonic function form a minimal lamination \cite[Theorem C]{BackusCML}.
-The convex dual problem to the $1$-Laplace equation is locally the problem of minimizing $\|F\|_{L^\infty}$ among $d-1$-forms $F$, so it is natural to select a minimizer $F$ and its $1$-harmonic dual $u$.
-For $d = 2$, we have $F = \dif f$ for a best Lipschitz map $f: M \to \Sph^1$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{\texorpdfstring{$\infty$-tight forms and $1$-harmonic functions}{Infinity-tight forms and one-harmonic functions}}
-We introduce the \dfn{comass}
-\begin{equation}\label{comass}
-L(F) := \sup_{\sigma \in \Chain_{d - 1}(M)} \frac{1}{|\sigma|} \int_\sigma F
-\end{equation}
-of a closed $d-1$-form $F$ in a closed Riemannian $d$-fold $M$.
-Here $\Chain_{d - 1}(M)$ denotes the space of oriented $d - 1$-chains in $M$, and $|\sigma|$ is the $d-1$-area of $\sigma$.
-In fact, we shall show that $\|F\|_{L^\infty} = L(F)$, but $L(F)$ is more geometrically natural than $\|F\|_{L^\infty}$.
-
-We study minimizers of the comass, which we call \dfn{best comass} forms, in a given cohomology class.
+\subsection{\texorpdfstring{Tight forms and $1$-harmonic functions}{Tight forms and one-harmonic functions}}
+We shall prove a Bangert--Cui-type theorem by Daskalopolous and Uhlenbeck's method of $p$-harmonic maps to $\Sph^1$.
 To do this, we construct best comass forms which are analogous to $\infty$-harmonic functions in the same spirit as \cite{daskalopoulos2020transverse,daskalopoulos2022}, and in particular which arise as limits of the $L^p$ analogue of best comass forms.
+These will be ``maximal flows''; their dual ``minimal cuts'' will be $1$-harmonic functions.
 
-Let $d < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$.
-Motivated by the $p$-Laplace equation $\dif^*(|\dif f|^{p - 2} \dif f) = 0$, we introduce \dfn{$p$-tight} forms, which are closed $d-1$-forms which solve the system of PDE
+To be more precise, let $(p, q)$ be a H\"older pair (thus $1/p + 1/q = 1$) such that $d < p < \infty$.
+Motivated by the $p$-Laplace equation $\dif^*(|\dif v|^{p - 2} \dif v) = 0$, we introduce \dfn{$p$-tight} forms, which are closed $d-1$-forms which solve the system of PDE
 $$\dif^*(|F|^{p - 2} F) = 0.$$
 Given a $p$-tight form, the $\pi_1(M)$-equivariant function $u$ on the universal cover such that
 $$\dif u = (-1)^{d - 1} |F|^{p - 2} \star F$$
@@ -256,76 +294,58 @@ Our first theorem constructs a best comass form, and a dual $1$-harmonic functio
 
 \begin{mainthm}\label{existence of infinity tight forms}
 Let $\rho \in H^{d - 1}(M, \RR)$ be a cohomology class.
-Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$.
-Then there exists a pair $(F, u)$ such that as $p \to \infty$, $F_p \to F$ weakly in $L^r$ for any $d < r < \infty$, and $u_q \to u$ weakly in $BV$.
-Moreover, $F$ has best comass in $\rho$, $u$ is $1$-harmonic, and we have the duality relation 
+Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$ and $(p, q)$ ranging over H\"older pairs with $d < p < \infty$.
+Then there exists a pair $(F, u)$ such that as $p \to \infty$ along a subsequence, $F_p \to F$ weakly in $L^r$ for any $d < r < \infty$, and $u_q \to u$ weakly in $BV$, with the following properties:
+\begin{enumerate}
+\item $F$ has best comass.
+\item $u$ is $1$-harmonic.
+\item The product of distributions $\dif u \wedge F$ is well-defined.
+\item We have the duality relation
 \begin{equation}\label{max flow mean cut}
-L|\dif u| = \langle \dif u, \star F\rangle
+\Comass(\rho) \star |\dif u| = \dif u \wedge F.
 \end{equation}
-in the sense of Radon measures, where $L$ is the best comass of a representative of $\rho$.
+\end{enumerate}
 \end{mainthm}
 
 This is a combination of Propositions \ref{existence infinity} and \ref{existence 1}.
 We call the best comass form $F$ an \dfn{$\infty$-tight} form, or simply a \dfn{tight} form.
 
-Most of this theorem essentially follows from the methods of \cite{Mazon14,daskalopoulos2020transverse}, but we highlight (\ref{max flow mean cut}) as the main point of the theorem.
-It has multiple interpretations:
-\begin{enumerate}
-\item Since (\ref{max flow mean cut}) asserts a form of convex duality between $\infty$-tight forms and $1$-harmonic functions, we can view it as the analogue of the max flow min cut principle alluded to by Thurston.
-\item Since (\ref{max flow mean cut}) is exactly the assertion that $F/L$ is the Poincar\'e dual to a vector field $X$ which witnesses that $u$ is $1$-harmonic, this duality relation allows us to easily prove that $u$ is $1$-harmonic without carrying out a careful analysis of the limiting behavior of the $q$-Laplacian or $p$-tight forms as in \cite[Theorem 2.4]{Mazon14} or \cite[\S6]{daskalopoulos2020transverse}.
-\item Modulo technicalities arising from geometric measure theory, one can interpret (\ref{max flow mean cut}) to mean that $F/L$ is the area form on the level sets of $u$. This last point we shall repreatedly use throughout the remainder of the paper.
-\end{enumerate}
+We highlight the max flow min cut-type formula (\ref{max flow mean cut}) as the main point of the theorem.
+It is crucial to the prooof that $u$ is $1$-harmonic, and allows us to prove this without a careful analysis of the limiting behavior of $q$-harmonic functions as in \cite[Theorem 2.4]{Mazon14}, or of $p$-tight forms as in \cite[\S6]{daskalopoulos2020transverse}.
+On the other hand, if $\Comass(\rho) = 1$, then we shall be able to use (\ref{max flow mean cut}) to show that the level sets of $u$ are $F$-calibrated.
 
 %%%%%%%%%%%%%%%%%%
 
 \subsection{Calibration of the measured stretch lamination}
-A \dfn{calibration} is a closed $d-1$-form $F$ on the Riemannian $d$-fold $M$, such that $L(F) = 1$.
-A hypersurface $N \subset M$ is $F$-\dfn{calibrated} the pullback of $F$ to $N$ is the area form on $N$ \cite{Harvey82}.
-In that case, the mean curvature of $N$ is 
-\begin{equation}\label{calibrated surfaces are minimal}
-H_N = \nabla \cdot \normal_N = \nabla \cdot (\star F)^\sharp = \star \dif F = 0,
-\end{equation}
-so that $N$ is minimal. 
-
-If a lamination $\lambda$ is $F$-calibrated (in the sense that its leaves are $F$-calibrated), then it is clear from the definitions and (\ref{calibrated surfaces are minimal}) that $\lambda$ is minimal and $\supp \lambda$ is contained in the locus on which $F$ attains its comass.
-In the other direction, Bangert and Cui showed that continuous minimizers of the comass are calibrations of laminations \cite{bangert_cui_2017}:
-
-\begin{theorem}[Bangert--Cui]
-Let $F$ be a continuous calibration of best comass on a closed Riemannian manifold of dimension $2 \leq d \leq 7$.
-Then there exists a measured oriented lamination $\lambda$ which is $F$-calibrated.
-In particular, $\lambda$ is minimal and $\supp \lambda$ is contained in the set on which $F$ attains its comass.
-\end{theorem}
-
-We would like to characterize the $F$-calibrated as arising from the dual $1$-harmonic function.
-Moreover, we cannot use the Bangert--Cui theorem directly, since a proof that tight forms are continuous is out of reach\footnote{For domains in $\RR^2$, $\infty$-tight forms are $C^\alpha$ \cite{Evans08}, but it is unlikely that this argument generalizes.}, though it may be possible to modify their argument to work for $L^\infty$ calibrations.
-As such, we now state a refinement of the Bangert--Cui theorem.
+Suppose that $\rho \in H^{d - 1}(M, \RR)$ satisfies $\Comass(\rho) = 1$.
+If we knew that every tight representative $F$ of $\rho$ was continuous, then it would follow from the Bangert--Cui theorem that $F$ calibrates a minimal lamination.
+However, a proof that tight forms are continuous is out of reach.\footnote{For domains in $\RR^2$, $\infty$-tight forms are $C^\alpha$ \cite{Evans08}, but it is unlikely that this argument generalizes.}
+On the other hand, we know by my previous work \cite[Theorem C]{BackusCML} that the level sets of a $1$-harmonic function form a measured oriented Lipschitz minimal lamination.
 
 \begin{definition}
 Let $M$ be a closed Riemannian manifold of dimension $2 \leq d \leq 4$, and $\rho \in H^{d - 1}(M, \RR)$.
-We can define a measured oriented minimal lamination $\mu$, by considering an $\infty$-tight representative $F$ of $\rho$, letting $u$ be the dual $1$-harmonic function to $F$, and letting $\mu$ be the lamination induced by $u$.
+We can define a measured oriented minimal lamination $\mu$, by considering a tight representative $F$ of $\rho$, letting $u$ be a dual $1$-harmonic function to $F$, and letting $\mu$ be the lamination induced by $u$.
 We call $\mu$ a \dfn{measured stretch lamination} associated to $\rho$.
 \end{definition}
 
-Our next theorem is the combination of Propositions \ref{MCL contains Thurston} and \ref{L equals K}, and follows easily from (\ref{max flow mean cut}) and the theory of \cite{BackusFLG, BackusCML}.
+Our main theorem is the combination of Propositions \ref{MCL contains Thurston} and \ref{L equals K}, and follows easily from (\ref{max flow mean cut}) and the theory of \cite{BackusFLG, BackusCML}.
 It characterizes the measured stretch lamination as a lamination which is maximally stretched in the sense of (\ref{L is K}).
 To state the theorem, we let $[\lambda]$ denote the homology class of a measured oriented lamination $\lambda$.
 
-\begin{mainthm}[refined Bangert--Cui theorem]\label{lams are calibrated}
-Suppose that $M$ is a closed Riemannian manifold of dimension $2 \leq d \leq 4$.
-Let $\mu$ be a measured stretch lamination associated to $\rho \in H^{d - 1}(M, \RR)$, and let $F$ be a form of best comass representing $\rho$, with comass $L$.
-Then $\mu$ is $F/L$-calibrated.
+\begin{mainthm}\label{lams are calibrated}
+Suppose that $M$ is a closed Riemannian manifold of dimension $d \leq 4$.
+Let $\mu$ be a measured stretch lamination associated to $\rho \in H^{d - 1}(M, \RR)$, and let $F$ be a form of best comass representing $\rho$.
+Then $\mu$ is $F/\Comass(\rho)$-calibrated.
 Moreover, for $\lambda$ ranging over measured oriented laminations,
 \begin{equation}\label{duality between stable and comass}
-L = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{|\lambda|} = \frac{\langle \rho, [\mu]\rangle}{|\mu|}.
+\Comass(\rho) = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{\Mass(\lambda)} = \frac{\langle \rho, [\mu]\rangle}{\Mass(\mu)}.
 \end{equation}
 \end{mainthm}
 
-Theorem \ref{lams are calibrated} has a rather useful interpretation.
-The \dfn{stable norm} $\|\alpha\|_s$ of a homology class $\alpha \in H_{d - 1}(M, \RR)$ is the area of a homologically area-minimizing representative of $\alpha$.
-The best comass $L(\rho)$ of a cohomology class $\rho \in H^{d - 1}(M, \RR)$ also defines a norm on $H^{d - 1}(M, \RR)$.
-Then by (\ref{duality between stable and comass}), the dual norm of the stable norm is the best comass.
-This was already known \cite[Theorem 3.8]{AUER20011095}, but it is convenient to have somewhat explicit witnesses to the duality.
+Every measured stretch lamination is homologically area-minimizing, and conversely, every homology class contains a measured stretch lamination.
+From these considerations, we see that Theorem \ref{Federer} is a corollary of Theorem \ref{lams are calibrated}.
 
+\todo{Connections to Thurston? What about absolute characterization of tight forms?}
 
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -364,7 +384,7 @@ An \dfn{$\ell$-blade} is the wedge product $v = v_1 \wedge \cdots \wedge v_\ell$
 The \dfn{comass} $|\varphi|$ of an $\ell$-covector $\varphi$ is the supremum of $\langle \varphi, v\rangle/|v|$, taken over all nonzero $\ell$-blades.
 
 By an $\ell$-\dfn{current of locally finite mass} $T$ we mean a continuous linear functional on the space $C^0_\cpt(M, \Omega^\ell)$ of continuous $\ell$-forms of compact support.
-We write $\int_M T \wedge \varphi$ or $\int_T \varphi$ for the dual pairing of a current and a form.
+We write $\int_M T \wedge \varphi$ for the dual pairing of a current and a form.
 The duality norm of $T$ is its \dfn{mass}, namely for an open set $U \subseteq M$,
 $$\Mass_U(T) := \sup_{\substack{\supp \varphi \Subset U \\ \|\varphi\|_{C^0} \leq 1}} \int_U T \wedge \varphi.$$
 We write $\Mass(T) := \Mass_M(T)$.
@@ -412,6 +432,14 @@ A function has \dfn{locally least gradient} if one can cover $M$ by balls in whi
 \end{definition}
 
 By \cite[Theorem 1.1]{Mazon14}, a function is $1$-harmonic iff it has locally least gradient.
+The de Giorgi--Miranda regularity theorem asserts that if $1_E$ has least gradient in a ball in $\RR^d$, $d \leq 7$, then $\partial E$ is smooth \cite[Theorem 10.11]{Giusti77}.
+We carefully wrote down the details of the de Giorgi--Miranda theorem on Riemannian manifolds \cite[Theorem 1.1]{BackusCML}.
+The one main new idea is an estimate on the parallel propagator, which allows us to define the oscillation of a differential form in an approximately coordinate-invariant way; once this has been established, the proof is similar to \cite{Giusti77}.
+
+\begin{theorem}
+Let $E \subset M$ be open, suppose that $d \leq 7$, and suppose that $1_E$ has least gradient.
+Then $E$ is bounded by smooth embedded stable minimal hypersurfaces.
+\end{theorem} 
 
 We also want a geometric formulation of $1$-harmonic functions.
 Thus we turn to the theory of laminations.
@@ -471,11 +499,6 @@ Then a function $u \in BV_\loc(M)$ is $1$-harmonic iff $\dif u$ is the Ruelle-Su
 In this section we establish some tools from geometric measure theory adapted to closed $L^\infty$ $d - 1$-forms.
 Throughout, we fix a Riemannian manifold $M$ (possibly not closed) of dimension $d$ and metric $g$.
 
-\begin{definition}
-The \dfn{comass} of a closed $d - 1$-form $F$ in a domain $\Omega$ is $\|F\|_{L^\infty(\Omega)}$.
-We say that $F$ has \dfn{best comass} if $F$ is a minimizer of its comass among all forms cohomologous to $F$.
-\end{definition}
-
 %%%%%%%%%%%%%%%%%%%
 \subsection{Trace theorem}
 We would like to be able to compute the comass of a form $F$ by integration of $F$ along chains.
@@ -486,20 +509,20 @@ The trace theorem is based on the fact that de Rham complex satisfies elliptic r
 
 \begin{lemma}
 Let $A$ be a coclosed $\ell - 1$-form, and $F = \dif A$.
-Then, if $F \in L^p$ where $1 \leq p \leq \infty$, then 
+Then, if $F \in L^p$ where $1 < p < p\infty$, then 
 \begin{equation}\label{elliptic}
-\|A\|_{W^{1, p}} \lesssim \|F\|_{L^p}.
+\|A\|_{W^{1, p}} \lesssim_p \|F\|_{L^p}.
 \end{equation}
 In particular, if $p > d$ then there exists $\alpha > 0$ such that
 \begin{equation}\label{Sobolev}
-\|A\|_{C^\alpha} \lesssim \|F\|_{L^p}.
+\|A\|_{C^\alpha} \lesssim_p \|F\|_{L^p}.
 \end{equation}
 \end{lemma}
 \begin{proof}
 By assumption, $F = (\dif + \dif^*) A$.
 By elliptic regularity of the Dirac operator $\dif + \dif^*$ \cite[\S4]{Scott95},
 \begin{align*}
-	\|\nabla A\|_{L^p} \lesssim \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
+	\|\nabla A\|_{L^p} \lesssim_p \|(\dif + \dif^*) A\|_{L^p} = \|F\|_{L^p}.
 \end{align*}
 This proves (\ref{elliptic}), and (\ref{Sobolev}) follows from the Sobolev embedding theorem \cite[\S5.6, Theorem 4]{evans2010partial}.
 \end{proof}
@@ -522,21 +545,22 @@ Every convolution operator commutes with $\dif$, so after convolution with a sta
 Since $g$ has bounded geometry, $\sqrt{\det g} \sim 1$, so the norms $L^p(\Ball^d)$ and $L^p(M)$ are comparable.
 
 Now suppose that $F \in L^\infty$.
-By Young's inequality and the fact that $\|\chi_n\|_{L^1} = 1$,
+By Young's inequality and the fact that $\|\chi_n\|_{L^1} = 1$, \todo{The heat kernel does NOT contract the sup norm! What the hell are you doing??}
 \begin{align*}
 \|F_n\|_{C^0} &\leq \|F\|_{L^\infty} \|\chi_n\|_{L^1} = \|F\|_{L^\infty}. \qedhere
 \end{align*}
 \end{proof}
 
-The natural setting for our trace theorem is the integral currents, as we shall want to be able to integrate a closed $L^p$ $d - 1$-form along the level sets of a $BV$ function; see \cite[\S27]{Simon84} for a more careful exposition.
+The natural setting for our trace theorem is the integral currents (studied for example in \cite[\S27]{Simon84}), as we shall want to be able to integrate a closed $L^p$ $d - 1$-form along the level sets of a $BV$ function.
 
 \begin{definition}
-The \dfn{approximate $\ell$-blade bundle} of an $\ell$-rectifiable set $N$ is the bundle of $\ell$-blades over the approximate tangent bundle of $N$.
-An $\ell$-current $\sigma$ is \dfn{rectifiable} if there exists an $\ell$-rectifiable set $N$, and a $\dif S_N$-measurable section $v$ of the appproximate $\ell$-blade bundle of $N$, such that for any $C^0_\cpt$ $\ell$-form $\varphi$,
-$$\int_\sigma \varphi = \int_N \langle \varphi, v\rangle \dif S_N,$$
+An $\ell$-current $\sigma$ is \dfn{rectifiable} if there exists an $\ell$-rectifiable set $N$, and a $\dif S_N$-measurable $\ell$-blade field $v$, such that for any $C^0_\cpt$ $\ell$-form $\varphi$,
+$$\int_M \sigma \wedge \varphi = \int_N \langle \varphi, v\rangle \dif S_N,$$
 and $|v|$ is $\ZZ$-valued.
-The rectifiable current $\sigma$ is \dfn{integral} if, in addition, $\partial T$ is rectifiable.
+The rectifiable current $\sigma$ is \dfn{integral} if, in addition, $\dif \sigma$ is rectifiable.
 \end{definition}
+
+To emphasize that integral currents $\sigma$ can be represented by rectifiable sets, we write $\partial \sigma := -\dif \sigma$, and $\int_\sigma \varphi := \int_M \sigma \wedge \varphi$.
 
 \begin{lemma}\label{local trace theorem}
 Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
@@ -544,7 +568,7 @@ Let $\tau$ be an integral $d - 1$-current and $\psi \in C^1(M)$.
 Then for any $d < p < \infty$, $F \mapsto \int_\tau \psi F$ is a continuous linear function on the space of $L^p$ closed $d - 1$-forms.
 \end{lemma}
 \begin{proof}
-Firtst suppose that $F, G$ are closed $C^1$ $d - 1$-forms.
+First suppose that $F, G$ are closed $C^1$ $d - 1$-forms.
 Then, since $H^{d - 1}(M, \RR) = 0$, there exist coclosed $d - 2$-forms $A, B$ such that $\dif A = F$, $\dif B = G$.
 We have from integration by parts and (\ref{Sobolev}),
 \begin{align*}
@@ -594,25 +618,7 @@ By approximating a $C^0$ test function $\psi$ by $C^1$ functions, we obtain the 
 \subsection{Coarea formula}
 We next seek to make sense of the Radon measure (or $0$-current of locally finite mass) $\dif u \wedge F$ when $u \in BV_\loc(M)$ and $F$ is a closed $L^\infty$ $d - 1$-form.
 A priori the expression $\dif u \wedge F$ is nonsensical, as $\dif u$ may fail to be absolutely continuous, while $F$ need not be defined on a Lebesgue null set.
-We thus view $\dif u \wedge F$ as the product of distributions $|\dif u|(\normal^\flat \wedge F)$ where $\normal^\flat := \dif u/|\dif u|$ is the polar part of $\dif u$.
-Unfortunately the product of an arbitrary pair of distributions need not be defined and so we must show that in this case it is defined.
 
-We begin by reviewing the theory of distributions following \cite{hörmander1990analysis}.
-To ease the burden of notation we let $\dif x$ and similar expressions denote the volume form on $M$, and identify functions $f$ with their respective distributions $\star f$.
-Let $\mathscr D$ be the presheaf $C^\infty_\cpt$, and let $\mathscr D'$ be the sheaf of distributions; see \cite[Chapter II]{hörmander1990analysis} for the definitions.
-We shall write $\int_M \chi(x) f(x) \dif x$ to denote the pairing of $f \in \mathscr D'$ and $\chi$ in $\mathscr D$.
-Let
-$$\delta: M \to M \times M$$
-be the diagonal morphism.
-The diagonal morphism induces a pullback map 
-$$\delta^*: D_\delta \to \mathscr D'(M)$$
-where $D_\delta \supseteq \mathscr D(M \times M)$ is the maximal subspace of $\mathscr D'(M \times M)$ to which $\delta$ extends as a continuous linear map.
-If $f, g \in \mathscr D'(M)$, then the tensor product $f \otimes g \in \mathscr D'(M \times M)$ is defined by its action on tensors $\varphi \otimes \psi \in \mathscr D(M \times M)$ of rank $1$ by
-$$\iint_{M \times M} (f \otimes g)(x, y) (\varphi \otimes \psi)(x, y) \dif x \dif y = \int_M f(x) \varphi(x) \dif x \int_M g(y) \psi(y) \dif y$$
-and then extended to all of $\mathscr D(M \times M)$ by density of tensors of finite rank \cite[\S5.1]{hörmander1990analysis}.
-The product of two distributions $f, g$ is defined by 
-$$fg := \delta^*(f \otimes g)$$
-whenever $f \otimes g \in D_\delta$ \cite[\S8.2]{hörmander1990analysis}.
 
 \begin{lemma}\label{reduced level sets are integral currents}
 Let $u \in BV(M)$.
@@ -625,91 +631,43 @@ So integration along $\partial^* \{u > \lambda\}$ defines a closed rectifiable, 
 \end{proof}
 
 \begin{proposition}[coarea formula]
-Let $u \in BV(M)$ and let $F$ be a closed $L^\infty$ $d - 1$-form.
-Let $\normal^\flat$ be the polar part of $\dif u$ and, for $\lambda \in \RR$, let $\tau_\lambda$ be the reduced level set of $u$.
-Then:
-\begin{enumerate}
-\item $|\dif u| \otimes (\normal^\flat \wedge F) \in D_\delta$, so that $\dif u \wedge F$ is a well-defined distribution.
-\item The distribution $\dif u \wedge F$ has locally finite mass, hence is a Radon measure.
-\item For every $\chi \in C^0_\cpt(M)$, we have the coarea formula
+Let $u \in BV(M)$, and for each $\lambda \in \RR$, let $\tau_\lambda$ be the reduced level set of $u$.
+Then the product $\dif u \wedge F$ with a closed $L^\infty$ $d - 1$-form $F$ can be defined in one and only one way so that for every sequence $(F_n)$ which is bounded in $L^\infty$ and converges in $L^p_\loc$ for some $d < p < \infty$ to a closed $d - 1$-form $F$, $\dif u \wedge F_n \to \dif u \wedge F$ in the weak topology of measures.
+
+Moreover, for every $\chi \in C^0_\cpt(M)$, we have the coarea formula
 \begin{equation}\label{coarea formula}
 \int_M \chi \dif u \wedge F = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda.
 \end{equation}
-\end{enumerate}
 \end{proposition}
 \begin{proof}
-Let $\eta_\varepsilon$ be a smooth approximation to the the Dirac mass along $\delta_*(M)$.
-For $f, g, \chi \in \mathscr D(M)$, one has 
-\begin{equation}\label{construction of distribution product 1}
-\int_M \chi(x) \delta^*(f \otimes g)(x) \dif x
-= \lim_{\varepsilon \to 0} \iint_{M \times M} \chi(x) \eta_\varepsilon(x, y) f(x) g(y) \dif x \dif y.
-\end{equation}
-The right-hand side of (\ref{construction of distribution product 1}) clearly makes sense even if $f$ is a Radon measure, since $\chi \eta_\varepsilon(\cdot, y)$ is compactly supported and continuous for each $y$.
-Thus we may plug in $f = |\dif u|$ and appeal to Proposition \ref{coarea} to write $x = (\lambda, z)$ where $u(x) = \lambda$ and $z$ is a coordinate on $\tau_\lambda$, in which case we have 
-\begin{align*}
-&\iint_{M \times M} \chi(x) \eta_\varepsilon(x, y) |\dif u|(x) g(y) \dif x \dif y \\
-&\qquad = \int_M \int_{-\infty}^\infty \int_{\tau_\lambda} \chi(\lambda, z) \eta_\varepsilon(\lambda, z, y) g(y) \dif S_{\tau_\lambda}(z) \dif \lambda \dif y.
-\end{align*}
-Applying (\ref{construction of distribution product 1}) and the fact that $\eta_\varepsilon(\lambda, z, \cdot)$ converges in the sense of distributions to the Dirac mass at $(\lambda, z)$,
-\begin{equation}\label{construction of distribution product 2}
-\int_M \chi(x) \delta^*(|\dif u| \otimes g)(x) \dif x = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi(\lambda, z) g(\lambda, z) \dif S_{\tau_\lambda}(z) \dif \lambda.
-\end{equation}
-For almost every $\lambda$, $\tau_\lambda$ is an integral $d - 1$-current by Lemma \ref{reduced level sets are integral currents}, so for such $\lambda$, the trace theorem allows us to plug in the pullback of $F$ to $\tau_\lambda$ for $g(\lambda, \cdot)$ in (\ref{construction of distribution product 2}).
-But that pullback is $\langle \star \normal^\flat, F\rangle$.
-Thus we may plug in $F(\lambda, z)$ for $g(\lambda, z) \dif S_{\tau_\lambda}(z)$.
-We then have by (\ref{construction of distribution product 2})
-\begin{equation}\label{construction of distribution product 3}
-\int_M \chi(x) \delta^*(|\dif u| \otimes \langle \star \normal^\flat, F\rangle)(x) \dif x = \int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda.
-\end{equation}
-The right-hand side of (\ref{construction of distribution product 3}) converges provided that $\chi \in \mathscr D(M)$.
-Therefore $|\dif u| \otimes \langle \star \normal^\flat, F\rangle \in D_\delta$.
-Plugging in 
-$$\delta^*(|\dif u| \otimes \langle \star \normal^\flat, F\rangle)(x) \dif x = \dif u \wedge F$$
-into (\ref{construction of distribution product 3}), we see that $\dif u \wedge F$ is a distribution, and (\ref{coarea formula}) holds for $\chi \in \mathscr D(M)$.
+Motivated by Proposition \ref{coarea}, it is natural to \emph{define} $\dif u \wedge F$ to be the Radon measure satisfying (\ref{coarea formula}).
+If $F$ is continuous, then this will agree with the usual definition of $\dif u \wedge F$ as a product of a Radon measure and a function.
+Even if $F$ is discontinuous, (\ref{coarea formula}) defines a Radon measure.
+Indeed, let $U \Subset M$ be an open set containing $\supp \chi$.
+Then, by the trace theorem, Lemma \ref{reduced level sets are integral currents}, and Proposition \ref{coarea},
+$$\left|\int_M \chi \dif u \wedge F\right| \leq \|\chi\|_{C^0} \|F\|_{L^\infty} \int_{-\infty}^\infty \Mass_U(\tau_\lambda) \dif \lambda = \|\chi\|_{C^0} \|F\|_{L^\infty} \Mass_U(\dif u).$$
+Therefore $\dif u \wedge F$ is a Radon measure, since it has locally finite mass
+$$\Mass_U(\dif u \wedge F) \leq \|F\|_{L^\infty} \Mass_U(\dif u) < \infty.$$
 
-We next apply (\ref{integral over chain is linfinity}) and Proposition \ref{coarea} to estimate the right-hand side of (\ref{construction of distribution product 3}).
-Let $U$ be a small open neighborhood of $\supp \chi$.
-Then
+Now we check the convergence on $L^\infty$-bounded sequences in $L^p_\loc$.
+Let $\chi \in C^0_\cpt(M)$, let $U \Subset M$ be an open set containing $\supp \chi$, and let $(F_n)$ be an $L^\infty$-bounded sequence converging in $L^p_\loc$ to a closed form $F$.
+We introduce the functions
+$$f_n(\lambda) := \int_{\tau_\lambda} \chi F_n, \qquad f(\lambda) := \int_{\tau_\lambda} \chi F,$$
+which are well-defined by the trace theorem and Lemma \ref{reduced level sets are integral currents}.
+Also consider the function $g(\lambda) := \Mass(\tau_\lambda)$, so that for almost every $\lambda \in \RR$, 
+$$|f_n(\lambda)| \leq \|F_n\|_{C^0} \|\chi\|_{C^0} g(\lambda) \lesssim \|\chi\|_{C^0} g(\lambda).$$
+By Proposition \ref{coarea} and the fact that $u \in BV$, $g \in L^1(\RR)$.
+On the other hand, since $F_n \to F$ in $L^p(U)$ and $p > d$, $f_n \to f$ almost everywhere.
+So by dominated convergence, $f_n \to f$ in $L^1(\RR)$.
+In particular, by Proposition \ref{coarea},
 \begin{align*}
-\left|\int_{-\infty}^\infty \int_{\tau_\lambda} \chi F \dif \lambda\right|
-&\leq \|F\|_{L^\infty} \int_{-\infty}^\infty \int_{\tau_\lambda} |\chi| \dif S_{\tau_\lambda} \dif \lambda \\
-&= \|F\|_{L^\infty} \int_M |\chi| \star |\dif u| \\
-&\leq \|F\|_{L^\infty} \|\chi\|_{C^0} \Mass_U(\dif u) < \infty.
+\lim_{n \to \infty} \int_M \chi \dif u \wedge F_n
+&= \lim_{n \to \infty} \int_{-\infty}^\infty f_n(\lambda) \dif \lambda
+= \int_{-\infty}^\infty f(\lambda) \dif \lambda \\
+&= \int_M \chi \dif u \wedge F. \qedhere 
 \end{align*}
-Therefore the right-hand side of (\ref{construction of distribution product 3}) converges even for $\chi \in C^0_\cpt(M)$.
-Therefore $\dif u \wedge F$ is a Radon measure and (\ref{coarea formula}) holds for $\chi \in C^0_\cpt(M)$.
 \end{proof}
 
-% Then $\dif u$ may fail to be absolutely continuous, in which case the Radon measure $\dif u \wedge F$ may be ill-defined for a measurable $d - 1$-form $F$.
-% We assert now that there is a reasonable definition of $\dif u \wedge F$ if $F$ is closed and $L^\infty$.
-
-% \begin{definition}
-% Let $u \in BV(M)$ and $F$ a closed $L^\infty$ $d - 1$-form.
-% We obtain a Radon measure $\dif u \wedge F$ by defining, for every $\psi \in C^0_\cpt(M)$,
-% \begin{equation}
-% \int_M \psi \dif u \wedge F := \int_{-\infty}^\infty \int_{\partial^* \{u > y\}} \psi F \dif y.
-% \end{equation}
-% \end{definition}
-
-% The integral on the right-hand side of (\ref{coarea formula}) makes sense by (\ref{integral over chain is linfinity}) and Lemma \ref{reduced level sets are integral currents}, which also shows that it depends continuously on $\psi$ in $C^0_\cpt$ (hence $\dif u \wedge F$ is a well-defined Radon measure).
-% Thus it only remains to show that the right-hand side of (\ref{coarea formula}) does not contradict the usual definition of $\dif u \wedge F$ for a continuous $F$:
-
-% \begin{lemma}
-% Let $u \in BV(M)$ and $F$ a closed, continuous $d - 1$-form.
-% Then (\ref{coarea formula}) is compatible with the usual definition of $\dif u \wedge F$.
-% In particular, we have the cohomological formula
-% $$\int_M \dif u \wedge F = \langle [\dif u], [F]\rangle.$$
-% \end{lemma}
-% \begin{proof}
-% Let $\tau_y := \partial^* \{u > y\}$ be the reduced level set, $\mu(U) := \Mass_U(\dif u)$ the total variation measure of $\dif u$, and $\normal$ the polar part of $\dif u$.
-% Since $F$ is continuous, $\langle\star \normal, F\rangle \in L^\infty(\mu)$, so we can compute using Proposition \ref{coarea}:
-% \begin{align*}
-% \int_U \dif u \wedge F &= \int_U \langle \star \normal, F\rangle \dif \mu = \int_{-\infty}^\infty \int_{\tau_y} \langle \star \normal, 1_U  F\rangle \dif S_{\tau_y} \dif y = \int_{-\infty}^\infty \int_{\tau_y \cap U} F \dif y. \qedhere
-% \end{align*}
-% \end{proof}
-
-% It would appear that the definition (\ref{coarea formula}) can be viewed microlocally as a special case of the H\"ormander product of the distributions $|\dif u|$ and $\langle \star \normal, F\rangle$, as in \cite[Theorem 8.2.10]{hörmander1990analysis}.
-% However, developing the relevant microlocal analysis, including a suitable $C^0$ analogue of the wavefront set, would take us too far afield, so we do not explore this theory here.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Local comass}
@@ -919,13 +877,11 @@ The fact that $\overline \eta \in \coker \Lambda$ follows from the facts that $\
 To establish uniqueness, we use \cite[Chapter II, Proposition 1.2]{Ekeland99}, the fact that $\hat I$ is strictly convex, and the fact that we may view $I \circ \Lambda$ as a strictly convex function on the reflexive Banach space $X/\ker \Lambda$.
 \end{proof}
 
-One of the most famous corollaries of Theorem \ref{abstract convex analysis} is the \dfn{max flow min cut theorem} of discrete convex optimization \cite[Chapter 7]{umesh2006algorithms}, and we sometimes call consequences of Theorem \ref{abstract convex analysis} ``max flow min cut theorems,'' even if they are not combinatorial in nature.
-
 %%%%%%%%%%%%%%%
 
 \subsection{Max flow min cut for the \texorpdfstring{$q$-Laplacian}{q-Laplacian}}
 We now turn to the problem at hand.
-Let $M$ be a closed oriented Riemannian manifold with fundamental group $\Gamma$ and universal covering $\tilde M \to M$, and let $M_{\rm fun} \subset \tilde M$ be a fundamental domain of $\Gamma$.
+Let $M$ be a closed oriented Riemannian manifold with fundamental group $\Gamma$ and universal abelian covering $\tilde M \to M$, and let $M_{\rm fun} \subset \tilde M$ be a fundamental domain of $\Gamma$.
 By Poincar\'e duality and the Hurcewiz theorem, we have canonical isomorphisms
 \begin{equation}\label{Poincare Hurcewiz}
 H_{d - 1}(M, \RR) = H^1(M, \RR) = \Hom(\Gamma, \RR).
@@ -1053,7 +1009,7 @@ Let $F$ be a $p$-tight form, let
 \begin{equation}
 \dif u := (-1)^{d - 1} |F|^{p - 2} \star F, \label{inverse extremality}
 \end{equation}
-and let $u$ be the primitive of $\dif u$ on the universal cover $\tilde M$, which is normalized to have zero mean on a fundamental domain $M_{\rm fun}$.
+and let $u$ be the primitive of $\dif u$ on the universal abelian cover $\tilde M$, which is normalized to have zero mean on a fundamental domain $M_{\rm fun}$.
 Then $u$ is called the \dfn{$q$-harmonic conjugate} of the $p$-tight form $F$, where $\frac{1}{p} + \frac{1}{q} = 1$.
 \end{definition}
 
@@ -1142,13 +1098,7 @@ So by Proposition \ref{crandall}(\ref{crandall linfinity}) and the fact that $B$
 The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called a \dfn{tight form}, or an \dfn{$\infty$-tight form}.
 \end{definition}
 
-The existence of tight (or even just best comass) representatives of each cohomology class implies the following useful lemma.
-For a reference on the stable norm, we refer the reader to \cite{AUER20011095}.
-
-\begin{definition}
-The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma$ is the infimum of $\Mass(N)$ among all representative chains $N$.
-The \dfn{costable norm} $\Comass(\rho)$ of a cohomology class $\rho$ is the infimum among $\Comass(F) = \|F\|_{L^\infty}$ among all representative forms $F$.
-\end{definition}
+The existence of tight (or even just best comass) representatives of each cohomology class $\rho$ implies the following useful lemma on the costable norm of $\rho$.
 
 \begin{lemma}\label{p tights approximate L}
 Let $F_p$ be the $p$-tight representative of $\rho$. Then 
@@ -1173,19 +1123,10 @@ Taking $r \to \infty$, we obtain $\Comass(\tilde F) < \Comass(\rho)$, which cont
 \subsection{\texorpdfstring{$1$-harmonic conjugates of $\infty$-tight forms}{One-harmonic conjugates of infinity-tight forms}}
 We now construct the $1$-harmonic conjugate of an $\infty$-tight form.
 Since (\ref{inverse extremality}) may blow up as $p \to \infty$, we have to renormalize the $q$-harmonic conjugates of $p$-tight forms before taking the limit $q \to 1$, as in \cite[\S3.2]{daskalopoulos2020transverse}.
-
 We begin by showing that $L^1$ convergence preserves the equivariance properties of functions.
-To make this precise, let $\tilde M \to M$ be the universal cover of $M$.
-Following \cite[\S4]{daskalopoulos2020transverse}, we use the Hurcewiz theorem to identify $1$-dimensional representations
-$$\alpha: \pi_1(M) \to \RR$$
-of the fundamental group with cohomology classes $H^1(M, \RR)$.
-If we have an $\alpha$-equivariant function $u$ on $\tilde M$, thus for every $\gamma \in \pi_1(M)$,
-$$\gamma^* u = u + \langle \alpha, \gamma\rangle,$$
-we write $[u] = \alpha$.
-Taking derivatives, we see that $\gamma^* \dif u = \dif u$, so $\dif u$ drops to a closed $1$-form (or perhaps better a closed $d-1$-current) on $M$ whose cohomology class is $\alpha$.
 
 \begin{lemma}\label{L1 convergence preserves pi1}
-Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\pi_1(M)$-equivariant functions on $\tilde M$ which converge in $L^1_\loc(\tilde M)$ to a function $u$ as $q \to 1$.
+Let $\tilde M \to M$ be the universal abelian cover, and let $(u_q)$ be a sequence of $\pi_1(M)$-equivariant functions on $\tilde M$ which converge in $L^1_\loc(\tilde M)$ to a function $u$ as $q \to 1$.
 Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
 Moreover, if $\dif u_q \to \dif u$ in the weak topology of measures on $M$ and $\dif u_q \in L^q$, then
 \begin{equation}\label{q to 1 Holder}
@@ -1249,7 +1190,7 @@ Taking logarithms we see that $q^{-1} \log k_p \to -\log \Comass(\rho)$, and sin
 \end{proof}
 
 \begin{proposition}\label{existence 1}
-Let $\rho \in H^{d - 1}(M, \RR)$ and let $\tilde M \to M$ be the universal cover.
+Let $\rho \in H^{d - 1}(M, \RR)$ and let $\tilde M \to M$ be the universal abelian cover.
 For $2 < p < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$, let $u_q$ be the renormalized $q$-harmonic conjugate of the $p$-tight representative of $\rho$.
 Then there exists a $\pi_1(M)$-equivariant function $u \in BV_\loc(\tilde M)$ such that:
 \begin{enumerate}
@@ -1386,54 +1327,51 @@ $$K \leq L \leq \frac{\langle \rho, [\mu]\rangle}{\Mass(\mu)} \leq K$$
 which is only possible if $L = K$ and $\mu$ is a maximizer.
 \end{proof}
 
-We now interpret Proposition \ref{L equals K} in terms of duality of norms.
-The fact that the dual norm to the best comass is the stable norm was already well-known \cite[Theorem 3.8]{AUER20011095} but it is interesting to note that it immediately follows from Proposition \ref{L equals K}.
+Propositions \ref{MCL contains Thurston} and \ref{L equals K} imply Theorem \ref{lams are calibrated}.
+As a corollary we obtain a special case of Federer's max flow min cut theorem, Theorem \ref{Federer}.
 
-\begin{corollary}
-View $H_{d - 1}(M, \RR)$ and $H^{d - 1}(M, \RR)$ as Banach spaces, equipped with the stable and costable norms respectively.
-Then $H_{d - 1}$ and $H^{d - 1}$ are mutually dual.
-\end{corollary}
-\begin{proof}
+\begin{proof}[Proof of Theorem \ref{Federer} if $d \leq 4$]
+It suffices to show that if we view $H_{d - 1}(M, \RR)$ and $H^{d - 1}(M, \RR)$ as Banach spaces, equipped with the stable and costable norms respectively, then $H_{d - 1}$ and $H^{d - 1}$ are mutually dual.
 Since $H^{d - 1}(M, \RR)$ is finite-dimensional and therefore reflexive \cite[Theorem 1.13.5]{megginson1998introduction}, it suffices to show that the dual space to $H^{d - 1}(M, \RR)$ is $H_{d - 1}(M, \RR)$.
 Since we may view the homologically area-minimizing representative of a homology class as a measured oriented minimal lamination, every homology class contains a measured oriented minimal lamination which is homologically area-minimizing.
 Therefore, for any $\rho \in H^{d - 1}(M, \RR)$, we obtain from Proposition \ref{L equals K} that
 \begin{align*}
-L(\rho) &= \sup_\lambda \frac{\langle \rho, [\lambda] \rangle}{\Mass(\lambda)} = \sup_{\alpha \in H_{d - 1}(M, \RR)} \frac{\langle \rho, \alpha\rangle}{\Mass(\alpha)}. \qedhere 
+\Comass(\rho) &= \sup_\lambda \frac{\langle \rho, [\lambda] \rangle}{\Mass(\lambda)} = \sup_{\alpha \in H_{d - 1}(M, \RR)} \frac{\langle \rho, \alpha\rangle}{\Mass(\alpha)}. \qedhere 
 \end{align*}
 \end{proof}
 
-\begin{corollary}\label{existence of calibrations}
-Every closed area-minimizing hypersurface can be calibrated.
-\end{corollary}
-\begin{proof}
-Let $\alpha$ be the homology class of a closed area-minimizing hypersurface $N$.
-By duality between the stable norm and the best comass, and local compactness of $H^{d - 1}(M, \RR)$, there is a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$ and, if $F$ is a best comass representative of $\rho$,
-$$|N| = \Mass(\alpha) = \langle \rho, \alpha\rangle = \int_N F.$$
-Therefore $F$ calibrates $N$.
-\end{proof}
+% \begin{corollary}\label{existence of calibrations}
+% Every closed area-minimizing hypersurface can be calibrated.
+% \end{corollary}
+% \begin{proof}
+% Let $\alpha$ be the homology class of a closed area-minimizing hypersurface $N$.
+% By duality between the stable norm and the best comass, and local compactness of $H^{d - 1}(M, \RR)$, there is a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$ and, if $F$ is a best comass representative of $\rho$,
+% $$|N| = \Mass(\alpha) = \langle \rho, \alpha\rangle = \int_N F.$$
+% Therefore $F$ calibrates $N$.
+% \end{proof}
 
 
-%%%%%%%%%%%%%%%%%
-\subsection{The dual Ryu-Takayanagi formula}
-In conformal field theory, one is often interested in the \emph{entanglement entropy} $S(N)$ through a closed oriented hypersurface $N \subset M$.
-This quantity has a physical definition, but according to the Ryu-Takayanagi formula \cite{Ryu_2006}, $S(N)$ is the area of any homologically area-minimizing hypersurface homologous to $N$.
-Owing to the conceptual difficulty of interpreting the Ryu-Takayanagi formula, Freedman and Headrick introduced a dual form of the Ryu-Takayanagi formula, motivated by the max flow min cut principle \cite{Freedman_2016}.
-We would like to highlight the fact that the dual Ryu-Takayanagi formula actually follows immediately from Corollary \ref{existence of calibrations}.
+% %%%%%%%%%%%%%%%%%
+% \subsection{The dual Ryu-Takayanagi formula}
+% In conformal field theory, one is often interested in the \emph{entanglement entropy} $S(N)$ through a closed oriented hypersurface $N \subset M$.
+% This quantity has a physical definition, but according to the Ryu-Takayanagi formula \cite{Ryu_2006}, $S(N)$ is the area of any homologically area-minimizing hypersurface homologous to $N$.
+% Owing to the conceptual difficulty of interpreting the Ryu-Takayanagi formula, Freedman and Headrick introduced a dual form of the Ryu-Takayanagi formula, motivated by the max flow min cut principle \cite{Freedman_2016}.
+% We would like to highlight the fact that the dual Ryu-Takayanagi formula actually follows immediately from Corollary \ref{existence of calibrations}.
 
-\begin{corollary}[dual Ryu-Takayanagi formula]
-For any closed oriented hypersurface $N \subset M$, the entanglement entropy through $N$ satisfies
-\begin{equation}\label{dual RT formula}
-S(N) = \max_{\substack{\dif F = 0 \\ L(F) \leq 1}} \int_N F.
-\end{equation}
-\end{corollary}
-\begin{proof}
-By Corollary \ref{existence of calibrations}, there exists a calibration $F$ of the area-minimizing hypersurface $N'$ homologous to $N$, and by Stokes' theorem, 
-$$S(N) = |N'| = \int_{N'} F = \int_N F.$$
-To see that $F$ is the maximum among all calibrations, let $G$ be another such form; then
-\begin{align*}
-\int_N G &= \int_{N'} G \leq |N'| = S(N). \qedhere 
-\end{align*}
-\end{proof}
+% \begin{corollary}[dual Ryu-Takayanagi formula]
+% For any closed oriented hypersurface $N \subset M$, the entanglement entropy through $N$ satisfies
+% \begin{equation}\label{dual RT formula}
+% S(N) = \max_{\substack{\dif F = 0 \\ L(F) \leq 1}} \int_N F.
+% \end{equation}
+% \end{corollary}
+% \begin{proof}
+% By Corollary \ref{existence of calibrations}, there exists a calibration $F$ of the area-minimizing hypersurface $N'$ homologous to $N$, and by Stokes' theorem, 
+% $$S(N) = |N'| = \int_{N'} F = \int_N F.$$
+% To see that $F$ is the maximum among all calibrations, let $G$ be another such form; then
+% \begin{align*}
+% \int_N G &= \int_{N'} G \leq |N'| = S(N). \qedhere 
+% \end{align*}
+% \end{proof}
 
 
 
