@@ -500,34 +500,49 @@ In this section we establish some tools from geometric measure theory adapted to
 Throughout, we fix a Riemannian manifold $M$ (possibly not closed) of dimension $d$ and metric $g$.
 
 %%%%%%%%%%%%%%%%%%%
-\subsection{Trace theorem}
-We would like to be able to compute the comass of a form $F$ by integration of $F$ along chains.
-Unfortunately, $F$ may only be defined almost everywhere, and then it is not clear that such an integral is well-defined; nor is it clear that the cohomology class of $F$ is well-defined (so that the notion of ``best comass'' makes no sense).
-Here we show that for closed forms $F$ in $L^p$ and suitable chains $\sigma$, $\int_\sigma F$ is well-defined.
+\subsection{Local Hodge theory in \texorpdfstring{$L^p$}{Lp}}
+The geometric measure theory that we develop in this section relies on the local elliptic regularity of the Hodge system.
+Such estimates are standard when $p = 2$ \cite[\S9.5]{taylor2010partial}, but we are mainly interested in the range $d < p < \infty$, where we may apply the Sobolev embedding $W^{1, p} \Subset C^\alpha$.
+We thus give a short proof for every $p$.
 
-The trace theorem is based on the fact that de Rham complex satisfies elliptic regularity in the following sense \todo{This isn't quite right be careful with the boundary conditions. Maybe use the Analyst Lair paper}:
-
-\begin{lemma}
-Let $A$ be a coclosed $\ell - 1$-form on a ball $B$, and $F = \dif A$.
-Then, if $F \in L^p$ where $1 < p < p\infty$, then 
-\begin{equation}\label{elliptic}
-\|A\|_{W^{1, p}} \lesssim_p \|F\|_{L^p} + \|A\|_{L^p(\partial B)}.
-\end{equation}
-In particular, if $p > d$ then there exists $\alpha > 0$ such that
-\begin{equation}\label{Sobolev}
-\|A\|_{C^\alpha} \lesssim_p \|F\|_{L^p} + \|A\|_{L^p(\partial B)}.
+\begin{lemma}\label{Hodge theorem}
+Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
+Let $1 < p < \infty$, and let $F$ be an $L^p$ closed $\ell + 1$-form.
+Then there exists an $\ell$-form $A$ such that $F = \dif A$ and
+\begin{equation}\label{Hodge theorem estimate}
+\|A\|_{W^{1, p}} \lesssim_p \|F\|_{L^p}.
 \end{equation}
 \end{lemma}
 \begin{proof}
-By assumption, $F = (\dif + \dif^*) A$.
-By elliptic regularity of the Dirac operator $\dif + \dif^*$ \cite[\S4]{Scott95},
+Without loss of generality, $M = (\Ball^d, g)$ where $g$ is a Riemannian metric of bounded geometry.
+Then, possibly after rescaling, the $L^p(M)$ norm is comparable to the $L^p(\Ball^d)$ norm.
+Everything else in the statement of the lemma is a diffeomorphism invariant, so we may assume that $M = \Ball^d$.
+We then solve the elliptic system 
+\begin{equation}\label{Hodge Laplacian}
+\begin{cases}
+	\Delta u = F \\
+	u|_{\partial \Ball^d} = 0
+\end{cases}
+\end{equation}
+for an $\ell$-form $u$.
+Since $M = \Ball^d$, the Hodge Laplacian commutes with taking components, thus the system (\ref{Hodge Laplacian}) decouples into $\binom d\ell$ elliptic PDE
+\begin{equation}\label{decoupled Hodge Laplacian}
+\begin{cases}
+\Delta(u_I) = F_I \\
+u_I|_{\partial \Ball^d} = 0,
+\end{cases}
+\end{equation}
+one for each $\ell$-index $I$.
+By \cite[Chapter 3, Theorem 6.3]{chen1998second}, we have a unique solution to (\ref{decoupled Hodge Laplacian}), which satisfies
+$$\|u_I\|_{W^{2, p}} \lesssim_p \|F_I\|_{L^p}.$$
+We then let $A := \dif^* u$; then (\ref{Hodge theorem estimate}) holds, and $\dif A = \dif \dif^* u$.
+On euclidean space, $\Delta$ and $\dif$ commute, so $\dif u = 0$, and it holds that 
 \begin{align*}
-	\|\nabla A\|_{L^p} \lesssim_p \|(\dif + \dif^*) A\|_{L^p} + \|A\|_{L^p(\partial B)} = \|F\|_{L^p} + \|A\|_{L^p(\partial B)}.
+\dif A &= (\dif \dif^* + \dif^* \dif) u = \Delta u = F. \qedhere 
 \end{align*}
-This proves (\ref{elliptic}), and (\ref{Sobolev}) follows from the Sobolev embedding theorem \cite[\S5.6, Theorem 4]{evans2010partial}.
 \end{proof}
 
-We shall need the following technical lemma, which asserts that we can locally find a mollifier which preserves the sheaf of closed forms.
+We also need the following result, which essentially asserts that mollification can be chosen to commute with the de Rham differential, at least locally.
 
 \begin{lemma}\label{mollification of closed forms}
 Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
@@ -535,21 +550,37 @@ Let $1 \leq p < \infty$ and let $F$ be an $L^p$ closed $\ell$-form.
 Then there exist smooth closed $\ell$-forms $F_n$ such that $F_n \to F$ in $L^p$.
 Moreover, if $F \in L^\infty$, then
 \begin{equation}\label{heat kernel contracts sup norm}
-\|F_n\|_{C^0} \leq \|F\|_{L^\infty}.
+\limsup_{n \to \infty} \|F_n\|_{C^0} \leq \|F\|_{L^\infty}.
 \end{equation}
 \end{lemma}
 \begin{proof}
 Without loss of generality, $M = (\Ball^d, g)$ where $g$ is a Riemannian metric of bounded geometry.
-If $\varphi$ is a form and $\chi$ is a function on $\RR^d$, we define the convolution $\chi * \varphi$ by $(\chi * \varphi)_I := \chi * \varphi_I$ for every multiindex $I$.
+Then, possibly after rescaling, the $L^p(M)$ norm is comparable to the $L^p(\Ball^d)$ norm.
+If $\varphi$ is am $\ell$-form and $\chi$ is a function on $\RR^d$, we define the convolution $\chi * \varphi$ by $(\chi * \varphi)_I := \chi * \varphi_I$ for every $\ell$-index $I$.
 Every convolution operator commutes with $\dif$, so after convolution with a standard mollifier $\chi_n$ as in \cite[Appendix C, Theorem 6]{evans2010partial}, $F_n := (\chi_n * F)|_{\Ball^d}$ is a closed $\ell$-form and $F_n \to F$ in $L^p(\Ball^d)$ and almost everywhere.
-Since $g$ has bounded geometry, $\sqrt{\det g} \sim 1$, so the norms $L^p(\Ball^d)$ and $L^p(M)$ are comparable.
 
 Now suppose that $F \in L^\infty$.
-By Young's inequality and the fact that $\|\chi_n\|_{L^1} = 1$, \todo{The heat kernel does NOT contract the sup norm! What the hell are you doing??}
+We may choose $\chi_n$ so that $\chi_n \geq 0$, $\int_{\RR^d} \chi_n = 1$, and $\supp \chi_n \Subset B_{1/n}$, the euclidean ball of radius $1/n$ around $0$.
+Then 
+$$|F_n(x)|_{g(x)} \leq \left|\int_{B_{1/n}} \chi_n(y) F(x - y) \dif y\right|_{g(x)},$$
+where the integral is a vector-valued integral (which makes sense since we may view $F$ as a map into $\RR^{\binom d\ell})$.
+By the triangle inequality and a Taylor expansion of $g$ around $g(x)$,
 \begin{align*}
-\|F_n\|_{C^0} &\leq \|F\|_{L^\infty} \|\chi_n\|_{L^1} = \|F\|_{L^\infty}. \qedhere
+\left|\int_{B_{1/n}} \chi_n(y) F(x - y) \dif y\right|_{g(x)}
+&\leq \int_{B_{1/n}} \chi_n(y) |F(x - y)|_{g(x)} \dif y \\
+&= \int_{B_{1/n}} \chi_n(y) |F(x - y)|_{g(x - y)}(1 + O(y)) \dif y \\
+&\leq \|F\|_{L^\infty(M)} \int_{B_{1/n}} \chi_n(y)(1 + O(y)) \dif y \\
+&= \|F\|_{L^\infty(M)}(1 + O(n^{-1})). \qedhere 
 \end{align*}
 \end{proof}
+
+%%%%%%%%%%%%%%%%%%%
+\subsection{Trace theorem}
+We would like to be able to compute the comass of a form $F$ by integration of $F$ along chains.
+Unfortunately, $F$ may only be defined almost everywhere, and then it is not clear that such an integral is well-defined; nor is it clear that the cohomology class of $F$ is well-defined (so that the notion of ``best comass'' makes no sense).
+Here we show that for closed forms $F$ in $L^p$ and suitable chains $\sigma$, $\int_\sigma F$ is well-defined.
+
+
 
 The natural setting for our trace theorem is the integral currents (studied for example in \cite[\S27]{Simon84}), as we shall want to be able to integrate a closed $L^p$ $d - 1$-form along the level sets of a $BV$ function.
 
@@ -568,17 +599,14 @@ Let $\tau$ be an integral $d - 1$-current and $\psi \in C^1(M)$.
 Then for any $d < p < \infty$, $F \mapsto \int_\tau \psi F$ is a continuous linear function on the space of $L^p$ closed $d - 1$-forms.
 \end{lemma}
 \begin{proof}
-First suppose that $F, G$ are closed $C^1$ $d - 1$-forms.
-Then, since $H^{d - 1}(M, \RR) = 0$, there exist coclosed $d - 2$-forms $A, B$ such that $\dif A = F$, $\dif B = G$, which can be chosen so that.
-We have from integration by parts and (\ref{Sobolev}),
+First suppose that $F, G$ are closed $C^1$ $d - 1$-forms, and let $A, B$ be the $d - 2$-forms obtained from Lemma \ref{Hodge theorem}.
+By integration by parts and the Sobolev embedding theorem,
 \begin{align*}
 	\left|\int_\tau \psi(F - G)\right| 
 	&\leq \left|\int_{\partial \tau} \psi (A - B)\right| + \left|\int_\tau \dif \psi \wedge (A - B)\right| \\
-	&\lesssim_{\tau, \psi} \|A - B\|_{C^0} \lesssim \|F - G\|_{L^p}.
+	&\lesssim_{\tau, \psi} \|A - B\|_{C^0} \lesssim_p \|A - B\|_{L^p} \lesssim_p \|F - G\|_{L^p}.
 \end{align*}
-
-Now suppose that $F, G$ need not be $C^1$.
-By Lemma \ref{mollification of closed forms}, the $C^1$ closed $d - 1$-forms are dense in the space of $L^p$ closed $d - 1$-forms, so the desired estimate holds by approximating $F, G$ by $C^1$ closed $d - 1$-forms.
+If $F, G$ are not necessarily $C^1$, then by Lemma \ref{mollification of closed forms}, the $C^1$ closed $d - 1$-forms are dense in the space of $L^p$ closed $d - 1$-forms, so the desired estimate holds by approximating $F, G$ by $C^1$ closed $d - 1$-forms.
 \end{proof}
 
 \begin{proposition}[trace theorem]\label{integration is welldefined}
@@ -603,7 +631,7 @@ This also implies that the cohomology is well-defined.
 
 We now handle the case $p = \infty$.
 Let $d < q < \infty$ and let $U$ be a small neighborhood of $\supp \tau$; since $\supp \tau$ is compact, if $F, G \in L^\infty$, then $F, G \in L^q(U)$ and 
-$$\left|\int_\tau \psi(F - G)\right| \lesssim_\tau \|F\|_{L^q(U)} \lesssim_{U, q} \|F\|_{L^\infty}.$$
+$$\left|\int_\tau \psi(F - G)\right| \lesssim_\tau \|F - g\|_{L^q(U)} \lesssim_{U, q} \|F - G\|_{L^\infty}.$$
 This gives the continuity in $L^\infty$.
 We then use Lemma \ref{mollification of closed forms} to find smooth closed $d - 1$-forms $F_{k, m}$ on $U_k$ such that $F_{k, m} \to F|_{U_k}$ in $L^q(U_k)$ and
 $$\|F_{k, m}\|_{C^0} \leq \|F\|_{L^\infty}.$$
@@ -779,7 +807,7 @@ Then $\lambda$ is $F$-calibrated (and in particular minimal).
 \end{proposition}
 \begin{proof}
 Let $(\chi_\alpha)$ be a locally finite partition of unity subordinate to an open cover $(U_\alpha)$ of flow boxes for $\lambda$, and let $(\mu_\alpha)$ be the transverse measure.
-After refining $(U_\alpha)$ we may assume that $U_\alpha$ is contractible, and after shrinking $U_\alpha$ we may assume that $\chi_\alpha > 0$ on $U_\alpha$.
+After refining $(U_\alpha)$ we may assume that $U_\alpha$ is contained in an open set which is bi-Lipschitz diffeomorphic to $\Ball^d$. After shrinking $U_\alpha$ we may assume that $\chi_\alpha > 0$ on $U_\alpha$.
 Then for some hypersurfaces $\sigma_{\alpha,k}$,
 $$\Mass(\lambda) = \int_M T_\lambda \wedge F = \sum_\alpha \int_I \int_{\sigma_{\alpha,k}} \chi_\alpha F \dif \mu_\alpha(k).$$
 Let $\dif S_{\alpha,k}$ be the surface measure on $\sigma_{\alpha,k}$. Then
@@ -797,10 +825,12 @@ Integrating over $K$, and using the fact that in general we have $\int_{\sigma_{
 $$\sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha F \dif \mu_\alpha(k) < \sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha \dif S_{\alpha, k} \dif \mu_\alpha(k)$$
 which contradicts (\ref{calibration condition contr}).
 
-To upgrade $\lambda$ from an almost calibrated lamination to a calibrated lamination, given $\sigma_{\alpha, k}$ we choose $k_j$ such that $\sigma_{\alpha, k_j}$ is calibrated and $k_j \to k$.
-Since we may write $F = \dif A$ near $\sigma_{\alpha, k}$ for some coclosed $d - 2$-form $A$, and 
-$$\int_{\sigma_{\alpha, k}} F = \int_{\partial \sigma_{\alpha, k}} A,$$
-the facts that $k_j \to k$ and that $A$ is continuous by (\ref{Sobolev}) imply 
+To upgrade $\lambda$ from an almost calibrated lamination to a calibrated lamination, we first 
+given $\sigma_{\alpha, k}$ we choose $k_j$ such that $\sigma_{\alpha, k_j}$ is calibrated and $k_j \to k$.
+By Lemma \ref{Hodge theorem}, we can find a $d - 2$-form $A$ with $F = \dif A$, which is necessarily continuous by the Sobolev embedding theorem.
+This justifies the following application of Stokes' theorem: 
+$$\int_{\sigma_{\alpha, k}} F = \int_{\partial \sigma_{\alpha, k}} A.$$
+Since $k_j \to k$, and $A$ is continuous,
 \begin{align*}
 \Mass(\sigma_{\alpha, k}) &= \lim_{j \to \infty} \Mass(\sigma_{\alpha, k_j}) = \lim_{j \to \infty} \int_{\sigma_{\alpha, k_j}} F = \lim_{j \to \infty} \int_{\partial \sigma_{\alpha, k_j}} A = \int_{\partial \sigma_{\alpha, k}} A = \int_{\sigma_{\alpha, k}} F. \qedhere 
 \end{align*}
