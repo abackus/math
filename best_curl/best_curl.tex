@@ -420,12 +420,20 @@ which we introduced in \cite{BackusCML}.
 The formulation essentially says that $\dif u/|\dif u|$ locally looks like a coclosed $d-1$-current, even if $|\dif u|$ is a singular Radon measure.
 
 \begin{definition}
-A \dfn{$1$-harmonic function} on $M$ is a function $u \in BV_\loc(M)$ such that we can cover $\supp u$ by open sets $U_\alpha$ equipped with vector fields $X_\alpha$, such that as Radon measures on $U_\alpha$,
+A \dfn{$1$-harmonic function} on $M$ is a function $u \in BV_\loc(M)$ such that we can cover $\supp u$ by open sets $U_\alpha$ equipped with measurable vector fields $X_\alpha$ satisfying
+\begin{equation}\label{local calibration}
+\begin{cases}
+\|X_\alpha\|_{L^\infty} \leq 1 \\
+\nabla \cdot X_\alpha = 0
+\end{cases}
+\end{equation}
+and such that as Radon measures on $U_\alpha$,
 $$(\dif u, X_\alpha) = |\dif u|.$$
 \end{definition}
 
-There need not exist a global vector field $X$ with the above properties; the indicator function of the northern hemisphere in $\Sph^2$ is $1$-harmonic, but does not admit such a vector field $X$ by the divergence theorem.
+There need not exist a global vector field $X$ satisfying (\ref{local calibration}); the indicator function of the northern hemisphere in $\Sph^2$ is $1$-harmonic, but does not admit such a vector field $X$ by the divergence theorem.
 Thus this definition is the ``sheafification'' of the definition due to Maz\'on, Rossi, and Segura de Le\'on \cite{Mazon14}.
+On the other hand, (\ref{local calibration}) asserts that the flux $F_\alpha := \star X_\alpha^\flat$ of $X_\alpha$ is a calibration on $U_\alpha$.
 
 \begin{definition}
 Let $B$ be a ball in $M$.
@@ -449,7 +457,7 @@ Thus we turn to the theory of laminations.
 Fix an interval $I \subset \RR$ and a box $J \subset \RR^{d - 1}$.
 
 \begin{definition}
-A \dfn{laminar flow box} is a $C^0$ coordinate chart $F: I \times J \to M$ and a compact set $K \subseteq I$, such that for every $k \in K$, $F|_{\{k\} \times J}$ is a $C^1$ embedding, and the \dfn{leaf} $F(\{k\} \times J)$ is a $C^1$ complete hypersurface in $F(I \times J)$.
+A \dfn{laminar flow box} is a $C^0$ coordinate chart $f: I \times J \to M$ and a compact set $K \subseteq I$, such that for every $k \in K$, $F|_{\{k\} \times J}$ is a $C^1$ embedding, and the \dfn{leaf} $F(\{k\} \times J)$ is a $C^1$ complete hypersurface in $F(I \times J)$.
 Two laminar flow boxes belong to the same \dfn{laminar atlas} if the transition maps between them send leaves to leaves.
 \end{definition}
 
@@ -518,7 +526,7 @@ Then there exists an $\ell$-form $A$ such that $F = \dif A$ and
 \end{lemma}
 \begin{proof}
 Without loss of generality, $M = (\Ball^d, g)$ where $g$ is a Riemannian metric of bounded geometry.
-Then, possibly after rescaling, the $L^p(M)$ norm is comparable to the $L^p(\Ball^d)$ norm.
+Then, possibly after rescaling, the $W^{s, p}(M)$ norm is comparable to the $W^{s, p}(\Ball^d)$ norm.
 Everything else in the statement of the lemma is a diffeomorphism invariant, so we may assume that $M = \Ball^d$.
 We then solve the elliptic system 
 \begin{equation}\label{Hodge Laplacian}
@@ -793,7 +801,7 @@ This is immediate from Proposition \ref{crandall}(\ref{crandall usc}) and the ex
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\texorpdfstring{$L^\infty$}{L-infinity} calibrations}
 The purpose of this paper is to study calibrated laminations.
-If the calibration $F$ is continuous, then the theory of \cite{bangert_cui_2017} of calibrated laminations applies; however, we are not aware of general existence results on continuous calibrations, only measurable calibrations \cite{Federer1974}.
+If the calibration $F$ is continuous, then the theory of \cite{bangert_cui_2017} of calibrated laminations applies; however, we are not aware of general existence results on continuous calibrations, only $L^\infty$ calibrations, such as \cite[\S4.12]{Federer1974}.
 Thus, we now introduce $L^\infty$ calibrations of laminations.
 
 \begin{definition}
@@ -803,18 +811,66 @@ $$\Mass(\sigma) = \int_\sigma F.$$
 A lamination $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
 \end{definition}
 
-The fundamental theorem of calibrated geometry \cite{Harvey82} asserts that a calibrated integral current is minimal, so every calibrated lamination is minimal.
-Moreover, if $M$ is closed, $\lambda$ is a lamination, and $F$ is a calibration, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just $\langle [F], [\lambda]\rangle$.
+The fundamental theorem of calibrated geometry \cite{Harvey82} asserts that a calibrated integral current is homologically area-minimizing (and in particular minimal), so every calibrated lamination is minimal.
+
+It follows from the definitions that if a smooth hypersurface $N$ is $F$-calibrated, then the trace of $F$ along $N$ is the area form $\dif S_N$.
+In particular, $F|_N$ is smooth and $N$ is oriented.
+If $\lambda$ is an $F$-calibrated lamination, then the trace $F|_\lambda$ is defined to be $F|_N$ along any leaf $N$.
+A priori, $\lambda$ could fail to be orientable, and then $F|_\lambda$ would be necessarily discontinuous.
+However, we assert that a calibrated lamination is orientable:
+
+\begin{proposition}\label{calibrated implies oriented}
+Let $F$ be a calibration and $\lambda$ an $F$-calibrated lamination.
+Then $F|_\lambda$ is continuous, and $F$ induces an orientation on $\lambda$.
+\end{proposition}
+\begin{proof}
+Let $N$ be a leaf of $\lambda$ and $x \in N$.
+Let $\mathscr O$ be the local orientation of $\lambda$ near $x$ which is compatible with $F(x)$. 
+We define a $d - 1$-form $G$ by declaring that for $y \in K$ close enough to $x$, $K$ a leaf of $\lambda$, $G(y) = \dif S_K(y)$ is the area form of $K$ with respect to $\mathscr O$.
+Then for any $y \in \supp \lambda$ close to $x$, either $F(y) = G(y)$ or $F(y) = -G(y)$; we claim that $F(y) = G(y)$ if $\dist(x, y)$ is small enough.
+If this claim is true, then the proposition follows, since $G$ is continuous at $x$.
+
+To prove the claim, we suppose towards contradiction that there is a sequence $(x_n) \subset \supp \lambda$ with $x_n \to x$ and $F(x_n) = -G(x_n)$.
+We may write $F = \dif A$ where $A$ is continuous near $x$ by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem.
+Let $N_n$ be the leaf of $\lambda$ containing $x_n$; then $N_n$ is minimal, hence smooth, so $F_n|_{N_n}$ is smooth.
+Therefore by Stokes' theorem, if $(D_{n, m})$ is a sequence of disks in $N_n$ which shrink down to $x_n$ as $m \to \infty$ and are equipped with the orientation $\mathscr O$,
+$$-1 = \lim_{m \to \infty} \frac{1}{\Mass(D_{n, m})} \int_{D_{n, m}} F = \lim_{m \to \infty} \frac{1}{\Mass(D_{n, m})} \int_{\partial D_{n, m}} A.$$
+In particular, we can choose $m_n \to \infty$ such that 
+\begin{equation}\label{orientation contradiction}
+\int_{\partial D_{n, m_n}} A \leq 0.
+\end{equation}
+We set $D_n := D_{n, m_n}$.
+
+Let $(k, z) \in \RR \times \RR^{d - 1}$ be coordinates near $x$ with respect to a flow box, where $k$ indexes the leaves and $z$ is a parameter on each leaf.
+Then $D_n = \{k_n\} \times \Omega_n$ for some $\Omega_n \subset \RR^{d - 1}$.
+Let $k$ be the index of $N$ and $D_n' := \{k\} \times \Omega_n$.
+Since $A$ is continuous, $A(k, z) = A(k_n, z) + o(1)$ as $n \to \infty$, hence
+\begin{equation}\label{orientation contradiction 2}
+\frac{1}{\Mass(D_n')} \int_{\partial D_n'} A = \frac{1}{\Mass(D_n)} \int_{\partial D_n} A + o(1).
+\end{equation}
+However, $D_n'$ shrinks down to $x$, and $F(x) = G(x)$, so by Stokes' theorem, for $n$ large,
+$$\int_{\partial D_n'} A \gtrsim \Mass(D_n'),$$
+hence by (\ref{orientation contradiction}) and (\ref{orientation contradiction 2}),
+$$0 < \Mass(D_n) \lesssim \int_{\partial D_n} A \leq 0,$$
+a contradiction.
+\end{proof}
+
+We next give a natural condition for a lamination to be calibrated.
+To make sense of it, observe that if $M$ is closed, $\lambda$ is a lamination, and $F$ is a calibration, then the quantity $\int_M T_\lambda \wedge F$ is well-defined, since it is just the pairing $\langle [F], [\lambda]\rangle$ of cohomology with homology.
 
 \begin{proposition}\label{calibration condition}
 Let $F$ be a calibration on a closed Riemannian manifold $M$.
-Let $T_\lambda$ be the Ruelle-Sullivan current of a measured oriented lamination $\lambda$, and suppose that 
-\begin{equation}\label{calibration by Ruelle Sullivan}
+Let $T_\lambda$ be the Ruelle-Sullivan current of a measured oriented lamination $\lambda$.
+Then the following are equivalent:
+\begin{enumerate}
+\item One has \begin{equation}\label{calibration by Ruelle Sullivan}
 \int_M T_\lambda \wedge F = \Mass(\lambda).
 \end{equation}
-Then $\lambda$ is $F$-calibrated (and in particular minimal).
+\item $\lambda$ is $F$-calibrated.
+\end{enumerate}
 \end{proposition}
 \begin{proof}
+First suppose that (\ref{calibration by Ruelle Sullivan}) holds.
 Let $(\chi_\alpha)$ be a locally finite partition of unity subordinate to an open cover $(U_\alpha)$ of flow boxes for $\lambda$, and let $(\mu_\alpha)$ be the transverse measure.
 After refining $(U_\alpha)$ we may assume that $U_\alpha$ is contained in an open set which is bi-Lipschitz diffeomorphic to $\Ball^d$. After shrinking $U_\alpha$ we may assume that $\chi_\alpha > 0$ on $U_\alpha$.
 Then for some hypersurfaces $\sigma_{\alpha,k}$,
@@ -841,12 +897,18 @@ This justifies the following application of Stokes' theorem:
 $$\int_{\sigma_{\alpha, k}} F = \int_{\partial \sigma_{\alpha, k}} A.$$
 Since $k_j \to k$, and $A$ is continuous,
 \begin{align*}
-\Mass(\sigma_{\alpha, k}) &= \lim_{j \to \infty} \Mass(\sigma_{\alpha, k_j}) = \lim_{j \to \infty} \int_{\sigma_{\alpha, k_j}} F = \lim_{j \to \infty} \int_{\partial \sigma_{\alpha, k_j}} A = \int_{\partial \sigma_{\alpha, k}} A = \int_{\sigma_{\alpha, k}} F. \qedhere 
+\Mass(\sigma_{\alpha, k}) &= \lim_{j \to \infty} \Mass(\sigma_{\alpha, k_j}) = \lim_{j \to \infty} \int_{\sigma_{\alpha, k_j}} F = \lim_{j \to \infty} \int_{\partial \sigma_{\alpha, k_j}} A = \int_{\partial \sigma_{\alpha, k}} A = \int_{\sigma_{\alpha, k}} F.
+\end{align*}
+
+To establish the converse, suppose that $\lambda$ is $F$-calibrated, and let notation be as above.
+Since $\lambda$ is $F$-calibrated, for every $\alpha$ and every $k$, the area form on $\sigma_{\alpha, k}$ is $F$. Therefore
+\begin{align*}
+\int_M T_\lambda \wedge F &= \sum_\alpha \int_I \int_{\sigma_{\alpha, k}} \chi_\alpha F \dif \mu_\alpha(k) = \Mass(T_\lambda). \qedhere
 \end{align*}
 \end{proof}
 
 \begin{proposition}\label{properties of calibrated laminations}
-Suppose that $M$ is a closed Riemannian manifold, $F$ is a calibration, and $\lambda$ is a measured oriented $F$-calibrated lamination.
+Suppose that $M$ is a closed Riemannian manifold, $F$ is a calibration, and $\lambda$ is a measured $F$-calibrated lamination.
 Then:
 \begin{enumerate}
 \item $\lambda$ is minimal.
@@ -856,8 +918,10 @@ Then:
 \end{proposition}
 \begin{proof}
 Every leaf of $\lambda$ is $F$-calibrated, hence minimal, so $\lambda$ is also minimal.
-Moreover, (\ref{calibration by Ruelle Sullivan}) only depends on the cohomology class of $F$, not $F$ itself, so $\lambda$ is $G$-calibrated.
-Finally, let $S := \MCL(F)$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
+Since $\lambda$ is oriented by Proposition \ref{calibrated implies oriented}, it has a Ruelle-Sullivan current.
+Then, since (\ref{calibration by Ruelle Sullivan}) only depends on the cohomology class of $F$, not $F$ itself, $\lambda$ is $G$-calibrated.
+
+Now let $S := \MCL(F)$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
 Since $S$ is closed, there exists $\varepsilon > 0$ such that $B_\varepsilon(x)$ does not meet $S$.
 Moreover, $\sigma := N \cap B_\varepsilon(x)$ is a $d-1$-chain in $B_\varepsilon(x)$, so by Proposition \ref{crandall}(\ref{crandall best curl is ABC}),
 $$\frac{1}{\Mass(\sigma)} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} \Comass(F, y) < \Comass(F) = 1.$$
@@ -868,7 +932,7 @@ so $N$ (hence $\lambda$) is not $F$-calibrated.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{\texorpdfstring{$\infty$-tight forms and the $1$-Laplacian}{Infinity-tight forms and the one-Laplacian}}\label{tight forms sec}
+\section{\texorpdfstring{Tight forms and the $1$-Laplacian}{Infinity-tight forms and the one-Laplacian}}\label{tight forms sec}
 \subsection{Convex optimization}
 We follow \cite{Ekeland99}.
 For a reflexive Banach space $X$, we denote by $\hat X$ its dual.
@@ -1373,6 +1437,7 @@ This set turns out to contain a measured oriented minimal lamination which only 
 \subsection{Measured stretch laminations}
 Let $u$ be a $\pi_1(M)$-equivariant $1$-harmonic function on $\tilde M$, which is nonconstant, so that $\dif u$ has nonempty support.
 Then $\dif u$ drops to a $d-1$-current on $M$, which is still the Ruelle-Sullivan current of a measured oriented minimal lamination on $M$, which we still call $\lambda_u$.
+\todo{Cite the right theorems and formulate this for arbitrary $d$ when possible.}
 Thus the following definition makes sense.
 
 \begin{definition}
@@ -1438,10 +1503,38 @@ Let $\rho$ be the homotopy class of a homeomorphism of two closed hyperbolic sur
 Thurston constructed a geodesic lamination, the \dfn{canonical lamination} of $\rho$, which can be dually viewed as the intersection of the maximum Lipschitz loci of all the best Lipschitz representatives of $\rho$, or the union of all measured geodesic laminations which are maximally stretched by $\rho$ in the sense of (\ref{L is K}) \cite[\S8]{Thurston98}.
 
 We seek an analogous lamination in our setting.
-Let $d \in \{2, 3\}$.
+Let $M$ be a closed Riemannian manifold of dimension $d \in \{2, 3\}$.
 Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$, thus $\Comass(\rho) = 1$.
 If $F$ is a best comass representative of $\rho$, it need not be the case that $\MCL(F)$ is a lamination \cite[Example 5.4]{bangert_cui_2017}, so we shall not be able to show that the intersection of all maximum comass loci of best comass representatives of $\rho$ is a lamination.
 But we shall show that the union of the measured stretch laminations is a lamination, contained in the intersection of the maximum comass loci.
+\todo{No we won't, write this carefully. Also it's chain recurrent laminations, not measured laminations}
+
+\begin{definition}
+Let $\lambda, \mu$ be laminations.
+\begin{enumerate}
+\item We say that $\lambda$ is a \dfn{sublamination} of $\mu$, and write $\lambda \preceq \mu$, if every leaf of $\lambda$ is a leaf of $\mu$.
+\item If $\lambda, \mu$ have a common leaf, their \dfn{meet} $\lambda \wedge \mu$ is defined to be the lamination whose leaves are leaves of both $\lambda$ and of $\mu$.
+\end{enumerate}
+\end{definition}
+
+The meet of arbitrarily many laminations which all have a common leaf is well-defined, because if $(f, K)$ is a flow box for one such lamination $\lambda$, and $K'$ is the set of $k \in K$ such that $\{k\} \times J$ is contained in a common leaf, then $(f, K')$ is a flow box for the meet.
+
+\begin{lemma}
+There exists a constant $C > 0$, only depending on $M$, such that for every calibration $F$ and complete $F$-calibrated hypersurface $L$, we have the curvature bound
+\begin{equation}\label{curvature bound for calibrated}
+\|\Two_L\|_{C^0} \leq C.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $B \subset M$ be a sufficiently small ball and $N$ a component of $L \cap B$ (so $\partial N \subset \partial B$).
+Since $B$ is contractible, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem we may assume that $A$ is continuous.
+Then if $N'$ is another complete connected hypersurface in $B$ with $\gamma := \partial N = \partial N'$,
+$$\Mass(N) = \int_N F = \int_\gamma A = \int_{N'} F \leq \Mass(N'),$$
+so $N$ is a stable minimal surface with respect to the Dirichlet problem for $B$.
+By the stable Bernstein theorem \cite[Theorem 2.10]{colding2011course}, if $B' \Subset B$ is a smaller ball, then
+$$\|\Two_N\|_{C^0(B')} \leq C_{B'}.$$
+We may cover $M$ by balls of the form $B'$; by compactness we may in fact choose finitely many of them, and let $C$ be the maximal value of $C_{B'}$.
+\end{proof}
 
 \begin{lemma}\label{calibrated implies disjoint}
 Let $F$ be a calibration, and let $N, N'$ be complete connected $F$-calibrated hypersurfaces.
@@ -1460,26 +1553,24 @@ By \cite[Theorem 7.3]{colding2011course}, the set of points of tangency is discr
 This contradicts the fact that $N \cap N'$ has only points of tangency.
 \end{proof}
 
+\begin{lemma}\label{existence of semicanonical lamination}
+Let $F$ be a best comass calibration.
+Then the set of $F$-calibrated hypersurfaces is the set of leaves of a lamination $\lambda_F$.
+\end{lemma}
+\begin{proof}
+Let $\mathscr L_F$ be the set of connected complete $F$-calibrated hypersurfaces.
+By Lemma \ref{calibrated implies disjoint}, $\mathscr L_F$ consists of pairwise disjoint minimal hypersurfaces.
+By Proposition \ref{MCL contains Thurston}, there is an $F$-calibrated lamination $\lambda$, and then by Proposition \ref{properties of calibrated laminations}, there is an $F$-calibrated leaf of $\lambda$, which implies that $\mathscr L_F$ is nonempty.
+Since the estimate (\ref{curvature bound for calibrated}) is independent of $L$, it follows by Theorem \ref{disjoint surfaces are lamination} that $\mathscr L_F$ is the set of leaves of some lamination $\lambda_F$.
+\end{proof}
+
 \begin{proposition}\label{existence of canonical lamination}
-Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$, and let $F$ be a best comass representative of $\rho$.
-Then there exists a unique $F$-calibrated lamination $\lambda_\rho$ such that every $F$-calibrated lamination is a sublamination of $\lambda_\rho$.
-Moreover, $\lambda_\rho$ is determined by $\rho$.
+Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$.
+Then the set of hypersurfaces which are calibrated by every best comass representatives of $\rho$ is the set of leaves of a lamination $\lambda_\rho$.
 \end{proposition}
 \begin{proof}
-Let $\mathscr L$ be the set of connected complete $F$-calibrated hypersurfaces.
-By Lemma \ref{calibrated implies disjoint}, $\mathscr L$ consists of pairwise disjoint minimal hypersurfaces.
-By Proposition \ref{MCL contains Thurston}, there is an $F$-calibrated lamination $\lambda$, and then by Proposition \ref{properties of calibrated laminations}, there is an $F$-calibrated leaf of $\lambda$, which implies that $\mathscr L$ is nonempty.
-
-Let $B \subset M$ be a small ball, $L \in \mathscr L$, and $N$ a component of $L \cap B$ (so $\partial N \subset \partial B$).
-Since $B$ is contractible, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem we may assume that $A$ is continuous.
-Then if $N'$ is another complete connected hypersurface in $B$ with $\gamma := \partial N = \partial N'$,
-$$\Mass(N) = \int_N F = \int_\gamma A = \int_{N'} F \leq \Mass(N'),$$
-so $N$ is a stable minimal surface with respect to the Dirichlet problem for $B$.
-By the stable Bernstein theorem \cite[Theorem 2.10]{colding2011course}, if $B' \Subset B$ is a smaller ball, then
-$$\|\Two_N\|_{C^0(B')} \lesssim_{B'} 1.$$
-Since this estimate is independent of $N$, it follows by Theorem \ref{disjoint surfaces are lamination} that $\mathscr L$ is the set of leaves of some lamination $\lambda_\rho$.
-By Proposition \ref{properties of calibrated laminations}, $\lambda_\rho$ only depends on $\rho$ and not $F$.
-By definition, $\lambda_\rho$ is an $F$-calibrated lamination; if $\lambda$ is another $F$-calibrated lamination, then the leaves of $\lambda$ are $F$-calibrated, hence are leaves of $\lambda_\rho$, so $\lambda_\rho$ is maximal among $F$-calibrated laminations.
+By Proposition \ref{MCL contains Thurston}, the best comass representatives of $\rho$ all calibrate a common leaf.
+So we may take the meet of the laminations $\lambda_F$ defined by Lemma \ref{existence of semicanonical lamination}, where $F$ ranges over best comass representatives of $\rho$, to obtain a lamination $\lambda_\rho$.
 \end{proof}
 
 \begin{definition}
@@ -1487,32 +1578,67 @@ Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$.
 The lamination $\lambda_\rho$ constructed in Proposition \ref{existence of canonical lamination} is the \dfn{canonical lamination} associated to $\rho$.
 \end{definition}
 
-\begin{lemma}\label{minimal sets are measured stretch}
-Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$, with canonical lamination $\lambda_\rho$.
-Then every sublamination of $\lambda_\rho$ which is minimal with respect to inclusion is a measured stretch lamination associated to $\rho$.
+\todo{What is the structure of the canonical lamination?}
+
+%%%%%%%%%%%%%%%%
+\subsection{Global structure of calibrated laminations}
+\todo{All this is pretty speculative and informally written.}
+
+\begin{definition}
+A lamination $\lambda$ is \dfn{transitive} if every leaf of $\lambda$ is dense in $\supp \lambda$.
+\end{definition}
+
+I called it this because minimal set is taken and it reminds me of topologically transitive.
+
+\begin{lemma}
+Let $\lambda$ be a lamination. Then:
+\begin{enumerate}
+\item The closure of any leaf of $\lambda$ is the support of a sublamination of $\lambda$.
+\item $\lambda$ is transitive iff $\lambda$ has no proper sublaminations.
+\item $\lambda$ has a transitive sublamination.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Let $\kappa$ be a sublamination of $\lambda_\rho$ which is minimal with respect to inclusion.
-\todo{Then every leaf of $\kappa$ is dense in $\kappa$.}
+We first recall that $\supp \lambda$ is closed, so if $N$ is a leaf of $\lambda$, then $\overline N \subseteq \supp \lambda$.
+So let $N'$ be a leaf of $\lambda$ and $P \in (\overline N \setminus N) \cap N'$.
+Choose coordinates $(x, y)$ based at $P$ where $N' = \{y = 0\}$.
+Then in a neighborhood of $P$, we can write $N$ as consisting of sheets $\{y = f_n(x)\}$, and after reordering the sheets and reorienting the coordinate system, we may assume that $0 < f_{n + 1} < f_n$.
+Thus $f_n(x)$ decreases to some $f(x)$ such that $f(0) = 0$.
+In particular,
+$$\{y = f(x)\} \subseteq \overline N \setminus N \subseteq \supp \lambda$$
+so $\{y = f(x)\}$ must be a sheet of a leaf of $\lambda$; since $f(0) = 0$ and $(0, 0) \in N'$, it follows that $\{y = f(x)\}$ is a sheet of $N'$.
+Therefore $\overline N \cap N'$ is an open subset of $N'$; since it is clearly a closed subset of $N'$ and $N'$ is connected, it follows that $N' = \overline N \cap N'$, or in other words $N' \subseteq \overline N$.
+The set $\mathscr L$ of leaves of $\lambda$ which meet $\overline N$ is therefore equal to the set of leaves contained in $\overline N$, hence the union of $\mathscr L$ is closed.
+So $\mathscr L$ is the set of leaves of a sublamination of $\lambda$, whose support is obviously $\overline N$.
 
-If $\kappa$ consists of a single closed leaf, we can define a $1$-harmonic map $u: M \to \Sph^1$ which maps all of $M$ to the north pole of $\Sph^1$, but which jumps around all of $\Sph^1$ along the leaf of $\kappa$.
-We can then lift $u$ to a $\pi_1(M)$-equivariant $1$-harmonic function on $\tilde M$ to see that $\kappa$ is a measured stretch lamination.
+If $\lambda$ is transitive and $\mu \preceq \lambda$, then the closure of any leaf of $\mu$ must contain $\supp \lambda$, so $\lambda \preceq \mu$, hence $\lambda = \mu$.
+Conversely, if $\lambda$ is nontransitive, then there is a leaf $N$ of $\lambda$ such that $\overline N \subset \supp \lambda$, so that $\overline N$ is the support of a proper sublamination of $\lambda$.
 
-Otherwise \todo{take the equidistributed measure on the universal cover}.
+Finally, let $\mathscr P$ be the poset of sublaminations of $\lambda$ with the ordering $\preceq$.
+If $\mathscr C \subseteq \mathscr P$ is a chain, then the laminations in $\mathscr C$ have a common leaf, so the meet of $\mathscr C$ is well-defined and therefore is a lower bound of $\mathscr C$.
+So by Zorn's lemma, $\mathscr P$ has a minimal element, which has no proper sublaminations and therefore is transitive.
 \end{proof}
+
+\begin{definition}
+Let $\lambda$ be a lamination.
+A \dfn{spiral} is a leaf of $\lambda$ which is not contained in any transitive sublamination of $\lambda$.
+\end{definition}
+
+By \cite[Theorem 3.2]{Morgan88}, a measured lamination contains no spirals.
+We want a converse:
 
 \begin{proposition}
-Let $\rho$ be a point on the unit sphere of $H^{d - 1}(M, \RR)$, with canonical lamination $\lambda_\rho$.
-Then the set of leaves of $\lambda_\rho$ is the union of the sets of leaves of the measured stretch laminations associated to $\rho$.
+Every lamination which contains no spirals admits a transverse measure.
 \end{proposition}
 \begin{proof}
-By Zorn's lemma, every leaf of $\lambda_\rho$ is contained in a sublamination $\kappa$ of $\lambda_\rho$ which is minimal with respect to inclusion.
-By Lemma \ref{minimal sets are measured stretch}, $\kappa$ is a measured stretch lamination for $\rho$, and every leaf of $\kappa$ is a leaf of $\lambda_\rho$.
-So every leaf of $\lambda_\rho$ is contained in a measured stretch lamination.
+\todo{Reduce to the case that $\lambda$ is transitive}
 
-In the other direction, let $F$ be a best comass representative of $\rho$.
-Every measured stretch lamination $\kappa$ is $F$-calibrated by Proposition \ref{MCL contains Thurston}, so by definition of the canonical lamination, $\kappa$ is a sublamination of $\lambda_\rho$.
+
 \end{proof}
+
+\todo{Does a transitive calibrated lamination admit a transverse measure? Krylov-Bogoliubov}
+
+
 
 %%%%%%%%%%%%%%%%
 \subsection{Laminations of rational homological direction}
@@ -1806,6 +1932,7 @@ Then we may set $q := \prod_i q_i$ and observe that $q \alpha$ is arbitrarily cl
 
 
 \section{Open problems}
+\subsection{\texorpdfstring{$\infty$-elliptic systems}{Infinity-elliptic systems}}
 The theory of $L^\infty$ variational problems is still nascent, especially in the case that the Euler-Lagrange equation is a \emph{system} of PDE.
 Indeed, the theory of the $\infty$-Laplacian is largely built around the maximum principle and viscosity solutions, neither of which are available for systems of PDE (but see the recent work of Katzourakis \cite{Katzourakis2018OnAV}).
 In the case $d \geq 3$, this is the situation dealt with in this paper; we have carefully sidestepped the lack of a theory of $L^\infty$ variational systems by working with $L^p$ variational systems, $d < p < \infty$, which can be written in divergence form, and then taking a limit.
