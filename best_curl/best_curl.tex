@@ -1122,7 +1122,7 @@ In the other direction, we estimate using H\"older's inequality
 \subsection{\texorpdfstring{$p$-tight forms}{p-tight forms}}
 We next scrutinize the PDE (\ref{pMaxwell}).
 If $p = 2$ and $d = 3$, then these equations are exactly the Maxwell equations in vacuum for a static magnetic strength tensor, and the functional $J_2$ below can be interpreted as the magnetic potential energy.
-On the other hand, as $p \to \infty$, the solutions of these equations converge to a minimizer of the comass; if $d = 2$, a minimizer of the comass is sometimes called \dfn{tight} \cite{farre23}.
+On the other hand, as $p \to \infty$, the solutions of these equations converge to a minimizer of the comass; if $d = 2$, a minimizer of the comass given by a PDE is sometimes called \dfn{tight} \cite{Sheffield12, farre23}.
 This motivates the below terminology:
 
 \begin{definition}
@@ -1743,6 +1743,78 @@ Then we may set $q := \prod_i q_i$ and observe that $q \alpha$ is arbitrarily cl
 
 
 \todo{Tie all this in with Thurston somehow}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \texorpdfstring{$\infty$-Maxwell}{infinity-Maxwell} equation}
+At present there is not a suitable theory of vector-valued viscosity maps, and in general, one does not expect our tight forms to be much more regular than $L^\infty$.
+Therefore there is no sense that we are aware of that such maps should solve an Euler-Lagrange equation.
+However, we shall formally derive what analytic properties tight forms \emph{should} have, in the tradition of Sheffield and Smart \cite{Sheffield12} for tight maps to finite-dimensional Hilbert spaces.
+
+\subsection{Formal derivation of Euler-Lagrange equation}
+To state our Euler-Lagrange equation we introduce some notation for derivatives of tensor fields along differential forms.
+If $\alpha$ is a $k$-form, $\nabla$ is the Levi-Civita connection, and $T$ is a section of a tensor bundle $E$, we introduce the tensor $\nabla^\alpha T$, a section of $E \otimes \Omega^{k - 1}$, defined as follows: if $X_1, \dots, X_{k - 1}$ are vector fields, and
+$$Y := (\iota_{X_1} \cdots \iota_{X_{k - 1}} \alpha)^\sharp$$
+is the vector field dual to the contraction of $\alpha$, then
+$$\langle \nabla^\alpha T, X_1 \otimes \cdots X_k\rangle := \nabla_Y T.$$
+We think of $\nabla^\alpha T$ as a sort of ``weighted projection'' of $\nabla T$ to the subbundle $\ker \star \alpha \subset TM$.
+
+\begin{proposition}
+Suppose that $F_p$ are $C^1$ $p$-tight forms converging to a tight form $F$.
+Furthermore suppose that as $p \to \infty$, $\nabla F_p$ is equicontinuous and $\|F_p\|_{C^1}^3 \lesssim 1$.
+Then $F \in C^1$ and 
+\begin{equation}\label{infty Max}
+\begin{cases}
+\dif F = 0, \\
+\langle \nabla^F F, F\rangle = 0.
+\end{cases}
+\end{equation}
+\end{proposition}
+
+We should clarify the \dfn{$\infty$-Maxwell equation}, (\ref{infty Max}): $\nabla^F F$ is a section of $\Omega^{d - 1} \otimes \Omega^{d - 2}$, so its contraction with $F$ is the contraction of the $\Omega^{d - 1}$ part with $F$; thus $\langle \nabla^F F, F\rangle$ is a $d - 2$-form.
+If $d = 2$, and $F = \dif u$, then (\ref{infty Max}) is exactly the $\infty$-Laplace equation 
+$$\langle\nabla^2 u, \nabla u \otimes \nabla u\rangle = 0.$$
+
+\begin{proof}
+We first compute from (\ref{pMaxwell}) that $\dif F = 0$ and
+\begin{align*}
+0
+&= \dif(|F_p|^{p - 2} \star F_p) \\
+&= \dif(|F_p|^{p - 2}) \wedge \star F_p + |F_p|^{p - 2} \dif \star F_p \\
+&= (p - 2) |F_p|^{p - 4} \langle \nabla F_p, F_p\rangle \wedge \star F_p + |F_p|^{p - 2} \dif \star F_p.
+\end{align*}
+If $F_p$ is nonzero, then we can divide through by $(p - 2) |F_p|^{p - 4}$ to get
+\begin{equation}\label{intermediate p Max}
+0 = \langle\nabla F_p, F_p\rangle \wedge \star F_p + \frac{|F_p|^2}{p - 2} \dif \star F_p.
+\end{equation}
+At the zeroes of $F_p$, we simply observe that (\ref{intermediate p Max}) holds for trivial reasons.
+
+By assumption $||F_p|^2 \dif \star F_p| = o(p)$, so as $p \to \infty$, the second term of (\ref{intermediate p Max}) drops out.
+We can take the limit of (\ref{intermediate p Max}) using the equicontinuity of $\nabla F_p$ to get
+$$0 = \langle \nabla F, F \rangle \wedge \star F.$$
+Taking the Hodge star of both sides, we get (\ref{infty Max}).
+\end{proof}
+
+The $\infty$-Maxwell equation has a simple geometric interpretation, which generalizes the interpretation of the $\infty$-Laplace equation as asserting that the gradient curves of an $\infty$-harmonic function are lines.
+
+\begin{proposition}
+Let $F$ be a $C^1$ solution of the $\infty$-Maxwell equation (\ref{infty Max}), and let $N$ be a connected integral hypersurface of $\ker \star F$.
+Then there exists $\lambda > 0$ such that $N$ is an $F/\lambda$-calibrated hypersurface.
+\end{proposition}
+\begin{proof}
+First observe that $F$ has no zeroes on $N$ (or else $N$ would not be equidimensional).
+Let $(X_1, \dots, X_{d - 1})$ be an orthonormal frame of vector fields tangent to $N$.
+We then introduce the tensor field
+$$T_i := X_1 \otimes \cdots \otimes \widehat{X_i} \otimes \cdots \otimes X_{d - 1},$$
+where the hat means to remove that factor.
+By definition of $N$, and the fact that $F$ has no zeroes, $F$ is a nonzero scalar field $\lambda$ times $\dif S_N$.
+So $\iota_{X_1} \cdots \widehat{\iota_{X_i}} \cdots \iota_{X_{d - 1}} F$ is a nonzero scalar field $u_i$ times $X_i^\flat$.
+Applying (\ref{infty Max}), we have 
+$$0 = \langle \langle \nabla^F F, F\rangle, T_i\rangle = u_i \langle \nabla_{X_i} F, F \rangle = \frac{u_i}{2} \partial_{X_i} (|F|^2).$$
+Since $u_i/2$ is nonzero, we see that $|F|^2$ is constant along integral curves of $X_i$.
+Since $(X_1, \dots, X_{d - 1})$ spans the tangent bundle of $N$, we conclude that $|F|^2$ is constant along $N$, or equivalently that $\lambda$ is a constant.
+Therefore $\dif S_N = F/\lambda$ is closed, hence $N$ is $F/\lambda$-calibrated.
+\end{proof}
+
 
 \todo{$C^2$ tight forms, what properties do they have?}
 
