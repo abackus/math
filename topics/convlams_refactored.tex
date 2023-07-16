@@ -356,8 +356,8 @@ Suppose that $\dim M \leq 7$.
 \item Let $u$ be a $1$-harmonic function on $M$.
 Then:
 \begin{enumerate}
-\item $\bigcup_{y \in \RR} \partial \{u > y\}$ is the support of a Lipschitz minimal lamination $\lambda$.
-\item The leaves of $\lambda$ are the connected components of the level sets $\partial \{u > y\}$.
+\item $\overline{\bigcup_{y \in \RR} \partial \{u > y\}}$ is the support of a Lipschitz minimal lamination $\lambda$.
+\item Connected components of the level sets $\partial \{u > y\}$ form a dense set of leaves.
 \item There is a measured oriented structure on $\lambda$ whose Ruelle-Sullivan current is $\dif u$.
 \end{enumerate}
 \item Conversely, if $\lambda$ is a minimal measured oriented minimal lamination of bounded curvature and Ruelle-Sullivan current $T$, and $H^1(M, \RR) = 0$, then there exists a $1$-harmonic function $u$ such that $T = \dif u$.
@@ -399,6 +399,13 @@ We consider the following manifolds: $\Ball^d$ is the unit ball in $\RR^d$ (and 
 
 For a map $F: X \to Y$ between metric spaces, we write $\Lip(F)$ for its Lipschitz constant.
 If $X, Y$ are connected Riemannian manifolds, one of which is $1$-dimensional, then we have $\Lip(F) = \|\dif F\|_{L^\infty}$.
+
+We shall frequently work with functions $u$ of locally bounded variation as though they were defined pointwise.
+To accomplish this, we write
+$$u(x) = \lim_{\varepsilon \to 0} \frac{1}{|B(x, \varepsilon)|} \int_{B(x, \varepsilon)} \star u,$$
+which is defined almost everywhere by the Lebesgue differentiation theorem; by \cite[Proposition 2.1]{BackusFLG} the value of $u(x)$, or the exceptional set on which it fails to be defined, does not depend on a choice of Riemannian metric, and if $u$ is a section of some vector bundle $E$, does not depend on the choice of trivialization of $E$.
+For $y \in \RR$, the superlevel set $\{u > y\}$ is well-defined as a set of locally finite perimeter.
+We call its measure-theoretic boundary $\partial \{u > y\}$ a \dfn{level set} of $u$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Outline of the paper}
@@ -1146,9 +1153,8 @@ Throughout, we shall assume that the dimension of $M$ is $2 \leq d \leq 7$.
 Here we collect some results about the stability of $1$-harmonic functions that will be useful in the proof of Theorem \ref{main thm}.
 
 \begin{proposition}\label{minimal implies locally minimizing}
-Let $i, A > 0$.
-Let $g$ be a Riemannian metric which is bounded in $C^\infty$ \todo{or $C^{2 + \alpha}$...}.
-Then there exists $\delta_* > 0$ which only depends on the $C^\infty$ seminorms of $g$, and $i, A$, such that the following holds:
+Let $i, A > 0$, and let $g$ be a Riemannian metric on $M$ with $\|g\|_{C^{2 + \alpha}} < \infty$ and injectivity radius $\geq i$.
+Then there exists $\delta_* > 0$ which only depends on $\|g\|_{C^{2 + \alpha}}, i, A$, such that the following holds:
 For every ball $B(p, \delta) \subset M$ with $\delta \leq \delta_*$ and every oriented minimal hypersurface $N \subset B(p, \delta)$ with $p \in N$, $\partial N \subset \partial B(p, \delta)$, $\|\Two_N\|_{C^0} \leq A$, and trivial normal bundle, $N$ is the unique absolute area-minimizer among all hypersurfaces with boundary $\partial N$.
 \end{proposition}
 
@@ -1180,7 +1186,7 @@ where the trace of $v$ is defined along $\partial B(p, r)$ and has $L^\infty$ no
 We can estimate the surface area of $\partial B(p, r)$ as $r^{d - 1}$ times twice the volume of $\Sph^{d - 1}$, at least if $r$ is small enough depending on the curvature of $M$ near $p$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma}\label{choose balls for main thm}
 There exist continuous functions $R, K: M \to \RR_+$ such that the following holds.
 Let $p \in M$, $0 < r \leq R(p)$, $u$ a function of least gradient on $B(p, 2r)$, and $N = \partial \{u > y\}$ a level set of $u$.
 Then
@@ -1204,17 +1210,48 @@ So by \cite[pg785, Corollary 1]{Schoen81}\footnote{See also \cite[Theorem 3]{Sch
 \subsubsection{\texorpdfstring{$1$-harmonic}{One-harmonic} function induces minimal lamination}
 Let $u$ be a $1$-harmonic function on $M$.
 By Theorem \ref{main thm of old paper}, the level sets of $u$ are complete embedded minimal hypersurfaces in $M$.
-Let
-$$Y = \{y \in \RR: \partial \{u > y\} \neq \emptyset\}$$
-index the level sets of $u$.
+The theorem is local, so we may replace $M$ by the balls $B(p, R(p))$ defined by Lemma \ref{choose balls for main thm}. 
 
-Let $y, z \in Y$. If $y > z$, then $\{u > y\} \subseteq \{u > z\}$, so $\partial \{u > y\}$ lies on one side of $\partial \{u > z\}$.
+Let $y, z \in \RR$. If $y > z$, then $\{u > y\} \subseteq \{u > z\}$, so $\partial \{u > y\}$ lies on one side of $\partial \{u > z\}$.
 By the maximum principle, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
 If we shrank $M$ enough, then by (\ref{least gradient curvature bound}),
-$$\sup_{y \in Y} \|\Two_{\partial \{u > y\}}\|_{C^0} < \infty.$$
-So by Theorem \ref{regularity theorem}, $\supp \dif u$ is the support of a lamination $\lambda$ with leaves given by the level sets of $u$.
-It follows that $\lambda$ is minimal and $\dif u$ is conormal to $\lambda$.
-In particular, we obtain an orientation on $\lambda$ from $\dif u$.
+\begin{equation}\label{curvature bound on level sets}
+\sup_{y \in \RR} \|\Two_{\partial \{u > y\}}\|_{C^0} < \infty.
+\end{equation}
+
+We next claim that
+\begin{equation}\label{level sets define support}
+\supp \dif u = \overline{\bigcup_{y \in \RR} \partial \{u > y\}}.
+\end{equation}
+In fact, the complement of $\supp \dif u$ is the set of $x \in M$ such that for some open neighborhood $V \ni x$, $u|_V$ is constant.
+If $\partial \{u > y\}$ intersects $V$, then there exist $x_\pm \in V$ such that, $u(x_-) \leq y$ and $u(x_+) > y$, contradicting the definition of $V$.
+Therefore $\partial \{u > y\} \subseteq \supp \dif u$.
+Conversely, if $x \in \supp \dif u$, then there exist $x_n$ such that $\dif u(x_n) \neq 0$ and $x_n \to x$.
+Thus, if $y_n := u(x_n)$ and $\varepsilon > 0$, there exists $x_{n, \varepsilon, \pm} \in B(x_n, \varepsilon)$ such that $u(x_{n, \varepsilon, -}) \leq y_n$ and $u(x_{n, \varepsilon, +}) > y_n$.
+Taking $\varepsilon \to 0$, we conclude that
+$$x_n \in \partial \{u > y_n\} \subseteq \bigcup_{y \in \RR} \partial \{u > y\}$$
+and hence $x \in \overline{\bigcup_{y \in \RR} \partial \{u > y\}}$, proving the claim (\ref{level sets define support}).
+
+We next address the structure of the closure.
+Suppose that we have a sequence of $x_n \in \partial \{u > y_n\}$ converging to some $x \notin \bigcup_{y \in \RR} \partial \{u > y\}$.
+By passing to a subsequence, we may assume that $(y_n)$ is a monotone sequence.
+By (\ref{curvature bound on level sets}), possibly after passing to a smaller ball and rescaling, the minimal hypersurfaces $N_n := \partial \{u > y_n\}$ all have small curvature in $C^0$.
+Thus by Lemmata \ref{existence of tubes} and \ref{lams have C0 fields}, each minimal hypersurface $N_n$ can locally be viewed as a graph of a function $f_n$ which is small in $C^2$, in normal coordinates centered on $x$.
+By (\ref{norms on uk}), $\|f_n\|_{C^3} \lesssim 1$ and so along a subsequence, $f_n \to f$ in $C^2$, for some $f$ whose graph is a minimal hypersurface $N \ni x$ satisfying the same curvature bound.
+Moreover, since $(y_n)$ is a monotone sequence and the $N_n$ are disjoint, $(f_n)$ is also a monotone sequence; without loss of generality it is an increasing sequence.
+Thus $f \geq f_n$ for every $n$, and $f_n(0) < f(0) = 0$, since $x = (0, 0)$ is contained in $N$ but not any of the $N_n$.
+So by the maximum principle, $N$ is disjoint from all the $N_n$.
+This argument works for any sequence $(x_n)$ which approximates $x$ with $(u(x_n))$ monotone, so $N$ is disjoint from $\bigcup_{y \in \RR} \partial \{u > y\}$.
+We call $N$ a \dfn{generalized level set} of $u$.
+
+It is not possible to produce two generalized level sets $N, N'$ which intersect.
+If $x \in N \cap N'$, then as above, we assume that $N, N'$ are graphs $f, f'$.
+By the maximum principle, if $N \neq N'$, there exist $z_\pm$ such that $f'(z_+) > f(z_+)$ but $f'(z_-) < f(z_-)$.
+We can approximate $f, f'$ in $C^0$ by graphs $f_n, f_n'$ corresponding to level sets $N_n, N_n'$; then for $n$ large, $f_n'(z_+) > f_n(z_+)$ but $f_n'(z_-) < f_n(z_-)$, contradicting the disjointness of the level sets.
+
+Summing up, we have partitioned the closed set $\supp \dif u$ into (possibly generalized) level sets, which satisfy a curvature bound (\ref{curvature bound on level sets}).
+So by Theorem \ref{regularity theorem}, the generalized level sets are the leaves of a lamination $\lambda$, which by (\ref{level sets define support}) has support equal to $\supp \dif u$.
+Since the level sets are minimal, so is $\lambda$; since $\dif u$ is conormal to, and orients, every level set, $\dif u$ is conormal to, and orients, $\lambda$.
 
 We now construct the transverse measure to $\lambda$.
 In any oriented laminar coordinates $(k, x) \in K \times J$ for $\lambda$, $\partial_x u = 0$, so $\star |\dif u|$ defines a measure $\mu$ on $K$: given $\alpha < \beta$, let
@@ -1264,6 +1301,14 @@ This completes the proof of Theorem \ref{main thm}.
 \subsection{Conclusions for \texorpdfstring{$1$-harmonic}{one-harmonic} functions}\label{1harmonic apps}
 Let us explore some consequences of the lamination perspective on $1$-harmonic functions.
 
+\subsubsection{Not every leaf is a level set}
+We briefly give an example of a $1$-harmonic function which has a leaf which is not the boundary of a superlevel set.
+Let $u(x, y) := |x|$ on $\Ball^2$; then $u$ is $1$-harmonic, since its level sets are lines.
+Moreover, $u$ attains a minimum on $\{x = 0\}$, which is a generalized level set of $u$.
+But $\{x = 0\}$ is not the boundary of any superlevel set $\{u > z\}$, since for $z > 0$, $\partial \{u > z\} = \{|x| = z\}$, and for $z \leq 0$, $\{u > z\} = \Ball^2$ has no boundary in $\Ball^2$.
+
+%%%%%%%%%%%%%%%%%%%
+
 \subsubsection{The Dirichlet problem}
 Let $\overline M$ be a compact Riemannian manifold with nonempty Lipschitz boundary $\partial M$, and interior $M$.
 A consequence of our formulation of the $1$-Laplacian, and the nonuniqueness and nonstability of minimal hypersurfaces, is that there are \emph{two} reasonable formulations for the Dirichlet problem for the $1$-Laplacian on $M$:
@@ -1273,37 +1318,6 @@ A consequence of our formulation of the $1$-Laplacian, and the nonuniqueness and
 \end{enumerate}
 Under certain convexity hypotheses on $\partial M$, the Dirichlet problem for functions of least gradient with $C^0$ data has a unique solution \cite{ZiemerWilliamsSternberg1992}.
 However, the Dirichlet problem for functions of least gradient is highly nonlocal, unlike the Dirichlet problem for solutions of a PDE; moreover, restricting to functions of least gradient causes Theorem \ref{main thm} to fail.
-
-% At least for suitably regular data, the two notions coincide, however.
-
-% \begin{proposition}\label{locally least gradient implies least gradient}
-% Let $h \in C^0(\partial M)$, and let $u$ be a function of locally least gradient on $M$ with $u|_{\partial M} = h$ and $\supp \dif u = M$.
-% Then:
-% \begin{enumerate}
-% \item $u$ has least gradient.
-% \item Suppose that:
-% \begin{enumerate}
-% \item The mean curvature $H_{\partial M} \geq 0$ (in the sense of distributions).
-% \item There does not exist an open set $U \subseteq \overline M$, such that $\partial M \cap U$ is absolutely area-minimizing in $U$.
-% \end{enumerate}
-% Then, if $v$ is a function of locally least gradient on $M$ with $v|_{\partial M} = h$, $u = v$.
-% \end{enumerate}
-% \end{proposition}
-% \begin{proof}
-% Let $\lambda$ be the lamination associated to $u$ by Theorem \ref{main thm}.
-% Then $\supp \lambda = M$, so $\lambda$ is a foliation.
-% The normal vector $\normal_\lambda$ is well-defined by Theorem \ref{regularity theorem}, which is the unique extension of $\nabla u/|\nabla u|$ off of $\{\dif u = 0\}$.
-% But by Theorem \ref{main thm of old paper}, $\nabla u/|\nabla u|$ locally has a divergence-free extension; therefore $\nabla \cdot \normal_\lambda = 0$.
-% We use this fact to integrate by parts:
-% $$\int_M \star |\dif u| = \int_M \dif u \wedge \star \frac{\dif u}{|\dif u|} = \int_{\partial M} h \langle \normal_\lambda, \normal_{\partial M} \rangle \dif S_{\partial M}.$$
-% If $v$ is a competitor, thus $v|_{\partial M} = h$, we have 
-% $$\int_M \star |\dif v| \geq \int_M \dif v \wedge \star \frac{\dif u}{|\dif u|} = \int_{\partial M} h \langle \normal_\lambda, \normal_{\partial M} \rangle \dif S_{\partial M} = \int_M \star |\dif u|$$
-% implying that $u$ has least gradient.
-
-% Now suppose that $v$ has locally least gradient and the hypotheses on $\partial M$ are in place.
-% Then \todo{$v$ induces a foliation}.
-% Then $v$ has least gradient, and the comparison principle for functions of least gradient \cite[Theorem 4.1]
-% \end{proof}
 
 For discontinuous data, the Dirichlet problem for functions of least gradient does not have a unique solution.
 When combined with Theorem \ref{main thm}, \cite[Remark 2.8]{Mazon14} could be interpreted as the following conjecture:
@@ -1538,7 +1552,7 @@ Given a hypersurface $\Sigma \subset \Ball^d$ and a metric $h$ on $\Ball^d$, let
 Q_{\Sigma, h} = -\Delta_{\Sigma, h} - |\Two_{\Sigma, h}|^2 - \Ric_h(\normal_{\Sigma, h}, \normal_{\Sigma, h})
 \end{equation}
 be the stability operator for $\Sigma$, and let $H_{\Sigma, h}$ be the mean curvature.
-Then the second variation of area in the direction of a normal variation $s$ is \cite[Chapter 1, \S8.1]{colding2011course} \todo{check this}
+Then the second variation of area in the direction of a normal variation $s$ is \cite[Chapter 1, \S8.1]{colding2011course}
 \begin{equation}\label{second variation formula}
 \delta^2_s |\Sigma|_h = \langle s, Q_{\Sigma, h} s\rangle_{L^2(\Sigma, h)} + \|sH_{\Sigma, h}\|_{L^2(\Sigma, h)}^2.
 \end{equation}
