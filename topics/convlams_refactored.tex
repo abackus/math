@@ -163,8 +163,9 @@ We then apply this theory to prove that a function has locally least gradient (i
 The space of codimension-$1$ minimal laminations on a Riemannian manifold has been topologized in several different ways.
 Thurston \cite[Chapter 8]{thurston1979geometry} introduced both his geometric topology as well as the weak topology of measures on the space of measured geodesic laminations.
 Independently of Thurston, Colding and Minicozzi \cite[Appendix B]{ColdingMinicozziIV} introduced a topology that emphasized not the laminations themselves, but rather the coordinate charts which flatten them.
-We shall explain how these three modes of convergence are related, as well as the regularity and compactness theorems associated to each such mode.
-We also show that a current is Ruelle-Sullivan with respect to a minimal lamination if and only if it is locally the exterior derivative of a $1$-harmonic function, generalizing a theorem of Daskalopoulos and Uhlenbeck \cite[Theorem 6.1]{daskalopoulos2020transverse} and strengthing an unpublished result of Auer and Bangert \cite[Theorem 1]{Auer01}.
+
+We establish a regularity theorem for minimal laminations, which implies compactness properties for the aforementioned topologies.
+We also show that a current is Ruelle-Sullivan with respect to a minimal lamination if and only if it is locally the exterior derivative of a function of least gradient, generalizing a theorem of Daskalopoulos and Uhlenbeck \cite[Theorem 6.1]{daskalopoulos2020transverse} and strengthing an unpublished result of Auer and Bangert \cite[Theorem 1]{Auer01}.
 
 %%%%%%%%%%%%%%%%%
 \subsection{Minimal laminations}\label{Lams sections}
@@ -302,7 +303,7 @@ Then:
 \begin{enumerate}
 \item $\overline{\bigcup_{y \in \RR} \partial \{u > y\}}$ is the support of a Lipschitz minimal lamination $\lambda$.
 \item Every connected component of a level set $\partial \{u > y\}$ is a leaf of $\lambda$.
-\item The set of connected components of level sets of $u$ is dense in the set of leaves of $\lambda$.
+\item Every leaf of $\lambda$ is the Hausdorff limit of connected components of level sets $\partial \{u > y\}$.
 \item There is a measured oriented structure on $\lambda$ whose Ruelle-Sullivan current is $\dif u$.
 \end{enumerate}
 \item Conversely, if $\lambda$ is a minimal measured oriented minimal lamination of bounded curvature and Ruelle-Sullivan current $T$, and $H^1(M, \RR) = 0$, then there exists a function $u$ of locally least gradient such that $T = \dif u$.
@@ -393,14 +394,6 @@ We consider the following manifolds: $\Ball^d$ is the unit ball in $\RR^d$ (and 
 
 For a map $F: X \to Y$ between metric spaces, we write $\Lip(F)$ for its Lipschitz constant.
 If $X, Y$ are connected Riemannian manifolds, one of which is $1$-dimensional, then we have $\Lip(F) = \|\dif F\|_{L^\infty}$.
-
-We shall frequently work with functions $u$ of locally bounded variation as though they were defined pointwise.
-To accomplish this, we write
-$$u(x) = \lim_{\varepsilon \to 0} \frac{1}{|B(x, \varepsilon)|} \int_{B(x, \varepsilon)} \star u,$$
-which is defined almost everywhere by the Lebesgue differentiation theorem; by \cite[Proposition 2.1]{BackusFLG} the value of $u(x)$, or the exceptional set on which it fails to be defined, does not depend on a choice of Riemannian metric, and if $u$ is a section of some vector bundle $E$, does not depend on the choice of trivialization of $E$.
-For $y \in \RR$, the superlevel set $\{u > y\}$ is well-defined as a set of locally finite perimeter.
-We call its measure-theoretic boundary $\partial \{u > y\}$ a \dfn{level set} of $u$.
-\todo{Replace this with just boundary of currents}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Outline of the paper}
@@ -749,10 +742,39 @@ If $(\lambda_n, \mu_n) \to (\lambda, \mu)$, $x_n \in \supp \lambda_n$ converges 
 	and therefore $\delta = 0$, a contradiction.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%
+\subsection{Level sets of \texorpdfstring{$BV$ functions}{functions of bounded variation}}
+Suppose that $u \in BV_\loc(M)$; then $u$ is only defined almost everywhere, and we cannot discuss its values pointwise.
+Instead, we work with the superlevel sets $\{u > y\}$, $y \in \RR$, which are defined by the property that $x \in \{u > y\}$ iff, for some (and hence every) everywhere-defined representative $u^*$ of $u$,
+$$\lim_{\varepsilon \to 0} \frac{|\{u^* > y\} \cap B(x, \varepsilon)|}{|B(x, \varepsilon)|} = 1.$$
+For almost every $y \in \RR$, it follows from the coarea formula that $\{u > y\}$ is a set of locally finite perimeter, and hence we can interpret $\partial \{u > y\}$ to be (the support of) the exterior derivative of the current $1_{\{u > y\}}$.
+This defines $\partial \{u > y\}$ in a way which does not depend on the choice of representative $u^*$.
+Since it is a support, $\partial \{u > y\}$ is a closed set, which is the closure of the reduced boundary studied in \cite[Chapter 4]{Giusti77}.
+In particular, $x \in \partial \{u > y\}$ iff for every $\varepsilon > 0$,
+$$0 < \frac{|\{u > y\} \cap B(x, \varepsilon)|}{|B(x, \varepsilon)|} < 1.$$
+
+\begin{proposition}
+Let $u \in BV_\loc(M)$. Then 
+\begin{equation}\label{level sets define support}
+	\supp \dif u = \overline{\bigcup_{y \in \RR} \partial \{u > y\}}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+First observe that $M \setminus \supp \dif u$ is the set of $x \in M$ such that for some open neighborhood $V \ni x$, $u|_V$ is almost constant.
+Hence if $\partial \{u > y\} \cap V$ is nonempty, we can write $V = V_+ \sqcup V_-$, where both $V_\pm$ have positive measure, $u|_{V_-} \leq y$, and $u|_{V_+} > y$, which contradicts that $u|_V$ is almost constant.
+Therefore $\partial \{u > y\} \subseteq \supp \dif u$.
+
+Conversely, if $x \notin \overline{\bigcup_{y \in \RR} \partial \{u > y\}}$, then there exists an open neighborhood $V \ni x$ such that for every $y \in \RR$, $\partial \{u > y\} \cap V$ is empty.
+Therefore either $|\{u > y\} \cap V| = |V|$ or $|\{u \leq y\} \cap V| = |V|$.
+Let $y$ be the real number at which $u$ transitions from $\{u > y\}$ meeting $V$ to $\{u \leq y\}$ meeting $V$.
+(Such a number must exist, or else $|u|_V| = +\infty$, violating that $u \in L^1_\loc$.)
+Then $u|_V = y$ almost everywhere, so $u|_V$ is almost constant, hence $x \notin \supp \dif u$.
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Functions of least gradient}
 \begin{theorem}\label{main thm of old paper}
-Let $u \in BV(M)$ have least gradient in $M$. Then $1_{\{u > y\}}$ has least gradient.
+Let $u \in BV(M)$ have least gradient in $M$. Then $1_{\{u > y\}}$ has least gradient in $M$.
 In particular, if $d \leq 7$, then every superlevel set $\{u > y\}$ is bounded by complete disjoint embedded oriented minimal hypersurfaces.
 \end{theorem}
 \begin{proof}
@@ -775,6 +797,7 @@ These hypersurfaces inherit an orientation from the current $\dif v$.
 This follows from the compactness of the forgetful map $BV(M) \to L^1(M)$ and the proof of \cite[Osservazione 3]{Miranda67}.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%
 \subsection{The Hausdorff topology on closed sets}
 In the sequel we shall use the Hausdorff topology on closed subsets of a topological space \cite[Chapter IV]{nadler2017continuum}:
 
@@ -912,22 +935,9 @@ If we shrank $M$ enough, then by (\ref{least gradient curvature bound}),
 \sup_{y \in \RR} \|\Two_{\partial \{u > y\}}\|_{C^0} < \infty.
 \end{equation}
 
-We next claim that
-\begin{equation}\label{level sets define support}
-\supp \dif u = \overline{\bigcup_{y \in \RR} \partial \{u > y\}}.
-\end{equation}
-In fact, the complement of $\supp \dif u$ is the set of $x \in M$ such that for some open neighborhood $V \ni x$, $u|_V$ is constant.
-If $\partial \{u > y\}$ intersects $V$, then there exist $x_\pm \in V$ such that, $u(x_-) \leq y$ and $u(x_+) > y$, contradicting the definition of $V$.
-Therefore $\partial \{u > y\} \subseteq \supp \dif u$.
-Conversely, if $x \in \supp \dif u$, then there exist $x_n$ such that $\dif u(x_n) \neq 0$ and $x_n \to x$.
-Thus, if $y_n := u(x_n)$ and $\varepsilon > 0$, there exists $x_{n, \varepsilon, \pm} \in B(x_n, \varepsilon)$ such that $u(x_{n, \varepsilon, -}) \leq y_n$ and $u(x_{n, \varepsilon, +}) > y_n$.
-Taking $\varepsilon \to 0$, we conclude that
-$$x_n \in \partial \{u > y_n\} \subseteq \bigcup_{y \in \RR} \partial \{u > y\}$$
-and hence $x \in \overline{\bigcup_{y \in \RR} \partial \{u > y\}}$, proving the claim (\ref{level sets define support}).
+Let us now partition $\supp \dif u$ into leaves. 
+By (\ref{level sets define support}), $\bigcup_{y \in \RR} \partial \{u > y\}$ is dense in $\supp \dif u$. \todo{Rewrite this}
 
-\todo{Be careful here, don't accidentally invoke a maximum principle}
-
-We next address the structure of the closure.
 Suppose that we have a sequence of $x_n \in \partial \{u > y_n\}$ converging to some $x \notin \bigcup_{y \in \RR} \partial \{u > y\}$.
 By passing to a subsequence, we may assume that $(y_n)$ is a monotone sequence.
 By (\ref{curvature bound on level sets}), possibly after passing to a smaller ball and rescaling, the minimal hypersurfaces $N_n := \partial \{u > y_n\}$ all have small curvature in $C^0$.
@@ -995,7 +1005,7 @@ This completes the proof of Theorem \ref{main thm}.
 Let us explore some consequences of the lamination perspective on $1$-harmonic functions.
 
 \subsubsection{Not every leaf is a level set}
-We briefly give an example of a funcion of locally least gradient which has a leaf which is not the boundary of a superlevel set.
+We briefly give an example of a function of locally least gradient which has a leaf which is not the boundary of a superlevel set.
 Let $u(x, y) := |x|$ on $\Ball^2$; then $u$ has locally least gradient, since its level sets are lines.
 Moreover, $u$ attains a minimum on $\{x = 0\}$, which is a generalized level set of $u$.
 But $\{x = 0\}$ is not the boundary of any superlevel set $\{u > z\}$, since for $z > 0$, $\partial \{u > z\} = \{|x| = z\}$, and for $z \leq 0$, $\{u > z\} = \Ball^2$ has no boundary in $\Ball^2$.
