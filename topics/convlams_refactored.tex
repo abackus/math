@@ -70,6 +70,8 @@
 \newcommand{\Riem}{\mathrm{Riem}}
 \newcommand{\Ric}{\mathrm{Ric}}
 
+\DeclareMathOperator*{\esssup}{ess\,sup}
+
 \newcommand{\Bmu}{\boldsymbol \mu}
 \newcommand{\Bnu}{\boldsymbol \nu}
 \newcommand{\Blambda}{\boldsymbol \lambda}
@@ -304,9 +306,13 @@ Then:
 \item $\overline{\bigcup_{y \in \RR} \partial \{u > y\}}$ is the support of a Lipschitz minimal lamination $\lambda$.
 \item Every connected component of a level set $\partial \{u > y\}$ is a leaf of $\lambda$.
 \item Every leaf of $\lambda$ is the Hausdorff limit of connected components of level sets $\partial \{u > y\}$.
-\item There is a measured oriented structure on $\lambda$ whose Ruelle-Sullivan current is $\dif u$.
+\item There exists a measured oriented structure on $\lambda$ whose Ruelle-Sullivan current is $\dif u$.
 \end{enumerate}
-\item Conversely, if $\lambda$ is a minimal measured oriented minimal lamination of bounded curvature and Ruelle-Sullivan current $T$, and $H^1(M, \RR) = 0$, then there exists a function $u$ of locally least gradient such that $T = \dif u$.
+\item Conversely, if $H^1(M, \RR) = 0$ and $\lambda$ is a minimal measured oriented minimal lamination, then:
+\begin{enumerate}
+\item If $\lambda$ has bounded curvature, then any primitive $u$ of the Ruelle-Sullivan current of $\lambda$ has locally least gradient.
+\item If the leaves of $\lambda$ are absolutely area-minimizing, then $u$ has least gradient.
+\end{enumerate}
 \end{enumerate}
 \end{mainthm}
 
@@ -402,8 +408,8 @@ The rest of the paper is organized as follows:
 \item In \S\ref{Regularity}, we prove the regularity theorem, Theorem \ref{regularity theorem}.
 \item In \S\ref{Prelims}, we develop basic facts about the measure topology, and $1$-harmonic functions, that we shall use throughout the remainder of the paper. This section is independent of \S\ref{Regularity}.
 \item In \S\ref{1harmonic sec}, we prove the equivalence of $1$-harmonic functions and measured oriented minimal laminations, Theorem \ref{main thm}, and apply it to study $1$-harmonic functions. This section relies on \S\ref{Regularity}, \S\ref{Prelims}, and Appendix \ref{locally minimizing appendix}.
-\item In \S\ref{CompactnessSec}, we prove the compactness theorem, Theorem \ref{compactness theorem}, and explore the consequences for how the different modes of convergence are related to each other. This section applies both \S\ref{Regularity} and \S\ref{Prelims}, but is independent of \S\ref{1harmonic sec} and Appendix \ref{locally minimizing appendix}.
-\item In Appendix \ref{locally minimizing appendix}, we give a short proof that the radius of a ball in which a minimal hypersurface is absolutely area-minimizing is controlled from below by the curvature. 
+\item In \S\ref{CompactnessSec}, we prove the compactness theorem, Theorem \ref{compactness theorem}, and explore the consequences for how the different modes of convergence are related to each other. This section applies both \S\ref{Regularity} and \S\ref{Prelims} for the proof of Theorem \ref{compactness theorem}, but the consequences of it also apply \S\ref{1harmonic sec}.
+\item In Appendix \ref{locally minimizing appendix}, we give a short proof that the radius of a ball in which a minimal hypersurface is absolutely area-minimizing is controlled from below by the curvature. The proof applies both \S\ref{Regularity} and \S\ref{Prelims}.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -773,6 +779,8 @@ Then $u|_V = y$ almost everywhere, so $u|_V$ is almost constant, hence $x \notin
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Functions of least gradient}
+Here we record sundry facts about functions of least gradient that we shall need later.
+
 \begin{theorem}\label{main thm of old paper}
 Let $u \in BV(M)$ have least gradient in $M$. Then $1_{\{u > y\}}$ has least gradient in $M$.
 In particular, if $d \leq 7$, then every superlevel set $\{u > y\}$ is bounded by complete disjoint embedded oriented minimal hypersurfaces.
@@ -785,7 +793,33 @@ So by the regularity theorem for minimal hypersurfaces \cite[\S37]{simon1983GMT}
 These hypersurfaces inherit an orientation from the current $\dif v$.
 \end{proof}
 
-\begin{proposition}\label{MirandaStability}
+\begin{proposition}[maximum principle]
+Suppose that $M$ is a compact manifold, possibly with boundary.
+Let $u \in BV(M)$ be a function of least gradient.
+Then 
+\begin{equation}\label{least gradient maximum principle}
+\esssup_M u = \esssup_{\partial M} u.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Suppose that (\ref{least gradient maximum principle}) fails, and let $y := \esssup_{\partial M} u$; then $\{u > y\}$ has positive measure.
+Let
+$$v(x) := \begin{cases}
+u(x), \text{ if } u(x) \leq y \\
+y, \text{ if } u(x) > y 
+\end{cases}$$
+so $u|_{\partial M} = v|_{\partial M}$ and
+\begin{equation}\label{least gradient maximum principle 2}
+\int_M \star |\dif v| = \int_M \star |\dif u| - \int_{\partial \{u > y\}} \star_{\partial \{u > y\}} |\dif u| - \int_{\{u > y\}} \star |\dif u|.
+\end{equation}
+The second integral on the right-hand side of (\ref{least gradient maximum principle 2}) is given by the amount that $u$ jumps across $\partial \{u > y\}$.
+If this is zero, then $u$ is continuous across $\partial \{u > y\}$, so in order for $\{u > y\}$ to have positive measure, the third integral on the right-hand side of (\ref{least gradient maximum principle 2}) must be nonzero (so that $u|_{\overline{\{u > y\}}}$ is not almost everywhere $y$).
+Therefore we have 
+$$\int_M \star |\dif v| < \int_M \star |\dif u|$$
+which is impossible if $u$ has least gradient.
+\end{proof}
+
+\begin{proposition}[Miranda compactness]\label{MirandaStability}
   Suppose that $M$ is a compact manifold, possibly with boundary.
 	If a sequence of functions $(u_n)$ (not necessarily of the same trace) is bounded in $L^1(M)$ and satisfies
 \begin{equation}\label{boundedness in Miranda}
@@ -796,6 +830,7 @@ These hypersurfaces inherit an orientation from the current $\dif v$.
 \begin{proof}
 This follows from the compactness of the forgetful map $BV(M) \to L^1(M)$ and the proof of \cite[Osservazione 3]{Miranda67}.
 \end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%
 \subsection{The Hausdorff topology on closed sets}
@@ -868,24 +903,6 @@ Throughout, we shall assume that the dimension of $M$ is $2 \leq d \leq 7$.
 \subsection{Stability of \texorpdfstring{$1$-harmonic functions}{one-harmonic functions}}
 Here we collect some results about the stability of $1$-harmonic functions that will be useful in the proof of Theorem \ref{main thm}.
 
-\begin{proposition}\label{minimal implies locally minimizing}
-Let $i, A > 0$, and let $g$ be a Riemannian metric on $M$ with $\|g\|_{C^{2 + \alpha}} < \infty$ and injectivity radius $\geq i$.
-Then there exists $\delta_* > 0$ which only depends on $\|g\|_{C^{2 + \alpha}}, i, A$, such that the following holds:
-For every ball $B(p, \delta) \subset M$ with $\delta \leq \delta_*$ and every oriented minimal hypersurface $N \subset B(p, \delta)$ with $p \in N$, $\partial N \subset \partial B(p, \delta)$, $\|\Two_N\|_{C^0} \leq A$, and trivial normal bundle, $N$ is the unique absolute area-minimizer among all hypersurfaces with boundary $\partial N$.
-\end{proposition}
-
-This proposition seems to be well-known, but we are not aware of a suitable reference.
-We give a version of the argument sketched by Otis Chodosh in a MathOverflow post \cite{MathOverflowMinimalLocal} in Appendix \ref{locally minimizing appendix}.
-
-\begin{lemma}\label{minimal implies 1 harmonic}
-Let $U$ be an open set bounded by minimal hypersurfaces.
-Then $1_U$ has locally least gradient.
-\end{lemma}
-\begin{proof}
-Since $\partial U$ is minimal, it is locally area-minimizing by Proposition \ref{minimal implies locally minimizing}.
-If $\partial U$ is area-minimizing in an open set $V$, then $1_U|_V$ has least gradient, so $1_U$ has locally least gradient.
-\end{proof}
-
 \begin{lemma}
 There exists a continuous function $R: M \to \RR_+$ such that the following holds.
 Let $p \in M$, $y \in \RR$, $0 < r \leq R(p)$, $u$ a function of least gradient on $B(p, r)$, and $N := \partial \{u > y\} \cap B(p, r)$.
@@ -929,34 +946,47 @@ By Theorem \ref{main thm of old paper}, the level sets of $u$ are complete embed
 The theorem is local, so we may replace $M$ by the balls $B(p, R(p))$ defined by Lemma \ref{choose balls for main thm}. 
 
 Let $y, z \in \RR$. If $y > z$, then $\{u > y\} \subseteq \{u > z\}$, so $\partial \{u > y\}$ lies on one side of $\partial \{u > z\}$.
-By the maximum principle, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
+By the maximum principle for minimal hypersurfaces, it follows that either $\partial \{u > y\}$ and $\partial \{u > z\}$ are disjoint, or are equal.
 If we shrank $M$ enough, then by (\ref{least gradient curvature bound}),
 \begin{equation}\label{curvature bound on level sets}
 \sup_{y \in \RR} \|\Two_{\partial \{u > y\}}\|_{C^0} < \infty.
 \end{equation}
 
 Let us now partition $\supp \dif u$ into leaves. 
-By (\ref{level sets define support}), $\bigcup_{y \in \RR} \partial \{u > y\}$ is dense in $\supp \dif u$. \todo{Rewrite this}
+By (\ref{level sets define support}), $S := \bigcup_{y \in \RR} \partial \{u > y\}$ is dense in $\overline S = \supp \dif u$.
+To describe the rest of $\supp \dif u$, suppose that we have $x \in \overline S \setminus S$, and we choose $x_n \in \partial \{u > y_n\}$ converging to $x$.
+Then $(y_n)$ must a bounded sequence, since by the maximum principle (\ref{least gradient maximum principle}) $u$ is bounded on $B(p, R(p))$, so after passing to a subsequence, we may assume that $(y_n)$ converges monotonically to some $y \in \RR$.
 
-Suppose that we have a sequence of $x_n \in \partial \{u > y_n\}$ converging to some $x \notin \bigcup_{y \in \RR} \partial \{u > y\}$.
-By passing to a subsequence, we may assume that $(y_n)$ is a monotone sequence.
-By (\ref{curvature bound on level sets}), possibly after passing to a smaller ball and rescaling, the minimal hypersurfaces $N_n := \partial \{u > y_n\}$ all have small curvature in $C^0$.
+After passing to a smaller ball and rescaling, we may use (\ref{curvature bound on level sets}), we may assume that the the minimal hypersurfaces $N_n := \partial \{u > y_n\}$ all have small curvature in $C^0$.
 Thus by Lemmata \ref{existence of tubes} and \ref{lams have C0 fields}, each minimal hypersurface $N_n$ can locally be viewed as a graph of a function $f_n$ which is small in $C^2$, in normal coordinates centered on $x$.
 By (\ref{norms on uk}), $\|f_n\|_{C^3} \lesssim 1$ and so along a subsequence, $f_n \to f$ in $C^2$, for some $f$ whose graph is a minimal hypersurface $N \ni x$ satisfying the same curvature bound.
-Moreover, since $(y_n)$ is a monotone sequence and the $N_n$ are disjoint, $(f_n)$ is also a monotone sequence; without loss of generality it is an increasing sequence.
+Moreover, since $(y_n)$ is a monotone sequence and the $N_n$ are disjoint, $(f_n)$ is also a monotone sequence.
+Therefore, after taking a reflection of the coordinate system if necessary, we may assume that $(f_n)$ is an increasing sequence.
+
 Thus $f \geq f_n$ for every $n$, and $f_n(0) < f(0) = 0$, since $x = (0, 0)$ is contained in $N$ but not any of the $N_n$.
-So by the maximum principle, $N$ is disjoint from all the $N_n$.
+So by the maximum principle for minimal hypersurfaces, $N$ is disjoint from all the $N_n$.
 This argument works for any sequence $(x_n)$ which approximates $x$ with $(u(x_n))$ monotone, so $N$ is disjoint from $\bigcup_{y \in \RR} \partial \{u > y\}$.
-We call $N$ a \dfn{generalized level set} of $u$.
 
-It is not possible to produce two generalized level sets $N, N'$ which intersect.
-If $x \in N \cap N'$, then as above, we assume that $N, N'$ are graphs $f, f'$.
-By the maximum principle, if $N \neq N'$, there exist $z_\pm$ such that $f'(z_+) > f(z_+)$ but $f'(z_-) < f(z_-)$.
-We can approximate $f, f'$ in $C^0$ by graphs $f_n, f_n'$ corresponding to level sets $N_n, N_n'$; then for $n$ large, $f_n'(z_+) > f_n(z_+)$ but $f_n'(z_-) < f_n(z_-)$, contradicting the disjointness of the level sets.
+\begin{definition}
+We call a hypersurface $N$ a \dfn{generalized level set} of $u$ if it is a component of $\partial \{u > y\}$, or if it is a limit of a sequence of such boundaries as above.
+\end{definition}
 
-Summing up, we have partitioned the closed set $\supp \dif u$ into (possibly generalized) level sets, which satisfy a curvature bound (\ref{curvature bound on level sets}).
+\begin{lemma}
+Let $N, N'$ be distinct generalized level sets of $u$.
+Then $N \cap N'$ is empty.
+\end{lemma}
+\begin{proof}
+As above, we assume that $N, N'$ are graphs of functions $f, f'$, which are approximated in $C^2$ by sequences $f_n, f_n'$ whose graphs are level sets.
+Now suppose that $N \cap N'$ is nonempty, hence for some $x$ we have $f(x) = f'(x)$.
+By the maximum principle for minimal hypersurfaces and the fact that $f, f'$ are distinct, $x$ is a saddle point of $f - f'$, so there exist $x_+, x_-$ close to $x$ with $f(x_+) > f'(x_+)$ and $f(x_-) < f'(x_-)$.
+Therefore for $n$ large enough, $f_n(x_+) > f_n'(x_+)$ and $f_n(x_-) < f'_n(x_-)$, so by the intermediate value theorem there exist $x_n$ with $f_n(x_n) = f_n(x_n')$.
+But the level sets of $u$ are disjoint, so this is a contradiction.
+\end{proof}
+
+Summing up, we have partitioned the closed set $\supp \dif u$ into generalized level sets, which satisfy a curvature bound (\ref{curvature bound on level sets}).
 So by Theorem \ref{regularity theorem}, the generalized level sets are the leaves of a lamination $\lambda$, which by (\ref{level sets define support}) has support equal to $\supp \dif u$.
 Since the level sets are minimal, so is $\lambda$; since $\dif u$ is conormal to, and orients, every level set, $\dif u$ is conormal to, and orients, $\lambda$.
+We can locally approximate a generalized level set by a level set in $C^2$, hence in the Hausdorff topology.
 
 We now construct the transverse measure to $\lambda$.
 In any oriented laminar coordinates $(k, x) \in K \times J$ for $\lambda$, $\partial_x u = 0$, so $\star |\dif u|$ defines a measure $\mu$ on $K$: given $\alpha < \beta$, let
@@ -974,23 +1004,22 @@ So by (\ref{polar ruelle sullivan}), $\dif u = \normal_\lambda |\dif u|$ is the 
 %%%%%%%%%%%%%%%%
 
 \subsubsection{Minimal lamination induces \texorpdfstring{$1$-harmonic}{one-harmonic} function}
-Suppose that $H^1(M, \RR) = 0$ and we are given a measured oriented minimal lamination $\lambda$ of bounded curvature, which then has a Ruelle-Sullivan current $\dif u$.
+Suppose that $H^1(M, \RR) = 0$ and we are given a measured oriented minimal lamination $\lambda$, which then has a Ruelle-Sullivan current $\dif u$.
 If $u$ does not have locally least gradient, then there exists $p \in M$ such that for any open set $E \ni p$, $u|_E$ does not have least gradient.
 Since $\supp \dif u = \supp \lambda$, we may assume that $p \in \supp \lambda$ (for if $p \notin \supp \dif u$, then $u$ is actually constant in a neighborhood of $p$, hence trivially has least gradient there).
-By Proposition \ref{minimal implies locally minimizing}, there exists $\delta > 0$ depending on $p$, $g$, and the curvature of $\lambda$, such that for any $q \in B(p, \delta)$ and any leaf $N$ of $\lambda$, $N \cap B(q, 2\delta)$ is absolutely area-minimizing in $B(q, 2\delta)$.
-In particular, $N \cap B(p, \delta)$ is absolutely area-minimizing in $B(p, \delta) \subseteq B(q, 2\delta)$.
 
-Let $E := B(p, \delta)$.
+By Proposition \ref{minimal implies locally minimizing}, if $\lambda$ has bounded curvature, then there exists $\delta > 0$ depending on $p$, $g$, and the curvature of $\lambda$, such that for any $q \in B(p, \delta)$ and any leaf $N$ of $\lambda$, $N \cap B(q, 2\delta)$ is absolutely area-minimizing in $B(q, 2\delta)$.
+In particular, $N \cap B(p, \delta)$ is absolutely area-minimizing in $B(p, \delta) \subseteq B(q, 2\delta)$, and let $E := B(p, \delta)$.
+On the other hand, if the leaves of $\lambda$ are absolutely area-minimizing, then we can take $E := M$.
+
 By construction, $u|_E$ does not have least gradient, so there exists a perturbation $v$ which satisfies
 \begin{equation}\label{not least gradient compact support}
 \int_M \star |\dif u| > \int_M \star |\dif u + \dif v|
 \end{equation}
 and has compact support in the interior $M$ \cite[Theorem 2.2]{Sternberg93}.
 In particular, there exists a collar neighborhood $F$ of the boundary such that $v|_F = 0$.
-
-Let $\partial^*$ be the reduced boundary operator, as in \cite[Chapter 3]{Giusti77}.
-Since $\partial \{u > y\}$ is smooth by Theorem \ref{main thm of old paper}, $\partial \{u > y\} = \partial^* \{u > y\}$, and
-$$\partial \{u > y\} \cap F = \partial^* \{u + v > y\} \cap F,$$
+Then
+$$\partial \{u > y\} \cap F = \partial \{u + v > y\} \cap F,$$
 so that $1_{\{u + v > y\}} - 1_{\{u > y\}}$ has compact support in $E$.
 Since $\partial \{u > y\}$ is absolutely area-minimizing in $E$, $1_{\{u > y\}}$ has least gradient in $E$.
 So we may estimate using the coarea formula (see \cite[Proposition 2.5]{BackusFLG} for a proof at this regularity)
@@ -1174,7 +1203,7 @@ To prove minimality, let
 $$u_\alpha(k, x) = (F_\alpha)_* 1_{k > k_\alpha}$$
 and similarly $u_\alpha^n(k, x) = (F_\alpha^n)_* 1_{k > k_\alpha^n}$ where $(k_\alpha^n) \in \prod_n K_\alpha^n$ converges to $k_\alpha$.
 Since $F_\alpha \circ (F_\alpha^n)^{-1}$ converges to the identity map in $C^{1-}$, and $F_\alpha^{-1}(N \cap U_\alpha)$ has zero measure, it follows that $u_\alpha^n \to u_\alpha$ almost everywhere, and hence in $L^1(I \times J)$ by the dominated convergence theorem.
-But $u_\alpha^n$ has least gradient, so by Proposition \ref{MirandaStability}, $\dif u_\alpha^n \to \dif u_\alpha$ in the weak topology of measures.
+But $u_\alpha^n$ has least gradient, so by Miranda compactness (Proposition \ref{MirandaStability}), $\dif u_\alpha^n \to \dif u_\alpha$ in the weak topology of measures.
 Clearly $\dif u_\alpha = [N \cap U_\alpha]$ and similarly for $u_\alpha^n$, so by Lemma \ref{measured convergence is smooth convergence}, $N \cap U_\alpha$ is minimal.
 \end{proof}
 
@@ -1223,7 +1252,7 @@ This completes the proof of Theorem \ref{compactness theorem}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Consequences of measured convergence}
-We now apply Theorem \ref{compactness theorem} to explain how the different modes of convergence are related to each other.
+We now apply Theorems \ref{main thm} and \ref{compactness theorem} to explain how the different modes of convergence are related to each other.
 It is clear from the definitions that flow-box convergence implies Thurston convergence.
 Moreover, for $d = 2$, Thurston claimed that that measure convergence implies Thurston convergence \cite[Proposition 8.10.3]{thurston1979geometry}, though he did not explicitly justify why the limit was geodesic, or why the convergence preserves the normal vectors.
 We complete the proof that measure convergence implies Thurston convergence, and show that flow-box convergence sits in the middle of the chain of implications.
@@ -1233,12 +1262,13 @@ Suppose that $d \leq 7$. The set of minimal measured laminations of bounded curv
 \end{lemma}
 \begin{proof}
 Let $(\lambda, \mu)$ be a measured lamination and suppose that $(\lambda_i, \mu_i) \to (\lambda, \mu)$ in the weak topology of measures, where $(\lambda_i, \mu_i)$ are measured minimal and of bounded curvature.
-Let $x \in \supp \lambda$ and $r > 0$ such that $B := B(x, r)$ is contractible.
-In $B$, we can write $T_{\mu_i} = \dif u_i$ for some sequence of functions of least gradient $u_i \in BV(B)$.
+By Proposition \ref{minimal implies locally minimizing} and the curvature bound, for every $x \in M$ there exists $r > 0$ such that every leaf of every lamination $\lambda_i$ is absolutely area-minimizing in $B(x, r)$.
+After shrinking $r$ if necessary, we may assume that $H^1(B(x, r), \RR) = 0$.
+Then, by Theorem \ref{main thm}, the Ruelle-Sullivan currents $T_{\mu_i}$ on $B(x, r)$ are the exterior derivatives of functions $u_i$ of least gradient.
 Since $u_i$ is only defined up to a constant, we impose $\int_M \star u_i = 0$, so by Poincar\'e's inequality,
-$$\|u_i\|_{L^1(B)} \lesssim r\mu_i(B) \leq 2r \mu(B) < \infty$$
+$$\|u_i\|_{L^1(B)} \lesssim r\mu_i(B(x, r)) \lesssim r^d < \infty$$
 for $i$ large.
-So by Proposition \ref{MirandaStability}, there exists a function $u$ of least gradient such that along a subsequence, $\dif u_i \to \dif u$ in the weak topology of measures. \todo{Seems sketchy?}
+So by Miranda compactness (Proposition \ref{MirandaStability}), there exists a function $u$ of least gradient such that along a subsequence, $\dif u_i \to \dif u$ in the weak topology of measures.
 Then $T = \dif \mu$, so the leaves of $\lambda$ are level sets of $u$.
 By Theorem \ref{main thm of old paper}, the leaves of $\lambda$ are minimal hypersurfaces, as desired.
 \end{proof}
@@ -1269,6 +1299,18 @@ Since $(\lambda_{n_k})$ was arbitrary, it follows that $\lambda_n \to \lambda$ i
 %%%%%%%%%%%%%%%%%%%%%%5
 \appendix 
 \section{Minimal hypersurfaces are locally area-minimizing} \label{locally minimizing appendix}
+The aim of this appendix is to prove the following proposition:
+
+\begin{proposition}\label{minimal implies locally minimizing}
+Let $d \leq 7$, let $i, A > 0$, and let $g$ be a Riemannian metric on $M$ with $\|g\|_{C^{2 + \alpha}} < \infty$ and injectivity radius $\geq i$.
+Then there exists $\delta_* > 0$ which only depends on $\|g\|_{C^{2 + \alpha}}, i, A$, such that the following holds:
+For every ball $B(p, \delta) \subset M$ with $\delta \leq \delta_*$ and every oriented minimal hypersurface $N \subset B(p, \delta)$ with $p \in N$, $\partial N \subset \partial B(p, \delta)$, $\|\Two_N\|_{C^0} \leq A$, and trivial normal bundle, $N$ is the unique absolute area-minimizer among all hypersurfaces with boundary $\partial N$.
+\end{proposition}
+
+This proposition seems to be well-known, but we are not aware of a suitable reference.
+We give a version of the argument sketched by Otis Chodosh in a MathOverflow post \cite{MathOverflowMinimalLocal} in Appendix \ref{locally minimizing appendix}.
+We take the results of \S\S\ref{Regularity}-\ref{Prelims} as given in this appendix, as we shall not use Proposition \ref{minimal implies locally minimizing} in those sections.
+
 \begin{lemma}\label{existence of absolute minimizers}
 Let $d \leq 7$, let $U \subseteq M$ be a ball of finite radius and $H^1(U, \RR) = 0$, and let $N \subset M$ be a hypersurface of trivial normal bundle and $\Two_N$ bounded.
 Then there exists a smooth hypersurface $N'$ with $N \cap \partial U = N' \cap \partial U$, which is absolutely area-minimizing.
@@ -1352,7 +1394,7 @@ Let $\eta_j$ be the area of an absolutely minimizing competitor of $L_j$ (for th
 Since $N_j'$ is absolutely minimizing for $g_j$, and $L_j \to L$ in $C^0$, the normal coordinates condition on $g_j$ implies that
 $$|L| - o(1) \leq |L_j'| \leq \eta_j + o(1) \leq |L| + o(1)$$
 where areas are taken in the flat metric.
-So along a subsequence, by Proposition \ref{MirandaStability}, the current defined by $L_j'$ converges in the weak topology of measures to the current of an absolutely minimizing competitor $L'$ of $L$.
+So along a subsequence, by Miranda compactness (Proposition \ref{MirandaStability}), the current defined by $L_j'$ converges in the weak topology of measures to the current of an absolutely minimizing competitor $L'$ of $L$.
 By uniqueness of $L$, $L = L'$; moreover, $|L_j'| \to |L|$, so (\ref{supports shrink in the limit}), $L_j' \to L$ in the Hausdorff topology.
 Therefore, by Lemma \ref{convergence of normals}, any sequence of points $p_j \in L_j'$ converges to some $p \in L$, with $\normal_{L_j'}(p_j) \to \normal_L(p)$.
 So by Lemma \ref{existence of tubes}, near $p$, $L_j'$ is a graph over $L$, of a function $f_j'$ such that $\|f_j'\|_{C^1} \to 0$.
