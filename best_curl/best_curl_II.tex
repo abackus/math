@@ -66,7 +66,7 @@
 \newcommand{\evect}{\mathbf e}
 \newcommand{\vol}{\mathrm{vol}}
 
-\newcommand{\diam}{\mathrm{diam}}
+\DeclareMathOperator{\diam}{diam}
 \newcommand{\Ell}{\mathrm{Ell}}
 \newcommand{\inj}{\mathrm{inj}}
 \newcommand{\Lip}{\mathrm{Lip}}
@@ -656,6 +656,8 @@ So we may apply Lemma \ref{existence of intersections} to the set $\mathscr S$ o
 The lamination $\lambda_\rho$ constructed in Proposition \ref{existence of canonical lamination} is the \dfn{canonical lamination} associated to $\rho$.
 \end{definition}
 
+\todo{Show that for surfaces, a best Lipschitz map calibrates ALL of its MCL. This proves a much stronger version of \cite[Theorem 5.2]{daskalopoulos2020transverse}. Not quite obvious, since they're not integrable, but it should be OK using the Carath\'eodory condition.}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Structure of the canonical lamination}\label{canonical structure}
 We now study the structure of the canonical lamination.
@@ -680,14 +682,21 @@ so by Proposition \ref{calibration condition}, $F$ calibrates $\lambda$.
 Therefore by Proposition \ref{calibrated means measured stretch}, $\lambda$ is a measured stretch lamination.
 \end{proof}
 
+\begin{lemma}\label{existence for least gradient}
+For each $\alpha \in H_{d - 1}(M, \RR)$, there exists an $\alpha$-equivariant function of least gradient $u: \tilde M \to \RR$.
+We can take $u$ to be approximated in $L^1$ by $\alpha$-equivariant $q$-harmonic functions if we choose.
+\end{lemma}
+\begin{proof}
+One can take a minimizing sequence $(u_n)$, apply Miranda compactness \todo{cite it once the other paper is done} to obtain a limit of least gradient, and observe that the limit is $\alpha$-equivariant by Lemma \ref{L1 convergence preserves pi1}.
+\todo{By a H\"older argument -- move it to the other paper maybe?} we can take the approximate minimizer $u_n$ to be $e^{-n}$-harmonic if we choose.
+This is a standard argument (aside from the equivariance) and we omit the details.
+\end{proof}
+
 \begin{proposition}\label{enough measures in canonical lamination}
 For each $\alpha \in \rho^*$, there exists a measured stretch sublamination of $\lambda_\rho$ with homology class $\alpha$.
 \end{proposition}
 \begin{proof}
-We first observe that there exists an $\alpha$-equivariant function $u$ of least gradient.
-In fact, one can take a minimizing sequence, apply Miranda compactness \todo{cite it once the other paper is done} to obtain a limit of least gradient, and observe that the limit is $\alpha$-equivariant by Lemma \ref{L1 convergence preserves pi1}.
-This is a standard argument (aside from the equivariance) and we omit the details.
-
+Let $u$ be the function of least gradient furnished by Lemma \ref{existence for least gradient}.
 The measured oriented, homologically minimizing, lamination $\kappa_u$ has class $\alpha$.
 So by Lemma \ref{homologically minimizing means measured stretch}, it is a measured stretch lamination and hence is a sublamination of $\lambda_\rho$.
 \end{proof}
@@ -862,6 +871,8 @@ In particular, the kernel of (\ref{wedge product}) is spanned by symmetric tenso
 \end{example}
 
 
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Existence of an optimal best comass form}
 % \todo{exposit this}
@@ -913,27 +924,36 @@ In particular, the kernel of (\ref{wedge product}) is spanned by symmetric tenso
 A homology class $\alpha \in H_{d - 1}(M, \RR)$ has \dfn{rational direction} if there exists $c > 0$ such that $c\alpha \in H_{d - 1}(M, \ZZ)$.
 \end{definition}
 
-\begin{proposition}
-Let $M$ be a closed manifold, let $\alpha \in H_{d - 1}(M, \RR)$ have rational direction, and let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$.
-Then every leaf of $\lambda_u$ is a closed hypersurface.
-\end{proposition}
-\begin{proof}
-Rescaling $u$ by a constant does not affect whether the leaves of $\lambda_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
-By Poincar\'e duality and the Hurcewiz theorem, we may identify $\alpha$ with a homomorphism
+If $\alpha \in H_{d - 1}(M, \ZZ)$, then by Poincar\'e duality and the Hurcewiz theorem, we may identify $\alpha$ with an integral representation
 $$\alpha: \pi_1(M) \to \ZZ,$$
 or equivalently (since $\Sph^1$ is a $K(\ZZ, 1)$ space) a homotopy class of maps $M \to \Sph^1$.
-Let $D$ be the degree of the homotopy class $\alpha$.
-By $\alpha$-equivariance, we may view $u$ as a map\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
-$$u: M \to \Sph^1.$$
-Since $\ker \alpha$ fits into a short exact sequence 
-$$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0,$$
-by the Galois correspondence, there exists a covering space $p: \hat M \to M$ with $\Gal(\hat M, M) \cong \ZZ$
-such that the lift of $u$ is topologically trivial:
+Thus it is meaningful to ask if $\tilde u: \tilde M \to \RR$ is $\alpha$-equivariant, and the data of an $\alpha$-equivariant function on $\tilde M$ is equivalent to the data of a map $u: M \to \Sph^1$ of homotopy class $\alpha$ (up to addition of an constant).
+We record a frequently useful special case of the Galois correspondence for covering spaces:
+
+\begin{lemma}\label{Galois}
+Let $M$ be a closed manifold and let $\alpha \in H_{d - 1}(M, \ZZ)$ be nonzero.
+Then there exists a covering space $p: \hat M \to M$ of Galois group $\Gal(\hat M, M) \cong \ZZ$, such that for any map $u: M \to \Sph^1$ of homotopy class $\alpha$, the lift of $u$ is topologically trivial:
 $$\begin{tikzcd}
 \hat M \arrow[r, "\hat u"] \arrow[d, "p"] & \RR \arrow[d] \\
 M \arrow[r, "u"] & \Sph^1
 \end{tikzcd}$$
-In particular, it makes sense to take superlevel sets $\{\hat u > y\}$.
+\end{lemma}
+\begin{proof}
+We view $\alpha$ as an integral representation.
+Since $\ker \alpha$ fits into a short exact sequence 
+$$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0,$$
+the result follows from the Galois correspondence for covering spaces.
+\end{proof}
+
+\begin{proposition}
+Let $M$ be a closed manifold, let $\alpha \in H_{d - 1}(M, \RR)$ have rational direction, $\alpha \neq 0$, and let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$.
+Then every leaf of $\lambda_u$ is a closed hypersurface.
+\end{proposition}
+\begin{proof}
+Rescaling $u$ by a constant does not affect whether the leaves of $\lambda_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
+We view $u$ as a map $M \to \Sph^1$ of homotopy class $\alpha$.\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
+Let $\hat u: \hat M \to \RR$ and $p: \hat M \to M$ be as in Lemma \ref{Galois}.
+Then it makes sense to take superlevel sets $\{\hat u > y\}$.
 Since $\Gal(\hat M, M)$ is a cyclic group, it is generated by a single element $h$ with the mapping property
 $$h: \partial \{\hat u > y\} \to \partial \{\hat u > y + D\}$$
 for each $y \in \RR$.
@@ -958,75 +978,298 @@ The covering space $\hat M$ is $\RR_x \times \Sph_y^1$, the point is that we unw
 \end{example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{\texorpdfstring{$\infty$-harmonic functions} with many duals}
+% We now apply the above theory, and a theorem of Massart \cite{Massart1997StableNO}, to disprove a conjecture of Daskalopolous and Uhlenbeck \cite[Conjecture 9.3]{daskalopoulos2020transverse}.
+% To state the conjecture, recall that if $F$ is a tight $1$-form on a closed surface $M$, then its primitive $v: \tilde M \to \RR$ is an $\infty$-harmonic function.
+% The conjecture is that the dual of an equivariant $\infty$-harmonic function is unique; we shall show that not even the dual cohomology class is unique.
+
+% \begin{proposition}
+% Let $M$ be a closed Riemannian surface of genus $\geq 2$.
+% Then there exists a tight $1$-form $\dif v$ on $M$, and $1$-harmonic duals $u_1, u_2$, such that $\dif u_1, \dif u_2$ are not homologous.
+% \end{proposition}
+% \begin{proof}
+% 	Let $\alpha \in H_1(M, \RR)$ have rational direction, and lie on the stable unit sphere: $\Mass(\alpha) = 1$.
+% 	By Massart's theorem \cite[Theorem 7]{Massart1997StableNO}, there exists $\rho \in H^1(M, \RR)$ with $\Comass(\rho) = 1$ and $\alpha \in \rho^*$, and $\beta \in \rho^*$ with $\alpha \neq \beta$.
+% 	Let $u_1, u_2$ be the functions of least gradient representing $\alpha, \beta$ furnished by Lemma \ref{existence for least gradient},\footnote{Daskalopolous and Uhlenbeck require their dual functions of least gradient to admit $p$-approximations, but as we already noted, $u_j$ can be chosen to admit $p$-approximations.} and note that if $\dif v$ is a tight representative of $\rho$ as constructed by \todo{cite it} then $u_1, u_2$ are dual functions of least gradient to $\dif v$.
+% \end{proof}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \section{Lattice MFMC}
-\todo{Define multiple periods, reduce, view triangulations as graphs...}
+\begin{definition}
+By a \dfn{closed continuous flow network} we mean a pair $(M, \alpha)$ where $M$ is a closed Riemannian manifold, and $\alpha \in H_{d - 1}(M, \RR)$ is nonzero.
+By a \dfn{solution for the continuous MF/MC problem} with data $(M, \alpha)$ we mean a pair $(F, \lambda)$ where $F$ is a calibration on $M$ and $\lambda$ is a measured oriented $F$-calibrated lamination which represents $\alpha$.
+\end{definition}
 
-\begin{proposition}
-Let $\hat M_{\rm cut}$ be a compact manifold-with-boundary with multiple periods and exactly two boundary components $S, T$.
-Suppose further that $S, T$ are homologous.
-Then, for each scale $0 < h \ll 1$, there exist quasiuniform triangulations $\mathcal T_h$ of $\hat M_{\rm cut}$ at scale $h$ such that the following holds:
+\begin{definition}
+By a \dfn{discrete flow network} we mean a triple $(G, s, t)$ where $G$ is a directed graph and $s, t$ are distinct vertices of $G$.
+By a \dfn{solution for the discrete MF/MC problem} with data $(G, s, t)$ we mean a pair $(f, c)$ where $f$ is a divergence-free $(s, t)$-flow, $c$ is an $(s, t)$-cut, and 
+$$\min_{c' \in \mathrm{Cuts}(\mathcal G_h)} \sum_{e \in c'} f(e) = \sum_{e \in c} f(e) = \max_{f' \in \mathrm{Flows}(\mathcal G_h)} \sum_{e \in c} f'(e).$$
+\end{definition}
 
-Choose a maximal flow $f_h$ and minimal cut $c_h$ relative to $S, T$; let $F_h$ be the closed $L^\infty$ $d - 1$-form on $M$, and $N_h$ the closed minimal hypersurface, associated to $f_h$ and $c_h$ respectively.
-Along a subsequence as $h \to 0$, $F_h \to F$ and $N_h \to N$ in \todo{what topologies?}, where $F$ has best comass, $N$ is a homologically minimizing closed minimal hypersurface, and $N$ is homologous to to $S$.
+\todo{Why are we doing this?}
+
+\begin{theorem}[discrete MF/MC theorem]\label{existence of discrete MFMC}
+Let $(G, s, t)$ be a discrete flow network.
+Then there exists a solution $(f, c)$ of the discrete MF/MC problem with data $(G, s, t)$.
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%
+\subsection{Reduction for manifolds with boundary}
+\begin{definition}
+Let $\overline M = M \cup \partial M$ be a compact Riemannian manifold-with-boundary.
+\begin{enumerate}
+\item We say that $\overline M$ is \dfn{weakly convex} if the mean curvature $H_{\partial M} \geq 0$.
+\item Suppose that $\partial M$ has two connected components $S, T$. We call $(\overline M, S, T)$ a \dfn{continuous flow network with boundary} if $S, T$ are homologous in $H_{d - 1}(\overline M, \RR)$.
+\item By a \dfn{solution for the continuous MF/MC problem} with data $(\overline M, S, T)$ we mean a pair $(F, N)$ where $F$ is a calibration on $M$ and $N \subset M$ is a closed $F$-calibrated hypersurface which is homologous to $S$ in $H_{d - 1}(\overline M, \RR)$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}[continuous MF/MC theorem with boundary]\label{existence of continuous MFMC with boundary}
+Let $(\overline M, S, T)$ be a continuous flow network with boundary.
+If $d \leq 7$ and $\overline M$ is weakly convex, then there is a solution $(F, N)$ to the continuous MF/MC problem with data $(\overline M, S, T)$.
 \end{proposition}
+
+% We use the discretization proposed by Freedman and Headrick \cite[Appendix A.6]{Freedman_2016} for this purpose.
+% They sketch the idea for flows but not for cuts, and they don't prove it works.
+
+% Let $(\overline M, S, T)$ be a continuous flow network with boundary.
+% Let $h_* := \min(\|\Riem_M\|_{C^0}^{-2}, \inj(M))/10$.
+% For each $0 < h \leq h_*$, choose a maximal $h^2/2$-separated set $V_h' \subset M$ (so $\{B(x, h^2): x \in V_h\}$ is an open cover of $M$), and let
+% $$E_h' := \left\{(x, y) \in V_h \times V_h: \frac{h}{2} \leq \dist(x, y) < h\right\}.$$
+% We add two new members $s, t$ to $V_h'$ to obtain $V_h$, and new members $(s, x)$ (resp $(x, t)$) to $E_h'$ to obtain $E_h$ if $B(x, h)$ intersects $S$ (resp $T$).
+% Then $G_h := (V_h, E_h)$ is a directed graph, so $(G_h, s, t)$ is a discrete flow network.
+
+% Given an $(s, t)$-cut $c \subseteq E_h$, which is the set of edges out of some vertex set $W \subseteq V_h$, introduce the open set
+% $$U_c := \bigcup \{B(x, h): x \in W \setminus \{s\}\}.$$
+% If $U_c$ is empty, then $W = \{s\}$ and we set $N_h := S$.
+% Otherwise, $\partial U_c$ is piecewise smooth and contains the cycle $S$, so if we write $\partial U_c = N_c - S$, then $N_c$ is a Lipschitz cycle homologous to $S$.
+
+% \begin{lemma}
+% Let $c \subseteq E_h$ be an $(s, t)$-cut. Then
+% $$\Mass(N_c) = (h^{d - 1} + O(h^d)) \card c.$$
+% \end{lemma}
+% \begin{proof}
+% For each $(x, y) \in c$, consider the sphere $\partial B(x, h)$. 
+% \end{proof}
+
+% Conversely, if $N \subset M$ is a Lipschitz cycle homologous to $S$, choose an open set $U \subseteq M$ with $\partial U = N - S$.
+% Let $W_N$ be the union of $\{s\}$ with the set of vertices of $G_h$ in $U$, and let $c_N$ be the set of edges out of $W_N$.
+% Then $c_N$ is an $(s, t)$-cut.
+
+% \begin{lemma}
+% For any Lipschitz cycle $N \subset M$ homologous to $S$, $N_{c_N}$ is Lipschitz close to $N$ if $0 < h \ll h_*$.
+% In particular,
+% $$\Mass(N_{c_N}) = (1 + O(h^{d - 1})) \Mass(N).$$
+% \end{lemma}
+% \begin{proof}
+
+% \end{proof}
+
+% Choosing $N$ to be a hypersurface with 
+% $$\Mass(N) \leq (1 + h^{d - 1}) \inf_{N' \sim S} \Mass(N'),$$
+% where $\sim$ means ``homologous,'' we see that for $h$ arbitrarily small, the 
+
+% % Moreover, there exists some $W' \subseteq W$ and relatively open $E(x) \subseteq \partial B(x, h^2)$, $x \in W'$, such that 
+% % $$N_c' = \bigcup_{x \in W'} E(x).$$
+% % Let $F(x) \subseteq \overline{B(x, h^2)}$ be the area-minimizing hypersurface in $\overline{B(x, h^2)}$ with $\partial F(x) = \partial E(x)$, and let
+% % $$N_c := \bigcup_{x \in W'} F(x).$$
+% % Then $N_c$ is homologous to $N_c'$, \todo{and is piecewise smooth}, so is a Lipschitz cycle homologous to $S$.
+
+
+% \todo{Introduce flows}
+
+% \todo{This doesn't seem to work just use FEM}
+
+
+\subsection{Discretization by finite elements}
+Though there are more direct ways to prove Proposition \ref{existence of continuous MFMC with boundary}, we prove it by reducing to the \emph{discrete} MF/MC problem using the finite element method.
+
+Let $0 < h \leq 1$.
+By a \dfn{triangulation at scale $h$} of a manifold $L$ we mean a triangulation of $L$ into Lipschitz simplices $\delta$, such that for any simplex $\delta$, $\diam \delta \leq h$.
+Since any smooth manifold admits a triangulation, by iteratively taking barycentric subdivision we may find a triangulation at scale $h$ for any $h$.
+Moreover, if $N \subset M$ is a hypersurface, and we fix a triangulation $\mathcal T$ of scale $h$ of $N$, then we can extend $\mathcal T$ to a triangulation of scale $\mathcal T'$ of $M$ \todo{cite Munkres}
+% https://mathoverflow.net/questions/342503/extending-a-triangulation-of-the-boundary-of-m-times-i/342512#342512
+and then, by iteratively taking barycentric subdivisions in $M$, we may assume that $\mathcal T'$ is of scale $h$.
+
+If $\mathcal T$ is a triangulation of $M$, we introduce the discrete flow network $(G, s, t)$ associated to $\mathcal T$, as follows.
+Let the vertices of $G$ be the $d$-simplices of $\mathcal T$, along with special vertices $s$ and $t$ corresponding to $S, T$.
+If two $d$-simplices $\delta, \delta'$ have a common $d - 1$-face $\gamma$, let there be edges $(\delta, \delta')$ and $(\delta', \delta)$.
+Furthermore, if $\delta$ is a $d$-simplex with a $d - 1$-face $\gamma \subseteq S$, let there be edges $(s, \delta)$ and $(\delta, s)$; and similarly for $d$-vertices with faces in $T$.
+The weight of an edge associated to a $d - 1$-face $\gamma$ shall be $\Mass(\gamma)$.
+
+If $c \subseteq \mathrm{Edges}(G)$, we obtain a simplicial $d - 1$-chain $N$ (for the simplicial structure $\mathcal T$) by taking the sum of the $d - 1$-faces associated to the edges in $c$; we call $N$ the chain \dfn{associated} to $c$.
+This is mainly interesting when $c$ is an $(s, t)$-cut, for the following reason:
+
+\begin{lemma}\label{cuts induce cycles}
+If $(G, s, t)$ is a discrete flow network arising from a triangulation of $M$, $c$ is an $(s, t)$-cut in $G$, and $N$ is the chain associated to $c$, then $N$ is a cycle, homologous to $S$.
+\end{lemma}
 \begin{proof}
-Let $\alpha$ be the homology class of $S$.
+Since $c$ is a $(s, t)$-cut, there exists a partition of the vertex set $V_s(G) \sqcup V_t(G)$ where $s \in V_s$, $t \in V_t$, and any edge from $V_s$ to $V_t$ passes through $c$.
+Let $U \subset \overline M$ be the interior of the union of the simplices in $V_s$.
+Then $U$ is bounded by $N - S$, so $N - S$ is exact.
+Since $S$ is a cycle, so is $N$.
+\end{proof}
+
+Any $f: \mathrm{Edges}(G) \to \RR$ induces a simplicial $d - 1$-cochain for the simplicial structure $\mathcal T$, which we also denote by $f$: if $e$ is a $d - 1$-simplex in $\mathcal T$, associated to an edge which we also denote $e$, we define $\langle f, e\rangle := f(e)$.
+By the characterization of Whitney forms \cite{dodziuk2022characterization}, associated to the simplicial cochain $f$ there exists a unique $d - 1$-form $F$ such that for each $d$-simplex $\iota_\sigma: \sigma \to M$ of $\mathcal T$, $\iota^*_\sigma F$ has affine coefficients, for each $d - 1$-simplex $\iota_e: e \to M$ of $\mathcal T$, $\iota_e^* F$ has constant coefficients, and for each such $e$,
+$$\int_e F = f(e).$$
+The form $F$ is called a \dfn{Whitney form} associated to $f$. \todo{We need to construct Whitney forms adapted to a Riemannian metric to get the $L^\infty$ property and for ``constant coefficients'' to be well-defined}
+
+\begin{lemma}\label{flows induce calibrations}
+If $(G, s, t)$ is a discrete flow network arising from a triangulation $\mathcal T$ at scale $h$ of $M$, $f$ is an $(s, t)$-flow on $G$, and $F$ is the Whitney form associated to $f$, then $\dif F = 0$ on $M$ and $\|F\|_{L^\infty} \leq 1 + O(h)$.
+\end{lemma}
+\begin{proof}
+The cochain $f$ is actually a cocycle: if $\delta$ is a $d$-simplex, and $O(\delta), I(\delta)$ denote the set of edges out of, and into, the vertex $\delta$, then
+$$\langle \dif f, \delta\rangle = \langle f, \partial \delta\rangle = \sum_{e \in O(\delta)} f(e) - \sum_{e \in I(\delta)} f(e) = 0$$
+since $f$ is a flow.
+Therefore $\dif F = 0$ \cite[Proposition 4.6]{Lohi21}. \todo{Estimate $\Comass(F)$}
+\end{proof}
+
+Proposition \ref{existence of continuous MFMC with boundary} follows from Theorem \ref{existence of discrete MFMC} and the following proposition:
+
+\begin{proposition}\label{discrete implies continuous MFMC}
+Let $(\overline M, S, T)$ be a continuous flow network with boundary.
+If $d \leq 7$ and $\overline M$ is weakly convex, then for each $0 < h \ll 1$, there exist triangulations $\mathcal T_h$ of $M$ at scale $h$ with the following property:
+
+Let $(G_h, s_h, t_h)$ be the discrete flow network induced by $\mathcal T_h$, and let $(f_h, c_h)$ be a solution of the discrete MF/MC problem with data $(G_h, s_h, t_h)$.
+Let $F_h$ be the Whitney form associated to $f_h$, and let $N_h$ be the simplicial $d - 1$-chain with simplices given by $c_h$.
+Then there is a solution $(F, N)$ to the continuous MF/MC problem with data $(\overline M, S, T)$ such that, after taking a subsequence as $h \to 0$, $F_h \to F$ weakly in $L^p$ for any $1 \leq p < \infty$, and $N_h \to N$ in the flat topology on currents.
+\end{proposition}
+
+Let $\alpha$ be the homology class of $S$ (hence of $T$) in $\overline M$.
 We say that a closed hypersurface $N$ representing $\alpha$ is \dfn{$\varepsilon$-minimizing} if 
 $$\Mass(N) \leq (1 + \varepsilon) \Mass(\alpha).$$
+
+\begin{lemma}\label{almost minimizers avoid boundary}
+Suppose that $S, T$ are not homologically minimizing hypersurfaces in $\alpha$.
+Then there exists a tubular neighborhood $E \supset \partial M$ such that for any $0 < \varepsilon \ll 1$, there is a $\varepsilon$-minimizing hypersurface in $\alpha$ which does not meet $E$.
+\end{lemma}
+\todo{Prove it, if this is enough}
+
+\begin{proof}[Proof of Proposition \ref{discrete implies continuous MFMC}]
+We first construct triangulation in which we shall solve the discrete MF/MC problem.
 In particular, for any $\varepsilon > 0$, there exists a smooth $\varepsilon$-minimizing hypersurface.
-Let $N_h'$ be $h^{d - 1}$-minimizing, and let $\mathcal S_h$ be a quasiuniform triangulation of $N_h$ at scale $h$.
-\todo{By using the $PL$ structure of $M$, and curvature bounds on $N_h$ to preserve the uniformity} we may choose a quasiuniform triangulation $\mathcal T_h$ of $M$ at scale $h$.
+Fix a scale $0 < h \ll 1$.
+By Lemma \ref{almost minimizers avoid boundary}, there is a $h^{d - 1}$-minimizing hypersurface $N_h$ which avoids an $h$-independent tubular neighborhood $F$ of $\partial M$.
+Choose a triangulation $\mathcal T_h$ of $M$ at scale $h$ which contains a triangulation of $N_h'$.
+\todo{Refinement of $\mathcal T_h$}
+Let $(G_h, s, t)$ be the induced flow network.
 
-We claim that $N_h'$ arises from a cut $c_h'$ of $\mathcal T_h$ relative to $S, T$.
-In fact, the chain $N_h' - S$ is exact, and so bounds an open set $U_h$.
-Let $V_h := M \setminus \overline{U_h}$, so $\partial V_h = T - N_h'$.
-Since $N_h'$ is covered by $d - 1$-simplices, $N_h'$ does not intersect the interior of any $d$-simplex $\Delta$ of $\mathcal T_h$, but $N_h'$ separates $U_h$ and $V_h$, so $\Delta$ cannot intersect both $U_h$ and $V_h$.
-Therefore $c_h'$ is a cut.
-
-By the (discrete) max flow/min cut theorem, there exist a maximal flow $f_h$ and minimal cut $c_h$ relative to $S, T$.
-Since $N_h'$ is $h^{d - 1}$-minimizing,
-$$\Mass(c_h) \leq \Mass(c_h') = \Mass(N_h') \leq (1 + h^{d - 1}) \Mass(\alpha).$$
-\todo{Prove more stuff...}
-
-Finally we claim that $N$ is a minimal hypersurface and $F$ has best comass.
+Since $N_h' - S$ bounds a region $U$ which is a simplicial subcomplex of $(\overline M, \mathcal T_h)$ and similarly for $T - N_h'$ and a region $V$, the set of $d - 1$-simplices in $N_h'$ is an $(s, t)$-cut $c_h'$ in $G_h$, namely the cut which partitions $G_h$ into the $d$-simplicies in $U$ and the $d$-simplices in $V$.
+By Lemma \ref{cuts induce cycles}, there exists a Lipschitz cycle $N_h \subset M$ induced by $c_h$; moreover,
+$$\Mass(N_h) = \Mass(c_h) \leq \Mass(c_h') = \Mass(N_h') \leq (1 + h^{d - 1}) \Mass(\alpha).$$
+The flow $f_h$ induces a Whitney $d - 1$-form $F_h$ on $M$ such that
+$$\int_{N_h} F_h = \sum_{e \in c_h} f(e) = \sum_{e \in c_h} \Mass(e) = \Mass(N_h)$$
+(where $\int_{N_h} F_h$ is well-defined because $N_h$ misses $E$)
+and by Lemma \ref{flows induce calibrations}, $\dif F_h = 0$ and $\|F_h\|_{L^\infty} \leq 1 + O(h)$.
+By \todo{compactness of integral currents}, $N_h$ converges along a subsequence to some integral current $N$ which is homologous to $S$, misses $E$, and is mass-minimizing:
+$$\Mass(\alpha) \leq \Mass(N) \leq \limsup_{h \to 0} \Mass(N_h) \leq \Mass(\alpha).$$
+By \todo{compactness of $L^p$}, $F_h$ converges along a further subsequence to some $F$ with $\|F\|_{L^\infty} \leq 1$.
+Since $N$ misses $E$, $\int_N F$ is well-defined and by \todo{convergence of integral currents}, $\int_N F = \Mass(N)$.
+Therefore $N$ is $F$-calibrated. Therefore \todo{the leaves of $N$ are disjoint}, so $N$ is an $F$-calibrated chain, as desired.
 \end{proof}
 
 
-Let $\mathcal T_h$ be a quasiuniform triangulation of $M$ at scale $h$.
-We iteratively define $\mathcal T_{h'}$ for $h' < h$ using barycentric subdivision.
-We identify undirected weighted graphs with directed weighted graphs with edges going both ways, each with the same weight as the undirected edge.
-The triangulation gives us a graph $G_h$ where the vertices are the $d$-simplices, and the edges are the $d - 1$-simplices, with weight $\Mass(e)$.
-A closed $d - 1$-form $F$ is identified with the function $F_h$ on edges:
-$$F_h(e) = \int_e F.$$
-This gives a positive function on one of the directed edges and $0$ on the other.
-If $\delta$ is a simplex, $h$ is much smaller than the topological scale, and $\partial \delta = \sum_i e_i$, then $\sum_i F_h(e_i) = 0$ by Stokes' theorem.
-If $F$ calibrates $e$, then $F_h(e) = \Mass(e)$, which justifies that choice of weight.
 
-Let $\alpha \in H_{d - 1}(M, \ZZ)$ and let $\hat M$ be the covering space which kills $\alpha$, so $\Gal(\hat M, M) \cong \ZZ$.
-Then truncate $\hat M$ to get a manifold-with-boundary $\hat M_{\rm cut}$ with slightly more than a single copy of $M$ in it, if we do this generically the boundary components will not be minimal surfaces.
-Choose one to be the source and the other to be the sink (since the Galois group is $\ZZ$ there's a source and a sink).
-So, at least if we only care about integral classes, wlog $M$ has two boundary components, which are homologous to each other, and $M$ is compact.
-Maybe we can approximate irrational classes by rational classes.
+%%%%%%%%%%%%%%
+\subsection{Reduction to integral classes}
+\begin{lemma}\label{reduction to rational direction}
+Let $(\alpha_n)$ be a sequence of classes of rational direction which converge to $\alpha$.
+Let $(F_n, \lambda_n)$ be a sequence of solutions to the continuous MF/MC problem with data $(M, \alpha_n)$.
+Then there exists a solution $(F, \lambda)$ to the problem with data $(M, \alpha)$ such that, along a subsequence:
+\begin{enumerate}
+\item $(F_n)$ converges in $L^p$, for any $1 \leq p < \infty$, to $F$.
+\item $(\lambda_n)$ converges in the weak topology of measures to $\lambda$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The mass and comass of $\lambda_n, F_n$ are bounded, so we can take limits in the measure topology and $L^p$.
+Convergence  implies convergence in homology which guarantees that the sequences converge.
+\todo{Details}
+\end{proof}
 
-Choose $h$ much smaller than the curvature scale or topological scale.
-By the Ford-Fulkerson algorithm we can find a max flow $F_h$ and a minimal cut $C_h$.
-Use this data to make a simplicial chain $N_h$: the sum of the $d - 1$-simplices in $C_h$, oriented using $F_h$.
-Taking $h \to 0$, we want to show that $N_h$ converges to a minimal lamination and $F_h$ converges to a best comass calibration.
+Given a measured lamination $\lambda$, and $c > 0$, let $c\lambda$ denote $\lambda$ with its transverse measure rescaled by $c$.
+It is clear that if $(M, \alpha)$ is data, with a solution $(F, \lambda)$, then for any $c > 0$, $(F, c\lambda)$ is a solution of the continuous MF/MC problem with data $(M, c\alpha)$.
+By Lemma \ref{reduction to rational direction}, for the purposes of approximating a solution to the continuous MF/MC problem we may assume that $\alpha$ has rational direction.
+By the scale-invariance described above, then, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$, and henceforth we do.
 
-\todo{To do this, we should estimate the mass of $N_h$ in terms of the stable norm, and show that if $h$ is smaller than the topological scale, then}
-$$\Mass(N_h) \leq \Mass(\alpha) + o(1).$$
+%%%%%%%%%%%%%%%%
+\subsection{Reduction to cut covering spaces}
+Let $p: \hat M \to M$ be the covering space attained from Lemma \ref{Galois}.
+Since $\Gal(\hat M, M)$ is infinite, $\hat M$ is not compact, but each fundamental domain $\hat M_0 \subset \hat M$ is compact.
 
-Side note: each simplex has mass $\sim h^d$ so there are $h^{-d}$ simplices.
+\begin{lemma}
+The fundamental domain $\hat M_0$ has exactly two boundary components, $\partial \hat M_0 = S_0 \sqcup T_0$, each of which is a cycle.
+\end{lemma}
+\begin{proof}
+\todo{Topology is hard}
+\end{proof}
+
+Let $h: \hat M \to \hat M$ be a generator of the cyclic group $\Gal(\hat M, M)$.
+Then $\hat M$ consists of biinfinitely many copies $h^n_*(\hat M_0)$, $n \in \ZZ$, of $\hat M_0$, which are glued along their boundary components: we can choose the decomposition $\partial \hat M_0 = S_0 \sqcup T_0$ so that for each $n \in \ZZ$,
+$$h^n_*(T_0) = h^{n + 1}_*(S_0).$$
+Let 
+$$\hat M_n := \bigcup_{k=-n}^n h^n_*(\hat M_0),$$
+so that $\hat M_n$ is bounded by $S_n := h^{-n}_*(S_0)$ and $T_n := h^n_*(T_0)$.
+We call $\hat M_n$ a \dfn{cut covering space} of $M$, since it is obtained by cutting off the covering space $\hat M$ to have only finitely many fundamental domains of $M$.
+
+\begin{definition}
+Let $n \geq 1$. We say that a pair $(\hat F_n, \hat \lambda_n)$ is a \dfn{solution} of the continuous MF/MC problem with data $(\hat M_n, S_n, T_n)$ concentrated in $\hat M_0$ if:
+\begin{enumerate}
+\item $\hat F_n$ has best comass with respect to compactly supported cohomology on the interior of $\hat M_n$.
+\item $\hat F_n$ is a calibration.
+\item $\hat \lambda_n$ is a measured oriented lamination on $\hat M_0$.
+\item $\hat \lambda_n$ is homologous to $S_n$.
+\item $\hat \lambda_n$ is $\hat F_n$-calibrated.
+\end{enumerate}
+\end{definition}
+
+\todo{Justify that we can move a solution to one which is concentrated on $\hat M_0$}
+
+Since $\hat M$ is periodic, it is no loss to consider those solutions concentrated in $\hat M_0$.
+In that case, $\hat \lambda$ will not intersect the boundary $S_n$, nor will it ``escape to infinity'' as we take $n \to \infty$.
+
+\begin{lemma}\label{reduction to one covering space}
+Suppose that $(\hat F_n, \hat \lambda_n)$ are solutions to the continuous MF/MC problems with data $(\hat M_n, S_n, T_n)$ concentrated in $\hat M_0$.
+Then along a subsequence, $(\hat F_n, \hat \lambda_n)$ converge in \todo{what topology?} to a pair $(\hat F, \hat \lambda)$, such that:
+\begin{enumerate}
+\item $\hat F$ has best comass with respect to compactly supported cohomology on $\hat M$.
+\item $\hat F$ is a calibration.
+\item $\hat \lambda$ is a measured oriented lamination on $\hat M_0$.
+\item $\hat \lambda$ is homologous to $S_0$.
+\item $\hat \lambda$ is $\hat F$-calibrated.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+\todo{Use compactness but you might need to take translations to keep them from running away to infinity}
+\end{proof}
+
+Suppose that we can solve the continuous MF/MC problem on each cut covering space.
+Let $(\hat F, \hat \lambda)$ be as in Lemma \ref{reduction to one covering space}.
+Let $\hat u$ be the function of least gradient associated to $\hat \lambda$.
+We introduce the average over pullbacks
+$$F := \lim_{n \to \infty} \frac{1}{2n + 1} \sum_{m=-n}^n (h^{-n})^* F$$
+and the sum of pushforwards 
+$$\dif u := \lim_{n \to \infty} \sum_{m=-n}^n h^n_* \dif u.$$
+Here the limits are taken in \todo{what topology?} and it is clear from the definitions that $F, \dif u$ are closed, with $F$ an invariant best comass calibration with respect to compactly supported cohomology, and $u$ a equivariant function of least gradient.
+Let $\lambda$ be the measured oriented lamination associated to $u$, so $\lambda$ is $F$-calibrated. \todo{Check all this}
+Therefore $(F, \lambda)$ drops to a solution of the MF/MC problem on $M$.
+
+Therefore it remains to show that given a cut covering space $\hat M_n$, we can discretize the continuous MF/MC problem on $\hat M$.
+
+
+\subsection{Runtime and practicality}
+\todo{Write this out} Side note: each simplex has mass $\sim h^d$ so there are $h^{-d}$ simplices.
 Each one gives a vertex and $T_d$ edges where $T_d \sim d^2$ is the $d$th triangle number.
 So $|V| \sim h^{-d}$ and $|E| \sim d^2 h^{-d}$.
 Ford-Fulkerson has $\sim |V| |E|^2 \sim d^4 h^{-3d}$ runtime.
 I guess this is worse than Loisel's algorithm since if $d = 3$ our runtime is $\sim h^{-9}$ while Loisel's is $h^{-8.52} \log(h^{-1})$.
 But maybe under some circumstances it's better, like if you need a max flow and a min cut together.
 
-\todo{Does lattice MFMC implies manifold MFMC?}
-
+\todo{Application to quantum gravity?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Open problems}\label{open problems}
@@ -1052,6 +1295,8 @@ We conjecture that the analogous fact should hold for our canonical lamination:
 Let $\rho \in H^{d - 1}(M, \RR)$, and let $\lambda_\rho$ be the canonical lamination.
 Then it is possible to approximate $\lambda_\rho$ in Thurston's geometric topology\footnote{See \cite[\S1]{BackusCML} for the definition of Thurston's geometric topology in this setting.} by finite unions of closed minimal hypersurfaces.
 \end{conjecture}
+
+\footnote{It might be possible using the reduction to integral classes!}
 
 The following problem was suggested to me by Karen Uhlenbeck. 
 There exist closed hyperbolic $3$-manifolds which admit taut foliations; in that case, \emph{after changing the metric} one may find a minimal foliation.
@@ -1110,6 +1355,8 @@ Then there exists an $\ell$-form $A$ such that $F = \dif A$ and
 \|A\|_{W^{1, p}} \lesssim_p \|F\|_{L^p}.
 \end{equation}
 \end{lemma}
+
+\todo{Whitney forms}
 
 %%%%%%%%%%%%%%%%%
 \section{Singularities of nodal sets}\label{nodal appendix}
