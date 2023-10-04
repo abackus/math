@@ -161,57 +161,69 @@
 
 
 \begin{document}
-\begin{abstract}
+% \begin{abstract}
 
-\end{abstract}
+% \end{abstract}
 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Calibrated solutions}
+\section{Preliminaries on matrix norms}
+In this paper we focus on the trace norm.
+But it will be convenient to study all the Schatten-von Neumann norms at once.
+To be precise, if $A \in \Hom(\RR^d, \RR^c)$ is a matrix, consider the positive factor
+$$Q(A) := (AA^\dagger)^{1/2} \in \End(\RR^c).$$
+Then introduce the \dfn{Schatten-von Neumann norm}
+$$|A|_{sv^p} := \tr(Q(A)^p)^{1/p}$$
+for $p \in [1, \infty)$ and extend to $p = \infty$ by taking limits.
+For $p = 1$ this is the trace norm, for $p = 2$ it is the Frobenius norm, and for $p = \infty$ it is the spectral norm.
+
+\section{Calibration tensors}
 \begin{definition}
-A matrix $R$ is \dfn{suborthogonal} if $R^\dagger R \leq 1$.
-The suborthogonal matrix $R$ is a \dfn{polar factor} of a matrix $A$ if
+A matrix $R \in \Hom(\RR^d, \RR^c)$ is a \dfn{polar factor} of a matrix $A \in \Hom(\RR^d, \RR^c)$ if $|R|_{sv^\infty} \leq 1$ and
 $$\tr(R^\dagger \dif u) = |\dif u|_{sv^1}.$$
 \end{definition}
 
-\begin{lemma}
-Let $R$ be a suborthogonal matrix. Then
-\begin{equation}\label{suborthogonal matrices are sub1}
-|R|_{sv^\infty} \leq 1.
-\end{equation}
-\end{lemma}
-\begin{proof}
-This follows because $|R|_{sv^\infty}^2$ is the top eigenvalue of the positive matrix $R^\dagger R \leq 1$.
-\end{proof}
+Recall Anzellotti theory \cite{Anzellotti1983}.
+In my previous paper I showed that Anzellotti theory holds even on Riemannian manifolds.
 
 \begin{definition}
-Let $R$ be a Borel measurable field of suborthogonal matrices.
-We say that $R$ \dfn{calibrates} a function $u \in BV(M \to \RR^d)$ if:
+We say that a measurable section $R: M \to \Hom(TM, \RR^c)$ \dfn{calibrates} a function $u \in BV(M \to \RR^c)$ if:
 \begin{enumerate}
-\item $R$ is divergence-free.
-\item For $|\dif u|$-almost every $x \in M$, $R(x)$ is a polar factor of $\dif u(x)$.
+\item $\dif^* R = 0$.
+\item $\||R|_{sv^\infty}\|_{L^\infty} \leq 1$.
+\item In the sense of Anzellotti theory, $R$ is a polar factor of $\dif u$.
 \end{enumerate}
 \end{definition}
 
-\begin{lemma}\label{existence}
-Let $h \in L^1(\partial M \to \RR^d)$.
-Then there exists a map $u \in BV(M \to \RR^d)$ and a calibration $R$ of $u$, such that for any $X \in C^0(\partial M \to \RR^d)$,
+\subsection{Solving the Dirichlet problem}
+\begin{proposition}\label{existence}
+Let $h \in L^1(\partial M \to \RR^c)$.
+Then there exists a map $u \in BV(M \to \RR^c)$ and a calibration $R$ of $u$, such that on $\partial M$,
 \begin{equation}\label{Dirichlet condition}
-X^\dagger R\normal_M \in \sgn(X^\dagger(h - u))
+R\normal_M \in \sgn(h - u).
 \end{equation}
-in the sense of Anzellotti theory.
-\end{lemma}
-\begin{proof}
-Let's do this for $h \in W^{1/2, 2}$.
+\end{proposition}
+
+The proof is similar to \cite[Theorem 2.4]{Mazon14} (see also \cite[Proposition 5.9]{Andreu-Vaillo2004}), and the main novelty is to apply those techniques to the PDE 
+\begin{equation}\label{Dask pLap}
+\dif^* (Q(\dif u_p)^{p - 2} \dif u_p) = 0
+\end{equation}
+studied by \cite{daskalopoulos2022analytic} instead of the scalar $p$-Laplacian.
+In doing so, we shall have to use the various Schatten-von Neumann norms, and so it is convenient to introduce the \dfn{relaxed functionals}, defined for $p \in [1, \infty]$, $h \in L^1(\partial M \to \RR^c)$, and $u \in BV(M \to \RR^c)$, as
+$$\Phi_{h, p}(u) := \int_M |\dif u|_{sv^p} + \int_{\partial M} |h - u|.$$
+
+\subsubsection{Proof for \texorpdfstring{$h \in W^{1/2, 2}$}{regular h}}
 By the inverse trace inequality, there exists $v \in W^{1, 2}_h$, the space of $W^{1, 2}$ extensions of $h$, with 
 $$\|v\|_{W^{1, 2}} \lesssim \|h\|_{W^{1/2, 2}}.$$
-Solve
-$$\begin{cases}
--\dif^\dagger (Q(\dif u_p)^{p - 2} \dif u_p) = 0, \\
-u_p|_{\partial M} = h 
-\end{cases}.$$
+Then by H\"older's inequality, $v \in W^{1, p}_h$ for any $p \in [1, 2]$, so by a slight modification of \cite[Theorem 2.12]{daskalopoulos2022analytic}, we can solve (\ref{Dask pLap}) for $u_p \in W^{1, p}_h$.
 Let $Q_p := Q(\dif u_p)$.
+
+\begin{lemma}
+There exists $C > 0$ independent of $p$ such that 
+$$\||\dif u_p|_{sv^p}\|_{L^p} \leq C.$$
+\end{lemma}
+\begin{proof}
 Integrating by parts, we see that 
 $$\int_M \tr(Q_p^{p - 2} \dif u_p^\dagger \dif(v - u_p)) = 0$$
 and hence
@@ -220,23 +232,109 @@ and hence
 &= \int_M \tr(Q_p^{p - 2} \dif u_p^\dagger \dif u_p)
 = \int_M \tr(Q_p^{p - 2} \dif u_p^\dagger \dif v).
 \end{align*}
-By von Neumann's trace inequality ($(p, q)$ is a H\"older pair)
+By von Neumann's trace inequality,
 $$\tr(Q_p^{p - 2} \dif u_p^\dagger \dif v) \leq |Q_p^{p - 2} \dif u_p^\dagger|_{sv^q} |\dif v|_{sv^p} = |\dif u_p|_{sv^p}^q |\dif v|_{sv^p}$$
 so by H\"older's inequality,
 $$\int_M |\dif u_p|_{sv^p}^p \leq \int_M |\dif u_p|_{sv^p}^q |\dif v|_{sv^p} \leq \left(\int_M |\dif u_p|_{sv^p}^p\right)^{1/q} \||\dif v|_{sv^p}\|_{L^p}.$$
 In particular, if $p \leq 2$, then by H\"older's inequality again,
 $$\||\dif u_p|_{sv^p}\|_{L^p} \leq \||\dif v|_{sv^p}\|_{L^p} \lesssim_M \||\dif v|_{sv^2}\|_{L^2},$$
 which does not depend on $p$ but only on $\|h\|_{W^{1/2, 2}}$.
-Another application of H\"older's inequality shows that $\||\dif u_p|_{sv^p}\|_{L^1}$ is similarly bounded independently of $p$.
+\end{proof}
+
+By H\"older's inequality,
+$$\||\dif u_p|_{sv^1}\|_{L^1} \leq d \||\dif u_p|_{sv^p}\|_{L^1} \leq d C^{1/q} |M|^{1/p}$$
+which is bounded as $p \to 1$ (that is, as $q \to \infty$).
 Since the trace of $u_p$ along $\partial M$ does not depend on $p$, it follows from Poincar\'e's inequality that $(u_p)$ is uniformly bounded in $BV$.
 By the isoperimetric inequality, if $r \in [1, r^*)$ where $r^* := \frac{d}{d - 1}$, then $BV$ embeds compactly in $L^r$.
 So there exists $u \in BV$ such that along a subsequence, $u_p \to u$ in $L^r$ for any $r \in [1, r^*)$, and almost everywhere.
 
-The hard part: studying the limiting behavior of $Q_p^{p - 2}$..
+If $s < q$ then 
+$$\int_M |Q_p^{p - 2} \dif u_p|_{sv^\infty}^s \leq \int_M |\dif u_p|_{sv^p}^{(p - 1)s} \leq \left(\int_M |\dif u_p|_{sv^p}^p\right)^{s/q} |M|^{1 - s/q} \leq C^{s/q} |M|^{1 - s/q}.$$
+Taking $q \to \infty$ we see that for $s \in [1, \infty)$, $Q_p^{p - 2} \dif u_p$ is bounded in $L^s$, so there exists $R$ such that along a subsequence,
+$$Q_p^{p - 2} \dif u_p \rightharpoonup R$$
+in $L^s$.
+If $\psi \in C^1(M \to \RR^d)$ then, by the weak convergence and some integrations by parts,
+$$\int_M \psi^\dagger \dif^* R = -\int_M \dif \psi^\dagger R = -\lim_{p \to 1} \int_M \dif \psi^\dagger Q_p^{p - 2} \dif u_p = 0.$$
+Therefore $\dif^* R = 0$.
+
+\begin{lemma}
+We have
+$$\||R|_{sv^\infty}\|_{L^\infty} \leq 1.$$
+\end{lemma}
+\begin{proof}
+Let 
+$$Z_{p, \varepsilon} := \left\{|\dif u_p|_{sv^\infty} > \frac{1}{\varepsilon}\right\}$$
+so that, by Chebyshev's inequality,
+$$|Z_{p, \varepsilon}| \leq \varepsilon^p \int_M |\dif u_p|_{sv^\infty}^p \leq \varepsilon^p \int_M |\dif u_p|_{sv^p}^p \leq C^p \varepsilon^p.$$
+Arguing as for $R$, we can find a measurable field of matrices $S_\varepsilon$ such that $Q_p^{p - 2} \dif u_p 1_{Z_{p, \varepsilon}} \rightharpoonup S_\varepsilon$ in $L^1$.
+Moreover, by H\"older's inequality,
+$$\int_{Z_{p, \varepsilon}} |\dif u_p|_{sv^\infty}^{p - 1} \leq d^{p - 1} \int_{Z_{p, \varepsilon}} |\dif u_p|_{sv^p}^{p - 1} \leq d^{p - 1} \left(\int_M |\dif u_p|^p\right)^{1/q} |Z_{p, \varepsilon}|^{1/p} \leq C^{1 + p/q} d^{p - 1} \varepsilon.$$
+Taking $p \to 1$ we see that 
+\begin{equation}\label{estimate on error S}
+\int_M |S_\varepsilon|_{sv^\infty} \leq C\varepsilon.
+\end{equation}
+If we set $R_\varepsilon := R - S_\varepsilon$, then $Q_p^{p - 2} \dif u_p (1 - 1_{Z_{p, \varepsilon}}) \rightharpoonup R_\varepsilon$ in $L^1$.
+Since 
+$$\||\dif u_p|_{sv^\infty}^{p - 1} (1 - 1_{Z_{p, \varepsilon}})\|_{L^\infty} \leq \varepsilon^{1 - p},$$
+it follows that $\||R_\varepsilon|_{sv^\infty}\|_{L^\infty} \leq 1$.
+Combining this estimate with (\ref{estimate on error S}) and taking $\varepsilon \to 0$ we conclude the lemma.
 \end{proof}
 
+\begin{lemma}
+$R$ is a polar factor of $\dif u$.
+\end{lemma}
+\begin{proof}
+Let $\varphi \in C^1_\cpt(M)$ and $\psi := \varphi u_p$.
+After integrating by parts,
+$$0 = \int_M \tr(\dif \psi^\dagger Q_p^{p - 2} \dif u_p) = \int_M \varphi \tr(\dif u_p^\dagger Q_p^{p - 2} \dif u_p) + \int_M (\dif \varphi \otimes u_p)^\dagger Q_p^{p - 2} \dif u_p.$$
+To control the first term, we use the cyclicity of trace:
+$$\tr(\dif u_p^\dagger Q_p^{p - 2} \dif u_p) = \tr(Q_p^{p - 2} \dif u_p \dif u_p^\dagger) = \tr(Q_p^p) = |\dif u_p|_{sv^p}^p.$$
+So by semicontinuity of total variation,
+$$\lim_{p \to 1} \int_M \varphi \dif u_p^\dagger Q_p^{p - 2} \dif u_p = \lim_{p \to 1} \int_M \varphi |\dif u_p|_{sv^p}^p \geq \int_M \varphi |\dif u|_{sv^1}.$$
+To control the second term, choose a H\"older pair $(r, s)$ with $r \in (1, r^*)$, so $s < \infty$.
+Thus $Q_p^{p - 2} \dif u_p \rightharpoonup R$ in $L^s$ and $\dif \varphi \otimes u_p \to \dif \varphi \otimes u$ in $L^r$.
+Integrating by parts using $\dif^* R = 0$, and applying the cyclicity of trace,
+$$\lim_{p \to 1} \int_M \tr((\dif \varphi \otimes u_p)^\dagger Q_p^{p - 2} \dif u_p) = \int_M \tr((\dif \varphi \otimes u)^\dagger R) = -\int_M \varphi \tr(\dif u^\dagger R) = -\int_M \varphi \tr(R^\dagger \dif u),$$
+hence
+$$0 \geq \int_M \varphi |\dif u|_{sv^1} - \int_M \varphi \tr(R^\dagger \dif u).$$
+Since $\varphi$ was arbitrary, and $\||R|_{sv^\infty}\|_{L^\infty} \leq 1$,
+\begin{align*}
+|\dif u|_{sv^1} &\leq \tr(R^\dagger \dif u) \leq |\dif u|_{sv^1}. \qedhere
+\end{align*}
+\end{proof}
+
+In particular, $R$ is a calibration of $u$.
+We now must check the boundary condition (\ref{Dirichlet condition}).
+To do this, we estimate using Young's inequality
+\begin{align*}
+\Phi_{h, p}(u_p)
+&= \int_M |\dif u_p|_{sv^p} 
+\leq \frac{1}{p} \int_M |\dif u_p|^p + \frac{|M|}{q}.
+\end{align*}
+The first term is
+\begin{align*}
+\frac{1}{p} \int_M |\dif u_p|^p
+&= \frac{1}{p} \int_M \tr(\dif u_p^\dagger Q_p^{p - 2} \dif u_p) + \frac{|M|}{q} 
+= \frac{1}{p} \int_M \tr(\dif v^\dagger Q_p^{p - 2} \dif u_p) + \frac{|M|}{q}.
+\end{align*}
+Taking the limit as $p \to 1$ and using the lower semicontinuity of the relaxed functionals $\Phi_{h, p}$, we conclude 
+$$\Phi_{h, 1}(u) \leq \int_M \tr(\dif v^\dagger R) = \int_{\partial M} \tr(v^\dagger R\normal_M) = \int_{\partial M} \tr(h^\dagger R\normal_M).$$
+Therefore 
+$$\Phi_{h, 1}(u) \leq \int_{\partial M} \tr((h - u)^\dagger R\normal_M) + \int_{\partial M} \tr(u^\dagger R\normal_M)$$
+and, since $R$ is a polar factor of $\dif u$,
+$$\int_{\partial M} \tr(u^\dagger R\normal_M) = \int_M \tr(R^\dagger \dif u) = \int_M |\dif u|_{sv^1}.$$
+In summary,
+$$\int_{\partial M} |u - h| \leq \int_{\partial M} \tr((h - u)^\dagger R\normal_M) \leq \int_{\partial M} |u - h|,$$
+implying the boundary condition.
+
+\subsubsection{The general case}
+Let $h_n \in W^{1/2, 2}(\partial M)$ converge to $h$ in $L^1$, and let $v_n, u_n, R_n$ be as in the $W^{1/2, 2}$ case.
+After taking a subsequence, there exists $R$ such that $\dif^* R = 0$ and $R_n \rightharpoonup^* R$.
+\todo{This part should be basically the same, I'll write it out later}
+
+\subsection{The main theorem}
 \begin{theorem}
-The following are equivalent for $u \in BV(M \to \RR^d)$:
+The following are equivalent for $u \in BV(M \to \RR^c)$:
 \begin{enumerate}
 \item $u$ has least gradient.
 \item There exists a calibration of $u$.
@@ -244,17 +342,103 @@ The following are equivalent for $u \in BV(M \to \RR^d)$:
 \end{theorem}
 \begin{proof}
 Let $R$ be a calibration of $u$, and let $v$ be a competitor. Then
-$$0 = \int_M (v - u) \nabla \cdot R = \int_M \tr(R^\dagger \dif u) - \int_M \tr(R^\dagger \dif v).$$
+$$0 = \int_M (v - u)^\dagger \dif^* R = \int_M \tr(R^\dagger \dif u) - \int_M \tr(R^\dagger \dif v).$$
 Since $R$ is a polar factor of $\dif u$,
-$$\int_M |\dif u|_{sv^1} = \int_M \tr(R^\dagger \dif u) = \int_M \tr(R^\dagger \dif v).$$
-By von Neumann's trace inequality and (\ref{suborthogonal matrices are sub1}),
-$$\int_M \tr(R^\dagger \dif v) \leq \int_M |R^\dagger|_{sv^\infty} |\dif v|_{sv^1} \leq \int_M |\dif v|_{sv^1},$$
-so $u$ has least gradient.
+$$\int_M |\dif u|_{sv^1} = \int_M \tr(R^\dagger \dif u) = \int_M \tr(R^\dagger \dif v) \leq \int_M |\dif v|_{sv^1},$$
+so $u$ has least gradient. \todo{Add in the relaxed functionals}
 
 Conversely, let $u$ be a map of least gradient, let $h := u|_{\partial M}$.
-By Lemma \ref{existence} there exists a map $v$ and a calibration $R$ of $v$ satisfying the boundary condition (\ref{Dirichlet condition})...
+By Lemma \ref{existence} there exists a map $v$ and a calibration $R$ of $v$ satisfying the boundary condition (\ref{Dirichlet condition}), and \todo{since $u$ has least gradient,
+$$\Phi_{h, 1}(u) \leq \Phi_{h, 1}(v)$$
+which implies $|\dif u|_{sv^1} = \tr(R^\dagger \dif u)$ and the Dirichlet condition}.
 \end{proof}
 
+\subsection{Examples}
+\begin{enumerate}
+\item Functions of least gradient: This is obvious.
+\item The identity map: the identity matrix is a calibration.
+\item If $u_j: M \to \RR^{c_j}$ are maps of least gradient, then their direct sum
+\begin{align*}
+u: M^n &\to \RR^{c_1} \times \cdots \times \RR^{c_n} \\
+(x_1, \dots, x_n) &\mapsto (u_1(x_1), \dots, u_n(x_n))
+\end{align*}
+is a map of least gradient.
+Indeed, if $R_j$ is a calibration of $u_j$, then the matrix 
+$$\begin{bmatrix}R_1 \\ & \ddots \\ && R_n\end{bmatrix}$$
+is a calibration of $u$. 
+\item Increasing corotational maps: If $\overline u: \RR_+ \to \RR_+$ is a nondecreasing function with $\overline u(r) \to 0$ as $r \to 0$, then in polar coordinates, 
+$$u(r, \theta) := (\overline u(r), \theta)$$
+has least gradient.
+In fact, the identity matrix is a calibration.
+To see this, for each $x \in \RR^d \setminus \{0\}$ we observe that if we take $\partial_r$ to be the unit radial vector, and $\partial_{\theta_1}, \dots, \partial_{\theta_{d - 1}}$ to be an orthonormal basis for $T_x S$ where $S$ is the sphere centered on $0$ with $x \in S$, then $\partial_r, \partial_{\theta_1}, \dots, \partial_{\theta_{d - 1}}$ is an orthonormal basis of $T_x \RR^d$. 
+In this basis, 
+$$\dif u = \begin{bmatrix}\overline u' \\ & \id_{\RR^{d - 1}}\end{bmatrix}.$$
+If $\overline u'$ is nonnegative then it is obvious that $\id_{\RR^d}$ is a polar factor of this matrix. 
+At $0$, we use the continuity of $\overline u$ at $0$ to see that $u$ does not jump near $0$, so $0$ doesn't contribute to $\int_M |\dif u|_{sv^1}$ and we can excise it. \todo{Write this out more carefully...}
+\item Conserved currents for $\infty$-harmonic maps from surfaces: see below.
+\end{enumerate}
+
+\subsection{Non-examples}
+\begin{enumerate}
+\item Rotation-invariant maps. Let $\overline u: \RR_+ \to \RR_+$ and $u(r, \theta) := (\overline u(r), 0)$.
+Then $u$ solves the Dirichlet problem for least gradient maps on a ball $\{r < r^*\}$ and $u$ is constant on $\{r = r^*\}$.
+So $u$ is a competitor with the constant map on $\{r \leq r^*\}$ whose total variation is $0$.
+\end{enumerate}
+
+\section{The conservation law for the Schatten-von Neumann \texorpdfstring{$\infty$-Laplacian}{infinity-Laplacian}}
+\begin{theorem}
+Let $\tilde M$ be a simply connected surface, $N$ a Riemannian symmetric space, and let $f: \tilde M \to N$ be a $sv^\infty$ $\infty$-harmonic map with distinct singular values everywhere.
+Let $\mathfrak g$ be the Lie algebra of translations of $N$, and let $u: \tilde M \to \mathfrak g$ be the potential for the conserved current corresponding to the action of $\mathfrak g$ on $N$. Then:
+\begin{enumerate}
+\item $u$ has least gradient.
+\item $\star \dif f/\Lip(f)$ is a calibration of $u$.
+\item $\supp \dif u \subseteq \MCL(f)$, the maximum Lipschitz locus of $f$.
+\item $u$ has rank one.
+\end{enumerate}
+\end{theorem}
+
+\todo{In order to formulate this, we can try to formulate Noether's theorem for the $L^\infty$ calculus of variations...}
+
+\begin{example}
+The $\infty$-harmonic map in the identity homotopy class from $[0, 1]^2 \to [0, 2]^2$ (edges glued) is $2$.
+There's no geodesic lamination!
+However, there is a geodesic lamination corresponding to $[0, 1]^2 \to [0, 1] \times [0, 2]$, namely the vertical foliation.
+\end{example}
+
+\begin{conjecture}
+$\MCL(f)$ contains a geodesic lamination, $f$ is tangent to the geodesics, and $f$ maximally stretches the geodesics.
+\end{conjecture}
+
+This probably follows by combining the rank-one theorem with Topoganov comparison.
+This conjecture is pretty ambitious though.
+
+%%%%%%%%%%%%%%%%%%%
+\section{The structure of a least gradient map at a jump discontinuity}
+Intuitively the jump discontinuities shouldn't ``talk to'' the rest of the map, so it should like a calibrated hypersurface which gets crushed to a point.
+By the rank-one theorem, $\dif^* R$ is a PDE for the level set versus the image set.
+
+%%%%%%%%%%%%%%%%%%%
+\section{Monotonicity formula}
+\begin{theorem}
+Let $u$ be a map of least gradient, with $sv^p$ where $p \leq 2$.
+Then for $x \in M$ there exists $A \geq 0$ depending continuously on $x$ such that for every $0 < r \lesssim 1$,
+$$\frac{\dif}{\dif r} \left[e^{Ar^2} r^{1 - d} \int_{B(x, r)} |\dif u|_{sv^p}\right] \geq 0.$$
+\end{theorem}
+
+It follows from the argument in \cite{Miranda66} where we use the estimate 
+$$\left|\begin{bmatrix}A & B\end{bmatrix}\right|_{sv^p}^2 \leq |A|_{sv^p}^2 + |B|_{sv^p}^2$$
+which holds for $p \leq 2$. (Or maybe it points the other way? Anyways, the case $p \leq 2$ is the one that works)
+
+%%%%%%%%%%%%%%%%%%%
+
+\section{Total variation flow}
+\begin{conjecture}
+Well-posedness of the Cauchy-Dirichlet problem for the total variation flow for any matrix norm.
+\end{conjecture}
+
+This has applications to image denoising if it's true \cite{GórnyMazón+2022}.
+This is interesting enough that it could be its own paper, maybe.
+It might also be a trivial consequence of the Dirichlet problem.
 
 \printbibliography
 
