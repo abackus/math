@@ -6,6 +6,12 @@
 \RequirePackage{amsxtra}
 \usepackage{cancel}
 \usepackage{tikz, quiver, wrapfig}
+
+% Add the 2020 MSC
+\makeatletter
+\@namedef{subjclassname@2020}{\textup{2020} Mathematics Subject Classification}
+\makeatother
+
 %\usepackage[T1]{fontenc}
 
 % \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
@@ -22,6 +28,8 @@
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
 \date{\today}
+\keywords{laminations, convex duality, minimal hypersurfaces, max flow/min cut theorem, calibrations, functions of least gradient}
+\subjclass[2020]{primary: 49Q20; secondary: 39J60, 49N15, 53C38}
 
 \newcommand{\NN}{\mathbf{N}}
 \newcommand{\ZZ}{\mathbf{Z}}
@@ -174,7 +182,7 @@ A straightforward application of the Hanh-Banach theorem shows that for each $\r
 \Mass(\sigma) = \langle \rho, \sigma\rangle.
 \end{equation}
 This result can be viewed somewhat charitably as a continuous analogue of the max flow/min cut theorem of graph theory.
-Indeed, if every homology class could be represented by a smooth homologically minimizing cycle, then for any continuous best comass calibration $F$ of degree $d - 1$ (which could be viewed as a ``maximal flow'', since $F$ is the flux of a divergence-free vector field), it would follow from (\ref{Federer duality}) that $F$ would attain its $L^\infty$ norm on some minimal hypersurface $N$ (a ``minimal cut''), which would then ``bottleneck'' $F$ in the sense that 
+Indeed, if every homology class could be represented by a smooth homologically minimizing cycle, then for any continuous best comass calibration $F$ of degree $d - 1$ (which could be viewed as a ``maximal flow'', since $F$ is the flux of a divergence-free vector field), it would follow from (\ref{Federer duality}) that $F$ would calibrate some minimal hypersurface $N$ (a ``minimal cut''), which would then ``bottleneck'' $F$ in the sense that for any $N'$ homologous to $N$,
 $$\Mass(N) = \int_N F.$$
 We refer to \cite[Figure 5]{Freedman_2016} for an enlightening visualization of this bottlenecking phenomenon.
 
@@ -223,14 +231,13 @@ A function $u$ has \dfn{least gradient} if it minimizes $\int_M \star |\dif u|$.
 Our first theorem, a combination of Propositions \ref{existence infinity} and \ref{existence 1}, constructs a best comass form, and a dual function of least gradient, by taking limits of $p$-tight forms and their dual $q$-harmonic functions.
 
 \begin{mainthm}\label{existence of infinity tight forms}
-Let $\rho \in H^{d - 1}(M, \RR)$ be a cohomology class.
+Let $\rho \in H^{d - 1}(M, \RR)$ be a nonzero cohomology class.
 Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$ and $(p, q)$ ranging over H\"older pairs with $d < p < \infty$.
 Then there exists a pair $(F, u)$ such that as $p \to \infty$ along a subsequence, $F_p \to F$ weakly in $L^r$ for any $d < r < \infty$, and $u_q \to u$ weakly in $BV$, with the following properties:
 \begin{enumerate}
 \item $F$ has best comass; we call $F$ \dfn{tight}.
-\item $u$ has least gradient.
-\item The product of distributions $\dif u \wedge F$ is well-defined.
-\item We have the duality relation
+\item $u$ has least gradient and is nonconstant.
+\item The product of distributions $\dif u \wedge F$ is well-defined, and
 \begin{equation}\label{max flow mean cut}
 \Comass(\rho) \star |\dif u| = \dif u \wedge F.
 \end{equation}
@@ -314,11 +321,33 @@ We shall not attempt to summarize our results on the structure of $\lambda_\rho$
 
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{The PDE for a tight form}
-Tight forms have best comass, and are obtained by taking limits of solutions of $L^p$ variational problems.
-Thus they are solutions of an $L^\infty$ variational problem, and one expects them to solve a PDE analogous to the $\infty$-Laplacian.
-However, the theory of the $\infty$-Laplacian is largely built around the maximum principle and viscosity solutions, neither of which have been adequately fleshed out for systems of PDE at present.
+At present there is not a suitable theory of viscosity solutions of PDEs for vector-valued maps, and in general, one does not expect our tight forms to be much more regular than $L^\infty$.
+However, we formally derive what analytic properties tight forms \emph{should} have, in the tradition of various other papers \cite{Barron2001,Aronsson67,Sheffield12} on the $L^\infty$ calculus of variations.
 
-\todo{Write this out}
+To be more precise, in \S\ref{infinityMax} we study $C^1$ solutions of the PDE 
+\begin{equation}\label{tight Einstein}
+\begin{cases}\dif F = 0, \\
+	(\nabla_i F_{j_1 \cdots j_{d - 1}}) F^{j_1 \cdots j_{d - 1}} {F^i}_{k_1 \cdots k_{d - 2}} = 0.
+\end{cases}
+\end{equation}
+We derive this equation as the formal limit of the PDE solved by the $p$-tight forms.
+Therefore tight forms are variational solutions of (\ref{tight Einstein}).
+
+When $d = 2$, (\ref{tight Einstein}) asserts that $F$ has an $\infty$-harmonic scalar potential.
+In general, (\ref{tight Einstein}) interpreted as asserting that the distribution $\ker(\star F)$ is ``calibrated" by $F$, though $\ker(\star F)$ need not be integrable.
+If it is integrable, then we show in \S\ref{EL interpretation} the following variational interpretation which generalizes the interpretation of $\infty$-harmonic functions as absolute minimizing Lipschitz. \todo{If the Caccioppoli estimates approach pans out, cut this theorem and refer to the other paper!}
+
+\begin{mainthm}\label{tight are absolute minimizers}
+Let $F$ be a closed $C^1$ $d - 1$-form on a compact Riemannian manifold (possibly with boundary). Then:
+\begin{enumerate}
+\item If, for every sufficiently ball $B$,
+\begin{equation}\label{absolute minimizer}
+\|F\|_{C^0(B)} = \|F\|_{C^0(\partial B)},
+\end{equation}
+then $F$ solves (\ref{tight Einstein}).
+\item Suppose that $\ker(\star F)$ is a singular integrable distribution. If $F$ solves (\ref{tight Einstein}), then for every sufficiently small ball $B$, (\ref{absolute minimizer}) holds.
+\end{enumerate}
+\end{mainthm}
 
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{Outline of the paper}
@@ -332,14 +361,14 @@ In \S\ref{MCL sec} we study the homologically minimizing lamination arising from
 
 In \S\ref{canonical sec} we construct the canonical lamination $\lambda_\rho$ of a cohomology class $\rho$, proving Theorem \ref{existence of calibrated lam}. We then establish various results about the structure of $\lambda_\rho$ and, as an application, the duality between stable and costable norms.
 
-In \S\ref{infinityMax} we study the PDE solved by a $C^1$ tight form.
+In \S\ref{infinityMax} we study the PDE (\ref{tight Einstein}) and prove Theorem \ref{tight are absolute minimizers}.
 
-In \S\ref{open problems} we make some concluding remarks. We discuss some external motivation and some applications for the canonical lamination and tight PDE. We also give some open problems and discuss how the results of this paper could naturally be generalized.
+In \S\ref{open problems} we make some concluding remarks. We discuss some external motivation and some applications for the canonical lamination and the PDE (\ref{tight Einstein}). We also give some open problems and discuss how the results of this paper could naturally be generalized.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \subsection{Acknowledgements}
 I would like to thank Georgios Daskalopolous and Karen Uhlenbeck for suggesting this project and providing helpful comments, and for providing me with a draft copy of \cite{daskalopoulos2023}.
-I would also like to thank Victor Bangert for providing me with a copy of \cite{Auer12}, and Bernd Kawohl for suggesting the references \cite{Kawohl2003, Grieser05}.
+I would also like to thank Victor Bangert for providing me with a copy of \cite{Auer12}, Bernd Kawohl for suggesting the references \cite{Kawohl2003, Grieser05}, and Anatole Gaudin for suggesting the reference \cite{Costabel2010}.
 
 This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
 
@@ -1759,10 +1788,6 @@ In particular, the kernel of (\ref{wedge product}) is spanned by symmetric tenso
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Euler-Lagrange equation for tight forms}\label{infinityMax}
-At present there is not a suitable theory of viscosity solutions of PDEs for vector-valued maps, and in general, one does not expect our tight forms to be much more regular than $L^\infty$.
-Therefore there is no sense that we are aware of that tight forms should solve an Euler-Lagrange equation.
-However, we shall formally derive what analytic properties tight forms \emph{should} have, in the tradition of various other papers \cite{Barron2001,Aronsson67,Sheffield12} on the $L^\infty$ calculus of variations.
-
 \subsection{Formal derivation of Euler-Lagrange equation}
 To state our Euler-Lagrange equation we introduce some notation for derivatives of tensor fields along differential forms.
 If $\alpha$ is a $k$-form, $\nabla$ is the Levi-Civita connection, and $T$ is a section of a tensor bundle $E$, we introduce the tensor $\nabla^\alpha T$, a section of $E \otimes \Omega^{k - 1}$, defined as follows: if $X_1, \dots, X_{k - 1}$ are vector fields, and
@@ -1808,7 +1833,7 @@ Taking the Hodge star of both sides, we get (\ref{infty Max}).
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Geometric and variational interpretations of the Euler-Lagrange equation}
+\subsection{Geometric and variational interpretations of the Euler-Lagrange equation}\label{EL interpretation}
 The PDE (\ref{infty Max}) has a simple geometric interpretation, which generalizes the interpretation of the $\infty$-Laplace equation as asserting that the gradient curves of an $\infty$-harmonic function are lines.
 
 \begin{proposition}\label{infty Max calibrates}
@@ -1873,7 +1898,7 @@ and since $\theta$ was arbitrary we conclude (\ref{infty Max}).
 \end{proof}
 
 \begin{proposition}
-Let $F$ be a $C^1$ solution of (\ref{infty Max}) such that $\star F \wedge \dif(\star F) = 0$.
+Let $F$ be a $C^1$ solution of (\ref{infty Max}) such that $\ker(\star F)|_{F \neq 0}$ is an integrable distribution.
 Then for every $x \in M$ and every sufficiently small $r > 0$, (\ref{ABC inequality}) holds for $U = B(x, r)$.
 \end{proposition}
 \begin{proof}
@@ -1881,7 +1906,7 @@ First observe that if $x \in M$ and $F(x) = 0$, then $|F|$ has a local minimum a
 Henceforth we assume that $F(x) \neq 0$.
 
 Let $r > 0$ be such that $F|_{B(x, r)}$ has no zeroes and for some $s > r$, $H^{d - 1}(B(x, s), \RR) = 0$.
-Since $\star F \wedge \dif(\star F) = 0$, $\ker(\star F)$ integrates to a foliation $\mathscr F$ of $B(x, r)$.
+Let $\mathscr F$ be the foliation of $B(x, r)$ obtained by integrating $\ker(\star F)$.
 By definition of $s$, we may assume that $F = \dif A$ for some $d - 2$-form $A$ defined on $B(x, s)$.
 By Proposition \ref{infty Max calibrates}, for each leaf $N$ of $\mathscr F$ there exists $\lambda_N > 0$ such that for each hypersurface $N'$ with $N \cap \partial B(x, r) = N' \cap \partial B(x, r)$,
 $$\lambda_N \Mass(N) = \int_N F = \int_{N \cap \partial B(x, r)} A = \int_{N' \cap \partial B(x, r)} A = \int_{N \cap \partial B(x, r)} F \leq \lambda_N \Mass(N'),$$
@@ -1935,12 +1960,14 @@ We do not expect to be able to weaken the dimensional assumption, since the func
 \subsection{Motivation for the canonical lamination}\label{Teichmuller}
 Our motivation for introducing the canonical lamination arose from an analogy with Thurston's approach to Teichm\"uller theory using best Lipschitz maps \cite{Thurston98}.
 Given $\gamma \geq 2$, let $\widetilde{\mathscr M}_\gamma$ be the Teichm\"uller space of hyperbolic metrics on the closed surface $S_\gamma$ of genus $\gamma$.
-Given $g, h \in \widetilde{\mathscr M}_\gamma$, let $\Lip(g, h)$ be the Lipschitz constant of a best Lipschitz map $(S_\gamma, g) \to (S_\gamma, h)$; then for a tangent vector $v \in T_g(\widetilde{\mathscr M}_\gamma)$, let $\Comass(v)$ be the partial derivative of $\log \Lip(g, \cdot)$ in the direction $v$.
+Given $g, h \in \widetilde{\mathscr M}_\gamma$, let $\Lip(g, h)$ be the Lipschitz constant of a best Lipschitz map homotopic to
+$$\id: (S_\gamma, g) \to (S_\gamma, h).$$ 
+For a tangent vector $v \in T_g(\widetilde{\mathscr M}_\gamma)$, let $\Comass(v)$ be the partial derivative of $\log \Lip(g, \cdot)$ in the direction $v$.
 This quantity, the \dfn{Thurston asymmetric norm}, is an asymmetric norm on $T_g(\widetilde{\mathscr M}_\gamma)$ obtained by solving an $L^\infty$ variational problem intimately tied to the structure of minimal laminations, so it is tempted to make an analogy between $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$, where both vector spaces are equipped with the norm $\Comass$.
 Two particularly salient pieces of evidence for the analogy are:
 \begin{enumerate}
 \item The unit spheres of the dual spaces of $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$ can both be viewed as spaces of projective measured minimal laminations, whose norm is given by an $L^1$ (actually $BV$) variational problem \cite[Theorem 5.1]{Thurston98}.
-\item In both cases, we can construct a canonical lamination; in Thurston's case, the canonical lamination is given by those geodesics which are maximally stretched by every best Lipschitz map homotopic to $\id_{S_\gamma}$ \cite[\S8]{Thurston98}. See also Conjecture \ref{chain recurrence}.
+\item In both cases, we can construct a canonical lamination. In Thurston's case, the canonical lamination is given by those geodesics which are maximally stretched by every best Lipschitz map homotopic to $\id_{S_\gamma}$ \cite[\S8]{Thurston98}. See also Conjecture \ref{chain recurrence}.
 \end{enumerate}
 However, one should not take this analogy too seriously.
 A key feature of Thurston's theory is the Birman-Series theorem: the union of the supports of all geodesic laminations on $(S_\gamma, g)$ has Hausdorff dimension $0$.
@@ -1977,23 +2004,23 @@ Then there does not exist a solution of the eikonal system (\ref{eikonal}) on $\
 In particular, there does not exist a minimal foliation on $M$.
 \end{conjecture}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{String theory}
-Suppose that $\overline M$ is a Riemannian manifold-with-boundary such that if $\Gamma \subset \partial M$ bounds a domain in $\partial M$, then there exists an area-minimizing and minimal hypersurface in $M$ with boundary $\Gamma$.
-One can interpret $M$ as a spacelike slice of a domain of a string theory, and $\partial M$ as a spacelike slice of the domain of the conformal field theory predicted by the gauge theory/gravity duality \cite{Freedman_2016}.
-In this setting, if $N$ is a smooth subdomain of $\partial M$, the entropy of entanglement $S(\partial N)$ of the CFT through $\partial N$ is given by the \dfn{Ryu-Takayanagi formula}
-\begin{equation}\label{RyuTakayanagi}
-S(\partial N) = \max_F \int_N F
-\end{equation}
-where $F$ ranges over calibrations on $\overline M$ \cite[(2.8)]{Freedman_2016}.
-If the results of this paper generalize cleanly to manifolds with boundary, then, by replacing $N$ with an area-minimizing hypersurface in $M$ with the same boundary, we should have:
+% %%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{String theory}
+% Suppose that $\overline M$ is a Riemannian manifold-with-boundary such that if $\Gamma \subset \partial M$ bounds a domain in $\partial M$, then there exists an area-minimizing and minimal hypersurface in $M$ with boundary $\Gamma$.
+% One can interpret $M$ as a spacelike slice of a domain of a string theory, and $\partial M$ as a spacelike slice of the domain of the conformal field theory predicted by the gauge theory/gravity duality \cite{Freedman_2016}.
+% In this setting, if $N$ is a smooth subdomain of $\partial M$, the entropy of entanglement $S(\partial N)$ of the CFT through $\partial N$ is given by the \dfn{Ryu-Takayanagi formula}
+% \begin{equation}\label{RyuTakayanagi}
+% S(\partial N) = \max_F \int_N F
+% \end{equation}
+% where $F$ ranges over calibrations on $\overline M$ \cite[(2.8)]{Freedman_2016}.
+% If the results of this paper generalize cleanly to manifolds with boundary, then, by replacing $N$ with an area-minimizing hypersurface in $M$ with the same boundary, we should have:
 
-\begin{conjecture}\label{tight RyuTakayanagi}
-There exists a tight calibration $F$ which realizes the maximum in (\ref{RyuTakayanagi}).
-\end{conjecture}
+% \begin{conjecture}\label{tight RyuTakayanagi}
+% There exists a tight calibration $F$ which realizes the maximum in (\ref{RyuTakayanagi}).
+% \end{conjecture}
 
-We know by recent work of Loisel that it is possible to solve the $\infty$-Laplacian in polynomial time \cite{Loisel_2020}.
-We expect the same technique to work for tight forms, so Conjecture \ref{tight RyuTakayanagi} could give an efficient algorithm for computing the entanglement entropy of $\partial N$.
+% We know by recent work of Loisel that it is possible to solve the $\infty$-Laplacian in polynomial time \cite{Loisel_2020}.
+% We expect the same technique to work for tight forms, so Conjecture \ref{tight RyuTakayanagi} could give an efficient algorithm for computing the entanglement entropy of $\partial N$.
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{The \texorpdfstring{$p$-Laplacian}{p-Laplacian}}
