@@ -115,6 +115,8 @@
 \newtheorem{mainthm}{Theorem}
 \renewcommand{\themainthm}{\Alph{mainthm}}
 
+\newcommand{\weakto}{\rightharpoonup}
+
 \newtheorem{claim}{Claim}[theorem]
 \renewcommand{\theclaim}{\thetheorem\Alph{claim}}
 % \newtheorem*{claim}{Claim}
@@ -372,133 +374,140 @@ which is clearly coclosed.
 
 %%%%%%%%%%%%%%
 \section{Infinity harmonic maps are absolutely best Lipschitz}
+Let $U$ be a Riemannian domain in a surface.
+If $A$ is a matrix, let $v_1(A)$ be a principal singular vector of $A$.
+
 \begin{definition}
-We say that $\Delta_\infty u = 0$ in the \dfn{variational sense} on a ball $B$ if $u \in W^{1, \infty}(B)$ has for each $p \in (1, \infty)$ a \dfn{$p$-regularization} $u_p$, that is a solution in the weak sense of 
-$$\begin{cases}
-    \Delta_p u_p = 0 \\
-    u_p|_{\partial B} = u|_{\partial B}
-\end{cases}$$
-such that along a subsequence, $u_p \to u$ in $C^0$ as $p \to \infty$.
+We say that a Lipschitz map $u: U \to \RR^c$ is a \dfn{variational solution} of the \dfn{spectral $\infty$-Laplacian}
+$$
+\langle \nabla^2 u, v_1(\nabla u) \otimes v_1(\nabla u)\rangle = 0,
+$$
+if there exists a sequence of $p \to \infty$ along which there exist \dfn{$p$-regularizations} $u_p$ of $u$, that is, Schatten von Neumann $p$-harmonic maps $u_p \in W^{1, p}(U, \RR^c)$, such that for any $s \in [1, \infty)$, $u_p \weakto u$ in $W^{1, s}$ as $p \to \infty$.
 \end{definition}
 
 \begin{definition}
-Suppose that $\Delta_\infty u = 0$ in the variational sense.
+Suppose that $u$ is a spectral $\infty$-harmonic map.
 The \dfn{stretch set} is the set of points $x$ such that $\Lip(u, x) = \Lip(u)$.
 \end{definition}
 
 \begin{proposition}[Caccioppoli's inequality]
-Let $V \Subset U \subseteq \RR^d$ and $u \in W^{1, p}_\loc(U)$.
-If $\Delta_p u = 0$ on $U$, and $\rho := \dist(\partial U, \partial V)$, then
-$$\int_V |\dif u|^p \leq \left(\frac{p}{\rho}\right)^p \int_{U \setminus V} |u|^p.$$
+Let $V \Subset U$, and suppose that $v$ is Schatten-von Neumann $q$-harmonic on $U$.
+Then, for $\rho := \dist(\partial U, \partial V)$,
+$$\int_V |\dif v|_{sv^q}^q \leq \left(\frac{q}{\rho}\right)^q \int_{U \setminus V} |v|^q.$$
 \end{proposition}
 \begin{proof}
-Choose $\varepsilon > 0$ and $\chi \in C^\infty_\cpt(U \to [0, 1])$ such that $\chi = 1$ on $V$ and
-$$|\dif \chi| \leq \frac{1 + \varepsilon}{\rho}.$$
-Plugging $\psi := u\chi^p$ into the $p$-Laplacian and integrating by parts,
-$$0 = \int_U |\dif u|^{p - 2} \dif u \cdot \dif \psi = \int_U p\chi^{p - 1} u|\dif u|^{p - 2} \dif u \cdot \dif \chi + \int_U \chi^p |\dif u|^p.$$
+Choose $\chi \in C^\infty_\cpt(U \to [0, 1])$ such that $\chi = 1$ on $V$ and
+$$\|\dif \chi\|_{C^0} \leq \frac{1 + \varepsilon}{\rho}.$$
+Multiplying the $q$-Laplacian by $\psi := \chi^q \dif v$ and integrating by parts,
+$$0 = \int_U \tr(\dif \psi^\dagger Q(\dif v)^{p - 2} \dif v) = \int_U q\chi^{q - 1} \tr((v \otimes \dif \chi)^\dagger Q(\dif v)^{q - 2} \dif u) + \int_U \chi^q |\dif u|_{sv^q}^q.$$
 By H\"older's inequality,
 \begin{align*}
-\int_U \chi^p |\dif u|^p 
-&\leq p\int_U \chi^{p - 1} |u| |\dif u|^{p - 1} |\dif \chi| 
-\leq p\left(\int_U \chi^p |\dif u|^p\right)^{1/q} \left(\int_U |\dif \chi|^p |u|^p\right)^{1/p}.
+\int_U \chi^q |\dif v|_{sv^q}^q 
+&\leq q \int_U \chi^{q - 1} |v \otimes \dif \chi|_{sv^\infty} |\dif v|_{sv^q}^{q - 1}
+\leq q \left(\int_U \chi^q |\dif v|_{sv^q}^q\right)^{1/p} \left(\int_U |\dif \chi|^q |v|^q\right)^{1/q}.
 \end{align*}
 After rearranging terms we get 
-$$\int_U \chi^p |\dif u|^p \leq p^p \int_U |\dif \chi|^p |u|^p$$
+$$\int_U \chi^q |\dif v|_{sv^q}^q \leq q^q \int_U |\dif \chi|^q |v|^q$$
 so we get 
-$$\int_V |\dif u|^p \leq \int_U \chi^p |\dif u|^p \leq p^p \int_U |\dif \chi|^p |u|^p \leq \left(\frac{(1 + \varepsilon)p}{\rho}\right)^p \int_{U \setminus V} |u|^p$$
+$$\int_V |\dif v|_{sv^q}^q \leq \int_U \chi^q |\dif u|_{sv^q}^q \leq q^q \int_U |\dif \chi|^q |v|^q \leq \left(\frac{(1 + \varepsilon)q}{\rho}\right)^q \int_{U \setminus V} |v|^q$$
 which implies Caccioppoli's inequality when we take $\varepsilon \to 0$.
 \end{proof}
 
-The important fact here is that Caccioppoli's inequality is \emph{uniform} as $p \to 1$, and it also works on domains which are not concentric balls.
+Here the improvements over the classical Caccioppoli inequality are:
+\begin{enumerate}
+\item Caccioppoli's inequality is \emph{uniform} as $q \to 1$.
+\item It works on domains which are not concentric balls.
+\item It works for the Schatten-von Neumann $q$-Laplacian.
+\end{enumerate}
 The proof however is the same as the usual one found in \cite[Chapter 11]{kinnunen2021maximal}.
 
 \begin{theorem}
-Let $U \Subset \RR^2$, $u \in W^{1, \infty}(U)$, and $\Delta_\infty u = 0$ in the variational sense.
+Let $u: U \to \RR^c$ be a spectral $\infty$-harmonic map.
 Let $\lambda$ be the stretch set of $u$.
 Then $\lambda \cap \partial U$ is nonempty.
 \end{theorem}
 \begin{proof}
 Without loss of generality, we may assume that $\Lip(u) = 1$.
-The stretch set $\lambda$ is a nonempty compact subset of $\overline U$ \cite[Lemma 4.2]{Crandall2008}, so if the theorem fails, then there exists an open set $V \Subset U$ such that $\lambda \Subset V$.
-Choose a $p$-regularization $u_p$, let
-$$k_p^{1 - p} := \int_B |\dif u_p|^p,$$
+The stretch set $\lambda$ is a nonempty compact subset of $\overline U$ \cite[Lemma 4.2]{Crandall2008}, so if the theorem fails, then there exists an open set $V \Subset U$ such that $\lambda \subseteq \overline V$.
+Choose $p$-regularizations $u_p$, let
+$$k_p^{1 - p} := \int_B |\dif u_p|_{sv^p}^p,$$
 and introduce the dual functions $v_q$, where $(p, q)$ is a H\"older pair,
-$$\dif v_q = k_p^{p - 1} |\dif u_p|^{p - 2} \star \dif u_p,$$
-and we have the gauge-fixing condition on the annulus $A := U \setminus V$
+$$\dif v_q = k_p^{p - 1} |\dif u_p|_{sv^p}^{p - 2} \star \dif u_p,$$
+and we have the gauge-fixing condition on the open annulus $A := U \setminus \overline V$
 \begin{equation}\label{annulus average is 0}
 \int_A v_q = 0.
 \end{equation}
-Then $\Delta_q v_q = 0$ and $k_p \to 1$ \cite[\S3]{daskalopoulos2022transverse}.
+Then $v_q$ is a Schatten-von Neumann $q$-harmonic map, and $k_p \to 1$ \cite[\S3]{daskalopoulos2022transverse}.
 We in particular have 
 \begin{equation}\label{estimate on Lq}
-\int_U |\dif v_q|^q = k_p^p \int_U |\dif u_p|^p = k_p.
+\int_U |\dif v_q|_{sv^q}^q = k_p^p \int_U |\dif u_p|_{sv^p}^p = k_p.
 \end{equation}
 
 Fix a H\"older pair $(r, s)$ such that $r \in (1, \frac{d}{d - 1})$, and observe that, by H\"older's inequality and (\ref{estimate on Lq}),
-$$\int_U |\dif v_q| \lesssim \left(\int_U |\dif v_q|^q\right)^{1/q} = k_p^{1/q} \lesssim 1.$$
+$$\int_U |\dif v_q|_{sv^1} \lesssim \left(\int_U |\dif v_q|_{sv^q}^q\right)^{1/q} = k_p^{1/q} \lesssim 1.$$
 So by the isoperimetric inequality, after taking a subsequence, $v_q \to v$ in $L^r$ for some $v \in BV(U)$, as $q \to 1$.
 
+% \begin{lemma}
+% There exists a calibration $\star R$ such that along a subsequence, $|\dif v_q|^{q - 2} \dif v_q \rightharpoonup R$ in $L^s$ as $q \to \infty$.
+% \end{lemma}
+% \begin{proof}
+% We follow the construction of the calibration in \cite[Proposition 5.9]{Andreu-Vaillo2004}.
+% If $p > s$ then by H\"older's inequality and (\ref{estimate on Lq}),
+% $$\int_U ||\dif v_q|^{q - 2} \dif v_q|^s = \int_U |\dif v_q|^{(q - 1)s} \lesssim \left(\int_U |\dif v_q|^q\right)^{s/p} = k_p^{s/p} \lesssim 1,$$
+% so by Alaoglu's theorem, there exists $R$ such that $|\dif v_q|^{q - 2} \dif v_q \rightharpoonup R$ in $L^s$.
+% If $\psi \in C^\infty_\cpt(U)$ then, integrating by parts,
+% $$\int_U \dif^* R \psi = \int_U R \wedge \dif \psi = \lim_{q \to 1} \int_U |\dif v_q|^{q - 2} \dif v_q \wedge \dif \psi = \lim_{q \to 1} \int_U \psi \Delta_q v_q = 0,$$
+% so $\dif^* R = 0$.
+
+% To estimate $\|R\|_{L^\infty}$, let
+% $$Z_{q, \varepsilon} := \left\{|\dif v_q| > \frac{1}{\varepsilon}\right\},$$
+% so by Chebyshev's inequality,
+% $$|Z_{q, \varepsilon}| \leq \varepsilon^q \int_U |\dif v_q|^q = \varepsilon^q k_p \int_U |\dif u_p|^p = \varepsilon^q k_p \lesssim \varepsilon^q.$$
+% Applying Alaoglu's theorem again, there exists $S_\varepsilon$ such that $|\dif v_q|^{q - 2} \dif v_q 1_{Z_{q, \varepsilon}} \rightharpoonup S_\varepsilon$ in $L^1$.
+% We estimate using H\"older's inequality and (\ref{estimate on Lq})
+% \begin{align*}
+% \int_{Z_{q, \varepsilon}} |\dif v_q|^{q - 1} \leq |Z_{q, \varepsilon}|^{1/q} \left(\int_{Z_{q, \varepsilon}} |\dif v_q|^q\right)^{1/p} \lesssim \varepsilon^{1/q} k_p^{1/p}.
+% \end{align*}
+% Taking the limit $q \to 1$ we obtain 
+% \begin{equation}\label{bad set is small}
+% \int_U |S_\varepsilon| \lesssim \varepsilon.
+% \end{equation}
+
+% Let $R_\varepsilon := R - S_\varepsilon$, so that if we set
+% $$R_{\varepsilon, q} := |\dif v_q|^{q - 2} \dif v_q (1 - 1_{Z_{q, \varepsilon}}),$$
+% then $R_{\varepsilon, q} \rightharpoonup R_\varepsilon$ in $L^1$.
+% Since
+% $$\|R_{\varepsilon, q}\|_{L^\infty} \leq \varepsilon^{1 - q} \leq 1 + o(1),$$
+% we have $\|R_\varepsilon\|_{L^\infty} \leq 1$.
+% Combining this fact with (\ref{bad set is small}) implies $\|R\|_{L^\infty} \leq 1$, as needed.
+% \end{proof}
+
 \begin{lemma}
-There exists a calibration $\star R$ such that along a subsequence, $|\dif v_q|^{q - 2} \dif v_q \rightharpoonup R$ in $L^s$ as $q \to \infty$.
+$v$ has tracial least gradient.
 \end{lemma}
 \begin{proof}
-We follow the construction of the calibration in \cite[Proposition 5.9]{Andreu-Vaillo2004}.
-If $p > s$ then by H\"older's inequality and (\ref{estimate on Lq}),
-$$\int_U ||\dif v_q|^{q - 2} \dif v_q|^s = \int_U |\dif v_q|^{(q - 1)s} \lesssim \left(\int_U |\dif v_q|^q\right)^{s/p} = k_p^{s/p} \lesssim 1,$$
-so by Alaoglu's theorem, there exists $R$ such that $|\dif v_q|^{q - 2} \dif v_q \rightharpoonup R$ in $L^s$.
-If $\psi \in C^\infty_\cpt(U)$ then, integrating by parts,
-$$\int_U \dif^* R \psi = \int_U R \wedge \dif \psi = \lim_{q \to 1} \int_U |\dif v_q|^{q - 2} \dif v_q \wedge \dif \psi = \lim_{q \to 1} \int_U \psi \Delta_q v_q = 0,$$
-so $\dif^* R = 0$.
-
-To estimate $\|R\|_{L^\infty}$, let
-$$Z_{q, \varepsilon} := \left\{|\dif v_q| > \frac{1}{\varepsilon}\right\},$$
-so by Chebyshev's inequality,
-$$|Z_{q, \varepsilon}| \leq \varepsilon^q \int_U |\dif v_q|^q = \varepsilon^q k_p \int_U |\dif u_p|^p = \varepsilon^q k_p \lesssim \varepsilon^q.$$
-Applying Alaoglu's theorem again, there exists $S_\varepsilon$ such that $|\dif v_q|^{q - 2} \dif v_q 1_{Z_{q, \varepsilon}} \rightharpoonup S_\varepsilon$ in $L^1$.
-We estimate using H\"older's inequality and (\ref{estimate on Lq})
-\begin{align*}
-\int_{Z_{q, \varepsilon}} |\dif v_q|^{q - 1} \leq |Z_{q, \varepsilon}|^{1/q} \left(\int_{Z_{q, \varepsilon}} |\dif v_q|^q\right)^{1/p} \lesssim \varepsilon^{1/q} k_p^{1/p}.
-\end{align*}
-Taking the limit $q \to 1$ we obtain 
-\begin{equation}\label{bad set is small}
-\int_U |S_\varepsilon| \lesssim \varepsilon.
-\end{equation}
-
-Let $R_\varepsilon := R - S_\varepsilon$, so that if we set
-$$R_{\varepsilon, q} := |\dif v_q|^{q - 2} \dif v_q (1 - 1_{Z_{q, \varepsilon}}),$$
-then $R_{\varepsilon, q} \rightharpoonup R_\varepsilon$ in $L^1$.
-Since
-$$\|R_{\varepsilon, q}\|_{L^\infty} \leq \varepsilon^{1 - q} \leq 1 + o(1),$$
-we have $\|R_\varepsilon\|_{L^\infty} \leq 1$.
-Combining this fact with (\ref{bad set is small}) implies $\|R\|_{L^\infty} \leq 1$, as needed.
-\end{proof}
-
-\begin{lemma}
-$v$ has least gradient.
-\end{lemma}
-\begin{proof}
-By the calibration criterion for functions of least gradient \cite[Theorem 1.1]{Mazon14}, it suffices to show that $\star R$ calibrates $v$.
+By the calibration criterion for functions of least gradient \cite[Theorem 1.1]{Mazon14}, it suffices to show that $\dif u$ calibrates $v$.
 Let $\varphi \in C^\infty_\cpt(U)$ and $\psi := v\varphi$.
 Integrating by parts,
-$$0 = \int_U |\dif v_q|^{q - 2} \dif v_q \cdot \dif \psi = \int_U \psi |\dif v_q|^q + \int_U v_q |\dif v_q|^{q - 2} \dif v_q \cdot \dif \psi.$$
+$$0 = \int_U \tr(\dif \psi^\dagger Q(\dif v_q)^{q - 2} \dif v_q) = \int_U \varphi |\dif v_q|_{sv^q}^q + \int_U \tr((v_q \otimes \dif \varphi)^\dagger Q(\dif v_q)^{q - 2} \dif v_q).$$
 By semicontinuity of total variation,
 \begin{align*}
-\int_U \psi |\dif v|
-&\leq \lim_{q \to 1} \int_U \psi |\dif v_q|^q 
-= -\lim_{q \to 1} \int_U v_q |\dif v_q|^{q - 2} \dif v_q \cdot \dif \psi.
+\int_U \varphi |\dif v|_{sv^1}
+&\leq \lim_{q \to 1} \int_U \varphi |\dif v_q|_{sv^q}^q 
+= -\lim_{q \to 1} \int_U \tr((v_q \otimes \dif \varphi)^\dagger Q(\dif v_q)^{q - 2} \dif v_q).
 \end{align*}
-Owing to the convergences $v_q \dif \psi \to v \dif \psi$ in $L^s$ and $|\dif v_q|^{q - 2} \dif v_q \rightharpoonup R$ in $L^r$,
+Owing to the convergences $v_q \dif \varphi \to v \dif \varphi$ in $L^s$ and $|\dif v_q|^{q - 2} \dif v_q \weakto -\star \dif u$ in $L^r$,
 $$
--\lim_{q \to 1} \int_U v_q |\dif v_q|^{q - 2} \dif v_q \cdot \dif \psi = -\int_U v\dif \psi \wedge \star R.
+-\lim_{q \to 1} \int_U \tr((v_q \otimes \dif \varphi)^\dagger Q(\dif v_q)^{q - 2} \dif v_q) = \int_U v\dif \varphi \wedge \dif u.
 $$
-Since $\dif^* R = 0$, an integration by parts and the fact that $\|R\|_{L^\infty} \leq 1$ now gives
-$$\int_U \psi |\dif v| \leq \int_U \psi \dif v \wedge \star R \leq \int_U \psi |\dif v|.$$
-Since $\varphi$ was arbitrary, it holds that $\star R$ calibrates $v$.
+An integration by parts and the fact that $\Lip(u) \leq 1$ now gives
+$$\int_U \varphi |\dif v| \leq \int_U \varphi \dif u \wedge \dif v \leq \int_U \varphi |\dif v|_{sv^1}.$$
+Since $\varphi$ was arbitrary, it holds that $\dif u$ calibrates $v$.
 \end{proof}
 
-By \cite[Proposition 6.5]{daskalopoulos2022transverse},
+By a straightforward modification of \cite[Proposition 6.5]{daskalopoulos2022transverse}, or perhaps better \cite[Theorem 7.1]{daskalopoulos2022analytic},
 \begin{equation}\label{convergence to stretch set}
-\lim_{q \to 1} \int_A |\dif v_q|^q = \lim_{p \to \infty} k_p^p \int_A |\dif u_p|^p = 0.
+\lim_{q \to 1} \int_A |\dif v_q|_{sv^q}^q = \lim_{p \to \infty} k_p^p \int_A |\dif u_p|_{sv^p}^p = 0.
 \end{equation}
 So by H\"older's inequality, $1_A \dif v_q \to 0$ in $L^1$, so $1_A \dif v = 0$.
 From the normalization (\ref{annulus average is 0}) and the convergence in $L^r$, we see that $\int_A v = 0$, hence $1_A v = 0$.
@@ -506,7 +515,7 @@ But $v$ has least gradient, so it follows that $v = 0$.
 In particular, $v_q \to 0$ in $L^r$.
 
 To derive a contradiction, we estimate
-$$k_p = \int_U |\dif v_q|^q = \int_V |\dif v_q|^q + \int_A |\dif v_q|^q =: \mathbf{I} + \mathbf{II}.$$
+$$k_p = \int_U |\dif v_q|_{sv^q}^q = \int_V |\dif v_q|_{sv^q}^q + \int_A |\dif v_q|_{sv^q}^q =: \mathbf{I} + \mathbf{II}.$$
 By the Caccioppoli and H\"older inequalities, and the fact that $v_q \to 0$ in $L^r$,
 $$\mathbf{I} \lesssim \int_A |v_q|^q \lesssim \left(\int_A |v_q|^r\right)^{q/r} \to 0.$$
 By (\ref{convergence to stretch set}), $\mathbf{II} \to 0$.
@@ -514,7 +523,7 @@ Therefore $k_p \to 0$, a contradiction.
 \end{proof}
 
 \begin{corollary}
-Let $U \Subset \RR^2$, and $\Delta_\infty u = 0$ on $U$.
+Suppose that $u$ is spectral $\infty$-harmonic.
 Then $u$ is absolutely minimizing Lipschitz on $U$.
 \end{corollary}
 \begin{proof}
@@ -523,18 +532,22 @@ $$\Lip(u|_V) > \Lip(u|_{\partial V}).$$
 So the stretch set of $u|_V$ is contained in $V$, a contradiction.
 \end{proof}
 
-\section{Things I want to prove}
 \begin{conjecture}
-The same theorem holds for $\Delta_\infty$ replaced by any $\infty$-elliptic system with a conservation law for the target, and $\RR^2$ replaced by any $\RR^d$, where the ``stretch set'' $\lambda$ is the set of points where the $L^\infty$ Lagrangian attains its maximum.
+Same result, where $U$ is replaced by a Riemannian domain of any dimension, and $\RR^c$ is replaced by an NPC symmetric space.
 \end{conjecture}
 
-It is almost certain that the theorem holds:
-\begin{enumerate}
-\item If $u$ is the gauge potential of a tight $d - 1$-form.
-\item If $u$ is an $sv^\infty$ $\infty$-harmonic map into a symmetric space. We have to replace the least gradient function with an $sv^1$ least gradient map into the (spacelike part of) the Lie algebra $\mathfrak g$, and the calibration with a $\mathfrak g$-valued calibration.
-\end{enumerate}
-In general, it probably works after replacing the least gradient map with a solution of some ``$1$-elliptic system'' and $R$ with some kind of ``calibration tensor.''
-This result might be important enough that I may want to put the least gradient maps stuff on hold and write a short paper about this...
+\begin{conjecture}
+Same result, where the spectral $\infty$-harmonic maps are replaced by tight forms and the Lipschitz constant is replaced by the comass.
+\end{conjecture}
+
+\begin{conjecture}
+Converses of the above conjectures.
+\end{conjecture}
+
+\begin{conjecture}
+If $u$ is spectral $\infty$-harmonic and $\sigma_1(\dif u) > \sigma_2(\dif u)$, then $\lambda_u$ is ``comprised of geodesics.''
+\end{conjecture}
+
 
 \printbibliography
 
