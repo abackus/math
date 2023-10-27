@@ -54,6 +54,7 @@
 \DeclareMathOperator{\Vect}{Vect}
 \DeclareMathOperator{\tr}{tr}
 
+\DeclareMathOperator{\sech}{sech}
 
 \DeclareMathOperator{\svd}{svd}
 \DeclareMathOperator{\SVD}{SVD}
@@ -225,19 +226,31 @@ Let $u: M \to \RR^d$ be spectral $\infty$-harmonic.
 Then $u$ is absolutely minimizing Lipschitz.
 \end{mainthm}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Counterexamples}
 \begin{example}
-It is very likely that the hypothesis that $H^1(U, \RR) = 0$ is optimal, or at least cannot be improved without significantly changing the proof.
-Using the Lie algebra techniques of \cite[\S3]{daskalopoulos2022analytic}, one can probably carry out the proof of Theorem \ref{main thm} if $\RR^d$ is replaced by any NPC symmetric space.
-If $S$ is a closed surface of genus $\geq 2$, then there are hyperbolic surfaces $M, N$ with topology $S$ such that the Thurston canonical lamination of $(M, N)$ is a closed geodesic $\lambda \subset M$ \cite[Theorem 10.7]{thurston1998minimal}.
-In particular, there is a spectral $\infty$-harmonic map $u: M \to N$ homotopic to the identity such that $\lambda$ is the stretch set of $u$ \cite[Theorem 8.11]{daskalopoulos2022analytic}.
-If $U \subseteq M$ contains a collar neighborhood of $\lambda$, then $\Lip(u, U) > \Lip(u, \partial U)$.
-This does not contradict the conjectured generalization of Theorem \ref{main thm}, since there is an injective map $\ZZ \to H^1(U, \RR)$ arising from the homology class of $\lambda$.
+Let us see the importance of the hypothesis $H^1(U, \RR) = 0$, even in the scalar-valued case.
+Consider the hyperbolic cylinder $M := \Sph^1_\theta \times \RR_x$ with the metric $\dif x^2 + \cosh^2 x \dif \theta^2$.
+Then $M$ has a single closed geodesic $\gamma$, which winds around $\{x = 0\}$, and has circumference $2\pi$.
+Let $N$ be a circle of circumference $4\pi$, and consider the map 
+$$u(x, \theta) := 2\theta.$$
+Now $\dif u = 2 \dif \theta$, so
+$$\Lip(u, x) = 2|\dif \theta|(x) = 2 \sech |x|.$$
+In particular, $\lambda_u = \gamma$, so $u$ is not globally AML.
+On the other hand, we can compute the Christoffel symbols
+\begin{align*}
+\Gamma^\theta_{\theta \theta} &= \Gamma^\theta_{x x} = 0, \\
+\Gamma^\theta_{x \theta} &= \Gamma^\theta_{\theta x} = \tanh x.
+\end{align*}
+It follows that 
+$$\nabla^2 u = 2 \tanh x \dif x \dif \theta,$$
+and hence $\Delta_\infty u = 0$.
 \end{example}
 
 \begin{example}
 The stretch set of a spectral $\infty$-harmonic map does not need to be a geodesic lamination in any canonical way.
-Take $M = (0, 1)^2$, and let $u: M \to \RR^2$ be a dilation of the inclusion map.
-Then $u$ is spectral $\infty$-harmonic since it is affine, and on any compact subset of $M$, $\lambda_u$ is the entire space, and there is no canonical way to assign it the structure of a geodesic lamination.
+Take $M = \Torus^2$, and $N$ a dilation of $M$ by a factor of $2$, and $u: M \to N$ the dilation map.
+Then $u$ is spectral $\infty$-harmonic since it is affine, $\lambda_u = M$, and there is no canonical way to assign it the structure of a geodesic lamination.
 \end{example}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -661,8 +674,8 @@ Then as $p \to \infty$,
 \end{proposition}
 
 In the proof of Proposition \ref{main estimate}, we denote $F_p := \kappa_p \dif u_p$, $F := \dif u$, $Q_p := Q(F_p)$,
-$$H_p := 1_U \tr(Q_p^{p - 2} F_p \wedge \star(F_p - F)).$$
-We write $G_p := \{\star H_p \geq 0\}$.
+$$H_p := \tr(Q_p^{p - 2} F_p \wedge \star(F_p - F)).$$
+We write $G_p := U \cap \{\star H_p \geq 0\}$.
 Possibly up to a Hodge star, the quantities $F, G_p, H_p$ are the same as in \cite[\S7]{daskalopoulos2022analytic}.
 Note that $F_p$ corresponds to $U_p$ in that paper, since we are already using $U$ to mean an open set.
 By von Neumann's trace inequality,
@@ -674,18 +687,17 @@ hence we have the bound
 which will be repeatedly useful.
 
 The argument is not quite the same as in \cite[\S7]{daskalopoulos2022analytic} because I found it a bit tedious to try to untangle the terms arising from the negative curvature of the target from the other terms, so there were a few parts that I reproved from scratch.
-We also pick up boundary terms in the proof of Lemma \ref{decay of tau} since we are localizing to the open set $U$.
-However the integrals along $\partial U$ are dominated by $\|u_p - u\|_{C^0}$ and therefore vanish in the limit.
 
 \begin{lemma}\label{decay of tau}
-One has $H_p \to 0$ in $L^1$.
+Let $\chi \in C^1_\cpt(U, [0, 1])$.
+Then as $p \to \infty$, $\chi H_p \to 0$ in $L^1$.
 \end{lemma}
 \begin{proof}
-We first split up the integral
+We first split up the integral using the support property of $\chi$:
 \begin{align*}
-\int_M H_p
-&= \int_U \tr(Q_p^{p - 2} F_p \wedge \star(F_p - F)) \\
-&= (\kappa_p - 1) \int_U \tr(Q_p^{p - 2} F_p \wedge \star F) + \int_U \tr(Q_p^{p - 2} (F_p \wedge \star (F_p - \kappa_p F))) \\
+\int_M \chi H_p
+&= \int_U \chi \tr(Q_p^{p - 2} F_p \wedge \star(F_p - F)) \\
+&= (\kappa_p - 1) \int_U \chi \tr(Q_p^{p - 2} F_p \wedge \star F) + \int_U \chi \tr(Q_p^{p - 2} (F_p \wedge \star (F_p - \kappa_p F))) \\
 &=: \mathbf I + \mathbf{II}.
 \end{align*}
 To estimate $\mathbf I$, we use (\ref{bound on half of Hp}), H\"older's inequality, the fact that $\||F|_\infty\|_{L^\infty} \leq 1$, (\ref{normalization condition}), and (\ref{convergence of normalizations}):
@@ -694,37 +706,40 @@ To estimate $\mathbf I$, we use (\ref{bound on half of Hp}), H\"older's inequali
 \end{align*}
 To estimate $\mathbf{II}$, we integrate by parts:
 \begin{align*}
-0 &= \int_U \tr(\dif^*(Q(\dif u_p)^{p - 2} \dif u_p) \otimes (u_p - u)) \star 1 \\
-&= \int_{\partial U} \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u)) \dif \mathcal H^1 - \int_U \tr(Q(\dif u_p)^{p - 2} \dif u_p \wedge \star \dif (u_p - u)).
+0 &= \int_U \chi \tr(\dif^*(Q(\dif u_p)^{p - 2} \dif u_p) \otimes (u_p - u)) \star 1 \\
+&= -\int_U \dif \chi \wedge \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u)) - \int_U \chi \tr(Q(\dif u_p)^{p - 2} \dif u_p \wedge \star \dif (u_p - u)).
 \end{align*}
-Here $\mathcal H^1$ is the $1$-dimensional Hausdorff measure (normalized appropriately).
 After we multiply through by $\kappa_p^p$, it follows that 
-$$\mathbf{II} = \kappa_p^p \int_{\partial U} \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u)) \dif \mathcal H^1.$$
+$$\mathbf{II} = - \kappa_p^p \int_U \dif \chi \wedge \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u)).$$
 We estimate using von Neumann's trace inequality and H\"older's inequality:
 \begin{align*}
-|\mathbf{II}| &= \kappa_p^p \left|\int_{\partial U} \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u)) \dif \mathcal H^1\right|
-\lesssim \kappa_p^p \left(\int_{\partial U} |\dif u_p|_p^p \dif \mathcal H^1\right)^{\frac{p - 1}{p}} \|u_p - u\|_{C^0} .
+|\mathbf{II}| &= \kappa_p^p \left|\int_U \dif \chi \wedge \tr(Q(\dif u_p)^{p - 2} \dif u_p \otimes (u_p - u))\right| \\
+&\lesssim \kappa_p^p \|\dif \chi\|_{C^0} \|u_p - u\|_{C^0} \left(\int_U |\dif u_p|_p^p \star 1\right)^{\frac{p - 1}{p}}.
 \end{align*}
 By Sobolev embedding, since $u_p \weakto u$ in $W^{1, 3}$, $u_p \to u$ in $C^0$.
 Therefore, by (\ref{convergence of normalizations}),
 \begin{align*}
-|\mathbf{II}| &\ll \kappa_p^p \kappa_p^{-\frac{(p - 1)^2}{p}} = \kappa_p^{\frac{1 - 2p}{p}} \lesssim 1. 
+|\mathbf{II}| &\ll \|\dif \chi\|_{C^0} \kappa_p^p \kappa_p^{-\frac{(p - 1)^2}{p}} = \|\dif \chi\|_{C^0} \kappa_p^{\frac{1 - 2p}{p}} \lesssim \|\dif \chi\|_{C^0}. 
 \end{align*}
 Therefore
-$$\lim_{p \to \infty} \int_M H_p = 0.$$
+$$\lim_{p \to \infty} \int_M \chi H_p = 0.$$
 
 For $p \geq 2$, we have \cite[Proposition 2.3]{daskalopoulos2022analytic}
 $$-(\star H_p) = \star \tr(Q_p^{p - 2} F_p \wedge \star (F_p - F)) \leq \frac{|F_p|_p^p - |F|_p^p}{p} \leq \frac{|F_p|_p^p}{p}.$$
-This inequality is vacuous on $G_p$, but if we integrate over $M \setminus G_p$, which is the set on which $\star H_p \leq 0$, we obtain
+Since $\chi \geq 0$, we conclude 
+\begin{equation}\label{convexity of Schatten norms}
+-(\chi \star H_p) \leq \frac{\chi |F_p|_p^p}{p}.
+\end{equation}
+The inequality (\ref{convexity of Schatten norms}) is vacuous on $G_p$, but if we integrate over $M \setminus G_p$, which is the set on which $\star H_p \leq 0$, we obtain
 \begin{align*}
-0 \leq -\int_{M \setminus G_p} H_p \leq \frac{1}{p} \int_U |F_p|_p^p \star 1 \lesssim \frac{1}{p}.
+0 \leq -\int_{M \setminus G_p} \chi H_p \leq \frac{1}{p} \int_U \chi |F_p|_p^p \star 1 \lesssim \frac{1}{p}.
 \end{align*}
-It follows that $1_{M \setminus G_p} H_p \to 0$ in $L^1$, and hence $H_p \to 0$ in $L^1$.
+It follows that $1_{M \setminus G_p} \chi H_p \to 0$ in $L^1$, and hence $\chi H_p \to 0$ in $L^1$.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{main estimate}]
 Let $0 < \varepsilon < 1$ and
-$$\chi \in C^0_\cpt(U \cap \{|F|_\infty \leq 1 - \varepsilon\}, [0, 1]).$$
+$$\chi \in C^1_\cpt(U \cap \{|F|_\infty \leq 1 - \varepsilon\}, [0, 1]).$$
 Applying (\ref{bound on half of Hp}),
 $$\star \tr(Q_p^{p - 2} F_p \wedge \star F) \leq |F_p|_p^{p - 1} |F|_p \leq 2^{\frac{1}{p}} |F_p|_p^{p - 1} |F|_\infty.$$
 Combining this with the support property of $\chi$, we deduce
@@ -752,7 +767,8 @@ or as $p \to \infty$,
 \begin{equation}\label{two dominates}
 \mathbf I \ll \mathbf{II}.
 \end{equation}
-If (\ref{one dominates}) holds, then by Lemma \ref{decay of tau},
+If (\ref{one dominates}) holds, then we use Lemma \ref{decay of tau} to show that $\mathbf I \ll 1$.
+Therefore, by (\ref{one dominates}),
 $$\int_{G_p} \chi |F_p|_p^p \star 1 \leq (1 + O(c^{-1})) \mathbf I \ll 1.$$
 If instead (\ref{two dominates}) holds, then we estimate by H\"older's inequality:
 \begin{equation}\label{if two dominates}
@@ -789,7 +805,7 @@ Combining this fact with (\ref{decay on positive}), we obtain
 $$\lim_{p \to \infty} \int_M \chi |F_p|_p^p \star 1 = 0.$$
 But $\chi$ and $\varepsilon$ were arbitrary.
 We can find a compact exhaustion $(W_\varepsilon)$ of $U \setminus \lambda$ such that $\Lip(u, W_\varepsilon) \leq 1 - \varepsilon$.
-Therefore there is an approximation $\chi_\varepsilon \in C^0_\cpt(W_\varepsilon)$ to $1_{U \setminus \lambda}$ in $L^1$.
+Therefore there is an approximation $\chi_\varepsilon \in C^1_\cpt(W_\varepsilon)$ to $1_{U \setminus \lambda}$ in $L^1$.
 Taking $\varepsilon \to 0$ and applying $F_p = \kappa_p \dif u_p$, we deduce (\ref{decay}).
 \end{proof}
 
@@ -839,6 +855,13 @@ So the stretch set of $u|_{\overline U}$ is contained in $U$, a contradiction to
 
 \begin{conjecture}
 Same result, where $M$ is any Riemannian manifold, and $\RR^d$ is an NPC symmetric space.
+To get rid of the assumption that $M$ is a surface, we need to show that under appropriate topological conditions, if $\beta_q$ is a $d - 1$-form with 
+$$\begin{cases}
+\dif \beta_q = 0 \\
+\dif^*(|\beta_q|^{q - 2} \beta_q) = 0
+\end{cases}$$
+and $U$ is contractible then 
+$$\int_V |\beta_q|^q \lesssim \int_{U \setminus V} |\beta_q|^q.$$
 \end{conjecture}
 
 \begin{conjecture}
@@ -901,22 +924,22 @@ Measurably tight implies tight (with no assumptions?)
 
 \section{Geodesic laminations}
 \begin{definition}
-The \dfn{nondegeneracy} of a spectral $\infty$-harmonic map $u$ is 
+The \dfn{nonconformality} of a spectral $\infty$-harmonic map $u$ is 
 $$\Sigma_u(x) := \liminf_{\delta \to 0} \essinf_{y \in B(x, \delta)} \sigma_1(\dif u)(y) - \sigma_2(\dif u)(y).$$
-If $\Sigma_u > 0$ then we say that $u$ is \dfn{nondegenerate}.
+If $\Sigma_u > 0$ then we say that $u$ is \dfn{nonconformal}.
 \end{definition}
 
 Since the liminf in the definition is actually a sup (since we are taking essinf's over smaller and smaller sets), $\Sigma_u$ is lower semicontinuous.
-Therefore $u$ is nondegenerate on an open set $U$ and we want to show that $\lambda_u \cap U$ is a geodesic lamination where $\xi_1(\dif u)$ is tangent to the leaves.
+Therefore $u$ is nonconformal on an open set $U$ and we want to show that $\lambda_u \cap U$ is a geodesic lamination where $\xi_1(\dif u)$ is tangent to the leaves.
   
 \begin{conjecture}
-Compatibility of variational solutions with the nondegenerate $C^2$ solutions of \cite{Sheffield2010VectorvaluedOL}.
+Compatibility of variational solutions with the nonconformal $C^2$ solutions of \cite{Sheffield2010VectorvaluedOL}.
 The idea would be to foliate $M$ by geodesics obtained by integrating $\xi_1(\dif u)$.
 \end{conjecture}
 
 \begin{conjecture}
 Let $M$ be a Riemann surface and $u: M \to \CC$ (or $u: M \to E$ where $E$ is an elliptic curve) be spectral $\infty$-harmonic.
-If $\xi_1(\dif u)$ is nondegenerate, then $\lambda_u$ is a geodesic lamination.
+If $u$ is nonconformal, then $\lambda_u$ is a geodesic lamination.
 This is closely related to the rank-$1$ condition on $v$.
 More generally, $\lambda_u$ splits into a geodesic lamination and a set on which $u$ or $\overline u$ is holomorphic.
 \end{conjecture}
