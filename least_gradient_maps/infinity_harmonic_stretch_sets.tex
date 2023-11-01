@@ -181,9 +181,10 @@
 % whose viscosity solutions $u$ are characterized as absolutely minimizing Lipschitz functions:
 
 \begin{definition}
-Let $M$ be a Riemannian manifold and $\mathscr O$ a class of precompact open subsets of $M$ with smooth boundary.
-A Lipschitz map $u: M \to \RR^d$ is \dfn{absolutely minimizing Lipschitz} on $\mathscr O$ if for every $U \in \mathscr O$,
+Let $M$ be a Riemannian manifold and $\mathscr U$ a class of precompact open subsets of $M$ with smooth boundary.
+A Lipschitz map $u: M \to \RR^d$ is \dfn{absolutely minimizing Lipschitz} (or \dfn{AML}) on $\mathscr U$ if for every $U \in \mathscr U$,
 $$\Lip(u, \overline U) = \Lip(u, \partial U).$$
+If $\mathscr U$ is the topology of $M$, we simply say that $u$ is \dfn{AML}.
 \end{definition}
 
 % In fact, the equivalence between absolutely minimizing Lipschitz functions and $\infty$-harmonic functions is usually established by showing that both conditions are equivalent to comparison with cones \cite[\S2]{Crandall2008}.
@@ -452,6 +453,30 @@ $$|\tr(F \wedge \beta)| \leq |F|_{\infty} |\beta|_{1}.$$
 
 I wrote an appendix to Paper 3 which justifies Anzellotti theory for Riemannian metrics, and could move it here if we wanted to release this paper first.
 
+%%%%%%%%%%%%%%%%%
+\subsection{The local Lipschitz constant}
+Let $X$ be a metric space.
+For a Lipschitz map $u: X \to \RR^d$, $Y \subseteq X$, and $x \in X$, we write $\Lip(u, Y)$ for the Lipschitz constant of $u|_Y$, and
+$$\Lip(u, x) := \limsup_{\varepsilon \to 0} \Lip(u, B(x, \varepsilon)).$$
+Since the quantity $\Lip(u, B(x, \varepsilon))$ is monotone, the limit superior defining $\Lip(u, x)$ is actually a limit and an infimum.
+Therefore $x \mapsto \Lip(u, x)$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
+
+The metric space $X$ is a \dfn{geodesic space} if for every $x, y \in X$ there is a \dfn{geodesic} from $x$ to $y$ -- that is, a rectifiable curve $\gamma$ of arc length $\dist(x, y)$ and endpoints $x, y$.
+Thus every convex Riemannian domain is a geodesic space.
+
+\begin{lemma}\label{lipschitz constant on geodesic spaces}
+If $X$ is a geodesic space, then 
+$$\Lip(u, X) = \sup_{x \in X} \Lip(u, x).$$
+\end{lemma}
+\begin{proof}
+It is clear that $\Lip(u, X) \geq \Lip(u, x)$ for any $x \in X$.
+Conversely, if $x, y \in X$, $T := \dist(x, y)$, and $\gamma: [0, T] \to X$ is a geodesic from $x$ to $y$, then we may assume that $\gamma$ is parametrized by arc length.
+Pulling back along $\gamma$ and applying \cite[Lemma 4.2(d)]{Crandall2008}, we see that
+\begin{align*}
+|u(x) - u(y)| &\leq \sup_{t \in [0, T]} \Lip(u, \gamma(t)) \dist(x, y) \leq \sup_{z \in X} \Lip(u, z) \dist(x, y). \qedhere
+\end{align*}
+\end{proof}
+
 %%%%%%%%%%%%%%%%%%
 \subsection{Maps of tracial least gradient}
 Fix an open subset $U \subseteq M$ of the surface $M$, such that $U$ has a smooth boundary.
@@ -616,15 +641,9 @@ so we get
 %%%%%%%%%%%%%%
 \section{Application to the primal problem}
 \subsection{The stretch set}
-Let $X$ be a metric space.
-For a Lipschitz map $u: X \to \RR^d$ and $x \in X$, we write 
-$$\Lip(u, x) := \limsup_{\varepsilon \to 0} \Lip(u, B(x, \varepsilon)).$$
-Since the quantity $\Lip(u, B(x, \varepsilon))$ is monotone, the limit superior defining $\Lip(u, x)$ is actually a limit and an infimum.
-Therefore $x \mapsto \Lip(u, x)$ is upper semicontinuous \cite[Lemma 4.2]{Crandall2008}.
-
 \begin{definition}
-The \dfn{stretch set} of a Lipschitz map $u: X \to \RR^d$ is the set 
-$$\lambda_u := \{x \in X: \Lip(u, x) = \Lip(u)\}.$$
+Let $X$ be a metric space.
+The \dfn{stretch set} of a Lipschitz map $u: X \to \RR^d$ is the set of maxima of the function $x \mapsto \Lip(u, x)$ on $X$.
 \end{definition}
 
 \begin{lemma}\label{stretch set is compact}
@@ -659,6 +678,10 @@ hence we have the bound
   \star \tr(Q_p^{p - 2} F_p \wedge \star F) \leq |F_p|_p^{p - 1} |F|_p
 \end{equation}
 which will be repeatedly useful.
+From (\ref{normalization condition}) and (\ref{convergence of normalizations}),
+\begin{equation}\label{normalized energies bounded}
+\int_U |F_p|_p^p \star 1 \leq \kappa_p^p \int_U |\dif u_p|^p = \kappa_p \lesssim 1.
+\end{equation}
 
 The argument is not quite the same as in \cite[\S7]{daskalopoulos2022analytic} because I found it a bit tedious to try to untangle the terms arising from the negative curvature of the target from the other terms, so there were a few parts that I reproved from scratch.
 
@@ -696,7 +719,9 @@ Therefore, by (\ref{convergence of normalizations}),
 |\mathbf{II}| &\ll \|\dif \chi\|_{C^0} \kappa_p^p \kappa_p^{-\frac{(p - 1)^2}{p}} = \|\dif \chi\|_{C^0} \kappa_p^{\frac{1 - 2p}{p}} \lesssim \|\dif \chi\|_{C^0}. 
 \end{align*}
 Therefore
-$$\lim_{p \to \infty} \int_M \chi H_p = 0.$$
+\begin{equation}\label{cut off average is 0}
+\lim_{p \to \infty} \int_M \chi H_p = 0.
+\end{equation}
 
 For $p \geq 2$, we have \cite[Proposition 2.3]{daskalopoulos2022analytic}
 $$-(\star H_p) = \star \tr(Q_p^{p - 2} F_p \wedge \star (F_p - F)) \leq \frac{|F_p|_p^p - |F|_p^p}{p} \leq \frac{|F_p|_p^p}{p}.$$
@@ -704,27 +729,41 @@ Since $\chi \geq 0$, we conclude
 \begin{equation}\label{convexity of Schatten norms}
 -(\chi \star H_p) \leq \frac{\chi |F_p|_p^p}{p}.
 \end{equation}
-The inequality (\ref{convexity of Schatten norms}) is vacuous on $G_p$, but if we integrate over $M \setminus G_p$, which is the set on which $\star H_p \leq 0$, we obtain
+The inequality (\ref{convexity of Schatten norms}) is vacuous on $G_p$.
+However, on $M \setminus G_p$, $-(\chi \star H_p) \geq 0$, which allows us to sandwich its integral using (\ref{normalized energies bounded}):
 \begin{align*}
 0 \leq -\int_{M \setminus G_p} \chi H_p \leq \frac{1}{p} \int_U \chi |F_p|_p^p \star 1 \lesssim \frac{1}{p}.
 \end{align*}
-It follows that $1_{M \setminus G_p} \chi H_p \to 0$ in $L^1$, and hence $\chi H_p \to 0$ in $L^1$.
+Since $\chi \star H_p$ is unsigned on $M \setminus G_p$, it follows that $1_{M \setminus G_p} \chi H_p \to 0$ in $L^1$.
+From this and (\ref{cut off average is 0}) we see that $\chi H_p \to 0$ in $L^1$.
 \end{proof}
 
-\begin{proof}[Proof of Proposition \ref{main estimate}]
+\begin{lemma}
 Let $0 < \varepsilon < 1$ and
-$$\chi \in C^1_\cpt(U \cap \{|F|_\infty \leq 1 - \varepsilon\}, [0, 1]).$$
+$$\chi \in C^1_\cpt(\{x \in U: \Lip(u, x) \leq 1 - \varepsilon\}, [0, 1]).$$
+Then
+\begin{equation}\label{cut off decay}
+\lim_{p \to \infty} \int_M \chi |F_p|_p^p \star 1 = 0.
+\end{equation}
+\end{lemma}
+\begin{proof}
 Applying (\ref{bound on half of Hp}),
 $$\star \tr(Q_p^{p - 2} F_p \wedge \star F) \leq |F_p|_p^{p - 1} |F|_p \leq 2^{\frac{1}{p}} |F_p|_p^{p - 1} |F|_\infty.$$
-Combining this with the support property of $\chi$, we deduce
+Combining this with the support property of $\chi$ and \cite[Lemma 4.2]{Crandall2008}, we deduce that almost everywhere,
 \begin{equation}\label{source of decay}
-\chi \tr(Q_p^{p - 2} F_p \wedge \star F) \leq 2^{\frac{1}{p}} (1 - \varepsilon) |F_p|_p^{p - 1} \star 1;
+\chi \tr(Q_p^{p - 2} F_p \wedge \star F) \leq 2^{\frac{1}{p}} (1 - \varepsilon) |F_p|_p^{p - 1} \star 1.
 \end{equation}
-the factor of $1 - \varepsilon$ here will be the source of decay needed to prove (\ref{decay}).
+The factor of $1 - \varepsilon$ here will be the source of decay needed to prove (\ref{decay}).
 To apply (\ref{source of decay}), we need to estimate $\chi |F_p|_p^p$ in $L^1$.
-We shall do this on each of $G_p$ and its complement.
 
-For the integral on $G_p$, we apply (\ref{source of decay}) to bound
+\begin{claim}
+We have
+\begin{equation}\label{decay on positive}
+\lim_{p \to \infty} \int_{G_p} \chi |F_p|_p^p \star 1 = 0.
+\end{equation}
+\end{claim}
+\begin{proof}[Proof of claim]
+We apply (\ref{source of decay}) to bound
 \begin{align*}
 \int_{G_p} \chi |F_p|_p^p \star 1
 &= \int_{G_p} \chi \tr(Q_p^{p - 2} F_p \wedge \star (F_p + F - F)) \\
@@ -732,8 +771,9 @@ For the integral on $G_p$, we apply (\ref{source of decay}) to bound
 &\leq \int_{G_p} \chi H_p + 2^{\frac{1}{p}} (1 - \varepsilon) \int_{G_p} \chi |F_p|_p^{p - 1} \star 1 \\
 &=: \mathbf I + \mathbf{II}.
 \end{align*}
-We now split into cases based on the relative rates of decay of $\mathbf I$ and $\mathbf{II}$.
-After passing to a subsequence of $p \to \infty$, we may assume that either there exists $c > 0$ such that for every $p \gg 1$,
+To prove (\ref{decay on positive}), it suffices to show that on every sequence $p_j \to \infty$, there is a subsequence on which (\ref{decay on positive}) holds.
+So we fix a sequence, which we also denote $p \to \infty$.
+After passing to a subsequence, we may assume that either there exists $c > 0$ such that for every $p \gg 1$,
 \begin{equation}\label{one dominates}
 \mathbf I \geq c \mathbf{II},
 \end{equation}
@@ -763,10 +803,8 @@ Here $\delta(p)$ can be bounded using (\ref{two dominates}) and (\ref{if two dom
 $$\delta(p) \ll \left(\int_{G_p} \chi |F_p|_p^p \star 1\right)^{-\frac{1}{q}} \mathbf{II} \lesssim 1.$$
 Taking $p$ so large that $\delta(p) < \frac{\varepsilon}{4}$ and $(2|U|)^{\frac{1}{p}} < 1 + \frac{\varepsilon}{4}$, we obtain
 $$\int_{G_p} \chi |F_p|_p^p \star 1 < \left(1 - \frac{\varepsilon}{2}\right)^p \ll 1.$$
-In particular, regardless of whether (\ref{one dominates}) or (\ref{two dominates}) holds,
-\begin{equation}\label{decay on positive}
-\lim_{p \to \infty} \int_{G_p} \chi |F_p|_p^p \star 1 = 0.
-\end{equation}
+In particular, regardless of whether (\ref{one dominates}) or (\ref{two dominates}) holds, (\ref{decay on positive}) holds.
+\end{proof}
 
 We now turn to the integral over $M \setminus G_p$.
 In that case, we can use (\ref{source of decay}) to estimate $\chi |F_p|^p$:
@@ -775,12 +813,55 @@ In that case, we can use (\ref{source of decay}) to estimate $\chi |F_p|^p$:
 \end{align*}
 Thus after rearranging terms and integrating,
 $$\int_{M \setminus G_p} \chi |F_p|_p^p \star 1 \leq 2(1 - \varepsilon)^p \ll 1.$$
-Combining this fact with (\ref{decay on positive}), we obtain 
-$$\lim_{p \to \infty} \int_M \chi |F_p|_p^p \star 1 = 0.$$
-But $\chi$ and $\varepsilon$ were arbitrary.
-We can find a compact exhaustion $(W_\varepsilon)$ of $U \setminus \lambda$ such that $\Lip(u, W_\varepsilon) \leq 1 - \varepsilon$.
-Therefore there is an approximation $\chi_\varepsilon \in C^1_\cpt(W_\varepsilon)$ to $1_{U \setminus \lambda}$ in $L^1$.
-Taking $\varepsilon \to 0$ and applying $F_p = \kappa_p \dif u_p$, we deduce (\ref{decay}).
+Combining this fact with (\ref{decay on positive}), we obtain (\ref{cut off decay}).
+\end{proof}
+
+\begin{proof}[Proof of Proposition \ref{main estimate}]
+Since $\Lip(u, \cdot)$ is upper semicontinuous, there is an exhaustion $(W_\varepsilon)_{\varepsilon > 0}$ of $U \setminus \lambda$ by open sets such that
+$$\sup_{x \in W_\varepsilon} \Lip(u, x) \leq 1 - \varepsilon$$
+and $W_\varepsilon \Subset U \setminus \lambda$.
+Let $\eta > 0$.
+Since Lebesgue measure is continuous from below, there exists $\varepsilon > 0$ such that $|U \setminus (\lambda \cup W_\varepsilon)| < \eta$.
+We choose $\chi_\varepsilon \in C^1_\cpt(W_\varepsilon, [0, 1])$ such that $\|\chi_\varepsilon - 1_{W_\varepsilon}\|_{L^1} < \eta$.
+Then by (\ref{cut off decay}) and (\ref{normalized energies bounded}),
+\begin{align*}
+\lim_{p \to \infty} \kappa_p^p \int_{U \setminus \lambda} |\dif u_p|_p^p \star 1
+&= \lim_{p \to \infty} \int_{U \setminus \lambda} |F_p|_p^p \star 1 \\
+&\leq \lim_{p \to \infty} \int_M \chi_\varepsilon |F_p|_p^p \star 1 + 2\eta \lim_{p \to \infty} \int_U |F_p|_p^p \star 1 \\
+&\lesssim \eta.
+\end{align*}
+The result follows by taking $\eta \to 0$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%
+\subsection{The Kirszbraun--Valentine theorem}
+\begin{proposition}[Kirszbraun--Valentine]\label{KV}
+Suppose that $M$ has nonnegative sectional curvature, and $S \subseteq M$.
+Then for every Lipschitz map $f: S \to \RR^d$ there exists $F: M \to \RR^d$ with $F|_S = f$ and $\Lip(F, M) = \Lip(f, S)$.
+\end{proposition}
+
+\todo{Prove it with Topoganov}
+
+\begin{proposition}\label{localized AML implies AML}
+Suppose that $M$ has nonnegative sectional curvature, $U \subseteq M$ is open, and there is an isometric embedding $\iota: \overline U \to X$ into a geodesic space.
+Then for any Lipschitz map $u: M \to \RR^d$, if
+\begin{equation}\label{localized AML}
+\sup_{x \in U} \Lip(u, x) \leq \Lip(u, \partial U),
+\end{equation}
+then $\Lip(u, \overline U) = \Lip(u, \partial U)$.
+\end{proposition}
+\todo{The RHS of localized AML isn't quite what we want}
+\begin{proof}
+By the Kirszbraun--Valentine theorem, Proposition \ref{KV}, there is a Lipschitz map $v: M \to \RR^d$ such that $v|_{\partial U} = u|_{\partial U}$ and
+$$\Lip(u, U) \leq \Lip(v, M) = \Lip(u, \partial U).$$
+Since $U$ is open, we obtain from (\ref{localized AML}) that
+$$\sup_{x \in U} \Lip(u, x) \leq \sup_{x \in U} \Lip(v, x) \leq \Lip(v, U) \leq \Lip(u, \partial U).$$
+If $x, y \in \overline U$, and $T := \dist(x, y)$, let $\gamma: [0, T] \to X$ be a geodesic from $\iota(x)$ to $\iota(y)$ parametrized by arc length.
+We define $f: [0, T] \to \RR^d$ by $f(t) := u(z)$ whenever $\gamma(t) = \iota(z)$ for some $z \in \overline U$, and extension by linear interpolation on $\gamma^{-1}(X \setminus \iota(\overline U))$.
+Since $f$ is extended by linear interpolation, and the extrinsic and intrinsic distances on $\iota(\overline U)$ agree,
+$$|u(y) - u(x)| = |f(T) - f(0)| \leq T\sup_{z \in U} \Lip(u, z) \leq T \Lip(u, \partial U).$$
+Therefore $\Lip(u, \overline U) \leq \Lip(u, \partial U)$.
+The converse is clear.
 \end{proof}
 
 %%%%%%%%%%%%%%%%
@@ -822,9 +903,8 @@ Therefore $\kappa_p \to 0$, a contradiction to (\ref{convergence of normalizatio
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{main thm}]
-Suppose not, so there exists a precompact open set $U \subseteq M$ with smooth boundary and $H^1(U, \RR) = 0$ such that 
-$$\Lip(u, \overline U) > \Lip(u, \partial U).$$
-So the stretch set of $u|_{\overline U}$ is contained in $U$, a contradiction to Proposition \ref{main prop}.
+By Proposition \ref{localized AML implies AML}, it suffices to show that for each precompact open set $U$ with smooth boundary and $H^1(U, \RR) = 0$, which embeds in a geodesic space, (\ref{localized AML}) holds.
+If it does not, then by Lemma \ref{stretch set is compact}, the stretch set of $u|_{\overline U}$ does not intersect $\partial U$, a contradiction to Proposition \ref{main prop}.
 \end{proof}
 
 \begin{conjecture}
@@ -966,6 +1046,8 @@ If $u$ is nonconformal, then $\lambda_u$ is a geodesic lamination.
 This is closely related to the rank-$1$ condition on $v$.
 More generally, $\lambda_u$ splits into a geodesic lamination and a set on which $u$ or $\overline u$ is holomorphic.
 \end{conjecture}
+
+\todo{We can probably use the Kirszbraun-Valentine theorem here as in Gueritaud--Kassel. We're going to use Topoganov maybe?}
 
 \section{Examples of least gradient maps}
 \subsection{Rank-one zero-homogeneous maps}
