@@ -65,6 +65,8 @@
 
 \newcommand{\Chain}{\underline C}
 
+\newcommand{\Euler}{\mathbf \chi}
+
 \newcommand{\Two}{\mathrm{I\!I}}
 \newcommand{\Ric}{\mathrm{Ric}}
 
@@ -176,6 +178,7 @@ Let $M$ be a closed Riemannian manifold.
 The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma$ is the infimum of the mass $\Mass(N)$ over all cycles $N$ representing $\sigma$.
 We call its dual norm the \dfn{costable norm} $\Comass(\rho)$, which for $\rho \in H^{d - 1}(M, \RR)$ is the minimum of the comass $\|F\|_{L^\infty}$ among all differential forms $F$ representing $\rho$.
 We say that a minimizing representative of $\rho$ has \dfn{best comass}.
+\todo{Explain that the stable norm is the Thurston norm somewhere}
 
 A straightforward application of the Hanh-Banach theorem, due to Federer \cite{Federer1974}, shows that for each $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$, there exists $\sigma \in H^{d - 1}(M, \RR)$ such that
 \begin{equation}\label{Federer duality}
@@ -1371,6 +1374,70 @@ By Theorem \ref{1 harmonic is MOML}, every measured stretch lamination is Lipsch
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%
+\subsection{A Gauss-Bonnet formula}
+We now give a formula for the Euler characteristic of a measured stretch lamination.
+
+We first recall the definition of Euler characteristic of a measured lamination \cite[\S1.5]{Morgan88}.
+A \dfn{parallel family of compact leaves} a closed set $F$ which can be expressed as the union of compact hypersurfaces $N$, possibly with boundary, which are all graphs over each other.
+Therefore the hypersurfaces $N$ are all homeomorphic.
+
+Given a measured lamination $\lambda$, there exists an open cover $\mathcal U := (U_a)_{a \in A}$ of $M$, which we call a \dfn{transverse cover}, such that for each $a \in A$, $\partial U_a$ is smooth and transverse to $\lambda$, and $\lambda_a := \lambda \cap \overline{U_a}$ is a parallel family of compact leaves.
+For each $\alpha \subseteq A$, $\lambda_\alpha := \bigcap_{a \in \alpha} \lambda_a$ is a parallel family of compact leaves.
+We let $w_\alpha$ be the measure of any transverse curve to $\lambda_\alpha$, and $N_\alpha$ a typical leaf of $\lambda_\alpha$.
+The \dfn{Euler characteristic} of $\lambda$ is defined by the inclusion-exclusion formula
+$$\Euler(\lambda) := \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} w_\alpha \Euler(N_\alpha)$$
+and does not depend on the choice of transverse cover $\mathcal U$ \cite[Theorem I.5.3]{Morgan88}.
+
+\todo{Redo this for $d = 5$, $d = 7$}
+
+\begin{proposition}[Gauss-Bonnet for laminations]
+Let $\kappa_u$ be the measured stretch lamination arising from a function $u$ of least gradient on $\tilde M$.
+Then for any $x \in \tilde M$,
+$$\Euler(\kappa_u) = \lim_{R \to \infty} \frac{\vol(M)}{2\pi \vol(B(x, R))} \int_{-\infty}^\infty \int_{\partial \{u > y\} \cap B(x, R)} K \dif \mathcal H^2 \dif y.$$
+\end{proposition}
+\begin{proof}
+If $\pi_1(M)$ is finite, then there are no measured stretch laminations on $M$; moreover, $\pi_1(M)$ is countable.
+So it is possible to tile $\tilde M$ by an infinite sequence $(F_n)$ of fundamental domains of $M$; we set $\tilde M_n := \bigcup_{m \leq n} F_m$.
+\todo{By the Thom transversality theorem, the fundamental domain can be chosen to be transverse to the universal covering lamination $\tilde \lambda$, and so that the generic leaf of $\tilde \lambda$ misses the singularities of the boundary of the fundamental domain.}
+We order the infinite sequence so that $x \in F_1$, and for $n \gg 1$, there exists $R > 0$ such that 
+$$B(x, R - o(1)) \subseteq \tilde M_n \subseteq B(x, R + o(1)).$$
+
+We cover $M$ by flow box charts $(U_a, K_a)_{a \in A}$, denote by $\mu_a$ the transverse measure on $K_a$, and denote by $\sigma_{ak}$ the leaf of $\lambda$ in $U_a$ with index $k \in K_a$.
+For $\alpha \subseteq A$ we similarly define $\mu_\alpha, K_\alpha, \sigma_{\alpha k}$, and let $\sigma_\alpha$ denote a typical leaf of $\lambda_\alpha$.
+Then, by the Gauss-Bonnet formula, 
+\begin{align*}
+\Euler(\lambda)
+&= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \Euler(\lambda_\alpha) \\
+&= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \mu_\alpha(K_\alpha) \Euler(\sigma_\alpha) \\
+&= \frac{1}{2\pi} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}} K \dif \mathcal H^2 + \int_{\partial \sigma_{\alpha k}} k \dif \mathcal H^1\right] \dif \mu_\alpha(k).
+\end{align*}
+If $S \subseteq M$, we write $S^m$ for the preimage of $S$ in the fundamental domain $F_m$.
+Then
+$$\partial \sigma_{\alpha k}^m = (\partial \sigma_{\alpha k})^m \cup (\sigma_{\alpha k}^m \cap \partial F_m)$$
+and, if $F_m$ is interior to $\partial \tilde M_n$, the integral along $\partial F_m$ will cancel with an integral along $\partial F_\ell$ for some other $\ell \leq n$.
+Meanwhile, the fact that the Euler characteristic is given by an inclusion-exclusion formula means that the integral along $(\partial \sigma_{\alpha k})^m$ will cancel with a similar such term.
+Similarly, all of the integrals along $\sigma_{\alpha k}$ cancel with each other, except for an integral over the entire leaf.
+In particular, for $n \geq 1$,
+\begin{align*}
+\Euler(\lambda)
+&= \frac{1}{2\pi n} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}^m} K \dif \mathcal H^2 + \int_{(\partial \sigma_{\alpha k})^m} k \dif \mathcal H^1\right] \dif \mu_\alpha(k) \\
+&= \frac{1}{2\pi n} \int_{-\infty}^\infty \left[\int_{\partial \{u > y\} \cap \tilde M_n} K \dif \mathcal H^2 + \int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right] \dif y.
+\end{align*}
+where the intersections $\partial \{u > y\} \cap \partial \tilde M_n$ are curves because the $F_m$ were chosen transverse to $\tilde \lambda$.
+
+To control the error terms, we first observe that \todo{for all but $o(1)$ tiles $F_m \subseteq \tilde M_n$, $\partial F_m$ does not meet $\partial \tilde M_n$}.
+Thus 
+\begin{align*}
+\frac{1}{n} \left|\int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right|
+& \leq \frac{4}{n} \card \{m: \partial F_m \cap \partial \tilde M_n \neq \emptyset\} \left|\int_{\partial \{u > y\} \cap \partial F_1} k \dif \mathcal H^1\right|
+\ll 1.
+\end{align*}
+\todo{This isn't quite right: we need to show that the geodesic curvature are bounded independently of $y$. This should follow from Gauss-Codazzi since $\partial \{u > y\}$ has bounded curvature and generically misses the singular points of $\partial F_1$.}
+\end{proof}
+
+
+
+%%%%%%%%%%%%%%%%%%%
 \subsection{Laminations of rational class}
 We next give a condition for a measured stretch lamination to have only closed leaves.
 Note that this condition appears in unpublished work of Auer and Bangert \cite{Auer12}, so we do not take credit for it.
@@ -1517,7 +1584,7 @@ Then for any complete connected $F$-calibrated hypersurface $N$,
 \end{equation}
 \end{lemma}
 \begin{proof}
-By the Thom transversality theorem, we may assume that $N$ meets $\partial B$ transversely. 
+By the Thom transversality theorem, we may assume that $N$ meets $\partial B$ transversely. \todo{Make it rigorous}
 Let $S := N \cap \partial B$, which by transversality can be identified with a closed $d - 2$-dimensional submanifold of $\Sph^{d - 1}$.
 Since $H_{d - 2}(\Sph^{d - 1}, \RR) = 0$, there exists a relatively open set $U \subseteq \partial B$ which is bounded by $S$.
 Since $H^{d - 1}(B, \RR) = 0$, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem we may assume that $A$ is continuous. Then
