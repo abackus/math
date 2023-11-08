@@ -28,7 +28,7 @@
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
 \date{\today}
-\keywords{laminations, convex duality, minimal hypersurfaces, max flow/min cut theorem, calibrations, functions of least gradient}
+\keywords{laminations, convex duality, minimal hypersurfaces, max flow/min cut theorem, calibrations, functions of least gradient, stable norm}
 \subjclass[2020]{primary: 49Q20; secondary: 39J60, 49N15, 53C38}
 
 \newcommand{\NN}{\mathbf{N}}
@@ -174,19 +174,24 @@ As an application, given a cohomology class $\rho \in H^{d - 1}(M, \RR)$, we con
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-Let $M$ be a closed Riemannian manifold.
-The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma$ is the infimum of the mass $\Mass(N)$ over all cycles $N$ representing $\sigma$.
-We call its dual norm the \dfn{costable norm} $\Comass(\rho)$, which for $\rho \in H^{d - 1}(M, \RR)$ is the minimum of the comass $\|F\|_{L^\infty}$ among all differential forms $F$ representing $\rho$.
-We say that a minimizing representative of $\rho$ has \dfn{best comass}.
-\todo{Explain that the stable norm is the Thurston norm somewhere}
+Let $M$ be a closed Riemannian manifold of dimension $d \geq 2$.
+\dfn{Federer's stable norm} $\Mass(\sigma)$ of a homology class $\sigma \in H_{d - 1}(M, \RR)$ is the infimum of the mass $\Mass(N)$ over all cycles $N$ representing $\sigma$ \cite{gromov2007metric}.
+Aside from its intrinsic interest, the stable norm has applications in computational geometry \cite{sullivan1990crystalline}, and is intimately related to the Thurston norm if $M$ is a closed hyperbolic $3$-fold \cite{Brock2017}.
 
-A straightforward application of the Hanh-Banach theorem, due to Federer \cite{Federer1974}, shows that for each $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$, there exists $\sigma \in H^{d - 1}(M, \RR)$ such that
+We call the dual norm to $\Mass$ the \dfn{costable norm}, defined for $\rho \in H^{d - 1}(M, \RR)$ as \cite{Federer1974}
+\begin{equation}\label{costable norm}
+\Comass(\rho) := \inf_{[F] = \rho} \|F\|_{L^\infty}.
+\end{equation}
+We say that a representative of $\rho$ which attains the mimimum in (\ref{costable norm}) has \dfn{best comass}.
+A convex duality argument (see \S\ref{fundamental theorem}) shows that if $F$ is a calibration on $M$ in the sense of Harvey and Lawson \cite{Harvey82}, and $F$ calibrates some hypersurface, then $F$ has best comass and the costable norm of $[F]$ is $1$.
+
+A straightforward application of the Hanh-Banach theorem shows that for each $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) = 1$, there exists $\sigma \in H^{d - 1}(M, \RR)$ such that
 \begin{equation}\label{Federer duality}
 \Mass(\sigma) = \langle \rho, \sigma\rangle.
 \end{equation}
-This result can be viewed somewhat charitably as a continuous analogue of the max flow/min cut theorem of graph theory \cite{sullivan1990crystalline}.
+This result can be viewed as a continuous analogue of the max flow/min cut theorem of graph theory \cite{sullivan1990crystalline,Freedman_2016}.
 Indeed, if every homology class could be represented by a smooth homologically minimizing cycle, then for any continuous best comass calibration $F$ of degree $d - 1$ (which could be viewed as a ``maximal flow'', since $F$ is the flux of a divergence-free vector field), it would follow from (\ref{Federer duality}) that $F$ would calibrate some minimal hypersurface $N$ (a ``minimal cut''), which would then ``bottleneck'' $F$ in the sense that for any $N'$ homologous to $N$,
-$$\Mass(N) = \int_N F.$$
+$$\Mass(N) = \int_{N'} F.$$
 We refer to \cite[Figure 5]{Freedman_2016} for an enlightening visualization of this bottlenecking phenomenon.
 
 In reality, not every homology class has a smooth homologically minimizing cycle.
@@ -196,10 +201,11 @@ In light of this fact, Bangert and Cui proved the following result which replace
 Let $F$ be a continuous best comass calibration of degree $d - 1$ on a closed Riemannian manifold of dimension $\leq 7$.
 Then there exists a measured oriented minimal lamination $\lambda$ such that every leaf of $\lambda$ is $F$-calibrated.
 In particular, 
-$$\Mass(\lambda) = \langle [\lambda], [F]\rangle.$$
+$$\Mass(\lambda) = \langle [F], [\lambda] \rangle.$$
 \end{theorem}
 
-However, most calibrations which appear in nature are $L^\infty$ but not necessarily continuous \cite[\S1]{bangert_cui_2017}, and it is natural to restrict attention to \emph{Lipschitz} laminations \cite[Remark 2.3]{bangert_cui_2017}.
+However, it is natural to restrict attention to \underline{Lipschitz} laminations \cite[Remark 2.3]{bangert_cui_2017}.
+Moreover, it is unclear if every cohomology class contains a \underline{continuous} best comass form.
 Thus a more natural formulation of Theorem \ref{BangertCui} would not require that $F$ is continuous, and would assert that $\lambda$ is Lipschitz.
 
 The main goal of this paper, then, is an improvement of Theorem \ref{BangertCui} (see Theorem \ref{lams are calibrated} for a precise statement).
@@ -338,7 +344,7 @@ Therefore tight forms are variational solutions of (\ref{tight Einstein}).
 
 When $d = 2$, (\ref{tight Einstein}) asserts that $F$ has an $\infty$-harmonic scalar potential.
 In general, (\ref{tight Einstein}) interpreted as asserting that the distribution $\ker(\star F)$ is ``calibrated" by $F$, though $\ker(\star F)$ need not be integrable.
-If it is integrable, then we show in \S\ref{EL interpretation} the following variational interpretation which generalizes the interpretation of $\infty$-harmonic functions as absolute minimizing Lipschitz. \todo{If the Caccioppoli estimates approach pans out, cut this theorem and refer to the other paper!}
+If it is integrable, then we show in \S\ref{EL interpretation} the following variational interpretation which generalizes the interpretation of $\infty$-harmonic functions as absolute minimizing Lipschitz.
 
 \begin{mainthm}\label{tight are absolute minimizers}
 Let $F$ be a closed $C^1$ $d - 1$-form on a compact Riemannian manifold (possibly with boundary). Then:
@@ -638,19 +644,41 @@ To establish uniqueness, we use \cite[Chapter II, Proposition 1.2]{Ekeland99}, t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{\texorpdfstring{Closed $L^\infty$ $d - 1$-forms}{Closed (d - 1)-forms of finite comass}}\label{comass sec}
+\subsection{Fundamental theorem of calibrated geometry}\label{fundamental theorem}
 The goal of the present series of papers is to study calibrations of laminations.
 If the calibration $F$ is continuous, then the theory of \cite{bangert_cui_2017} of calibrated laminations applies; however, we are not aware of general existence results on continuous calibrations, only $L^\infty$ calibrations, such as \cite[\S4.12]{Federer1974}.
 Thus, we now introduce $L^\infty$ calibrations of laminations.
 
 \begin{definition}
 A \dfn{calibration} of degree $d - 1$ is a closed $d - 1$-form $F$ such that $\Comass(F) = 1$.
-An integral $d - 1$-current $\sigma$ is $F$-\dfn{calibrated} if 
-$$\Mass(\sigma) = \int_\sigma F.$$
+A closed $d - 1$-current $T$ is $F$-\dfn{calibrated} if 
+$$\Mass(T) = \int_M T \wedge F.$$
 A lamination $\lambda$ is \dfn{$F$-calibrated} if every leaf of $\lambda$ is $F$-calibrated.
 \end{definition}
 
-The fundamental theorem of calibrated geometry \cite{Harvey82} asserts that a calibrated integral current is homologically minimizing relative to its boundary (and hence minimal).
-Therefore every calibrated lamination $\lambda$ is minimal, and if $\lambda$ is measured oriented (so the homology class $[\lambda]$ is well-defined), $\lambda$ is homologically minimizing.
+The fundamental theorem of calibrated geometry \cite{Harvey82} asserts that a calibrated current is homologically minimizing relative to its boundary (and hence minimal).
+The argument is short and frequently useful to us, so we recall it.
+Let $F$ be a calibration, $T$ an $F$-calibrated current, and $S$ a current homologous to $T$.
+Then by Stokes' theorem,
+\begin{equation}\label{calibrated geometry}
+\Mass(T) = \int_M T \wedge F = \int_M S \wedge F \leq \Mass(S).
+\end{equation}
+In particular, every calibrated lamination $\lambda$ is minimal, and if $\lambda$ is measured oriented (so the homology class $[\lambda]$ is well-defined), $\lambda$ is homologically minimizing.
+A dual argument to (\ref{calibrated geometry}) shows that most calibrations are ``ersatz'' in that they do not calibrate any currents at all:
+
+\begin{proposition}
+Let $F$ be a calibration.
+If there exists an $F$-calibrated current, then $F$ has best comass.
+\end{proposition}
+\begin{proof}
+Let $G$ be cohomologous to $F$, and let $T$ be an $F$-calibrated current.
+Then by Stokes' theorem,
+\begin{align*}
+\Comass(F) &= 1 = \frac{1}{\Mass(T)} \int_M T \wedge F = \frac{1}{\Mass(T)} \int_M T \wedge G \leq \Comass(G). \qedhere
+\end{align*}
+\end{proof}
+
+Henceforth we will mainly be interested in calibrations of best comass, and hence will mainly be interested in cohomology classes whose costable norm is $1$.
 
 \subsection{Local comass}
 We will be interested in the points at which the $L^\infty$ calibration $F$ attains its comass.
@@ -991,7 +1019,8 @@ among all forms cohomologous to them.
 \end{proposition}
 \begin{proof}
 Strict convexity of $J_p$ on closed $L^p$ $d - 1$-forms is straightforward; since each cohomology class is an affine subspace of $L^p(M, \Omega^{d - 1})$, and hence is convex, the strict convexity on each class follows.
-The existence and uniqueness of a minimizer is a standard consequence of strict convexity \cite[Chapter II]{Ekeland99}.
+Since $J_p(F) \to \infty$ as $\|F\|_{L^p} \to \infty$, $J_p$ is coercive on $L^p(M, \Omega^{d - 1})$.
+Therefore we have existence and uniqueness \cite[Chapter II]{Ekeland99}.
 To compute the Euler-Lagrange equations for $J_p$, let $B$ be a $d-2$-form (so $F + t \dif B$ is cohomologous to $F$), so that for a minimizer $F$ of $J_p$,
 $$\frac{\dif}{\dif t} J_p(F + t \dif B) = \frac{1}{p} \int_M \star \frac{\partial}{\partial t} |F + t \dif B|^p = \int_M \star |F + t \dif B|^{p - 2} \langle F + t \dif B, \dif B\rangle.$$
 Setting $t = 0$, we obtain 
@@ -1118,16 +1147,13 @@ Moreover, $[F] = \lim_{p \to \infty} [F_p] = \rho$.
 Since $B$ was arbitrary in (\ref{infinity magnetics have best curl}), $F$ has best comass.
 \end{proof}
 
-\begin{definition}
-The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called a \dfn{tight form}.
-\end{definition}
-
-Our next corollary follows immediately from Proposition \ref{existence infinity}.
-It can also be proven using Alaoglu's theorem, but we record it because it is extremely useful.
-
 \begin{corollary}
 Every cohomology class has a best comass representative.
 \end{corollary}
+
+\begin{definition}
+The $d - 1$-form $F$ of best comass in Proposition \ref{existence infinity} is called a \dfn{tight form}.
+\end{definition}
 
 The existence of best comass representatives of each cohomology class $\rho$ implies the following useful lemma on the costable norm of $\rho$.
 
@@ -1374,66 +1400,72 @@ By Theorem \ref{1 harmonic is MOML}, every measured stretch lamination is Lipsch
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%
-\subsection{A Gauss-Bonnet formula}
-We now give a formula for the Euler characteristic of a measured stretch lamination.
+% \subsection{A Gauss-Bonnet formula}
+% We now give a formula for the Euler characteristic of a measured stretch lamination.
 
-We first recall the definition of Euler characteristic of a measured lamination \cite[\S1.5]{Morgan88}.
-A \dfn{parallel family of compact leaves} a closed set $F$ which can be expressed as the union of compact hypersurfaces $N$, possibly with boundary, which are all graphs over each other.
-Therefore the hypersurfaces $N$ are all homeomorphic.
+% We first recall the definition of Euler characteristic of a measured lamination \cite[\S1.5]{Morgan88}.
+% A \dfn{parallel family of compact leaves} a closed set $F$ which can be expressed as the union of compact hypersurfaces $N$, possibly with boundary, which are all graphs over each other.
+% Therefore the hypersurfaces $N$ are all homeomorphic.
+% Given a measured lamination $\lambda$, there exists an open cover $(U_a)_{a \in A}$ of $M$, which we call a \dfn{transverse cover}, such that for each $a \in A$, $\partial U_a$ is smooth and transverse to $\lambda$, and $\lambda_a := \lambda \cap \overline{U_a}$ is a parallel family of compact leaves.
+% For each $\alpha \subseteq A$, $\lambda_\alpha := \bigcap_{a \in \alpha} \lambda_a$ is a parallel family of compact leaves.
 
-Given a measured lamination $\lambda$, there exists an open cover $\mathcal U := (U_a)_{a \in A}$ of $M$, which we call a \dfn{transverse cover}, such that for each $a \in A$, $\partial U_a$ is smooth and transverse to $\lambda$, and $\lambda_a := \lambda \cap \overline{U_a}$ is a parallel family of compact leaves.
-For each $\alpha \subseteq A$, $\lambda_\alpha := \bigcap_{a \in \alpha} \lambda_a$ is a parallel family of compact leaves.
-We let $w_\alpha$ be the measure of any transverse curve to $\lambda_\alpha$, and $N_\alpha$ a typical leaf of $\lambda_\alpha$.
-The \dfn{Euler characteristic} of $\lambda$ is defined by the inclusion-exclusion formula
-$$\Euler(\lambda) := \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} w_\alpha \Euler(N_\alpha)$$
-and does not depend on the choice of transverse cover $\mathcal U$ \cite[Theorem I.5.3]{Morgan88}.
+% \begin{definition}
+% Let $(U_a)_{a \in A}$ be a transverse cover of a measured lamination $\lambda$.
+% For $\alpha \subseteq A$, let $w_\alpha$ be the measure of any transverse curve to $\lambda_\alpha$, and let $N_\alpha$ be a typical leaf of $\lambda_\alpha$.
+% The \dfn{Euler characteristic} of $\lambda$ is defined by the inclusion-exclusion formula
+% $$\Euler(\lambda) := \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} w_\alpha \Euler(N_\alpha).$$
+% \end{definition}
 
-\todo{Redo this for $d = 5$, $d = 7$}
+% The Euler characteristic $\Euler(\lambda)$ does not depend on the choice of transverse cover \cite[Theorem I.5.3]{Morgan88}.
 
-\begin{proposition}[Gauss-Bonnet for laminations]
-Let $\kappa_u$ be the measured stretch lamination arising from a function $u$ of least gradient on $\tilde M$.
-Then for any $x \in \tilde M$,
-$$\Euler(\kappa_u) = \lim_{R \to \infty} \frac{\vol(M)}{2\pi \vol(B(x, R))} \int_{-\infty}^\infty \int_{\partial \{u > y\} \cap B(x, R)} K \dif \mathcal H^2 \dif y.$$
-\end{proposition}
-\begin{proof}
-If $\pi_1(M)$ is finite, then there are no measured stretch laminations on $M$; moreover, $\pi_1(M)$ is countable.
-So it is possible to tile $\tilde M$ by an infinite sequence $(F_n)$ of fundamental domains of $M$; we set $\tilde M_n := \bigcup_{m \leq n} F_m$.
-\todo{By the Thom transversality theorem, the fundamental domain can be chosen to be transverse to the universal covering lamination $\tilde \lambda$, and so that the generic leaf of $\tilde \lambda$ misses the singularities of the boundary of the fundamental domain.}
-We order the infinite sequence so that $x \in F_1$, and for $n \gg 1$, there exists $R > 0$ such that 
-$$B(x, R - o(1)) \subseteq \tilde M_n \subseteq B(x, R + o(1)).$$
+% \todo{Redo this for $d = 5$, $d = 7$}
 
-We cover $M$ by flow box charts $(U_a, K_a)_{a \in A}$, denote by $\mu_a$ the transverse measure on $K_a$, and denote by $\sigma_{ak}$ the leaf of $\lambda$ in $U_a$ with index $k \in K_a$.
-For $\alpha \subseteq A$ we similarly define $\mu_\alpha, K_\alpha, \sigma_{\alpha k}$, and let $\sigma_\alpha$ denote a typical leaf of $\lambda_\alpha$.
-Then, by the Gauss-Bonnet formula, 
-\begin{align*}
-\Euler(\lambda)
-&= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \Euler(\lambda_\alpha) \\
-&= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \mu_\alpha(K_\alpha) \Euler(\sigma_\alpha) \\
-&= \frac{1}{2\pi} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}} K \dif \mathcal H^2 + \int_{\partial \sigma_{\alpha k}} k \dif \mathcal H^1\right] \dif \mu_\alpha(k).
-\end{align*}
-If $S \subseteq M$, we write $S^m$ for the preimage of $S$ in the fundamental domain $F_m$.
-Then
-$$\partial \sigma_{\alpha k}^m = (\partial \sigma_{\alpha k})^m \cup (\sigma_{\alpha k}^m \cap \partial F_m)$$
-and, if $F_m$ is interior to $\partial \tilde M_n$, the integral along $\partial F_m$ will cancel with an integral along $\partial F_\ell$ for some other $\ell \leq n$.
-Meanwhile, the fact that the Euler characteristic is given by an inclusion-exclusion formula means that the integral along $(\partial \sigma_{\alpha k})^m$ will cancel with a similar such term.
-Similarly, all of the integrals along $\sigma_{\alpha k}$ cancel with each other, except for an integral over the entire leaf.
-In particular, for $n \geq 1$,
-\begin{align*}
-\Euler(\lambda)
-&= \frac{1}{2\pi n} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}^m} K \dif \mathcal H^2 + \int_{(\partial \sigma_{\alpha k})^m} k \dif \mathcal H^1\right] \dif \mu_\alpha(k) \\
-&= \frac{1}{2\pi n} \int_{-\infty}^\infty \left[\int_{\partial \{u > y\} \cap \tilde M_n} K \dif \mathcal H^2 + \int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right] \dif y.
-\end{align*}
-where the intersections $\partial \{u > y\} \cap \partial \tilde M_n$ are curves because the $F_m$ were chosen transverse to $\tilde \lambda$.
+% \todo{Need a lemma which estimates the number of fundamental domains in an annulus of inner radius $R - o(R)$ and outer radius $R + o(R)$}
 
-To control the error terms, we first observe that \todo{for all but $o(1)$ tiles $F_m \subseteq \tilde M_n$, $\partial F_m$ does not meet $\partial \tilde M_n$}.
-Thus 
-\begin{align*}
-\frac{1}{n} \left|\int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right|
-& \leq \frac{4}{n} \card \{m: \partial F_m \cap \partial \tilde M_n \neq \emptyset\} \left|\int_{\partial \{u > y\} \cap \partial F_1} k \dif \mathcal H^1\right|
-\ll 1.
-\end{align*}
-\todo{This isn't quite right: we need to show that the geodesic curvature are bounded independently of $y$. This should follow from Gauss-Codazzi since $\partial \{u > y\}$ has bounded curvature and generically misses the singular points of $\partial F_1$.}
-\end{proof}
+% \begin{proposition}[Gauss-Bonnet for laminations]
+% Let $\kappa_u$ be the measured stretch lamination arising from a function $u$ of least gradient on $\tilde M$.
+% Then for any $x \in \tilde M$,
+% $$\Euler(\kappa_u) = \lim_{R \to \infty} \frac{\vol(M)}{2\pi \vol(B(x, R))} \int_{-\infty}^\infty \int_{\partial \{u > y\} \cap B(x, R)} K \dif \mathcal H^2 \dif y.$$
+% \end{proposition}
+% \begin{proof}
+% If $\pi_1(M)$ is finite, then there are no measured stretch laminations on $M$; moreover, $\pi_1(M)$ is countable.
+% So it is possible to tile $\tilde M$ by an infinite sequence $(F_n)$ of fundamental domains of $M$; we set $\tilde M_n := \bigcup_{m \leq n} F_m$.
+% \todo{By the Thom transversality theorem, the fundamental domain can be chosen to be transverse to the universal covering lamination $\tilde \lambda$, and so that the generic leaf of $\tilde \lambda$ misses the singularities of the boundary of the fundamental domain.}
+% We order the infinite sequence so that $x \in F_1$, and for $n \gg 1$, there exists $R > 0$ such that 
+% $$B(x, R - o(1)) \subseteq \tilde M_n \subseteq B(x, R + o(1)).$$
+
+% We cover $M$ by flow box charts $(U_a, K_a)_{a \in A}$, denote by $\mu_a$ the transverse measure on $K_a$, and denote by $\sigma_{ak}$ the leaf of $\lambda$ in $U_a$ with index $k \in K_a$.
+% For $\alpha \subseteq A$ we similarly define $\mu_\alpha, K_\alpha, \sigma_{\alpha k}$, and let $\sigma_\alpha$ denote a typical leaf of $\lambda_\alpha$.
+% Then, by the Gauss-Bonnet formula, 
+% \begin{align*}
+% \Euler(\lambda)
+% &= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \Euler(\lambda_\alpha) \\
+% &= \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \mu_\alpha(K_\alpha) \Euler(\sigma_\alpha) \\
+% &= \frac{1}{2\pi} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}} K \dif \mathcal H^2 + \int_{\partial \sigma_{\alpha k}} k \dif \mathcal H^1\right] \dif \mu_\alpha(k).
+% \end{align*}
+% If $S \subseteq M$, we write $S^m$ for the preimage of $S$ in the fundamental domain $F_m$.
+% Then
+% $$\partial \sigma_{\alpha k}^m = (\partial \sigma_{\alpha k})^m \cup (\sigma_{\alpha k}^m \cap \partial F_m)$$
+% and, if $F_m$ is interior to $\partial \tilde M_n$, the integral along $\partial F_m$ will cancel with an integral along $\partial F_\ell$ for some other $\ell \leq n$.
+% Meanwhile, the fact that the Euler characteristic is given by an inclusion-exclusion formula means that the integral along $(\partial \sigma_{\alpha k})^m$ will cancel with a similar such term.
+% Similarly, all of the integrals along $\sigma_{\alpha k}$ cancel with each other, except for an integral over the entire leaf.
+% In particular, for $n \geq 1$,
+% \begin{align*}
+% \Euler(\lambda)
+% &= \frac{1}{2\pi n} \sum_{\alpha \subseteq A} (-1)^{\card \alpha - 1} \int_{K_\alpha} \left[\int_{\sigma_{\alpha k}^m} K \dif \mathcal H^2 + \int_{(\partial \sigma_{\alpha k})^m} k \dif \mathcal H^1\right] \dif \mu_\alpha(k) \\
+% &= \frac{1}{2\pi n} \int_{-\infty}^\infty \left[\int_{\partial \{u > y\} \cap \tilde M_n} K \dif \mathcal H^2 + \int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right] \dif y.
+% \end{align*}
+% where the intersections $\partial \{u > y\} \cap \partial \tilde M_n$ are curves because the $F_m$ were chosen transverse to $\tilde \lambda$.
+
+% To control the error terms, we first observe that \todo{for all but $o(1)$ tiles $F_m \subseteq \tilde M_n$, $\partial F_m$ does not meet $\partial \tilde M_n$}.
+% Thus 
+% \begin{align*}
+% \frac{1}{n} \left|\int_{\partial \{u > y\} \cap \partial \tilde M_n} k \dif \mathcal H^1\right|
+% & \leq \frac{4}{n} \card \{m: \partial F_m \cap \partial \tilde M_n \neq \emptyset\} \left|\int_{\partial \{u > y\} \cap \partial F_1} k \dif \mathcal H^1\right|
+% \ll 1.
+% \end{align*}
+% \todo{This isn't quite right: we need to show that the geodesic curvature are bounded independently of $y$. This should follow from Gauss-Codazzi since $\partial \{u > y\}$ has bounded curvature and generically misses the singular points of $\partial F_1$.}
+% \end{proof}
 
 
 
@@ -1486,8 +1518,6 @@ Suppose that $M = \Sph^1_x \times \Sph^1_y$.
 Let $u(x, y) = x$, so $\kappa_u$ is itself topologically nontrivial (in the $x$ direction) and its leaves are also topologically nontrivial (in the $y$ direction).
 The covering space $\hat M$ is $\RR_x \times \Sph_y^1$, the point is that we unwound $\kappa_u$ without messing with its leaves.
 \end{example}
-
-\todo{Can we show that the Federer norm is basically the Thurston norm?}
 
 %%%%%%%%%%%%%%%%
 \section{The canonical lamination}
@@ -1584,7 +1614,9 @@ Then for any complete connected $F$-calibrated hypersurface $N$,
 \end{equation}
 \end{lemma}
 \begin{proof}
-By the Thom transversality theorem, we may assume that $N$ meets $\partial B$ transversely. \todo{Make it rigorous}
+By the Thom transversality theorem, possibly after shrinking $B$ slightly, we may assume that $B$ meets $N$ transversely.
+Since both sides of (\ref{area bound for calibrated}) depend continuously on the radius of $B$, this assumption is no loss of generality.
+
 Let $S := N \cap \partial B$, which by transversality can be identified with a closed $d - 2$-dimensional submanifold of $\Sph^{d - 1}$.
 Since $H_{d - 2}(\Sph^{d - 1}, \RR) = 0$, there exists a relatively open set $U \subseteq \partial B$ which is bounded by $S$.
 Since $H^{d - 1}(B, \RR) = 0$, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem we may assume that $A$ is continuous. Then
@@ -2033,7 +2065,7 @@ In the prequel paper \cite{BackusCML} I have only studied the interior behavior 
 
 We cannot easily weaken the assumption $d \leq 7$, since the double-napped Simons cone defines a function of least gradient on $\RR^8$ which does not admit a lamination structure \cite{BackusCML}.
 Similarly, if the codimension $c \geq 2$, then Liu recently constructed homologically minimizing submanifolds $N$ which do not admit calibrations, even if $d = 3$ or $M = \CC \PP^2$ with a perturbation of the Fubini-Study metric \cite{liu2023homologically}.
-Liu also showed that if $d \geq 8$ and $c = 1$, then homologically minimizing hypersurfaces may only admit \emph{smooth} calibrations; the regularity of best comass calibrations remains open if $d \leq 7$ \todo{Look for more literature on this}.
+Liu also showed that if $d \geq 8$ and $c = 1$, then there exist smooth homologically minimizing hypersurfaces with no smooth calibration; the regularity of best comass calibrations remains open if $d \leq 7$ \todo{Look for more literature on this}.
 
 After replacing Poincar\'e duality with Lefschetz duality and imposing boundary conditions, I expect that the results of this paper go through if $M$ is a compact manifold with strictly mean-convex boundary $\partial M$.
 Under that assumption, a version of the max-flow min-cut theorem has been claimed in the physics literature \cite[Appendix A]{Freedman_2016}.
