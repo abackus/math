@@ -17,7 +17,7 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Many calibrations}
+\title{Variational construction of calibrated currents}
 \author{Aidan Backus}
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
@@ -157,6 +157,11 @@
 
 
 \begin{document}
+\begin{abstract}
+We show that the problem of finding a calibration $\varphi$, and a $\varphi$-calibrated current, can be expressed as the limit of first-order degenerate-elliptic PDE.
+We also show that on a wide class of manifolds of special holonomy, there exist calibrations which calibrate currents, but do not interact with the special holonomy.
+\end{abstract}
+
 \maketitle
 
 \section{Introduction}
@@ -176,15 +181,24 @@ $$\langle T, \varphi\rangle = \Mass(T).$$
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
-\subsection{Singular values of differential forms}
-Let $V$ be a Hilbert space of dimension $d < \infty$.
-We denote by $\Bl_k(V) \subseteq V^{\wedge k}$ the set of $k$-blades over $V$, and record for future reference that
-$$\dim V^{\wedge k} = \binom dk.$$
+\subsection{Norms on the exterior algebra}
+Let $V$ be a Hilbert space of dimension $d < \infty$, and let $V^{\wedge k}$ be the $k$th exterior power of $V$.
+Thus 
+$$\dim(V^{\wedge k}) = \binom dk.$$
+
+A \dfn{$k$-blade} over $V$ is a $k$-vector of the form $v_1 \wedge \cdots \wedge v_k$ for some $v_1, \dots, v_k \in V$.
+We denote by $\Bl_k(V) \subseteq V^{\wedge k}$ the set of $k$-blades over $V$.
 If $v, w \in \Bl_k(V)$, let
 $$\langle v, w\rangle := \det(\langle v_i, w_j\rangle_{ij}),$$
 which extends to an inner product on $V^{\wedge k}$ in the natural way.
 
-Let $\varphi \in V^{\wedge k}$.
+Let $m(d, k)$ be the smallest number such that any $k$-vector can be written as the sum of at most $m(d, k)$ $k$-blades.
+Then $m(d, k) = \todo{???}$ by (\ref{minimal number of blades}); in particular, $m(d, k) = 1$ unless $d \geq 4$ and $k \in \{2, \dots, d - 2\}$.
+Otherwise, the below singular value decomposition is trivial, in the sense that for any $k$-vector $\varphi$, $\varphi = \sigma_1(\varphi) \xi_1(\varphi)$ with $\sigma_1(\varphi) = |\varphi|$ and $\xi_1(\varphi) = \varphi/|\varphi|$.
+This is why in the previous paper \todo{cite my old paper} we could avoid the use of the singular value decomposition.
+In the present paper, we are especially interested in the cases $(d, k) = (4, 2)$ and $(d, k) = (7, 3)$ (arising from the study of K\"ahler surfaces and $G_2$ manifolds, respectively).
+
+Let $\varphi \in V^{\wedge k}$ and $m := m(d, k)$.
 We define
 \begin{equation}\label{first singular value}
 \sigma_1(\varphi) := \max_{\substack{v \in \Bl_k(V) \\ |v| \leq 1}} \langle \varphi, v\rangle,
@@ -195,9 +209,9 @@ We can then inductively define
 \sigma_{j + 1}(\varphi) := \max_{\substack{v \in \Bl_k(V) \\ |v| \leq 1 \\ v \perp \xi_1(\varphi), \cdots, \xi_j(\varphi)}} \langle \varphi, v\rangle,
 \end{equation}
 and let $\xi_{j + 1}(\varphi) \in \Bl_k(V)$ realize the maximum in (\ref{low singular value}).
-Then $\sigma_j(\varphi) \geq \sigma_{j + 1}(\varphi)$, $\xi_1(\varphi), \dots, \xi_{\binom dk}(\varphi)$ is an orthonormal basis of $V^{\wedge k}$, and
+Then $\sigma_j(\varphi) \geq \sigma_{j + 1}(\varphi)$, $\{\xi_1(\varphi), \dots, \xi_m(\varphi)\}$ is an orthonormal subset of $V^{\wedge k}$, and
 \begin{equation}\label{SVD of a form}
-\varphi = \sum_{j = 1}^{\binom dk} \sigma_j(\varphi) \xi_j(\varphi).
+\varphi = \sum_{j = 1}^m \sigma_j(\varphi) \xi_j(\varphi).
 \end{equation}
 Moreover, since $\Bl_k(V)$ spans $V^{\wedge k}$,
 \begin{equation}\label{seminorms are norms}
@@ -208,33 +222,28 @@ Moreover, since $\Bl_k(V)$ spans $V^{\wedge k}$,
 The \dfn{singular value decomposition} of $\varphi \in V^{\wedge k}$ is defined as (\ref{SVD of a form}), where $\sigma_j(\varphi)$ and $\xi_j(\varphi)$ are defined by (\ref{first singular value}) and (\ref{low singular value}).
 \end{definition}
 
-If $V$ is (a typical fiber of) the cotangent bundle of $M$, and $\varphi$ is a $k$-form on $M$, then
-\begin{equation}\label{infinity norm gives comass}
-\Comass(\varphi) = \esssup_{x \in M} \sigma_1(\varphi(x)).
-\end{equation}
-Unfortunately $\sigma_1$ is not a strictly convex norm on $V^{\wedge k}$, so we introduce approximations:
-
 \begin{definition}
 Let $p \in [1, \infty)$.
 The $p$th \dfn{Schatten-von Neumann norm} on $V^{\wedge k}$ is 
-$$|\varphi|_p := \left(\sum_{j = 1}^{\binom dk} \sigma_j(\varphi)^p\right)^{1/p}.$$
+$$|\varphi|_p := \left(\sum_{j = 1}^m \sigma_j(\varphi)^p\right)^{1/p}.$$
 We moreover define $|\varphi|_\infty := \sigma_1(\varphi)$.
 \end{definition}
 
-Since $|\varphi|_p$ is the $\ell^p$ norm of $(\sigma_1(\varphi), \dots, \sigma_{\binom dk}(\varphi))$, $p \in [1, \infty]$, and $\ell^p$ norms converge to the $\ell^\infty$ norm as $p \to \infty$,
+Since $|\varphi|_p$ is the $\ell^p$ norm of $(\sigma_1(\varphi), \dots, \sigma_m(\varphi))$, $p \in [1, \infty]$, and $\ell^p$ norms converge to the $\ell^\infty$ norm as $p \to \infty$,
 \begin{equation}\label{SvN norms converge}
 |\varphi|_\infty = \lim_{p \to \infty} |\varphi|_p.
 \end{equation}
-Since $\xi_1(\varphi), \dots, \xi_{\binom dk}(\varphi)$ is an orthonormal basis of $V^{\wedge k}$, the norm arising from the inner product on $V^{\wedge k}$ is exactly $|\cdot|_2$.
-Applying H\"older's inequality to the atomic measure space $\{1, \dots, \binom dk\}$, we have for $1 \leq p \leq q \leq \infty$ that
+Since $\xi_1(\varphi), \dots, \xi_m(\varphi)$ is an orthonormal basis of $V^{\wedge k}$, the norm arising from the inner product on $V^{\wedge k}$ is exactly $|\cdot|_2$.
+Applying H\"older's inequality to the atomic measure space $\{1, \dots, m\}$, we have for $1 \leq p \leq q \leq \infty$ that
 \begin{equation}\label{relating Schatten norms}
-|\varphi|_q \leq |\varphi|_p \leq \binom dk^{\frac{1}{p} - \frac{1}{q}} |\varphi|_q.
+|\varphi|_q \leq |\varphi|_p \leq m^{\frac{1}{p} - \frac{1}{q}} |\varphi|_q.
 \end{equation}
 
-In order to prove further properties of $|\cdot|_p$, we denote for a matrix $A \in \End(\RR^m)$,
+In order to prove further properties of $|\cdot|_p$, we denote for a matrix $A$,
 $$Q(A) := \sqrt{AA^\dagger}.$$
 We then have the \dfn{Schatten-von Neumann norm} $|\cdot|_{M, p}$ on matrices, which is the $\ell^p$ norm of their singular values.
 To exploit this norm, let $(e_j)$ be an orthonormal basis of $V^{\wedge k}$, and $\varphi \in V^{\wedge k}$.
+For convenience, we extend $\{\xi_i(\varphi): i \leq m\}$ to an orthonormal basis of $V^{\wedge k}$.
 We introduce the matrix $A \in \End(\RR^{\binom dk})$,
 $$A_{ij} := \sigma_i(\varphi) \langle \xi_i(\varphi), e_j\rangle,$$
 so that $\sum_i A_{ij} = \langle \varphi, e_j\rangle$.
@@ -243,7 +252,7 @@ and $\Xi_{ij} := \langle \xi_i(\varphi), e_j\rangle$.
 Then $\Sigma$ is a positive semidefinite diagonal matrix with decreasing entries, $\Xi$ is an orthogonal matrix, and $A = \Sigma \Xi$.
 Then $Q(A) = \Sigma$, the singular value decomposition of $A$ is 
 $$A = I \Sigma \Xi,$$
-and the singular values of $A$ equal the singular values of $\varphi$.
+and the singular values of $A$ equal the first $m$ singular values of $\varphi$.
 It follows that $|\cdot|_p$ is a norm.
 We have 
 \begin{equation}\label{derivative of matrix norm}
@@ -251,7 +260,7 @@ We have
 \end{equation}
 Multiplying both sides of (\ref{derivative of matrix norm}) by the basis vectors $e_j$, and then summing in $i$,
 \begin{equation}\label{derivative of schatten norm}
-\frac{\dif}{\dif \varphi} |\varphi|_p^p = p \sum_{i=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \xi_i(\varphi).
+\frac{\dif}{\dif \varphi} |\varphi|_p^p = p \sum_{i=1}^m \sigma_i(\varphi)^{p - 1} \xi_i(\varphi).
 \end{equation}
 Since $|\cdot|_{M, p}^p$ is a strictly convex function if $p \in (1, \infty)$, so is $|\cdot|_p^p$.
 
@@ -259,7 +268,7 @@ Since $|\cdot|_{M, p}^p$ is a strictly convex function if $p \in (1, \infty)$, s
 Let $\psi, \varphi \in V^{\wedge k}$.
 Then
 \begin{equation}\label{von Neumann inequality}
-|\langle \varphi, \psi\rangle| \leq \sum_{i=1}^{\binom dk} \sigma_i(\varphi) \sigma_i(\psi).
+|\langle \varphi, \psi\rangle| \leq \sum_{i=1}^m \sigma_i(\varphi) \sigma_i(\psi).
 \end{equation}
 \end{lemma}
 \begin{proof}
@@ -271,41 +280,67 @@ Let $(p, q)$ be a H\"older pair. Then the norms $|\cdot|_p$ and $|\cdot|_q$ are 
 \end{lemma}
 \begin{proof}
 Let $\varphi \in V^{\wedge k}$.
-From von Neumann's inequality (\ref{von Neumann inequality}) and H\"older's inequality applied to the atomic measure space $\{1, \dots, \binom dk\}$, we have for every $\psi \in V^{\wedge k}$ that
+From von Neumann's inequality (\ref{von Neumann inequality}) and H\"older's inequality applied to the atomic measure space $\{1, \dots, m\}$, we have for every $\psi \in V^{\wedge k}$ that
 $$|\langle \varphi, \psi\rangle| \leq |\varphi|_p |\psi|_q.$$
 Thus 
 \begin{equation}\label{dual norm inequality}
 |\varphi|_p \geq \max_{\substack{\psi \in V^{\wedge k} \\ |\psi|_q \leq 1}} \langle \varphi, \psi\rangle.
 \end{equation}
 Conversely, if $p \in [1, \infty)$ and we take
-$$\psi := |\varphi|_p^{1 - p} \sum_{i=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \xi_i(\varphi),$$
+$$\psi := |\varphi|_p^{1 - p} \sum_{i=1}^m \sigma_i(\varphi)^{p - 1} \xi_i(\varphi),$$
 we see that the converse inequality to (\ref{dual norm inequality}) holds.
 By taking limits we see that the result holds even if $p = \infty$.
 \end{proof}
 
 %%%%%%%%%%%%%%%%
-\subsection{Currents of locally finite mass}
-The mass of a $k$-current $T$ satisfies 
-$$\Mass(T) = \sup_{\substack{\varphi \in C^\infty(M, \Omega^k) \\ \Comass(\varphi) \leq 1}} \int_M T \wedge \varphi.$$
-If $T$ has locally finite mass, then we can view $\sigma_1(T) \star 1, \dots, \sigma_{\binom dk}(T) \star 1$ as positive Radon measures. \todo{Write out their definitions rigorously -- it's based on induction probably}.
-Thus their sum $|T|_1 \star 1$ is also a positive Radon measure.
-Then we have, by (\ref{infinity norm gives comass}) and the duality between the $|\cdot|_1$ and $|\cdot|_\infty$ norms,
-$$\Mass(T) = \int_M |T| \star 1.$$
+\subsection{Mass and comass}
+Let $M$ be a closed Riemannian manifold of dimension $d$.
+We apply the above construction when $V$ is (a typical fiber of) the cotangent bundle of $M$.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Anzellotti theory}
-Let $\Omega^k$ ($\Omega^k_{\rm cl}$) be the sheaf of (closed) $k$-forms on $M$. 
 If $\mathscr F$ is a sheaf and $\mathcal X$ is a function space that the components of sections of $\mathscr F$ can take values in, we write $\mathcal X(\cdot, \mathscr F)$ for the functor that sends an open set to the local sections of $\mathscr F$ with components in $\mathcal X$.
 
-Let $\Omega_k$ denote the sheaf of $k$-currents.
+Let $\Omega^k$ ($\Omega^k_{\rm cl}$) be the sheaf of (closed) $k$-forms on $M$, and let $\Omega_k$ ($\Omega^{\rm cl}_k$) be the sheaf of (closed) $k$-currents on $M$.
 We willl tacitly identify $L^q(\cdot, \Omega_k)$ with $L^q(\cdot, \Omega^{d - k})$, by setting, for every $\varphi \in L^p(\cdot, \Omega^k)$,
 $$\langle T, \varphi\rangle = \int_M T \wedge \varphi.$$
 In fact we write $\int_M T \wedge \varphi$ to mean $\langle T, \varphi\rangle$ even if $T$ cannot be identified with a form.
+We write $\mathcal M$ for the function space of Radon measures.
 
+\begin{definition}
+Let $\varphi \in L^\infty(M, \Omega^k)$. The \dfn{comass} of $\varphi$ is 
+\begin{equation}\label{infinity norm gives comass}
+\Comass(\varphi) = \esssup_{x \in M} \sigma_1(\varphi(x)).
+\end{equation}
+Dually, let $T \in \mathcal M(M, \Omega_k)$. The \dfn{mass} of $T$ is 
+$$\Mass(T) = \sup_{\substack{\varphi \in C^\infty(M, \Omega^k) \\ \Comass(\varphi) \leq 1}} \int_M T \wedge \varphi.$$
+\end{definition}
+
+Let $T \in \mathcal M(M, \Omega_k)$.
+We can introduce the \dfn{mass measure} $\mu_T$ by setting, for every open set $U \subseteq M$,
+$$\mu_T(U) = \sup_{\substack{\varphi \in C^\infty_\cpt(U, \Omega^k) \\ \Comass(\varphi) \leq 1}} \int_M T \wedge \varphi.$$
+
+\begin{lemma}\label{formula for mass measure}
+Let $T \in L^1(M, \Omega_k)$, viewed as a $d - k$-form. Then 
+$$\mu_T(U) = \int_U |T|_1 \star 1.$$
+\end{lemma}
+\begin{proof}
+In this proof we use $|T|_1$ exclusively to mean the first Schatten-von Neumann norm, not the Hodge dual of the mass measure.
+In particular we think of $T$ as a $d - k$-form.
+Since $|\cdot|_1$ and $|\infty|$ are dual norms,
+$$\int_U |T|_1 \star 1 = \int_U \max_{\substack{\psi(x) \in (T^*_x M)^{\wedge (d - k)} \\ |\psi(x)|_\infty \leq 1}} \langle T(x), \psi(x)\rangle \dif \mathcal H^d(x).$$
+Since $T$ is measurable and the maximizer $\psi(x)$ depends continuously on $T(x)$, $\psi$ can chosen to be measurable, and it is clear that $\Comass(\psi) = 1$.
+
+For each $\varepsilon > 0$ we select $\varphi_\varepsilon \in C^\infty_\cpt(U, \Omega^k)$ such that $\Comass(\varphi_\varepsilon) = 1$, and in $L^\infty$,
+$$\varphi_\varepsilon \weakto^* \star \psi.$$
+Then we have
+$$\int_U |T|_1 \star 1 = \lim_{\varepsilon \to 0} \int_U T \wedge \varphi_\varepsilon.$$
+The claim now follows from the definition of $\mu_T(U)$.
+\end{proof}
+
+Henceforth we write $|T|_1 \star 1$ for the mass measure of $T \in \mathcal M(M, \Omega_k)$, even if $T$ is not $L^1$.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Existence of calibrations and calibrated currents}
-\subsection{The \texorpdfstring{case $p < \infty$}{finite case}}
+\subsection{The regularized variational problems}
 \begin{definition}
 Let $p \in (1, \infty)$.
 The \dfn{$p$-energy} is defined on $L^p(M, \Omega^k_{\rm cl})$ by 
@@ -319,7 +354,7 @@ Let $\rho \in H^k(M, \RR)$ and $p \in (1, \infty)$.
 Then there is a unique $p$-tight $k$-form $\varphi$ representing $\rho$.
 Moreover, $\varphi$ is the unique representative of $\rho$ which solves
 \begin{equation}\label{first variation}
-\dif^*\left[\sum_{i=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \xi_i(\varphi)\right] = 0.
+\dif^*\left[\sum_{i=1}^m \sigma_i(\varphi)^{p - 1} \xi_i(\varphi)\right] = 0.
 \end{equation}
 \end{proposition}
 \begin{proof}
@@ -329,7 +364,7 @@ Then, by (\ref{derivative of schatten norm}),
 \begin{align*}
 \frac{\dif}{\dif t} J_p(\varphi_t)
 &= \frac{1}{p} \int_M \frac{\partial}{\partial t} |\varphi_t|_p^p \star 1
-= \int_M \left\langle \sum_{i=1}^{\binom dk} \sigma_i(\varphi_t)^{p - 1} \xi_i(\varphi_t), \dif \gamma\right\rangle \star 1.
+= \int_M \left\langle \sum_{i=1}^m \sigma_i(\varphi_t)^{p - 1} \xi_i(\varphi_t), \dif \gamma\right\rangle \star 1.
 \end{align*}
 Therefore if $\varphi$ is $p$-tight, (\ref{first variation}) holds.
 Moreover, since $|\cdot|_p^p$ is strictly convex, 
@@ -343,65 +378,67 @@ Therefore by the direct method in the calculus of variations, the existence and 
 \begin{definition}
 Let $(p, q)$ be a H\"older pair, and let $\varphi$ be a $p$-tight $k$-form.
 Let
-$$T := -\frac{1}{p J_p(\varphi)} \sum_{i=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \star \xi_i(\varphi).$$
+$$T := -\frac{1}{p J_p(\varphi)} \sum_{i=1}^m \sigma_i(\varphi)^{p - 1} \star \xi_i(\varphi).$$
 We call $T$ the \dfn{dual $k$-current} to $\varphi$.
 \end{definition}
 
 \begin{lemma}
 Let $(p, q)$ be a H\"older pair, let $\varphi$ be a $p$-tight $k$-form, and let $T$ be the dual $k$-current to $\varphi$.
 Then $T$ is a $q$-tight $d - k$-form such that 
-$$\int_M T \wedge \varphi = 1.$$
+\begin{equation}\label{intersection product is 1}
+\int_M T \wedge \varphi = 1.
+\end{equation}
 \end{lemma}
 \begin{proof}
 By (\ref{first variation}), $\dif T = 0$.
 It is clear from the definitions that
 $$\sigma_i(T) = \sigma_i(\varphi)^{p - 1}.$$
 Moreover, $(p - 1)(q - 1) = 1$, so 
-$$p J_p(\varphi) \dif^*\left[\sum_{i=1}^{\binom dk} \sigma_i(T)^{p - 1} \xi_i(T)\right] = -\dif^*\left[\sum_{i=1}^{\binom dk} \sigma_i(\varphi) \star^{-1} \xi_i(\varphi)\right] = \pm \dif \varphi = 0$$
+$$p J_p(\varphi) \dif^*\left[\sum_{i=1}^m \sigma_i(T)^{p - 1} \xi_i(T)\right] = -\dif^*\left[\sum_{i=1}^m \sigma_i(\varphi) \star^{-1} \xi_i(\varphi)\right] = \pm \dif \varphi = 0$$
 where the sign depends on the parities of $d$ and $k$.
-Finally, we use the fact that $\xi_1(\varphi), \dots, \xi_{\binom dk}(\varphi)$ is an orthonormal basis of $(T^* M)^{\wedge k}$ to compute
+Finally, we use the fact that $\xi_1(\varphi), \dots, \xi_m(\varphi)$ is an orthonormal basis of $(T^* M)^{\wedge k}$ to compute
 \begin{align*}
 \int_M T \wedge \varphi
-&= -\frac{1}{p J_p(\varphi)} \int_M \sum_{i=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \star \xi_i(\varphi) \wedge \varphi \\
-&= \frac{1}{p J_p(\varphi)} \int_M \sum_{i,j=1}^{\binom dk} \sigma_i(\varphi)^{p - 1} \sigma_j(\varphi) \langle\xi_i(\varphi), \xi_j(\varphi)\rangle \star 1 \\
-&= \frac{1}{p J_p(\varphi)} \int_M \sum_{i=1}^{\binom dk} \sigma_i(\varphi)^p \star 1 \\
+&= -\frac{1}{p J_p(\varphi)} \int_M \sum_{i=1}^m \sigma_i(\varphi)^{p - 1} \star \xi_i(\varphi) \wedge \varphi \\
+&= \frac{1}{p J_p(\varphi)} \int_M \sum_{i,j=1}^m \sigma_i(\varphi)^{p - 1} \sigma_j(\varphi) \langle\xi_i(\varphi), \xi_j(\varphi)\rangle \star 1 \\
+&= \frac{1}{p J_p(\varphi)} \int_M \sum_{i=1}^m \sigma_i(\varphi)^p \star 1 \\
 &= 1. \qedhere 
 \end{align*}
 \end{proof}
 
 %%%%%%%%%%%%%%%
-\subsection{The limit \texorpdfstring{$p \to \infty$}{p to infinity}}
+\subsection{Constructing the calibration}
 We now fix a cohomology class $\rho \in H^k(M, \RR)$, with $\Comass(\rho) = 1$.
 Thus we have $p$-tight $k$-forms $\varphi_p$ for every $p \in (1, \infty)$.
 We will construct a limiting form $\varphi$.
+Let $m := m(d, k)$ throughout.
 
 \begin{lemma}
 For any $2 \leq r \leq p < \infty$, one has the energy bound
 \begin{equation}\label{energy bound}
-J_r(\varphi_p) \leq \frac{1}{r} \binom dk (\vol M)^{r/p}.
+J_r(\varphi_p) \leq \frac{m}{r} (\vol M)^{r/p}.
 \end{equation}
 In particular, we have the norm bound 
 \begin{equation}\label{norm bound}
-\|\varphi_p\|_{L^r} \leq \binom dk^{1/2} (\vol M)^{1/p}.
+\|\varphi_p\|_{L^r} \leq m^{1/2} (\vol M)^{1/p}.
 \end{equation}
 \end{lemma}
 \begin{proof}
 Let $\varepsilon > 0$ and choose some $\psi \in C^0(M, \Omega^k_{\rm cl})$ to represent $\rho$.
 Since $\Comass(\rho) = 1$, we may assume $\Comass(\psi) \leq 1 + \varepsilon$.
 Then, by (\ref{relating Schatten norms}),
-$$|\psi|_p^p \leq \binom dk|\psi|_\infty^p \leq (1 + \varepsilon)^p \binom dk.$$
+$$|\psi|_p^p \leq |\psi|_\infty^p m \leq (1 + \varepsilon)^p m.$$
 Therefore 
-$$J_p(\varphi_p) \leq J_p(\psi) \leq \frac{1}{p} \binom dk \int_M (1 + \varepsilon)^p \star 1 = \frac{\vol M}{p} \binom dk (1 + \varepsilon)^p.$$
+$$J_p(\varphi_p) \leq J_p(\psi) \leq \frac{m}{p} \int_M (1 + \varepsilon)^p \star 1 = \frac{m \vol M}{p} (1 + \varepsilon)^p.$$
 Taking $\varepsilon \to 0$ we conclude (\ref{energy bound}) if $r = p$.
 Otherwise, we again apply (\ref{relating Schatten norms}) to estimate 
-$$J_r(\varphi_p) \leq \frac{1}{r} \binom dk^{1 - r/p} \int_M |\varphi_p|_p^r \star 1 \leq \frac{1}{r} \binom dk^{1 - r/p} (pJ_p(\varphi_p))^{r/p}.$$
+$$J_r(\varphi_p) \leq \frac{1}{r} m^{1 - r/p} \int_M |\varphi_p|_p^r \star 1 \leq \frac{1}{r} m^{1 - r/p} (pJ_p(\varphi_p))^{r/p}.$$
 Plugging in (\ref{energy bound}) in the case $r = p$, we conclude (\ref{energy bound}) in the general case.
 We can then prove (\ref{norm bound}) by applying (\ref{relating Schatten norms}) and (\ref{energy bound}):
 \begin{align*}
-\|\varphi_p\|_{L^r} &= \left(\int_M |\varphi_p|_2^r \star 1\right)^{1/r} \leq \binom dk^{1/2 - 1/r} (rJ_r(\varphi_p))^{1/r}. \qedhere 
+\|\varphi_p\|_{L^r} &= \left(\int_M |\varphi_p|_2^r \star 1\right)^{1/r} \leq m^{1/2 - 1/r} (rJ_r(\varphi_p))^{1/r}. \qedhere 
 \end{align*}
 \end{proof}
-
 
 \begin{proposition}
 There exists $\varphi \in L^\infty(M, \Omega^k_{\rm cl})$ such that:
@@ -414,7 +451,7 @@ There exists $\varphi \in L^\infty(M, \Omega^k_{\rm cl})$ such that:
 \begin{proof}
 By the norm bound (\ref{norm bound}) and Alaoglu's theorem, we can choose a subsequential limit of $\varphi$, which converges in the weak topology on $L^r$ for every $r \in [1, \infty)$.
 By the lower semicontinuity of $J_r$, we can use the energy bound (\ref{energy bound}) to obtain 
-$$J_r(\varphi)^{1/r} \leq r^{-1/r} \binom dk^{1/r}.$$
+$$J_r(\varphi)^{1/r} \leq (m/r)^{1/r}.$$
 Taking $r \to \infty$, we see that $\Comass(\varphi) \leq 1$.
 
 Now let $\sigma \in H_k(M, \RR)$, and choose a representative $T \in C^0(M, \Omega^{\rm cl}_k)$ of $\sigma$.
@@ -423,67 +460,67 @@ $$\langle \sigma, [\varphi]\rangle = \int_M T \wedge \varphi = \lim_{p \to \inft
 Therefore $[\varphi] = \rho$; since $\Comass(\rho) = 1$, it follows that $\Comass(\varphi) \geq 1$.
 \end{proof}
 
-%%%%%%%%%%%%%%%%
-\subsection{The limit \texorpdfstring{$q \to 1$}{q to 1}}
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\section{Proving the main theorem}
+\begin{lemma}
+For any $1 < q < \infty$, one has the mass bound 
+\begin{equation}\label{mass bound}
+\Mass(T_q) \leq (m \vol M)^{1/p}.
+\end{equation}
+\end{lemma}
 \begin{proof}
-Let $1 < p < \infty$.
-We are going to define a strictly convex functional which approximates the comass, following Daskalopoulos and Uhlenbeck's approximation of the Lipschitz constant \cite{daskalopoulos2022}.
-
-We first construct a singular value deomposition of a covector.
-Let $\varphi$ be a $k$-covector at $x$ and let 
-$$\sigma_1(\varphi) := \max_{v \in B_{x, k} M} \langle \varphi, v\rangle$$
-and let $\xi_1(\varphi)$ be a $k$-blade which realizes the maximum.
-Define 
-$$\sigma_{n + 1}(\varphi) := \max_{\substack{v \in B_{x, k} M \\ v \perp \xi_1(\varphi), \dots, \xi_n(\varphi)}} \langle \varphi, v\rangle$$
-and $\xi_{n + 1}(\varphi)$ a $k$-blade which realizes the maximum.
-Thus we have $\sigma_n(\varphi) \geq \sigma_{n + 1}(\varphi)$.
-We can then define the $p$th Schatten-von Neumann norm 
-$$|\varphi|_p := \left(\sum_{n=1}^{\binom dk} \sigma_n(\varphi)^p\right)^{1/p}.$$
-I think this quantity is a norm with strictly convex unit ball, since this is true of the Schatten-von Neumann norms on matrices.
-This is the key step of the argument: \emph{we need to show that the we can approximate the pointwise comass by a norm with strictly convex unit ball}. \todo{Write it out}
-
-We then introduce the $p$-energy
-$$J_p(\varphi) := \int_M |\varphi(x)|_p^p \dif x$$
-(where $\dif x$ is the Riemannian measure).
-Then $J_p(\varphi) \sim \|\varphi\|_{L^p}^p$, hence $J_p$ is coercive on $L^p(M, \Omega^k_{\rm cl})$.
-Moreover, since $|\varphi|_p$ has strictly convex unit ball, $J_p$ is strictly convex on each cohomology class in $L^p(M, \Omega^k_{\rm cl})$.
-So by the direct method, for each $\rho \in H^k(M, \RR)$ there is a $\varphi_p \in L^p(M, \Omega^k_{\rm cl})$ representing $\rho$ which minimizes $J_p$.
-
-If $\psi$ is cohomologous to $\varphi_p$ then by H\"older's inequality, applied first to $M$ and then to $\{1, \dots, \binom dk\}$ with its counting measure, we have
-$$J_p(\varphi_p) \leq J_p(\psi) \leq \vol(M) \binom dk \esssup_{x \in M} \sigma_1(\psi(x))^p = \vol(M) \binom dk \Comass(\psi)^p.$$
-In particular, $\|\varphi_p\|_{L^q}$ is bounded independently of $p \in (1, \infty)$ and $q \in (1, p]$.
-Taking $p \to \infty$ and using Alaoglu's theorem, we see that for any $q \in (1, \infty)$, $\varphi_p \weakto \varphi$ along a subsequence in $L^q$.
-We can then take the limits and use the fact that energy can only decrease along weak limits to deduce 
-$$\Comass(\varphi) \leq \Comass(\psi).$$
-Since $\psi$ was arbitrary, $\varphi$ minimizes the comass in $\rho$, hence $\Comass(\varphi) = 1$ and $\varphi$ is a calibration.
+We use Lemma \ref{formula for mass measure}, (\ref{relating Schatten norms}), and H\"older's inequality to bound 
+\begin{align*}
+\Mass(T_q) 
+&= \int_M |T_q|_1 \star 1 
+\leq (m \vol M)^{1/p} \left(\int_M |T_q|_q^q \star 1\right)^{1/q} \\
+&= (m \vol M)^{1/p} \left(\frac{1}{p J_p(\varphi_p)} \int_M |\varphi_p|_p^p \star 1\right)^{1/q} 
+= (m \vol M)^{1/p}. \qedhere
+\end{align*}
 \end{proof}
 
-Since $H^2(\CC \PP^2, \RR) \cong \RR$, I suspect that there is only one calibration $2$-form on $\CC \PP^2$, which is the Fubini-Study $2$-form.
-This seems atypical for K\"ahler varieties, however, given the following.
-
-\begin{corollary}
-Let $M$ be a K3 surface. Then there is a calibration $2$-form $\varphi$ on $M$, which is not a K\"ahler $2$-form.
-\end{corollary}
+\begin{proposition}
+There exists $T \in \mathcal M(M, \Omega_k^{\rm cl})$ such that $\varphi$ calibrates $T$:
+$$\Mass(T) = \langle [T], [\varphi]\rangle.$$
+\end{proposition}
 \begin{proof}
-By Theorem \ref{existence of calibrations}, we can take $\varphi$ to represent the generator of $H^{2, 0}(M, \RR)$ after scaling it to have costable norm $1$.
+Taking $q \to 1$ in (\ref{mass bound}) and applying Alaoglu's theorem, there exists $T$ such that $T_q \weakto^* T$ as Radon measures as $q \to 1$.
+In particular, $\Mass(T) \leq 1$.
+However, since $\varphi_p$ is cohomologous to $\varphi$, we can apply (\ref{intersection product is 1}):
+$$\langle [T], [\varphi]\rangle = \lim_{q \to 1} \langle [T_q], [\varphi]\rangle = \lim_{q \to 1} \int_M T_q \wedge \varphi_p = 1.$$
+Therefore, since $\Comass(\varphi) = 1$,
+\begin{align*}
+\Mass(T) &\leq \langle [T], [\varphi]\rangle = \int_M T \wedge \varphi \leq \Mass(T). \qedhere 
+\end{align*}
 \end{proof}
 
+\todo{Show that there is a stronger sense in which $\varphi$ calibrates $T$.
+Otherwise the above construction is pretty trivial.}
 
+\todo{Otherwise, redo the above argument without $p$-regularization, and just weakstar topology}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Breaking special holonomy}
+\subsection{K\"ahler surfaces}
+The first example of a K\"ahler surface is $\CC \PP^2$.
+But $H^2(\CC \PP^2, \RR) \cong \RR$, and the generating class contains the K\"ahler $2$-form (since it is dual to the homology class of the equatorial $\CC \PP^1$).
+
+\begin{proposition}
+Let $M$ be a K3 surface.
+Then there is a calibration $(1, 1)$-form on $M$ which calibrates a current, but is not covariantly constant.
+\end{proposition}
+\begin{proof}
+The space of covariantly constant forms has dimension $\leq \binom 42 = 6$ \todo{right?}, but the space of calibration $(1, 1)$-forms which calibrate a current, up to cohomology, is identified with the unit sphere of $H^{1, 1}(M)$, which has dimension $19$.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%
 \appendix 
-\section{Elementary inequalities}
-% \begin{lemma}
-% Suppose that $x, y \in \RR^m_+$ have decreasing entries, and for every $j \leq m$,
-% \begin{equation}\label{Ky Fan gives SvN hyp}
-% \sum_{i=1}^j x_j \leq \sum_{i=1}^j y_j.
-% \end{equation}
-% Then 
-% \begin{equation}\label{Ky Fan gives SvN concl}
-% \sum_{i=1}^m x_i^p \leq \sum_{i=1}^m y_i^p.
-% \end{equation}
-% \end{lemma}
+\section{Elementary computations}
+\begin{lemma}
+Let $m(d, k)$ be the smallest number such that any $k$-vector over $\RR^d$ can be written as the sum of at most $m(d, k)$ $k$-blades.
+Then 
+\begin{equation}\label{minimal number of blades}
+m(d, k) = ???.
+\end{equation}
+\end{lemma}
 
 \begin{lemma}
 Suppose that $x, y \in \RR^m_+$ have decreasing entries, and $B \in \Orth(\RR^m)$. Then
@@ -491,7 +528,9 @@ Suppose that $x, y \in \RR^m_+$ have decreasing entries, and $B \in \Orth(\RR^m)
 |\langle x, By\rangle| \leq \langle x, y\rangle.
 \end{equation}
 \end{lemma}
-% https://math.stackexchange.com/questions/3075288/how-to-show-the-von-neumann-trace-inequality
+\begin{proof}
+\todo{If we need it...}
+\end{proof}
 
 \printbibliography
 
