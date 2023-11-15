@@ -1,0 +1,209 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz-cd}
+%\usepackage[T1]{fontenc}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Dupin's theorem in general dimension}
+\author{Aidan Backus}
+\address{Department of Mathematics, Brown University}
+\email{aidan\_backus@brown.edu}
+\date{\today}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Teich}{Teich}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\Leaves}{\mathscr L}
+\newcommand{\Lagrange}{\mathcal L}
+\newcommand{\Hypspace}{\mathscr H}
+
+\newcommand{\Chain}{\underline C}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\diam}{\mathrm{diam}}
+\newcommand{\Ell}{\mathrm{Ell}}
+\newcommand{\inj}{\mathrm{inj}}
+\newcommand{\Lip}{\mathrm{Lip}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\Min}{\mathrm{Min}}
+\newcommand{\Max}{\mathrm{Max}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+\newtheorem{claim}{Claim}[theorem]
+\renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+% \newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+% \numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,giveninits=true]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+
+\maketitle
+
+Let $d \geq 2$.
+We say that two foliations $\mathscr F, \mathscr G$ of codimension $1$ in $\RR^d$ are \dfn{orthogonal} if for any $p \in \RR^d$, the leaves $X, Y$ of $\mathscr F, \mathscr G$ passing through $p$ are orthogonal at $p$.
+We only consider $C^\infty$ foliations in the sequel.
+
+\begin{theorem}[Dupin theorem in general dimension]
+Let $\vec{\mathscr F} = (\mathscr F_1, \dots, \mathscr F_d)$ be a $d$-tuple of mutually orthogonal foliations of codimension $1$ in $\mathbf R^d$.
+Let $p \in \RR^d$, let $X_i$ denote the leaf of $\mathscr F_i$ passing through $p$, and let 
+$$Y_i := \bigcap_{j \neq i} X_j.$$
+Then $Y_i$ is tangent to a principal curvature vector of $X_j$ at $p$ whenever $i \neq j$.
+\end{theorem}
+\begin{proof}
+We first check that the conclusion of the theorem makes sense.
+In fact, $Y_i$ is the intersection of $d - 1$ smooth hypersurfaces, each of which are mutually orthogonal and therefore are transverse.
+So $Y_i$ is a smooth curve, and its tangent space at $p$ is a line.
+
+Near $p$, we can find a coordinate system $\vec \xi = (\xi^1, \dots, \xi^d)$ such that the level sets of $\xi^i$ are the leaves of $\mathscr F_i$.
+Let $g$ be the euclidean metric tensor written in the coordinates $\vec \xi$.
+Orthogonality of $\mathscr F_i$ and $\mathscr F_j$ means that $\langle \dif \xi^i, \dif \xi^j\rangle = 0$. 
+Therefore the cometric
+$$g^{ij} = \frac{\partial \xi^i}{\partial x^\mu} \frac{\partial \xi^j}{\partial x^\nu} \delta^{\mu \nu}$$
+is diagonal; therefore the same holds for the metric
+\begin{equation}\label{metric formula}
+g_{ij} = \frac{\partial x^\mu}{\partial \xi^i} \frac{\partial x^\nu}{\partial \xi^j} \delta_{\mu \nu}.
+\end{equation}
+
+Let $(i, j, k)$ be a distinct triple.
+Differentiating the equation $g_{ij} = 0$, we obtain
+\begin{equation}\label{differentiated metric}
+0 = \frac{\partial^2 x^\mu}{\partial \xi^i \partial \xi^k}  \frac{\partial x^\nu}{\partial \xi^j} \delta_{\mu \nu} + \frac{\partial x^\mu}{\partial \xi^i} \frac{\partial^2 x^\nu}{\partial \xi^j \partial \xi^k} \delta_{\mu \nu}.
+\end{equation}
+Thus if we set
+$$a_{ijk} := \frac{\partial^2 x^\mu}{\partial \xi^i \partial \xi^j}  \frac{\partial x^\nu}{\partial \xi^k} \delta_{\mu \nu}$$
+then we have the system of equations 
+\begin{align*}
+a_{ijk} + a_{ikj} &= 0, \\
+a_{jik} + a_{jki} &= 0, \\
+a_{kij} + a_{kji} &= 0, \\
+a_{ijk} - a_{jik} &= 0, \\
+a_{ikj} - a_{kij} &= 0, \\
+a_{jki} - a_{kji} &= 0,
+\end{align*}
+where the first three equations arise from (\ref{differentiated metric}) and the last three originate from symmetry of second partial derivatives.
+The only solution of this system of this equation is $a_{ijk} = 0$ for every distinct triple $(i, j, k)$, or in other words 
+$$0 = \frac{\partial^2 x^\mu}{\partial \xi^i \partial \xi^j}  \frac{\partial x^\nu}{\partial \xi^k} \delta_{\mu \nu}.$$
+Combining this equation with (\ref{metric formula}) and the equation $g_{ij} = 0$, we see that every vector in the list 
+$$L := \left(\frac{\partial^2 \vec x}{\partial \xi^i \partial \xi^j}, \frac{\partial \vec x}{\partial \xi^1}, \dots, \widehat{\frac{\partial \vec x}{\partial \xi^k}}, \dots, \frac{\partial \vec x}{\partial \xi^d}\right)$$
+(where the roof means to remove that entry from the list) is orthogonal to $\partial \vec x/\partial \xi^k$.
+Therefore every vector in $L$ is contained in a vector space of dimension $d - 1$, but the length of $L$ is $d$, so $L$ is linearly dependent.
+
+Let $\Two_{(k)}$ be the second fundamental form of $X_k$, written in the coordinate system
+$$\vec \xi_k := (\xi^1, \dots, \widehat{\xi^k}, \dots, \xi^d).$$
+Then $\Two_{(k)ij}$ is equal to a scalar times the Hodge star of the wedge product of all of the vectors in $L$.
+Since the wedge product of $L$ vanishes, so does $\Two_{(k)ij}$, so $\Two_{(k)}$ is diagonal.
+Since the metric $h_{(k)}$ on $X_k$ is given by $h_{(k)ij} = g_{ij}$, $h_{(k)}$ is also diagonal in the coordinate system $\vec \xi_k$, it follows that $\partial_{\xi_i}$ is a principal curvature vector of $X_k$ whenever $i \neq k$.
+But $\partial_{\xi_i}$ is normal to $X_i$, so it is tangent to the curve $Y_i$, as desired.
+\end{proof}
+
+
+\printbibliography
+
+\end{document}
