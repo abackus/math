@@ -6,6 +6,12 @@
 \RequirePackage{amsxtra}
 \usepackage{cancel}
 \usepackage{tikz, quiver, wrapfig}
+
+% Add the 2020 MSC
+\makeatletter
+\@namedef{subjclassname@2020}{\textup{2020} Mathematics Subject Classification}
+\makeatother
+
 %\usepackage[T1]{fontenc}
 
 % \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
@@ -17,11 +23,13 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title[Laminations and calibrations II]{Minimal laminations and tight calibrations II: The max flow/min cut theorem}
+\title{Convex duality between minimal laminations and tight calibrations}
 \author{Aidan Backus}
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
 \date{\today}
+\keywords{laminations, convex duality, minimal hypersurfaces, max flow/min cut theorem, calibrations, functions of least gradient, stable norm}
+\subjclass[2020]{primary: 49Q20; secondary: 39J60, 49N15, 53C38}
 
 \newcommand{\NN}{\mathbf{N}}
 \newcommand{\ZZ}{\mathbf{Z}}
@@ -34,6 +42,7 @@
 \newcommand{\II}{\mathbf I}
 \newcommand{\Hyp}{\mathbf H}
 \newcommand{\Sph}{\mathbf S}
+\newcommand{\Torus}{\mathbf T}
 \newcommand{\Group}{\mathbf G}
 \newcommand{\GL}{\mathbf{GL}}
 \newcommand{\Orth}{\mathbf{O}}
@@ -44,7 +53,6 @@
 
 \DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\dist}{dist}
-\DeclareMathOperator{\Gal}{Gal}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\coker}{coker}
@@ -58,6 +66,8 @@
 
 \newcommand{\Chain}{\underline C}
 
+\newcommand{\Euler}{\mathbf \chi}
+
 \newcommand{\Two}{\mathrm{I\!I}}
 \newcommand{\Ric}{\mathrm{Ric}}
 
@@ -66,7 +76,9 @@
 \newcommand{\evect}{\mathbf e}
 \newcommand{\vol}{\mathrm{vol}}
 
-\DeclareMathOperator{\diam}{diam}
+\newcommand{\diam}{\mathrm{diam}}
+\DeclareMathOperator{\Gal}{Gal}
+\DeclareMathOperator{\sech}{sech}
 \newcommand{\Ell}{\mathrm{Ell}}
 \newcommand{\inj}{\mathrm{inj}}
 \newcommand{\Lip}{\mathrm{Lip}}
@@ -153,359 +165,313 @@
 
 \begin{document}
 \begin{abstract}
-We introduce a family of closed $d-1$-forms on Riemannian $d$-manifolds which minimize their comass (or $L^\infty$ norm) in their cohomology class, which we call \dfn{tight}.
-Tight forms have properties similar to (gradients of) $\infty$-harmonic maps between surfaces: they are convex duals of $1$-harmonic functions and attain their comass on a measured oriented minimal lamination $\mu$.
-We show that $\mu$ has properties analogous to a measured sublamination of Thurston's canonical lamination.
-\todo{Rewrite this}
+\todo{Absorb from the general paper}
 \end{abstract}
 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-The classical \dfn{max flow min cut theorem} asserts that in a discrete flow network $\mathcal G$, the maximal flow through $\mathcal G$ is equal to the \dfn{minimal cut} of $\mathcal G$, namely the minimal total capacity of any set of edges which divide $\mathcal G$ into a source component and a sink component; this theorem is a concrete form of the duality theorem for convex optimization.
-As we shall survey below, various continuous versions of the max flow min cut theorem have since appeared, which usually replace the maximal flow by a \dfn{calibration} (a closed $d - 1$-form, or equivalently a divergence-free vector field, of $L^\infty$ norm $1$), and the minimal cut by a minimal submanifold.
-In particular, Bangert and Cui have shown that given a continuous calibration $F$ on a closed Riemannian manifold of dimension $\leq 7$, such that $\|F\|_{L^\infty}$ is minimized in its cohomology class, there exists a minimal lamination calibrated by $F$ \cite[Theorem 5.1]{bangert_cui_2017}.
+\todo{Absorb this from the general paper}
 
-We shall prove a particularly strong version of the Bangert--Cui max flow min cut theorem.
-We only need to assume that the calibration $F$ is measurable; moreover, it shall follow from our methods that the calibrated lamination is Lipschitz.
-We use the approach of $p$-harmonic duality which was pioneered by Daskalopolous and Uhlenbeck in the context of best Lipschitz maps \cite{daskalopoulos2020transverse,daskalopoulos2022,daskalopoulos2023}.
-To be more precise, we pick out a special class of calibrations, which we call \dfn{tight forms}, which are the variational solutions of a suitable generalization of the $\infty$-Laplace equation.
-Tight forms are necessarily convex duals of functions of least gradients, and because functions of least gradient induce minimal laminations \cite[Theorem B]
-{BackusCML}, the main theorem follows.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Review of previous papers}\label{prevResults}
+We use \cite{BackusCML, BackusBest1} as a reference.
+\todo{Summarize the previous papers once they're on the arxiv}
 
-Along the way, we establish several auxiliary results that may be of independent interest.
-We establish the necessary geometric measure theory to study $L^\infty$ calibrations; we construct a minimal lamination, which we call the \dfn{canonical lamination}, associated to each cohomology class in $H^{d - 1}(M, \RR)$ which analogous to Thurston's canonical lamination of a closed hyperbolic surface \cite[\S8]{Thurston98}; and we study some analytic questions concerning the Euler-Lagrange equation for a $C^1$ tight form.
-We have also included several conjectures concerning the canonical lamination and the Euler-Lagrange equation.
 
-%%%%%%%%%%%%%%%
-\subsection{Max flow min cut theorems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}
-	\begin{tikzpicture}
-\draw[rounded corners=35pt](6,-1)--(4.2,-1)--(2,-2)--(0,0)--(2,2)--(4.2,1)--(7,1)--(9.2,2)--(11,0)
---(9,-2)--(6,-1);
-\draw (1.5,0.2) arc (175:315:1cm and 0.5cm);
-\draw (3,-0.28) arc (-30:180:0.7cm and 0.3cm);
-\draw[blue] (1.8,-0.3) arc (0:360:0.63cm and 0.3cm);
-\draw (7.5,0.2) arc (175:315:1cm and 0.5cm);
-\draw (9,-0.28) arc (-30:180:0.7cm and 0.3cm);
-\end{tikzpicture}
-
-\caption{A closed surface containing a homologically minimizing closed geodesic $N^*$ (in blue).
-In Figure \ref{discretized} we show a discretization of a tubular neighborhood $M'$ of $N^*$.
-Adapted from \cite{Orduz20}. \label{to discretize}}
-\end{figure}
-
-Recall the max flow min cut theorem \cite[Chapter 7]{umesh2006algorithms}.
-A \dfn{flow network} $\mathcal G = (V, E, c, s, t)$ consists of a finite directed graph $(V, E)$, a \dfn{capacity} $c: E \to \RR_+$, a \dfn{source} $s \in V$, and a \dfn{sink} $t \in V$.
-For $v \in V$, let $I(v), O(v) \subseteq E$ be the sets of edges in and out of $v$, respectively.
-A \dfn{flow} in $\mathcal G$ is a function $F: E \to \RR_+$ such that $F \leq c$, and which is \dfn{divergence-free} in the sense that for each $v \in V \setminus \{s, t\}$,
-$$\sum_{e \in I(v)} F(e) = \sum_{e \in O(v)} F(e).$$
-A \dfn{cut} of $\mathcal G$ is a partition $V = S \sqcup T$ such that $s \in S$, $t \in T$; in that case we write $E(S, T) := \{(v, w) \in E: v \in S, w \in T\}$.
-
-\begin{theorem}[max flow min cut, graphs]
-Let $\mathcal G$ be a flow network. Then 
-$$\max_{F \in \mathrm{Flows}(\mathcal G)} \sum_{e \in O(s)} F(e) = \min_{(S, T) \in \mathrm{Cuts}(\mathcal G)} \sum_{e \in E(S, T)} c(e).$$
-In particular, if $F$ is a maximal flow in $\mathcal G$ and $(S, T)$ is a minimal cut of $\mathcal G$, then for each $e \in E(S, T)$, $F(e) = c(e)$.
-\end{theorem}
-
-Suppose that we have a closed Riemannian manifold $M$ and a homology class $\sigma \in H_{d - 1}(M, \RR)$, and we want to compute the minimal area of a hypersurface in $\sigma$.
-We propose to discretize this problem, as in \cite[Appendix A]{Freedman_2016}.
-
-Assume that we know that $N$ is contained in a tubular neighborhood $M' = N_0 \times (-1, 1) \subset M$ where $[N_0] = \sigma$.
-Then we can discretize $M'$ at a length scale $0 < h \ll 1$ to get a graph $(V, E)$, where between any two adjacent vertices there are edges in both directions, and we have two ``boundary'' vertices $s, t$, one for each component of $N_0 \times \{-1, 1\}$.
-Then $\mathcal G := (V, E, 1, s, t)$ is a flow network.
-Roughly speaking, flows correspond to closed $d - 1$-forms $F$ (which we view as fluxes of divergence-free vector fields) such that $\|F\|_{L^\infty} = 1$, while cuts correspond to hypersurfaces in $\sigma$, and minimal cuts correspond to homologically minimizing hypersurfaces.
-If $N$ is a hypersurface in $\sigma$, $F$ is a closed $d - 1$-form, and $N^*$ is a homologically minimizing hypersurface in $\sigma$, then by Stokes' theorem,
-\begin{equation}\label{one sided max flow min cut}
-\int_N F = \int_{N^*} F \leq \mathrm{Area}(N^*).
-\end{equation}
-See Figures \ref{to discretize} and \ref{discretized}.
-Ignoring all questions about the validity of our discretization, one expects from the max flow min cut theorem that (\ref{one sided max flow min cut}) is sharp:
-We have the \dfn{continuous max flow min cut theorem} that for any closed homologically minimizing hypersurface $N^*$, there exists a closed $d - 1$-form $F$ such that $\|F\|_{L^\infty} = 1$ such that for any hypersurface $N$ in $\sigma$,
-\begin{equation}\label{continuous max flow min cut}
-\int_N F = \mathrm{Area}(N^*).
-\end{equation}
-
-% https://q.uiver.app/#q=WzAsMTksWzAsMywiXFxidWxsZXQiXSxbMSwwLCJcXGJ1bGxldCJdLFsxLDEsIlxcYnVsbGV0Il0sWzEsMiwiXFxidWxsZXQiXSxbMSwzLCJcXGJ1bGxldCJdLFsxLDQsIlxcYnVsbGV0Il0sWzEsNSwiXFxidWxsZXQiXSxbMSw2LCJcXGJ1bGxldCJdLFsyLDIsIlxcYnVsbGV0Il0sWzIsMywiXFxidWxsZXQiXSxbMiw0LCJcXGJ1bGxldCJdLFszLDAsIlxcYnVsbGV0Il0sWzMsMSwiXFxidWxsZXQiXSxbMywyLCJcXGJ1bGxldCJdLFszLDMsIlxcYnVsbGV0Il0sWzMsNCwiXFxidWxsZXQiXSxbMyw1LCJcXGJ1bGxldCJdLFszLDYsIlxcYnVsbGV0Il0sWzQsMywiXFxidWxsZXQiXSxbMCw0LCIiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDMsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsMiwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCwxLCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDUsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzAsNiwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMCw3LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxLDIsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsMywiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw0LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs0LDUsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsNiwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNiw3LCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxNCwxOCwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTUsMTgsIiIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzE2LDE4LCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxNywxOCwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTMsMTgsIiIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEyLDE4LCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMSwxOCwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTEsMTIsIiIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEyLDEzLCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMywxNCwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTQsMTUsIiIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzE1LDE2LCIiLDEseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxNiwxNywiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTcsMTEsIiIsMSx7ImN1cnZlIjoyLCJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCw5LCIiLDEseyJjb2xvdXIiOlsyMzcsMTAwLDQ2XSwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs5LDgsIiIsMSx7ImNvbG91ciI6WzIzNywxMDAsNDZdLCJzdHlsZSI6eyJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTAsIiIsMSx7ImN1cnZlIjotMiwiY29sb3VyIjpbMjM3LDEwMCw0Nl0sInN0eWxlIjp7ImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMSw3LCIiLDIseyJjdXJ2ZSI6LTIsInN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9fX1dLFs4LDEsIiIsMSx7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzIsOCwiIiwxLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMyw4LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFszLDksIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzQsOSwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbNCw4LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFs1LDksIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzQsMTAsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzUsMTAsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzYsMTAsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzcsMTAsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTEsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTIsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTMsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzgsMTQsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksMTMsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksMTQsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzksMTUsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDE0LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFsxMCwxNSwiIiwyLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoiZGFzaGVkIn0sImhlYWQiOnsibmFtZSI6Im5vbmUifX19XSxbMTAsMTYsIiIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6ImRhc2hlZCJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV0sWzEwLDE3LCIiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifSwiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dXQ==
-
-\begin{figure}
-\[\begin{tikzcd}
-	& \bullet && \bullet \\
-	& \bullet && \bullet \\
-	& \bullet & \bullet & \bullet \\
-	s & \bullet & \bullet & \bullet & t \\
-	& \bullet & \bullet & \bullet \\
-	& \bullet && \bullet \\
-	& \bullet && \bullet
-	\arrow[dashed, no head, from=4-1, to=4-2]
-	\arrow[dashed, no head, from=4-1, to=3-2]
-	\arrow[dashed, no head, from=4-1, to=2-2]
-	\arrow[dashed, no head, from=4-1, to=1-2]
-	\arrow[dashed, no head, from=4-1, to=5-2]
-	\arrow[dashed, no head, from=4-1, to=6-2]
-	\arrow[dashed, no head, from=4-1, to=7-2]
-	\arrow[dashed, no head, from=1-2, to=2-2]
-	\arrow[dashed, no head, from=2-2, to=3-2]
-	\arrow[dashed, no head, from=3-2, to=4-2]
-	\arrow[dashed, no head, from=4-2, to=5-2]
-	\arrow[dashed, no head, from=5-2, to=6-2]
-	\arrow[dashed, no head, from=6-2, to=7-2]
-	\arrow[dashed, no head, from=4-4, to=4-5]
-	\arrow[dashed, no head, from=5-4, to=4-5]
-	\arrow[dashed, no head, from=6-4, to=4-5]
-	\arrow[dashed, no head, from=7-4, to=4-5]
-	\arrow[dashed, no head, from=3-4, to=4-5]
-	\arrow[dashed, no head, from=2-4, to=4-5]
-	\arrow[dashed, no head, from=1-4, to=4-5]
-	\arrow[dashed, no head, from=1-4, to=2-4]
-	\arrow[dashed, no head, from=2-4, to=3-4]
-	\arrow[dashed, no head, from=3-4, to=4-4]
-	\arrow[dashed, no head, from=4-4, to=5-4]
-	\arrow[dashed, no head, from=5-4, to=6-4]
-	\arrow[dashed, no head, from=6-4, to=7-4]
-	\arrow[curve={height=12pt}, dashed, no head, from=7-4, to=1-4]
-	\arrow[color={rgb,255:red,0;green,0;blue,235}, no head, from=5-3, to=4-3]
-	\arrow[color={rgb,255:red,0;green,0;blue,235}, no head, from=4-3, to=3-3]
-	\arrow[color={rgb,255:red,0;green,0;blue,235}, curve={height=-12pt}, no head, from=3-3, to=5-3]
-	\arrow[curve={height=-12pt}, dashed, no head, from=1-2, to=7-2]
-	\arrow[dashed, no head, from=3-3, to=1-2]
-	\arrow[dashed, no head, from=2-2, to=3-3]
-	\arrow[dashed, no head, from=3-2, to=3-3]
-	\arrow[dashed, no head, from=3-2, to=4-3]
-	\arrow[dashed, no head, from=4-2, to=4-3]
-	\arrow[dashed, no head, from=4-2, to=3-3]
-	\arrow[dashed, no head, from=5-2, to=4-3]
-	\arrow[dashed, no head, from=4-2, to=5-3]
-	\arrow[dashed, no head, from=5-2, to=5-3]
-	\arrow[dashed, no head, from=6-2, to=5-3]
-	\arrow[dashed, no head, from=7-2, to=5-3]
-	\arrow[dashed, no head, from=3-3, to=1-4]
-	\arrow[dashed, no head, from=3-3, to=2-4]
-	\arrow[dashed, no head, from=3-3, to=3-4]
-	\arrow[dashed, no head, from=3-3, to=4-4]
-	\arrow[dashed, no head, from=4-3, to=3-4]
-	\arrow[dashed, no head, from=4-3, to=4-4]
-	\arrow[dashed, no head, from=4-3, to=5-4]
-	\arrow[dashed, no head, from=5-3, to=4-4]
-	\arrow[dashed, no head, from=5-3, to=5-4]
-	\arrow[dashed, no head, from=5-3, to=6-4]
-	\arrow[dashed, no head, from=5-3, to=7-4]
-\end{tikzcd}\]
-\caption{With $M'$ as in Figure \ref{to discretize}, the discretization of $M'$ is a flow network $\mathcal G$ in which the discretization of $N^*$ is a minimal cut (in blue and solid).
-Therefore the maximal flow $F$ through $\mathcal G$ must have flux density $1$ through the discretization of $N^*$, and hence the closed $d - 1$-form corresponding to $F$ must be the area form on $N^*$. \label{discretized}}
-\end{figure}
-
-\subsubsection{Federer's version}
-Modulo regularity issues, the continuous max flow min cut theorem was proven by Federer \cite[\S4.15]{Federer1974}.
-In the modern formulation of Federer's theorem, we introduce the stable norm on homology:
-
+\section{Preliminaries on laminations}
+\subsection{The maximum comass locus}
 \begin{definition}
-The \dfn{stable norm} $\Mass(\sigma)$ of a homology class $\sigma \in H_{d - 1}(M, \RR)$ is the infimum of the mass $\Mass(N)$ among all representative chains $N$.
-The \dfn{costable norm} $\Comass(\rho)$ of a cohomology class $\rho \in H^{d - 1}(M, \RR)$ is the infimum of $\|F\|_{L^\infty}$ among all representative forms $F$.
+For an open set $\Omega \subseteq M$, let $\Chain_{d - 1}(\Omega)$ be the set of simplicial $d - 1$-chains in $\Omega$.
+For each closed $d - 1$-form $F$ on $\Omega$, let
+$$\Comass_\Omega(F) := \sup_{\sigma \in \Chain_{d - 1}(\Omega)} \frac{1}{\Mass(\sigma)} \int_\sigma F.$$
+The \dfn{local comass} of a closed $d - 1$-form $F$ at $x \in M$ is 
+$$\Comass(F, x) = \limsup_{\varepsilon \to 0} \Comass_{B_\varepsilon(x)}(F).$$
 \end{definition}
 
-\begin{theorem}[max flow min cut, Federer's version]\label{Federer}
-Let $M$ be a closed Riemannian manifold and $\sigma \in H_{d - 1}(M, \RR)$.
-Then there exists a cohomology class $\rho \in H^{d - 1}(M, \RR)$ such that $\Comass(\rho) \leq 1$, and 
-\begin{equation}\label{Federer duality}
-\Mass(\sigma) = \langle \rho, \sigma\rangle.
-\end{equation}
-\end{theorem}
+By the trace theorem, $\Comass_\Omega(F)$ is well-defined (but possibly $+\infty$) for any measurable $F$.
+Since $\Comass_{B_\varepsilon(x)}(F)$ is a supremum over a set which grows in $\varepsilon$, it is increasing in $\varepsilon$, so the limit superior is actually a limit and an infimum:
+$$\Comass(F, x) = \lim_{\varepsilon \to 0} \Comass_{B_\varepsilon(x)}(F) = \inf_{\varepsilon > 0} \Comass_{B_\varepsilon(x)}(F).$$
+In particular, if we write $\Comass(F) := \Comass_M(F)$, then $\Comass(F, x) \leq \Comass(F)$.
 
-Theorem \ref{Federer} has found myriad applications, including in computational geometry \cite{sullivan1990crystalline} and string theory \cite{Freedman_2016}; both references here observe that Federer has essentially proven a max flow min cut theorem.
-However, Federer's theorem is nothing more than the Hanh-Banach theorem in the special case of the (finite-dimensional) Banach space $H_{d - 1}(M, \RR)$ equipped with the stable norm.
-It does not say anything about the pointwise duality of the chains and cochains which realize the infima in the definitions of the stable and costable norms.\footnote{As we have formulated Theorem \ref{Federer}, it is not clear whether the infima are attained at all, but for sufficiently general notions of chain and cochain, this is not hard to show.}
+The local comass was defined in an analogous manner to the local Lipschitz constant.
+As such, it enjoys many of the same properties, including those endowed on the local Lipschitz constant by \cite[Lemma 4.3]{Crandall2008}:
 
-\subsubsection{Thurston's version}
-An analogous result to Federer's appears in Thurston's work on best Lipschitz maps \cite{Thurston98}.
-A \dfn{best Lipschitz map} $u$ is a map which minimizes its Lipschitz constant, among all maps homotopic to $u$.
-% Thurston's motivation was to define a Finsler metric on the Teichm\"uller space $\widetilde{\mathscr M_g}$: the \dfn{Thurston asymmetric distance} between two hyperbolic structures on a closed surface $S$ of genus $g \geq 2$ is the Lipschitz constant of a best Lipschitz map homotopic to $\id_S$.
-% Thurston's asymmetric metric is a particularly appealing geometry on $\widetilde{\mathscr M_g}$ because of its intimate connection with the structure of geodesic laminations on hyperbolic surfaces \cite{Thurston98, Gu_ritaud_2017}:
-Such maps are intimately connected to geodesic laminations in hyperbolic surfaces:
-
-\begin{theorem}[max flow min cut, Thurston's version]\label{existence of thurston lamination}
-Let $f: M \to N$ be a homeomorphism of closed hyperbolic surfaces.
-Then there exists a best Lipschitz map $u$ homotopic to $f$, and a measured geodesic lamination $\mu$ on $M$, such that $\mu$ pushes forward to a measured geodesic lamination on $N$, and
-\begin{equation}\label{L is K}
-	\Lip(u) = \frac{\Mass(u_* \mu)}{\Mass(\mu)}.
-\end{equation}
-Moreover, $\mu$ maximizes the ratio $\Mass(u_* \lambda)/\Mass(\lambda)$ among measured laminations on $M$.
-\end{theorem}
-
-Thurston established Theorem \ref{existence of thurston lamination} in a tour de force of geometric topology, but he conjectured that a proof of his result ``should be feasible with a simpler proof based on more general principles -- in particular, the max flow min cut principle, convexity, and $L^0 \leftrightarrow L^\infty$ duality'' \cite[Abstract]{Thurston98}.
-
-Theorem \ref{existence of thurston lamination} does not follow from our main theorem; however, the analogous result for maps from closed hyperbolic surfaces to $\Sph^1$, which was proven by Daskalopolous and Uhlenbeck \cite{daskalopoulos2020transverse}, is a special case of our main result.
-Our work, like \cite{daskalopoulos2020transverse}, is based on the idea of approximating an $L^\infty$ functional by $L^p$ functionals.
-As Daskalopolous and Uhlenbeck have given a proof of a version of Theorem \ref{existence of thurston lamination} using similar methods \cite{daskalopoulos2022,daskalopoulos2023}, it may be possible to adapt our results to manifold-valued maps.
-
-\subsubsection{Bangert and Cui's version}
-The statement in the literature that we are aware of, which is closest to our main theorem, is due to Bangert and Cui \cite{bangert_cui_2017}.
-To emphasize the analogy with best Lipschitz maps, we call a form \dfn{best comass} if it minimizes its comass:
-
-\begin{definition}
-The \dfn{comass} of a closed $d - 1$-form $F$ is $\|F\|_{L^\infty}$.
-A form $F$ has \dfn{best comass} if it minimizes its comass among all forms cohomologous to $F$.
-\end{definition}
-
-\begin{definition}
-A \dfn{calibration} is a measurable closed $d - 1$-form $F$, such that $\|F\|_{L^\infty} = 1$.
-Given a calibration $F$, a hypersurface $N$ is $F$-\dfn{calibrated} if the pullback of $F$ to $N$ is the area form on $N$.
-\end{definition}
-
-Observe that a best comass form is a calibration iff the costable norm of its cohomology class is $1$.
-Moreover, the fundamental theorem of calibrated geometry \cite{Harvey82} asserts that every $F$-calibrated hypersurface $N$ is minimal, and in fact homologically area-minimizing if $N$ is closed.
-With these preliminaries in mind, we may now state the Bangert--Cui theorem \cite[Theorem 5.1]{bangert_cui_2017}:
-
-\begin{theorem}[max flow min cut, Bangert and Cui's version]\label{BangertCui}
-Let $F$ be a continuous best comass calibration on a closed Riemannian manifold of dimension $\leq 7$.
-Then there exists a measured oriented minimal lamination $\lambda$ such that every leaf of $\lambda$ is $F$-calibrated.
-In particular, 
-$$\Mass(\lambda) = \langle [\lambda], [F]\rangle.$$
-\end{theorem}
-
-The idea of Theorem \ref{BangertCui} is to use Theorem \ref{Federer} to find a homology class $\sigma$ dual to $[F]$, and then consider a minimizing representative $\lambda$ of $\sigma$, so that $\Mass(\lambda)$ is the stable norm of $\sigma$.
-However, most calibrations which appear in nature are measurable and not necessarily continuous \cite[\S1]{bangert_cui_2017}, and it is natural to restrict attention to \emph{Lipschitz} laminations \cite[Remark 2.3]{bangert_cui_2017}; thus, a more natural formulation of Theorem \ref{BangertCui} would not require that $F$ is continuous, and would assert that $\lambda$ is Lipschitz.
-
-\begin{mainthm}\label{existence of infinity tight forms}
-Let $\rho \in H^{d - 1}(M, \RR)$ be a cohomology class.
-Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$ and $(p, q)$ ranging over H\"older pairs with $d < p < \infty$.
-Then there exists a pair $(F, u)$ such that as $p \to \infty$ along a subsequence, $F_p \to F$ weakly in $L^r$ for any $d < r < \infty$, and $u_q \to u$ weakly in $BV$, with the following properties:
+\begin{proposition}\label{crandall}
+Let $F \in L^\infty(M, \Omega^{d - 1}_{\rm cl})$. Then:
 \begin{enumerate}
-\item $F$ has best comass.
-\item $u$ has least gradient.
-\item The product of distributions $\dif u \wedge F$ is well-defined.
-\item We have the duality relation
-\begin{equation}\label{max flow mean cut}
-\Comass(\rho) \star |\dif u| = \dif u \wedge F.
-\end{equation}
-\end{enumerate}
-\end{mainthm}
-
-%%%%%%%%%%%%%%%%%%
-
-\subsection{Calibrated laminations}
-Suppose that $\rho \in H^{d - 1}(M, \RR)$ satisfies $\Comass(\rho) = 1$.
-If $F$ is a continuous tight representative of $\rho$, then by the Bangert--Cui theorem, $F$ calibrates a minimal lamination.
-However, a proof that tight forms are continuous is out of reach.\footnote{For domains in $\RR^2$, tight forms are $C^\alpha$ \cite{Evans08}, but it is unlikely that this argument generalizes.}
-On the other hand, we know by \cite[Theorem B]{BackusCML} that the level sets of a function of least gradient form a measured oriented Lipschitz minimal lamination.
-
-\begin{definition}
-Let $M$ be a closed Riemannian manifold of dimension $d \leq 7$, and $\rho \in H^{d - 1}(M, \RR)$.
-We can define a measured oriented minimal lamination $\mu$, by considering a tight representative $F$ of $\rho$, letting $u$ be a dual function of least gradient to $F$, and letting $\mu$ be the lamination induced by $u$.
-We call $\mu$ a \dfn{measured stretch lamination} associated to $\rho$.
-\end{definition}
-
-\begin{mainthm}\label{lams are calibrated}
-Suppose that $M$ is a closed Riemannian manifold of dimension $d \leq 7$, and let $\rho \in H^{d - 1}(M, \RR)$ be nonzero.
-Then there is a measured stretch lamination associated to $\rho$.
-Moreover, if $\kappa$ is a measured stretch lamination associated to $\rho$, and $F$ is a best comass representative of $\rho$, then $\kappa$ is $F/\Comass(\rho)$-calibrated, and for $\lambda$ ranging over measured oriented laminations,
-\begin{equation}\label{duality between stable and comass}
-\Comass(\rho) = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{\Mass(\lambda)} = \frac{\langle \rho, [\kappa]\rangle}{\Mass(\kappa)}.
-\end{equation}
-\end{mainthm}
-
-In order to make connection with Thurston's max flow/min cut theorem, we recall that the maximally stretched measured lamination given by Theorem \ref{existence of thurston lamination} is contained in a larger lamination, called the \dfn{canonical lamination} of the homotopy class $[f]$ \cite{Thurston98,Gu_ritaud_2017}.
-The canonical lamination is the largest geodesic lamination whose leaves are maximally stretched by the best Lipschitz maps homotopic to $f$.
-We construct an analogous lamination for best comass calibrations; this is Proposition \ref{existence of canonical lamination}.
-
-\begin{mainthm}\label{existence of calibrated lam}
-Suppose that $M$ is a closed Riemannian manifold of dimension $d \leq 7$, and let $\rho \in H^{d - 1}(M, \RR)$ satisfy $\Comass(\rho) = 1$.
-Then there is a Lipschitz lamination $\lambda_\rho$, the \dfn{canonical lamination} of $\rho$, such that a complete hypersurface $N$ is a leaf of $\lambda_\rho$ iff, for every best comass representative $F$ of $\rho$, $N$ is $F$-calibrated.
-The support of $\lambda_\rho$ is contained in the maximum comass locus of every best comass representative $F$.
-\end{mainthm}
-
-In addition to Theorem \ref{lams are calibrated}, which is necessary to show that $\lambda_\rho$ is nonempty, and curvature bounds on homologically minimizing hypersurfaces \cite{Schoen75, Schoen81}, which are necessary to construct the Lipschitz flow boxes \cite{BackusCML}, we also have to show that if $v$ is a harmonic function, then almost every zero of $v$ is a single zero.
-From this it follows that any two calibrated hypersurfaces which intersect, must somewhere intersect transversely, contradicting the definition of calibration.
-The highlight of the proof is an application of the rectifiability of the set $P$ of double zeroes of $v$ \cite{Hardt89} to bound the cohomological dimension of $P$.
-
-We then study the structure of the canonical lamination $\lambda_\rho$.
-The canonical lamination is covered by the measured stretch laminations which are associated to $\rho$, along with some leaves which do not admit a transverse measure.
-The measured stretch laminations, in turn, are exactly those homologically minimizing laminations which represent homology classes in the convex set 
-$$\rho^* := \{\alpha \in H_{d - 1}(M, \RR): \langle \rho, \alpha\rangle = \Mass(\alpha) = 1\}.$$
-A special role is played by the extreme points of $\rho^*$, which are represented by measured stretch laminations with no proper sublamination.
-We shall not attempt to summarize our results on the structure of $\lambda_\rho$ into a clean theorem here, but refer the reader to \S\ref{canonical structure}.
-In \S\ref{Teichmuller}, we explain how these results compare and contrast with the results of Thurston's canonical lamination.
-In \S\ref{canonical conjectures}, we give some open problems about the structure of the canonical lamination.
-
-%%%%%%%%%%%%%%%%%%%%
-\subsection{Convexity of the stable unit ball}
-It is known that convexity properties of the stable unit ball 
-$$B := \{\alpha \in H_{d - 1}(M, \RR): \Mass(\alpha) \leq 1\}$$
-are intimately related to the structure of homologically minimizing laminations \cite{Thurston98,Auer01}.
-From our perspective, this is because $\rho^*$ is a \dfn{flat} of $\partial B$ -- that is, the intersection of $\partial B$ with a supporting hyperplane of $B$.
-
-Though the proofs were never published, Auer and Bangert announced several results on the structure of $B$ using laminations \cite{Auer01}.
-In fact, some of these results immediately follow from the structure of the canonical lamination, and we now record them.
-
-Recall that the exterior product on the cohomology ring $H^\bullet(M, \RR)$ induces, by Poincar\'e duality, an \dfn{intersection product}
-\begin{align*}
-H_{d - k}(M, \RR) \times H_{d - \ell}(M, \RR) &\to H_{d - k - \ell}(M, \RR) \\
-(\alpha, \beta) &\mapsto \alpha \cdot \beta.
-\end{align*}
-Also recall that $B$ is strictly convex iff $\partial B$ has no flats except singletons.
-Then we have the following theorem, which is Proposition \ref{flats are nonintersecting}:
-
-\begin{mainthm}\label{convexity summary}
-Let $B$ be the stable unit ball of a closed Riemannian manifold $M$ of dimension $\leq 7$, and let $S$ be a flat of $\partial B$.
-Then for any $\alpha, \beta \in S$, $\alpha \cdot \beta = 0$.
-\end{mainthm}
-
-Taken in the contrapositive, Theorem \ref{convexity summary} gives a condition for strict convexity of $B$.
-In particular, if $M$ is homeomorphic to a torus, then $B$ is strictly convex (see Example \ref{torus convex}).
-
-
-%%%%%%%%%%%%%%%%%%%%%
-\subsection{Outline of the paper}
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Acknowledgements}
-I would like to thank Georgios Daskalopolous and Karen Uhlenbeck for providing helpful comments and providing me with an early draft of the manuscript \cite{daskalopoulos2023} which was a major source of inspiration for this work.
-I would also like to thank Victor Bangert for providing me with a copy of \cite{Auer12}.
-
-This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
-
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preliminaries}\label{prevResults}
-
-\begin{theorem}[{\cite[Theorem A]{BackusCML}}]\label{disjoint surfaces are lamination}
-Let $\mathcal S$ be a set of disjoint complete minimal hypersurfaces in a manifold $M$ of bounded geometry.
-Suppose that there exists $C > 0$ such that for every $N \in \mathcal S$, $\|\Two_N\|_{C^0} \leq C$.
-Then $\mathcal S$ is the set of leaves of a Lipschitz minimal lamination $\lambda$ of bounded curvature.
-In particular, if $\lambda$ is oriented, then there is a Lipschitz vector field on $M$ whose restriction to each $N \in \mathcal S$ is the normal vector to $N$.
-\end{theorem}
-
-
-\begin{proposition}\label{calibration condition}
-Let $F$ be a calibration on a closed Riemannian manifold $M$.
-Let $T_\lambda$ be the Ruelle-Sullivan current of a measured oriented lamination $\lambda$.
-Then the following are equivalent:
-\begin{enumerate}
-\item One has \begin{equation}\label{calibration by Ruelle Sullivan}
-\int_M T_\lambda \wedge F = \Mass(\lambda).
-\end{equation}
-\item $\lambda$ is $F$-calibrated.
+\item The local comass $\Comass(F, \cdot)$ is upper semicontinuous. \label{crandall usc}
+\item For almost every $x \in M$, \label{crandall LDT}
+$$|F(x)| \leq \Comass(F, x).$$
+\item The local comass is bounded, and \label{crandall linfinity}
+$$\Comass(F) = \sup_{x \in M} \Comass(F, x) = \|F\|_{L^\infty}.$$
+\item If $\sigma \in \Chain_{d - 1}(M)$ then \label{crandall best curl is ABC}
+$$\int_\sigma F \leq \Mass(\sigma) \sup_{x \in \sigma} \Comass(F, x).$$
 \end{enumerate}
 \end{proposition}
+\begin{proof}
+We first prove (\ref{crandall usc}).
+Let $x^n \to x$ and $r > 0$. Then eventually $x^n \in B_r(x)$, hence $\Comass(F, x^n) \leq \Comass_{B_r(x)}(F)$ and so
+\begin{align*}
+\limsup_{n \to \infty} \Comass(F, x^n) &\leq \inf_{r > 0} \Comass_{B_r(x)}(F) = \Comass(F, x).
+\end{align*}
+
+We now prove (\ref{crandall LDT}).
+We may work locally, and choose coordinates $(y^i)$ in which $\sqrt{\det g} = 1$.
+Let $I$ be the increasing $d-1$-index with $d$ removed.
+By the Lebesgue differentiation theorem and Fubini's theorem, there exists a null set $Z \subset M$, which does not depend on $(y^i)$ by \cite[Proposition 2.1]{BackusFLG}, such that for every $x \notin Z$,
+\begin{align*}
+F_I(x) 
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{B_\varepsilon(x)} F_I(y) \dif y \\
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F_I(y) \dif y^1 \wedge \cdots \wedge \dif y^{d - 1} \wedge \dif t
+\end{align*}
+where we used the fact that $\sqrt{\det g} = 1$.
+Now $\partial_{y^1} \wedge \cdots \wedge \partial_{y^{d - 1}}$ is the oriented unit $d - 1$-blade tangent to $\{y^d = t\}$, so as forms on $\{y^d = t\}$,
+$$F_I(y) \dif y^1 \wedge \cdots \wedge \dif y^{d - 1} = F.$$
+So
+\begin{align*}
+F_I(x) 
+&= \lim_{\varepsilon \to 0} \frac{1}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty \int_{\{y^d = t\} \cap B_\varepsilon(x)} F \dif t \\
+&\leq \lim_{\varepsilon \to 0} \frac{\Comass_{B_\varepsilon(x)}(F)}{\Mass(B_\varepsilon(x))} \int_{-\infty}^\infty |\{y^d = t\} \cap B_\varepsilon(x)| \dif t.
+\end{align*}
+By Fubini's theorem,
+$$F_I(x) \leq \lim_{\varepsilon \to 0} \frac{\Comass_{B_\varepsilon(x)}(F)}{\Mass(B_\varepsilon(x))} \Mass(B_\varepsilon(x)) = \Comass(F, x).$$
+For every $x \in M$ we may select coordinates in which $|F(x)| = F_I(x)$, and then if $x \notin Z$, we conclude that (\ref{crandall LDT}) holds for $x$.
+
+If we combine (\ref{crandall LDT}) with (\ref{integral over chain is linfinity}), then
+$$\sup_{x \in M} \Comass(F, x) \leq \Comass(F) \leq \|F\|_{L^\infty} \leq \sup_{x \in M} \Comass(F, x).$$
+The inequalities collapse, proving (\ref{crandall linfinity}).
+In particular, for each $\sigma \in \Chain_{d - 1}(M)$, we obtain (\ref{crandall best curl is ABC}):
+\begin{align*}
+\int_\sigma F &\leq \Mass(\sigma) \inf_{\Omega \supset \sigma} \sup_{x \in \Omega} \Comass(F, x) = \Mass(\sigma) \sup_{x \in \sigma} \Comass(F, x). \qedhere
+\end{align*}
+\end{proof}
+
+\begin{definition}
+Let $F \in L^\infty(M, \Omega^{d - 1}_{\rm cl})$.
+The \dfn{maximum comass locus} is the set
+$$\MCL(F) := \{x \in M: \Comass(F, x) = \Comass(F)\}.$$
+\end{definition}
+
+\begin{corollary}
+Suppose that $M$ is a closed manifold and $F \in L^\infty(M, \Omega^{d - 1}_{\rm cl})$.
+Then $\MCL(F)$ is a nonempty compact set.
+\end{corollary}
+\begin{proof}
+This is immediate from Proposition \ref{crandall}(\ref{crandall usc}) and the extreme value theorem for upper semicontinuous functions.
+\end{proof}
 
 \begin{proposition}\label{properties of calibrated laminations}
-Suppose that $M$ is a closed Riemannian manifold, $F$ is a calibration, and $\lambda$ is a measured $F$-calibrated lamination.
+Suppose that $M$ is a closed Riemannian manifold, $F$ is a calibration, and $\lambda$ is a measured oriented $F$-calibrated lamination.
+Then $\supp \lambda \subseteq \MCL(F)$.
+\end{proposition}
+\begin{proof}
+Let $S := \MCL(F)$, $N$ a leaf of $\lambda$, and suppose that $x \in N \setminus S$.
+Since $S$ is closed, there exists $\varepsilon > 0$ such that $B_\varepsilon(x)$ does not meet $S$.
+Moreover, $\sigma := N \cap B_\varepsilon(x)$ is a $d-1$-chain in $B_\varepsilon(x)$, so by Proposition \ref{crandall}(\ref{crandall best curl is ABC}),
+$$\frac{1}{\Mass(\sigma)} \int_\sigma F \leq \sup_{y \in B_\varepsilon(x)} \Comass(F, y) < \Comass(F) = 1.$$
+But then 
+$$\int_N F = \int_\sigma F + \int_{N \setminus B_\varepsilon(x)} F < \Mass(\sigma) + \Mass(N \setminus B_\varepsilon(x)) = \Mass(N),$$
+so $N$ (hence $\lambda$) is not $F$-calibrated.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%
+\subsection{Laminations of rational class}
+We next give a condition for a measured stretch lamination to have only closed leaves, which appeared in unpublished work of Auer and Bangert \cite{Auer12}.
+
+\begin{definition}
+A homology class $\alpha \in H_{d - 1}(M, \RR)$ has \dfn{rational direction} if there exists $c > 0$ such that $c\alpha \in H_{d - 1}(M, \ZZ)$.
+\end{definition}
+
+\begin{proposition}
+Let $M$ be a closed manifold, let $\alpha \in H_{d - 1}(M, \RR)$ have rational direction, $\alpha \neq 0$, and let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$.
+Then every leaf of $\kappa_u$ is a closed hypersurface.
+\end{proposition}
+\begin{proof}
+Rescaling $u$ by a constant does not affect whether the leaves of $\kappa_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
+We view $u$ as a map $M \to \Sph^1$ of homotopy class $\alpha$.\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
+Since the representation $\alpha$ is integral, $\ker \alpha$ fits into a short exact sequence 
+$$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0.$$
+So from the Galois correspondence for covering spaces there exists a covering space $p: \hat M \to M$ such that $\Gal(\hat M, M) \cong \ZZ$, and a function $\hat u$ on $\hat M$, such that the diagram 
+$$\begin{tikzcd}
+\hat M \arrow[r, "\hat u"] \arrow[d, "p"] & \RR \arrow[d] \\
+M \arrow[r, "u"] & \Sph^1
+\end{tikzcd}$$
+commutes.
+In particular, it sense to take superlevel sets $\{\hat u > y\}$.
+
+Since $\Gal(\hat M, M)$ is a cyclic group, it is generated by a single element $h$ with the mapping property
+$$h: \partial \{\hat u > y\} \to \partial \{\hat u > y + D\}$$
+for each $y \in \RR$.
+In particular, $\hat u$ does not have a global minimum or maximum.
+Since $\hat u$ does not have a global minimum or maximum on the complete manifold $\hat M$, by the maximum principle for functions of least gradient \cite[Theorem 5.1]{HakkarainenKorteLahtiShanmugalingam+2015}, $\hat u$ does not have any local minimum or maximum.
+Therefore every leaf of $\kappa_{\hat u}$ is a component of $\partial \{\hat u > y\}$ for some $y \in \RR$ \cite[Proposition 4.7]{BackusCML}.
+
+Now let $N$ be a (connected) leaf of $\lambda$, and let $\hat N := p^{-1}(N)$.
+Then each component of $\hat N$ is a leaf of $\kappa_{\hat u}$, and hence a component of $\partial \{u > y\}$ for some $y \in \RR$.
+Moreover, the deck transformation $h$ has the mapping property
+$$h: \hat N \to \hat N.$$
+So if $\hat N$ meets $\partial \{u > y\}$, then for every $n \in \ZZ$, a component $K_n$ of $\hat N$ is a component of $\partial \{\hat u > y + nD\}$.
+Since $h$ acts on $\kappa_{\hat u}$ by sending $\partial \{\hat u > y\}$ to $\partial \{\hat u > y + D\}$, $h$ acts on $\hat N$ by sending $K_n$ to $K_{n + D}$.
+In particular, $\hat N \cong N \times \ZZ$ and $p: \hat N \to N$ is projection onto the first factor. 
+So $N \cong K_0$, and $K_0$ is a closed hypersurface in $\hat M$ since it is a complete manifold \cite[Theorem 3.3]{BackusCML} and it is compact.
+\end{proof}
+
+\begin{example}
+Suppose that $M = \Sph^1_x \times \Sph^1_y$.
+Let $u(x, y) = x$, so $\kappa_u$ is itself topologically nontrivial (in the $x$ direction) and its leaves are also topologically nontrivial (in the $y$ direction).
+The covering space $\hat M$ is $\RR_x \times \Sph_y^1$, the point is that we unwound $\kappa_u$ without messing with its leaves.
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%
+\section{Convex duality}
+\subsection{Abstract convex duality}
+We follow \cite{Ekeland99}.
+For a reflexive Banach space $X$, we denote by $\hat X$ its dual.
+If $I: X \to \RR \cup \{+\infty\}$ is a convex function, we introduce its \dfn{Legendre transform}, the convex function
+\begin{align*}
+	\hat I: \hat X &\to \RR \cup \{+\infty\}\\
+	\xi &\mapsto \sup_{x \in X} \langle \xi, x\rangle - I(x).
+\end{align*}
+We identify the cokernel of a linear map with the kernel of its adjoint.
+In this setting, we have the following form of the convex duality theorem.
+
+\begin{theorem}[convex duality]\label{abstract convex analysis}
+Let $\Lambda : X \to Y$ be a bounded linear map between reflexive Banach spaces.
+Let $I: Y \to \RR \cup \{+\infty\}$ satisfy:
+\begin{enumerate}
+\item $I$ and $\hat I$ are strictly convex,
+\item $I$ is lower semicontinuous,
+\item if $|y| \to \infty$ in $Y$, then $I(y) \to +\infty$, and 
+\item there exists a point $x \in X$ such that $I$ is continuous and finite at $\Lambda(x)$.
+\end{enumerate}
 Then:
 \begin{enumerate}
-\item $\lambda$ is minimal.
-\item If $G$ is a calibration and cohomologous to $F$, then $\lambda$ is $G$-calibrated.
-\item $\supp \lambda \subseteq \MCL(F)$.
+\item There exists a minimizer $\underline x \in X$ of $I(\Lambda(x))$, unique modulo $\ker \Lambda$.
+\item There exists a unique maximizer $\overline \eta$ of $-\hat I(-\eta)$ subject to the constraint $\eta \in \coker \Lambda$.
+\item We have \dfn{strong duality}
+\begin{equation}\label{abstract strong duality}
+I(\Lambda(\underline x)) = -\hat I(-\overline \eta).
+\end{equation}
 \end{enumerate}
-\end{proposition}
+\end{theorem}
+\begin{proof}
+This is largely a special case of \cite[Chapter IV, Theorem 4.2]{Ekeland99}.
+Let $\mathscr P, \mathscr P^*$ be as in the statement of that theorem.
+Then $\mathscr P$ is the problem of minimizing $J(x, \Lambda x)$ where $J(x, y) := I(y)$.
+The Legendre transform of $J$ satisfies 
+$$\hat J(\xi, \eta) = \begin{cases} \hat I(\eta), & \xi = 0, \\
+	+\infty, &\xi \neq 0,
+\end{cases}$$
+and $\mathscr P^*$ is the problem of maximizing
+$$-\hat J(\Lambda^* \eta, -\eta) = \begin{cases}
+	-\hat I(-\eta), &\eta \in \ker \Lambda^*, \\
+	-\infty, &\eta \notin \ker \Lambda^*,
+\end{cases}$$
+where $\Lambda^*$ is the adjoint of $\Lambda$.
+Then most of the various assertions of this theorem follow immediately from \cite[Chapter IV, Theorem 4.2]{Ekeland99}.
+The fact that $\overline \eta \in \coker \Lambda$ follows from the facts that $\overline \eta$ is a solution of $\mathscr P^*$, but any solution of $\mathscr P^*$ must be a member of $\ker \Lambda^*$. 
+To establish uniqueness, we use \cite[Chapter II, Proposition 1.2]{Ekeland99}, the fact that $\hat I$ is strictly convex, and the fact that we may view $I \circ \Lambda$ as a strictly convex function on the reflexive Banach space $X/\ker \Lambda$.
+\end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Norms on cohomology}
+Let $M$ be a closed oriented Riemannian manifold. 
+We shall, without mention, use Poincar\'e duality to identify 
+$$H^k(M, \RR) = H_{d - k}(M, \RR).$$
+We put the stable and costable norms on these cohomology groups into a broader family of norms to which H\"older duality applies, in degrees $1$ and $d - 1$.
+
+\begin{definition}
+Let $p \in [1, \infty]$, $k \in \{1, d - 1\}$, and $\alpha \in H^k(M, \RR)$, viewed as a de Rham class.
+Then 
+$$\|\alpha\|_{L^p} := \inf_{[f] = \alpha} \|f\|_{L^p}.$$
+\end{definition}
+
+It is clear that the $L^1$ and stable norms on $H^1$ agree, as do the $L^\infty$ and costable norms on $H^{d - 1}$.
+The definition of the $L^p$ norm makes sense even on $H^k$, $k \in \{2, \dots, d - 2\}$, but there we cannot identify the norm with the stable or costable norms, because, for example, on the square torus $\Torus^4$, the costable norm of 
+$$\alpha := [\dif x \wedge \dif y + \dif z \wedge \dif w]$$
+is $1$ but $\|\alpha\|_{L^\infty} = \sqrt 2$.
+
+\begin{proposition}
+Let $(p, q)$ be a H\"older pair with $q < \infty$.
+Then the $L^p$ norm on $H^{d - 1}$ and the $L^q$ norm on $H^1$ are dual.
+\end{proposition}
+\todo{Prove it. This might be easier to do after the next section}
+
+\todo{Massart's inequalities for homology}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Application to the equivariant \texorpdfstring{$p$-Laplacian}{p-Laplacian}}
+Let $M$ be a closed oriented Riemannian manifold with fundamental group $\Gamma$ and universal cover $\tilde M \to M$.
+Choose a fundamental domain $M_{\rm fun} \subseteq \tilde M$.
+Given a representation $\alpha: \Gamma \to \RR$, choose a smooth $1$-form, which we also call $\alpha$, to represent the cohomology class corresponding to $\alpha$ in $H^1(M, \RR)$ given by the natural isomorphism
+$$H^1(M, \RR) = \Hom(\Gamma, \RR).$$
+
+Given a H\"older pair $(p, q)$ with $1 < p < \infty$ (thus $\frac{1}{p} + \frac{1}{q} = 1$),
+we are interested in the $q$-Laplace equation
+$$\dif^* (|\dif u|^{q - 2} \dif u) = 0$$
+for an $\alpha$-equivariant function $u$.
+Let us express this problem variationally.
+
+Let $X$ be the space of $W^{1, q}_\loc(\tilde M)$ functions $u$ which are $\Gamma$-equivariant in the sense that for $\gamma \in \Gamma$, $\gamma^* \dif u = \dif u$, and let $Y := L^q(M, \Omega^1)$.
+We identify $\hat Y$ with $L^p(M, \Omega^{d - 1})$ using the perfect pairing 
+\begin{align*}
+	L^p(M, \Omega^{d - 1}) \times Y &\to \RR \\
+	(F, \varphi) &\mapsto \int_M \varphi \wedge F.
+\end{align*}
+Then $\Lambda := (\dif: X \to Y)$ is a bounded linear map, and the $\alpha$-equivariant $q$-Laplacian is the Euler-Lagrange equation of $I \circ \Lambda$, where $I$ is the strictly convex functional such that
+$$I(\varphi) := \frac{1}{q} \int_M \star |\varphi|^q$$
+if the cohomology class of $\varphi$ is $\alpha$, and $I(\varphi) := +\infty$ otherwise.
+
+\begin{proposition}[convex duality for the $q$-Laplacian]\label{mfmc qLaplacian}
+Given a representation $\alpha: \Gamma \to \RR$, and a H\"older pair $(p, q)$ with $1 < p < \infty$, there exists an $\alpha$-equivariant $q$-harmonic function $u: \tilde M \to \RR$, unique modulo constants, and a unique minimizer $F$ of 
+$$J_{p, \alpha}(F) := \frac{1}{p} \int_M \star |F|^p - \int_M \alpha \wedge F$$
+among all closed $d - 1$-forms on $M$.
+Moreover, we have
+\begin{equation}\label{strong duality}
+	\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p + \int_M \dif u \wedge F = 0.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Let
+$$I_\alpha(\psi) := \frac{1}{q} \int_M \star |\psi + \alpha|^q,$$
+defined for exact $L^q$ $1$-forms $\psi$, thus $\widehat{I_\alpha}$ is defined on the space of $L^p$ $d - 1$-forms modulo the kernel of the map
+$$F \mapsto \left(\psi \mapsto \int_M \psi \wedge F\right)$$
+and we lift it to $L^p(M, \Omega^{d - 1})$.
+
+Let $v$ be a primitive of $\alpha$.
+Then an $\alpha$-equivariant $u$ minimizes $I$ iff $u - v$ minimizes $I_\alpha \circ \Lambda$, which happens iff $u$ is $\alpha$-equivariant $q$-harmonic.
+Since $I_\alpha(\psi) = I_0(\psi + \alpha)$, we can apply \cite[Chapter I, Remark 4.1]{Ekeland99} to see that $I_\alpha$ and $\widehat{I_\alpha}$ are strictly convex and
+$$\widehat{I_\alpha}(F) = \widehat{I_0}(F) - \int_M \alpha \wedge F = \frac{1}{p} \int_M \star |F|^p - \int_M \alpha \wedge F.$$
+Since $\coker \Lambda$ is the space of closed $L^p$ $d - 1$-forms on $M$, for $F \in \coker \Lambda$, $\widehat{I_\alpha}(F)$ does not depend on the choice of representatives $\alpha, v$, or of the lift of $\widehat{I_\alpha}$ to $L^p(M, \Omega^{d - 1})$.
+
+Finally observe that $\ker \Lambda$ is the space of constants, and for any $\alpha$-equivariant $u$ and closed $F$,
+\begin{align*}
+I(\Lambda u) + \widehat{I_\alpha}(-F)
+&= \frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p + \int_M \alpha \wedge F \\
+&= \frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p + \int_M \dif u \wedge F.
+\end{align*}
+All of the assertions of this proposition now follow from Theorem \ref{abstract convex analysis}.
+\end{proof}
+
+Let $u$ be $\alpha$-equivariant $q$-harmonic.
+Motivated by \cite[\S3.1]{daskalopoulos2020transverse}, it is natural to guess that 
+\begin{equation}\label{dual solution}
+F := - |\dif u|^{q - 2} \star \dif u
+\end{equation}
+is the solution of the dual problem of minimizing $J_{p, \alpha}$.
+In order to prove that this is true, we shall need that if $(p, q)$ is a H\"older pair, then
+\begin{equation}\label{holder cancellation}
+	(p - 2)(q - 1) + (q - 2) = 0.
+\end{equation}
 
 \begin{lemma}\label{dual to u is minimizer}
-Suppose that $u: \tilde M \to \RR$ is an $\alpha$-equivariant $q$-harmonic function, and suppose that
-$$F := - |\dif u|^{q - 2} \star \dif u.$$
+Suppose that $u: \tilde M \to \RR$ is an $\alpha$-equivariant $q$-harmonic function, and suppose that $F$ satisfies (\ref{dual solution}).
 Then $F$ is a closed $d - 1$-form, which minimizes $J_{p, \alpha}$ among all closed $d - 1$-forms.
 Moreover, $F$ solves the PDE 
 \begin{equation}\label{pMaxwell}
@@ -515,45 +481,159 @@ Moreover, $F$ solves the PDE
 \end{cases}
 \end{equation}
 \end{lemma}
+\begin{proof}
+We first show that $\dif F = 0$.
+In fact, 
+$$\star \dif F = - \star \dif(|\dif u|^{q - 2} \star \dif u) = \pm \dif^*(|\dif u|^{q - 2} \dif u) = 0.$$
+By uniqueness, if (\ref{strong duality}) holds, then $F$ must be the minimizer of $J_{p, \alpha}$.
+One can easily compute 
+$$|F|^p = |\dif u|^{(q - 1)p} = |\dif u|^q,$$
+so by Stokes' theorem and the fact that $\alpha$ is cohomologous to $\dif u$,
+\begin{align*}
+\frac{1}{q} \int_M \star |\dif u|^q + \frac{1}{p} \int_M \star |F|^p&
+= \left[\frac{1}{p} + \frac{1}{q}\right] \int_M \star |\dif u|^q
+= \int_M \dif u \wedge |\dif u|^{q - 2} \star \dif u \\
+&= -\int_M \alpha \wedge F,
+\end{align*}
+implying (\ref{strong duality}).
+Finally, we use (\ref{holder cancellation}) to prove
+\begin{align*}
+\dif^*(|F|^{p - 2} F) &= - \dif^*(|\dif u|^{(p - 2)(q - 1)} |\dif u|^{q - 2} \star \dif u) = - \dif^*(\star \dif u) \\
+&= \pm \star \dif^2 u = 0. \qedhere 
+\end{align*}
+\end{proof}
 
-\begin{lemma}\label{L1 convergence preserves pi1}
-Let $\tilde M \to M$ be the universal cover, and let $(u_q)$ be a sequence of $\pi_1(M)$-equivariant functions on $\tilde M$ which converge in $L^1_\loc(\tilde M)$ to a function $u$ as $q \to 1$.
-Then $u$ is $\pi_1(M)$-equivariant, and $[u_q] \to [u]$.
-Moreover, if $\dif u_q \to \dif u$ in the weak topology of measures on $M$ and $\dif u_q \in L^q$, then
-\begin{equation}\label{q to 1 Holder}
-\Mass(\dif u) \leq \liminf_{q \to 1} \frac{1}{q} \int_M \star |\dif u_q|^q.
+We next scrutinize the PDE (\ref{pMaxwell}).
+At least at the heuristic level, one expects that as $p \to \infty$, the solutions of (\ref{pMaxwell}) converge to an absolute minimizer of a suitable $L^\infty$ variational problem; minimizers of such problems have been called \dfn{tight} by Sheffield and Smart \cite{Sheffield12}.
+This motivates the below terminology:
+
+\begin{definition}
+Let $1 < p < \infty$.
+A \dfn{$p$-tight form} is a solution of the PDE (\ref{pMaxwell}).
+\end{definition}
+
+\begin{proposition}
+Suppose that $M$ is a closed oriented Riemannian manifold.
+Then there is a unique $p$-tight form in each cohomology class in $H^{d - 1}(M, \RR)$.
+Moreover, $p$-tight forms are minimizers of the strictly convex functional
+$$J_p(F) := \frac{1}{p} \int_M \star |F|^p$$
+among all forms cohomologous to them.
+\end{proposition}
+\begin{proof}
+Strict convexity of $J_p$ on closed $L^p$ $d - 1$-forms is straightforward; since each cohomology class is an affine subspace of $L^p(M, \Omega^{d - 1})$, and hence is convex, the strict convexity on each class follows.
+Since $J_p(F) \to \infty$ as $\|F\|_{L^p} \to \infty$, $J_p$ is coercive on $L^p(M, \Omega^{d - 1})$.
+Therefore we have existence and uniqueness \cite[Chapter II]{Ekeland99}.
+To compute the Euler-Lagrange equations for $J_p$, let $B$ be a $d-2$-form (so $F + t \dif B$ is cohomologous to $F$), so that for a minimizer $F$ of $J_p$,
+$$\frac{\dif}{\dif t} J_p(F + t \dif B) = \frac{1}{p} \int_M \star \frac{\partial}{\partial t} |F + t \dif B|^p = \int_M \star |F + t \dif B|^{p - 2} \langle F + t \dif B, \dif B\rangle.$$
+Setting $t = 0$, we obtain 
+$$0 = \int_M \star |F|^{p - 2} \langle F, \dif B\rangle = \int_M \star \langle \dif^*(|F|^{p - 2} F), B\rangle.$$
+Thus the Euler-Lagrange equations for $J_p$ are (\ref{pMaxwell}).
+\end{proof}
+
+\begin{definition}
+Let $F$ be a $p$-tight form, let
+\begin{equation}
+\dif u := (-1)^d |F|^{p - 2} \star F, \label{inverse extremality}
 \end{equation}
+and let $u$ be the primitive of $\dif u$ on the universal cover $\tilde M$, which is normalized to have zero mean on a fundamental domain $M_{\rm fun}$.
+Then $u$ is called the \dfn{$q$-harmonic conjugate} of the $p$-tight form $F$, where $\frac{1}{p} + \frac{1}{q} = 1$.
+\end{definition}
+
+Let $u$ be the $q$-harmonic conjugate of $F$.
+By Poincar\'e's inequality,
+$$\|u\|_{W^{1, q}(M_{\rm fun})}^q \lesssim \int_M \star |\dif u|^q = \int_M \star |F|^{(p - 1)q} = \int_M \star |F|^p < \infty$$
+since $F$ is $p$-tight; that is, we have $F \in L^p$ and $u \in W^{1, q}_\loc$, justifying any manipulations we shall make with these forms.
+
+\begin{lemma}
+Let $1 < p, q < \infty$ and $\frac{1}{p} + \frac{1}{q} = 1$.
+Let $F$ be a $p$-tight form, and let $u$ be its $q$-harmonic conjugate.
+Then $u$ is $q$-harmonic, $F$ satisfies (\ref{dual solution}), and we have strong duality (\ref{strong duality}).
 \end{lemma}
+\begin{proof}
+We first use (\ref{holder cancellation}) to prove
+$$|\dif u|^{q - 2} \star \dif u = (-1)^d |F|^{(q - 2)(p - 1)} \star \star |F|^{p - 2} F = - |F|^{(q - 2)(p - 1) - (p - 2)} F = - F.$$
+Thus we have (\ref{dual solution}), and moreover
+$$\dif \star (|\dif u|^{q - 2} \dif u) = - \dif F = 0$$
+so that $u$ is $q$-harmonic.
+Then by Lemma \ref{dual to u is minimizer}, $F$ is the unique minimizer of $J_{p, [\dif u]}$, which implies (\ref{strong duality}).
+\end{proof}
 
-\begin{proposition}\label{MCL contains Thurston}
-Let $F$ be a best comass representative of $\rho$, where $\Comass(\rho) = 1$, and let $\lambda$ be a measured stretch lamination associated to $\rho$.
-Then $F$ calibrates $\lambda$. In particular, $\MCL(F) \supseteq \supp \lambda$.
-\end{proposition}
-
-\begin{proposition}\label{calibrated means measured stretch}
-Let $F$ be a best comass representative of $\rho$, where $\Comass(\rho) = 1$, and suppose that $F$ calibrates a measured oriented lamination $\lambda$.
-Then $\lambda$ is a measured stretch lamination associated to $\rho$.
-\end{proposition}
-
-
-
+\subsection{Application to \texorpdfstring{$p$-harmonic}{p-harmonic} maps to \texorpdfstring{$\Hyp^2$}{hyperbolic space}}
 
 
 %%%%%%%%%%%%%%%%
 \section{The canonical lamination}
+\label{canonical sec}
 Throughout this section, we fix $\rho \in H^{d - 1}(M, \RR)$ in the costable unit sphere $\{\Comass(\rho) = 1\}$.
 Motivated by Thurston's approach to Teichm\"uller theory (see \S\ref{Teichmuller}), we construct a lamination which is calibrated by every best comass form in $\rho$, and which only depends on $\rho$: the \dfn{canonical lamination} $\lambda_\rho$.
 
-%%%%%%%%%%%%%%%%%%%%%
-\subsection{Construction of the canonical lamination}
-We note carefully that if $F$ is a best comass representative of $\rho$, then $\MCL(F)$ need not itself be a lamination \cite[Example 5.4]{bangert_cui_2017}.
-In particular, unlike in Thurston's theory, we cannot simply take the intersection of all the maximum comass loci of best comass representatives of $\rho$.
-On the other hand, one can use the existence of measured stretch laminations to show that $\MCL(F)$ contains a lamination.
-So our strategy is to construct the largest lamination $\lambda_F$ which $F$ calibrates, and take an intersection over all the $\lambda_F$s.
+Even if $F$ is a best comass representative of $\rho$, then $\MCL(F)$ need not itself be a lamination.
+This can happen even if $F$ is smooth, because the bundle $\ker(\star F)$ does not need to be integrable near $\MCL(F)$, even if $M$ is homeomorphic to $\mathbf T^3$ \cite[Example 5.4]{bangert_cui_2017}.
+So we must show that there is a lamination $\lambda_F \subseteq \MCL(F)$ which contains every $F$-calibrated hypersurface.
+We will then be able to show that the intersection $\bigcap_F \lambda_F$, where $F$ ranges over best comass representatives of $\rho$, is a lamination.
 
-We first rule out intersections of the leaves.
-This can be done by showing that the generic intersection point of two minimal hypersurfaces is transverse.
+One may wonder why we must take an intersection:
+If $F$, $G$ are cohomologous, and $\lambda$ is an $F$-calibrated measured lamination, then $\lambda$ is $G$-calibrated by Proposition \ref{properties of calibrated laminations}.
+However, not every lamination admits a transverse measure, and for such a lamination, we do not expect calibration to be a cohomological invariant.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Intersections of minimal hypersurfaces}\label{nodal appendix}
+Let $F$ be a best comass representative of $\rho$.
+We begin the construction of the lamination $\lambda_F$ by showing that any two $F$-calibrated hypersurfaces are disjoint.
+This can be done by showing that the generic intersection point of two minimal hypersurfaces $N, N'$ is transverse.
 If the dimension of the underlying manifold $M$ is $d = 2$, then this is trivial, and if $d = 3$, then the structure of $N \cap N'$ is completely described by complex-analytic means \cite[Theorem 7.3]{colding2011course}, so the proof we present here is mainly of interest if $d \geq 4$.
+
+For a solution $v$ of an elliptic PDE, we write $Z(v), Z^{\rm sing}(v)$ for the nodal and singular sets of $v$, namely the sets of zeroes and double zeroes, respectively.
+We will show that the generic point of $Z(v)$ is not a singular point. More precisely:
+
+\begin{proposition}\label{nodal set is generically smooth}
+Let $Q$ be a linear elliptic operator on $\Ball^{d - 1}$ satisfying the maximum principle.
+Suppose that $Qv = 0$ and $v$ has a zero of finite order.
+Then the Hausdorff dimensions of the nodal and singular sets of $v$ are
+\begin{align}
+	\dim(Z(v)) &= d - 2, \label{nodal dimension}\\
+	\dim(Z^{\rm sing}(v)) &\leq d - 3. \label{singular nodal dimension}
+\end{align}
+\end{proposition}
+
+The main idea of the proof is to show that the complement of $Z^{\rm sing}(v)$ is path-connected.
+By Alexander duality for singular cohomology, the complement of a submanifold $P$ of codimension $\geq 2$ is path-connected.
+The singular set $P = Z^{\rm sing}(v)$ is not in general a manifold, but the proof still works as long as we apply Alexander duality for sheaf cohomology.
+Let $\hat H^\bullet(P, \RR)$ denote the cohomology of the constant sheaf $\RR$ on $P$.
+
+\begin{lemma}\label{closed mfld complement}
+Let $P \subset \Sph^{d - 1}$ be a closed $d - 3$-rectifiable set.
+Then $\Sph^{d - 1} \setminus P$ is path-connected.
+\end{lemma}
+\begin{proof}
+Let $\delta^{\rm Haus}, \delta^{\rm cov}, \delta^{\rm shf}$ be the Hausdorff, covering, and sheaf cohomological dimensions of $P$ respectively.
+Then by \cite[{\S}II.5.12]{godement1973topologie} and \cite[Theorem 6.3.10]{edgar2008measure}, we have 
+$$\delta^{\rm shf} \leq \delta^{\rm cov} \leq \delta^{\rm Haus} \leq d - 3,$$
+hence $\hat H^{d - 2}(P, \RR) = 0$.
+By Alexander duality for sheaf cohomology \cite[Theorem 6]{Kaplan47}, it follows that $H_0(\Sph^{d - 1} \setminus P, \RR) \cong \ZZ$, or in other words $\Sph^{d - 1} \setminus P$ is path-connected.
+\end{proof}
+
+\begin{lemma}\label{open mfld complement}
+Let $P \subset \Ball^{d - 1}$ be a closed $d - 3$-rectifiable set.
+Then $\Ball^{d - 1} \setminus P$ is path-connected.
+\end{lemma}
+\begin{proof}
+Embed $\Ball^{d - 1}$ in $\Sph^{d - 1}$ using the one-point compactification, let $\infty$ be the point at infinity, and let $x, y \in \Ball^{d - 1} \setminus P$.
+Choose a $d - 3$-sphere $S$ in $\Sph^{d - 1}$ which contains $\infty$ but does not contain $x, y$.
+Then $P \cup S$ is a closed $d - 3$-rectifiable set and $x, y \notin P \cup S$, so by Lemma \ref{closed mfld complement}, there exists a curve $\gamma$ from $x$ to $y$ which avoids $P \cup S$.
+Therefore $\gamma \subset \Ball^{d - 1} \setminus P$.
+\end{proof}
+
+\begin{proof}[Proof of Proposition \ref{nodal set is generically smooth}]
+By \cite[Lemma 1.9]{Hardt89}, $Z^{\rm sing}(v)$ is $d - 3$-rectifiable, which implies (\ref{singular nodal dimension}).
+If there exists $x \in Z(v) \setminus Z^{\rm sing}(v)$, then by the implicit function theorem, there is a neighborhood $U \ni x$ such that $U \cap Z(v)$ is a $d - 2$-dimensional manifold.
+So if (\ref{nodal dimension}) fails, we must have $Z(v) = Z^{\rm sing}(v)$, so $Z(v)$ is $d - 3$-rectifiable.
+But then, by Lemma \ref{open mfld complement}, the sets $U_\pm := \{\pm v > 0\}$ satisfy $U_+ \cup U_-$ are connected.
+Since $v$ is continuous, one of these sets must be empty; without loss of generality, $U_- = \emptyset$.
+Then $v \geq 0$ and $v$ has a zero, so by the maximum principle, $v = 0$ identically.
+This contradicts the fact that $v$ has a zero of finite order.
+\end{proof}
 
 \begin{proposition}\label{intersection theory prop}
 Let $N, N' \subset M$ be minimal hypersurfaces, and let $S \subseteq N, N'$ be the set of points at which $N, N'$ intersect nontransversely.
@@ -572,6 +652,10 @@ If $v$ only has zeroes of finite order, then the claim follows from Proposition 
 Otherwise, $v$ is identically $0$ by the unique continuation theorem \cite[Theorem 6.1]{colding2011course}, so $N \cap U = N' \cap U$.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%
+\subsection{Construction of the canonical lamination}
+We are now ready to prove Theorem \ref{existence of calibrated lam}, the existence of the canonical lamination.
+
 \begin{lemma}
 Let $F$ be a calibration, and let $B \subseteq M$ be a sufficiently small ball.
 Then for any complete connected $F$-calibrated hypersurface $N$, 
@@ -580,10 +664,13 @@ Then for any complete connected $F$-calibrated hypersurface $N$,
 \end{equation}
 \end{lemma}
 \begin{proof}
-By the Thom transversality theorem, we may assume that $N$ meets $\partial B$ transversely. 
+By the Thom transversality theorem, possibly after shrinking $B$ slightly, we may assume that $B$ meets $N$ transversely.
+Since both sides of (\ref{area bound for calibrated}) depend continuously on the radius of $B$, this assumption is no loss of generality.
+
 Let $S := N \cap \partial B$, which by transversality can be identified with a closed $d - 2$-dimensional submanifold of $\Sph^{d - 1}$.
 Since $H_{d - 2}(\Sph^{d - 1}, \RR) = 0$, there exists a relatively open set $U \subseteq \partial B$ which is bounded by $S$.
-Since $H^{d - 1}(B, \RR) = 0$, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} and the Sobolev embedding theorem we may assume that $A$ is continuous. Then
+Since $H^{d - 1}(B, \RR) = 0$, we may write $F = \dif A$ in a neighborhood of $B$, where by Lemma \ref{Hodge theorem} we may assume that $A$ is continuous.
+Then
 \begin{align*}
 \Mass(N \cap B) &= \int_{N \cap B} F = \int_S A = \int_U F \leq \Mass(U) \leq \Mass(\partial B). \qedhere
 \end{align*}
@@ -656,7 +743,7 @@ So we may apply Lemma \ref{existence of intersections} to the set $\mathscr S$ o
 The lamination $\lambda_\rho$ constructed in Proposition \ref{existence of canonical lamination} is the \dfn{canonical lamination} associated to $\rho$.
 \end{definition}
 
-\todo{Show that for surfaces, a best Lipschitz map calibrates ALL of its MCL. This proves a much stronger version of \cite[Theorem 5.2]{daskalopoulos2020transverse}. Not quite obvious, since they're not integrable, but it should be OK using the Carath\'eodory condition.}
+If $d = 2$ and $\rho \in H^1(M, \ZZ)$, then $\lambda_\rho$ is the lamination obtained by taking an intersection over the best Lipschitz maps of homotopy class $\rho$ by Daskalopolous and Uhlenbeck \cite[\S6.2]{daskalopoulos2020transverse}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Structure of the canonical lamination}\label{canonical structure}
@@ -684,12 +771,9 @@ Therefore by Proposition \ref{calibrated means measured stretch}, $\lambda$ is a
 
 \begin{lemma}\label{existence for least gradient}
 For each $\alpha \in H_{d - 1}(M, \RR)$, there exists an $\alpha$-equivariant function of least gradient $u: \tilde M \to \RR$.
-We can take $u$ to be approximated in $L^1$ by $\alpha$-equivariant $q$-harmonic functions if we choose.
 \end{lemma}
 \begin{proof}
-One can take a minimizing sequence $(u_n)$, apply Miranda compactness \todo{cite it once the other paper is done} to obtain a limit of least gradient, and observe that the limit is $\alpha$-equivariant by Lemma \ref{L1 convergence preserves pi1}.
-\todo{By a H\"older argument -- move it to the other paper maybe?} we can take the approximate minimizer $u_n$ to be $e^{-n}$-harmonic if we choose.
-This is a standard argument (aside from the equivariance) and we omit the details.
+The space $X$ of $\alpha$-equivariant functions on $\tilde M$ is closed under $L^1_\loc$ limits by Lemma \ref{L1 convergence preserves pi1}, so the existence of a minimizer in $X$ follows from an argument similar to the solution of the Dirichlet problem for least gradient functions \cite[Theorem 1.20]{Giusti77}.
 \end{proof}
 
 \begin{proposition}\label{enough measures in canonical lamination}
@@ -788,28 +872,9 @@ By Theorem \ref{MorganShelan}, $\kappa$ has an indecomposable sublamination $\ze
 By Lemma \ref{extreme points are closed under sublaminations}, possibly after rescaling the transverse measure, $\zeta$ is a representative of $\alpha$.
 Since any tight representative $F$ of $\rho$ calibrates $\kappa$, $F$ also calibrates $\zeta$, so by Proposition \ref{calibrated means measured stretch}, $\zeta$ is a measured stretch sublamination of $\lambda_\rho$.
 \end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Motivation for the canonical lamination}\label{Teichmuller}
-Our motivation for introducing the canonical lamination arose from an analogy with Thurston's approach to Teichm\"uller theory using best Lipschitz maps \cite{Thurston98}.\footnote{None of this discussion shall be used in the sequel, except as motivation, and to state some conjectures in \S\ref{open problems}.} \todo{Reword some of this}
-Given $\gamma \geq 2$, let $\widetilde{\mathscr M}_\gamma$ be the Teichm\"uller space of hyperbolic metrics on the closed surface $S_\gamma$ of genus $\gamma$.
-Given $g, h \in \widetilde{\mathscr M}_\gamma$, let $\Lip(g, h)$ be the Lipschitz constant of a best Lipschitz map $(S_\gamma, g) \to (S_\gamma, h)$; then for a tangent vector $v \in T_g(\widetilde{\mathscr M}_\gamma)$, let $\Comass(v)$ be the partial derivative of $\log \Lip(g, \cdot)$ in the direction $v$.
-This quantity, the \dfn{Thurston asymmetric norm}, is an asymmetric norm on $T_g(\widetilde{\mathscr M}_\gamma)$ obtained by solving an $L^\infty$ variational problem intimately tied to the structure of minimal laminations, so it is tempted to make an analogy between $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$, where both vector spaces are equipped with the norm $\Comass$.
-Two particularly salient pieces of evidence for the analogy are:
-\begin{enumerate}
-\item The unit spheres of the dual spaces of $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$ can both be viewed as spaces of projective measured minimal laminations, whose norm is given by an $L^1$ (actually $BV$) variational problem \cite[Theorem 5.1]{Thurston98}.
-\item In both cases, we can construct a canonical lamination; in Thurston's case, the canonical lamination is given by those geodesics which are maximally stretched by every best Lipschitz map homotopic to $\id_{S_\gamma}$ \cite[\S8]{Thurston98}. See also Conjecture \ref{chain recurrence}.
-\end{enumerate}
-However, one should not take this analogy too seriously.
-A key feature of Thurston's theory is the Birman-Series theorem: the union of the supports of all geodesic laminations on $(S_\gamma, g)$ has Hausdorff dimension $0$.
-As a corollary, for almost every $h \in \widetilde{\mathscr M}_\gamma$, the canonical lamination associated to $(g, h)$ is a closed geodesic \cite[\S10]{Thurston98}.
-The analogue of the Birman-Series theorem is clearly not true in our case, and in fact, if $M$ is a square flat torus, then it is easy to see that every canonical lamination covers all of $M$.
-But see Conjecture \ref{Karen}.
-
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Applications to homology}\label{homology sec}
 \subsection{Convexity of the stable unit ball}\label{convexity sec}
-Let $M$ be a closed manifold of dimension $\leq 7$.
+Let $M$ be a closed oriented manifold of dimension $\leq 7$.
 Auer and Bangert \cite{Auer01} claimed certain results concerning the convex structure of the stable unit ball
 $$B := \{\alpha \in H_{d - 1}(M, \RR): \Mass(\alpha) \leq 1\}.$$
 Here we show that some of these results follow from the structure theory of the canonical lamination.
@@ -826,7 +891,7 @@ Since $S$ is convex, $\partial S$ is topologically a sphere, so $\partial S$ adm
 Then we take the vector-valued integral 
 $$\beta := \int_{\partial S} \alpha \dif \nu(\alpha),$$
 thus $\beta \in S$ by convexity.
-By the Hanh-Banach theorem (Theorem \ref{Federer}), there exists $\rho \in H^{d - 1}(M, \RR)$ such that $\beta \in \rho^*$.
+By the Hanh-Banach theorem (as in (\ref{Federer duality})), there exists $\rho \in H^{d - 1}(M, \RR)$ such that $\beta \in \rho^*$.
 
 We claim that $\partial S \subseteq \rho^*$.
 If not, then by continuity of $\alpha \mapsto \langle \rho, \alpha\rangle$, there is a positive measure set of $\partial S$ on which $\langle \rho, \cdot\rangle < 1$, hence
@@ -834,6 +899,12 @@ $$\Comass(\rho) = \langle \rho, \beta\rangle = \int_{\partial S} \langle \rho, \
 a contradiction.
 Since $\rho^*$ is convex, it follows that $S \subseteq \rho^*$.
 \end{proof}
+
+Recall that the exterior product on the cohomology ring $H^\bullet(M, \RR)$ induces, by Poincar\'e duality, an \dfn{intersection product}
+\begin{align*}
+H_{d - k}(M, \RR) \times H_{d - \ell}(M, \RR) &\to H_{d - k - \ell}(M, \RR) \\
+(\alpha, \beta) &\mapsto \alpha \cdot \beta.
+\end{align*}
 
 \begin{proposition}\label{flats are nonintersecting}
 Let $B$ be the stable unit ball of $H_{d - 1}(M, \RR)$.
@@ -843,9 +914,9 @@ Suppose that $S \subset \partial B$ is a flat, and $\alpha, \beta \in S$. Then $
 Let $\rho$ be the cohomology class dual to $S$ given by (\ref{flats duality}).
 By Proposition \ref{enough measures in canonical lamination}, there exist measured stretch sublaminations $\kappa_\alpha, \kappa_\beta$ of $\lambda_\rho$, of classes $\alpha, \beta$.
 Let $\dif u_\alpha, \dif u_\beta$ be their Ruelle-Sullivan currents, and suppose that $x$ is in the union of their supports.
-By \todo{previous paper}, if $N$ denotes the leaf of $\lambda_\rho$ containing $x$, then for $\sigma = \alpha, \beta$,
+If $N$ denotes the leaf of $\lambda_\rho$ containing $x$, then for $\sigma = \alpha, \beta$,
 $$\dif u_\sigma(x) = \normal_N^\flat(x) \mu_\sigma(x)$$
-where $\mu_\sigma$ is the positive Radon measure induced on $M$ by the transverse measure to $\kappa_\sigma$.
+where $\mu_\sigma$ is the positive Radon measure induced on $M$ by the transverse measure to $\kappa_\sigma$ \cite[Lemma 3.1]{BackusCML}.
 In particular, $\dif u_\alpha|_{\supp \dif u_\beta}$ is a scalar multiple of $\dif u_\beta$, so $\dif u_\alpha \wedge \dif u_\beta = 0$, hence $\alpha \cdot \beta = 0$.
 \end{proof}
 
@@ -865,428 +936,111 @@ If $H_{d - 1}(M, \RR)$ does not have a strictly convex unit ball, then by Propos
 Dually, this means that we can find linearly independent $\theta, \omega \in H^1(M, \RR)$ such that $\theta \otimes \omega \in \ker(\wedge)$.
 \end{proof}
 
-\begin{example}\label{torus convex}
-Suppose that $M$ is homotopic to a torus, so that the cohomology ring $H^\bullet(M, \RR)$ is isomorphic to the exterior algebra of $\RR^d$.
-In particular, the kernel of (\ref{wedge product}) is spanned by symmetric tensors, so by Corollary \ref{condition for strict convexity}, the stable unit ball of $H_{d - 1}(M, \RR)$ is strictly convex.
-\end{example}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Worked examples}
+\subsection{Fiber bundles over \texorpdfstring{$\Sph^1$}{the circle}}
+As a demonstration that in practice it is sometimes possible to explicitly compute the canonical lamination, let us do so when $M$ is a locally warped product with $\Sph^1$.
 
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \subsection{Existence of an optimal best comass form}
-% \todo{exposit this}
-
-% \begin{definition}
-% An \dfn{optimal best comass form} is a best comass form $F$ such that
-% $$\MCL(F) = \bigcap_G \MCL(G)$$
-% where $G$ ranges over best comass forms cohomologous to $F$.
-% \end{definition}
-
-% \begin{proposition}
-% Let $\rho \in H^2(M, \RR)$.
-% Then there exists an optimal best comass representative of $\rho$.
-% \end{proposition}
-% \begin{proof}
-% Let $\lambda := \bigcap_G \MCL(G)$ where $G$ ranges over best comass representatives of $\rho$.
-% For $x \notin \lambda$, we can find a best comass form $F_x$ of class $\rho$ such that $x \notin \MCL(F_x)$.
-% In particular, $U_x := \{L(F_x, \cdot) < L\}$ is an open set which contains $x$, so $(U_x)_{x \notin \lambda}$ is an open cover of $M \setminus \lambda$.
-% Since $M \setminus \lambda$ is $\sigma$-compact, there exists a countable subcover $(U_{x_i})_{i \in I}$, for some countable set $I \subseteq \NN$.
-
-% We then introduce the closed form 
-% $$F := \sum_{i \in I} \alpha_i F_{x_i},$$
-% where $\sum_{i \in I} \alpha_i = 1$.
-% Here the sum converges in the norm topology of $L^\infty$, even if $I$ is infinite.
-% Indeed, if $I_N := I \cap \{1, \dots, N\}$, then the partial sums $\sum_{i \in I_N} \alpha_i F_{x_i}$ satisfy the tail bound
-% $$\sum_{i \in I \setminus I_N} \alpha_i \|F_{x_i}\|_{L^\infty} \leq L \sum_{i \in I \setminus I_N} \alpha_i \to 0$$
-% since $(\alpha_i) \in \ell^1$, which implies the convergence.
-% This convergence implies (by Proposition \ref{crandall}) that $[F] = \rho$, so $L(F) \geq L$.
-% On the other hand, 
-% $$L(F) \leq \sum_{i \in I} \alpha_i L(F_{x_i}) \leq L \sum_{i \in I} \alpha_i = L.$$
-% It follows that $L(F) = L$.
-% In particular, $F$ has best comass and $\MCL(F) \supseteq \lambda$.
-
-% To complete the proof, we show that $\MCL(F) \subseteq \lambda$.
-% Let $x \notin \lambda$, and let $j$ satisfy $U_{x_j} \ni x$.
-% Then by Proposition \ref{crandall},
-% $$L(F, x) = \lim_{r \to 0} L_{B_r(x)}(F) \leq \lim_{r \to 0} \sum_{i \in I} \alpha_i L_{B_r(x)}(F_{x_i}).$$
-% The summands are dominated by the $\ell^1$ sequence $(L\alpha_i)$, so by dominated convergence, 
-% $$\lim_{r \to 0} \sum_{i \in I} \alpha_i L_{B_r(x)}(F_{x_i}) = \sum_{i \in I} \lim_{r \to 0} \alpha_i L_{B_r(x)}(F_{x_i}) = \sum_{i \in I} \alpha_i L(F_{x_i}, x).$$
-% By assumption on $j$, $L(F_{x_j}, x) < L$, and besides $L(F_{x_i}, x) \leq L$ for any $i$.
-% So 
-% $$L(F, x) \leq \sum_{i \in I} \alpha_i L(F_{x_i}, x) < L$$
-% and we conclude $x \notin \MCL(F)$.
-% \end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Rational points in homology}
-\begin{definition}
-A homology class $\alpha \in H_{d - 1}(M, \RR)$ has \dfn{rational direction} if there exists $c > 0$ such that $c\alpha \in H_{d - 1}(M, \ZZ)$.
-\end{definition}
-
-If $\alpha \in H_{d - 1}(M, \ZZ)$, then by Poincar\'e duality and the Hurcewiz theorem, we may identify $\alpha$ with an integral representation
-$$\alpha: \pi_1(M) \to \ZZ,$$
-or equivalently (since $\Sph^1$ is a $K(\ZZ, 1)$ space) a homotopy class of maps $M \to \Sph^1$.
-Thus it is meaningful to ask if $\tilde u: \tilde M \to \RR$ is $\alpha$-equivariant, and the data of an $\alpha$-equivariant function on $\tilde M$ is equivalent to the data of a map $u: M \to \Sph^1$ of homotopy class $\alpha$ (up to addition of an constant).
-We record a frequently useful special case of the Galois correspondence for covering spaces:
-
-\begin{lemma}\label{Galois}
-Let $M$ be a closed manifold and let $\alpha \in H_{d - 1}(M, \ZZ)$ be nonzero.
-Then there exists a covering space $p: \hat M \to M$ of Galois group $\Gal(\hat M, M) \cong \ZZ$, such that for any map $u: M \to \Sph^1$ of homotopy class $\alpha$, the lift of $u$ is topologically trivial:
-$$\begin{tikzcd}
-\hat M \arrow[r, "\hat u"] \arrow[d, "p"] & \RR \arrow[d] \\
-M \arrow[r, "u"] & \Sph^1
-\end{tikzcd}$$
-\end{lemma}
-\begin{proof}
-We view $\alpha$ as an integral representation.
-Since $\ker \alpha$ fits into a short exact sequence 
-$$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0,$$
-the result follows from the Galois correspondence for covering spaces.
-\end{proof}
+Let $(N, h)$ be a closed Riemannian manifold of dimension $d - 1$, and assume that we have an oriented fiber bundle $N_x \to M \to \Sph^1_\theta$ with a warped product metric 
+$$g = \dif \theta^2 + f(\theta)^2 h.$$
+Let $\theta_0$ be a minimizer of $f$, and let $F := \sqrt{\det h} \dif x$ denote the area form on $(N, h)$.
+By rescaling $h$ and $f$, we may assume that $f(\theta_0) = 1$ and $\vol(N, h) = 1$.
+In particular, the fiber $N_\theta$ of $\theta$ has area
+$$\Mass(N_\theta) = \int_N f(\theta)^{d - 1} F = f(\theta)^{d - 1}.$$
+Since $h$ is a function of $x$ but not $\theta$, $\dif F = 0$.
+Moreover,
+\begin{equation}\label{fiber bundle sample comass}
+|F|(\theta, x) = \frac{1}{f(\theta)^{d - 1}}
+\end{equation}
+which attains its maximum $1$ on $N_{\theta_0}$, so $F$ is a calibration, and $N_{\theta_0}$ is $F$-calibrated.
+In particular, the cohomology class $\rho := [F]$ has costable norm $1$.
 
 \begin{proposition}
-Let $M$ be a closed manifold, let $\alpha \in H_{d - 1}(M, \RR)$ have rational direction, $\alpha \neq 0$, and let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$.
-Then every leaf of $\lambda_u$ is a closed hypersurface.
+With notation as above, $F$ is tight, the leaves of $\lambda_\rho$ are exactly the fibers $N_\theta$ such that $f(\theta) = 1$, and $\rho^*$ is the convex hull of homology classes $[N_\theta]$ such that $f(\theta) = 1$.
 \end{proposition}
 \begin{proof}
-Rescaling $u$ by a constant does not affect whether the leaves of $\lambda_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
-We view $u$ as a map $M \to \Sph^1$ of homotopy class $\alpha$.\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
-Let $\hat u: \hat M \to \RR$ and $p: \hat M \to M$ be as in Lemma \ref{Galois}.
-Then it makes sense to take superlevel sets $\{\hat u > y\}$.
-Since $\Gal(\hat M, M)$ is a cyclic group, it is generated by a single element $h$ with the mapping property
-$$h: \partial \{\hat u > y\} \to \partial \{\hat u > y + D\}$$
-for each $y \in \RR$.
-In particular, $\hat u$ does not have a global minimum or maximum.
-Since $\hat u$ does not have a global minimum or maximum on the complete manifold $\hat M$, by the maximum principle for functions of least gradient \todo{cite paper 2}, $\hat u$ does not have any local minimum or maximum.
-Therefore \todo{cite paper 2}, every leaf of $\lambda_{\hat u}$ is a component of $\partial \{u > y\}$ for some $y \in \RR$.
+We first compute
+$$\star F = \frac{\dif \theta}{f(\theta)^{d - 1}}$$
+and combine this with (\ref{fiber bundle sample comass}) to get
+$$\dif(|F|^{p - 2} \star F) = \dif\left(\frac{\dif \theta}{f(\theta)^{(p - 1)(d - 1)}}\right) = 0$$
+so $F$ is $p$-tight for every $1 < p < \infty$ and hence is tight.
+Since $F$ is the area form for a complete hypersurface $L \subset M$ iff $L = N_\theta$ for some $\theta$ such that $f(\theta) = 1$, we deduce that $\lambda_\rho$ is a sublamination of the lamination $\kappa$ whose leaf set is $\{N_\theta: f(\theta) = 1\}$.
+On the other hand, $\kappa$ admits a transverse probability measure $\mu$, because the set $\{f = 1\}$ is a closed subset of $\Sph^1$ and therefore is the support of some Borel probability measure.
+So $(\kappa, \mu)$ is a measured stretch lamination for $\rho$, and therefore $\kappa$ is a sublamination of $\lambda_\rho$.
+Therefore $\lambda_\rho = \kappa$.
 
-Now let $N$ be a (connected) leaf of $\lambda$, and let $\hat N := p^{-1}(N)$.
-Then each component of $\hat N$ is a leaf of $\lambda_{\hat u}$, and hence a component of $\partial \{u > y\}$ for some $y \in \RR$.
-Moreover, the deck transformation $h$ has the mapping property
-$$h: \hat N \to \hat N.$$
-So if $\hat N$ meets $\partial \{u > y\}$, then for every $n \in \ZZ$, a component $K_n$ of $\hat N$ is a component of $\partial \{\hat u > y + nD\}$.
-Since $h$ acts on $\lambda_{\hat u}$ by sending $\partial \{\hat u > y\}$ to $\partial \{\hat u > y + D\}$, $h$ acts on $\hat N$ by sending $K_n$ to $K_{n + D}$.
-In particular, $\hat N \cong N \times \ZZ$ and $p: \hat N \to N$ is projection onto the first factor. 
-So $N \cong K_0$, and $K_0$ is a closed hypersurface in $\hat M$ by the regularity theorem \todo{cite paper 2}.
+We next compute $\rho^*$.
+Let $\kappa$ be a measured stretch lamination for $\rho$; then every leaf of $\kappa$ is $N_\theta$ for some $\theta$ such that $f(\theta) = 1$; for such a $\theta$, the stable norm is $\Mass([N_\theta]) = 1$.
+Therefore $[\kappa]$ is a convex combination of the classes $[N_\theta]$.
+Since $N_\theta$ is itself a measured stretch lamination for $\rho$ if $f(\theta) = 1$, $\rho^*$ is the convex hull of $\{[N_\theta]: f(\theta) = 1\}$.
+In particular, if the stable unit ball is strictly convex (so $\rho^*$ is singleton), any two fibers $N_\theta$ with $f(\theta) = 1$ must be homologous.
 \end{proof}
 
-\begin{example}
-Suppose that $M = \Sph^1_x \times \Sph^1_y$.
-Let $u(x, y) = x$, so $\lambda_u$ is itself topologically nontrivial (in the $x$ direction) and its leaves are also topologically nontrivial (in the $y$ direction).
-The covering space $\hat M$ is $\RR_x \times \Sph_y^1$, the point is that we unwound $\lambda_u$ without messing with its leaves.
-\end{example}
+%%%%%%%%%%%%%%
+\subsection{Generic hyperbolic surfaces}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \subsection{\texorpdfstring{$\infty$-harmonic functions} with many duals}
-% We now apply the above theory, and a theorem of Massart \cite{Massart1997StableNO}, to disprove a conjecture of Daskalopolous and Uhlenbeck \cite[Conjecture 9.3]{daskalopoulos2020transverse}.
-% To state the conjecture, recall that if $F$ is a tight $1$-form on a closed surface $M$, then its primitive $v: \tilde M \to \RR$ is an $\infty$-harmonic function.
-% The conjecture is that the dual of an equivariant $\infty$-harmonic function is unique; we shall show that not even the dual cohomology class is unique.
+%%%%%%%%%%%%%%
+\subsection{A canonical lamination with nonmeasurable leaves}
 
-% \begin{proposition}
-% Let $M$ be a closed Riemannian surface of genus $\geq 2$.
-% Then there exists a tight $1$-form $\dif v$ on $M$, and $1$-harmonic duals $u_1, u_2$, such that $\dif u_1, \dif u_2$ are not homologous.
-% \end{proposition}
-% \begin{proof}
-% 	Let $\alpha \in H_1(M, \RR)$ have rational direction, and lie on the stable unit sphere: $\Mass(\alpha) = 1$.
-% 	By Massart's theorem \cite[Theorem 7]{Massart1997StableNO}, there exists $\rho \in H^1(M, \RR)$ with $\Comass(\rho) = 1$ and $\alpha \in \rho^*$, and $\beta \in \rho^*$ with $\alpha \neq \beta$.
-% 	Let $u_1, u_2$ be the functions of least gradient representing $\alpha, \beta$ furnished by Lemma \ref{existence for least gradient},\footnote{Daskalopolous and Uhlenbeck require their dual functions of least gradient to admit $p$-approximations, but as we already noted, $u_j$ can be chosen to admit $p$-approximations.} and note that if $\dif v$ is a tight representative of $\rho$ as constructed by \todo{cite it} then $u_1, u_2$ are dual functions of least gradient to $\dif v$.
-% \end{proof}
+%%%%%%%%%%%%%
+\subsection{The injectivity radius of \texorpdfstring{$\Hyp^3/\Gamma$}{a closed hyperbolic threefold}}
 
+%%%%%%%%%%%%
+\subsection{The stable norm on a homotopy torus}
+The following example is due to Auer and Bangert \cite{Auer01} but we include it for completeness.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{proposition}\label{torus convex}
+Suppose that $M$ is homotopic to a torus.
+Then the stable unit ball of $H_{d - 1}(M, \RR)$ is strictly convex.
+\end{proposition}
+\begin{proof}
+The cohomology ring $H^\bullet(M, \RR)$ is isomorphic to the exterior algebra of $\RR^d$.
+In particular, the kernel of (\ref{wedge product}) is spanned by symmetric tensors, so by Corollary \ref{condition for strict convexity}, the stable unit ball of $H_{d - 1}(M, \RR)$ is strictly convex.
+\end{proof}
 
 
-% \section{Lattice MFMC}
-% \begin{definition}
-% By a \dfn{closed continuous flow network} we mean a pair $(M, \alpha)$ where $M$ is a closed Riemannian manifold, and $\alpha \in H_{d - 1}(M, \RR)$ is nonzero.
-% By a \dfn{solution for the continuous MF/MC problem} with data $(M, \alpha)$ we mean a pair $(F, \lambda)$ where $F$ is a calibration on $M$ and $\lambda$ is a measured oriented $F$-calibrated lamination which represents $\alpha$.
-% \end{definition}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Concluding remarks}\label{open problems}
+\subsection{Generalizations}
+In this paper I have only dealt with closed Riemannian manifolds $M$ of dimension $d \leq 7$, and submanifolds of codimension $c := 1$.
+In the prequel paper \cite{BackusCML} I have only studied the interior behavior of functions of least gradient, but moreover, the statements of the main theorems would be significantly more involved in a more general setting.
 
-% \begin{definition}
-% By a \dfn{discrete flow network} we mean a triple $(G, s, t)$ where $G$ is a directed graph and $s, t$ are distinct vertices of $G$.
-% By a \dfn{solution for the discrete MF/MC problem} with data $(G, s, t)$ we mean a pair $(f, c)$ where $f$ is a divergence-free $(s, t)$-flow, $c$ is an $(s, t)$-cut, and 
-% $$\min_{c' \in \mathrm{Cuts}(\mathcal G_h)} \sum_{e \in c'} f(e) = \sum_{e \in c} f(e) = \max_{f' \in \mathrm{Flows}(\mathcal G_h)} \sum_{e \in c} f'(e).$$
-% \end{definition}
+We cannot easily weaken the assumption $d \leq 7$, since the double-napped Simons cone defines a function of least gradient on $\RR^8$ which does not admit a lamination structure \cite{BackusCML}.
+Similarly, if the codimension $c \geq 2$, then Liu recently constructed homologically minimizing submanifolds $N$ which do not admit calibrations, even if $d = 3$ or $M = \CC \PP^2$ with a perturbation of the Fubini-Study metric \cite{liu2023homologically}.
+Liu also showed that if $d \geq 8$ and $c = 1$, then there exist smooth homologically minimizing hypersurfaces with no smooth calibration; the regularity of best comass calibrations remains open if $d \leq 7$.
 
-% \todo{Why are we doing this?}
+After replacing Poincar\'e duality with Lefschetz duality and imposing boundary conditions, I expect that the results of this paper go through if $M$ is a compact manifold with strictly mean-convex boundary $\partial M$.
+Under that assumption, a version of the max-flow min-cut theorem has been claimed in the physics literature \cite[Appendix A]{Freedman_2016}.
+To see that convexity is necessary, let $\theta$ be the latitude on $\Sph^2$, and let $M := \{|\theta| \leq \pi/4\}$; then any function of least gradient which extends the boundary data 
+$$h(\theta, \phi) := \begin{cases} 1, \text{ if } \theta = \pi/4 \\ 0, \text{ if } \theta = -\pi/4\end{cases}$$
+is constant on the interior, hence does not induce a lamination.
 
-% \begin{theorem}[discrete MF/MC theorem]\label{existence of discrete MFMC}
-% Let $(G, s, t)$ be a discrete flow network.
-% Then there exists a solution $(f, c)$ of the discrete MF/MC problem with data $(G, s, t)$.
-% \end{theorem}
+By replacing the boundary components of $M = \{|\theta| \leq \pi/4\}$ by cusps, we see that if $M$ has infinite ends, then it is possible for $H_{d - 1}(M, \RR) \neq 0$ but the stable seminorm to be identically $0$.
+Freedman and Headrick conjectured that a max-flow min-cut theorem should hold for a manifold with infinite ends $M$ if there exist compact manifolds $M_i$ with mean-convex boundary, such that $(M_i)$ is a compact exhaustion of $M$ \cite[Appendix A]{Freedman_2016}.
+This assumption clearly rules out the existence of cusps.
 
-% %%%%%%%%%%%%%%%%%
-% \subsection{Reduction for manifolds with boundary}
-% \begin{definition}
-% Let $\overline M = M \cup \partial M$ be a compact Riemannian manifold-with-boundary.
-% \begin{enumerate}
-% \item We say that $\overline M$ is \dfn{weakly convex} if the mean curvature $H_{\partial M} \geq 0$.
-% \item Suppose that $\partial M$ has two connected components $S, T$. We call $(\overline M, S, T)$ a \dfn{continuous flow network with boundary} if $S, T$ are homologous in $H_{d - 1}(\overline M, \RR)$.
-% \item By a \dfn{solution for the continuous MF/MC problem} with data $(\overline M, S, T)$ we mean a pair $(F, N)$ where $F$ is a calibration on $M$ and $N \subset M$ is a closed $F$-calibrated hypersurface which is homologous to $S$ in $H_{d - 1}(\overline M, \RR)$.
-% \end{enumerate}
-% \end{definition}
+However, even assuming the existence of a compact exhaustion with mean-convex boundaries, I expect that extension of this paper to noncompact manifolds to be quite challenging.
+If $H^{d - 1}(M, \RR)$ is infinite-dimensional, then its completion with respect to the costable norm is unlikely to be reflexive, so arguments involving the Hanh-Banach theorem will become precarious.
+Moreover, already in the case of $\RR^d$, the behavior of functions of least gradient near infinity is rather involved \cite[\S4.4]{górny2021}.
 
-% \begin{proposition}[continuous MF/MC theorem with boundary]\label{existence of continuous MFMC with boundary}
-% Let $(\overline M, S, T)$ be a continuous flow network with boundary.
-% If $d \leq 7$ and $\overline M$ is weakly convex, then there is a solution $(F, N)$ to the continuous MF/MC problem with data $(\overline M, S, T)$.
-% \end{proposition}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Motivation for the canonical lamination}\label{Teichmuller}
+Our motivation for introducing the canonical lamination arose from an analogy with Thurston's approach to Teichm\"uller theory using best Lipschitz maps \cite{Thurston98}.
+Given $\gamma \geq 2$, let $\widetilde{\mathscr M}_\gamma$ be the Teichm\"uller space of hyperbolic metrics on the closed surface $S_\gamma$ of genus $\gamma$.
+Given $g, h \in \widetilde{\mathscr M}_\gamma$, let $\Lip(g, h)$ be the Lipschitz constant of a best Lipschitz map homotopic to
+$$\id: (S_\gamma, g) \to (S_\gamma, h).$$ 
+For a tangent vector $v \in T_g(\widetilde{\mathscr M}_\gamma)$, let $\Comass(v)$ be the partial derivative of $\log \Lip(g, \cdot)$ in the direction $v$.
+This quantity, the \dfn{Thurston asymmetric norm}, is an asymmetric norm on $T_g(\widetilde{\mathscr M}_\gamma)$ obtained by solving an $L^\infty$ variational problem intimately tied to the structure of minimal laminations, so it is tempted to make an analogy between $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$, where both vector spaces are equipped with the norm $\Comass$.
+Two particularly salient pieces of evidence for the analogy are:
+\begin{enumerate}
+\item The unit spheres of the dual spaces of $T_g(\widetilde{\mathscr M}_\gamma)$ and $H^{d - 1}(M, \RR)$ can both be viewed as spaces of projective measured minimal laminations, whose norm is given by an $L^1$ (actually $BV$) variational problem \cite[Theorem 5.1]{Thurston98}.
+\item In both cases, we can construct a canonical lamination. In Thurston's case, the canonical lamination is given by those geodesics which are maximally stretched by every best Lipschitz map homotopic to $\id_{S_\gamma}$ \cite[\S8]{Thurston98}. See also Conjecture \ref{chain recurrence}.
+\end{enumerate}
+However, one should not take this analogy too seriously.
+A key feature of Thurston's theory is the Birman-Series theorem: the union of the supports of all geodesic laminations on $(S_\gamma, g)$ has Hausdorff dimension $0$.
+As a corollary, for almost every $h \in \widetilde{\mathscr M}_\gamma$, the canonical lamination associated to $(g, h)$ is a closed geodesic \cite[\S10]{Thurston98}.
+The analogue of the Birman-Series theorem is clearly not true in our case, and in fact, if $M$ is a square flat torus, then it is easy to see that every canonical lamination covers all of $M$.
 
-% % We use the discretization proposed by Freedman and Headrick \cite[Appendix A.6]{Freedman_2016} for this purpose.
-% % They sketch the idea for flows but not for cuts, and they don't prove it works.
-
-% % Let $(\overline M, S, T)$ be a continuous flow network with boundary.
-% % Let $h_* := \min(\|\Riem_M\|_{C^0}^{-2}, \inj(M))/10$.
-% % For each $0 < h \leq h_*$, choose a maximal $h^2/2$-separated set $V_h' \subset M$ (so $\{B(x, h^2): x \in V_h\}$ is an open cover of $M$), and let
-% % $$E_h' := \left\{(x, y) \in V_h \times V_h: \frac{h}{2} \leq \dist(x, y) < h\right\}.$$
-% % We add two new members $s, t$ to $V_h'$ to obtain $V_h$, and new members $(s, x)$ (resp $(x, t)$) to $E_h'$ to obtain $E_h$ if $B(x, h)$ intersects $S$ (resp $T$).
-% % Then $G_h := (V_h, E_h)$ is a directed graph, so $(G_h, s, t)$ is a discrete flow network.
-
-% % Given an $(s, t)$-cut $c \subseteq E_h$, which is the set of edges out of some vertex set $W \subseteq V_h$, introduce the open set
-% % $$U_c := \bigcup \{B(x, h): x \in W \setminus \{s\}\}.$$
-% % If $U_c$ is empty, then $W = \{s\}$ and we set $N_h := S$.
-% % Otherwise, $\partial U_c$ is piecewise smooth and contains the cycle $S$, so if we write $\partial U_c = N_c - S$, then $N_c$ is a Lipschitz cycle homologous to $S$.
-
-% % \begin{lemma}
-% % Let $c \subseteq E_h$ be an $(s, t)$-cut. Then
-% % $$\Mass(N_c) = (h^{d - 1} + O(h^d)) \card c.$$
-% % \end{lemma}
-% % \begin{proof}
-% % For each $(x, y) \in c$, consider the sphere $\partial B(x, h)$. 
-% % \end{proof}
-
-% % Conversely, if $N \subset M$ is a Lipschitz cycle homologous to $S$, choose an open set $U \subseteq M$ with $\partial U = N - S$.
-% % Let $W_N$ be the union of $\{s\}$ with the set of vertices of $G_h$ in $U$, and let $c_N$ be the set of edges out of $W_N$.
-% % Then $c_N$ is an $(s, t)$-cut.
-
-% % \begin{lemma}
-% % For any Lipschitz cycle $N \subset M$ homologous to $S$, $N_{c_N}$ is Lipschitz close to $N$ if $0 < h \ll h_*$.
-% % In particular,
-% % $$\Mass(N_{c_N}) = (1 + O(h^{d - 1})) \Mass(N).$$
-% % \end{lemma}
-% % \begin{proof}
-
-% % \end{proof}
-
-% % Choosing $N$ to be a hypersurface with 
-% % $$\Mass(N) \leq (1 + h^{d - 1}) \inf_{N' \sim S} \Mass(N'),$$
-% % where $\sim$ means ``homologous,'' we see that for $h$ arbitrarily small, the 
-
-% % % Moreover, there exists some $W' \subseteq W$ and relatively open $E(x) \subseteq \partial B(x, h^2)$, $x \in W'$, such that 
-% % % $$N_c' = \bigcup_{x \in W'} E(x).$$
-% % % Let $F(x) \subseteq \overline{B(x, h^2)}$ be the area-minimizing hypersurface in $\overline{B(x, h^2)}$ with $\partial F(x) = \partial E(x)$, and let
-% % % $$N_c := \bigcup_{x \in W'} F(x).$$
-% % % Then $N_c$ is homologous to $N_c'$, \todo{and is piecewise smooth}, so is a Lipschitz cycle homologous to $S$.
-
-
-% % \todo{Introduce flows}
-
-% % \todo{This doesn't seem to work just use FEM}
-
-
-% \subsection{Discretization by finite elements}
-% Though there are more direct ways to prove Proposition \ref{existence of continuous MFMC with boundary}, we prove it by reducing to the \emph{discrete} MF/MC problem using the finite element method.
-
-% Let $0 < h \leq 1$.
-% By a \dfn{triangulation at scale $h$} of a manifold $L$ we mean a triangulation of $L$ into Lipschitz simplices $\delta$, such that for any simplex $\delta$, $\diam \delta \leq h$.
-% Since any smooth manifold admits a triangulation, by iteratively taking barycentric subdivision we may find a triangulation at scale $h$ for any $h$.
-% Moreover, if $N \subset M$ is a hypersurface, and we fix a triangulation $\mathcal T$ of scale $h$ of $N$, then we can extend $\mathcal T$ to a triangulation of scale $\mathcal T'$ of $M$ \todo{cite Munkres}
-% % https://mathoverflow.net/questions/342503/extending-a-triangulation-of-the-boundary-of-m-times-i/342512#342512
-% and then, by iteratively taking barycentric subdivisions in $M$, we may assume that $\mathcal T'$ is of scale $h$.
-
-% If $\mathcal T$ is a triangulation of $M$, we introduce the discrete flow network $(G, s, t)$ associated to $\mathcal T$, as follows.
-% Let the vertices of $G$ be the $d$-simplices of $\mathcal T$, along with special vertices $s$ and $t$ corresponding to $S, T$.
-% If two $d$-simplices $\delta, \delta'$ have a common $d - 1$-face $\gamma$, let there be edges $(\delta, \delta')$ and $(\delta', \delta)$.
-% Furthermore, if $\delta$ is a $d$-simplex with a $d - 1$-face $\gamma \subseteq S$, let there be edges $(s, \delta)$ and $(\delta, s)$; and similarly for $d$-vertices with faces in $T$.
-% The weight of an edge associated to a $d - 1$-face $\gamma$ shall be $\Mass(\gamma)$.
-
-% If $c \subseteq \mathrm{Edges}(G)$, we obtain a simplicial $d - 1$-chain $N$ (for the simplicial structure $\mathcal T$) by taking the sum of the $d - 1$-faces associated to the edges in $c$; we call $N$ the chain \dfn{associated} to $c$.
-% This is mainly interesting when $c$ is an $(s, t)$-cut, for the following reason:
-
-% \begin{lemma}\label{cuts induce cycles}
-% If $(G, s, t)$ is a discrete flow network arising from a triangulation of $M$, $c$ is an $(s, t)$-cut in $G$, and $N$ is the chain associated to $c$, then $N$ is a cycle, homologous to $S$.
-% \end{lemma}
-% \begin{proof}
-% Since $c$ is a $(s, t)$-cut, there exists a partition of the vertex set $V_s(G) \sqcup V_t(G)$ where $s \in V_s$, $t \in V_t$, and any edge from $V_s$ to $V_t$ passes through $c$.
-% Let $U \subset \overline M$ be the interior of the union of the simplices in $V_s$.
-% Then $U$ is bounded by $N - S$, so $N - S$ is exact.
-% Since $S$ is a cycle, so is $N$.
-% \end{proof}
-
-% Any $f: \mathrm{Edges}(G) \to \RR$ induces a simplicial $d - 1$-cochain for the simplicial structure $\mathcal T$, which we also denote by $f$: if $e$ is a $d - 1$-simplex in $\mathcal T$, associated to an edge which we also denote $e$, we define $\langle f, e\rangle := f(e)$.
-% By the characterization of Whitney forms \cite{dodziuk2022characterization}, associated to the simplicial cochain $f$ there exists a unique $d - 1$-form $F$ such that for each $d$-simplex $\iota_\sigma: \sigma \to M$ of $\mathcal T$, $\iota^*_\sigma F$ has affine coefficients, for each $d - 1$-simplex $\iota_e: e \to M$ of $\mathcal T$, $\iota_e^* F$ has constant coefficients, and for each such $e$,
-% $$\int_e F = f(e).$$
-% The form $F$ is called a \dfn{Whitney form} associated to $f$. \todo{We need to construct Whitney forms adapted to a Riemannian metric to get the $L^\infty$ property and for ``constant coefficients'' to be well-defined}
-
-% \begin{lemma}\label{flows induce calibrations}
-% If $(G, s, t)$ is a discrete flow network arising from a triangulation $\mathcal T$ at scale $h$ of $M$, $f$ is an $(s, t)$-flow on $G$, and $F$ is the Whitney form associated to $f$, then $\dif F = 0$ on $M$ and $\|F\|_{L^\infty} \leq 1 + O(h)$.
-% \end{lemma}
-% \begin{proof}
-% The cochain $f$ is actually a cocycle: if $\delta$ is a $d$-simplex, and $O(\delta), I(\delta)$ denote the set of edges out of, and into, the vertex $\delta$, then
-% $$\langle \dif f, \delta\rangle = \langle f, \partial \delta\rangle = \sum_{e \in O(\delta)} f(e) - \sum_{e \in I(\delta)} f(e) = 0$$
-% since $f$ is a flow.
-% Therefore $\dif F = 0$ \cite[Proposition 4.6]{Lohi21}. \todo{Estimate $\Comass(F)$}
-% \end{proof}
-
-% Proposition \ref{existence of continuous MFMC with boundary} follows from Theorem \ref{existence of discrete MFMC} and the following proposition:
-
-% \begin{proposition}\label{discrete implies continuous MFMC}
-% Let $(\overline M, S, T)$ be a continuous flow network with boundary.
-% If $d \leq 7$ and $\overline M$ is weakly convex, then for each $0 < h \ll 1$, there exist triangulations $\mathcal T_h$ of $M$ at scale $h$ with the following property:
-
-% Let $(G_h, s_h, t_h)$ be the discrete flow network induced by $\mathcal T_h$, and let $(f_h, c_h)$ be a solution of the discrete MF/MC problem with data $(G_h, s_h, t_h)$.
-% Let $F_h$ be the Whitney form associated to $f_h$, and let $N_h$ be the simplicial $d - 1$-chain with simplices given by $c_h$.
-% Then there is a solution $(F, N)$ to the continuous MF/MC problem with data $(\overline M, S, T)$ such that, after taking a subsequence as $h \to 0$, $F_h \to F$ weakly in $L^p$ for any $1 \leq p < \infty$, and $N_h \to N$ in the flat topology on currents.
-% \end{proposition}
-
-% Let $\alpha$ be the homology class of $S$ (hence of $T$) in $\overline M$.
-% We say that a closed hypersurface $N$ representing $\alpha$ is \dfn{$\varepsilon$-minimizing} if 
-% $$\Mass(N) \leq (1 + \varepsilon) \Mass(\alpha).$$
-
-% \begin{lemma}\label{almost minimizers avoid boundary}
-% Suppose that $S, T$ are not homologically minimizing hypersurfaces in $\alpha$.
-% Then there exists a tubular neighborhood $E \supset \partial M$ such that for any $0 < \varepsilon \ll 1$, there is a $\varepsilon$-minimizing hypersurface in $\alpha$ which does not meet $E$.
-% \end{lemma}
-% \todo{Prove it, if this is enough}
-
-% \begin{proof}[Proof of Proposition \ref{discrete implies continuous MFMC}]
-% We first construct triangulation in which we shall solve the discrete MF/MC problem.
-% In particular, for any $\varepsilon > 0$, there exists a smooth $\varepsilon$-minimizing hypersurface.
-% Fix a scale $0 < h \ll 1$.
-% By Lemma \ref{almost minimizers avoid boundary}, there is a $h^{d - 1}$-minimizing hypersurface $N_h$ which avoids an $h$-independent tubular neighborhood $F$ of $\partial M$.
-% Choose a triangulation $\mathcal T_h$ of $M$ at scale $h$ which contains a triangulation of $N_h'$.
-% \todo{Refinement of $\mathcal T_h$}
-% Let $(G_h, s, t)$ be the induced flow network.
-
-% Since $N_h' - S$ bounds a region $U$ which is a simplicial subcomplex of $(\overline M, \mathcal T_h)$ and similarly for $T - N_h'$ and a region $V$, the set of $d - 1$-simplices in $N_h'$ is an $(s, t)$-cut $c_h'$ in $G_h$, namely the cut which partitions $G_h$ into the $d$-simplicies in $U$ and the $d$-simplices in $V$.
-% By Lemma \ref{cuts induce cycles}, there exists a Lipschitz cycle $N_h \subset M$ induced by $c_h$; moreover,
-% $$\Mass(N_h) = \Mass(c_h) \leq \Mass(c_h') = \Mass(N_h') \leq (1 + h^{d - 1}) \Mass(\alpha).$$
-% The flow $f_h$ induces a Whitney $d - 1$-form $F_h$ on $M$ such that
-% $$\int_{N_h} F_h = \sum_{e \in c_h} f(e) = \sum_{e \in c_h} \Mass(e) = \Mass(N_h)$$
-% (where $\int_{N_h} F_h$ is well-defined because $N_h$ misses $E$)
-% and by Lemma \ref{flows induce calibrations}, $\dif F_h = 0$ and $\|F_h\|_{L^\infty} \leq 1 + O(h)$.
-% By \todo{compactness of integral currents}, $N_h$ converges along a subsequence to some integral current $N$ which is homologous to $S$, misses $E$, and is mass-minimizing:
-% $$\Mass(\alpha) \leq \Mass(N) \leq \limsup_{h \to 0} \Mass(N_h) \leq \Mass(\alpha).$$
-% By \todo{compactness of $L^p$}, $F_h$ converges along a further subsequence to some $F$ with $\|F\|_{L^\infty} \leq 1$.
-% Since $N$ misses $E$, $\int_N F$ is well-defined and by \todo{convergence of integral currents}, $\int_N F = \Mass(N)$.
-% Therefore $N$ is $F$-calibrated. Therefore \todo{the leaves of $N$ are disjoint}, so $N$ is an $F$-calibrated chain, as desired.
-% \end{proof}
-
-
-
-% %%%%%%%%%%%%%%
-% \subsection{Reduction to integral classes}
-% \begin{lemma}\label{reduction to rational direction}
-% Let $(\alpha_n)$ be a sequence of classes of rational direction which converge to $\alpha$.
-% Let $(F_n, \lambda_n)$ be a sequence of solutions to the continuous MF/MC problem with data $(M, \alpha_n)$.
-% Then there exists a solution $(F, \lambda)$ to the problem with data $(M, \alpha)$ such that, along a subsequence:
-% \begin{enumerate}
-% \item $(F_n)$ converges in $L^p$, for any $1 \leq p < \infty$, to $F$.
-% \item $(\lambda_n)$ converges in the weak topology of measures to $\lambda$.
-% \end{enumerate}
-% \end{lemma}
-% \begin{proof}
-% The mass and comass of $\lambda_n, F_n$ are bounded, so we can take limits in the measure topology and $L^p$.
-% Convergence  implies convergence in homology which guarantees that the sequences converge.
-% \todo{Details}
-% \end{proof}
-
-% Given a measured lamination $\lambda$, and $c > 0$, let $c\lambda$ denote $\lambda$ with its transverse measure rescaled by $c$.
-% It is clear that if $(M, \alpha)$ is data, with a solution $(F, \lambda)$, then for any $c > 0$, $(F, c\lambda)$ is a solution of the continuous MF/MC problem with data $(M, c\alpha)$.
-% By Lemma \ref{reduction to rational direction}, for the purposes of approximating a solution to the continuous MF/MC problem we may assume that $\alpha$ has rational direction.
-% By the scale-invariance described above, then, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$, and henceforth we do.
-
-% %%%%%%%%%%%%%%%%
-% \subsection{Reduction to cut covering spaces}
-% Let $p: \hat M \to M$ be the covering space attained from Lemma \ref{Galois}.
-% Since $\Gal(\hat M, M)$ is infinite, $\hat M$ is not compact, but each fundamental domain $\hat M_0 \subset \hat M$ is compact.
-
-% \begin{lemma}
-% The fundamental domain $\hat M_0$ has exactly two boundary components, $\partial \hat M_0 = S_0 \sqcup T_0$, each of which is a cycle.
-% \end{lemma}
-% \begin{proof}
-% \todo{Topology is hard}
-% \end{proof}
-
-% Let $h: \hat M \to \hat M$ be a generator of the cyclic group $\Gal(\hat M, M)$.
-% Then $\hat M$ consists of biinfinitely many copies $h^n_*(\hat M_0)$, $n \in \ZZ$, of $\hat M_0$, which are glued along their boundary components: we can choose the decomposition $\partial \hat M_0 = S_0 \sqcup T_0$ so that for each $n \in \ZZ$,
-% $$h^n_*(T_0) = h^{n + 1}_*(S_0).$$
-% Let 
-% $$\hat M_n := \bigcup_{k=-n}^n h^n_*(\hat M_0),$$
-% so that $\hat M_n$ is bounded by $S_n := h^{-n}_*(S_0)$ and $T_n := h^n_*(T_0)$.
-% We call $\hat M_n$ a \dfn{cut covering space} of $M$, since it is obtained by cutting off the covering space $\hat M$ to have only finitely many fundamental domains of $M$.
-
-% \begin{definition}
-% Let $n \geq 1$. We say that a pair $(\hat F_n, \hat \lambda_n)$ is a \dfn{solution} of the continuous MF/MC problem with data $(\hat M_n, S_n, T_n)$ concentrated in $\hat M_0$ if:
-% \begin{enumerate}
-% \item $\hat F_n$ has best comass with respect to compactly supported cohomology on the interior of $\hat M_n$.
-% \item $\hat F_n$ is a calibration.
-% \item $\hat \lambda_n$ is a measured oriented lamination on $\hat M_0$.
-% \item $\hat \lambda_n$ is homologous to $S_n$.
-% \item $\hat \lambda_n$ is $\hat F_n$-calibrated.
-% \end{enumerate}
-% \end{definition}
-
-% \todo{Justify that we can move a solution to one which is concentrated on $\hat M_0$}
-
-% Since $\hat M$ is periodic, it is no loss to consider those solutions concentrated in $\hat M_0$.
-% In that case, $\hat \lambda$ will not intersect the boundary $S_n$, nor will it ``escape to infinity'' as we take $n \to \infty$.
-
-% \begin{lemma}\label{reduction to one covering space}
-% Suppose that $(\hat F_n, \hat \lambda_n)$ are solutions to the continuous MF/MC problems with data $(\hat M_n, S_n, T_n)$ concentrated in $\hat M_0$.
-% Then along a subsequence, $(\hat F_n, \hat \lambda_n)$ converge in \todo{what topology?} to a pair $(\hat F, \hat \lambda)$, such that:
-% \begin{enumerate}
-% \item $\hat F$ has best comass with respect to compactly supported cohomology on $\hat M$.
-% \item $\hat F$ is a calibration.
-% \item $\hat \lambda$ is a measured oriented lamination on $\hat M_0$.
-% \item $\hat \lambda$ is homologous to $S_0$.
-% \item $\hat \lambda$ is $\hat F$-calibrated.
-% \end{enumerate}
-% \end{lemma}
-% \begin{proof}
-% \todo{Use compactness but you might need to take translations to keep them from running away to infinity}
-% \end{proof}
-
-% Suppose that we can solve the continuous MF/MC problem on each cut covering space.
-% Let $(\hat F, \hat \lambda)$ be as in Lemma \ref{reduction to one covering space}.
-% Let $\hat u$ be the function of least gradient associated to $\hat \lambda$.
-% We introduce the average over pullbacks
-% $$F := \lim_{n \to \infty} \frac{1}{2n + 1} \sum_{m=-n}^n (h^{-n})^* F$$
-% and the sum of pushforwards 
-% $$\dif u := \lim_{n \to \infty} \sum_{m=-n}^n h^n_* \dif u.$$
-% Here the limits are taken in \todo{what topology?} and it is clear from the definitions that $F, \dif u$ are closed, with $F$ an invariant best comass calibration with respect to compactly supported cohomology, and $u$ a equivariant function of least gradient.
-% Let $\lambda$ be the measured oriented lamination associated to $u$, so $\lambda$ is $F$-calibrated. \todo{Check all this}
-% Therefore $(F, \lambda)$ drops to a solution of the MF/MC problem on $M$.
-
-% Therefore it remains to show that given a cut covering space $\hat M_n$, we can discretize the continuous MF/MC problem on $\hat M$.
-
-
-% \subsection{Runtime and practicality}
-% \todo{Write this out} Side note: each simplex has mass $\sim h^d$ so there are $h^{-d}$ simplices.
-% Each one gives a vertex and $T_d$ edges where $T_d \sim d^2$ is the $d$th triangle number.
-% So $|V| \sim h^{-d}$ and $|E| \sim d^2 h^{-d}$.
-% Ford-Fulkerson has $\sim |V| |E|^2 \sim d^4 h^{-3d}$ runtime.
-% I guess this is worse than Loisel's algorithm since if $d = 3$ our runtime is $\sim h^{-9}$ while Loisel's is $h^{-8.52} \log(h^{-1})$.
-% But maybe under some circumstances it's better, like if you need a max flow and a min cut together.
-
-% \todo{Application to quantum gravity?}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Open problems}\label{open problems}
-\subsection{More general Riemannian manifolds}
-For simplicity in this paper we have only dealt with closed manifolds of dimension $d \leq 7$.
-However, it is likely that the results largely go through for compact manifolds with boundary, as our arguments are mainly local, and for those that are not one can pass to the double of the manifold with boundary, as long as the boundary is not itself a minimal hypersurface.
-Moreover, one can most likely recover the results of this paper without the dimension assumption, as long as one is willing to deal with the consequence of having minimal hypersurfaces with singularities, since we mainly deal with phenomena in codimension $\leq 2$, while singularities of minimal hypersurfaces necessarily have codimension $\geq 8$. 
-There are genuine differences in the case of manifolds with infinite ends, since if $M$ is a manifold with cusps, the stable (semi)norm of every homology class in $M$ may be zero.
-Still, one expects to be able to recover most of the results of this paper.
-
-\begin{problem}\label{generalization}
-Formulate the results in this paper for complete Riemannian manifolds with boundary and infinite ends, and arbitrary dimension $d \geq 2$.
-\end{problem}
-
-
-%%%%%%%%%%
-\subsection{Laminations and foliations}\label{canonical conjectures}
 Thurston's canonical lamination $\lambda$ is chain-recurrent, in the sense that traveling along the geodesics in $\lambda$ defines a chain-recurrent dynamical system.
 This makes no sense for higher-dimensional laminations, but is equivalent to assert that Thurston's canonical lamination can be approximated by finite sums of closed geodesics \cite[\S9]{Gu_ritaud_2017}.
 We conjecture that the analogous fact should hold for our canonical lamination:
@@ -1296,8 +1050,8 @@ Let $\rho \in H^{d - 1}(M, \RR)$, and let $\lambda_\rho$ be the canonical lamina
 Then it is possible to approximate $\lambda_\rho$ in Thurston's geometric topology\footnote{See \cite[\S1]{BackusCML} for the definition of Thurston's geometric topology in this setting.} by finite unions of closed minimal hypersurfaces.
 \end{conjecture}
 
-\footnote{It might be possible using the reduction to integral classes!}
-
+%%%%%%%%%%%%%%%%%%%
+\subsection{Taut foliations and eikonal calibrations}
 The following problem was suggested to me by Karen Uhlenbeck. 
 There exist closed hyperbolic $3$-manifolds which admit taut foliations; in that case, \emph{after changing the metric} one may find a minimal foliation.
 Thus one cannot rule out minimal foliations by a simple topological argument (as one could rule out geodesic foliations of closed hyperbolic surfaces).
@@ -1309,7 +1063,7 @@ This form satisfies a particularly strong form
 of the Euler-Lagrange equation for tight forms which is analogous to the role of the eikonal equation
 $$\dif(|\dif u|^2) = 0$$
 in the study of the $\infty$-Laplace equation.
-Global solutions of the eikonal equation are rather uncommon (for example, the Dirichlet problem for the eikonal equation on $\Ball^d$ is extremely overdetermined), so this suggests a means to rule out the existence of minimal foliations:
+Global solutions of the eikonal equation are rather uncommon (for example, the Dirichlet problem for the eikonal equation on $\Ball^d$ is overdetermined), so this suggests a means to rule out the existence of minimal foliations:
 
 \begin{conjecture}\label{Karen}
 Let $\Gamma$ be the fundamental group of a closed hyperbolic $3$-manifold $M$.
@@ -1317,100 +1071,9 @@ Then there does not exist a solution of the eikonal system (\ref{eikonal}) on $\
 In particular, there does not exist a minimal foliation on $M$.
 \end{conjecture}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{String theory}
-Let us highlight a possible application of this work to string theory.
-Freedman and Headrick considered the holographic principle in the setting where a theory of quantum gravity lives on a Riemannian manifold $M$, and the dual conformal field theory lives on its boundary $\partial M$ \cite{Freedman_2016}.
-We assume that if $\Gamma \subset \partial M$ bounds a domain in $\partial M$, then there exists an area-minimizing and minimal hypersurface in $M$ with boundary $\Gamma$.
-In this setting, if $N$ is a smooth subdomain of $\partial M$, the entropy of entanglement $S(\partial N)$ of the CFT through $\partial N$ is given by the \dfn{Ryu-Takayanagi formula}
-\begin{equation}\label{RyuTakayanagi}
-S(\partial N) = \max_F \int_N F
-\end{equation}
-where $F$ ranges over calibrations on $\overline M$ \cite[(2.8)]{Freedman_2016}.
-
-If the results of this paper generalize cleanly to manifolds with boundary (see Problem \ref{generalization}) then, by replacing $N$ with an area-minimizing hypersurface in $M$ with the same boundary, we should have:
-
-\begin{conjecture}
-There exists a tight calibration $F$ which realizes the maximum in (\ref{RyuTakayanagi}).
-\end{conjecture}
-
-On the other hand, we know by recent work of Loisel that it is possible to solve the $\infty$-Laplacian in polynomial time \cite{Loisel_2020}.
-We expect the same technique to work for tight forms, and so we expect the following problem to be doable.
-
-\begin{problem}
-Given a hypersurface $N \subset \overline M$ which is homologous relative to $\partial N$ to an area-minimizing hypersurface, give an efficient algorithm to numerically find a tight calibration $F$ which realizes the maximum in (\ref{RyuTakayanagi}), and in particular to compute $S(\partial N)$ if $N \subset \partial M$.
-\end{problem}
 
 
-%%%%%%%5
 
-
-\appendix
-\section{Local Hodge theory in \texorpdfstring{$L^p$}{Lp}} \label{local Hodge appendix}
-\begin{lemma}\label{Hodge theorem}
-Suppose that there is a bi-Lipschitz diffeomorphism $M \cong \Ball^d$.
-Let $1 < p < \infty$, and let $F$ be an $L^p$ closed $\ell + 1$-form.
-Then there exists an $\ell$-form $A$ such that $F = \dif A$ and
-\begin{equation}\label{Hodge theorem estimate}
-\|A\|_{W^{1, p}} \lesssim_p \|F\|_{L^p}.
-\end{equation}
-\end{lemma}
-
-\todo{Whitney forms}
-
-%%%%%%%%%%%%%%%%%
-\section{Singularities of nodal sets}\label{nodal appendix}
-Suppose that $v$ solves an elliptic PDE.
-Then we write $Z(v), Z^{\rm sing}(v)$ for the nodal and singular sets of $v$, namely the sets of zeroes and double zeroes, respectively.
-We will show that the generic point of $Z(v)$ is not a singular point. More precisely:
-
-\begin{proposition}\label{nodal set is generically smooth}
-Let $Q$ be a linear elliptic operator on $\Ball^{d - 1}$ satisfying the maximum principle.
-Suppose that $Qv = 0$ and $v$ has a zero of finite order.
-Then the Hausdorff dimensions of the nodal and singular sets of $v$ are
-\begin{align}
-	\dim(Z(v)) &= d - 2, \label{nodal dimension}\\
-	\dim(Z^{\rm sing}(v)) &\leq d - 3. \label{singular nodal dimension}
-\end{align}
-\end{proposition}
-
-The main idea of the proof is to show that the complement of $Z^{\rm sing}(v)$ is path-connected.
-By Alexander duality for singular cohomology, the complement of a submanifold $P$ of codimension $\geq 2$ is path-connected.
-The singular set $P = Z^{\rm sing}(v)$ is not in general a manifold, but the proof still works as long as we apply Alexander duality for sheaf cohomology.
-Let $\hat H^\bullet(P, \RR)$ denote the cohomology of the constant sheaf $\RR$ on $P$.
-
-\begin{lemma}\label{closed mfld complement}
-Let $P \subset \Sph^{d - 1}$ be a closed $d - 3$-rectifiable set.
-Then $\Sph^{d - 1} \setminus P$ is path-connected.
-\end{lemma}
-\begin{proof}
-Let $\delta^{\rm Haus}, \delta^{\rm cov}, \delta^{\rm shf}$ be the Hausdorff, covering, and sheaf cohomological dimensions of $P$ respectively.
-Then by \cite[{\S}II.5.12]{godement1973topologie} and \cite[Theorem 6.3.10]{edgar2008measure}, we have 
-$$\delta^{\rm shf} \leq \delta^{\rm cov} \leq \delta^{\rm Haus} \leq d - 3,$$
-hence $\hat H^{d - 2}(P, \RR) = 0$.
-By Alexander duality for sheaf cohomology \cite[Theorem 6]{Kaplan47}, it follows that $H_0(\Sph^{d - 1} \setminus P, \RR) \cong \ZZ$, or in other words $\Sph^{d - 1} \setminus P$ is path-connected.
-\end{proof}
-
-\begin{lemma}\label{open mfld complement}
-Let $P \subset \Ball^{d - 1}$ be a closed $d - 3$-rectifiable set.
-Then $\Ball^{d - 1} \setminus P$ is path-connected.
-\end{lemma}
-\begin{proof}
-Embed $\Ball^{d - 1}$ in $\Sph^{d - 1}$ using the one-point compactification, let $\infty$ be the point at infinity, and let $x, y \in \Ball^{d - 1} \setminus P$.
-Choose a $d - 3$-sphere $S$ in $\Sph^{d - 1}$ which contains $\infty$ but does not contain $x, y$.
-Then $P \cup S$ is a closed $d - 3$-rectifiable set and $x, y \notin P \cup S$, so by Lemma \ref{closed mfld complement}, there exists a curve $\gamma$ from $x$ to $y$ which avoids $P \cup S$.
-Therefore $\gamma \subset \Ball^{d - 1} \setminus P$.
-\end{proof}
-
-\begin{proof}[Proof of Proposition \ref{nodal set is generically smooth}]
-By \cite[Lemma 1.9]{Hardt89}, $Z^{\rm sing}(v)$ is $d - 3$-rectifiable, which implies (\ref{singular nodal dimension}).
-If there exists $x \in Z(v) \setminus Z^{\rm sing}(v)$, then by the implicit function theorem, there is a neighborhood $U \ni x$ such that $U \cap Z(v)$ is a $d - 2$-dimensional manifold.
-So if (\ref{nodal dimension}) fails, we must have $Z(v) = Z^{\rm sing}(v)$, so $Z(v)$ is $d - 3$-rectifiable.
-But then, by Lemma \ref{open mfld complement}, the sets $U_\pm := \{\pm v > 0\}$ satisfy $U_+ \cup U_-$ are connected.
-Since $v$ is continuous, one of these sets must be empty; without loss of generality, $U_- = \emptyset$.
-Then $v \geq 0$ and $v$ has a zero, so by the maximum principle, $v = 0$ identically.
-This contradicts the fact that $v$ has a zero of finite order.
-\end{proof}
 
 
 \printbibliography
