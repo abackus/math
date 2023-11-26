@@ -1,0 +1,233 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{beamer}
+
+% \usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{cjhebrew}
+% \usepackage[shortlabels]{enumerate}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows}
+
+\title[Higher-dimensional FUP via Dolgopyat]{The fractal uncertainty principle via Dolgopyat's method in higher dimensions}
+\author[Backus, Leng, and Tao]{Aidan Backus (joint with James Leng and Zhongkai Tao)}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Exc}{Exc}
+\DeclareMathOperator*{\Expect}{\mathbf E}
+\newcommand{\normal}{\vec n}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\Spec}{\operatorname{Spec}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newtheorem{theoremconjecture}{Theorem-Conjecture}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{ultrapowerful.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usetheme{AnnArbor}
+\usecolortheme{dove}
+
+\begin{document}
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Fractal uncertainty principle}
+\begin{itemize}
+\item The fractal uncertainty principle is the assertion that if the $L^2$ mass of a function $f$ is concentrated in a small neighborhood of a Cantor set, then the same is not true of $\hat f$. \pause
+\item Let $0 < h \ll 1$ be a small parameter (the \emph{effective Planck constant}).
+Given a compact set $X \subset \RR^d$, let
+$$X_h := \{x \in \RR^d: \dist(x, X) < h\}.$$ \pause
+\item We are interested in the behavior of $f|_{X_h}$, so we introduce the \emph{semiclassical Fourier transform}
+$$\mathscr F_h f(\xi) := \frac{1}{(2\pi h)^{d/2}} \int_{\RR^d} e^{-ix\cdot \xi/h} f(x) \dif x$$
+which probes the behavior of $f$ at scale $h$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Fractal uncertainty principle}
+\begin{definition}
+A pair of compact sets $(X, Y)$ satisfies the \emph{fractal uncertainty principle} with exponent $\beta$ if
+$$\|1_{X_h} \mathscr F_h 1_{Y_h}\|_{L^2 \to L^2} \lesssim h^\beta.$$
+\end{definition} \pause
+
+\begin{itemize}
+\item The \emph{trivial bound} $\beta \geq 0$ is trivial. \pause
+\item Suppose that $X, Y$ have Minkowski dimensions $\delta, \delta'$ with uniform constants at all scales. We can use H\"older's inequality to prove the \emph{volume bound}
+$$\beta \geq \frac{d - \delta - \delta'}{2}.$$ \pause
+\item We are interested in improvements over the trivial and volume bounds when $X, Y$ are ``fractalline'' in some sense.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exponential decay of correlations}
+\begin{itemize}
+\item Dyatlov and coauthors introduced FUP to obtain spectral gaps for elliptic operators on negatively curved manifolds $M$. \pause
+\item Such results are closely related to exponential decay of correlations for certain Anosov flows on $M$. \pause
+\end{itemize}
+
+\begin{theorem}[Dyatlov, Zahl '16]
+Let $M$ be a noncompact convex cocompact hyperbolic manifold, let $\Lambda$ be the limit set of $\pi_1(M)$, and let $R(z)$ be the analytic continuation of the Laplacian resolvent
+$$R(z) = (\Delta_M + z)^{-1}$$
+to $\CC$. If $(\Lambda, \Lambda)$ satisfies FUP with exponent $\beta > 0$, then for any $\varepsilon > 0$, the set of poles $z$ of $R$ with
+$$-\Im(z) > \beta - \varepsilon$$
+is finite.
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Improving over the trivial bound}
+\begin{itemize}
+\item Suppose that $X, Y$ have Minkowski dimensions $\delta, \delta'$. Most literature on FUP has considered the case that $X, Y$ are \emph{Ahlfors-David regular}, or the slightly stronger condition \emph{line-porous}. \pause
+\item AD-regular means that there is a probability measure $\mu$ with support $X$, such that for any $x \in X$ and $0 < r < 1$,
+$$\mu(B(x, r)) \sim r^\delta.$$ \pause
+\end{itemize}
+
+\begin{theorem}[Bourgain, Dyatlov '18; Han, Schlag '19; Cohen '23]
+Suppose that $X$ is AD-regular, $Y$ is line-porous in $\RR^d$, and $0 < \delta, \delta' < d$. Then we have FUP with $\beta > 0$.
+\end{theorem} \pause 
+
+\begin{itemize}
+\item The main idea is to use the Paley-Wiener theorem and a unique continuation estimate on holomorphic functions.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Improving over the volume bound}
+\begin{theorem}[Dyatlov, Jin '18]
+Suppose that $X, Y$ are AD-regular in $\RR$ and $0 < \delta, \delta' < 1$. Then we have FUP with $\beta > \frac{1 - \delta - \delta'}{2}$.
+\end{theorem} \pause
+
+\begin{itemize}
+\item If $X$ is a Cantor set in $\{(x, y): y = 0\}$ and $Y$ is a Cantor set in $\{(\xi, \eta): \xi = 0\}$ then $(X, Y)$ does not satisfy FUP. \pause
+\item So to generalize Dyatlov--Jin, we need a nonorthogonality assumption to be stated later. \pause
+\end{itemize}
+
+\begin{theorem}[B, Leng, Tao '23]
+Suppose that $X, Y$ are AD-regular in $\RR^d$, $0 < \delta, \delta' < d$, and $(X, Y)$ is nonorthogonal. Then we have FUP with $\beta > \frac{d - \delta - \delta'}{2}$.
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Nonorthogonality and nonintegrability}
+\begin{itemize}
+\item To prove decay of correlations for an Anosov flow $g$, we need the bundle of stable and unstable directions to $g$ to be nonintegrable. \pause
+\item Let $f$ be an observable, and $V_s$, $V_u$ be vector fields that point in the stable and unstable directions. The point is that the correlation of $f$ and $e^{t[V_s, V_u]} f$ decays, because $|[V_s, V_u]| > 0$. \pause
+\item Combining this idea with an induction on scale to get exponential decay of correlations is called \emph{Dolgopyat's method}. The same idea is used in the Dyatlov--Jin theorem. \pause
+\item This motivates our definition of nonorthogonality. Let $M$ be a noncompact convex cocompact hyperbolic manifold, and let $\Lambda$ be the limit set of $\pi_1(M)$. \pause
+\item Nonorthogonality of $(\Lambda, \Lambda)$ is morally equivalent to $|[V_s, V_u]| \gtrsim 1$ for the geodesic flow on $M$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Main theorem}
+\begin{definition}
+A pair of compact sets $(X, Y)$ is \emph{nonorthogonal} if for any $x_0 \in X$, $\xi_0 \in Y$, $0 < r_X, r_Y < 1$, there exist $x_1, x_2 \in X \cap X \cap B(x_0, r_X)$, $\xi_1, \xi_2 \in Y \cap B(\xi_0, r_Y)$, such that 
+$$|(x_2 - x_1) \cdot (\xi_2 - \xi_1)| \gtrsim r_X r_Y.$$
+\end{definition} \pause
+
+\begin{theorem}[B, Leng, Tao '23]
+Suppose that $X, Y$ are compact sets such that $(X, Y)$ is nonorthogonal, and such that $X, Y$ are supports of doubling measures $\mu_X, \mu_Y$. Then there exists $\varepsilon_0 > 0$ such that 
+$$\|\mathscr F_h\|_{L^2(\mu_Y) \to L^2(\mu_X)} \lesssim h^{\varepsilon_0}.$$
+\end{theorem} \pause
+
+\begin{itemize}
+\item This result implies our FUP by a rescaling. We only use the AD-regularity to get the doubling measure and get the scaling correct. \pause
+\item In the remainder of the talk, I sketch a proof of this theorem.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Constructing a tree of Christ cubes}
+\begin{itemize}
+\item If $V$ is a tree, let $V_n$ be the set of nodes of $V$ of height $n$. \pause
+\end{itemize}
+
+\begin{proposition}
+Let $X \subset \RR^d$ be a compact set and let $L \geq 1000$. Then there is a tree $V(X)$, such that $V_n(X)$ is a partition of a neighborhood of $X$ into sets $I$ such that:
+\begin{itemize}
+\item[(a)] for some $L$-adic cube $I^0$ at scale $n$, 
+$$(1 - L^{-2/3}) I^0 \subseteq I \subseteq I^0(1 + L^{-2/3}),$$
+\item[(b)] and there exists $x \in I \cap X$ such that $\dist(x, \partial I) \geq L^{-2/3-n}/10$.
+\end{itemize}
+\end{proposition} \pause
+
+\begin{itemize}
+\item This tree enjoys similar properties to the tree of Christ cubes of a doubling metric measure space. \pause
+\item Dyatlov--Jin constructed a similar tree when $X$ is AD-regular of Minkowski dimension $< 1$ with a simpler proof.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomly drawn children often enjoy nonorthogonality}
+\begin{itemize}
+\item For the remainder of the talk, let $X, Y \subset \RR^d$ be compact sets such that $(X, Y)$ is nonorthogonal, and such that $X, Y$ are supports of doubling measures $\mu_X, \mu_Y$. Introduce the \emph{scale separation} $L \geq C_{X, Y}$. \pause
+\end{itemize}
+
+\begin{proposition}
+Let $I \in V_n(X)$ and $J \in V_m(Y)$, and draw random children $I_a, I_{a'} \subset I$ and $J_b, J_{b'} \subset J$ using the probability measures.
+Let
+$$(x_a, x_{a'}, y_b, y_{b'}) \in I_a \times I_{a'} \times J_b \times J_{b'}.$$
+With probability $\rho \geq C_{X, Y}^{-\log(O(L^{5/3}))}$,
+$$|(x_a - x_{a'}) \cdot (y_b - y_{b'})| \sim L^{-n-m-4/3}.$$
+\end{proposition} \pause
+
+\begin{itemize}
+\item By construction of the tree $V(X)$, we can find points $x_0 \in X \cap I$, $y_0 \in Y \cap J$ near which the nonorthogonality assumption gives good children. \pause
+\item By the doubling assumption, these children are not unusual.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dolgopyat's inequality}
+\begin{itemize}
+\item Let $f \in L^2(Y, \mu_Y)$ be an observable. For any $J \in V_m(Y)$ and $x \in X$, let $y_J \in J$ and 
+$$F_J(x) := \frac{1}{\mu_Y(J)} \int_J e^{ix \cdot (y - y_J)/h} f(y) \dif \mu_Y(y).$$ \pause
+\item Let $n + m + 1 \approx -\log_L h$, $I \in V_n(X)$, and $J \in V_m(Y)$. \pause
+\item It suffices to get exponential decay of $F_J$ in a certain norm $C_\theta$ as $m$ decreases, by iterating the following estimate: \pause
+\end{itemize}
+
+\begin{proposition}
+Suppose that $\varepsilon \leq \rho^2 C_{X, Y}^{-1} L^{-2/3}$.
+Draw random children $I_a \subset I$ and $J_b \subset J$. Then 
+$$\Expect \|F_J\|_{C_\theta(I_a)}^2 \leq (1 - \varepsilon) \Expect \|F_{J_b}\|_{C_\theta(I)}^2.$$
+\end{proposition}
+\end{frame}
+
+\begin{frame}{Proof of Dolgopyat's inequality}
+\begin{itemize}
+\item For a certain $x_a \in I_a$ and $y_b \in J_b$, let $f_{ab} := e^{ix\cdot y_J/h} F_{J_b}(x_a)$. Then 
+$$F_J(x_a) = \Expect_b f_{ab}.$$
+We may assume that Dolgopyat's inequality fails, in which case $\Var |f_{ab}|$ is small. \pause
+\item Let $\theta_{ab}$ be the phase of $f_{ab}$. By our previous proposition, for many tuples $(a, a', b, b')$,
+$$|(x_a - x_{a'}) \cdot (y_b - y_{b'})| \sim L^{-1/3} h.$$
+But $\theta_{ab}$ is basically a constant phase times $x_a \cdot y_b/h$, so $\Var \theta_{ab}$ is not small. \pause
+\item Thus $f_{ab}$ is basically a constant, times a randomly drawn phase. This forces lots of cancellation, and we conclude Dolgopyat's inequality -- a contradiction!
+\end{itemize}
+\end{frame}
+\end{document}
