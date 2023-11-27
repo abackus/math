@@ -23,7 +23,7 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Convex duality between minimal laminations and tight calibrations}
+\title{The canonical lamination calibrated by a cohomology class}
 \author{Aidan Backus}
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
@@ -70,6 +70,9 @@
 
 \newcommand{\Two}{\mathrm{I\!I}}
 \newcommand{\Ric}{\mathrm{Ric}}
+
+
+\newcommand{\weakto}{\rightharpoonup}
 
 \newcommand{\normal}{\mathbf n}
 \newcommand{\radial}{\mathbf r}
@@ -209,11 +212,10 @@ Let $\rho \in H^{d - 1}(M, \RR)$, and let $\lambda_\rho$ be the canonical lamina
 Then it is possible to approximate $\lambda_\rho$ in Thurston's geometric topology\footnote{See \cite[\S1]{BackusCML} for the definition of Thurston's geometric topology in this setting.} by finite unions of closed minimal hypersurfaces.
 \end{conjecture}
 
-\todo{We can probably prove that $\lambda_\rho$ contains a chain-recurrent sublamination by approximation by rational points}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Review of previous papers}\label{prevResults}
+\section{Preliminaries}\label{prevResults}
+\subsection{Review of previous papers}
 We use \cite{BackusCML, BackusBest1} as a reference.
 \todo{Summarize the previous papers once they're on the arxiv. In particular define measured stretch laminations}
 
@@ -253,9 +255,6 @@ Then $\kappa$ is $F$-calibrated, and for $\lambda$ ranging over measured oriente
 Conversely, if a measured oriented lamination $\lambda$ attains the maximum in (\ref{duality between stable and comass}), then $\lambda$ is a measured stretch lamination.
 \end{theorem}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Preliminaries on laminations}
 \subsection{The maximum comass locus}
 \begin{definition}
 For an open set $\Omega \subseteq M$, let $\Chain_{d - 1}(\Omega)$ be the set of simplicial $d - 1$-chains in $\Omega$.
@@ -352,61 +351,117 @@ so $N$ (hence $\lambda$) is not $F$-calibrated.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%
-\subsection{Laminations and homology}
-We shall need the below facts about how laminations interact with homology, due to Auer and Bangert \cite{Auer12}.
+\subsection{Laminations on the universal abelian cover}
+We shall need a result due to Auer and Bangert \cite{Auer12} on functions of least gradient on a universal abelian cover.
 As the cited manuscript is unpublished and unfinished, we recreate their proofs here.
 
-Let $M$ be a closed oriented Riemannian manifold with fundamental group $\Gamma$.
+\begin{lemma}[reverse isoperimetric inequality]
+Suppose that $U$ is a Riemannian domain of bounded curvature and $E \subseteq U$ is a Borel set such that $1_E$ has least gradient in $U$.
+Suppose that $0 < r \ll \|\Riem_U\|_{C^0}^{-1/2}$ and $B(x, r) \subseteq E$.
+Then, if $c_d$ denotes the isoperimetric constant on $\RR^d$,
+\begin{equation}\label{reverse isoperimetric inequality}
+\vol(E) \geq \frac{r^d}{4dc_d}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Reasoning as in \cite[Proposition 5.14]{Giusti77}, we estimate for almost every $0 < \rho < r$ that
+$$\Mass(\partial(E \cap B(x, \rho))) \leq 2 \frac{\dif}{\dif \rho} \vol(E \cap B(x, \rho)).$$
+Since $r$ is much smaller than the curvature scale, we can use the euclidean isoperimetric inequality to bound 
+$$\Mass(\partial(E \cap B(x, \rho))) \geq \frac{1}{2c_d} \vol(E \cap B(x, \rho))^{\frac{d - 1}{d}}.$$
+The result now follows from Gr\"onwall's inequality.
+\end{proof}
+
+Let $M$ be a closed connected oriented Riemannian manifold with fundamental group $\Gamma$.
 We shall consider a homology class $\alpha \in H_{d - 1}(M, \RR)$, which we identify with a representation 
 $$\alpha: \Gamma \to \RR$$
 using Poincar\'e duality and the Hurcewiz theorem. 
-The class $\alpha$ has \dfn{rational direction} if there exists $c > 0$ such that $c\alpha \in H_{d - 1}(M, \ZZ)$.
+% The class $\alpha$ has \dfn{rational direction} if there exists $c > 0$ such that $c\alpha \in H_{d - 1}(M, \ZZ)$.
 
-\begin{proposition}
-Let $u$ be a nonconstant $\alpha$-equivariant function of least gradient on $\tilde M$.
-Then every leaf of the measured stretch lamination $\kappa_u$ is a closed hypersurface.
-\end{proposition}
-\begin{proof}
-Rescaling $u$ by a constant does not affect whether the leaves of $\kappa_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
-We view $u$ as a map $M \to \Sph^1$ of homotopy class $\alpha$.\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
-Since the representation $\alpha$ is integral, $\ker \alpha$ fits into a short exact sequence 
-$$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0.$$
-So from the Galois correspondence for covering spaces there exists a covering space $p: \hat M \to M$ such that $\Gal(\hat M, M) \cong \ZZ$, and a function $\hat u$ on $\hat M$, such that the diagram 
-$$\begin{tikzcd}
-\hat M \arrow[r, "\hat u"] \arrow[d, "p"] & \RR \arrow[d] \\
-M \arrow[r, "u"] & \Sph^1
-\end{tikzcd}$$
-commutes.
-In particular, it sense to take superlevel sets $\{\hat u > y\}$.
+% \begin{proposition}
+% Let $u$ be a nonconstant $\alpha$-equivariant function of least gradient on $\tilde M$.
+% Then every leaf of the measured stretch lamination $\kappa_u$ is a closed hypersurface.
+% \end{proposition}
+% \begin{proof}
+% Rescaling $u$ by a constant does not affect whether the leaves of $\kappa_u$ are closed, so after rescaling, we may assume that $\alpha \in H_{d - 1}(M, \ZZ)$.
+% We view $u$ as a map $M \to \Sph^1$ of homotopy class $\alpha$.\footnote{Note that $u$ is not continuous, so strictly speaking the homotopy class of $u$ is not $\alpha$; but by equivariance, it is profitable to view $u$ in this way.}
+% Since the representation $\alpha$ is integral, $\ker \alpha$ fits into a short exact sequence 
+% $$0 \to \ker \alpha \to \pi_1(M) \to \ZZ \to 0.$$
+% So from the Galois correspondence for covering spaces there exists a covering space $p: \hat M \to M$ such that $\Gal(\hat M, M) \cong \ZZ$, and a function $\hat u$ on $\hat M$, such that the diagram 
+% $$\begin{tikzcd}
+% \hat M \arrow[r, "\hat u"] \arrow[d, "p"] & \RR \arrow[d] \\
+% M \arrow[r, "u"] & \Sph^1
+% \end{tikzcd}$$
+% commutes.
+% In particular, it sense to take superlevel sets $\{\hat u > y\}$.
 
-Since $\Gal(\hat M, M)$ is a cyclic group, it is generated by a single element $h$ with the mapping property
-$$h: \partial \{\hat u > y\} \to \partial \{\hat u > y + D\}$$
-for each $y \in \RR$.
-In particular, $\hat u$ does not have a global minimum or maximum.
-Since $\hat u$ does not have a global minimum or maximum on the complete manifold $\hat M$, by the maximum principle for functions of least gradient \cite[Theorem 5.1]{HakkarainenKorteLahtiShanmugalingam+2015}, $\hat u$ does not have any local minimum or maximum.
-Therefore every leaf of $\kappa_{\hat u}$ is a component of $\partial \{\hat u > y\}$ for some $y \in \RR$ \cite[Proposition 4.7]{BackusCML}.
+% Since $\Gal(\hat M, M)$ is a cyclic group, it is generated by a single element $h$ with the mapping property
+% $$h: \partial \{\hat u > y\} \to \partial \{\hat u > y + D\}$$
+% for each $y \in \RR$.
+% In particular, $\hat u$ does not have a global minimum or maximum.
+% Since $\hat u$ does not have a global minimum or maximum on the complete manifold $\hat M$, by the maximum principle for functions of least gradient \cite[Theorem 5.1]{HakkarainenKorteLahtiShanmugalingam+2015}, $\hat u$ does not have any local minimum or maximum.
+% Therefore every leaf of $\kappa_{\hat u}$ is a component of $\partial \{\hat u > y\}$ for some $y \in \RR$ \cite[Proposition 4.7]{BackusCML}.
 
-Now let $N$ be a (connected) leaf of $\lambda$, and let $\hat N := p^{-1}(N)$.
-Then each component of $\hat N$ is a leaf of $\kappa_{\hat u}$, and hence a component of $\partial \{u > y\}$ for some $y \in \RR$.
-Moreover, the deck transformation $h$ has the mapping property
-$$h: \hat N \to \hat N.$$
-So if $\hat N$ meets $\partial \{u > y\}$, then for every $n \in \ZZ$, a component $K_n$ of $\hat N$ is a component of $\partial \{\hat u > y + nD\}$.
-Since $h$ acts on $\kappa_{\hat u}$ by sending $\partial \{\hat u > y\}$ to $\partial \{\hat u > y + D\}$, $h$ acts on $\hat N$ by sending $K_n$ to $K_{n + D}$.
-In particular, $\hat N \cong N \times \ZZ$ and $p: \hat N \to N$ is projection onto the first factor. 
-So $N \cong K_0$, and $K_0$ is a closed hypersurface in $\hat M$ since it is a complete manifold \cite[Theorem 3.3]{BackusCML} and it is compact.
-\end{proof}
+% Now let $N$ be a (connected) leaf of $\lambda$, and let $\hat N := p^{-1}(N)$.
+% Then each component of $\hat N$ is a leaf of $\kappa_{\hat u}$, and hence a component of $\partial \{u > y\}$ for some $y \in \RR$.
+% Moreover, the deck transformation $h$ has the mapping property
+% $$h: \hat N \to \hat N.$$
+% So if $\hat N$ meets $\partial \{u > y\}$, then for every $n \in \ZZ$, a component $K_n$ of $\hat N$ is a component of $\partial \{\hat u > y + nD\}$.
+% Since $h$ acts on $\kappa_{\hat u}$ by sending $\partial \{\hat u > y\}$ to $\partial \{\hat u > y + D\}$, $h$ acts on $\hat N$ by sending $K_n$ to $K_{n + D}$.
+% In particular, $\hat N \cong N \times \ZZ$ and $p: \hat N \to N$ is projection onto the first factor. 
+% So $N \cong K_0$, and $K_0$ is a closed hypersurface in $\hat M$ since it is a complete manifold \cite[Theorem 3.3]{BackusCML} and it is compact.
+% \end{proof}
 
 Let $u: \tilde M \to \RR$ be an $\alpha$-equivariant function.
 Since $\alpha$ annihilates $[\Gamma, \Gamma]$, $u$ drops to a function
 $$u^{\rm ab}: \tilde M^{\rm ab} \to \RR$$
 on the universal abelian cover $\tilde M^{\rm ab}$ of $M$.
+The group $H_1(M, \ZZ)$ acts on $\tilde M^{\rm ab}$ by deck transformations.
+
+\begin{lemma}\label{superlevel sets are connected}
+Let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$.
+Then the set $\{u^{\rm ab} > t\}$ is connected.
+\end{lemma}
+\begin{proof}
+We may assume that $\alpha$ is nonzero.
+Otherwise, $u$ drops to a function of least gradient on $M$, which is constant since $M$ is closed, and the claim is proven.
+
+Let $F$ be the image of a fundamental domain of $M$ in $\tilde M^{\rm ab}$.
+Since $u^{\rm ab} \in L^\infty_\loc$ \cite[Theorem 4.3]{Gorny20} and $F$ is compact, there exists $t_0 \in \RR$ such that $u > t_0$ on $F$.
+Let 
+$$H := \bigcup_{\substack{\rho \in H_1(M, \ZZ) \\ \langle \alpha, \rho\rangle > t - t_0}} \rho(F).$$
+If $x \in H$, then for some $\rho \in H_1(M, \ZZ)$ and $y \in F$, $x = \rho(y)$, and then 
+$$u^{\rm ab}(x) = u^{\rm ab}(y) + \langle \alpha, \rho\rangle > t_0 + t - t_0 = t$$
+so $H \subseteq \{u^{\rm ab} > y\}$.
+Since $H$ is the set of translations of the connected fundamental domain $F$ by the intersection of the lattice of deck transformations and a half-space, $H$ is connected.
+
+Suppose that $\{u^{\rm ab} > t\}$ is disconnected, so it has a component $X$ which does not meet $H$.
+For any $\rho \in H_1(M, \ZZ)$ such that $\langle \alpha, \rho\rangle > 0$, $\rho$ sends $\{u^{\rm ab} > y\}$ into itself, hence sends $X$ into a component of $\{u^{\rm ab} > t\}$.
+If $\rho(X) \subseteq X$, then we choose $x \in X$ and $\theta \in H_1(M, \ZZ)$ such that $\theta(x) \in F$; then, for $m$ large, 
+$$\langle \alpha, m\rho - \theta\rangle > t - t_0,$$
+and it follows that $\rho^m(X)$ meets $H$, so $X$ meets $H$.
+
+Therefore we may assume that for every $\rho \in H_1(M, \ZZ)$ such that $\langle \alpha, \rho\rangle \neq 0$, $\rho$ sends $X$ into another component of $\{u^{\rm ab} > t\}$.
+Let $\hat M$ be the minimal covering space on which $u$ drops to a function $\hat u: \hat M \to \RR$, thus $\Gal(\hat M, M) = \ker(\alpha)$.
+Then $\hat u$ has least gradient, and $X$ drops to a component $\hat X$ of $\{\hat u > y\}$.
+In particular, $1_{\{\hat u > y\}}$ has least gradient \cite[Theorem 1]{BOMBIERI1969} \todo{define least gradient when not equivariant}.
+Therefore $v := 1_{\hat X}$ also has least gradient.
+So $\dif v$ cannot have compact support, and hence $\hat X$ is unbounded.
+By the reverse isoperimetric inequality (\ref{reverse isoperimetric inequality}), it follows that $\|v\|_{L^1} = \infty$.
+But by our assumption, and the fact that $\Gal(\hat M, M) = \ker(\alpha)$, the projection map $\hat M \to M$ restricts to an injective map on $\hat X$, so $\|v\|_{L^1} < \infty$, a contradiction.
+\end{proof}
 
 \begin{proposition}\label{abelian cover connected}
 Let $u$ be an $\alpha$-equivariant function of least gradient on $\tilde M$, and let $\mathscr G$ be a set of curves in $\tilde M^{\rm ab}$ which represent a basis of $H_1(M^{\rm ab}, \RR)$.
-If $\partial \{u^{\rm ab} > y\}$ misses every curve in $\mathscr G$, then $\partial \{u^{\rm ab} > y\}$ is connected.
+If $\partial \{u^{\rm ab} > t\}$ misses every curve in $\mathscr G$, then $\partial \{u^{\rm ab} > t\}$ is connected.
 \end{proposition}
-
-\todo{prove it}
+\begin{proof}
+We reason by contrapositive.
+Let $N_1, N_2$ be two distinct components of $\partial \{u^{\rm ab} > t\}$.
+By Lemma \ref{superlevel sets are connected} (and the analogous result for sublevel sets), $\tilde M^{\rm ab} \setminus \partial \{u^{\rm ab} > t\}$ has two components $E_1, E_2$.
+We construct a curve $\gamma$, transverse to $N_1$, which starts at a point $x \in N_1$, passes through $E_1$, crosses $N_2$ into $E_2$, and then returns to $x$.
+In particular $\gamma$ meets $N_1$ at a single point, so their intersection number $[\gamma] \cdot [N_1] = 1$ (possibly after reorienting).
+Therefore $[\gamma]$ is a nontrivial class in $H_1(M^{\rm ab}, \RR)$.
+\end{proof}
 
 %%%%%%%%%%%%%%%%
 \section{The canonical lamination}
@@ -500,9 +555,7 @@ Otherwise, $v$ is identically $0$ by the unique continuation theorem \cite[Theor
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%
-\subsection{Construction of the canonical lamination}
-We are now ready to prove Theorem \ref{existence of calibrated lam}, the existence of the canonical lamination.
-
+\subsection{Curvature and mass bounds on the leaves}
 \begin{lemma}
 Let $F$ be a calibration, and let $B \subseteq M$ be a sufficiently small ball.
 Then for any complete connected $F$-calibrated hypersurface $N$, 
@@ -523,12 +576,12 @@ Then
 \end{align*}
 \end{proof}
 
-\begin{lemma}
+\begin{proposition}
 There exists a constant $C > 0$, only depending on $M$, such that for every calibration $F$ and complete $F$-calibrated hypersurface $N$, we have the curvature bound
 \begin{equation}\label{curvature bound for calibrated}
 \|\Two_N\|_{C^0} \leq C.
 \end{equation}
-\end{lemma}
+\end{proposition}
 \begin{proof}
 Let $x \in N$ and let $r > 0$ be small.
 Then each component $N'$ of $N \cap B(x, r)$ is absolutely area-minimizing by the fundamental theorem of calibrated geometry, so it is stable.
@@ -541,6 +594,9 @@ Since $N'$ was an arbitrary component, the same estimate holds for $N$.
 Using the compactness of $M$, we may cover it by finitely many balls in which estimates of this form hold to conclude (\ref{curvature bound for calibrated}).
 \end{proof}
 
+%%%%%%%%%%%%%%%%%
+\subsection{Existence of the canonical lamination}
+We are now ready to prove Theorem \ref{existence of calibrated lam}, the existence of the canonical lamination.
 \begin{lemma}\label{calibrated implies disjoint}
 Let $F$ be a calibration, and let $N, N'$ be complete connected $F$-calibrated hypersurfaces.
 If $N \cap N'$ is nonempty, then $N = N'$.
@@ -589,23 +645,6 @@ So we may apply Lemma \ref{existence of intersections} to the set $\mathscr S$ o
 \begin{definition}
 The lamination $\lambda_\rho$ constructed in Proposition \ref{existence of canonical lamination} is the \dfn{canonical lamination} associated to $\rho$.
 \end{definition}
-
-If $d = 2$ and $\rho \in H^1(M, \ZZ)$, then $\lambda_\rho$ is the lamination obtained by taking an intersection over the best Lipschitz maps of homotopy class $\rho$ by Daskalopolous and Uhlenbeck \cite[\S6.2]{daskalopoulos2020transverse}.
-In that case, if $u$ is an $\infty$-harmonic map representing $\rho$, then the lamination calibrated by $\dif u$ (and in fact, $\MCL(\dif u)$) is exactly $\lambda_\rho$.
-This argument is based on viscosity solutions, so it works only when $d = 2$, but it works even when $\rho$ is not a class of rational direction.
-Thus we have:
-
-\begin{corollary}
-Suppose that $d = 2$.
-Then the canonical lamination $\lambda_\rho = \MCL(F)$ for any tight $1$-form $F$ representing $\rho$.
-\end{corollary}
-
-This is not true if $d \geq 3$ since $\ker(\star F)$ need not be integrable, so $\MCL(F)$ does not need to be a lamination.
-However, we expect that if there was a suitable generalization of viscosity solution for systems of PDE, we would be able to show:
-
-\begin{conjecture}
-The canonical lamination $\lambda_\rho = \lambda_F$ for any tight $d - 1$-form $F$ representing $\rho$.
-\end{conjecture}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -700,14 +739,6 @@ implying $\kappa = \lambda_\rho$.
 Otherwise, the exceptional indecomposable sublamination $\zeta$ of $\kappa$ containing $N$ is calibrated by any tight representative of $\rho$, so $\zeta$ is measured stretch for $\rho$ by Proposition \ref{calibrated means measured stretch}.
 \end{proof}
 
-\begin{corollary}\label{measurable leaves are contained in indecomposables}
-Let $N$ be a leaf of the canonical lamination $\lambda_\rho$.
-Then either $N$ is nonmeasurable, or $N$ is contained in an indecomposable measured stretch lamination associated to $\rho$.
-\end{corollary}
-\begin{proof}
-By Proposition \ref{classification of leaves}, if $N$ is not nonmeasurable, then either $N$ is closed, in which case $N$ is itself an indecomposable measured stretch lamination, or $N$ is noncompact and is contained in an exceptional indecomposable measured stretch lamination.
-\end{proof}
-
 \begin{corollary}
 Let $F$ be a best comass representative of $\rho$, and $N$ a leaf of the calibrated lamination $\lambda_F$.
 Then either $N$ is a leaf of the canonical lamination $\lambda_\rho$, or $N$ is a nonmeasurable leaf of $\lambda_F$.
@@ -746,9 +777,33 @@ By Lemma \ref{extreme points are closed under sublaminations}, possibly after re
 Since any tight representative $F$ of $\rho$ calibrates $\kappa$, $F$ also calibrates $\zeta$, so by Proposition \ref{calibrated means measured stretch}, $\zeta$ is a measured stretch sublamination of $\lambda_\rho$.
 \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Rational points and chain-recurrence}
-\todo{Show that $\lambda_\rho$ has a chain-recurrent sublamination}
+% %%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{Rational points and chain-recurrence}
+% \todo{Show that $\lambda_\rho$ has a chain-recurrent sublamination}
+
+% The map $\rho \mapsto \lambda_\rho$ is upper semicontinuous.
+% More precisely we have:
+
+% \begin{proposition}
+% Let $(\rho_n)$ be a sequence in the costable unit sphere, $\rho_n \to \rho$, and assume that $\lambda_{\rho_n} \to \lambda$ in Thurston's geometric topology.
+% Then 
+% $$\lambda \subseteq \lambda_\rho.$$
+% \end{proposition}
+% \begin{proof}
+% Let $F_n$ be best comass representatives of $\rho_n$.
+% By Alaoglu's theorem, after passing to a subsequence, $F_n \weakto F$ in $L^p$ for any $1 < p < \infty$, where
+% $$\|F\|_{L^\infty} \leq \lim_{p \to \infty} \lim_{n \to \infty} \|F_n\|_{L^p} \leq \lim_{p \to \infty} \vol(M)^{1/p} \lim_{n \to \infty} \|F_n\|_{L^\infty} = 1.$$
+% Testing against smooth $1$-forms, we see that $F$ is a representative of $\rho$, and in particular $\|F\|_{L^\infty} \geq 1$.
+
+% By (\ref{curvature bound for calibrated}) and \cite[Theorem C]{BackusCML}, we may assume that $\lambda_{\rho_n} \to \lambda$ in the H\"older and tangentially $C^\infty$ flow box topology.
+% This in particular implies that if $\sigma$ is a small ball in a leaf of $\lambda$, then $\sigma$ is the H\"older limit of small open sets $\sigma_n$ of leaves of $\lambda_{\rho_n}$.
+% By \todo{$L^\infty$ Poincar\'e lemma with continuity!}, we can find H\"older $d - 2$-forms $A_n, A$ defined near $\sigma$ such that $A_n \to A$ uniformly and $\dif A_n = F_n$, $\dif A = F$.
+% Then we have 
+% $$\int_\sigma F = \int_{\partial \sigma} A = \lim_{n \to \infty} \int_{\partial \sigma_n} A_n = \lim_{n \to \infty} \int_{\sigma_n} F_n = \lim_{n \to \infty} \Mass(\sigma_n) = \Mass(\sigma).$$
+% Therefore $\lambda$ is an $F$-calibrated lamination.
+
+
+% \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Application: Convexity of the stable unit ball}\label{convexity sec}
