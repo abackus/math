@@ -55,6 +55,7 @@
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\mesh}{mesh}
 \DeclareMathOperator{\coker}{coker}
 \DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\tr}{tr}
@@ -159,9 +160,22 @@
 For a Lipschitz map $u: U \to \RR^n$, let
 $$Lu(x) := \inf_{r > 0} \Lip(u, B(x, r)).$$
 Then $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
+Though $Lu$ is not lower semicontinuous, it enjoys the following partial lower semicontinuity property:
+
+\begin{lemma}
+Let $x \in U$, let $V \subseteq U$ be an open neighborhood of $x$, and let $\delta > 0$.
+Then 
+\begin{equation}\label{partial lower semicontinuity}
+\vol(V \cap \{Lu > Lu(x) - \delta\}) > 0.
+\end{equation}
+\end{lemma}
+\begin{proof}
+\todo{Claimed without proof by \cite[\S1.4]{Sheffield12}.}
+\end{proof}
 
 For $p \in [1, \infty]$, and a linear map $A$, let $|A|_p$ denote the $p$th Schatten norm of $A$.
 In particular $|A|_\infty$ is the operator norm of $A$.
+So, if $u: U \to \RR^n$ is a $C^1$ map, $\||\dif u|_\infty\|_{C^0} = \Lip(u, U)$.
 
 \begin{lemma}
 For almost every $x \in U$,
@@ -178,43 +192,72 @@ The claim follows by taking $\varepsilon \to 0$.
 
 \begin{definition}[{\cite[\S1.3]{Sheffield12}}]
 Let $u, v: U \to \RR^n$ be Lipschitz extensions of a Lipschitz map $\partial U \to \RR^n$.
-\begin{enumerate}
-\item We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
+We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
 $$\sup_{Lu > Lv} Lu < \sup_{Lv > Lu} Lv.$$
-\item If there is no tighter $v$ than $u$, we say that $u$ is \dfn{tight}.
-\item We say that $u$ is \dfn{measurably tighter} than $v$, written $u \prec_M v$, if there exists $s > 0$ such that for every $t \geq s$,
-\begin{align*}
-\vol\{Lu \geq s\} &< \vol\{Lv \geq s\}, \\
-\vol\{Lu \geq t\} &\leq \vol\{Lv \geq t\}.
-\end{align*}
-\item If there is no measurably tighter $v$ than $u$, we say that $u$ is \dfn{measurably tight}.
-\end{enumerate}
+If there is no tighter $v$ than $u$, we say that $u$ is \dfn{tight}.
+% \item We say that $u$ is \dfn{measurably tighter} than $v$, written $u \prec_M v$, if there exists $s > 0$ such that for every $t \geq s$,
+% \begin{align*}
+% \vol\{Lu \geq s\} &< \vol\{Lv \geq s\}, \\
+% \vol\{Lu \geq t\} &\leq \vol\{Lv \geq t\}.
+% \end{align*}
+% \item If there is no measurably tighter $v$ than $u$, we say that $u$ is \dfn{measurably tight}.
 \end{definition}
 
-\begin{lemma}
-Let $u, v: U \to \RR^n$ be Lipschitz extensions of a Lipschitz map $\partial U \to \RR^n$.
-If $u \prec_M v$ then $u \prec v$.
-\end{lemma}
-\begin{proof}
-Claimed without proof by \cite[\S1.4]{Sheffield12}.
-\end{proof}
+% \begin{lemma}
+% Let $u, v: U \to \RR^n$ be Lipschitz extensions of a Lipschitz map $\partial U \to \RR^n$.
+% If $u \prec_M v$ then $u \prec v$.
+% \end{lemma}
+% \begin{proof}
+% Claimed without proof by \cite[\S1.4]{Sheffield12}.
+% \end{proof}
 
 \section{The discrete problem}
 \subsection{Discretization}
-Let $(\tau_h)_{h > 0}$ be a family of triangulations of $\RR^m$ with $\diam(\tau_h) < h$.
-We write $V(T)$ for the set of vertices of a simplex $T \in \tau_h$.
-We say that $x \in \RR^m$ is a \dfn{regular point} if for every $h > 0$ and every $k < m$, $x$ is not contained in any $k$-face of $\tau_h$; otherwise $x$ is a \dfn{vertex point}.
-
-\todo{We are assuming that there exists a family of triangulations such that
+\begin{definition}
+Let $\tau$ be a simplicial complex.
 \begin{enumerate}
-\item All edges are line segments.
-\item Almost every point is regular, but the vertex points are a dense set.
-\item For every $\ell \in \PP^{m - 1}$, $x \in U$, and $0 < h \ll 1$, there are edges $[y_h, z_h]$ of $\tau_h$ contained in a translate of a line $\ell_h$, such that $|x - y_h| \ll h$ and $\dist(\ell, \ell_h) \ll 1$.
-\item Every edge of $\tau_h$ has length $\gtrsim h$.
+\item Let $V_i(\tau)$ be the set of $i$-simplices in $\tau$.
+\item The \dfn{mesh size} $\mesh(\tau)$ of $\tau$ is 
+$$\mesh(\tau) := \sup_{E \in V_1(\tau)} \diam(E).$$
+\item We say that $\tau$ is $R$-\dfn{shape regular}, $R > 0$, if for every $T \in V_m(\tau)$ and every pair of vertices $x, y \in T$,
+$$\diam(T) \leq R|x - y|.$$
+\item We say that $\tau$ is a \dfn{subdivision} of a simplicial complex $\tau'$ if:
+\begin{enumerate}
+\item Every simplex of $\tau$ is contained in a simplex of $\tau'$.
+\item Every simplex of $\tau'$ admits a triangulation by finitely many simplices of $\tau$.
 \end{enumerate}
-This seems to be possible by fixing a triangulation and then computing an iterated barycentric subdivision.
-}
+\end{enumerate}
+\end{definition}
 
+\begin{definition}
+Let $(\tau_h)_{h > 0}$ be a family of triangulations of a polytope $U \subseteq \RR^m$ with $\mesh(\tau_h) \leq h$, such that if $h < h'$, then $\tau_h$ is a subdivision of $\tau_{h'}$.
+\begin{enumerate}
+\item We say that $x \in U$ is a \dfn{regular point} if for every $h > 0$, $x$ is not contained in any $m - 1$-face of $\tau_h$.
+\item We say that $x \in U$ is a \dfn{vertex point} if there exist arbitrarily small $h > 0$ such that $x$ is a vertex of $\tau_h$.
+\end{enumerate}
+\end{definition}
+
+\begin{proposition}
+Suppose that $U$ is the interior of an $m$-simplex.
+Then there is a family of triangulations $(\tau_h)_{h > 0}$ of $U$ such that:
+\begin{enumerate}
+\item For every $h > 0$, $\mesh(\tau_h) \leq h$.
+\item For every $h' > h > 0$, $\tau_h$ is a subdivision of $\tau_{h'}$.
+\item There exists $R > 0$ such that for every $h > 0$, $\tau_h$ is $R$-shape regular.
+\item For every $h > 0$ and every edge $T \in V_1(\tau_h)$, $T$ is a line segment.
+\item Almost every point of $U$ is regular, but the vertex points are a dense subset of $U$.
+\item For every $\ell \in \PP^{m - 1}$, $x \in U$, and $h > 0$, there exist $T_h \in V_m(\tau_h)$ and an edge $[y_h, z_h]$ of $T_h$, such that $x \in T_h$,
+$$\lim_{h \to 0} \frac{|x - y_h|}{\diam(T_h)} = 0,$$
+and if $[y_h, z_h]$ is a line segment in a translate of $\ell_h \in \PP^{m - 1}$, then $\ell_h \to \ell$.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+\end{proof}
+
+\todo{We need something much weaker than this (the proposition is false anyways). In particular we don't care if they are subdivisions, only that regular and vertex points are well-defined.}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Lipschitz maps from simplicial complexes}
 For a Lipschitz map $u: U \to \RR^n$ and $h > 0$, define $u_h$ by letting $u_h(x) = u(x)$ whenever $x$ is a vertex of $\tau_h$, and extension so $u_h$ is linear on each simplex of $\tau_h$.
 Thus for any simplex $T \in \tau_h$ and regular point $x \in T$,
 \begin{equation}\label{discrete derivative is vertex lip}
@@ -267,22 +310,32 @@ Then for every sufficiently small $h$, $u_h \prec v_h$.
 \begin{proof}
 Let 
 $$M := \sup_{Lu < Lv} Lv$$
-Since $u \prec v$, there exists $\delta > 0$ such that for any $x \in U$ with $Lv(x) < Lu(x)$, $Lu(x) < M - \delta$.
+Since $u \prec v$, there exists $\delta > 0$ such that
+$$\sup_{Lv < Lu} Lu(x) < M - \delta.$$
 
 \begin{claim}
 If $\delta, h$ are small enough, then 
-$$\sup_{Lu_h < Lv_h} Lv_h \geq Lv_h(x) > M - \delta.$$
+$$\sup_{Lu_h < Lv_h} Lv_h > M - \delta.$$
 \end{claim}
 \begin{proof}[Proof of claim]
-If $\delta$ is chosen small enough, then there exists $x \in U$ and $\delta' \in (0, \delta)$ such that $Lv(x) > M - \delta'$ and $Lu(x) < M - \delta$.
-We claim that $Lv_h(x) \geq M - \delta$ for all $h$ small enough. 
-By \todo{the unproven claim of \cite[\S1.4]{Sheffield12} that the set of points above $M - \delta'$ has positive measure} we may assume that $v$ is differentiable at $x$.
-Then we can find a unit vector $\omega \in \Sph^{m - 1}$ such that 
+By definition of $M$, if $\delta$ is taken small enough, then there exists $x \in U$ such that
+$$Lu(x) < M - \delta < Lv(x).$$
+By (\ref{partial lower semicontinuity}), and the fact that $\{Lu < M - \delta\}$ is open, it follows that the set of $y$ such that $Lv(y) > M - \delta$ and $Lu(y) < M - \delta$ has positive measure.
+So by Rademacher's theorem, after replacing $x$ with some such $y$, we may assume that $v$ is differentiable at $x$.
+Moreover, we can find $\delta' < \delta$ such that $Lv(x) > M - \delta'$.
+\todo{It is impossible to impose $|x - y_h| \ll \diam(T_h)$. However, this is probably OK, because we have freedom to choose a DIFFERENT $x$ at every scale to be close in a scale-invariant sense to a vertex point.}
+\todo{Alternatively, we can try to redo this argument using Egorov's theorem again.}
+
+Since $v$ is differentiable at $x$, we can find a principal singular vector $\omega \in \Sph^{m - 1}$ of $\dif v(x)$.
+In particular,
 $$\lim_{\varepsilon \to 0} \frac{|v(x + \varepsilon \omega) - v(x)|}{\varepsilon} > M - \delta'.$$
-Let $\ell$ be the line through $\omega$.
-Choose edges $[y_h, z_h]$ of $\tau_h$, contained in translates of lines $\ell_h$, such that $|x - y_h| \ll h$ and $\dist(\ell, \ell_h) \ll 1$.
-Then
-$$|(x + |y_h - z_h| \omega) - z_h| \ll h \lesssim |y_h - z_h|.$$
+\todo{Need to use upper semicontinuity to check that this works! Crandall only gives $|\dif v(x)|_\infty \leq Lv(x)$.}
+Let $\ell$ be the line through $\omega$ and let $T_h \in V_m(\tau_h)$ contain $x$.
+By the definition of $\tau_h$, we can find edges $[y_h, z_h]$ of $\tau_h$, contained in translates of lines $\ell_h$, such that $\ell_h \to \ell$ and $|x - y_h|/\diam(T_h) \to 0$.
+In particular, since $\dist(\ell, \ell_h) \to 0$, if we define $\omega_h$ by 
+$$z_h = y_h + |y_h - z_h| \omega_h,$$
+then $\omega_h \to \omega$ and
+$$|x + |y_h - z_h| \omega - z_h| \leq |x - y_h| + |y_h - z_h| \cdot |\omega - \omega_h| \ll \diam(T_h) (1 + R).$$
 Therefore 
 \begin{align*}
 |v(y_h) - v(z_h)| &\geq |v(x + |y_h - z_h| \omega) - v(x)| - o(|y_h - z_h| \Lip(v)) \\
@@ -291,7 +344,13 @@ Therefore
 so 
 $$Lv_h(x) \geq (1 - o(1))(M - \delta') > M - \delta$$
 if $h$ is small enough.
-Since $\{Lu < M - \delta\}$ is open, $\Lip(u, B(x, r)) < M - \delta$ for $0 < r \ll 1$, so $Lu_h(x) < M - \delta$ if $h$ is small enough, so we deduce the claim.
+
+Since $\{Lu < M - \delta\}$ is open, $\Lip(u, B(x, r)) < M - \delta$ for $0 < r \ll 1$.
+So $Lu_h(x) < M - \delta < Lv_h(x)$ if $h$ is small enough.
+Therefore
+\begin{align*}
+\sup_{Lu_h < Lv_h} Lv_h &\geq Lv_h(x) > M - \delta. \qedhere 
+\end{align*}
 \end{proof}
 
 \begin{claim}
@@ -325,7 +384,7 @@ Let $x \in U$ satisfy $Lv_h(x) < Lu_h(x) - \theta$.
 Then there exists $\kappa > 0$ such that
 $$Lv_h(x) < Lu_h(x) - \theta - \kappa.$$
 Moreover, $V := \{Lv_h < Lu_h(x) - \theta - \kappa\}$ is an open neighborhood of $x$ since $Lv_h$ is upper semicontinuous.
-So the set $W := \{Lu_h > Lu_h(x) - \kappa\} \cap V$ has positive measure \todo{by that unproven SS lemma}.
+So the set $W := \{Lu_h > Lu_h(x) - \kappa\} \cap V$ has $\vol(W) > 0$ by (\ref{partial lower semicontinuity}).
 So $W \setminus Z$ is nonempty and for any $y \in W$,
 $$Lv_h(y) < Lu_h(x) - \theta - \kappa < Lu_h(y) - \theta$$
 which implies $Lu_h(y) \leq M - \delta$.
