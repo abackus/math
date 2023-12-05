@@ -156,33 +156,116 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
+Let $U \subseteq \RR^m$ be an open polytope.
 
+\begin{definition}
+For a Lipschitz map $u: U \to \RR^n$, define the \dfn{Lipschitz modulus}
+$$Lu(x) := \inf_{r > 0} \Lip(u, B(x, r)).$$
+\end{definition}
+
+\begin{definition}[{\cite[\S1.3]{Sheffield12}}]
+Let $u, v: U \to \RR^n$ be Lipschitz maps such that $u|_{\partial U} = v|_{\partial U}$.
+We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
+$$\sup_{Lu > Lv} Lu < \sup_{Lv > Lu} Lv.$$
+If there is no tighter $v$ than $u$, we say that $u$ is \dfn{tight}.
+\end{definition}
+
+\begin{theorem}
+Every Lipschitz map $f: \partial U \to \RR^n$ has a tight extension $u: U \to \RR^n$.
+\end{theorem}
+
+Showing that the finite element approximations converge is hard, because the local Lipschitz constant of the approximation is piecewise constant, and we do not have any a priori estimates on the $W^{s, p}$ norms of the exact solution when $s > 1$.
+Therefore we do not expect the approximate local Lipschitz constants to converge in any stronger sense than pointwise convergence almost everywhere.
+This difficulty is already implicit in the numerical analysis literature concerning the scalar $\infty$-Laplacian.
+Even though finite element approximations to $\infty$-harmonic functions $u$ are available \cite{Loisel_2020}, we are not aware of any estimates on the approximation error for $\dif u$ as in the case of $p$-harmonic functions, $p < \infty$ \cite{Barrett93}.
 
 %%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
 \subsection{Notation}
 \begin{enumerate}
-\item $E^\circ$ is interior of a set $E$.
-\item For $p \in [1, \infty]$, and a linear map $A$, $|A|_p$ is the $p$th Schatten norm of $A$.
+\item $U$ is an open polytope in $\RR^m$.
+\item For a measurable set $E$, $E^\circ$, $\overline E$, and $\vol(E)$ are the interior, closure, and Lebesgue measure of $E$.
 \item For a continuous map $u: U \to \RR^n$ and a set $E \subseteq U$, $\Lip(u, E)$ is the Lipschitz constant of $u|_E$.
+\item For a precompact measurable set $E$ and $f \in L^1(E)$, $\dashint_E f := \vol(E)^{-1} \int_E f$.
+\item For $p \in [1, \infty]$, and a linear map $A$, $|A|_p$ is the $p$th Schatten norm of $A$.
 \end{enumerate}
 
 %%%%%%%%%%%%%%%%
-\subsection{Lipschitz maps}
-For a Lipschitz map $u: U \to \RR^n$, let
-$$Lu(x) := \inf_{r > 0} \Lip(u, B(x, r)).$$
-Then $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
-Though $Lu$ is not lower semicontinuous, it enjoys the following partial lower semicontinuity property:
+\subsection{Measure theory}
+\begin{proposition}[one-sided Egorov theorem]\label{one sided Egorov}
+Let $X$ be a Polish space, $\mu$ a finite Borel measure on $X$, and $f_n, f$ $\mu$-measurable functions on $X$, such that for $\mu$-almost every $x \in X$,
+$$f(x) \leq \liminf_{n \to \infty} f_n(x).$$
+Then for every $\varepsilon > 0$ there exists a $\mu$-measurable set $Z_\varepsilon \subseteq X$ such that $\mu(Z_\varepsilon) < \varepsilon$ and for every $\delta > 0$ there exists $N \in \NN$ such that for every $n \geq N$ and every $x \in X \setminus Z_\varepsilon$,
+$$f(x) < f_n(x) + \delta.$$
+\end{proposition}
+\begin{proof}
+Let 
+$$E_{n, k} := \bigcup_{m \geq n} \left\{x \in X: f(x) \geq f_m(x) + \frac{1}{k}\right\}.$$
+Then for $m \geq n$, $E_{m, k} \subseteq E_{n, k}$; since $f_n \to f$ $\mu$-almost everywhere, it follows that for every $k$, $\bigcap_n E_{n, k}$ is $\mu$-null.
+By continuity from above of $\mu$, for every $k$, there exists $n(k)$ such that $\mu(E_{n(k), k}) < \varepsilon/2^k$.
+We set $Z_\varepsilon := \bigcup_k E_{n(k), k}$, so $\mu(Z_\varepsilon) < \varepsilon$.
+For each $\delta > 0$, if $k \geq \delta^{-1}$, then for
+$$x \in X \setminus E_{n(k), k} \subseteq X \setminus Z_\varepsilon,$$
+and $n \geq n(k)$, $f(x) < f_n(x) + \delta$.
+\end{proof}
 
-\begin{lemma}
-Let $x \in U$, let $V \subseteq U$ be an open neighborhood of $x$, and let $\delta > 0$.
-Then for any Lipschitz map $u: U \to \RR^n$,
-\begin{equation}\label{partial lower semicontinuity}
-\vol(V \cap \{Lu > Lu(x) - \delta\}) > 0.
-\end{equation}
+\begin{lemma}[lower semicontinuity of vectorial total variation]\label{TV lower semicontinuity}
+Let $|\cdot|_M$ be a norm on $n \times m$-matrices, let $u_n, u \in BV(U, \RR^n)$, and suppose that $u_n \to u$ in $L^1$.
+Then for any open $V \subseteq U$,
+$$\int_V |\dif u|_M(x) \dif x \leq \liminf_{n \to \infty} \int_V |\dif u_n|_M(x) \dif x.$$
 \end{lemma}
 \begin{proof}
-\todo{Claimed without proof by \cite[\S1.4]{Sheffield12}.}
+Let $|\cdot|_M'$ be the dual norm to $|\cdot|_M$.
+Let $\mathscr D$ be the set of all $X \in C^1_\cpt(U, \RR^{n \times m})$ such that $\||X|_M'\|_{C^0} \leq 1$.
+Integrating by parts, for any $v \in BV(U, \RR^n)$, 
+$$\int_V |\dif v|_M(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle \dif v, X\rangle(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle v, \nabla \cdot X\rangle(x) \dif x.$$
+The result follows when we use the $L^1$ convergence to bound
+\begin{align*}
+\sup_{X \in \mathscr D} \int_V \langle u, \nabla \cdot X\rangle(x) \dif x 
+&\leq \liminf_{n \to \infty} \sup_{X \in \mathscr D} \int_V \langle u_n, \nabla \cdot X\rangle(x) \dif x. \qedhere
+\end{align*}
+\end{proof}
+
+%%%%%%%%%%%%%%%%
+\subsection{Lipschitz maps}
+The Lipschitz modulus $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
+\todo{Should probably put a more detailed exposition of the Crandall lemma here, since we use it so often.}
+Though $Lu$ is not lower semicontinuous, it is "lower semicontinuous on average" in the following sense:
+
+\begin{lemma}\label{partial lower semicontinuity}
+Let $x \in U$, let $V \subseteq U$ be an open neighborhood of $x$, and let $\delta > 0$.
+Then for any Lipschitz map $u: U \to \RR^n$,
+$$\vol(V \cap \{Lu > Lu(x) - \delta\}) > 0.$$
+\end{lemma}
+\begin{proof}
+It suffices to show the contrapositive: if, for almost every $y \in V$, $Lu(y) \leq K$, then $Lu(x) \leq K$ as well.
+Furthermore, by shrinking $V$ to be a ball if necessary, we may assume that $V$ is convex.
+Let $\Delta_V$ be the diagonal of $V^2$. Then
+$$Lu(x) \leq \Lip(u, V) \leq \sup_{(y, z) \in V^2 \setminus \Delta_V} \frac{|u(y) - u(z)|}{|y - z|}.$$
+Since the difference quotient $f(y, z) := |u(y) - u(z)|/|y - z|$ is continuous on $V^2 \setminus \Delta_V$, this expression is the $L^\infty$ norm of $f$.
+Moreover, $\Delta_V$ is a null subset of $V^2$, so
+$$\|f\|_{L^\infty(V^2 \setminus \Delta_V)} = \lim_{p \to \infty} \left[\int_V \int_V \frac{|u(y) - u(z)|^p}{|y - z|^p} \dif y \dif z\right]^{1/p}.$$
+We estimate this integral using the mean value and Jensen inequalities:
+\begin{align*} 
+\int_V \int_V \frac{|u(y) - u(z)|^p}{|y - z|^p} \dif y \dif z 
+&\leq \int_V \int_V \frac{1}{|y - z|^p} \left[\int_{[y, z]} Lu(w) \dif w\right]^p \dif y \dif z \\
+&\leq \int_V \int_V \frac{1}{|y - z|} \int_{[y, z]} Lu(w)^p \dif w \dif y \dif z. 
+\end{align*}
+Let $E(y, w)$ be the set of points in $V$ on the line $\ell$ through $y, w$ which are to the right of $w$, where $\ell$ is oriented so that the vector $w - y$ points to the right.
+Then $w \in [y, z]$ iff $z \in E(y, w)$, so we can rewrite the bounds of integration using Fubini's theorem as follows:
+$$\int_V \int_V \frac{1}{|y - z|} \int_{[y, z]} Lu(w)^p \dif w \dif y \dif z = \int_V \int_V \int_{E(y, w)} Lu(w)^p \frac{\dif z}{|y - z|} \dif y \dif w.$$
+The point is that $w$ now ranges over $V$, and we know that for almost every $w \in V$, $Lu(w) \leq K$.
+We therefore can estimate this integral, and undo the change in the order of integration, as follows:
+\begin{align*} 
+\int_V \int_V \int_{E(y, w)} Lu(w)^p \frac{\dif z}{|y - z|} \dif y \dif w
+&\leq K^p \int_V \int_V \int_{E(y, w)} \frac{\dif z}{|y - z|} \dif y \dif w \\
+&= K^p \int_V \int_V \int_{[y, z]} \frac{\dif w}{|y - z|} \dif y \dif z \\
+&= K^p \vol(V)^2.
+\end{align*}
+Therefore 
+\begin{align*}
+Lu(x) &\leq \|f\|_{L^\infty(V^2 \setminus \Delta_V)} \leq K \lim_{p \to \infty} \vol(V)^{2/p} = K. \qedhere 
+\end{align*}  
 \end{proof}
 
 \begin{lemma}\label{Lip is du}
@@ -190,9 +273,16 @@ For every Lipschitz map $u: U \to \RR^n$ and almost every $x \in U$,
 $$Lu(x) = |\dif u|_\infty(x).$$
 \end{lemma}
 \begin{proof}
-If $u$ is $C^1$, then for any convex open set $V \subseteq U$,
-$$\||\dif u|_\infty\|_{C^0(V)} = \Lip(u, V).$$
-So by a similar argument to \cite[Lemma 4.2(e)]{Crandall2008}, for any $x \in U$,
+We first claim that for any convex open set $V \subseteq U$ and any $y, z \in V$, we have the mean-value estimate 
+\begin{equation}\label{mean value estimate}
+|u(y) - u(z)| \leq \||\dif u|_\infty\|_{L^\infty(V)} |y - z|
+\end{equation}
+and this estimate is sharp.
+If $u \in C^1(U)$, this estimate is clear, and its sharpness follows from taking $y$ to be a maximizer of $|\dif u|_\infty$ and $z$ close to $y$ such that $y - z$ is in the span of a principal singular vector of $\dif u(y)$.
+In general, we can consider a mollification $(u_\varepsilon)_{\varepsilon > 0}$ and exploit the facts that $u_\varepsilon \to u$ in $C^0$ and $|\dif u_\varepsilon|_\infty \leq \Lip(u, B(x, \varepsilon))$.
+We omit the standard details.
+
+We apply (\ref{mean value estimate}) and a similar argument to \cite[Lemma 4.2(e)]{Crandall2008}, to prove that for any $x \in U$,
 $$Lu(x) = \lim_{r \to 0} \||\dif u|_\infty\|_{L^\infty(B(x, r))}.$$
 Let $\varepsilon > 0$.
 By Lusin's theorem, there is a closed set $Z_\varepsilon \subset U$ such that $\vol(Z_\varepsilon) < \varepsilon$ and $|\dif u|_\infty$ is continuous on $U \setminus Z_\varepsilon$.
@@ -202,177 +292,343 @@ hence $Lu(x) = |\dif u|_\infty(x)$.
 The claim follows by taking $\varepsilon \to 0$.
 \end{proof}
 
-\begin{definition}[{\cite[\S1.3]{Sheffield12}}]
-Let $u, v: U \to \RR^n$ be Lipschitz extensions of a Lipschitz map $\partial U \to \RR^n$.
-We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
-$$\sup_{Lu > Lv} Lu < \sup_{Lv > Lu} Lv.$$
-If there is no tighter $v$ than $u$, we say that $u$ is \dfn{tight}.
-% \item We say that $u$ is \dfn{measurably tighter} than $v$, written $u \prec_M v$, if there exists $s > 0$ such that for every $t \geq s$,
-% \begin{align*}
-% \vol\{Lu \geq s\} &< \vol\{Lv \geq s\}, \\
-% \vol\{Lu \geq t\} &\leq \vol\{Lv \geq t\}.
-% \end{align*}
-% \item If there is no measurably tighter $v$ than $u$, we say that $u$ is \dfn{measurably tight}.
-\end{definition}
-
-% \begin{lemma}
-% Let $u, v: U \to \RR^n$ be Lipschitz extensions of a Lipschitz map $\partial U \to \RR^n$.
-% If $u \prec_M v$ then $u \prec v$.
-% \end{lemma}
-% \begin{proof}
-% Claimed without proof by \cite[\S1.4]{Sheffield12}.
-% \end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The discrete problem}
-\subsection{Discretization}
-We introduce some notation for a finite simplicial complex $\tau$ of dimension $\leq m$.
-Let $F_i(\tau)$ be the set of $i$-faces of $\tau$.
-The \dfn{mesh size} $\mesh(\tau)$ of $\tau$ is 
-$$\mesh(\tau) := \max_{E \in F_1(\tau)} \diam(E).$$
-Notice that for any face $F \in F_i(\tau)$ with $i \in \{1, \dots, m\}$, $\diam(F) \leq \mesh(\tau)$.
-
-Now we fix a triangulation $\tau$ of the open polytope $U \subseteq \RR^m$.
-For each $h > 0$, define $\tau_h$ to be an iterated barycentric subdivision of $\tau$ such that $\mesh(\tau_h) \leq h$.
-We say that $x \in U$ is regular if for every $h > 0$, $x$ is not contained in some face $T \in F_{m - 1}(\tau_h)$.
-In particular, almost every point is regular.
-
-For a Lipschitz map $u: U \to \RR^n$ and $h > 0$, define $u_h$ by letting $u_h(x) = u(x)$ whenever $x$ is a vertex of $\tau_h$, and extension so $u_h$ is linear on each simplex of $\tau_h$.
-Thus for $i \in \{1, \dots, m\}$, $T \in F_i(\tau_h)$, and $x \in T^\circ$,
-\begin{equation}\label{discrete derivative is vertex lip}
-|\dif u_h|_\infty(x) = \max_{y, z \in T \cap F_0(\tau_h)} \frac{|u(y) - u(z)|}{|y - z|}.
-\end{equation}
-In particular,
-\begin{equation}\label{discretization contracts lipschitz}
-\Lip(u_h, T^\circ) \leq \Lip(u, T).
-\end{equation}
-
-\begin{lemma}
-For every $x \in U$ and every Lipschitz map $u: U \to \RR^n$,
-$$|u_h(x) - u(x)| \leq 2h \Lip(u, B(x, h)).$$
+\begin{lemma}[lower semicontinuity of $L$]\label{Lip is lower semicontinuous}
+Suppose that $u_k, u: U \to \RR$ are maps with $u_k \to u$ in $L^1$ and $\Lip(u_k, U) \leq K < \infty$.
+Then for almost every $x \in U$,
+$$Lu(x) \leq \liminf_{k \to \infty} Lu_k(x).$$
 \end{lemma}
-\begin{proof}
-First suppose that $x$ is a regular point.
-Suppose that $T \in F_m(\tau_h)$ contains $x$ and let $y \in T \cap F_0(\tau_h)$.
-Then $u_h(y) = u(y)$, so 
-$$|u_h(x) - u(x)| \leq |u_h(y) - u_h(x)| + |u(y) - u(x)|.$$
-Since $x$ is a regular point and $T$ is convex, the line segment $[x, y)$ is contained in $T^\circ$.
-So by continuity of $u$ and $u_h$, and (\ref{discretization contracts lipschitz}),
-$$|u_h(y) - u_h(x)| + |u(y) - u(x)| \leq h(\Lip(u_h, T^\circ) + \Lip(u, T^\circ)) \leq 2h \Lip(u, T^\circ).$$
-In particular, 
-$$|u_h(x) - u(x)| \leq 2h \Lip(u, T^\circ).$$
-By continuity of $u_h$ and $u$, this holds for any $x \in T$, not just a regular point.
-Moreover, $T^\circ \subseteq B(x, h)$ since $\mesh(\tau_h) \leq h$, so the claim holds.
-\end{proof}
-
-\begin{lemma}\label{du converges ae}
-For any Lipschitz map $u: U \to \RR^n$, $Lu_h \to Lu$ almost everywhere.
-\end{lemma}
-\begin{proof}
-Let $\varepsilon > 0$.
-By Lusin's theorem, there is a closed set $Z_\varepsilon \subset U$ with $\vol(Z_\varepsilon) < \varepsilon$ such that $|\dif u|_\infty$ is continuous away from $Z_\varepsilon$.
-We shall show that $|\dif u_h|_\infty(x) \to |\dif u|_\infty(x)$ for every regular point $x$ of $U \setminus Z_\varepsilon$.
-Taking $\varepsilon \to 0$ and applying Lemma \ref{Lip is du}, this implies the claim.
-
-For each $h > 0$, let $T_h \in F_m(\tau_h)$ contain $x$.
-Since $x$ is a regular point, $x \in T_h^\circ$, so by (\ref{discrete derivative is vertex lip}) we can find $y_h, z_h \in T_h \cap F_0(\tau_h)$ and a point $w_h$ on the edge $[y_h, z_h]$ such that
-$$|\dif u_h|_\infty(x) = \frac{|u(y_h) - u(z_h)|}{|y_h - z_h|} = |\dif u|_\infty(w_h).$$
-If $h$ is small enough depending on $x$, then $T_h$ is contained in the open set $U \setminus Z_\varepsilon$, so 
+\begin{proof} 
+  \todo{Check this one carefully}
+We first use the Lebesgue differentiation theorem to write, for almost every $x \in U$,
+$$Lu(x) = \lim_{r \to 0} \dashint_{B(x, r)} Lu(y) \dif y.$$
+By Lemmata \ref{Lip is du} and \ref{TV lower semicontinuity},
+$$\dashint_{B(x, r)} Lu(y) \dif y \leq \liminf_{k \to \infty} \dashint_{B(x, r)} Lu_k(y) \dif y.$$
+Estimating $Lu_k(y) \leq \Lip(u_k, U) \leq K$ and applying dominated convergence and the Lebesgue differentiation theorem again,
 \begin{align*}
-\lim_{h \to 0} |\dif u_h|_\infty(x) = \lim_{h \to 0} |\dif u|_\infty(w_h) &= |\dif u|_\infty(x). \qedhere
+\lim_{r \to 0} \dashint_{B(x, r)} Lu(y) \dif y
+&\leq \lim_{r \to 0} \dashint_{B(x, r)} \liminf_{k \to \infty} Lu_k(y) \dif y
+\leq \liminf_{k \to \infty} Lu_k(x). \qedhere
 \end{align*}
 \end{proof}
 
-The proof of Lemma \ref{du converges ae} fails for discretizations that are not simplicial complexes.
-This is because it is false that $[y_h, z_h]$ is an edge in that case.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Application of the finite element method}
+\subsection{Construction of the combinatorial model}
+We introduce some notation for a finite simplicial complex $\tau$.
+Let $F_i(\tau)$ be the set of $i$-faces of $\tau$.
+The \dfn{mesh size} $\mesh(\tau)$ of $\tau$ is 
+$$\mesh(\tau) := \max_{E \in F_1(\tau)} \diam(E).$$
+For any face $T \in F_i(\tau)$ with $i \geq 1$, $\diam(T) \leq \mesh(\tau)$.
 
-%%%%%%%%%%%%%%%%%%%
-\subsection{From discrete to continuum tight maps}
-\begin{proposition}
-Assume that $u \prec v$.
-Then for every sufficiently small $h$, $u_h \prec v_h$.
+Now we fix a triangulation $\tau$ of the open polytope $U \subseteq \RR^m$.
+For each $h > 0$, define $\tau_h$ to be an iterated barycentric subdivision of $\tau$ such that:
+\begin{enumerate}
+\item $\mesh(\tau_h) \leq h$.
+\item If $h' < h$, then $\tau_{h'}$ is a subdivision of $\tau_h$.
+\end{enumerate}
+
+We next need to construct shape maps adapted to our problem.
+We would like to consider the PL maps to be the shape maps, as in the finite element approximation of the Laplacian.
+This doesn't quite work.
+Let $u(x, y) := x + y$, and $T$ the standard $2$-simplex.
+Then $Lu = \sqrt 2$ but the right-hand side of (\ref{Lip constant comes from 1 skeleton}) is $1$.
+
+Furthermore, we cannot construct the extension by Perron's method even if $n = 1$, because we need the shape maps to sometimes fail to be viscosity solutions of the eikonal equation.\footnote{The Dirichlet problem for viscosity solutions to the eikonal equation is overdetermined, since such any solution is also a viscosity solution to the $\infty$-Laplacian, whose Dirichlet problem is well-posed.}
+Instead, we use the more involved construction described below.
+
+\begin{lemma}\label{existence of lines}
+Suppose that $k \geq 2$, and let $V \subseteq \RR^k$ be an open set.
+Then there exist points $q_i \in U$ and line segments $\ell_i \subset V$, $i \in \NN$, such that:
+\begin{enumerate}
+\item $\{q_i: i \in \NN\}$ is dense in $V$.
+\item $q_i \in \ell_i$.
+\item For $i \neq j$, $\ell_i \cap \ell_j = \emptyset$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+A \dfn{packing} of an open set $W \subseteq \RR^k$ is a set of disjoint subsets of $W$.
+(We stress that these sets cannot intersect $\partial W$.)
+A \dfn{maximal packing} of $W$ by sets satisfying a property $\mathscr P$ is a packing $P$ by sets satisfying $\mathscr P$, such that there does not exist a packing $Q \supset P$ of sets satisfying $\mathscr P$.
+
+Let $\{B(q, 1/9): q \in \mathscr U^2\}$ be a maximal packing of $V$ by balls of radius $1/9$.
+For each $q \in \mathscr U^2$, choose a line segment $\ell(q) \subset B(q, 1)$ of length $1/16$ passing through $q$.
+
+Suppose that for $2 \leq J < I$, we have defined $\mathscr U^J$.
+Let $L^{I - 1}$ be the union of the segments $\ell(q)$ such that for some $2 \leq J < I$, $q \in \mathscr U^J$.
+Let $\{B(q, 3^{-I}): q \in \mathscr U^I\}$ be a maximal packing of $V \setminus L^{I - 1}$ by balls of radius $3^{-I}$.
+For each $q \in \mathscr U^I$, choose a line segment $\ell(q) \subset B(q, 2^{-I})$ of length $4^{-I}$ passing through $q$.
+
+The line segments in $L^I$ are $3^{-I} - 4^{-I}$-separated \todo{by induction}.
+Let $x \in V \setminus L^I$ satisfy $\dist(x, \partial V) > 3^{-I + 2}$.
+If
+$$\min_{2 \leq J \leq I} \dist(x, \mathscr U^J) > 3^{-I + 2},$$
+then by maximality of $\mathscr U^I$, $B(x, 3^{-I + 2}) \setminus L^I$ must not contain any balls of radius $3^{-I}$.
+\todo{But we know that $x$ is far from $\mathscr U^I$ so the lines are actually all in $L^{I - 1}$ and hence even more separated. Thus we do get a ball, a contradiction.}
+So 
+\begin{equation}\label{approximate density}
+\min_{2 \leq J \leq I} \dist(x, \mathscr U^J) \leq 3^{-I + 2}.
+\end{equation}
+Since $k \geq 2$, and $L^I$ is a finite union of line segments, $L^I$ is nowhere dense in $V$.
+Therefore (\ref{approximate density}) actually holds for every $v \in V$ with $\dist(x, \partial V) > 3^{-I + 2}$.
+
+Once we have defined $\mathscr U^I$ for every $I \geq 2$, let $(q_i)$ be an enumeration of $\bigcup_{I \geq 2} \mathscr U^I$, and let $\ell_i := \ell(q_i)$.
+It is clear from the construction that $q_i \in \ell_i$ and if $i \neq j$ then $\ell_i \cap \ell_j = \emptyset$.
+From (\ref{approximate density}), we see that $\{q_i: i \in \NN\}$ is dense in $V$.
+\end{proof}
+
+\begin{lemma}\label{eikonal extension}
+Let $V \subseteq \RR^k$ be a convex open set.
+For every Lipschitz map $f: \partial V \to \RR^n$, there exists an extension $u: V \to \RR^n$ of $f$, such that for every $x \in V$,
+$$Lu(x) = \Lip(f, \partial V).$$
+\end{lemma}
+\begin{proof}
+If $k = 1$, then $V$ is a line segment and we can take $u$ to be the linear interpolation of $f$.
+So we may assume $k \geq 2$.
+Let $(q_i)$ and $(\ell_i)$ be as in Lemma \ref{existence of lines}.
+
+Let $K := \Lip(f, \partial V)$.
+By the Kirszbraun-Valentine theorem, there exists an extension $u_0: V \to \RR^n$ of $f$ such that $\Lip(u_0, V) \leq K$.
+
+\begin{claim}
+Suppose that we are given $u_{i - 1}: V \to \RR^n$ such that:
+\begin{enumerate}
+\item $u_{i - 1}|_{\partial V} = f$.
+\item $\Lip(u_{i - 1}, V) \leq K$.
+\item For every $j < i - 1$ and $x \in \ell_j$, $L(u_{i - 1}|_{\ell_j})(q_j) \geq K$.
+\end{enumerate}
+Then there exists $u_i: V \to \RR^n$ with the same properties, but with $i - 1$ replaced by $i$.
+Furthermore, if $j < i - 1$ then $u_i|_{\ell_j} = u_{i - 1}|_{\ell_j}$.
+\end{claim}
+\begin{proof}[Proof of claim]
+\todo{Use the improvement trick}
+\end{proof}
+
+\todo{Take the limit}
+\end{proof}
+
+\begin{proposition}[construction of shape maps]\label{construction of shape maps}
+Let $X := F_0(\tau_h)$ be the $0$-skeleton.
+For each map $u_0: X \to \RR^n$ there exists a map $u: u \to \RR^n$ such that $u|_X = u_0$ and for every $x \in X$,
+\begin{equation}\label{Lip constant comes from 1 skeleton}
+Lu(x) \leq \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in X \\ y, z \in T}} \frac{|u(y) - u(z)|}{|y - z|}.
+\end{equation}
 \end{proposition}
 \begin{proof}
-Let 
-$$M := \sup_{Lu < Lv} Lv$$
+Let $k \geq 1$, and let $T$ be a $k$-face.
+Inductively define $u_k|_T$ to be the extension of $u_{k - 1}$ given by Lemma \ref{eikonal extension}; then $u_k$ is Lipschitz on the $k$-skeleton of $\tau_h$, with $\Lip(u_k, T) \leq \Lip(u_k, V_T)$ where $V_T$ is the set of vertices of $T$.
+
+Let $u := u_m$.
+By Lemma \ref{partial lower semicontinuity}, the estimate (\ref{Lip constant comes from 1 skeleton}) holds beause it does whenever $x \in T^\circ$ for some $m$-face $T$.
+\end{proof}
+
+\begin{definition}
+Let $h > 0$.
+For every map $u_0: F_0(\tau_h) \to \RR^n$, choose a map $u: U \to \RR^n$ satisfying the conclusion of Lemma \ref{construction of shape maps}.
+We call $u$ the $h$-\dfn{shape map} extending $u_0$.
+\end{definition}
+
+%%%%%%%%%%%%%%%
+\subsection{Approximation of Lipschitz maps}
+We define a projection operator $\Pi_h$, by declaring that for every continuous map $v: U \to \RR^n$, $\Pi_h v$ is the unique $h$-shape map such that 
+$$\Pi_h v|_{F_0(\tau_h)} = v|_{F_0(\tau_h)}.$$
+We can use (\ref{Lip constant comes from 1 skeleton}) to show that for every $x \in U$,
+\begin{equation}\label{discrete derivative is vertex lip}
+L \Pi_h u(x) = \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in F_0(\tau_h) \\ y, z \in T}} \frac{|u(y) - u(z)|}{|y - z|}.
+\end{equation}
+We now use this estimate to show the convergence of $\Pi_h u$ to $u$ whenever $u$ is Lipschitz.
+
+\begin{lemma}\label{uniform convergence}
+For every $x \in U$ and every Lipschitz map $u: U \to \RR^n$,
+$$|\Pi_h(x) - u(x)| \leq 2h \Lip(u, B(x, h)).$$
+\end{lemma}
+\begin{proof}
+Suppose that $T \in F_m(\tau_h)$ attains the maximum in (\ref{discrete derivative is vertex lip}).
+Let $y$ be a vertex of $T$.
+Then $\Pi_h u(y) = u(y)$, so 
+$$|\Pi_h u(x) - u(x)| \leq |\Pi_h u(y) - u_h(x)| + |u(y) - u(x)|.$$
+By (\ref{discrete derivative is vertex lip}) and the fact that $T \subseteq B(x, h)$,
+\begin{align*}
+|\Pi_h u(y) - u_h(x)| + |u(y) - u(x)| &\leq 2h \Lip(u, T) \leq 2h \Lip(u, B(x, h)). \qedhere
+\end{align*}
+\end{proof}
+
+\begin{lemma}\label{du converges ae}
+For any Lipschitz map $u: U \to \RR^n$, $L\Pi_h u \to Lu$ almost everywhere.
+\end{lemma}
+\begin{proof}
+By Lemma \ref{uniform convergence}, $\Pi_h u \to u$ uniformly.
+By (\ref{Lip constant comes from 1 skeleton}), $\Lip(\Pi_h u, U) \leq \Lip(u, U) < \infty$, so by Lemma \ref{Lip is lower semicontinuous},
+$$Lu \leq \liminf_{h \to 0} L\Pi_hu$$
+almost everywhere.
+Thus it suffices to show that for almost every $x \in U$,
+\begin{equation}\label{upper semicontinuity of discrete Lips}
+\limsup_{h \to 0} L\Pi_h u(x) \leq Lu(x).
+\end{equation}
+By Lusin's theorem, for every $\varepsilon > 0$ there is a closed set $Z_\varepsilon \subset U$ with $\vol(Z_\varepsilon) < \varepsilon$ such that $Lu$ is continuous away from $Z_\varepsilon$.
+It suffices to show (\ref{upper semicontinuity of discrete Lips}) for every $x \in U \setminus Z_\varepsilon$.
+
+By (\ref{discrete derivative is vertex lip}) and a straightforward modification of \cite[Lemma 4.2(d)]{Crandall2008}, for every $h > 0$ there exist $T_h \in F_m(\tau_h)$, $[y_h, z_h] \in F_1(\tau_h)$ and $w_h \in [y_h, z_h]$ such that $x \in T_h$, $[y_h, z_h] \subseteq T_h$, and
+$$L \Pi_h u(x) \leq \frac{|u(y_h) - u(z_h)|}{|y_h - z_h|} \leq Lu(w_h).$$
+If $h$ is small enough depending on $x$, then $T_h$ is contained in the open set $U \setminus Z_\varepsilon$, so 
+\begin{align*}
+\limsup_{h \to 0} L \Pi_h u(x) \leq \limsup_{h \to 0} Lu(w_h) &= Lu(x). \qedhere
+\end{align*}
+\end{proof}
+
+\begin{proposition}\label{discrete tight maps converge}
+Let $u, v: U \to \RR^n$ be Lipschitz maps, and let $v_h: U \to \RR^n$ be $h$-shape maps such that:
+\begin{enumerate}
+\item $u \prec v$.
+\item $v_h \to v$ in $L^1$.
+\item For some $K < \infty$ and every $h > 0$, $\Lip(v_h, U) \leq K$.
+\end{enumerate}
+Then there exists $h_* > 0$ such that for $0 < h < h_*$, $\Pi_h u \prec v_h$.
+\end{proposition}
+\begin{proof}
+Let $u_h := \Pi_h u$ and
+$$M := \sup_{Lu < Lv} Lv.$$
 Since $u \prec v$, there exists $\delta > 0$ such that
 $$\sup_{Lv < Lu} Lu(x) < M - \delta.$$
-The proof now follows from the two below claims which we prove in turn.
 
 \begin{claim}
 If $\delta, h$ are small enough, then 
 $$\sup_{Lu_h < Lv_h} Lv_h > M - \delta.$$
 \end{claim}
-
+\begin{proof}[Proof of claim]
 By definition of $M$, if $\delta$ is taken small enough, then there exists $x \in U$ such that
 $$Lu(x) < M - \delta < Lv(x).$$
-By (\ref{partial lower semicontinuity}), and the fact that $\{Lu < M - \delta\}$ is open, it follows that the set
-$$E := \{y \in U: (Lv(y) > M - \delta) \wedge (Lu(y) < M - \delta)\}$$
+By Lemma \ref{partial lower semicontinuity}, and the fact that $\{Lu < M - \delta\}$ is open, it follows that the set
+$$E := \{y \in U: Lu(y) < M - \delta < Lv(y)\}$$
 satisfies $\vol(E) > 0$.
-By Lemma \ref{du converges ae}, we can find $y \in E$ such that $Lv_h(y) \to Lv(y)$ and $Lu_h(y) \to Lu(y)$.
+By Lemmata \ref{Lip is lower semicontinuous} and \ref{du converges ae}, we can find $y \in E$ such that
+$$Lv(y) \leq \liminf_{h \to 0} Lv_h(y)$$
+and $Lu_h(y) \to Lu(y)$.
 Therefore for $h$ small enough,
 $$Lu_h(y) < M - \delta < Lv_h(y).$$
 In particular, $Lv_h(y) > Lu_h(y)$, so 
-$$\sup_{Lu_h < Lv_h} Lv_h \geq Lv_h(y) > M - \delta.$$
+\begin{align*}
+\sup_{Lu_h < Lv_h} Lv_h \geq Lv_h(y) &> M - \delta. \qedhere 
+\end{align*}
+\end{proof}
 
 \begin{claim}
 If $h$ is small enough, then 
 $$\sup_{Lv_h < Lu_h} Lu_h \leq M - \delta.$$
 \end{claim}
-Fix $\theta > 0$. We claim that 
+\begin{proof}[Proof of claim]
+It suffices to show that for every sufficiently small $h > 0$ and every $\theta > 0$,
 \begin{equation}\label{loss of theta}
 \sup_{Lv_h < Lu_h - \theta} Lu_h \leq M - \delta.
 \end{equation}
-This is enough, since if $Lv_h(x) < Lu_h(x)$ then there exists $\theta > 0$ such that $Lv_h(x) < Lu_h(x) - \theta$.
+Indeed, if $Lv_h(x) < Lu_h(x)$, then there exists $\theta > 0$ such that $Lv_h(x) < Lu_h(x) - \theta$, so if (\ref{loss of theta}) holds, then $Lu_h(x) \leq M - \delta$, as claimed.
 
-In order to prove (\ref{loss of theta}), we fix $\varepsilon > 0$, so by Egorov's theorem and Lemma \ref{du converges ae}, there exists a set $Z_\varepsilon$ such that $\vol(Z_\varepsilon) < \varepsilon$ and $Lu_n \to Lu$, $Lv_n \to Lv$ uniformly on $U \setminus Z_\varepsilon$.
-By appending $\partial U$ to $Z_\varepsilon$ and then using continuity from without of Lebesgue measure, we may assume that $Z_\varepsilon$ is open and contains a collar neighborhood of $\partial U$.
+In order to prove (\ref{loss of theta}), we fix $\varepsilon > 0$, so by Proposition \ref{one sided Egorov} and Lemmata \ref{Lip is lower semicontinuous} and \ref{du converges ae}, there exists a set $Z_\varepsilon$ such that $\vol(Z_\varepsilon) < \varepsilon$ and $Lu_h \to Lu$ and 
+$$Lv \leq \liminf_{h \to 0} Lv_h$$
+uniformly on $U \setminus Z_\varepsilon$.
+By appending $\partial U$ to $Z_\varepsilon$ and then using continuity from above of Lebesgue measure, we may assume that $Z_\varepsilon$ is open and contains a collar neighborhood of $\partial U$.
+In particular, $U \setminus Z_\varepsilon$ is a compact subset of $U$.
+
 We then claim 
 \begin{equation}\label{loss of epsilon}
-\sup \{Lu_h(x): (x \notin Z_\varepsilon) \wedge (Lv_h(x) < Lu_h(x) - \theta)\} \leq M - \delta.
+\limsup_{h \to 0} \sup_{\substack{Lv_h(x) < Lu_h(x) - \theta \\ x \notin Z_\varepsilon}} Lu_h(x) > M - \delta.
 \end{equation}
 To prove (\ref{loss of epsilon}), we use compactness and contradiction.
-If (\ref{loss of epsilon}) is false, then there exist $x_h \notin Z_\varepsilon$ such that $Lv_h \geq Lu_h(x_\delta) - \theta$ and $Lu_h(x_h) > M - \delta$.
-By construction of $Z_\varepsilon$, $U \setminus Z_\varepsilon$ is compactly contained in $U$.
-So after taking a subsequence, we can find $x \in U \setminus Z_\varepsilon$ with $x_h \to x$.
-By the uniform convergence, $Lv(x) \leq Lu(x) - \theta < Lu(x)$ and $Lu(x) > M - \delta$, which contradicts the definition of $\delta$.
+If (\ref{loss of epsilon}) is false, then for every $h > 0$ along a subsequence, there exist $x_h \in U \setminus Z_\varepsilon$ such that $Lv_h(x_h) < Lu_h(x_h) - \theta$ but $Lu_h(x_h) > M - \delta$.
+Since $U \setminus Z_\varepsilon$ is compact, after taking another subsequence, we can find $x \in U \setminus Z_\varepsilon$ with $x_h \to x$.
+By the uniform convergence, $Lu(x) \geq M - \delta$ but 
+$$Lv(x) \leq \liminf_{h \to 0} Lv_h(x_h) < \liminf_{h \to 0} Lu_h(x_h) - \theta = Lu(x) - \theta,$$
+which contradicts the definition of $\delta$.
 So (\ref{loss of epsilon}) holds.
 
-To deduce (\ref{loss of theta}) from (\ref{loss of epsilon}), we first take $\varepsilon \to 0$ to deduce 
-$$\esssup_{Lv_h < Lu_h - \theta} Lu_h \leq M - \delta.$$
-Let $Z := \bigcap_\varepsilon Z_\varepsilon$ be the exceptional set implicit in this essential supremum.
+To deduce (\ref{loss of theta}) from (\ref{loss of epsilon}), we first let $Z := \bigcap_\varepsilon Z_\varepsilon$ and take $\varepsilon \to 0$ to deduce that for every sufficiently small $h > 0$,
+\begin{equation}\label{loss of theta 2}
+\sup_{\substack{Lv_h(x) < Lu_h(x) - \theta \\ x \notin Z}} Lu_h(x) \leq M - \delta.
+\end{equation}
 Let $x \in U$ satisfy $Lv_h(x) < Lu_h(x) - \theta$.
-Then there exists $\kappa > 0$ such that
+Then for every sufficiently small $\kappa > 0$,
 $$Lv_h(x) < Lu_h(x) - \theta - \kappa.$$
 Moreover, $V := \{Lv_h < Lu_h(x) - \theta - \kappa\}$ is an open neighborhood of $x$ since $Lv_h$ is upper semicontinuous.
-So the set $W := \{Lu_h > Lu_h(x) - \kappa\} \cap V$ has $\vol(W) > 0$ by (\ref{partial lower semicontinuity}).
+So the set $W := \{Lu_h > Lu_h(x) - \kappa\} \cap V$ has $\vol(W) > 0$ by Lemma \ref{partial lower semicontinuity}.
 So $W \setminus Z$ is nonempty and for any $y \in W$,
 $$Lv_h(y) < Lu_h(x) - \theta - \kappa < Lu_h(y) - \theta$$
-which implies $Lu_h(y) \leq M - \delta$.
+which, combined with (\ref{loss of theta 2}), implies $Lu_h(y) \leq M - \delta$.
 Therefore
-$$Lu_h(x) \leq M - \delta - \kappa < M - \delta.$$
-This proves (\ref{loss of theta}).
+$$Lu_h(x) < Lu_h(y) + \kappa \leq M - \delta + \kappa.$$
+We take $\kappa \to 0$ to deduce (\ref{loss of theta}).
 \end{proof}
 
+It is clear that the above claims imply the result.
+\end{proof}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The continuum problem}
+%%%%%%%%%%%%%%%%%%%%
 \subsection{Existence of tight maps}
+We assume that $U \subseteq \RR^m$ is an open convex polytope.
+\todo{Since the domain is a length space, probably the convexity assumption can be removed.}
+Then $\tau_h$ extends to a triangulation of every polytope in $\partial U$, so it makes sense to ask if a continuous map $f: \partial U \to \RR^n$ is a shape map.
+
+\begin{definition}
+An $h$-shape map $u: U \to \RR^n$ is \dfn{$h$-tight} if there does not exist an $h$-shape map $v$ such that $v \prec u$ and $u|_{\partial U} = v|_{\partial U}$.
+\end{definition}
+
+\begin{proposition}\label{discrete wellposedness}
+Let $h > 0$ and let $f: \partial U \to \RR^n$ be an $h$-shape map.
+Then there exists an $h$-tight map $u: U \to \RR^n$ extending $f$.
+\end{proposition}
+\begin{proof}
+Let $G$ be the graph induced by the $1$-skeleton of $\tau_h$, and let $H$ be the subgraph induced by the $1$-skeleton of $\tau_h \cap \partial U$.
+We introduce a weight on edges by $\omega(x, y) := |x - y|$.
+Let $V_G$ be the set of vertices of $G$.
+For an $h$-shape map $u$ and $x \in V_G$,
+$$Lu(x) = \max_{y \sim_G x} \frac{|u(x) - u(y)|}{\omega(x, y)}.$$
+From this, and the fact that Lipschitz moduli of $h$-shape maps are constant on $m$-faces, it follows that $u \prec v$ iff $u|_{V_G}$ is tighter than $v|_{V_G}$ in the combinatorial sense of \cite[\S1.2]{Sheffield12}.
+So there exists an $h$-tight map \cite[Theorem 1.2]{Sheffield12}.\footnote{Strictly speaking, \cite{Sheffield12} deals with unweighted graphs, but this assumption can be removed \cite[Remark 2.2]{Sheffield12}.}
+\end{proof}
+
+\begin{lemma}\label{tight implies best lipschitz}
+Suppose that $U$ is convex, and let $u, v: U \to \RR^n$ be Lipschitz maps with $u|_{\partial U} = v|_{\partial U}$ and $\Lip(u, U) > \Lip(v, U)$.
+Then $v \prec u$.
+\end{lemma}
+\begin{proof}
+Reasoning as in \cite[Lemma 4.2(e)]{Crandall2008}, and exploiting the convexity of $U$, we see that for any Lipschitz map $w$, $\Lip(w, U) = \sup_U Lw$.
+So there exists $x \in U$ such that $Lu(x) > Lip(v, U)$, and then
+\begin{align*}
+\sup_{Lu > Lv} Lu &> \Lip(v, U) = \sup_U Lv \geq \sup_{Lv > Lu} Lv. \qedhere
+\end{align*}
+\end{proof}
+
 \begin{theorem}
-Suppose that $U$ has Lipschitz boundary.
-For any Lipschitz map $g: \partial U \to \RR^n$, there is a tight map $u: U \to \RR^n$ extending $g$.
+Let $f: \partial U \to \RR^n$ be a Lipschitz map.
+Then there exists a tight map $u: U \to \RR^n$ extending $f$.
+Moreover, $\Lip(u, U) = \Lip(f, \partial U)$.
 \end{theorem}
 \begin{proof}
-\todo{Here is a sketch.}
-By assumption we can approximate $U$ by polytopes and then triangulate $\overline U$.
-In particular we may assume that $\partial U$ is triangulated into $m - 1$-faces of the triangulation of $U$.
-Let $g_h$ be the discretization of $g$.
-By the lexicographic trick \cite[Theorem 1.2]{Sheffield12}, there exists a discrete-tight extension $u_h$ of $g$.
-We can get a priori estimates on the Lipschitz constant of a discrete tight map in terms of the Lipschitz constant of its trace.
-So $u_h \to u$ in H\"older spaces, where $u|_{\partial U} = g$.
-If $v \prec u$, then there exists $h > 0$ such that $v_h \prec u_h$, contradicting that $u_h$ is tight by construction.
+Let $f_h := \Pi_h f$.
+By Proposition \ref{discrete wellposedness} there exist $h$-tight maps $u_h: U \to \RR^n$ extending $f_h$.
+By the Kirszbraun-Valentine theorem, there also exist extensions $\tilde w_h: U \to \RR^n$ of $f_h$ with $\Lip(\tilde w_h, U) = \Lip(f_h, \partial U)$.
+By (\ref{discrete derivative is vertex lip}), $w_h := \Pi_h \tilde w_h$ satisfies
+$$\Lip(w_h, U) = \Lip(f_h, \partial U) \leq \Lip(f, \partial U).$$
+Since $f_h$ was already a shape map, the action of $\Pi_h$ on $\tilde w_h$ preserved its restriction to the boundary, so $w_h|_{\partial U} = f_h$.
+
+By Lemma \ref{tight implies best lipschitz}, $\Lip(u_h, U) \leq \Lip(f, \partial U)$.
+By the Arzela-Ascoli theorem, after passing to a subsequence, we may assume that $u_h \to u$ in $C^0$ for some Lipschitz map $u: U \to \RR^n$ with $\Lip(u, U) \leq \Lip(f, \partial U)$.
+By Lemma \ref{uniform convergence}, $f_h \to f$ in $C^0$, so $u$ is an extension of $f$.
+
+If $u$ is not tight, then there exists a Lipschitz map $v: U \to \RR^n$ with $v \prec u$.
+By Proposition \ref{discrete tight maps converge}, there exists $h > 0$ such that $\Pi_h v \prec u_h$.
+This is a contradiction, because $u_h$ is tight.
 So $u$ is tight.
 \end{proof}
+
+%%%%%%%%%%%%%%%%
+\section{More stuff to do}
+\begin{conjecture}
+The same existence result, but with curvature.
+\end{conjecture}
+
+\begin{conjecture}
+The same existence result holds when the datum is a homotopy class.
+The point is that homotopy classes still make sense in the PL category, and we should be able to modify the lexicographic trick of \cite[Theorem 1.2]{Sheffield12} to work for homotopy classes.
+\end{conjecture}
 
 \begin{conjecture}
 If $u_p$ is a sequence of $p$-harmonic maps, then $u_p \to u$ where $u$ is tight.
@@ -380,13 +636,21 @@ In particular, if $u$ is $\infty$-harmonic in the variational sense of \cite{das
 \end{conjecture}
 
 \begin{conjecture}
-If $u$ is tight then $u_h$ is discrete-tight.
-In particular, tight maps are unique.
+Tight maps are unique. This cannot be shown by a discretization alone (since $\prec$ is an open condition, so shouldn't be preserved by limits).
 \end{conjecture}
 
 \begin{conjecture}
 Discrete tight maps have a ``discrete geodesic lamination'' in their nonholomorphic stretch set.
 This lamination converges to a (continuum) lamination of $U$.
+\end{conjecture}
+
+\begin{conjecture}
+If $u$ is tight and $C^2$, then $|\dif u|_\infty$ is a viscosity solution of a degenerate-elliptic PDE.
+Therefore $C^2$ tight maps have no critical points, as in the scalar-valued case \cite{Yu2006}.
+\end{conjecture}
+
+\begin{conjecture}
+Loisel's finite element approximation of the scalar $\infty$-Laplacian \cite{Loisel_2020} converges to a best Lipschitz map which, in general, is not $\infty$-harmonic.
 \end{conjecture}
 
 \printbibliography
