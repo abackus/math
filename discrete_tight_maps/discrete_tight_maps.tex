@@ -182,7 +182,6 @@ Even though finite element approximations to $\infty$-harmonic functions $u$ are
 %%%%%%%%%%%%%%%%%%
 \subsection{Acknowlegments}
 I would like to thank Georgios Daskalopolous, Brian Freidin, and Nate River for various helpful discussions.
-\todo{Or is BF a coauthor?}
 
 This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
 
@@ -202,8 +201,12 @@ This research was supported by the National Science Foundation's Graduate Resear
 \begin{proposition}[one-sided Egorov theorem]\label{one sided Egorov}
 Let $X$ be a Polish space, $\mu$ a finite Borel measure on $X$, and $f_n, f$ $\mu$-measurable functions on $X$, such that for $\mu$-almost every $x \in X$,
 $$f(x) \leq \liminf_{n \to \infty} f_n(x).$$
-Then for every $\varepsilon > 0$ there exists a $\mu$-measurable set $Z_\varepsilon \subseteq X$ such that $\mu(Z_\varepsilon) < \varepsilon$ and for every $\delta > 0$ there exists $N \in \NN$ such that for every $n \geq N$ and every $x \in X \setminus Z_\varepsilon$,
+Then for every $\varepsilon > 0$ there exists a $\mu$-measurable set $Z_\varepsilon \subseteq X$ such that:
+\begin{enumerate}
+\item $\mu(Z_\varepsilon) < \varepsilon$.
+\item For every $\delta > 0$ there exists $N \in \NN$ such that for every $n \geq N$ and every $x \in X \setminus Z_\varepsilon$,
 $$f(x) < f_n(x) + \delta.$$
+\end{enumerate}
 \end{proposition}
 \begin{proof}
 Let 
@@ -223,7 +226,8 @@ $$\int_V |\dif u|_M(x) \dif x \leq \liminf_{n \to \infty} \int_V |\dif u_n|_M(x)
 \end{lemma}
 \begin{proof}
 Let $|\cdot|_M'$ be the dual norm to $|\cdot|_M$.
-Let $\mathscr D$ be the set of all $X \in C^1_\cpt(U, \RR^{n \times m})$ such that $\||X|_M'\|_{C^0} \leq 1$.
+Let
+$$\mathscr D := \{X \in C^1_\cpt(U, \RR^{n \times m}): \||X|_M'\|_{C^0} \leq 1\}.$$
 Integrating by parts, for any $v \in BV(U, \RR^n)$, 
 $$\int_V |\dif v|_M(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle \dif v, X\rangle(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle v, \nabla \cdot X\rangle(x) \dif x.$$
 The result follows when we use the $L^1$ convergence to bound
@@ -235,11 +239,11 @@ The result follows when we use the $L^1$ convergence to bound
 
 %%%%%%%%%%%%%%%%
 \subsection{Lipschitz maps}
-The Lipschitz modulus $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
-\todo{Should probably put a more detailed exposition of the Crandall lemma here, since we use it so often.}
-Though $Lu$ is not lower semicontinuous, it is "lower semicontinuous on average" in the following sense:
+Let $u: U \to \RR^n$ be a Lipschitz map.
+Its Lipschitz modulus $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
+Though $Lu$ is not lower semicontinuous, it is ``lower semicontinuous on average"; this was claimed without proof by Sheffield and Smart \cite[\S1.4]{Sheffield12}.
 
-\begin{lemma}\label{partial lower semicontinuity}
+\begin{lemma}[lower semicontinuity on average of $Lu$]\label{partial lower semicontinuity}
 Let $x \in U$, let $V \subseteq U$ be an open neighborhood of $x$, and let $\delta > 0$.
 Then for any Lipschitz map $u: U \to \RR^n$,
 $$\vol(V \cap \{Lu > Lu(x) - \delta\}) > 0.$$
@@ -275,25 +279,36 @@ Lu(x) &\leq \|f\|_{L^\infty(V^2 \setminus \Delta_V)} \leq K \lim_{p \to \infty} 
 \end{align*}  
 \end{proof}
 
+\begin{lemma}
+For every Lipschitz map $u: U \to \RR^n$:
+\begin{enumerate}
+\item For every compact convex set $K \Subset U$,
+\begin{equation}\label{Lip is sup of local Lips}
+\Lip(u, V) = \max_{x \in K} Lu(x).
+\end{equation}
+\item For every open convex set $V \subseteq U$,
+\begin{equation}\label{mean value estimate}
+\Lip(u, V) = \||\dif u|_\infty\|_{L^\infty(V)}.
+\end{equation}
+\item For every $x \in U$,
+\begin{equation}\label{localized mean value estimate}
+Lu(x) = \lim_{r \to 0} \||\dif u|_\infty\|_{L^\infty(B(x, r))}.
+\end{equation}
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+This is essentially the content of \cite[Lemma 4.2]{Crandall2008} when $n = 1$.
+The only meaningful difference when $n \geq 2$ is that we have to worry about which matrix norm is applied to $\dif u$, but of course we know the correct norm to use is $|\cdot|_\infty$.
+\end{proof}
+
 \begin{lemma}\label{Lip is du}
 For every Lipschitz map $u: U \to \RR^n$ and almost every $x \in U$,
 $$Lu(x) = |\dif u|_\infty(x).$$
 \end{lemma}
 \begin{proof}
-We first claim that for any convex open set $V \subseteq U$ and any $y, z \in V$, we have the mean-value estimate 
-\begin{equation}\label{mean value estimate}
-|u(y) - u(z)| \leq \||\dif u|_\infty\|_{L^\infty(V)} |y - z|
-\end{equation}
-and this estimate is sharp.
-If $u \in C^1(U)$, this estimate is clear, and its sharpness follows from taking $y$ to be a maximizer of $|\dif u|_\infty$ and $z$ close to $y$ such that $y - z$ is in the span of a principal singular vector of $\dif u(y)$.
-In general, we can consider a mollification $(u_\varepsilon)_{\varepsilon > 0}$ and exploit the facts that $u_\varepsilon \to u$ in $C^0$ and $|\dif u_\varepsilon|_\infty \leq \Lip(u, B(x, \varepsilon))$.
-We omit the standard details.
-
-We apply (\ref{mean value estimate}) and a similar argument to \cite[Lemma 4.2(e)]{Crandall2008}, to prove that for any $x \in U$,
-$$Lu(x) = \lim_{r \to 0} \||\dif u|_\infty\|_{L^\infty(B(x, r))}.$$
 Let $\varepsilon > 0$.
 By Lusin's theorem, there is a closed set $Z_\varepsilon \subset U$ such that $\vol(Z_\varepsilon) < \varepsilon$ and $|\dif u|_\infty$ is continuous on $U \setminus Z_\varepsilon$.
-So for $x \in U \setminus Z_\varepsilon$,
+Applying (\ref{localized mean value estimate}) and $x \in U \setminus Z_\varepsilon$,
 $$\lim_{r \to 0} \||\dif u|_\infty\|_{L^\infty(B(x, r))} = |\dif u|_\infty(x),$$
 hence $Lu(x) = |\dif u|_\infty(x)$.
 The claim follows by taking $\varepsilon \to 0$.
@@ -323,7 +338,7 @@ The result follows when we take $r \to 0$ and apply the Lebesgue differentiation
 \section{Application of the finite element method}
 \subsection{Construction of eikonal extensions}
 \begin{lemma}\label{eikonal extension}
-Let $V \subseteq \RR^k$ be a bounded open set.
+Let $V \subseteq \RR^k$ be a bounded convex open set.
 For every Lipschitz map $f: \partial V \to \RR^n$, there exists an extension $u: V \to \RR^n$ of $f$, such that for every $x \in V$,
 $$Lu(x) = \Lip(f, \partial V).$$
 \end{lemma}
@@ -349,9 +364,6 @@ Maybe I'll try to write out an explicit counterexample.
 \end{enumerate}
 We are thus compelled to construct an eikonal extension which is NOT a viscosity solution of (\ref{eikonal equation}) when $n = 1$.
 
-In the proof of Lemma \ref{eikonal extension} we use the following definition: A \dfn{maximal packing} of an open set $W \subseteq \RR^k$ by balls of radius $r$ is a set $\mathscr P$ of balls contained in $W$ of radius $r$, such that there does not exist a ball $B \subseteq W$ of radius $r$ such that $B$ is disjoint from every ball in $\mathscr P$.
-We stress that the balls in the packing $\mathscr P$ are assumed to not intersect $\partial W$.
-
 \begin{proof}[Proof of Lemma \ref{eikonal extension}]
 If $k = 1$, then $V$ is a line segment and we can take $u$ to be the linear interpolation of $f$.
 So we may assume $k \geq 2$.
@@ -361,7 +373,10 @@ By the Kirszbraun-Valentine theorem, there exists an extension $u_0: V \to \RR^n
 Furthermore, define
 $$\mathscr U_0 = \mathscr P_0 = \mathscr L_0 = \emptyset.$$
 
-\begin{claim}
+Recall that a \dfn{maximal packing} of an open set $W \subseteq \RR^k$ by balls of radius $r$ is a set $\mathscr P$ of balls contained in $W$ of radius $r$, such that there does not exist a ball $B \subseteq W$ of radius $r$ such that $B$ is disjoint from every ball in $\mathscr P$.
+We stress that the balls in the packing $\mathscr P$ are assumed to not intersect $\partial W$.
+
+\begin{claim}[iteration]
 Assume we have defined:
 \begin{enumerate}
 \item Finite sets of points $\mathscr U_0, \dots, \mathscr U_{I - 1}$.
@@ -405,10 +420,11 @@ $$u_I|_{\overline{B(q, r_q)}} := u_{I - 1}|_{\overline{B(q, r_q)}}.$$
 \item Otherwise, since $\overline{B(q, r_q)}$ is convex and compact, we must have $\Lip(u_{I - 1}, \overline{B(q, r_q)}) < K$.
 Choose $\varphi \in C^\infty_\cpt(B(q, r_q))$ which is rapidly oscillating near $q$.
 For each $t > 0$, let
-$$v_t := u_{I - 1}|_{B(q, r_q)} + t\varphi.$$
-Then there exists $t > 0$ such that $\Lip(v_t, \overline{B(q, r_q)}) = K$.
-Let $u_I|_{\overline{B(q, r_q)}} := v_t$.
-By construction, there exists $x \in \overline{B(q, r_q)}$ such that $Lv_t(x) = K$.
+$$v_t := u_{I - 1}|_{\overline{B(q, r_q)}} + t\varphi.$$
+Since $w \mapsto \Lip(w, \overline{B(q, r_q)})$ is a seminorm, $\beta(t) := \Lip(v_t, \overline{B(q, r_q)})$ is a continuous function.
+Since $\beta(0) < K$ and $\beta(t) \to \infty$ as $\to \infty$, there exists $T > 0$ such that $\beta(T) = K$.
+Let $u_I|_{\overline{B(q, r_q)}} := v_T$.
+By construction, there exists $x \in \overline{B(q, r_q)}$ such that $Lu_I(x) = K$.
 \end{enumerate}
 In either case, $\Lip(u_I|_{\overline{B(q, r_q)}}) \leq K$, and we can find $y_n, z_n \to x$ with
 $$\frac{|u_I(y_n) - u_I(z_n)|}{|y_n - z_n|} = K.$$
@@ -475,11 +491,11 @@ The bound $\Lip(u_I, V) \leq K$ and the Arzela-Ascoli theorem implies that along
 \item $u|_{\partial V} = f$.
 \item For every $I \in \NN$ and $\ell \in \mathscr L_I$, $u|_\ell = u_I|_\ell$.
 \end{enumerate}
-The last condition implies that if $\ell \in \mathscr L_I$, then $\Lip(u, \ell) \geq K$, so by \cite[Lemma 4.2(d)]{Crandall2008} there exists $x \in \ell$ such that $Lu(x) \geq K$.
+The last condition implies that if $\ell \in \mathscr L_I$, then $\Lip(u, \ell) \geq K$, so by (\ref{Lip is sup of local Lips}) there exists $x \in \ell$ such that $Lu(x) \geq K$.
 But then $\dist(x, \mathscr U_I) < 4^{-I}$.
 By Claim \ref{almost density of balls} it follows that for any $y \in V$ and $I \geq 10$, one of the following holds:
 \begin{enumerate}
-\item $\dist(y, \partial V) < 2^{-I + 4}$.
+\item $\dist(y, \partial V) \leq 2^{-I + 4}$.
 \item There exists $x \in V$ such that $Lu(x) \geq K$ and $|x - y| < 2^{-I + 5}$.
 \end{enumerate}
 Taking $I \to \infty$ we see that $\{Lu \geq K\}$ is dense in $V$.
@@ -487,6 +503,7 @@ But it is also closed in $V$, so $Lu \geq K$ everywhere.
 Since in addition $Lu \leq K$, the result follows.
 \end{proof}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Construction of the combinatorial model}
 We introduce some notation for a finite simplicial complex $\tau$.
 Let $F_i(\tau)$ be the set of $i$-faces of $\tau$.
@@ -562,7 +579,7 @@ Thus it suffices to show that for almost every $x \in U$,
 By Lusin's theorem, for every $\varepsilon > 0$ there is a closed set $Z_\varepsilon \subset U$ with $\vol(Z_\varepsilon) < \varepsilon$ such that $Lu$ is continuous away from $Z_\varepsilon$.
 It suffices to show (\ref{upper semicontinuity of discrete Lips}) for every $x \in U \setminus Z_\varepsilon$.
 
-By (\ref{discrete derivative is vertex lip}) and a straightforward modification of \cite[Lemma 4.2(d)]{Crandall2008}, for every $h > 0$ there exist $T_h \in F_m(\tau_h)$, $[y_h, z_h] \in F_1(\tau_h)$ and $w_h \in [y_h, z_h]$ such that $x \in T_h$, $[y_h, z_h] \subseteq T_h$, and
+By (\ref{discrete derivative is vertex lip}) and (\ref{Lip is sup of local Lips}) for every $h > 0$ there exist $T_h \in F_m(\tau_h)$, $[y_h, z_h] \in F_1(\tau_h)$ and $w_h \in [y_h, z_h]$ such that $x \in T_h$, $[y_h, z_h] \subseteq T_h$, and
 $$L \Pi_h u(x) \leq \frac{|u(y_h) - u(z_h)|}{|y_h - z_h|} \leq Lu(w_h).$$
 If $h$ is small enough depending on $x$, then $T_h$ is contained in the open set $U \setminus Z_\varepsilon$, so 
 \begin{align*}
@@ -675,7 +692,7 @@ We introduce a weight on edges by $\omega(x, y) := |x - y|$.
 Let $V_G$ be the set of vertices of $G$.
 For an $h$-shape map $u$ and $x \in V_G$,
 $$Lu(x) = \max_{y \sim_G x} \frac{|u(x) - u(y)|}{\omega(x, y)}.$$
-From this, and the fact that Lipschitz moduli of $h$-shape maps are constant on $m$-faces, it follows that $u \prec v$ iff $u|_{V_G}$ is tighter than $v|_{V_G}$ in the combinatorial sense of \cite[\S1.2]{Sheffield12}.
+From this, and the fact that Lipschitz moduli of $h$-shape maps are constant on $m$-faces, it follows that $u \prec v$ iff $u|_{V_G}$ is tighter than $v|_{V_G}$ in the combinatorial sense of Sheffield and Smart \cite[\S1.2]{Sheffield12}.
 So there exists an $h$-tight map \cite[Theorem 1.2]{Sheffield12}.\footnote{Strictly speaking, \cite{Sheffield12} deals with unweighted graphs, but this assumption can be removed \cite[Remark 2.2]{Sheffield12}.}
 \end{proof}
 
@@ -684,8 +701,7 @@ Suppose that $U$ is convex, and let $u, v: U \to \RR^n$ be Lipschitz maps with $
 Then $v \prec u$.
 \end{lemma}
 \begin{proof}
-Reasoning as in \cite[Lemma 4.2(e)]{Crandall2008}, and exploiting the convexity of $U$, we see that for any Lipschitz map $w$, $\Lip(w, U) = \sup_U Lw$.
-So there exists $x \in U$ such that $Lu(x) > Lip(v, U)$, and then
+By (\ref{Lip is sup of local Lips}), there exists $x \in U$ such that $Lu(x) > \Lip(v, U)$, and then
 \begin{align*}
 \sup_{Lu > Lv} Lu &> \Lip(v, U) = \sup_U Lv \geq \sup_{Lv > Lu} Lv. \qedhere
 \end{align*}
