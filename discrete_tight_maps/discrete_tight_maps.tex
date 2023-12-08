@@ -90,6 +90,7 @@
 \newtheorem{prop}[theorem]{Proposition}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{invariant}[theorem]{Invariant}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{conjecture}[theorem]{Conjecture}
@@ -335,13 +336,168 @@ The result follows when we take $r \to 0$ and apply the Lebesgue differentiation
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Application of the finite element method}
-\subsection{Construction of eikonal extensions}
-\begin{lemma}\label{eikonal extension}
-Let $V \subseteq \RR^k$ be a bounded convex open set.
+\section{Eikonal Kirszbraun-Valentine theorem}
+\begin{proposition}\label{eikonal extension}
+Let $V \Subset \RR^k$ be a bounded convex open set.
 For every Lipschitz map $f: \partial V \to \RR^n$, there exists an extension $u: V \to \RR^n$ of $f$, such that for every $x \in V$,
 $$Lu(x) = \Lip(f, \partial V).$$
+\end{proposition}
+
+%%%%%%%%%%%%%%%%%%%%
+\subsection{Modifying the Lipschitz constant on a packing}
+We first show that we can modify a Lipschitz map $u$ on a small ball to increase $Lu$ in a controlled manner.
+As a consequence, we show that we can modify $Lu$ safely on every ball in a packing.
+
+Throughout the proof of Proposition \ref{eikonal extension}, given a ball $B$ of radius $r$, let $\Phi(B)$ be the concentric ball of radius $r^2$.
+
+\begin{definition}
+Let $W \subseteq \RR^k$ be an open set.
+\begin{enumerate}
+\item An $r$-\dfn{packing} of $W$ is a set of disjoint balls $B \Subset W$ of radius $r$.
+\item An $r$-packing $\mathscr P$ of $W$ is \dfn{maximal} if there does not exist an $r$-packing $\mathscr Q$ of $W$ with $\mathscr Q \supset \mathscr P$.
+\end{enumerate}
+\end{definition}
+
+\begin{lemma}\label{improvement on one ball}
+Let $W \subseteq \RR^k$ be a convex open set and $K > 0$.
+Let $u: W \to \RR^n$ satisfy $\Lip(u, W) \leq K$.
+Then there exists $v: W \to \RR^n$ such that:
+\begin{enumerate}
+\item $\Lip(v, W) = K$.
+\item For some $W' \Subset W$ and every $x \in W \setminus W'$, $v(x) = u(x)$.
+\item For every $\varepsilon > 0$, there exists a closed line segment $\ell \Subset W$ such that $\Lip(v, \ell) > K - \varepsilon$.
+\end{enumerate}
 \end{lemma}
+\begin{proof}
+We first observe that it suffices to show that there exists $v: W \to \RR^n$ with $v = u$ near $\partial W$, $\Lip(v, W) = K$, and $Lv(x) = K$ for some $x \in W$.
+Indeed, if this is true, then there exist $y_n, z_n \in W$ with $y_n, z_n \to x$ and
+$$\frac{|v(y_n) - v(z_n)|}{|y_n - z_n|} \to K.$$
+If we take $\ell$ to be the line segment $[y_n, z_n]$ for a sufficiently large $n$, the result follows.
+
+So suppose that for every $x \in W$, $Lu(x) < K$.
+Choose a convex open set $W' \Subset W$, so $\Lip(u, W') < K$ by (\ref{Lip is sup of local Lips}).
+Choose $\varphi \in C^\infty_\cpt(W', \RR^n)$ which is rapidly oscillating on some set $W'' \Subset W'$, and define
+$$u_t(x) := u + t\varphi.$$
+Since $w \mapsto \Lip(w, W')$ is a seminorm, $\beta(t) := \Lip(u_t, W')$ is a continuous function on $\RR_+$.
+Moreover, $\beta(0) < K$ and $\beta(t) \to \infty$ as $t \to \infty$, so there exists $T > 0$ such that $\beta(T) = K$.
+We then set $v := u_T$.
+By (\ref{Lip is sup of local Lips}) and the fact that $\overline{W'}$ is a convex compact set, there exists $x \in W'$ such that
+$$Lv(x) = \beta(T) = K.$$
+Moreover, for $y \in W'$ we have $Lv(y) \leq K$ and for $y \in W \setminus W'$ we have $Lv(y) < K$.
+So by (\ref{Lip is sup of local Lips}) and convexity of $W$, $\Lip(v, W) = K$.
+\end{proof}
+
+\begin{lemma}\label{improvement on packing}
+Let $W \subseteq \RR^k$ be an open set, $K > 0$, and $0 < r \leq 1$.
+Let $u: W \to \RR^n$ satisfy $\Lip(u, W) \leq K$.
+Then for every $r$-packing $\mathscr P$ of $W$, there exists $v: W \to \RR^n$ such that:
+\begin{enumerate}
+\item For every $x \in W$, $Lv(x) \leq K$.
+\item For every $x \in W \setminus \bigcup \{\Phi(B): B \in \mathscr P\}$, $v(y) = u(y)$.
+\item For every $\varepsilon > 0$ and every $B \in \mathscr P$, there exists a closed line segment $\ell \Subset \Phi(B)$ such that $\Lip(v, \ell) > K - \varepsilon$.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We apply Lemma \ref{improvement on one ball} to each ball $\Phi(B)$ such that $B \in \mathscr P$.
+Since $r^2 \leq r$ and $\mathscr P$ is a packing, the balls $\Phi(B)$ are all disjoint.
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Iterating the packing procedure}
+We are going to iteratively apply Lemma \ref{improvement on packing} to finer and finer packings; at each scale, we get some improvement to a given Lipschitz map $u_0$.
+Later we shall take a limit as the scale goes to $0$; it is important that we choose our packings so carefully that in the limit, our improvements do not cancel each other.
+
+\begin{lemma}\label{iterating the packing}
+Let $u_0: V \to \RR^n$ be a map with $\Lip(u_0, V) \leq K$, and $\mathscr L_0 := \emptyset$.
+Then there exist
+\begin{enumerate}
+\item maps $u_i: V \to \RR^n$ with $\Lip(u_i, V) \leq K$,
+\item finite sets of line segments $\mathscr L_i \supset \mathscr L_{i - 1}$,
+\item and maximal $2^{-i}$-packings $\mathscr P_i$ of $V \setminus \bigcup \mathscr L_{i - 1}$,
+\end{enumerate}
+such that for every $i \geq 1$,
+\begin{enumerate}
+\item \label{balls and lines} there is a bijection
+$$\ell: \mathscr P_i \to \mathscr L_i \setminus \mathscr L_{i - 1},$$
+which sends $B \in \mathscr P_i$ to a line segment $\ell(B) \Subset \Phi(B)$ such that
+$$\Lip(u_i, \ell(B)) > K - 2^{-i},$$
+\item \label{preservation} and for each $x \in V \setminus \bigcup \{\Phi(B): B \in \mathscr P_i\}$,
+$$u_i(x) = u_{i - 1}(x).$$
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+We proceed by induction. Assume that we have defined $u_{i - 1}, \mathscr L_{i - 1}, \mathscr P_{i - 1}$ to have the desired properties.
+Let $W := V \setminus \bigcup \mathscr L_{i - 1}$.
+Then $W$ is an open set since $\mathscr L_{i - 1}$ is a finite set of closed sets, so we may choose a maximal $2^{-i}$-packing $\mathscr P_i$ of $W$.
+Let $Z := \bigcup \{\Phi(B): B \in \mathscr P_i\}$.
+
+By Lemma \ref{improvement on packing}, we can find $u_i: W \to \RR^k$ and line segments $\ell(B)$, $B \in \mathscr P_i$, such that $u_i$ agrees with $u_{i - 1}$ away from $Z$ and satisfies $Lu_i \leq K$, but for each $B \in \mathscr P_i$,
+$$\Lip(u_i, \ell(B)) > K - 2^{-i}.$$
+Since $V \setminus W$ does not intersect $Z$, $u_i = u_{i - 1}$ near $W$, and in particular, extends uniquely to all of $V$ while satisfying (\ref{preservation}).
+Let
+$$\mathscr L_i := \mathscr L_{i - 1} \cup \{\ell(B): B \in \mathscr P_i\}.$$
+Since $V$ is bounded and hence has finite volume, the packing $\mathscr P_i$ is finite.
+Since $\mathscr L_{i - 1}$ is finite, so is $\mathscr L_i$, and $\mathscr L_i$ satisfies (\ref{balls and lines}).
+\end{proof}
+
+Throughout the rest of this section, we fix a Lipschitz map $u_0: V \to \RR^n$, and let $\mathscr L_i, \mathscr P_i$ be as in Lemma \ref{iterating the packing}.
+We are interested in the geometry of the packings $\mathscr P_i$; specifically, we want to show that any point in $V$ can be well-approximated by centers of balls in $\mathscr P_i$.
+
+\begin{lemma}\label{separation of line segments}
+For every $\ell, \ell' \in \mathscr L_i$, either $\ell = \ell'$ or
+$$\dist(\ell, \ell') > 2^{-i} - 4^{-i}.$$
+\end{lemma}
+\begin{proof}
+Suppose that $\ell \neq \ell'$.
+By induction, we may assume that this result holds if $\ell, \ell' \in \mathscr L_{i - 1}$.
+So suppose that $\ell \in \mathscr L_i \setminus \mathscr L_{i - 1}$, so by (\ref{balls and lines}) there exists $B \in \mathscr P_i$ such that $\ell \Subset \Phi(B)$.
+
+We claim that $\ell'$ does not intersect $B$.
+Indeed, if $\ell' \in \mathscr L_{i - 1}$, then since balls in $\mathscr P_i$ are disjoint from $\bigcup \mathscr L_{i - 1}$, $\ell'$ does not intersect $B$.
+Otherwise, by (\ref{balls and lines}), there exists $B' \in \mathscr P_i$ such that $\ell' \subset \Phi(B') \Subset B'$. Since $\mathscr P_i$ is a packing, $\ell'$ does not intersect $B$.
+In either case, the result follows, because
+\begin{align*} 
+\dist(\ell, \ell') &\geq \dist(\ell, V \setminus B) > \dist(\Phi(B), V \setminus B) > 2^{-i} - 4^{-i}. \qedhere
+\end{align*}
+\end{proof}
+
+\begin{lemma}\label{almost density of balls}
+Suppose that $k \geq 2$. Let
+$$\mathscr U_i := \{x \in V: B(x, 2^{-i}) \in \mathscr P_i\}.$$
+For every $i \geq 10$ and $x \in V$,
+$$\min\left(\dist(x, \partial V), \min_{j \leq i} \dist(x, \mathscr U_j)\right) \leq 2^{-i + 4}.$$
+\end{lemma}
+\begin{proof}
+Suppose not, so some ball $B(x, 2^{-i + 4}) \Subset V$ does not contain any point of $\bigcup_{j \leq i} \mathscr U_j$.
+Then every ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 4})$ intersects a line segment in $\mathscr L_{i - 1}$.
+Otherwise, by maximality of the packing $\mathscr P_i$, any point of $V \setminus \bigcup \mathscr L_{i - 1}$ must be within $2^{-i}$ of a ball in $\mathscr P_i$, or $\partial V$, or $\bigcup \mathscr L_{i - 1}$.
+But by definition of $y$, no ball in $\mathscr P_i$ intersects $B(y, 2^{-i})$, a set which also does not intersect $\partial V$ or $\mathscr L_{i - 1}$.
+This is a contradiction.
+
+Applying the previous paragraph with $y := x$, we can find $j_1 \leq i - 1$ and $q_1 \in \mathscr U_{j_1}$ such that $\ell_1 := \ell(B(q_1, 2^{-j_1}))$ intersects $B(x, 2^{-i + 1})$.
+Since $q_1 \notin B(x, 2^{-i + 4})$, but $\ell_1 \subset \Phi(B(q_1, 2^{-j_1})) = B(q_1, 4^{-{j_1}})$,
+$$\dist(\partial B(x, 2^{-i + 4}), B(x, 2^{-i + 1})) < 4^{-j_1}.$$
+From this it follows that
+$$2^{-2j_1} = 4^{-j_1} > 2^{-i + 4} - 2^{-i + 1} > 2^{-i + 3}.$$
+Therefore $j_1 < (i - 3)/2$.
+
+\todo{Pick up the editing process here} Since $k \geq 2$, there is a ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 2})$ which does not intersect $\ell_1$.
+Therefore there is a line segment $\ell(q_2) \in \mathscr L_{I - 1}$, $q_2 \in \mathscr U_{J_2}$, which intersects $B(y, 2^{-I + 1})$.
+Arguing as above, $J_2 < (I - 3)/2$ as well.
+
+Since $\ell(q_1)$ and $\ell(q_2)$ both intersect $B(x, 2^{-I + 2})$,
+$$\dist(\ell(q_1), \ell(q_2)) < 2^{-I + 3}.$$
+On the other hand, by Claim \ref{separation of line segments},
+$$\dist(\ell(q_1), \ell(q_2)) > 2^{-\frac{I - 3}{2}} - 4^{-\frac{I - 3}{2}},$$
+which is a contradiction when $I \geq 10$.
+\end{proof}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Application of the finite element method}
+\subsection{Construction of eikonal extensions}
+
 
 The following attempts to prove Lemma \ref{eikonal extension} might seem like they work, but they don't:
 \begin{enumerate}
@@ -436,53 +592,6 @@ Therefore we have also defined $\mathscr L_I$.
 By construction, they satisfy the desired properties.
 \end{proof}
 
-\begin{claim}\label{separation of line segments}
-For every $\ell, \ell' \in \mathscr L_I$, either $\ell = \ell'$ or
-$$\dist(\ell, \ell') \geq 2^{-I} - 4^{-I}.$$
-\end{claim}
-\begin{proof}[Proof of claim]
-Suppose that $\ell \neq \ell'$.
-By induction, we may assume that this result holds if $\ell, \ell' \in \mathscr L_{I - 1}$.
-So suppose that $\ell \in \mathscr L_I \setminus \mathscr L_{I - 1}$.
-Then there exists $q \in \mathscr U_I$ such that $\ell \subset B(q, 4^{-I})$.
-We break into cases:
-\begin{enumerate}
-\item If $\ell' \in \mathscr L_{I - 1}$, then since balls $\mathscr P_I$ are disjoint from $\bigcup \mathscr L_{I - 1}$, $\ell'$ does not intersect $B(q, 2^{-I})$.
-\item Otherwise, $\ell' \subset B(q', 4^{-I})$ for some $q' \in \mathscr U_I \setminus \{q\}$. Since $\mathscr P_I$ is disjoint, it follows that $\ell'$ does not intersect $B(q, 2^{-I})$.
-\end{enumerate}
-In either case, the result follows.
-\end{proof}
-
-\begin{claim}\label{almost density of balls}
-For every $x \in V$ and every $I \geq 10$,
-$$\min\left(\dist(x, \partial V), \min_{J \leq I} \dist(x, \mathscr U_J)\right) \leq 2^{-I + 4}.$$
-\end{claim}
-\begin{proof}[Proof of claim]
-Suppose not, so some ball $B(x, 2^{-I + 4})$ is compactly contained in $V$, and does not contain any point of $\bigcup_{I \leq J} \mathscr U_J$.
-
-Every ball of radius $2^{-I + 1}$ in $B(x, 2^{-I + 4})$ intersects a line segment in $\mathscr L_{I - 1}$.
-If this is false of $B(y, 2^{-I + 1})$, then by maximality of the packing $\mathscr P_I$, any point of $V \setminus \bigcup \mathscr L_{I - 1}$ must be within $2^{-I}$ of a ball in $\mathscr P_I$, or $\partial V$, or $\bigcup \mathscr L_{I - 1}$.
-But by definition of $y$, no ball in $\mathscr P_I$ intersects $B(y, 2^{-I})$, a set which also does not intersect $\partial V$ or $\mathscr L_{I - 1}$.
-This is a contradiction.
-
-In particular, $B(x, 2^{-I + 1})$ intersects a line segment $\ell(q_1) \in \mathscr L_{I - 1}$.
-Suppose that $q_1 \in \mathscr U_{J_1}$.
-Since $q_1 \notin B(x, 2^{-I + 4})$, but $\ell(q_1) \subset B(q_1, 4^{-{J_1}})$,
-$$\dist(\partial B(x, 2^{-I + 4}), B(x, 2^{-I + 1})) < 4^{-J_1}.$$
-From this it follows that
-$$2^{-2J_1} = 4^{-J_1} > 2^{-I + 4} - 2^{-I + 1} > 2^{-I + 3}.$$
-Therefore $J_1 < (I - 3)/2$.
-
-Since $k \geq 2$, there is a ball $B(y, 2^{-I + 1}) \subseteq B(x, 2^{-I + 2})$ which does not intersect $\ell(q_1)$.
-Therefore there is a line segment $\ell(q_2) \in \mathscr L_{I - 1}$, $q_2 \in \mathscr U_{J_2}$, which intersects $B(y, 2^{-I + 1})$.
-Arguing as above, $J_2 < (I - 3)/2$ as well.
-
-Since $\ell(q_1)$ and $\ell(q_2)$ both intersect $B(x, 2^{-I + 2})$,
-$$\dist(\ell(q_1), \ell(q_2)) < 2^{-I + 3}.$$
-On the other hand, by Claim \ref{separation of line segments},
-$$\dist(\ell(q_1), \ell(q_2)) > 2^{-\frac{I - 3}{2}} - 4^{-\frac{I - 3}{2}},$$
-which is a contradiction when $I \geq 10$.
-\end{proof}
 
 The bound $\Lip(u_I, V) \leq K$ and the Arzela-Ascoli theorem implies that along a subsequence $u_I \to u$ in $C^0$, where:
 \begin{enumerate}
@@ -526,7 +635,7 @@ Lu(x) = \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in 
 \end{proposition}
 \begin{proof}
 Let $k \geq 1$, and let $T$ be a $k$-face.
-Inductively define $u_k|_T$ to be the extension of $u_{k - 1}$ given by Lemma \ref{eikonal extension}; then $u_k$ is Lipschitz on the $k$-skeleton of $\tau_h$, and by induction on $k$, for every $x \in T \setminus \partial T$, $Lu(x) = \Lip(u, V_T)$ where $V_T$ is the set of vertices of $T$.
+Inductively define $u_k|_T$ to be the extension of $u_{k - 1}$ given by Proposition \ref{eikonal extension}; then $u_k$ is Lipschitz on the $k$-skeleton of $\tau_h$, and by induction on $k$, for every $x \in T \setminus \partial T$, $Lu(x) = \Lip(u, V_T)$ where $V_T$ is the set of vertices of $T$.
 
 Let $u := u_m$.
 By Lemma \ref{partial lower semicontinuity}, the estimate (\ref{Lip constant comes from 1 skeleton}) holds because it does whenever $x \in T^\circ$ for some $m$-face $T$.
