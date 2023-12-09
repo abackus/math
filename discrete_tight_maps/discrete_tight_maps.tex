@@ -343,12 +343,34 @@ For every Lipschitz map $f: \partial V \to \RR^n$, there exists an extension $u:
 $$Lu(x) = \Lip(f, \partial V).$$
 \end{proposition}
 
+The following attempts to prove Lemma \ref{eikonal extension} might seem like they work, but they don't:
+\begin{enumerate}
+\item If $V$ is a simplex, and we are allowed to prescribe $f$ on the vertices $X$ of $V$ rather than $\partial V$ (this is the situation we actually care about, anyways), try $u$ to be the linear extension of $f$.
+However, we can take
+$$V = \{(x, y) \in \RR^2: x > 0, y > 0, x + y < 1\}$$
+and $f(0, 0) = 0$, $f(1, 0) = f(0, 1) = 1$.
+Then the unique linear extension of $f$ is $u(x, y) = x + y$.
+Then $\Lip(f, X) = 1$ but $\Lip(u, V) = \sqrt 2$.
+\item If $n = 1$, then try $u$ to be given by Perron's method as
+\begin{equation}\label{eikonal equation}
+\begin{cases}
+|\dif u| = \Lip(f, \partial V) \\
+u|_{\partial V} = f.
+\end{cases}
+\end{equation}
+This clearly fails when $n \geq 2$, but even when $n = 1$, I think this fails because (\ref{eikonal equation}) is so overdetermined.
+For example, it seems very likely that (\ref{eikonal equation}) has no $C^1$ supersolutions under various hypotheses, which, for example, could compel any $C^1$ extension of $f$ to have a critical point.
+Maybe I'll try to write out an explicit counterexample.
+\end{enumerate}
+We are thus compelled to construct an eikonal extension which is NOT a viscosity solution of (\ref{eikonal equation}) when $n = 1$.
+
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Modifying the Lipschitz constant on a packing}
 We first show that we can modify a Lipschitz map $u$ on a small ball to increase $Lu$ in a controlled manner.
 As a consequence, we show that we can modify $Lu$ safely on every ball in a packing.
 
 Throughout the proof of Proposition \ref{eikonal extension}, given a ball $B$ of radius $r$, let $\Phi(B)$ be the concentric ball of radius $r^2$.
+We recall some definitions from metric geometry:
 
 \begin{definition}
 Let $W \subseteq \RR^k$ be an open set.
@@ -450,11 +472,11 @@ $$\dist(\ell, \ell') > 2^{-i} - 4^{-i}.$$
 \begin{proof}
 Suppose that $\ell \neq \ell'$.
 By induction, we may assume that this result holds if $\ell, \ell' \in \mathscr L_{i - 1}$.
-So suppose that $\ell \in \mathscr L_i \setminus \mathscr L_{i - 1}$, so by (\ref{balls and lines}) there exists $B \in \mathscr P_i$ such that $\ell \Subset \Phi(B)$.
+So suppose that $\ell \in \mathscr L_i \setminus \mathscr L_{i - 1}$, so by Lemma \ref{iterating the packing}(\ref{balls and lines}) there exists $B \in \mathscr P_i$ such that $\ell \Subset \Phi(B)$.
 
 We claim that $\ell'$ does not intersect $B$.
 Indeed, if $\ell' \in \mathscr L_{i - 1}$, then since balls in $\mathscr P_i$ are disjoint from $\bigcup \mathscr L_{i - 1}$, $\ell'$ does not intersect $B$.
-Otherwise, by (\ref{balls and lines}), there exists $B' \in \mathscr P_i$ such that $\ell' \subset \Phi(B') \Subset B'$. Since $\mathscr P_i$ is a packing, $\ell'$ does not intersect $B$.
+Otherwise, by Lemma \ref{iterating the packing}(\ref{balls and lines}), there exists $B' \in \mathscr P_i$ such that $\ell' \subset \Phi(B') \Subset B'$. Since $\mathscr P_i$ is a packing, $\ell'$ does not intersect $B$.
 In either case, the result follows, because
 \begin{align*} 
 \dist(\ell, \ell') &\geq \dist(\ell, V \setminus B) > \dist(\Phi(B), V \setminus B) > 2^{-i} - 4^{-i}. \qedhere
@@ -481,137 +503,83 @@ From this it follows that
 $$2^{-2j_1} = 4^{-j_1} > 2^{-i + 4} - 2^{-i + 1} > 2^{-i + 3}.$$
 Therefore $j_1 < (i - 3)/2$.
 
-\todo{Pick up the editing process here} Since $k \geq 2$, there is a ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 2})$ which does not intersect $\ell_1$.
-Therefore there is a line segment $\ell(q_2) \in \mathscr L_{I - 1}$, $q_2 \in \mathscr U_{J_2}$, which intersects $B(y, 2^{-I + 1})$.
-Arguing as above, $J_2 < (I - 3)/2$ as well.
+Since $k \geq 2$, there is a ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 2})$ which does not intersect $\ell_1$.
+Therefore there exist $j_2 \leq i - 1$ and $q_2 \in \mathscr U_{j_2}$ such that $\ell_2 := \ell(B(q_2, 2^{-j_2}))$ intersects $B(y, 2^{-i + 1})$.
+Arguing as above, we see that $j_2 \leq (i - 3)/2$ as well.
 
-Since $\ell(q_1)$ and $\ell(q_2)$ both intersect $B(x, 2^{-I + 2})$,
-$$\dist(\ell(q_1), \ell(q_2)) < 2^{-I + 3}.$$
-On the other hand, by Claim \ref{separation of line segments},
-$$\dist(\ell(q_1), \ell(q_2)) > 2^{-\frac{I - 3}{2}} - 4^{-\frac{I - 3}{2}},$$
-which is a contradiction when $I \geq 10$.
+Since $\ell_1$ and $\ell_2$ both intersect $B(x, 2^{-i + 2})$,
+$$\dist(\ell_1, \ell_2) < 2^{-i + 3}.$$
+On the other hand, by Lemma \ref{separation of line segments},
+$$\dist(\ell_1, \ell_2) > 2^{-\frac{i - 3}{2}} - 4^{-\frac{i - 3}{2}},$$
+which is a contradiction when $i \geq 10$.
 \end{proof}
+
+As we shall see, we can get good estimates on $Lu_i(x)$ provided that $x$ is $\sim 2^{-i}$-close to $\mathscr U_j$ for some $j \sim i$.
+Motivated by Lemma \ref{almost density of balls}, we shall show exponential decay of the volume of an exceptional set
+\begin{equation}\label{exponential exceptional set}
+Z_i := \bigcup \left\{B(x, 2^{-i+4}): x \in \partial V \cup \bigcup_{j \leq i/2} \mathscr U_j\right\}.
+\end{equation}
+
+\begin{lemma}\label{decay of the exceptional set}
+Suppose that $k \geq 2$.
+Then there exists $0 < \theta < 1$, which only depends on $V$, such that for any $i \geq 10$, $\vol(Z_i) \leq \theta^i$.
+\end{lemma}
+\begin{proof}
+We first observe that since the Minkowski codimension of $\partial V$ is $1$, for any $s < 1$, the volume of a $2^{-i+4}$-neighborhood $T$ of $\partial U$ is $\lesssim 2^{-is}$.
+Next, we estimate
+$$\card \mathscr U_j \leq \frac{\vol(\bigcup \mathscr U_j)}{\vol(B(0, 2^{-j}))} \lesssim 2^{jk} \vol(V) \lesssim 2^{jk}.$$
+Summing in $j$ we obtain 
+$$\card\left(\bigcup_{j \leq i/2} \mathscr U_j\right) \leq \sum_{j=1}^{i/2} 2^{jk} = \frac{2^{ik/2} - 2^k}{1 - 2^{-k}} \lesssim 2^{ik/2}.$$
+Thus we estimate
+\begin{align*}
+\vol(Z_i)
+&\leq \vol(T) + \card\left(\bigcup_{j \leq i/2} \mathscr U_j\right) \vol(B(0, 2^{-i})) \\
+&\lesssim 2^{-is} + 2^{ik/2} 2^{-ik}.
+\end{align*}
+Since $k \geq 2$, this quantity is $\lesssim 2^{-is}$. 
+The result follows when we take $\theta < 2^{-s}$ so small that $\theta^{10}$ can absorb the implied constants.
+\end{proof}
+
+%%%%%%%%%%%%%%
+\subsection{Proof of Proposition \ref{eikonal extension}}
+If $k = 1$, then $V$ is an interval and we can $u$ to be take the linear extension of $f$.
+Henceforth we assume $k \geq 2$.
+
+Let $K := \Lip(f, \partial V)$.
+By the Kirszbraun-Valentine theorem, there exists a Lipschitz extension $u_0: V \to \RR^n$ of $f$ with $\Lip(u_0, V) \leq K$.
+Let $u_i, \mathscr P_i, \mathscr L_i$ be as in Lemma \ref{iterating the packing}.
+Since $\Lip(u_i, V) \leq K$, we can apply the Arzela-Ascoli theorem and pass to a subsequence to find a Lipschitz extension $u: V \to \RR^n$ of $f$ with $\Lip(u, V) \leq K$ and $u_i \to u$ in $C^0$.
+
+It remins to show that $Lu = K$ everywhere.
+To this end, let $Z_i$ be as in (\ref{exponential exceptional set}).
+Introduce the exceptional set $Z := \bigcap_{i \geq 10} \bigcup_{j \geq i} Z_j$.
+By Lemma \ref{decay of the exceptional set}, there exists $0 < \theta < 1$ such that for every $i \geq 10$,
+$$\vol\left(\bigcup_{j \geq i} Z_j\right) \leq \sum_{j = i}^\infty \theta^j = \frac{\theta^i}{1 - \theta},$$
+so by continuity from above, $Z$ is null.
+In particular $V \setminus Z$ is dense.
+
+For every $x \in V \setminus Z$ and $\varepsilon > 0$, there exists $i \geq 10$ such that
+$$2^{-i} < \max(\varepsilon^2, 16 \dist(x, \partial V))$$
+and $x \notin \bigcup_{j \geq i} Z_j$.
+By Lemma \ref{almost density of balls}, there exists $j \geq i/2$ and $q \in \mathscr U_j$ such that $|x - q| < 2^{-i + 4}$.
+
+From Lemma \ref{iterating the packing}(\ref{balls and lines}), there exists a line segment $\ell \in \mathscr L_j$ such that
+\begin{align*}
+\ell &\Subset B(q, 4^{-j}) \subseteq B(q, 2^{-i}) \\
+\Lip(u_j, \ell) &> K - 2^{-j} \geq K - 2^{-i/2} > K - \varepsilon.
+\end{align*}
+An induction on Lemma \ref{iterating the packing}(\ref{preservation}) implies that for $p \geq j$, $u_p|_\ell = u_j|_\ell$; taking the limit, we see that $u|_\ell = u_j|_\ell$.
+Therefore $\Lip(u, \ell) > K - \varepsilon$, so by (\ref{Lip is sup of local Lips}), there exists $y_i \in \ell$ such that $Lu(y_i) > K - \varepsilon$.
+But $|y_i - q| < 2^{-i}$, so $|y_i - x| < 2^{-i + 5}$.
+
+We can now take $i \to \infty$, so $y_i \to x$ with $Lu(y_i) = K$.
+Since $Lu(x) \leq K$ and $Lu$ is upper semicontinuous, $Lu(x) = K$ as well.
+Since $V \setminus Z$ is dense, the same conclusion holds even if $x \in Z$, proving Proposition \ref{eikonal extension}.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application of the finite element method}
-\subsection{Construction of eikonal extensions}
-
-
-The following attempts to prove Lemma \ref{eikonal extension} might seem like they work, but they don't:
-\begin{enumerate}
-\item If $V$ is a simplex, and we are allowed to prescribe $f$ on the vertices $X$ of $V$ rather than $\partial V$ (this is the situation we actually care about, anyways), try $u$ to be the linear extension of $f$.
-However, we can take
-$$V = \{(x, y) \in \RR^2: x > 0, y > 0, x + y < 1\}$$
-and $f(0, 0) = 0$, $f(1, 0) = f(0, 1) = 1$.
-Then the unique linear extension of $f$ is $u(x, y) = x + y$.
-Then $\Lip(f, X) = 1$ but $\Lip(u, V) = \sqrt 2$.
-\item If $n = 1$, then try $u$ to be given by Perron's method as
-\begin{equation}\label{eikonal equation}
-\begin{cases}
-|\dif u| = \Lip(f, \partial V) \\
-u|_{\partial V} = f.
-\end{cases}
-\end{equation}
-This clearly fails when $n \geq 2$, but even when $n = 1$, I think this fails because (\ref{eikonal equation}) is so overdetermined.
-For example, it seems very likely that (\ref{eikonal equation}) has no $C^1$ supersolutions under various hypotheses, which, for example, could compel any $C^1$ extension of $f$ to have a critical point.
-Maybe I'll try to write out an explicit counterexample.
-\end{enumerate}
-We are thus compelled to construct an eikonal extension which is NOT a viscosity solution of (\ref{eikonal equation}) when $n = 1$.
-
-\begin{proof}[Proof of Lemma \ref{eikonal extension}]
-If $k = 1$, then $V$ is a line segment and we can take $u$ to be the linear interpolation of $f$.
-So we may assume $k \geq 2$.
-
-Let $K := \Lip(f, \partial V)$.
-By the Kirszbraun-Valentine theorem, there exists an extension $u_0: V \to \RR^n$ of $f$ such that $\Lip(u_0, V) \leq K$.
-Furthermore, define
-$$\mathscr U_0 = \mathscr L_0 = \emptyset.$$
-
-Recall that a \dfn{maximal packing} of an open set $W \subseteq \RR^k$ by balls of radius $r$ is a set $\mathscr P$ of disjoint balls contained in $W$ of radius $r$, such that there does not exist a ball $B \subseteq W$ of radius $r$ such that $B$ is disjoint from every ball in $\mathscr P$.
-We stress that the balls in the packing $\mathscr P$ are assumed to not intersect $\partial W$.
-
-\begin{claim}[iteration]
-Assume we have defined:
-\begin{enumerate}
-\item Finite sets of points $\mathscr U_0, \dots, \mathscr U_{I - 1}$.
-\item Finite set of line segments $\mathscr L_0, \dots, \mathscr L_{I - 1}$.
-\item Lipschitz maps $u_0, \dots, u_{I - 1}$ mapping $V$ into $\RR^n$.
-\end{enumerate}
-Furthermore, suppose that for every $0 \leq J \leq I - 1$:
-\begin{enumerate}
-\item $\mathscr L_J = \mathscr L_{J - 1} \cup \{\ell(q): q \in \mathscr U_J\}$ where $\ell(q)$ is a closed line segment in $B(q, 4^{-J})$.
-\item If $J \geq 1$, then 
-$$\mathscr P_J := \{B(q, 2^{-J}): q \in \mathscr U_J\}$$
-is a maximal packing of $V \setminus \bigcup \mathscr L_{J - 1}$ by balls of radius $2^{-J}$.
-\item $u_J|_{\partial V} = f$.
-\item $\Lip(u_J, V) \leq K$.
-\item For every $\ell \in \mathscr L_J$, $\Lip(u_J, \ell) \geq K$.
-\item For every $\ell \in \mathscr L_{J - 1}$, $u_J|_\ell = u_{J - 1}|_\ell$.
-\end{enumerate}
-Then there exist $\mathscr U_I, \mathscr L_I, u_I$ with the same properties, but $I - 1$ replaced by $I$.
-\end{claim}
-\begin{proof}[Proof of claim]
-Since $\mathscr L_{I - 1}$ is a finite set of closed sets, $\bigcup \mathscr L_{I - 1}$ is itself closed.
-Choose $\mathscr U_I \subset V$ such that
-$$\mathscr P_I := \{B(q, 2^{-I}): q \in \mathscr U_I\}$$
-is a maximal packing of $V \setminus \bigcup \mathscr L_{I - 1}$ by balls of radius $2^{-I}$.
-Since $V$ is bounded, $\vol(V) < \infty$, and since $\mathscr P_I$ is disjoint it follows that 
-$$\card \mathscr U_I = \card \mathscr P_I \leq 2^{kI} \vol(V) < \infty.$$
-
-Since $\partial V \cup \bigcup \mathscr L_{I - 1}$ is closed and disjoint from $\mathscr U_I$, which is finite and hence itself closed, there is an open set $W \supseteq \mathscr U_I$ which is disjoint from a neighborhood of $\partial V \cup \bigcup \mathscr L_{I - 1}$.
-Furthermore, we may choose $W = \bigcup_{q \in \mathscr U_I} B(q, r_q)$ for some $r_q < 4^{-I}$.
-
-We now define $u_I|_{(V \setminus W)^\circ} := u_{I - 1}|_{(V \setminus W)^\circ}$.
-Thus we immediately have $u_I|_{\partial V} = f$ and, for every $\ell \in \mathscr U_{I - 1}$, $u_I|_\ell = u_{I - 1}|_\ell$.
-
-We now define $\mathscr L_I$ and $u_I|_{\overline W}$.
-To this end, let $q \in \mathscr U_I$, and consider the behavior of $u_{I - 1}|_{\overline{B(q, r_q)}}$.
-There are two cases:
-\begin{enumerate}
-\item If there exists $x \in \overline{B(q, r_q)}$ with $Lu_{I - 1}(x) = K$, then we set
-$$u_I|_{\overline{B(q, r_q)}} := u_{I - 1}|_{\overline{B(q, r_q)}}.$$ 
-\item Otherwise, since $\overline{B(q, r_q)}$ is convex and compact, we must have $\Lip(u_{I - 1}, \overline{B(q, r_q)}) < K$.
-Choose $\varphi \in C^\infty_\cpt(B(q, r_q))$ which is rapidly oscillating near $q$.
-For each $t > 0$, let
-$$v_t := u_{I - 1}|_{\overline{B(q, r_q)}} + t\varphi.$$
-Since $w \mapsto \Lip(w, \overline{B(q, r_q)})$ is a seminorm, $\beta(t) := \Lip(v_t, \overline{B(q, r_q)})$ is a continuous function.
-Since $\beta(0) < K$ and $\beta(t) \to \infty$ as $\to \infty$, there exists $T > 0$ such that $\beta(T) = K$.
-Let $u_I|_{\overline{B(q, r_q)}} := v_T$.
-By construction, there exists $x \in \overline{B(q, r_q)}$ such that $Lu_I(x) = K$.
-\end{enumerate}
-In either case, $\Lip(u_I|_{\overline{B(q, r_q)}}) \leq K$, and we can find $y_n, z_n \to x$ with
-$$\frac{|u_I(y_n) - u_I(z_n)|}{|y_n - z_n|} = K.$$
-For $n$ large enough, $[y_n, z_n] \subset B(q, 4^{-I})$.
-We then set $\ell(q) := [y_n, z_n]$, and observe that
-$$\Lip(u_I, \ell(q)) \geq K.$$
-
-After this process is done, we have defined $u_I$ and $\ell(q)$ for every $q \in \mathscr U_I$.
-Therefore we have also defined $\mathscr L_I$.
-By construction, they satisfy the desired properties.
-\end{proof}
-
-
-The bound $\Lip(u_I, V) \leq K$ and the Arzela-Ascoli theorem implies that along a subsequence $u_I \to u$ in $C^0$, where:
-\begin{enumerate}
-\item $\Lip(u, V) \leq K$.
-\item $u|_{\partial V} = f$.
-\item For every $I \in \NN$ and $\ell \in \mathscr L_I$, $u|_\ell = u_I|_\ell$.
-\end{enumerate}
-The last condition implies that if $\ell \in \mathscr L_I$, then $\Lip(u, \ell) \geq K$, so by (\ref{Lip is sup of local Lips}) there exists $x \in \ell$ such that $Lu(x) \geq K$.
-But then $\dist(x, \mathscr U_I) < 4^{-I}$.
-By Claim \ref{almost density of balls} it follows that for any $y \in V$ and $I \geq 10$, one of the following holds:
-\begin{enumerate}
-\item $\dist(y, \partial V) \leq 2^{-I + 4}$.
-\item There exists $x \in V$ such that $Lu(x) \geq K$ and $|x - y| < 2^{-I + 5}$.
-\end{enumerate}
-Taking $I \to \infty$ we see that $\{Lu \geq K\}$ is dense in $V$.
-But it is also closed in $V$, so $Lu \geq K$ everywhere.
-Since in addition $Lu \leq K$, the result follows.
-\end{proof}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Construction of the combinatorial model}
 We introduce some notation for a finite simplicial complex $\tau$.
 Let $F_i(\tau)$ be the set of $i$-faces of $\tau$.
