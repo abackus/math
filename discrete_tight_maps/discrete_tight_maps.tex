@@ -4,7 +4,7 @@
 \RequirePackage[usenames,dvipsnames]{xcolor}
 \RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
 \RequirePackage{amsxtra}
-\usepackage{cancel}
+\usepackage{cancel, longtable}
 \usepackage{tikz, wrapfig}
 
 % Add the 2020 MSC
@@ -160,12 +160,12 @@
 \section{Introduction}
 Let $U \subseteq \RR^m$ be an open polytope.
 
-\begin{definition}
+\begin{definition}\label{local Lipschitz constant}
 For a Lipschitz map $u: U \to \RR^n$, define the \dfn{local Lipschitz constant}
 $$Lu(x) := \inf_{r > 0} \Lip(u, B(x, r)).$$
 \end{definition}
 
-\begin{definition}[{\cite[\S1.3]{Sheffield12}}]
+\begin{definition}[{\cite[\S1.3]{Sheffield12}}]\label{tighter}
 Let $u, v: U \to \RR^n$ be Lipschitz maps such that $u|_{\partial U} = v|_{\partial U}$.
 We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
 $$\sup_{Lu > Lv} Lu < \sup_{Lv > Lu} Lv.$$
@@ -190,13 +190,25 @@ This research was supported by the National Science Foundation's Graduate Resear
 %%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
 \subsection{Notation}
-\begin{enumerate}
-\item $U$ is an open polytope in $\RR^m$.
-\item For a measurable set $E$, $E^\circ$, $\overline E$, and $\vol(E)$ are the interior, closure, and Lebesgue measure of $E$.
-\item For a continuous map $u: U \to \RR^n$ and a set $E \subseteq U$, $\Lip(u, E)$ is the Lipschitz constant of $u|_E$.
-\item For a precompact measurable set $E$ and $f \in L^1(E)$, $\dashint_E f := \vol(E)^{-1} \int_E f$.
-\item For $p \in [1, \infty]$, and a linear map $A$, $|A|_p$ is the $p$th Schatten norm of $A$.
-\end{enumerate}
+Here is a brief summary of the notation used throughout this paper.
+
+\begin{longtable}{@{\extracolsep{\fill}}lp{0.75\textwidth}}
+\multicolumn{2}{c}{\textbf{General notation}}\\[4pt]
+$E^\circ$ & interior of the set $E$ \\
+$\overline E$ & closure of the set $E$ \\
+$\vol(E)$ & Lebesgue measure of the Lebesgue measurable set $E$ \\
+$\dashint_E u$ & $\vol(E)^{-1} \int_E u$ \\
+$|A|_p$ & $p$th Schatten norm of the matrix $A$ ($p \in [1, \infty]$) \\
+\\
+\multicolumn{2}{c}{\textbf{Lipschitz maps}}\\[4pt]
+$\Lip(u, E)$ & Lipschitz constant of $u|_E$\\
+$Lu(x)$ & local Lipschitz constant of $u$ at $x$ (Definition \ref{local Lipschitz constant})\\
+$u \prec v$ & $u$ is tighter than $v$ (Definition \ref{tighter})\\
+\\
+\multicolumn{2}{c}{\textbf{Simplicial complexes}}\\[4pt]
+$F_i(\tau)$ & set of $i$-dimensional faces of the simplicial complex $\tau$\\
+$\Pi_h u$ & unique $h$-shape map which agrees with $u$ on vertices (Definition \ref{shape map})
+\end{longtable}
 
 %%%%%%%%%%%%%%%%
 \subsection{Measure theory}
@@ -744,16 +756,17 @@ Let $u := u_m$.
 By Lemma \ref{partial lower semicontinuity}, the estimate (\ref{Lip constant comes from 1 skeleton}) holds because it does whenever $x \in T^\circ$ for some $m$-face $T$.
 \end{proof}
 
-\begin{definition}
+%%%%%%%%%%%%%%%
+\subsection{Approximation of Lipschitz maps}
+\begin{definition}\label{shape map}
 Let $h > 0$.
 For every map $u_0: F_0(\tau_h) \to \RR^n$, choose a map $u: U \to \RR^n$ satisfying the conclusion of Proposition \ref{construction of shape maps}.
 We call $u$ the $h$-\dfn{shape map} extending $u_0$.
+
+Define a projection operator $\Pi_h$, by declaring that for every continuous map $v: U \to \RR^n$, $\Pi_h v$ is the unique $h$-shape map such that 
+$$\Pi_h v|_{F_0(\tau_h)} = v|_{F_0(\tau_h)}.$$
 \end{definition}
 
-%%%%%%%%%%%%%%%
-\subsection{Approximation of Lipschitz maps}
-We define a projection operator $\Pi_h$, by declaring that for every continuous map $v: U \to \RR^n$, $\Pi_h v$ is the unique $h$-shape map such that 
-$$\Pi_h v|_{F_0(\tau_h)} = v|_{F_0(\tau_h)}.$$
 We can use (\ref{Lip constant comes from 1 skeleton}) to show that for every $x \in U$,
 \begin{equation}\label{discrete derivative is vertex lip}
 L \Pi_h u(x) = \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in F_0(\tau_h) \\ y, z \in T}} \frac{|u(y) - u(z)|}{|y - z|}.
