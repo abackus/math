@@ -55,6 +55,7 @@
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\len}{len}
+\DeclareMathOperator{\Lex}{Lex}
 \DeclareMathOperator{\Hom}{Hom}
 \DeclareMathOperator{\mesh}{mesh}
 \DeclareMathOperator{\coker}{coker}
@@ -67,6 +68,7 @@
 \newcommand{\normal}{\mathbf n}
 \newcommand{\vol}{\mathrm{vol}}
 
+\DeclareMathOperator{\hull}{hull}
 \newcommand{\diam}{\mathrm{diam}}
 \DeclareMathOperator{\sech}{sech}
 \newcommand{\inj}{\mathrm{inj}}
@@ -158,22 +160,22 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-Let $U \subseteq \RR^m$ be an open polytope.
+Let $U \subseteq \RR^d$ be an open polytope.
 
 \begin{definition}\label{local Lipschitz constant}
-For a Lipschitz map $u: U \to \RR^n$, define the \dfn{local Lipschitz constant}
+For a Lipschitz map $u: U \to \RR^D$, define the \dfn{local Lipschitz constant}
 $$Lu(x) := \inf_{r > 0} \Lip(u, B(x, r)).$$
 \end{definition}
 
 \begin{definition}[{\cite[\S1.3]{Sheffield12}}]\label{tighter}
-Let $u, v: U \to \RR^n$ be Lipschitz maps such that $u|_{\partial U} = v|_{\partial U}$.
+Let $u, v: U \to \RR^D$ be Lipschitz maps such that $u|_{\partial U} = v|_{\partial U}$.
 We say that $u$ is \dfn{tighter} than $v$, written $u \prec v$, if 
 $$\sup_{Lu > Lv} Lu < \sup_{Lv > Lu} Lv.$$
 If there is no tighter $v$ than $u$, we say that $u$ is \dfn{tight}.
 \end{definition}
 
 \begin{theorem}
-Every Lipschitz map $f: \partial U \to \RR^n$ has a tight extension $u: U \to \RR^n$.
+Every Lipschitz map $f: \partial U \to \RR^D$ has a tight extension $u: U \to \RR^D$.
 \end{theorem}
 
 Showing that the finite element approximations converge is hard, because the local Lipschitz constant of the approximation is piecewise constant, and we do not have any a priori estimates on the $W^{s, p}$ norms of the exact solution when $s > 1$.
@@ -194,8 +196,11 @@ Here is a brief summary of the notation used throughout this paper.
 
 \begin{longtable}{@{\extracolsep{\fill}}lp{0.75\textwidth}}
 \multicolumn{2}{c}{\textbf{General notation}}\\[4pt]
+$d$ & dimension of the domain \\
+$D$ & dimension of the codomain \\
 $E^\circ$ & interior of the set $E$ \\
-$\overline E$ & closure of the set $E$ \\
+$\overline E$ & closure of $E$ \\
+$\hull(E)$ & convex hull of $E$ \\
 $\vol(E)$ & Lebesgue measure of the Lebesgue measurable set $E$ \\
 $\dashint_E u$ & $\vol(E)^{-1} \int_E u$ \\
 $|A|_p$ & $p$th Schatten norm of the matrix $A$ ($p \in [1, \infty]$) \\
@@ -234,15 +239,15 @@ and $n \geq n(k)$, $f(x) < f_n(x) + \delta$.
 \end{proof}
 
 \begin{lemma}[lower semicontinuity of vectorial total variation]\label{TV lower semicontinuity}
-Let $|\cdot|_M$ be a norm on $n \times m$-matrices, let $u_n, u \in BV(U, \RR^n)$, and suppose that $u_n \to u$ in $L^1$.
+Let $|\cdot|_M$ be a norm on $\Hom(\RR^d, \RR^D)$, let $u_n, u \in BV(U, \RR^D)$, and suppose that $u_n \to u$ in $L^1$.
 Then for any open $V \subseteq U$,
 $$\int_V |\dif u|_M(x) \dif x \leq \liminf_{n \to \infty} \int_V |\dif u_n|_M(x) \dif x.$$
 \end{lemma}
 \begin{proof}
 Let $|\cdot|_M'$ be the dual norm to $|\cdot|_M$.
 Let
-$$\mathscr D := \{X \in C^1_\cpt(U, \RR^{n \times m}): \||X|_M'\|_{C^0} \leq 1\}.$$
-Integrating by parts, for any $v \in BV(U, \RR^n)$, 
+$$\mathscr D := \{X \in C^1_\cpt(U, \Hom(\RR^d, \RR^D)): \||X|_M'\|_{C^0} \leq 1\}.$$
+Integrating by parts, for any $v \in BV(U, \RR^D)$, 
 $$\int_V |\dif v|_M(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle \dif v, X\rangle(x) \dif x = \sup_{X \in \mathscr D} \int_V \langle v, \nabla \cdot X\rangle(x) \dif x.$$
 The result follows when we use the $L^1$ convergence to bound
 \begin{align*}
@@ -253,13 +258,13 @@ The result follows when we use the $L^1$ convergence to bound
 
 %%%%%%%%%%%%%%%%
 \subsection{Lipschitz maps}
-Let $u: U \to \RR^n$ be a Lipschitz map.
+Let $u: U \to \RR^D$ be a Lipschitz map.
 Its local Lipschitz constant $Lu$ is upper semicontinuous \cite[Lemma 4.2(a)]{Crandall2008}.
 Though $Lu$ is not lower semicontinuous, it is ``lower semicontinuous on average"; this was claimed without proof by Sheffield and Smart \cite[\S1.4]{Sheffield12}.
 
 \begin{lemma}[lower semicontinuity on average of $Lu$]\label{partial lower semicontinuity}
 Let $x \in U$, let $V \subseteq U$ be an open neighborhood of $x$, and let $\delta > 0$.
-Then for any Lipschitz map $u: U \to \RR^n$,
+Then for any Lipschitz map $u: U \to \RR^D$,
 $$\vol(V \cap \{Lu > Lu(x) - \delta\}) > 0.$$
 \end{lemma}
 \begin{proof}
@@ -294,7 +299,7 @@ Lu(x) &\leq \|f\|_{L^\infty(V^2 \setminus \Delta_V)} \leq K \lim_{p \to \infty} 
 \end{proof}
 
 \begin{lemma}
-For every Lipschitz map $u: U \to \RR^n$:
+For every Lipschitz map $u: U \to \RR^D$:
 \begin{enumerate}
 \item For every compact convex set $K \Subset U$,
 \begin{equation}\label{Lip is sup of local Lips}
@@ -311,12 +316,12 @@ Lu(x) = \lim_{r \to 0} \||\dif u|_\infty\|_{L^\infty(B(x, r))}.
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-This is essentially the content of \cite[Lemma 4.2]{Crandall2008} when $n = 1$.
-The only meaningful difference when $n \geq 2$ is that we have to worry about which matrix norm is applied to $\dif u$, but of course we know the correct norm to use is $|\cdot|_\infty$.
+This is essentially the content of \cite[Lemma 4.2]{Crandall2008} when $D = 1$.
+The only meaningful difference when $D \geq 2$ is that we have to worry about which matrix norm is applied to $\dif u$, but of course we know the correct norm to use is $|\cdot|_\infty$.
 \end{proof}
 
 \begin{lemma}\label{Lip is du}
-For every Lipschitz map $u: U \to \RR^n$ and almost every $x \in U$,
+For every Lipschitz map $u: U \to \RR^D$ and almost every $x \in U$,
 $$Lu(x) = |\dif u|_\infty(x).$$
 \end{lemma}
 \begin{proof}
@@ -329,7 +334,7 @@ The claim follows by taking $\varepsilon \to 0$.
 \end{proof}
 
 \begin{lemma}[lower semicontinuity of $L$]\label{Lip is lower semicontinuous}
-Suppose that $u_k, u: U \to \RR$ are maps with $u_k \to u$ in $L^1$ and $\Lip(u_k, U) \leq K < \infty$.
+Suppose that $u_k, u: U \to \RR^D$ are maps with $u_k \to u$ in $L^1$ and $\Lip(u_k, U) \leq K < \infty$.
 Then for almost every $x \in U$,
 $$Lu(x) \leq \liminf_{k \to \infty} Lu_k(x).$$
 \end{lemma}
@@ -347,6 +352,18 @@ Because $Lu_k(y) \leq \Lip(u_k, U) \leq K$, we can apply dominated convergence:
 $$\liminf_{k \to \infty} \dashint_{B(x, r)} Lu_k(y) \dif y = \dashint_{B(x, r)} \liminf_{k \to \infty} Lu_k(y) \dif y.$$
 The result follows when we take $r \to 0$ and apply the Lebesgue differentiation theorem.
 \end{proof}
+
+\begin{lemma}\label{tight implies best lipschitz}
+Suppose that $U$ is convex, and let $u, v: U \to \RR^n$ be Lipschitz maps with $u|_{\partial U} = v|_{\partial U}$ and $\Lip(u, U) > \Lip(v, U)$.
+Then $v \prec u$.
+\end{lemma}
+\begin{proof}
+By (\ref{Lip is sup of local Lips}), there exists $x \in U$ such that $Lu(x) > \Lip(v, U)$, and then
+\begin{align*}
+\sup_{Lu > Lv} Lu &> \Lip(v, U) = \sup_U Lv \geq \sup_{Lv > Lu} Lv. \qedhere
+\end{align*}
+\end{proof}
+
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Tight maps from graphs}
@@ -485,43 +502,83 @@ The result follows when we take $r \to 0$ and apply the Lebesgue differentiation
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Eikonal Kirszbraun-Valentine theorem}
-\begin{proposition}\label{eikonal extension}
-Let $V \Subset \RR^k$ be a bounded convex open set.
-For every Lipschitz map $f: \partial V \to \RR^n$, there exists an extension $u: V \to \RR^n$ of $f$, such that for every $x \in V$,
-$$Lu(x) = \Lip(f, \partial V).$$
-\end{proposition}
+In order to pass from a tight map defined on a graph to a continuously defined tight map, it is convenient to know that given a simplex $T$ and a map defined on the vertices of $T$, we can extend to a map defined on all of $T$ with constant local Lipschitz constant.
 
-The following attempts to prove Lemma \ref{eikonal extension} might seem like they work, but they don't:
-\begin{enumerate}
-\item If $V$ is a simplex, and we are allowed to prescribe $f$ on the vertices $X$ of $V$ rather than $\partial V$ (this is the situation we actually care about, anyways), try $u$ to be the linear extension of $f$.
-However, we can take
+\begin{theorem}\label{eikonal extension}
+Let $V \Subset \RR^d$ be a bounded convex open set, and let $\Gamma \subseteq \partial V$ be closed.
+For every Lipschitz map $f: \Gamma \to \RR^D$, there exists an extension $u: V \to \RR^D$ of $f$, such that for every $x \in V$,
+$$Lu(x) = \Lip(f, \Gamma).$$
+\end{theorem}
+
+Let us motivate the proof of Theorem \ref{eikonal extension}.
+First we check that we cannot simply use the linear extension of $f$:
+
+\begin{example}
+Let
 $$V = \{(x, y) \in \RR^2: x > 0, y > 0, x + y < 1\}$$
 and $f(0, 0) = 0$, $f(1, 0) = f(0, 1) = 1$.
 Then the unique linear extension of $f$ is $u(x, y) = x + y$.
 Then $\Lip(f, X) = 1$ but $\Lip(u, V) = \sqrt 2$.
-\item If $n = 1$, then try $u$ to be given by Perron's method as
+\end{example}
+
+If we normalize $\Lip(f, \Gamma) = 1$, then Theorem \ref{eikonal extension} is essentially solving the eikonal equation
 \begin{equation}\label{eikonal equation}
 \begin{cases}
-|\dif u| = \Lip(f, \partial V) \\
-u|_{\partial V} = f.
+|\dif u|_\infty = 1 \\
+u|_\Gamma = f.
 \end{cases}
 \end{equation}
-This clearly fails when $n \geq 2$, but even when $n = 1$, I think this fails because (\ref{eikonal equation}) is so overdetermined.
-For example, it seems very likely that (\ref{eikonal equation}) has no $C^1$ supersolutions under various hypotheses, which, for example, could compel any $C^1$ extension of $f$ to have a critical point.
-Maybe I'll try to write out an explicit counterexample.
-\end{enumerate}
-We are thus compelled to construct an eikonal extension which is NOT a viscosity solution of (\ref{eikonal equation}) when $n = 1$.
+It is tempting to look for solutions of (\ref{eikonal equation}) using Perron's method.
+Of course, if $D \geq 2$, then (\ref{eikonal equation}) is a strongly coupled system, so the usual formulation of Perron's method \cite{Ishii92} fails.
+However, this scheme would fail even when $D = 1$, because Perron's method as usually formulated gives a viscosity solution, but viscosity solutions of (\ref{eikonal equation}) do not have to satisfy $u|_\Gamma = f$ in the classical sense \cite[\S7.C]{Crandall92}.
+
+So we need a strategy for constructing \emph{nonviscosity} solutions of (\ref{eikonal equation}).
+We know by the Kirszbraun-Valentine theorem that we can construct a subsolution $\tilde u$ of (\ref{eikonal equation}) in the sense that (classically)
+$$\begin{cases}
+L\tilde u \leq 1 \\
+\tilde u|_\Gamma = f.
+\end{cases}$$
+The idea, as in Perron's method, is to iteratively modify $\tilde u$ in order to increase $L \tilde u$, without ever violating that $\tilde u$ is a subsolution.
+We have to carry out this process carefully, however, because our modifications are artificial oscillations, which could experience destructive interference in the limit.
+So we make our modifications on spaced-out balls, so that they cannot cancel with each other.
+
+%%%%%%%%%%%%%%%%%%%%%
+\subsection{Classical Kirszbraun-Valentine theorem}
+We shall need the main lemma in the proof of the Kirszbraun-Valentine theorem elsewhere, so we now state it, and for the reader's convenience recall why it implies the Kirszbraun-Valentine theorem.
+The cited proof works on hyperbolic space, but the proof for euclidean space is strictly easier, as we can avoid the use of Topoganov's theorem.
+
+\begin{lemma}[{\cite[\S1.3]{Kassel17}}]\label{KV lemma}
+Let $K \Subset \RR^d$ be a nonempty compact set and $u_0: K \to \RR^D$ a Lipschitz map.
+For every $x \in \RR^d \setminus K$ there exists $\xi \in \RR^D$ such that 
+$$\max_{k \in K} \frac{|\xi - u_0(k)|}{|x - k|} \leq \Lip(u_0, K).$$
+\end{lemma}
+
+\begin{proposition}[Kirszbraun-Valentine]
+Let $K \Subset \RR^d$ be a nonempty compact set and $u_0: K \to \RR^D$ a Lipschitz map.
+Then there exists a Lipschitz extension $u: \RR^d \to \RR^D$ of $f$ such that $\Lip(u, \RR^d) = \Lip(u_0, K)$.
+\end{proposition}
+\begin{proof}
+Let $(x_j)$ be a dense injective sequence in $\RR^d \setminus K$.
+We inductively define $u_{j + 1}(x_i) = u_j(x_i)$ for $i \leq j$.
+Let $x_{j + 1}$ be the input to Lemma \ref{KV lemma}, and let $\xi$ be its output.
+Then let $u_{j + 1}(x_{j + 1}) := \xi$.
+We then define $u(x_j) := u_j(x_j)$, so that
+$$\Lip(u, K \cup \{x_j: j \in \NN\}) = \Lip(u_0, K)$$
+by induction.
+In particular, $u$ extends uniquely to a Lipschitz map defined on all of $\RR^d$ with the same Lipschitz constant.
+\end{proof}
+
 
 %%%%%%%%%%%%%%%%%%%%
 \subsection{Modifying the Lipschitz constant on a packing}
 We first show that we can modify a Lipschitz map $u$ on a small ball to increase $Lu$ in a controlled manner.
 As a consequence, we show that we can modify $Lu$ safely on every ball in a packing.
 
-Throughout the proof of Proposition \ref{eikonal extension}, given a ball $B$ of radius $r$, let $\Phi(B)$ be the concentric ball of radius $r^2$.
+Throughout the proof of Theorem \ref{eikonal extension}, given a ball $B$ of radius $r$, let $\Phi(B)$ be the concentric ball of radius $r^2$.
 We recall some definitions from metric geometry:
 
 \begin{definition}
-Let $W \subseteq \RR^k$ be an open set.
+Let $W \subseteq \RR^d$ be an open set.
 \begin{enumerate}
 \item An $r$-\dfn{packing} of $W$ is a set of disjoint balls $B \Subset W$ of radius $r$.
 \item An $r$-packing $\mathscr P$ of $W$ is \dfn{maximal} if there does not exist an $r$-packing $\mathscr Q$ of $W$ with $\mathscr Q \supset \mathscr P$.
@@ -529,9 +586,9 @@ Let $W \subseteq \RR^k$ be an open set.
 \end{definition}
 
 \begin{lemma}\label{improvement on one ball}
-Let $W \subseteq \RR^k$ be a convex open set and $K > 0$.
+Let $W \subseteq \RR^d$ be a convex open set and $K > 0$.
 Let $u: W \to \RR^n$ satisfy $\Lip(u, W) \leq K$.
-Then there exists $v: W \to \RR^n$ such that:
+Then there exists $v: W \to \RR^D$ such that:
 \begin{enumerate}
 \item $\Lip(v, W) = K$.
 \item For some $W' \Subset W$ and every $x \in W \setminus W'$, $v(x) = u(x)$.
@@ -539,14 +596,14 @@ Then there exists $v: W \to \RR^n$ such that:
 \end{enumerate}
 \end{lemma}
 \begin{proof}
-We first observe that it suffices to show that there exists $v: W \to \RR^n$ with $v = u$ near $\partial W$, $\Lip(v, W) = K$, and $Lv(x) = K$ for some $x \in W$.
+We first observe that it suffices to show that there exists $v: W \to \RR^D$ with $v = u$ near $\partial W$, $\Lip(v, W) = K$, and $Lv(x) = K$ for some $x \in W$.
 Indeed, if this is true, then there exist $y_n, z_n \in W$ with $y_n, z_n \to x$ and
 $$\frac{|v(y_n) - v(z_n)|}{|y_n - z_n|} \to K.$$
 If we take $\ell$ to be the line segment $[y_n, z_n]$ for a sufficiently large $n$, the result follows.
 
 So suppose that for every $x \in W$, $Lu(x) < K$.
 Choose a convex open set $W' \Subset W$, so $\Lip(u, W') < K$ by (\ref{Lip is sup of local Lips}).
-Choose $\varphi \in C^\infty_\cpt(W', \RR^n)$ which is rapidly oscillating on some set $W'' \Subset W'$, and define
+Choose $\varphi \in C^\infty_\cpt(W', \RR^D)$ which is rapidly oscillating on some set $W'' \Subset W'$, and define
 $$u_t(x) := u + t\varphi.$$
 Since $w \mapsto \Lip(w, W')$ is a seminorm, $\beta(t) := \Lip(u_t, W')$ is a continuous function on $\RR_+$.
 Moreover, $\beta(0) < K$ and $\beta(t) \to \infty$ as $t \to \infty$, so there exists $T > 0$ such that $\beta(T) = K$.
@@ -558,9 +615,9 @@ So by (\ref{Lip is sup of local Lips}) and convexity of $W$, $\Lip(v, W) = K$.
 \end{proof}
 
 \begin{lemma}\label{improvement on packing}
-Let $W \subseteq \RR^k$ be an open set, $K > 0$, and $0 < r \leq 1$.
-Let $u: W \to \RR^n$ satisfy $\Lip(u, W) \leq K$.
-Then for every $r$-packing $\mathscr P$ of $W$, there exists $v: W \to \RR^n$ such that:
+Let $W \subseteq \RR^d$ be an open set, $K > 0$, and $0 < r \leq 1$.
+Let $u: W \to \RR^D$ satisfy $\Lip(u, W) \leq K$.
+Then for every $r$-packing $\mathscr P$ of $W$, there exists $v: W \to \RR^D$ such that:
 \begin{enumerate}
 \item For every $x \in W$, $Lv(x) \leq K$.
 \item For every $x \in W \setminus \bigcup \{\Phi(B): B \in \mathscr P\}$, $v(y) = u(y)$.
@@ -578,10 +635,10 @@ We are going to iteratively apply Lemma \ref{improvement on packing} to finer an
 Later we shall take a limit as the scale goes to $0$; it is important that we choose our packings so carefully that in the limit, our improvements do not cancel each other.
 
 \begin{lemma}\label{iterating the packing}
-Let $u_0: V \to \RR^n$ be a map with $\Lip(u_0, V) \leq K$, and $\mathscr L_0 := \emptyset$.
+Let $u_0: V \to \RR^D$ be a map with $\Lip(u_0, V) \leq K$, and $\mathscr L_0 := \emptyset$.
 Then there exist
 \begin{enumerate}
-\item maps $u_i: V \to \RR^n$ with $\Lip(u_i, V) \leq K$,
+\item maps $u_i: V \to \RR^D$ with $\Lip(u_i, V) \leq K$,
 \item finite sets of line segments $\mathscr L_i \supset \mathscr L_{i - 1}$,
 \item and maximal $2^{-i}$-packings $\mathscr P_i$ of $V \setminus \bigcup \mathscr L_{i - 1}$,
 \end{enumerate}
@@ -601,7 +658,7 @@ Let $W := V \setminus \bigcup \mathscr L_{i - 1}$.
 Then $W$ is an open set since $\mathscr L_{i - 1}$ is a finite set of closed sets, so we may choose a maximal $2^{-i}$-packing $\mathscr P_i$ of $W$.
 Let $Z := \bigcup \{\Phi(B): B \in \mathscr P_i\}$.
 
-By Lemma \ref{improvement on packing}, we can find $u_i: W \to \RR^k$ and line segments $\ell(B)$, $B \in \mathscr P_i$, such that $u_i$ agrees with $u_{i - 1}$ away from $Z$ and satisfies $Lu_i \leq K$, but for each $B \in \mathscr P_i$,
+By Lemma \ref{improvement on packing}, we can find $u_i: W \to \RR^D$ and line segments $\ell(B)$, $B \in \mathscr P_i$, such that $u_i$ agrees with $u_{i - 1}$ away from $Z$ and satisfies $Lu_i \leq K$, but for each $B \in \mathscr P_i$,
 $$\Lip(u_i, \ell(B)) > K - 2^{-i}.$$
 Since $V \setminus W$ does not intersect $Z$, $u_i = u_{i - 1}$ near $W$, and in particular, extends uniquely to all of $V$ while satisfying (\ref{preservation}).
 Let
@@ -632,7 +689,7 @@ In either case, the result follows, because
 \end{proof}
 
 \begin{lemma}\label{almost density of balls}
-Suppose that $k \geq 2$. Let
+Suppose that $d \geq 2$. Let
 $$\mathscr U_i := \{x \in V: B(x, 2^{-i}) \in \mathscr P_i\}.$$
 For every $i \geq 10$ and $x \in V$,
 $$\min\left(\dist(x, \partial V), \min_{j \leq i} \dist(x, \mathscr U_j)\right) \leq 2^{-i + 4}.$$
@@ -651,7 +708,7 @@ From this it follows that
 $$2^{-2j_1} = 4^{-j_1} > 2^{-i + 4} - 2^{-i + 1} > 2^{-i + 3}.$$
 Therefore $j_1 < (i - 3)/2$.
 
-Since $k \geq 2$, there is a ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 2})$ which does not intersect $\ell_1$.
+Since $d \geq 2$, there is a ball $B(y, 2^{-i + 1}) \subseteq B(x, 2^{-i + 2})$ which does not intersect $\ell_1$.
 Therefore there exist $j_2 \leq i - 1$ and $q_2 \in \mathscr U_{j_2}$ such that $\ell_2 := \ell(B(q_2, 2^{-j_2}))$ intersects $B(y, 2^{-i + 1})$.
 Arguing as above, we see that $j_2 \leq (i - 3)/2$ as well.
 
@@ -669,33 +726,33 @@ Z_i := \bigcup \left\{B(x, 2^{-i+4}): x \in \partial V \cup \bigcup_{j \leq i/2}
 \end{equation}
 
 \begin{lemma}\label{decay of the exceptional set}
-Suppose that $k \geq 2$.
+Suppose that $d \geq 2$.
 Then there exists $C > 0$ which depends only on $V$ such that $\vol(Z_i) \leq C/2^i$.
 \end{lemma}
 \begin{proof}
 The Minkowski codimension of $\partial V$ is $1$ with uniform constants at all scales so the volume of a $2^{-i+4}$-neighborhood $T$ of $\partial U$ is $\lesssim 2^{-i}$.
 Next, we estimate
-$$\card \mathscr U_j \leq \frac{\vol(\bigcup \mathscr U_j)}{\vol(B(0, 2^{-j}))} \lesssim 2^{jk} \vol(V) \lesssim 2^{jk}.$$
+$$\card \mathscr U_j \leq \frac{\vol(\bigcup \mathscr U_j)}{\vol(B(0, 2^{-j}))} \lesssim 2^{jd} \vol(V) \lesssim 2^{jd}.$$
 Summing in $j$ we obtain 
-$$\card\left(\bigcup_{j \leq i/2} \mathscr U_j\right) \leq \sum_{j=1}^{i/2} 2^{jk} = \frac{2^{ik/2} - 2^k}{1 - 2^{-k}} \lesssim 2^{ik/2}.$$
+$$\card\left(\bigcup_{j \leq i/2} \mathscr U_j\right) \leq \sum_{j=1}^{i/2} 2^{jd} = \frac{2^{id/2} - 2^d}{1 - 2^{-d}} \lesssim 2^{id/2}.$$
 Thus we estimate
 \begin{align*}
 \vol(Z_i)
 &\leq \vol(T) + \card\left(\bigcup_{j \leq i/2} \mathscr U_j\right) \vol(B(0, 2^{-i})) 
-\lesssim 2^{-is} + 2^{ik/2} 2^{-ik}.
+\lesssim 2^{-is} + 2^{id/2} 2^{-id}.
 \end{align*}
-Since $k \geq 2$, this quantity is $\lesssim 2^{-i}$.
+Since $d \geq 2$, this quantity is $\lesssim 2^{-i}$.
 \end{proof}
 
 %%%%%%%%%%%%%%
-\subsection{Proof of Proposition \ref{eikonal extension}}
-If $k = 1$, then $V$ is an interval and we can $u$ to be take the linear extension of $f$.
-Henceforth we assume $k \geq 2$.
+\subsection{Proof of Theorem \ref{eikonal extension}}
+If $d = 1$, then $V$ is an interval and we can choose $u$ to be a linear extension of $f$.
+Henceforth we assume $d \geq 2$.
 
-Let $K := \Lip(f, \partial V)$.
-By the Kirszbraun-Valentine theorem, there exists a Lipschitz extension $u_0: V \to \RR^n$ of $f$ with $\Lip(u_0, V) \leq K$.
+Let $K := \Lip(f, \Gamma)$.
+By the Kirszbraun-Valentine theorem, there exists a Lipschitz extension $u_0: V \to \RR^D$ of $f$ with $\Lip(u_0, V) \leq K$.
 Let $u_i, \mathscr P_i, \mathscr L_i$ be as in Lemma \ref{iterating the packing}.
-Since $\Lip(u_i, V) \leq K$, we can apply the Arzela-Ascoli theorem and pass to a subsequence to find a Lipschitz extension $u: V \to \RR^n$ of $f$ with $\Lip(u, V) \leq K$ and $u_i \to u$ in $C^0$.
+Since $\Lip(u_i, V) \leq K$, we can apply the Arzela-Ascoli theorem and pass to a subsequence to find a Lipschitz extension $u: V \to \RR^D$ of $f$ with $\Lip(u, V) \leq K$ and $u_i \to u$ in $C^0$.
 
 It remins to show that $Lu = K$ everywhere.
 To this end, let $Z_i$ be as in (\ref{exponential exceptional set}).
@@ -721,17 +778,22 @@ But $|y_i - q| < 2^{-i}$, so $|y_i - x| < 2^{-i + 5}$.
 
 We can now take $i \to \infty$, so $y_i \to x$ with $Lu(y_i) = K$.
 Since $Lu(x) \leq K$ and $Lu$ is upper semicontinuous, $Lu(x) = K$ as well.
-Since $V \setminus Z$ is dense, the same conclusion holds even if $x \in Z$, proving Proposition \ref{eikonal extension}.
+Since $V \setminus Z$ is dense, the same conclusion holds even if $x \in Z$, proving Theorem \ref{eikonal extension}.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Existence of tight maps}
 \begin{theorem}\label{existence of tight maps}
-Let $f: \partial U \to \RR^n$ be a Lipschitz map.
-Then there exists a tight map $u: U \to \RR^n$ extending $f$.
+Let $U \subseteq \RR^d$ be an convex open bounded polytope.
+Let $f: \partial U \to \RR^D$ be a Lipschitz map.
+Then there exists a tight map $u: U \to \RR^D$ extending $f$.
 Moreover, $\Lip(u, U) = \Lip(f, \partial U)$.
 \end{theorem}
+
+As proposed by Sheffield and Smart \cite[Question 5.1]{Sheffield12}, we are going to prove Theorem \ref{existence of tight maps} by approximating $U$ by a graph.
+Even when $D = 1$, lattice approximations to $U$ are difficult to work with, because the $\infty$-Laplacian only cares about the second derivative of $u$ in the direction of $\nabla u$, which does not have to be a lattice direction \cite[\S3]{Oberman13}.
+Instead, we use a triangulation.
 
 %%%%%%%%%%%%%%%%%%%%%
 \subsection{Construction of the combinatorial model}
@@ -741,51 +803,76 @@ The \dfn{mesh size} $\mesh(\tau)$ of $\tau$ is
 $$\mesh(\tau) := \max_{E \in F_1(\tau)} \diam(E).$$
 For any face $T \in F_i(\tau)$ with $i \geq 1$, $\diam(T) \leq \mesh(\tau)$.
 
-Now we fix a triangulation $\tau$ of the open polytope $U \subseteq \RR^m$.
+Now we fix a triangulation $\tau$ of the open polytope $U \subseteq \RR^d$.
 For each $h > 0$, define $\tau_h$ to be an iterated barycentric subdivision of $\tau$ such that:
 \begin{enumerate}
 \item $\mesh(\tau_h) \leq h$.
 \item If $h' < h$, then $\tau_{h'}$ is a subdivision of $\tau_h$.
 \end{enumerate}
+To construct the shape maps, we first use the following version of the Kirszbraun-Valentine theorem:
+
+\begin{lemma}\label{convex KV theorem}
+Let $X := F_0(\tau_h)$ be the $0$-skeleton.
+For each map $u_0: X \to \RR^D$ there exists a map $u: u \to \RR^D$ such that $u|_X = u_0$ and for every $T \in F_d(\tau_h)$,
+\begin{equation}\label{Lip constant bounded by 1 skeleton}
+\Lip(u, T) \leq \Lip(u, X \cap T).
+\end{equation}
+\end{lemma}
+\begin{proof}
+Choose a dense injective sequence $\{x_j: j \in \NN\}$ in $U$ such that an initial segment $\{x_0, \dots, x_m\} = X$, and for every $j \geq m + 1$, there exists $T_j \in F_d(\tau)$ such that $x_j \in T^\circ_j$.
+Given a map $u_j: \{x_0, \dots, x_{m + j}\} \to \RR^D$, let $K$ be the set of points $x_i$, $i \in \{0, \dots, m + j\}$, such that $x_i \in T_{j + 1}$.
+Use Lemma \ref{KV lemma} to find $\xi \in \RR^D$ which minimizes
+$$\lambda := \max_{k \in K} \frac{|\xi - u_j(k)|}{|x_{j + 1} - k|}.$$
+In particular, $\lambda \leq \Lip(u_j, K)$.
+We then set $u_{j + 1}(x_{j + 1}) := \xi$ and $u_{j + 1}(x_i) = u_j(x_i)$ for $i \leq j$.
+By induction, we conclude that if $x_{i_1}, x_{i_2} \in T_{j + 1}$ and $\max(i_1, i_2) \leq j + 1$, then
+\begin{equation}\label{Lip constant bounded by 1 skeleton pre}
+\frac{|u_{j + 1}(x_{i_1}) - u_{j + 1}(x_{i_2})|}{|x_{i_1} - x_{i_2}|} \leq \Lip(u_{j + 1}, X \cap T_{j + 1}).
+\end{equation}
+Now if we let $u(x_j) = u_j(x_j)$, then $u$ is Lipschitz and defined on a dense subset of $U$.
+So it extends uniquely to $U$, and by (\ref{Lip constant bounded by 1 skeleton pre}) we have (\ref{Lip constant bounded by 1 skeleton}).
+\end{proof}
 
 \begin{proposition}[construction of shape maps]\label{construction of shape maps}
 Let $X := F_0(\tau_h)$ be the $0$-skeleton.
-For each map $u_0: X \to \RR^n$ there exists a map $u: u \to \RR^n$ such that $u|_X = u_0$ and for every $x \in X$,
+For each map $u_0: X \to \RR^D$ there exists a map $u: u \to \RR^D$ such that $u|_X = u_0$ and for every $x \in X$,
 \begin{equation}\label{Lip constant comes from 1 skeleton}
-Lu(x) = \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in X \\ y, z \in T}} \frac{|u(y) - u(z)|}{|y - z|}.
+Lu(x) = \max_{\substack{T \in F_d(\tau_h) \\ x \in T}} \Lip(u, X \cap T).
 \end{equation}
 \end{proposition}
 \begin{proof}
-Let $k \geq 1$, and let $T$ be a $k$-face.
-Inductively define $u_k|_T$ to be the extension of $u_{k - 1}$ given by Proposition \ref{eikonal extension}; then $u_k$ is Lipschitz on the $k$-skeleton of $\tau_h$, and by induction on $k$, for every $x \in T \setminus \partial T$, $Lu(x) = \Lip(u, V_T)$ where $V_T$ is the set of vertices of $T$.
-
-Let $u := u_m$.
+Let $u_1$ be the output of Lemma \ref{convex KV theorem}.
+By Theorem \ref{eikonal extension}, we can modify $u_1$ on each $d$-face $T$ of $\tau$ to obtain a map $u$ such that $Lu(x) = \Lip(u, T \cap X)$ for $x \in T^\circ$, but such that, if $Y$ denotes the $d - 1$-skeleton of $\tau$, then $u|_Y = u_1|_Y$.
+In partiular $u$ is continuous across the $d - 1$-faces of $\tau$.
 By Lemma \ref{partial lower semicontinuity}, the estimate (\ref{Lip constant comes from 1 skeleton}) holds because it does whenever $x \in T^\circ$ for some $m$-face $T$.
 \end{proof}
 
 \begin{definition}\label{shape map}
 Let $h > 0$.
-For every map $u_0: F_0(\tau_h) \to \RR^n$, choose a map $u: U \to \RR^n$ satisfying the conclusion of Proposition \ref{construction of shape maps}.
+For every map $u_0: F_0(\tau_h) \to \RR^D$, choose a map $u: U \to \RR^D$ satisfying the conclusion of Proposition \ref{construction of shape maps}.
 We call $u$ the $h$-\dfn{shape map} extending $u_0$.
 
-Define a projection operator $\Pi_h$, by declaring that for every continuous map $v: U \to \RR^n$, $\Pi_h v$ is the unique $h$-shape map such that 
+Define a projection operator $\Pi_h$, by declaring that for every continuous map $v: U \to \RR^D$, $\Pi_h v$ is the unique $h$-shape map such that 
 $$\Pi_h v|_{F_0(\tau_h)} = v|_{F_0(\tau_h)}.$$
 \end{definition}
 
 %%%%%%%%%%%%%%%
 \subsection{Approximation of Lipschitz maps}
-We can use (\ref{Lip constant comes from 1 skeleton}) to show that for every $x \in U$,
+Let $u: U \to \RR^D$ be a Lipschitz map.
+We are interested in the sense in which its projections $\Pi_h u$ approximate $u$ as $h \to 0$.
+In particular, we must show that $\Pi_h$ preserves the tightness relation $\prec$.
+Towards this end, we use (\ref{Lip constant comes from 1 skeleton}) to show that for every $x \in U$,
 \begin{equation}\label{discrete derivative is vertex lip}
-L \Pi_h u(x) = \max_{\substack{T \in F_m(\tau_h) \\ x \in T}} \max_{\substack{y, z \in F_0(\tau_h) \\ y, z \in T}} \frac{|u(y) - u(z)|}{|y - z|}.
+L \Pi_h u(x) = \max_{\substack{T \in F_d(\tau_h) \\ x \in T}} \Lip(u, T \cap F_0(\tau_h))
 \end{equation}
-We now use this estimate to show the convergence of $\Pi_h u$ to $u$ whenever $u$ is Lipschitz.
+We now use this estimate to show the convergence of $\Pi_h u$ to $u$.
 
 \begin{lemma}\label{uniform convergence}
-For every $x \in U$ and every Lipschitz map $u: U \to \RR^n$,
+For every $x \in U$ and every Lipschitz map $u: U \to \RR^D$,
 $$|\Pi_h(x) - u(x)| \leq 2h \Lip(u, B(x, h)).$$
 \end{lemma}
 \begin{proof}
-Suppose that $T \in F_m(\tau_h)$ attains the maximum in (\ref{discrete derivative is vertex lip}).
+Suppose that $T \in F_d(\tau_h)$ attains the maximum in (\ref{discrete derivative is vertex lip}).
 Let $y$ be a vertex of $T$.
 Then $\Pi_h u(y) = u(y)$, so 
 $$|\Pi_h u(x) - u(x)| \leq |\Pi_h u(y) - u_h(x)| + |u(y) - u(x)|.$$
@@ -796,7 +883,7 @@ By (\ref{discrete derivative is vertex lip}) and the fact that $T \subseteq B(x,
 \end{proof}
 
 \begin{lemma}\label{du converges ae}
-For any Lipschitz map $u: U \to \RR^n$, $L\Pi_h u \to Lu$ almost everywhere.
+For any Lipschitz map $u: U \to \RR^D$, $L\Pi_h u \to Lu$ almost everywhere.
 \end{lemma}
 \begin{proof}
 By Lemma \ref{uniform convergence}, $\Pi_h u \to u$ uniformly.
@@ -810,7 +897,7 @@ Thus it suffices to show that for almost every $x \in U$,
 By Lusin's theorem, for every $\varepsilon > 0$ there is a closed set $Z_\varepsilon \subset U$ with $\vol(Z_\varepsilon) < \varepsilon$ such that $Lu$ is continuous away from $Z_\varepsilon$.
 It suffices to show (\ref{upper semicontinuity of discrete Lips}) for every $x \in U \setminus Z_\varepsilon$.
 
-By (\ref{discrete derivative is vertex lip}) and (\ref{Lip is sup of local Lips}) for every $h > 0$ there exist $T_h \in F_m(\tau_h)$, $[y_h, z_h] \in F_1(\tau_h)$ and $w_h \in [y_h, z_h]$ such that $x \in T_h$, $[y_h, z_h] \subseteq T_h$, and
+By (\ref{discrete derivative is vertex lip}) and (\ref{Lip is sup of local Lips}) for every $h > 0$ there exist $T_h \in F_d(\tau_h)$, $[y_h, z_h] \in F_1(\tau_h)$ and $w_h \in [y_h, z_h]$ such that $x \in T_h$, $[y_h, z_h] \subseteq T_h$, and
 $$L \Pi_h u(x) \leq \frac{|u(y_h) - u(z_h)|}{|y_h - z_h|} \leq Lu(w_h).$$
 If $h$ is small enough depending on $x$, then $T_h$ is contained in the open set $U \setminus Z_\varepsilon$, so 
 \begin{align*}
@@ -819,7 +906,7 @@ If $h$ is small enough depending on $x$, then $T_h$ is contained in the open set
 \end{proof}
 
 \begin{proposition}\label{discrete tight maps converge}
-Let $u, v: U \to \RR^n$ be Lipschitz maps, and let $v_h: U \to \RR^n$ be $h$-shape maps such that:
+Let $u, v: U \to \RR^D$ be Lipschitz maps, and let $v_h: U \to \RR^D$ be $h$-shape maps such that:
 \begin{enumerate}
 \item $u \prec v$.
 \item $v_h \to v$ in $L^1$.
@@ -904,38 +991,29 @@ It is clear that the above claims imply the result.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%
-\subsection{Constructing the tight map}
-We assume that $U \subseteq \RR^m$ is an open convex polytope.
-\todo{Since the domain is a length space, probably the convexity assumption can be removed.}
-Then $\tau_h$ extends to a triangulation of every polytope in $\partial U$, so it makes sense to ask if a continuous map $f: \partial U \to \RR^n$ is a shape map.
+\subsection{Constructing the tight maps}
+We are almost ready to prove Theorem \ref{existence of tight maps}, but we first show the analogous result for maps from the $1$-skeleton of $\tau_h$ to $\RR^D$.
+It turns out that while our notion of discretized local Lipschitz constant does not quite agree with that of Sheffield and Smart \cite[\S1.2]{Sheffield12}, the proof of existence of discretized tight maps \cite[Theorem 1.2]{Sheffield12} goes through unchanged.
+
+Since $U$ is a polytope, $\tau_h$ induces a triangulation of the simplicial complex $\partial U$.
+So it makes sense to ask if $f: \partial U \to \RR^n$ is a shape map.
 
 \begin{definition}
-An $h$-shape map $u: U \to \RR^n$ is \dfn{$h$-tight} if there does not exist an $h$-shape map $v$ such that $v \prec u$ and $u|_{\partial U} = v|_{\partial U}$.
+An $h$-shape map $u: U \to \RR^D$ is \dfn{$h$-tight} if there does not exist an $h$-shape map $v$ such that $v \prec u$ and $u|_{\partial U} = v|_{\partial U}$.
 \end{definition}
 
 \begin{proposition}\label{discrete wellposedness}
-Let $h > 0$ and let $f: \partial U \to \RR^n$ be an $h$-shape map.
-Then there exists an $h$-tight map $u: U \to \RR^n$ extending $f$.
+Let $h > 0$ and let $f: \partial U \to \RR^D$ be an $h$-shape map.
+Then there exists an $h$-tight map $u: U \to \RR^D$ extending $f$.
 \end{proposition}
 \begin{proof}
-Let $G$ be the graph induced by the $1$-skeleton of $\tau_h$, and let $H$ be the subgraph induced by the $1$-skeleton of $\tau_h \cap \partial U$.
-We introduce a weight on edges by $\omega(x, y) := |x - y|$.
-Let $V_G$ be the set of vertices of $G$.
-For an $h$-shape map $u$ and $x \in V_G$,
-$$Lu(x) = \max_{y \sim_G x} \frac{|u(x) - u(y)|}{\omega(x, y)}.$$
-From this, and the fact that local Lipschitz constants of $h$-shape maps are constant on $m$-faces, it follows that $u \prec v$ iff $u|_{V_G}$ is tighter than $v|_{V_G}$ in the combinatorial sense of Sheffield and Smart \cite[\S1.2]{Sheffield12}.
-So there exists an $h$-tight map \cite[Theorem 1.2]{Sheffield12}.\footnote{Strictly speaking, \cite{Sheffield12} deals with unweighted graphs, but this assumption can be removed \cite[Remark 2.2]{Sheffield12}.}
-\end{proof}
+Let $X := F_0(\tau_h)$ and $Y := X \cap \partial U$.
+Let $\Omega$ be the set of points in $\RR_+^{\card(X \setminus Y)}$ with nonincreasing coordinates, equipped with its lexicographic ordering.
+Given an $h$-tight map $v$, let $\Lex(v) \in \Omega$ be the list of values of $Lv(x)$, $x \in X \setminus Y$, in nonincreasing order.
+If $v \prec w$, then $\Lex(v) < \Lex(w)$.
 
-\begin{lemma}\label{tight implies best lipschitz}
-Suppose that $U$ is convex, and let $u, v: U \to \RR^n$ be Lipschitz maps with $u|_{\partial U} = v|_{\partial U}$ and $\Lip(u, U) > \Lip(v, U)$.
-Then $v \prec u$.
-\end{lemma}
-\begin{proof}
-By (\ref{Lip is sup of local Lips}), there exists $x \in U$ such that $Lu(x) > \Lip(v, U)$, and then
-\begin{align*}
-\sup_{Lu > Lv} Lu &> \Lip(v, U) = \sup_U Lv \geq \sup_{Lv > Lu} Lv. \qedhere
-\end{align*}
+The space of possible values of $\Lex(v)$, as $v$ ranges over $h$-shape extensions of $f$, is an unbounded closed polyhedron $\Omega'$ in $\Omega$.
+An induction on $\card(X \setminus Y)$ shows that $\Omega'$ has a lexicographic minimum $\Lex(u)$, for some map $u$ which is necessarily $h$-tight.
 \end{proof}
 
 \begin{proof}[Proof of Theorem \ref{existence of tight maps}]
@@ -1052,6 +1130,20 @@ The former implies that $\gamma$ is a geodesic while the latter implies that $u$
 
 %%%%%%%%%%%%%%%%%
 \subsection{Application of principal nonconformality}
+\begin{lemma}\label{Lipschitz maximum principle}
+Let $u: [0, S) \times U \to \RR^D$ be a harmonic map heat flow.
+Then for every $s > 0$,
+$$\sup L(u(s)) \leq \Lip(u, U).$$
+\end{lemma}
+\begin{proof}
+For $\xi \in \Sph^{d - 1}$ and $\eta \in \Sph^{D - 1}$, let
+$$v_{\xi, \eta}(s, x) = \langle \partial_x u(s, x), \xi \otimes \eta\rangle.$$
+Then $\partial_s v_{\xi, \eta} = \Delta v_{\xi, \eta}$, and $L(u(s))(x) = \sup_{\xi, \eta} v_{\xi, \eta}(s, x)$.
+Therefore, in the viscosity sense \cite[Lemma 4.2]{Crandall92},
+$$\partial_s L(u(s)) \leq \Delta L(u(s)),$$
+and the result follows by the parabolic maximum principle.
+\end{proof}
+
 \begin{lemma}
 Let $u: U \to \RR^D$ be a principally nonconformal AML map, $x \in U$, $K := \Lip(u, U)$, and suppose that $Lu(x) = K$.
 Then there exists a unique complete geodesic $\gamma$ in $\RR^d$ and a geodesic $\Gamma$ in $\RR^D$, such that $u|_\gamma$ maps $\gamma$ onto $\Gamma$, and which admit unit-speed parametrizations such that $\gamma(0) = x$ and
@@ -1073,7 +1165,7 @@ Then for every $t > 0$ small enough depending on the choice of $s$,
 \end{align*}
 Taking $t \to 0$, we see that for any unit vector $\omega \in P$,
 $$\langle \dif u(s)(x), \omega\rangle \geq K - \frac{\varepsilon}{2}.$$
-On the other hand, \todo{harmonic map heat flow decreases Lipschitz constant} so
+On the other hand, by Lemma \ref{Lipschitz maximum principle},
 $$\sigma_1(\dif u(s)(x)) \leq \Lip(u(s), U) \leq K.$$
 Since $P$ is a $2$-plane, we see that
 $$\sigma_2(\dif u(s)(x)) \geq K - \frac{\varepsilon}{2} \geq \sigma_1(\dif u(s)(x)) - \frac{\varepsilon}{2},$$
