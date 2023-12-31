@@ -1,0 +1,289 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel, longtable}
+\usepackage{wrapfig, quiver}
+
+% Add the 2020 MSC
+\makeatletter
+\@namedef{subjclassname@2020}{\textup{2020} Mathematics Subject Classification}
+\makeatother
+
+%\usepackage[T1]{fontenc}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Convex duality as a conservation law}
+\author{Aidan Backus}
+\address{}
+\email{}
+\date{\today}
+\keywords{}
+\subjclass[2020]{primary: }
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Torus}{\mathbf T}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\len}{len}
+\DeclareMathOperator{\Lex}{Lex}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\mesh}{mesh}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+\newcommand{\weakto}{\rightharpoonup}
+
+\newcommand{\normal}{\mathbf n}
+\newcommand{\vol}{\mathrm{vol}}
+
+\DeclareMathOperator{\hull}{hull}
+\newcommand{\diam}{\mathrm{diam}}
+\DeclareMathOperator{\sech}{sech}
+\newcommand{\inj}{\mathrm{inj}}
+\newcommand{\Lip}{\mathrm{Lip}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\Lagrange}{\mathscr L}
+
+\newcommand{\Bl}{\mathrm{Bl}}
+\newcommand{\Comass}{\mathbf L}
+\newcommand{\Mass}{\mathbf M}
+
+\DeclareMathOperator*{\essinf}{ess\,inf}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{invariant}[theorem]{Invariant}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+%\newtheorem{mainthm}{Theorem}
+%\renewcommand{\themainthm}{}
+
+\newtheorem{claim}{Claim}[theorem]
+\renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+% \newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,giveninits=true]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{best_curl.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\begin{abstract}
+    
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+One of the fundamental theorems of the calculus of variations, and indeed of differential geometry and mathematical physics, is \dfn{Noether's theorem}: to every symmetry of a calculus of variations problem is associated a conservation law.
+It is well-known that we can interpret invariance under symmetries of the domain as the classical conservation laws of physics: invariance under temporal translation corresponds to conservation of energy, invariance under spatial translation corresponds to conservation of momentum, and invariance under spatial rotation corresponds to conservation of angular momentum.
+
+Let us give an interpretation of the conservation laws associated to invariance of symmetries of the target.
+Roughly speaking, our main theorem is as follows:
+
+\begin{mainthm}
+Let $M$ be a Riemannian manifold and $N$ a Riemannian locally symmetric space.
+Let $I$ be the action functional of a calculus of variations problem whose solution is a map $u: M \to N$.
+Assume that $I$ is strictly convex and invariant under the infinitesimal symmetries of $M$.
+Let $u$ be the minimizer of $I$ and let $Q$ be the solution of the dual calculus of variations problem to $I$.
+Then $Q$ is the conserved current of $u$ associated to the symmetries of $N$.
+\end{mainthm}
+
+We shall later make the statement of this theorem, most importantly the meanings of the terms ``dual calculus of variations problem'' and ``conserved current'', more precise in the body of the paper.
+After proving this theorem, we illustrate its application to certain $p$-Laplacian systems.
+This explains how I was able to construct the dual transverse measure to certain problems in the $L^\infty$ calculus of variations using convex duality \cite{BackusBest1} while Daskalopolous and Uhlenbeck constructed a closely related dual transverse measure using Noether's theorem \cite{daskalopoulos2022}.
+
+
+\subsection{Notation}
+Here is a brief summary of the notation used throughout this paper.
+
+\begin{longtable}{@{\extracolsep{\fill}}lp{0.75\textwidth}}
+\multicolumn{2}{c}{\textbf{General notation}}\\[4pt]
+$J^1(M, N)$ & bundle of $1$-jets on $M$ with values in $N$ \\
+$V^*$ & dual vector space to a vector space $V$ \\
+$\hat I$ & Legendre transform of the convex function $I$ \\
+\\
+\end{longtable}
+
+%%%%%%%%%%%%%%%%%%
+\subsection{Acknowlegments}
+This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
+
+\section{Proof of main theorem}
+\subsection{Application of Noether's theorem}
+Let $M$ be a Riemannian manifold of dimension $d$ and $N$ a manifold of dimension $D$.
+Let $J^1(M, N)$ be the bundle of $1$-jets on $M$ with values in $N$; a typical point $(x, z, \xi) \in J^1(M, N)$ satisfies $x \in M$, $z \in N$, and $\xi \in \Hom(T_x M, T_z N)$.
+Thus $J^1(M, N)$ is a fiber bundle over $M$.
+By a \dfn{Lagrangian} (of order $1$), we shall always mean a smooth function on $J^1(M, N)$.
+
+Suppose that $N = \Gamma \setminus G/H$ is a locally symmetric space.
+Here $G$ is a connected Lie group, $H$ is a compact subgroup, and $\Gamma$ is a discrete subgroup.
+\todo{We ignore the twisting by $\Gamma$ by now but this can be resolved later easily enough.}
+The action of $G$ on its tangent bundle induces an action of $G$ on each fiber of $J^1(M, N)$.
+Let $\mathfrak g$ be the Lie algebra of $G$.
+
+\begin{definition}
+A Lagrangian $\Lagrange$ is \dfn{$G$-invariant} if there exists a smooth map $\Lambda: M \to \mathfrak g^*$ such that for every $X \in \mathfrak g$ and $(x, z, \xi) \in J^1(M, N)$,
+$$\frac{\partial}{\partial t} \Lagrange(x, e^{tX}z, e^{tX} \xi)\bigg|_{t = 0} = \nabla \cdot \langle \Lambda, X\rangle.$$
+\end{definition}
+
+Suppose that $\Lagrange$ is $G$-invariant, and consider the action
+$$I(u) := \int_M \Lagrange(x, u(x), \dif u(x)) \dif V(x).$$
+If $I'(u) = 0$ and $X$ is a constant element of the Lie algebra, then $I$ is constant along the variation $u_t := e^{tX} u$.
+So by Noether's theorem, the $d - 1$-form 
+$$\langle J, X\rangle := \star \left\langle\frac{\partial \Lagrange}{\partial \xi}(x, u(x), \dif u(x)), X\right\rangle$$
+is closed.
+Here, $X$ is viewed as a vector field on $N$, and $\partial \Lagrange/\partial \xi(x, u(x), \dif u(x))$ is viewed as a $1$-form on $M$ with values in the cotangent bundle of $N$.
+In particular, $\partial \Lagrange/\partial \xi$ can be viewed as a $\mathfrak g^*$-valued $1$-form on $M$.
+This motivates the following definition, and proposition which sums up the above discussion:
+
+\begin{definition}
+Suppose that $\Lagrange$ is $G$-invariant and $I'(u) = 0$.
+The \dfn{conserved current associated to $G$} is 
+$$Q_u := \star \frac{\partial \Lagrange}{\partial \xi}(x, u(x), \dif u(x)).$$
+\end{definition}
+
+\begin{proposition}
+Suppose that $\Lagrange$ is $G$-invariant and $I'(u) = 0$.
+Then the conserved current $Q_u$ associated to $G$ is a $\mathfrak g^*$-valued $d - 1$-form.
+Furthermore, $\dif Q_u = 0$.
+\end{proposition}
+
+It is convenient to rewrite the action as a function on $C^\infty_\cpt(M, \mathfrak g)$.
+To be more precise, if $I'(u) = 0$, then we introduce a new action
+\begin{align*}
+J: C^\infty_\cpt(M, \mathfrak g) &\to \RR \\
+X &\mapsto I(e^X u).
+\end{align*}
+If $(X_t)$ is a variation of $0$, then we obtain a variation $u_t := e^{X_t} u$ of $u$, and 
+$$\frac{\dif}{\dif t} J(X_t)\bigg|_{t = 0} = \frac{\dif}{\dif t} I(u_t)\bigg|_{t = 0} = 0,$$
+so $J'(0) = 0$.
+Conversely, if $(u_t)$ is a variation of $u$, then we can use the symmetry of $N$ to find $X \in \mathfrak g$ such that 
+$$u_t = e^{tX}u + O(t^2),$$
+and we have 
+$$I(u_t) = J(tX) + O(t^2),$$
+so knowledge of the fact that $0$ is a critical point of $J$ is enough to recover that $I'(u) = 0$.
+
+
+\subsection{Application of convex duality}
+Throughout this section, fix a $G$-invariant Lagrangian $\Lagrange$ with action $I$.
+
+\begin{definition}
+The action $I$ is \dfn{convex} if, whenever $(u_t)_{t \in [0, 1]}$ is a geodesic homotopy between maps $u_0, u_1: M \to N$,
+$$tI(u_0) + (1 - t)I(u_1) \leq I(u_t).$$
+\end{definition}
+
+\begin{lemma}
+If $I$ is convex, and $u$ is a minimizer of $I$, then the action
+$$J(X) := I(e^X u)$$
+on the Lie algebra is also convex, with a minimum at $X = 0$.
+\end{lemma}
+
+\todo{This might not literally be true, since $\mathfrak g$ includes rotations.
+But I guess it is true on the positive cone or something, at least when $I$ is strictly convex and $X$ is close to $0$ (since then we can Taylor expand the Lie exponential map and it's basically just euclidean translations).}
+
+Since $J$ is convex, we can introduce its Legendre transform \todo{Need to formulate $J$ in such a way that $\partial \Lagrange/\partial \xi$ is naturally an element of the domain of $\hat J$. Look at the $p$-Laplacian for examples}
+Here we're supposed to conclude that $Q_u$ satisfies strong duality:
+$$J(X) = -\hat J(-Q_u).$$
+This completes the proof.
+
+\section{Application to \texorpdfstring{$p$-Laplacian}{p-Laplacian} systems}
+
+
+\printbibliography
+
+\end{document}
