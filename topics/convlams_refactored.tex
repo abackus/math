@@ -455,6 +455,7 @@ The $\delta$-dimensional Hausdorff measure is $\mathcal H^\delta$, normalized so
 If $\tau$ is a $\delta$-rectifiable set, we write $|\tau| := \mathcal H^\delta(\tau)$.
 
 If we specify that $M$ is a manifold with boundary, we specifically mean that $M$ has a smooth boundary.
+By \dfn{injectivity radius} we mean the minimum of the injectivity radius and distance to $\partial M$.
 If $E$ is a set of locally finite perimeter, we assume that the boundaries of $E$ in the sense of point-set topology and measure theory agree; see Appendix \ref{boundary conventions}.
 
 By a \dfn{hypersurface} we mean a $C^1$ submanifold of codimension $1$.
@@ -478,10 +479,8 @@ The rest of the paper is organized as follows:
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Acknowledgements}
-I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions, Wojciech Górny for many helpful comments and edits of an earlier draft, Victor Bangert for providing me with the manuscript \cite{Auer12}, and Stephen Obinna for help with Appendix \ref{portmanteau appendix}.
-
-An earlier draft of this paper only considered the cases $d = 2$, $d = 3$.
-I would like to thank Chao Li for suggesting the reference \cite{chodosh2022complete} which extended the main result to $d \leq 4$, and William Minicozzi for suggesting the references \cite{Schoen75, Schoen81} which extended the main result to its natural hypothesis $d \leq 7$.
+I would like to thank Georgios Daskalopoulos for suggesting this project and for many helpful discussions, Wojciech Górny and Christine Breiner for many helpful comments on an earlier draft, Victor Bangert for providing me with the manuscript \cite{Auer12}, and Stephen Obinna for set-theoretic help.
+I would also like to thank Chao Li and William Minicozzi for suggesting the references \cite{chodosh2022complete, Schoen75, Schoen81} which extended the main result to its natural hypothesis $d \leq 7$; an earlier draft only considered the case $d = 3$.
 
 This research was supported by the National Science Foundation's Graduate Research Fellowship Program under Grant No. DGE-2040433.
 
@@ -893,24 +892,22 @@ If $r$ is small enough depending on the curvature of $M$ near $p$, we can approx
 \end{proof}
 
 \begin{lemma}\label{choose balls for main thm}
-There exist continuous functions $R, K: M \to \RR_+$ such that the following holds.
+There exists a continuous function $R: M \to \RR_+$ such that the following holds.
 Let $p \in M$, $y \in \RR$, $0 < r \leq R(p)$, $u$ a function of least gradient on $B(p, 2r)$, and $N := \partial \{u > y\} \cap B(p, 2r)$.
 Then
 \begin{equation}\label{least gradient curvature bound}
-\|\Two_N\|_{C^0(B(p, r))} \leq \frac{K(p)}{r}.
+\|\Two_N\|_{C^0(B(p, r))} \lesssim \frac{1}{r}.
 \end{equation}
 \end{lemma}
 \begin{proof}
 Let $q \in N \cap B(p, r)$ (so $B(q, r) \subseteq B(p, 2r)$).
-By (\ref{least gradient area bound}), $|N \cap B(p, r)| \lesssim r^{d - 1}$.
-Since $N$ bounds a set $\{u > y\}$ such that $v := 1_{\{u > y\}}|_{B(p, 2r)}$ has least gradient (by Theorem \ref{main thm of old paper}), the components of $N$ are stable.
-Indeed, if $(N_t)$ is a normal variation of $N$ with compact support in $B(p, 2r)$, then for $t$ small, $N_t$ bounds an open set whose indicator function $v_t$ is a competitor to $v$, so
-$$|N_t \cap B(p, 2r)| = \int_{B(p, 2r)} \star |\dif v_t| \geq \int_{B(p, 2r)} \star |\dif v| = |N \cap B(p, 2r)|.$$
+By (\ref{least gradient area bound}), $|N \cap B(q, r)| \lesssim r^{d - 1}$.
+Since $N$ bounds a set $\{u > y\}$ such that $v := 1_{\{u > y\}}|_{B(p, 2r)}$ has least gradient (by Theorem \ref{main thm of old paper}), the components of $N$ are absolutely area-minimizing and hence stable.
 So by \cite[pg785, Corollary 1]{Schoen81}\footnote{See also \cite[Theorem 3]{Schoen75} for an easier proof when $M$ has nonpositive curvature and dimension $d \leq 6$, or \cite[Chapter 2, \S\S4-5]{colding2011course} for a textbook treatment of a similar estimate.}
 \begin{align*}
 |\Two_N(q)| &\leq \|\Two_N\|_{C^0(B(q, r/2))} \lesssim \frac{1}{r}
 \end{align*}
-where the constant only depends on the curvature of $M$ near $p$.
+where the contribution from the curvature of $M$ can be absorbed if $R(p)$ is chosen small enough.
 \end{proof}
 
 %%%%%%%%%%%%%%
@@ -1434,7 +1431,7 @@ The weak-star topology on $C_\cpt(X)'$ is known as the \dfn{weak topology of mea
 Unpacking the definitions, a sequence $(\mu_n)$ of Radon measures converges to $\mu$ in the weak topology of measures iff for every continuous function $f: X \to \RR$,
 $$\lim_{n \to \infty} \int_X f \dif \mu_n = \int_X f \dif \mu.$$
 
-\begin{proposition}[portmanteau theorem]\label{portmanteau}
+\begin{proposition}\label{portmanteau}
 	Let $(\mu_n)$ be a sequence of positive Radon measures on a compact metrizable space $X$ with $\mu_n(X) \lesssim 1$, and let $\mu$ be a Radon measure on $X$. The following are equivalent:
 \begin{enumerate}
 	\item $\mu_n \to \mu$ in the weak topology of measures.
@@ -1448,34 +1445,18 @@ $$\lim_{n \to \infty} \int_X f \dif \mu_n = \int_X f \dif \mu.$$
 	\item For every $x \in X$ and all but countably many $\varepsilon > 0$, $\lim_{n \to \infty} \mu_n(B(x, \varepsilon)) = \mu(B(x, \varepsilon))$.
 \end{enumerate}
 \end{proposition}
-
-\begin{lemma}\label{cardinality appendix}
-Let $S$ be an uncountable set and $f: S \to (0, \infty)$. Then there exists a countable set $S' \subset S$ such that
-$$\sum_{x \in S'} f(x) = \infty.$$
-\end{lemma}
 \begin{proof}
-Define $S_n := f^{-1}([\frac{1}{n + 1}, \frac{1}{n}))$ for $n \in \NN$ (where we take the convention $1/n = \infty$).
-Since $S$ is uncountable but $\NN$ is countable, it follows from the infinite pigeonhole principle that there exists $n \in \NN$ such that $S_n$ is infinite.
-In particular there exists an infinite countable set $S' \subseteq S_n$, which then satisfies
-\begin{align*}
-\sum_{x \in S'} f(x) &\geq \sum_{x \in S'} \frac{1}{n + 1} = \infty. \qedhere 
-\end{align*}
-\end{proof}
-
-\begin{proof}[Proof of Proposition \ref{portmanteau}]
 	See \cite[Theorem 13.16]{klenke2013probability} for the equivalence of (1)--(4); \cite{klenke2013probability} deals with subprobability measures, but this is equivalent to measures of bounded total mass by a rescaling.
 
 	We then must show that (4) implies (5); to do so, it suffices to show that for all but countably many $\varepsilon$, $\mu(\partial B(x, \varepsilon)) = 0$.
 	Let
 	$$A := \{\varepsilon > 0: \mu(\partial B(x, \varepsilon)) > 0\}.$$
-	Since the sets $\partial B(x, \varepsilon)$ are disjoint, for every countable $A' \subseteq A$,
-	$$\sum_{\varepsilon \in A'} \mu(\partial B(x, \varepsilon)) \leq \mu(X) < \infty,$$
-	where $\mu(X) < \infty$ since $X$ is compact.
-	It follows from (the contrapositive of) Lemma \ref{cardinality appendix} that $A$ is countable.
+	If $A$ is uncountable, then by pigeonholing and the countability of $\NN$, there exists $n \in \NN$ such that for infinitely many $\varepsilon \in A$, $\mu(\partial B(x, \varepsilon)) > 1/n$. 
+	Choose $A' \subset A$ such that $\card(A') = \aleph_0$ and for every $\varepsilon \in A'$, $\mu(\partial B(x, \varepsilon)) > 1/n$.
+	The sets $\partial B(x, \varepsilon)$ are disjoint, so
+	$$\mu(X) \geq \sum_{\varepsilon \in A'} \mu(\partial B(x, \varepsilon)) = \infty,$$
+	contradicting that $X$ is compact and $\mu$ is Radon.
 \end{proof}
-
-There are subtleties involved in the portmanteau theorem for noncompact $X$.
-However, this will never be an issue, as we shall only use it locally, in small precompact balls.
 
 Now let $X = M$ be a manifold, and consider instead the space $C_\cpt(M, \Omega^\ell)$ of compactly supported continuous $\ell$-forms.
 An $\ell$-\dfn{current of locally finite mass} (which we will simply call an \dfn{$\ell$-current}) is an element of the dual space $C_\cpt(M, \Omega^\ell)'$ \cite{simon1983GMT}.
@@ -1539,60 +1520,56 @@ Let $y$ be the real number at which $u$ transitions from $\{u > y\}$ meeting $V$
 Then $u|_V = y$ almost everywhere, so $u|_V$ is almost constant, hence $x \notin \supp \dif u$.
 \end{proof}
 
-%%%%%%%%%%%%%%%%%%%%
-\subsection{Regularity of minimizing boundaries}
-The regularity of codimension-$1$ hypersurfaces is well-known: see Giusti \cite[Theorem 10.11]{Giusti77} for an exposition of Miranda \cite{Miranda66}'s proof using functions of least gradient on $\RR^d$; Morgan \cite[Chapter 8]{Morgan88} for a history of the result and more references, including proofs on Riemannian manifolds; and my expository note \cite{BackusFLG} for a direct generalization of \cite{Miranda66} to Riemannian manifolds.
-For the reader's convenience, we record here a short argument which reduces the regularity theorem to Nash's embedding theorem and a weak form of Allard's $\varepsilon$-regularity theorem on $\RR^d$ which is easily established in lecture notes of de Lellis \cite[Theorem 3.2]{DeLellis18}.
-
 \begin{theorem}\label{regularity}
 Let $d \leq 7$. Let $E$ be a set of locally finite perimeter in the Riemannian manifold $M$, such that $1_E$ has least gradient.
 Then $\partial E$ is a smooth area-minimizing minimal hypersurface.
 \end{theorem}
 
-To set up the proof, recall that the mean curvature $H_N$ of a rectifiable set $N \subset \RR^D$ satisfies, for every $C^\infty_\cpt(\RR^D)$ vector field $X$,
-$$\delta N(X) = -\int_N X \cdot H \dif \mu_N$$
-where $\delta N(X)$ is the first variation of area in the direction $X$, and $\dif \mu_N$ is the surface measure on $N$.
-By \cite[Proposition 1.5]{DeLellis18}, 
-$$\delta N(X) = \int_N \Div_{TN} X \dif \mu_N$$
-where, given a measurable subbundle $E$ of the tangent bundle $T\RR^D$ with an orthonormal frame $v_1, \dots, v_\delta$, the divergence is 
-$$\Div_E X := \sum_{i = 1}^\delta \langle v_i, \nabla X\rangle.$$
+This is well-known; see, for example, \cite{DeLellis18} or \cite[Chapter 8]{morgan2016geometric}.
+Another proof is available for euclidean space which explicitly uses functions of least gradient \cite[Theorem 10.11]{Giusti77}; my expository note \cite{BackusFLG} explains how to extend that argument to Riemannian manifolds.
 
-\begin{theorem}[Allard's $\varepsilon$-regularity theorem]
-For any integers $1 \leq \delta < D$ there exist $\varepsilon, \gamma, \alpha > 0$ such that the following holds:
+% To set up the proof, recall that the mean curvature $H_N$ of a rectifiable set $N \subset \RR^D$ satisfies, for every $C^\infty_\cpt(\RR^D)$ vector field $X$,
+% $$\delta N(X) = -\int_N X \cdot H \dif \mu_N$$
+% where $\delta N(X)$ is the first variation of area in the direction $X$, and $\dif \mu_N$ is the surface measure on $N$.
+% By \cite[Proposition 1.5]{DeLellis18}, 
+% $$\delta N(X) = \int_N \Div_{TN} X \dif \mu_N$$
+% where, given a measurable subbundle $E$ of the tangent bundle $T\RR^D$ with an orthonormal frame $v_1, \dots, v_\delta$, the divergence is 
+% $$\Div_E X := \sum_{i = 1}^\delta \langle v_i, \nabla X\rangle.$$
 
-Let $N \subset \RR^D$ be a $\delta$-rectifiable set, $x \in N$, and $0 < r < 1$.
-Suppose that
-\begin{align}
-\mu_N(B(x, r)) &\leq (|\Ball^\delta| + \varepsilon) r^\delta, \label{measure excess}\\
-\|H_N\|_{L^\infty(N \cap B(x, r))} &\leq \varepsilon/r. \label{mean curvature excess}
-\end{align}
-Then $N \cap B(x, \gamma r)$ is a $C^{1 + \alpha}$ submanifold of $B(x, \gamma r)$ without boundary.
-\end{theorem}
+% \begin{theorem}[Allard's $\varepsilon$-regularity theorem]
+% For any integers $1 \leq \delta < D$ there exist $\varepsilon, \gamma, \alpha > 0$ such that the following holds:
 
-\begin{proof}[Proof of Theorem \ref{regularity}]
-By the Nash embedding theorem, we may assume that $M$ is embedded in $\RR^D$ for some $D \geq d + 1$.
-Let $N := \partial^* E$. 
-By \cite[Theorem 4.11]{Giusti77} and the diffeomorphism invariance of $\partial^*$, $N$ is a $d - 1$-rectifiable subset of $\RR^D$.
+% Let $N \subset \RR^D$ be a $\delta$-rectifiable set, $x \in N$, and $0 < r < 1$.
+% Suppose that
+% \begin{align}
+% \mu_N(B(x, r)) &\leq (|\Ball^\delta| + \varepsilon) r^\delta, \label{measure excess}\\
+% \|H_N\|_{L^\infty(N \cap B(x, r))} &\leq \varepsilon/r. \label{mean curvature excess}
+% \end{align}
+% Then $N \cap B(x, \gamma r)$ is a $C^{1 + \alpha}$ submanifold of $B(x, \gamma r)$ without boundary.
+% \end{theorem}
 
-Let $x \in N$. By a blowup argument similar to the euclidean case treated in \cite[Chapters 9-10]{Giusti77}, the appropriate rescaling of $N \cap B(x, r)$ can be approximated in the weak topology of measures by $\Ball^{d - 1}$.
-% For $0 < r \ll 1$, the dilation $F_r$ by $r^{-1}$ of $(\exp_x)^{-1}(N \cap B(x, r))$ is an approximately mass-minimizing $d - 1$-rectifiable subset of the unit ball in $T_x M$ (since on small scales the exponential map is close to an isometry).
-% By a suitable modification of \cite[Chapters 9-10]{Giusti77}, $d \leq 7$ implies that $[F_r]$ converges in the weak topology of measures on $T_x M$ to a hyperplane $T_x N$.
-In particular, $r^{1 - d} \mu_N(B(x, r))$ is approximated arbitrarily well by $|\Ball^{d - 1}|$ as $r \to 0$, so for $r$ small, (\ref{measure excess}) holds.
+% \begin{proof}[Proof of Theorem \ref{regularity}]
+% By the Nash embedding theorem, we may assume that $M$ is embedded in $\RR^D$ for some $D \geq d + 1$.
+% Let $N := \partial^* E$. 
+% By \cite[Theorem 4.11]{Giusti77} and the diffeomorphism invariance of $\partial^*$, $N$ is a $d - 1$-rectifiable subset of $\RR^D$.
 
-Let $X$ be a $C^\infty_\cpt(B(x, r))$ vector field on $\RR^D$.
-If $X$ is tangent to $M$, then $\delta N(X) = 0$ by minimality of $N$.
-So we assume that $X$ is normal to $M$.
-By the Gauss-Codazzi theorem, $\nabla_M X$ is given by a contraction of the second fundamental form $\Two_M$ with $X$.
-Moreover, $\nabla_N X$ is a minor of $\nabla_M X$, so $\Div_{TN} X$ is a partial trace of $\Two_M \otimes X$.
-In particular,
-$$\left|\int_N \Div_{TN} X \dif \mu_N\right| \lesssim_{D, d} \int_N |\Two_M| |X| \dif \mu_N \leq \|\Two_M\|_{C^0} \|X\|_{L^1(N)}.$$
-Therefore 
-$$\|H_{N \to \RR^D}\|_{L^\infty} \lesssim_{D, d} \|\Two_M\|_{C^0}.$$
-So for $r$ small, (\ref{mean curvature excess}) holds.
+% Let $x \in N$. By a blowup argument similar to the euclidean case treated in \cite[Chapters 9-10]{Giusti77}, the appropriate rescaling of $N \cap B(x, r)$ can be approximated in the weak topology of measures by $\Ball^{d - 1}$.
+% In particular, $r^{1 - d} \mu_N(B(x, r))$ is approximated arbitrarily well by $|\Ball^{d - 1}|$ as $r \to 0$, so for $r$ small, (\ref{measure excess}) holds.
 
-So by Allard's theorem, $N \cap B(x, \gamma r)$ is $C^{1 + \alpha}$ and a closed set, implying that the normal vector extends continuously to $\partial E \cap B(x, \gamma r)$.
-By elliptic bootstrapping, it follows that $\partial E \cap B(x, \gamma r)$ is $C^\infty$.
-\end{proof}
+% Let $X$ be a $C^\infty_\cpt(B(x, r))$ vector field on $\RR^D$.
+% If $X$ is tangent to $M$, then $\delta N(X) = 0$ by minimality of $N$.
+% So we assume that $X$ is normal to $M$.
+% By the Gauss-Codazzi theorem, $\nabla_M X$ is given by a contraction of the second fundamental form $\Two_M$ with $X$.
+% Moreover, $\nabla_N X$ is a minor of $\nabla_M X$, so $\Div_{TN} X$ is a partial trace of $\Two_M \otimes X$.
+% In particular,
+% $$\left|\int_N \Div_{TN} X \dif \mu_N\right| \lesssim_{D, d} \int_N |\Two_M| |X| \dif \mu_N \leq \|\Two_M\|_{C^0} \|X\|_{L^1(N)}.$$
+% Therefore 
+% $$\|H_{N \to \RR^D}\|_{L^\infty} \lesssim_{D, d} \|\Two_M\|_{C^0}.$$
+% So for $r$ small, (\ref{mean curvature excess}) holds.
+
+% So by Allard's theorem, $N \cap B(x, \gamma r)$ is $C^{1 + \alpha}$ and a closed set, implying that the normal vector extends continuously to $\partial E \cap B(x, \gamma r)$.
+% By elliptic bootstrapping, it follows that $\partial E \cap B(x, \gamma r)$ is $C^\infty$.
+% \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Minimal hypersurfaces are locally area-minimizing} \label{locally minimizing appendix}
@@ -1661,9 +1638,9 @@ Given a hypersurface $\Sigma \subset \Ball^d$ and a metric $h$ on $\Ball^d$, let
 Q_{\Sigma, h} = -\Delta_{\Sigma, h} - |\Two_{\Sigma, h}|^2 - \Ric_h(\normal_{\Sigma, h}, \normal_{\Sigma, h})
 \end{equation}
 be the stability operator for $\Sigma$, and let $H_{\Sigma, h}$ be the mean curvature.
-Then the second variation of area in the direction of a normal variation $s$ is \cite[Chapter 1, \S8.1]{colding2011course}
+Then the second variation of area in the direction of a normal variation $s$ is \cite[Theorem 1.3]{Chodosh21}
 \begin{equation}\label{second variation formula}
-\delta^2_s |\Sigma|_h = \langle s, Q_{\Sigma, h} s\rangle_{L^2(\Sigma, h)} + \|sH_{\Sigma, h}\|_{L^2(\Sigma, h)}^2.
+\delta^2_s |\Sigma|_h = \langle s, Q_{\Sigma, h} s\rangle_{L^2(\Sigma, h)} + \|sH_{\Sigma, h}\|_{L^2(\Sigma, h)}^2 + \int_\Sigma H_{\Sigma, h} s \star_{\Sigma, h} 1.
 \end{equation}
 
 \begin{lemma}\label{uniform continuity of stability}
@@ -1678,88 +1655,72 @@ Then
 is uniformly continuous on $\mathscr N$, with modulus of continuity only depending on $\|s\|_{W^{1, 2}}, \mathscr N, \mathscr G$.
 \end{lemma}
 \begin{proof}
-From (\ref{second variation formula}) and the fact that $s \mapsto \langle s, Q_{\Sigma, h} s\rangle_{L^2(\Sigma, h)}$ is a continuous quadratic form on $W^{1, 2}$, it will suffice to show that
+First observe that the mapping
 \begin{equation}\label{stability curvature map}
 (\Sigma, h) \mapsto (Q_{\Sigma, h}, H_{\Sigma, h})
 \end{equation}
-is uniformly equicontinuous, where the topology on the space of differential operators $Q$ is the $C^0$ topology on their nondivergence form coefficients.
-Moreover, since $\mathscr N \times \mathscr G$ is compact, it suffices to show that (\ref{stability curvature map}) is continuous.
-This is clear from (\ref{stability formula}) and the fact that $H_{\Sigma, h}$ only depends on second derivatives of $(\Sigma, h)$.
+is continuous, where $Q_{\Sigma, h}$ is measured using the $C^0$ topology on its coefficients, and $H_{\Sigma, h}$ is measured in $C^0$.
+By (\ref{second variation formula}), it follows that $\delta^2_s |\Sigma|_h$ is continuous, where for $\Sigma, h$ fixed, the modulus of continuity only depends on $\|s\|_{W^{1, 2}}$.
+The result then follows from the compactness of $\mathscr N \times \mathscr G$.
 \end{proof}
 
 \begin{proof}[Proof of Proposition \ref{minimal implies locally minimizing}]
 We proceed by compactness and contradiction.
-Let $(g_j)$ be a sequence of metrics on $\Ball^d$ with $\|\Riem_g\|_{C^1} \lesssim 1$, which are increasingly severe violations of the proposition, in the sense that for some sequence $\delta_j \to 0$, there exist oriented $g_j$-minimal hypersurfaces $N_j \subset B_j := B_{g_j}(0, \delta_j)$ which contain $0$ and are not uniquely area-minimizing, but such that $\|\Two_{N_j}\|_{C^0(B_j)} \leq A$.
+By rescaling, we may assume that $A = 1/100$.
+Let $(g_j)$ be a sequence of metrics on $\Ball^d$ with $\|\Riem_g\|_{C^1} \leq 1$, which are increasingly severe violations of the proposition, in the sense that there exist oriented $g_j$-minimal hypersurfaces $N_j \subset B_j := B_{g_j}(0, 1/j)$ which contain $0$ and are not uniquely area-minimizing, but such that $\|\Two_{N_j}\|_{C^0(B_j)} \leq 1/100$.
+
 We may assume that the $(g_j)$ are normal coordinates centered on $0$.
 In particular, $\|g_j\|_{C^3} \lesssim \|\Riem_g\|_{C^1}$, implying that $(g_j)$ is contained in a compact subset of $C^2$.
+Furthermore, by rotating $N_j$ and applying the assumptions that $0 \in N_j$ and $\|\Two_{N_j}\|_{C^0(B_j)} \leq 1/100$ (and using the normal coordinate condition and Gauss-Codazzi to propagate this estimate to an estimate on the second fundamental form in the euclidean metric), we may assume (using Lemma \ref{existence of tubes}) that $N_j$ is the graph of a function, and is contained in a small tubular neighborhood of the equatorial disk in $B_j$.
+Moreover, such a tubular neighborhood shrinks to the equatorial disk as $j \to \infty$.
 
-% and after rescaling and shrinking $\delta_j$ if necessary, we may assume that $\|\Riem_{g_j}\|_{C^0} \leq K_0$ as in \S\ref{Regularity}.
-% After applying isometries as necessary, we may assume that $g_j$ is written in normal coordinates centered on $0$, hence $|g_j - I| \lesssim K_0 |x|^2$.
-% By compactness of the forgetful map $C^{2 + \alpha} \to C^2$, we may further assume that $(g_j)$ converges in $C^2$ to a $2$-tensor $g$ on $\Ball^d$ such that $|g - I| \lesssim K_0 |x|^2$.
-% Taking $K_0$ small enough, it follows that $g$ is positive-definite and hence is a Riemannian metric.
+Let $L_j \subset \Ball^d$ be the rescaling of $N_j$ by $j$, let $g_j'$ be the corresponding rescaling of $g_j$, and let $f_j$ be the function on (a large subset of) $\Ball^{d - 1}$ whose graph is $L_j$.
+By elliptic estimates as in \S\ref{Leaf estimates}, and the estimates on $N_j$ described in the previous paragraph, $f_j \to 0$ in $C^3$.
 
-By a straightforward modification of \cite[Theorem 1.20]{Giusti77} and Theorem \ref{main thm of old paper}, there exist $g_j$-absolutely minimizing competitors $N_j'$ to $N_j$ in $B_j$.
-Let $L_j, L_j' \subset \Ball^d$ be the rescalings of $N_j, N_j'$ by $\delta_j^{-1}$.
-Since $A < \infty$, $(\Riem_{g_j})$ is bounded in $C^0$, and $\delta_j \to 0$, $L_j$ is an oriented hypersurface in $\Ball^d$ such that $0 \in L_j$ and $\Two_{L_j} \to 0$ uniformly, where $\Two_{L_j}$ is taken in the flat metric on $\Ball^d$.
-By Lemma \ref{existence of tubes}, for $j$ large enough, $L_j$ is a graph, possibly after rotation, of some function $f_j$ such that $\|f_j\|_{C^2} \to 0$.
-Let $L$ be the graph of $0$, so $L_j \to L$ as $C^2$ graphs.
-Since $L$ is a disk, $L$ is the unique absolutely minimizer among its competitors for the flat metric.
+Let $L_j'$ be an absolutely area-minimizing competitor of $L_j$ with respect to $g_j'$, which exists by a modification of \cite[Theorem 1.20]{Giusti77} and Theorem \ref{main thm of old paper}.
+In particular $|L_j'|_{g_j'}$ is bounded (as in the proof of Lemma \ref{least gradient area bound}).
+By Proposition \ref{MirandaStability}, and the fact that $L_j'$ is contained in a small tubular neighborhood of $\Ball^{d - 1}$, $[L_j'] \to [\Ball^{d - 1}]$ in the weak topology of measures.
+So by Lemma \ref{convergence of normals}, $L_j'$ is the graph of a function $f_j'$ which converges to $0$ in $C^1$.
+But $f_j'$ solves the minimal surface equation, so as in \S\ref{Leaf estimates}, $f_j' \to 0$ in $C^3$.
 
-Let $\eta_j$ be the area of an absolutely minimizing competitor of $L_j$ (for the flat metric).
-Recall that we have rescaled by $\delta_j^{-1}$, and $g_j$ has curvatures bounded in $C^0$, so upon rescaling, their curvatures are small in $C^0$.
-Since $N_j'$ is absolutely minimizing for $g_j$, and $L_j \to L$ in $C^0$, $\|\Riem_{g_j}\|_{C^0} \ll 1$ and the normal coordinates condition implies that
-$$|L| - o(1) \leq |L_j'| \leq \eta_j + o(1) \leq |L| + o(1)$$
-where areas are taken in the flat metric.
-So along a subsequence, by Miranda compactness (Proposition \ref{MirandaStability}), the current defined by $L_j'$ converges in the weak topology of measures to the current of an absolutely minimizing competitor $L'$ of $L$.
-By uniqueness of $L$, $L = L'$; moreover, $|L_j'| \to |L|$, so (\ref{supports shrink in the limit}), $L_j' \to L$ in the Hausdorff topology.
-Therefore, by Lemma \ref{convergence of normals}, any sequence of points $p_j \in L_j'$ converges to some $p \in L$, with $\normal_{L_j'}(p_j) \to \normal_L(p)$.
-So by Lemma \ref{existence of tubes}, near $p$, $L_j'$ is a graph over $L$, of a function $f_j'$ such that $\|f_j'\|_{C^1} \to 0$.
-
-The size of the ball around $p$ in which $L_j'$ is a graph is bounded from below by a quantity depending on $\|f_j'\|_{C^2}$.
-But by (\ref{norms on uk}), $\|f_j'\|_{C^3} \to 0$.
-So by a bootstrapping argument and Lemma \ref{existence of tubes}, $L_j'$ is globally a graph over $L_j'$ for $j$ large enough.
-Since $L_j$ is close to $L$ in $C^2$, if $j$ is large, then $L_j'$ is a graph over $L_j$.
-
-Thus, for $j \gg 1$, we may view $L_j'$ as a normal variation of $L_j$ in the rescaled metric $g_j' := \delta_j^{1/2} g_j$, associated to a function $s_j$ on $L_j$.
-But $\|f_j - f_j'\|_{C^2} \to 0$, so $s_j \to 0$ in $C^2 \subset W^{1, 2}$.
-Let $Q_j$ be the stability operator $Q_{L_j, g_j'}$, and observe that since $L_j, L_j'$ are converging to $L$ in $C^2$, they lie in a compact subset of $C^2$. 
+In particular, $L_j, L_j'$ are graphs over each other.
+Viewing $L_j'$ as a normal variation of $L_j$, let $s_j$ be the function on $L_j$ defining the normal variation $L_j'$.
+Then $s_j \to 0$ in $W^{1, 2}$.
+Let $Q_j$ be the stability operator $Q_{L_j, g_j'}$, and observe that since $L_j, L_j'$ are converging to the equatorial disk $\Ball^{d - 1}$ in $C^2$, they lie in a compact subset of $C^2$. 
 Moreover, $L_j$ has zero $g_j'$-mean curvature, so the $g_j'$-area of $L_j'$ satisfies
 \begin{equation}\label{stability area bound}
-|L_j'|_{g_j'} \geq |L_j|_{g_j'} + \langle s_j, Q_j s_j\rangle_{L^2(L_j, g_j')} - o(\|s_j\|_{W^{1, 2}(L_j, g_j')}^2)
+|L_j'|_{g_j'} \geq |L_j|_{g_j'} + \langle s_j, Q_j s_j\rangle_{L^2(L_j, g_j')} + o(\|s_j\|_{W^{1, 2}(L_j, g_j')}^2)
 \end{equation}
 where the rate of convergence in the error term is independent of $j$ by Lemma \ref{uniform continuity of stability}.
 By (\ref{norms on uk}), $\|s_j\|_{W^{1, 2}} \sim \|s_j\|_{L^2}$, which we use to replace the error term in (\ref{stability area bound}).
 
-By (\ref{stability formula}), the Laplacian $-\Delta$ of $\Ball^{d - 1}$ is the stability operator of $L$.
-Let $\lambda > 0$ be the first Dirichlet eigenvalue of $-\Delta$, and $\lambda_j > 0$ the first Dirichlet eigenvalue of $Q_j$.
-Observe that by (\ref{stability formula}) and the convergence $\|f_j'\|_{C^3} \to 0$, we can decompose 
+Let $\lambda > 0$ be the first Dirichlet eigenvalue of the Laplacian $-\Delta$ of $\Ball^{d - 1}$, and $\lambda_j$ the first Dirichlet eigenvalue of $Q_j$.
+Observe that by (\ref{stability formula}) and the convergence $\|f_j\|_{C^3} + \|g_j'\|_{C^3} \to 0$, we can decompose 
 \begin{align}
 Q_j &= -\Delta + R_j, \label{perturbing Laplacian 1}\\
 R_j &:= \partial_\mu a_j^{\mu \nu} \partial_\nu + b_j^\mu \partial_\mu + c_j, \label{perturbing Laplacian 2}
 \end{align}
-where
+where, as $j \to \infty$,
 \begin{equation}
-\|a_j\|_{C^1} + \|b_j\|_{C^0} + \|c_j\|_{C^0} \to 0 \label{perturbing Laplacian 3}
+\|a_j\|_{C^1} + \|b_j\|_{C^0} + \|c_j\|_{C^0} \to 0. \label{perturbing Laplacian 3}
 \end{equation}
-as $j \to \infty$.
-
 Let $u_j$ be an eigenfunction corresponding to $\lambda_j$ such that $\|u_j\|_{L^2} = 1$.
 Using (\ref{perturbing Laplacian 1}--\ref{perturbing Laplacian 3}), and the elliptic estimate \cite[Theorem 8.12]{gilbarg2015elliptic}, we see that for $j$ large enough, 
 $$\|u_j\|_{W^{2, 2}} \lesssim \|u_j\|_{L^2} + \|\lambda_j u_j\|_{L^2} \leq 1 + |\lambda_j|.$$
 In particular,
 $$|\langle u_j, R_j u_j\rangle| \ll \|u_j\|_{W^{2, 2}} \lesssim 1 + |\lambda_j|$$
-so, by the Rayleigh-Ritz theorem,
+so by the Rayleigh-Ritz theorem,
 \begin{align*}
 \lambda_j 
-&= \langle u_j, Q_j u_j\rangle \\
-&= \langle u_j, -\Delta u_j\rangle + \langle u_j, R_j u_j\rangle \\
-&\geq \lambda - o(1 + |\lambda_j|).
+&= \langle u_j, Q_j u_j\rangle 
+= \langle u_j, -\Delta u_j\rangle + \langle u_j, R_j u_j\rangle 
+\geq \lambda - o(1 + |\lambda_j|).
 \end{align*}
 Rearranging terms, we see that for $j$ large enough, $\lambda_j \geq \lambda/2$.
 Since $L_j'$ is an absolute minimizer, we obtain from (\ref{stability area bound}) that for $j$ large enough,
-$$|L_j'|_{g_j'} \geq |L_j|_{g_j'} + \frac{\lambda}{2} \|s_j\|_{L^2}^2 - o(\|s_j\|_{L^2}^2) \geq |L_j'|_{g_j'} + \frac{\lambda}{3} \|s_j\|_{L^2}^2.$$
-Rearranging terms and exploiting $\lambda > 0$, we see that $s_j = 0$.
-Therefore $L_j = L_j'$ is both an absolute minimizer and not an absolute minimizer, a contradiction.
+$$|L_j'|_{g_j'} \geq |L_j|_{g_j'} + \frac{\lambda}{2} \|s_j\|_{L^2}^2 + o(\|s_j\|_{L^2}^2),$$
+but since $\lambda > 0$ and $|L_j'|_{g_j'} \leq |L_j|_{g_j'}$, we conclude that if $j$ is large, then $s_j = 0$.
+Therefore $L_j = L_j'$, even though $L_j$ is not uniquely area-minimizing.
 \end{proof}
 
 \printbibliography
