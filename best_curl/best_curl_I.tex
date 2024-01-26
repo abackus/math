@@ -58,6 +58,9 @@
 
 \newcommand{\Chain}{\underline C}
 
+
+\newcommand{\weakto}{\rightharpoonup}
+
 \newcommand{\Two}{\mathrm{I\!I}}
 \newcommand{\Ric}{\mathrm{Ric}}
 
@@ -86,6 +89,9 @@
 
 \newcommand{\loc}{\mathrm{loc}}
 \newcommand{\cpt}{\mathrm{cpt}}
+
+\DeclareMathOperator*{\essinf}{ess\,inf}
+\DeclareMathOperator*{\esssup}{ess\,sup}
 
 \def\Japan#1{\left \langle #1 \right \rangle}
 
@@ -168,15 +174,16 @@ But we show that in the nonintegrable case, there exist smooth solutions of the 
 \section{Introduction}
 \subsection{Motivation}
 Let $M$ be a closed surface of genus $\gamma \geq 2$.
-Thurston introduced a Finsler metric on the Teichm\"uller space $\widetilde{\mathscr M_\gamma}$ of hyperbolic structures on $M$, which we now recall \cite{Thurston98}.
-Let $\rho, \sigma \in \widetilde{\mathscr M_\gamma}$ be two hyperbolic structures on $M$. 
+Thurston introduced a Finsler metric on the Teichm\"uller space $\mathscr T_\gamma$ of hyperbolic structures on $M$.
+Let $\rho, \sigma$ be two hyperbolic structures on $M$. 
 Let $f: M \to M$ minimize its Lipschitz constant
-$$\Lip(f) = \sup_{x, y \in M} \frac{\dist_\rho(f(x), f(y))}{\dist_\sigma(x, y)}$$
+$$\Lip(f) := \sup_{\substack{x, y \in M \\ x \neq y}} \frac{\dist_{(M, \rho)}(f(x), f(y))}{\dist_{(M, \sigma)}(x, y)}$$
 among all maps homotopic to $\id_M$, and let $L(\rho, \sigma) := \Lip(f)$.
-Clearly $L$ does not depend on the choice of extremal Lipschitz map $f$; moreover, $\log L$ is a Finsler metric on $\widetilde{\mathscr M_\gamma}$ \cite{Papadopoulos15}.
+Then the \dfn{Thurston metric} on $\mathscr T_\gamma$ is $\log L$.
 
-The key fact about the Thurston metric is that it is intimately related to the structure of the geodesic laminations on $M$.
-Let $\lambda$ be a geodesic lamination on $(M, \rho)$; it can be deformed to a geodesic lamination on $(M, \sigma)$; the deformation will stretch each leaf of $\lambda$ by some factor which we call the \dfn{stretch ratio} of $\lambda$.
+The Thurston metric is a Finsler metric on $\mathscr T_\gamma$ \cite{Papadopoulos15}, and is intimately related to the structure of the geodesic laminations on $M$.
+Let $\lambda$ be a geodesic lamination on $(M, \rho)$.
+Then $\lambda$ can be deformed to a geodesic lamination on $(M, \sigma)$; the deformation will stretch each leaf of $\lambda$ by some factor which we call the \dfn{stretch ratio} of $\lambda$.
 
 \begin{theorem}[{\cite{Thurston98}}]\label{Thurston MFMC}
 Let $\rho, \sigma$ be two hyperbolic structures on the closed surface $M$, and let $K(\rho, \sigma)$ be the supremum of the stretch ratios of all geodesic laminations on $(M, \rho)$.
@@ -200,24 +207,22 @@ Let $M$ be a closed hyperbolic surface, let $\rho \in H^1(M, \ZZ)$, and let $u: 
 \langle \nabla^2 u, \dif u \otimes \dif u\rangle = 0, \\
 [\dif u] = \rho.
 \end{cases}\end{equation}
-Then $u$ minimizes $\Lip(u) = \|\dif u\|_{L^\infty}$ among all maps representing $\rho$, and $u$ is approximated by solutions of the \dfn{$p$-Laplacian}
-$$\begin{cases}
-\dif^*(|\dif u_p|^{p - 2} \dif u_p) = 0, \\
-[\dif u_p] = \rho.
-\end{cases}$$
-The convex dual problem is the $q$-Laplacian, where $1/p + 1/q = 1$, and the solution $v_q$ of the dual problem converges to a function of least gradient $v$; in other words, $v$ minimizes 
-$$\Mass(\dif v) := \int_M \star |\dif v|$$
-in its homotopy class. 
+Then $u$ minimizes $\Lip(u) = \|\dif u\|_{L^\infty}$ among all maps representing $\rho$, and $u$ is approximated by solutions of the $p$-Laplacian in the limit $p \to \infty$.
+The convex dual problem to the $p$-Laplacian on a surface is the $q$-Laplacian, where $1/p + 1/q = 1$, and the solution $v_q$ of the dual problem converges to a function of least gradient $v$ -- that is, $v$ minimizes $\int_M \star |\dif v|$.
 The analogue of (\ref{Thurston MFMC formula}) follows from their main theorem:
 
 \begin{theorem}[{\cite{daskalopoulos2020transverse}}]\label{Daskalopolous MFMC}
 Let $M$ be a closed hyperbolic surface, let $\rho \in H^1(M, \ZZ)$, and let $u$ solve (\ref{infinity laplacian}) with dual function of least gradient $v$.
-Then $\dif u$ attains its maximum on a geodesic lamination $\lambda$, and $\dif v$ is a transverse measure to a sublamination of $\lambda$.
+Then there is a geodesic lamination $\lambda$ such that:
+\begin{enumerate}
+\item $|\dif u|$ attains its maximum on $\lambda$.
+\item $\dif v$ is a Ruelle-Sullivan current\footnote{We refer the reader to \S\ref{lamination intro sec} for the definition of a Ruelle-Sullivan current.} for $\lambda$.
+\end{enumerate}
 \end{theorem}
 
-In Theorem \ref{Daskalopolous MFMC}, after normalizing $\Lip(u) = 1$, one can think of $\dif u$ as a calibration which calibrates the leaves of $\lambda$.
-This theorem fits into a circle of general results suggesting a general duality theorem, where on one side we have calibrations arising from an $L^\infty$ variational problem, and on the other side we have transverse measures arising from functions of least gradient.
-I showed that every function $u$ of least gradient induces a transverse measure $\dif u$ to the lamination of area-minimizing hypersurfaces whose leaves are the level sets of $u$ \cite{BackusCML}.
+In Theorem \ref{Daskalopolous MFMC}, after normalizing $\Lip(u) = 1$, one can think of $\dif u$ as a calibration\footnote{We refer the reader to \S\ref{calibration intro sec} for the definition of a calibration.} which calibrates the leaves of $\lambda$.
+This theorem fits into a circle of general results suggesting a general duality theorem, where on one side we have calibrations arising from an $L^\infty$ variational problem, and on the other side we have Ruelle-Sullivan currents arising from functions of least gradient.
+I showed that every function $u$ of least gradient induces a Ruelle-Sullivan current $\dif u$ for the lamination of area-minimizing hypersurfaces whose leaves are the level sets of $u$ \cite{BackusCML}.
 Maz\'on, Rossi, and Segura de L\'eon showed that every function of least gradient is dual to a calibration \cite{Mazon14}.
 Finally, we have a theorem of Bangert and Cui; to state it, we define for a cohomology class $\rho \in H^{d - 1}_{\rm dR}(M, \RR)$ its \dfn{costable norm}
 $$\Comass(\rho) := \inf_{[F] = \rho} \|F\|_{L^\infty}.$$
@@ -234,124 +239,183 @@ Then one can find a solution $F$ of a generalized $\infty$-Laplacian such that $
 Furthermore, the solution of the convex dual problem is a function of least gradient $u$ such that $\dif u$ is a transverse measure to the leaves of $\lambda$, and we have an analogue of (\ref{Thurston MFMC formula}).
 Finally, the calibration $F$ and the function of least gradient $u$ arises as limits of solutions of a generalized $p$-Laplacian, and of the $q$-Laplacian, respectively, as $p \to \infty$ (where $1/p + 1/q = 1$).
 
-Unlike in Theorem \ref{Bangert MFMC}, we do not assume that $F$ is continuous.
-In general, it seems unlikely that every class $\rho \in H^{d - 1}$ such that $\Comass(\rho) = 1$ contains a continuous calibration, though this holds when $d = 2$ \cite{Evans08} or when $M$ is Ricci-flat.
-
-Our analogue of (\ref{Thurston MFMC formula}) was already interpreted (when $\lambda$ is a single hypersurface) by Freedman and Headrick \cite{Freedman_2016} as the continuous analogue of the max flow min cut theorem.
-Thus our result explains the role of the max flow min cut theorem in Thurston's conjecture.
-
-As an auxiliary result, we more carefully scrutinize the PDE which generalizes the $\infty$-Laplacian.
-With few exceptions \cite{Barron2001,Sheffield12,daskalopoulos2022}, $L^\infty$ variational problems have mainly been studied in the scalar-valued case, so that one can appeal to the theory of viscosity solutions.
-Our generalized $\infty$-Laplacian is a PDE for a $d - 1$-form, however, and it exhibits behavior quite unlike in the scalar case: as we shall see, the PDE admits $C^\infty$ solutions which do not solve the corresponding $L^\infty$ variational problem.
-
-Finally, let us remark on the uniqueness of the lamination.
-In Theorem \ref{Thurston MFMC}, there are many maximally stretched laminations, but a unique canonically defined such lamination $\lambda(\rho, \sigma)$, which can be used to study the duality of the tangent and cotangent bundles of $\widetilde{\mathscr M_\gamma}$.
-Our situation is completely analogous.
-While there may be many functions of least gradient, inducing many different calibrated laminations corresponding to a class $\rho \in H^{d - 1}(M, \RR)$, there is a unique canonically defined lamination $\lambda(\rho)$, as I will show in an upcoming companion paper \cite{BackusBest2}.
-Moreover, I will show that $\lambda(\rho)$ can be used to prove facts about the duality between the costable and stable norms, some of which were claimed but not proven by Auer and Bangert \cite{Auer01}.
-
-
-\subsection{Motivation: geodesic laminations on hyperbolic surfaces}
-Let $M$ be a closed hyperbolic surface.
-Daskalopolous and Uhlenbeck have studied $p$-harmonic maps $v_p: M \to \Sph^1$ in the limit $p \to \infty$; these maps converge to an $\infty$-harmonic map which attains its Lipschitz constant on a geodesic lamination $\lambda$ \cite{daskalopoulos2020transverse}.
-Given such a map, we can introduce its \dfn{$q$-harmonic conjugate} $u_q$, which satisfies a renormalized version of the \dfn{$p$-Cauchy-Riemann equation}
-$$\dif u_q = |\dif v_p|^{p - 2} \star \dif v_p$$
-where $(p, q)$ are a \dfn{H\"older pair}, thus $p^{-1} + q^{-1} = 1$.
-As $q \to 1$, $\dif u_q$ converges to a Radon measure $\dif u$ which is transverse to a sublamination of $\lambda$.
-Moreover, $\dif u$ is locally the derivative of a function $u$ of \dfn{least gradient}, meaning that whenever $\dif w$ is an exact $1$-form, 
-$$\int_M \star |\dif u| \leq \int_M \star |\dif u + \dif w|.$$
-The goal of this paper is to generalize the above duality to codimension $1$ laminations of much more general closed Riemannian manifolds.
-
-%%%%%%%%%%%
-\subsection{Tight forms and least gradient functions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Review of calibrated geometry}\label{calibration intro sec}
 Throughout this paper, let $M$ be a closed Riemannian manifold of dimension $d \geq 2$.
-Let $(p, q)$ be a H\"older pair such that $1 < p < \infty$.
-Motivated by the $p$-Laplace equation $\dif^*(|\dif v|^{p - 2} \dif v) = 0$, we introduce \dfn{$p$-tight} forms, which are $d-1$-forms $F$ which solve the system of PDE
-$$\begin{cases}\dif F = 0 \\ \dif^*(|F|^{p - 2} F) = 0\end{cases}.$$
-Given a $p$-tight form, the $\pi_1(M)$-equivariant function $u$ on the universal cover $\tilde M$ such that
-\begin{equation}\label{harmonic conjugate}
-\dif u = (-1)^{d - 1} |F|^{p - 2} \star F
+Before stating our main results, we recall some terminology concerning currents and calibrations on $M$.
+We refer the reader to \cite{Harvey82} for more details.
+
+The \dfn{comass} of a $k$-form $F$ is
+$$\Comass(F) := \esssup_{x \in M} \sup_{v_1, \dots, v_k \in T_x M} \frac{\langle F, v_1 \wedge \cdots \wedge v_k\rangle}{|v_1 \wedge \cdots \wedge v_k|}.$$
+If $k = d - 1$, then the comass is particularly easy to work with, as we have $\Comass(F) = \|F\|_{L^\infty}$.
+Dually, the \dfn{mass} of a $k$-current $T$ is 
+$$\Mass(T) := \sup_{\substack{F \in C^0(M, \Omega^k) \\ \Comass(F) \leq 1}} \int_M T \wedge F.$$
+Notice that if $T$ represents a $k$-dimensional submanifold $N$, then $\Mass(T) = \vol(N)$.
+
+If $\Comass(F) = 1$ and $\dif F = 0$, then $F$ is a \dfn{calibration}.
+If $F$ is a calibration, then a $k$-dimensional submanifold $N \subseteq M$ is \dfn{$F$-calibrated} if $F$ pulls back to the Riemannian volume form on $N$.
+We think of $F$ as a ``certificate'' of the minimality of $N$, as made precise by the \dfn{fundamental theorem of calibrated geometry} \cite{Harvey82}.
+
+\begin{theorem}[fundamental theorem of calibrated geometry]
+Let $F$ be a calibration $k$-form and $N$ a $F$-calibrated submanifold. Then:
+\begin{enumerate}
+\item For every $k + 1$-dimensional submanifold $P$, $\vol(N) \leq \vol(N + \partial P)$.
+\item For every $k - 1$-form $A$, $\Comass(F) \leq \Comass(F + \dif A)$.
+\end{enumerate}
+\end{theorem}
+
+The proof is frequently useful to us, so we recall it briefly.
+The bound on $\Comass(F)$ is similar, so we just consider the bound on $\vol(N)$.
+By Stokes' theorem, $\int_{\partial P} F = 0$, so
+$$\vol(N) = \int_N F = \int_{N + \partial P} F \leq \vol(N + \partial P).$$
+
+The mass and comass induce norms on homology and cohomology.
+The \dfn{costable norm} of $\rho \in H^k(M, \RR)$ is 
+$$\Comass(\rho) := \inf_{[F] = \rho} \Comass(F),$$
+and dually, the \dfn{stable norm} of $\alpha \in H_k(M, \RR)$ is 
+$$\Mass(\alpha) := \inf_{[T] = \alpha} \Mass(T).$$
+The stable norm was studied by Gromov \cite[Chapter 4]{gromov2007metric} though the idea goes back to Federer \cite{Federer1974}, who made use of the fact that the stable and costable norms are dual norms.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Tight forms and least gradient functions}
+Let $\tilde M \to M$ be the universal covering.
+Let $1 < p < \infty$, $1/p + 1/q = 1$, and $\alpha \in H_{d - 1}(M, \RR)$.
+If a function $u: \tilde M \to \RR$ is equivariant under $\pi_1(M)$, then $\dif u$ drops to a closed $1$-form on $M$, and we write $[\dif u] = \alpha$ if $\alpha$ is Poincar\'e dual to the cohomology class of $\dif u$.
+We shall be interested in the $q$-Laplacian
+\begin{equation}\label{q harmonic}
+\begin{cases}
+\dif^*(|\dif u|^{q - 2} \dif u) = 0, \\
+[\dif u] = \alpha
+\end{cases}
 \end{equation}
-is $q$-harmonic -- in other words, $u$ is a solution of the $q$-Laplace equation 
-$$\dif^*(|\dif u|^{q - 2} \dif u) = 0.$$
-The $p$-tight forms can be thought as the Fenchel duals of their $q$-harmonic conjugates; for the Dirichlet problem, this is a standard result \cite[Chapter IV]{Ekeland99}, but for our equivariant problem we defer a careful discussion of the Fenchel duality to a later work \cite{BackusBest2}, in which we shall study the duality in a broader context which ties it into the duality theory of Thurston's asymmetric norm on Teichm\"uller space \cite{Thurston98}.
+and its convex dual problem
+\begin{equation}\label{p tight}
+\begin{cases}
+\dif F = 0, \\ 
+\dif^*(|F|^{p - 2} F) = 0, \\
+[F] = \rho.
+\end{cases}
+\end{equation}
+Here $F$ is a $d - 1$-form on $M$, $[F]$ is the cohomology class of $F$, and $\rho \in H^{d - 1}(M, \RR)$ is a class which depends on $\alpha$.
+Recall that solutions of (\ref{q harmonic}) are called \dfn{$q$-harmonic}; we say that solutions of (\ref{p tight}) are \dfn{$p$-tight}.
+If $\rho$ was chosen so that (\ref{q harmonic}) and (\ref{p tight}) are convex dual problems, then we have 
+\begin{equation}\label{harmonic conjugate}
+\dif u = (-1)^{d - 1} |F|^{p - 2} \star |F|
+\end{equation}
+and we say that $(F, u)$ is a \dfn{dual pair of a $p$-tight form and $q$-harmonic function}.
+
+\begin{definition}
+Let $u \in BV(\tilde M, \RR)$ be a $\pi_1(M)$-equivariant function.
+Suppose that, for every $\pi_1(M)$-invariant function $v$,
+$$\Mass(\dif u) \leq \Mass(\dif u + \dif v).$$
+Then $u$ has \dfn{least gradient}.
+\end{definition}
 
 Our first theorem is a summary of Propositions \ref{existence infinity} and \ref{existence 1}, and describes the limiting behavior of the $p$-tight forms and their $q$-harmonic conjugates as $p \to \infty$.
 
 \begin{mainthm}\label{existence of infinity tight forms}
 Let $\rho \in H^{d - 1}(M, \RR)$ be a nonzero cohomology class.
-Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$ and $(p, q)$ ranging over H\"older pairs with $1 < p < \infty$.
-Then there exists a pair $(F, u)$ such that as $p \to \infty$ along a subsequence, $F_p \to F$ weakly in $L^r$ for any $1 \leq r < \infty$, and $u_q \to u$ weakly in $BV$, with the following properties:
-\begin{enumerate}
-\item For any Lipschitz $d - 2$-form $B$, 
+Let $(F_p, u_q)$ be the family of dual pairs of $p$-tight forms and $q$-harmonic functions, suitably normalized, with $[F_p] = \rho$, $1/p + 1/q = 1$, and $1 < p < \infty$.
+Then there exists a pair $(F, u)$ such that as $p \to \infty$ along a subsequence, $F_p \weakto F$ in $L^r$ for any $1 \leq r < \infty$, and $u_q \weakto^* u$ in $BV$, such that
 \begin{equation}\label{best comass}
-\|F\|_{L^\infty} \leq \|F + \dif B\|_{L^\infty}.
+\Comass(F) = \Comass(\rho),
 \end{equation}
-\item $u$ has least gradient and is nonconstant.
-\item The product of distributions $\dif u \wedge F$ is well-defined, and
+the product of distributions $\dif u \wedge F$ is well-defined,
 \begin{equation}\label{max flow min cut}
-\|F\|_{L^\infty} \star |\dif u| = \dif u \wedge F.
+\Comass(F) \star |\dif u| = \dif u \wedge F,
 \end{equation}
-\end{enumerate}
+and $u$ is a nonconstant function of least gradient.
 \end{mainthm}
 
 If a closed $d - 1$-form $F$ is a limit of $p$-tight forms $F_p$, as in Theorem \ref{existence of infinity tight forms}, we say that $F$ is a \dfn{tight} form.
-Thus the content of Theorem \ref{existence of infinity tight forms} is that every tight $d - 1$-form minimizes its $L^\infty$ norm, and has a dual function $u$ of least gradient, in the sense that $(F, u)$ satisfies the relation (\ref{max flow min cut}).
-This relation can be viewed as the assertion that $F$ ``calibrates" $u$ in some sense, and allows us to show that $u$ has least gradient without a careful analysis of the behavior of $u_q$ as $q \to 1$ which appeared in the previous works \cite{daskalopoulos2020transverse,daskalopoulos2022,Mazon14}.
+Thus the content of Theorem \ref{existence of infinity tight forms} is that every cohomology class contains a tight form, every tight form minimizes its $L^\infty$ norm, and every tight form $F$ has a dual function $u$ of least gradient, in the sense that $(F, u)$ satisfies the relation (\ref{max flow min cut}).
 
-The calibration condition (\ref{max flow min cut}) is implicit in work of Maz\'on, Rossi, and Segura de Le\'on on the Dirichlet problem for functions of least gradient \cite{Mazon14}.
-In our language, they showed that every function $u$ of least gradient on a domain in $\RR^d$ admits a closed $d - 1$-form $F$ satisfying (\ref{max flow min cut}).
-Their proof actually shows that $F$ is tight, so every function of least gradient on a domain has a dual tight $d - 1$-form.
-We stress, however, that the proof of Theorem \ref{existence of infinity tight forms} does not go through for domains with a boundary, as the mass of $\dif u_q$ may concentrate along the boundary as $q \to 1$; see \S\ref{boundaries bad} for an explicit counterexample.
+Suppose that $\Comass(\rho) = 1$.
+Then (\ref{best comass}) asserts that the tight form $F$ is a calibration, and (\ref{max flow min cut}) asserts that every level set of $u$ is $F$-calibrated.
+Thus $F$ certificates the fact that $u$ has least gradient.
+This allows us, in the proof of Theorem \ref{existence of infinity tight forms}, to show that $u$ has least gradient without a careful analysis of the behavior of $u_q$ as $q \to 1$ which appeared in the previous works \cite{daskalopoulos2020transverse,daskalopoulos2022}.
 
-%%%%%%%%%%%%
-\subsection{Calibrations of measured laminations}
-To give a more geometric interpretation of Theorem \ref{existence of infinity tight forms}, we assume that the ambient dimension $d \leq 7$.
-Then every nonconstant function $u$ of least gradient induces a measured oriented lamination $\lambda_u$ by homologically minimizing hypersurfaces \cite{BackusCML}.
-The leaves are the level sets of $u$, and $\dif u$ is the transverse measure.
+Though they did not use the language of calibrations, it is interesting to think of Theorem \ref{existence of infinity tight forms} as a partial converse of the theorem of Maz\'on, Rossi, and Segura de L\'eon \cite{Mazon14}, which asserts that every least gradient function is certificated by a calibration.
+In fact, one can show that their calibration is tight.
+Their result holds for the Dirichlet problem, but as we show in \S\ref{boundaries bad}, the analogue of Theorem \ref{existence of infinity tight forms} is false for the Dirichlet problem.
+
+%%%%%%%%%%%%%%%%%
+\subsection{Calibrations of measured laminations}\label{lamination intro sec}
+To give a more geometric interpretation of Theorem \ref{existence of infinity tight forms}, we recall the language of laminations.
+See \cite{BackusCML} for more details.
 
 \begin{definition}
-Let $\rho \in H^{d - 1}(M, \RR)$, let $F$ be a tight representative of $\rho$, and let $u$ be a function of least gradient satisfying (\ref{max flow min cut}).
-We call $\lambda_u$ a \dfn{measured stretch lamination} for $\rho$.
+Let $I \subset \RR$ be an interval and $J \subset \RR^{d - 1}$ a box. Then:
+\begin{enumerate}
+\item A (codimension-$1$, Lipschitz) \dfn{laminar flow box} is a Lipschitz coordinate chart $\Psi: I \times J \to M$ and a compact set $K \subseteq I$, called the \dfn{local leaf space}, such that for each $k \in K$, $\Psi|_{\{k\} \times J}$ is a $C^1$ embedding, and the leaf $\Psi(\{k\} \times J)$ is a $C^1$ complete hypersurface in $\Psi(I \times J)$.
+\item Two laminar flow boxes belong to the same \dfn{laminar atlas} if the transition map preserves the local leaf spaces.
+\item A \dfn{lamination} $\lambda$ is a closed nonempty set $\supp \lambda$ and a maximal laminar atlas $\{(\Psi_\alpha, K_\alpha): \alpha \in A\}$ such that
+$$\supp \lambda \cap \Psi_\alpha(I \times J) = \Psi_\alpha(K_\alpha \times J).$$
+\end{enumerate}
 \end{definition}
 
-Let $\rho \in H^{d - 1}(M, \RR)$ be nonzero.
-It is straightforward to check that for every $1 < p < \infty$ there exists a unique $p$-tight representative of $\rho$, so by Theorem \ref{existence of infinity tight forms}, there is a measured stretch lamination for $\rho$.
+\begin{definition}
+Let $\lambda$ be a lamination with laminar atlas $\{(\Psi_\alpha, K_\alpha): \alpha \in A\}$. Then:
+\begin{enumerate}
+\item If every leaf of $\lambda$ has zero mean curvature, then $\lambda$ is \dfn{minimal}. If in addition $d = 2$, then $\lambda$ is \dfn{geodesic}.
+\item Let $F$ be a calibration. If every leaf of $\lambda$ is $F$-calibrated, then $\lambda$ is \dfn{$F$-calibrated}.
+\item If the transition maps $\Psi_\alpha^{-1} \circ \Psi_\beta$ are orientation-preserving, then $\lambda$ is \dfn{oriented}.
+\item A \dfn{transverse measure} $\mu$ to $\lambda$ consists of Radon measures $\mu_\alpha$ on each local leaf space $K_\alpha$, such that the transition maps $\Psi_\alpha^{-1} \circ \Psi_\beta$ send $\mu_\beta$ to $\mu_\alpha$, and $\supp \mu_\alpha = K_\alpha$.
+The pair $(\lambda, \mu)$ is a \dfn{measured lamination}.
+\item Suppose that $\lambda$ is measured oriented, and let $\{\chi_\alpha: \alpha \in A\}$ be a partition of unity subordinate to $\{\Psi_\alpha(I \times J): \alpha \in A\}$. The \dfn{Ruelle-Sullivan current} $T_\lambda$ acts on $\varphi \in C^0_\cpt(M, \Omega^{d - 1})$ by 
+$$\int_M T_\lambda \wedge \varphi := \sum_{\alpha \in A} \int_{K_\alpha} \left[\int_{\{k\} \times J} (\Psi_\alpha^{-1})^* (\chi_\alpha \varphi)\right] \dif \mu_\alpha(k).$$
+\item Suppose that $\lambda$ is measured oriented. The \dfn{mass} $\Mass(\lambda) := \Mass(T_\lambda)$ and the \dfn{homology class} $[\lambda] := [T_\lambda]$.
+\end{enumerate}
+\end{definition}
 
-For convenience, we want to normalize $\rho$. 
-We introduce its \dfn{costable norm}
-$$\Comass(\rho) := \inf_{[F] = \rho} \|F\|_{L^\infty},$$
-and say that any $F$ which attains the infimum has \dfn{best comass}.
-Every tight form has best comass, and $F$ is a calibration which calibrates some current, then $F$ has best comass and its cohomology class has costable norm $1$.
-We then have the following consequence of (\ref{max flow min cut}), which is the content of \S\ref{proof of Theorem B}.
+In recent work, I interpreted functions of least gradient in terms of their level sets, which form a lamination:
+
+\begin{theorem}[{\cite{BackusCML}}]
+Suppose that $d \leq 7$ and $u$ is a $\pi_1(M)$-equivariant function on $\tilde M$.
+The following are equivalent:
+\begin{enumerate}
+\item $u$ has least gradient.
+\item There is a measured oriented minimal lamination $\lambda_u$, which minimizes its mass in its homology class, whose leaves are all of the form $\partial \{u > y\}$ or $\partial \{u < y\}$, $y \in \RR$, and whose Ruelle-Sullivan current is $\dif u$.
+\end{enumerate}
+\end{theorem}
+
+By Theorem \ref{existence of infinity tight forms}, if $d \leq 7$, then every nonzero class $\rho \in H^{d - 1}$ contains a tight form $F$, which is related to a function $u$ of least gradient by (\ref{max flow min cut}).
+We say that the lamination $\lambda_u$ is a \dfn{measured stretch lamination} associated to $\rho$.
+In general, there may be many measured stretch laminations, but our next theorem, proven in \S\ref{proof of Theorem B}, characterizes the measured stretch laminations.
 
 \begin{mainthm}\label{lams are calibrated}
-Suppose that $M$ is a closed Riemannian manifold of dimension $d \leq 7$.
-Let $\rho \in H^{d - 1}(M, \RR)$ satisfy $\Comass(\rho) = 1$.
-Let $\kappa$ be a measured stretch lamination for $\rho$.
-Let $F$ be a best comass representative of $\rho$.
-Then $\kappa$ is $F$-calibrated, and for $\lambda$ ranging over measured oriented laminations,
+Suppose that $d \leq 7$.
+Let $\rho \in H^{d - 1}(M, \RR)$ be nonzero.
+Let $\kappa$ be a measured stretch lamination for $\rho$, and let $[F] = \rho$ satisfy $\Comass(F) = \Comass(\rho)$.
+Then $\kappa$ is $F/\Comass(\rho)$-calibrated, and for $\lambda$ ranging over measured oriented laminations,
 \begin{equation}\label{duality between stable and comass}
-1 = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{\Mass(\lambda)} = \frac{\langle \rho, [\kappa]\rangle}{\Mass(\kappa)}.
+\Comass(\rho) = \sup_\lambda \frac{\langle \rho, [\lambda]\rangle}{\Mass(\lambda)} = \frac{\langle \rho, [\kappa]\rangle}{\Mass(\kappa)}.
 \end{equation}
 Conversely, if a measured oriented lamination $\lambda$ attains the maximum in (\ref{duality between stable and comass}), then $\lambda$ is a measured stretch lamination.
 \end{mainthm}
 
-Bangert and Cui showed that every continuous best comass calibration calibrates some measured oriented lamination \cite{bangert_cui_2017}.
-This result improves on their work by allowing $F$ to be merely measurable; it also implies that the lamination is Lipschitz.
-Moreover, if one has an approximation of $F$ by $p$-tight forms, it allows one to compute the calibrated lamination $\kappa$ more or less explicitly, by using the formula (\ref{harmonic conjugate}) and taking limits.
-In the sequel paper \cite{BackusBest2} we shall interpret (\ref{duality between stable and comass}) as a max flow/min cut principle; a similar max flow/min cut principle was predicted by Thurston for certain geodesic laminations on closed hyperbolic manifolds \cite{Thurston98}.
+Given our previous work \cite{BackusCML} and Theorem \ref{existence of infinity tight forms}, the only difficulty in the proof of Theorem \ref{lams are calibrated} is to verify that it is meaningful to ask if a lamination be $F$-calibrated when $F$ is only measurable, but not continuous.
+This technicality aside, the proof of Theorem \ref{lams are calibrated} is based on (\ref{max flow min cut}), which says that if $F$ is tight and $\Comass(\rho) = 1$, then $F$ calibrates $\kappa$.
+Since calibration is a cohomological invariant, any other calibration representing $\rho$ must also calibrate $\kappa$.
+Conversely, if $F$ calibrates $\lambda$, then $\lambda$ must arise from some function of least gradient satisfying (\ref{max flow min cut}).
 
-The pairing $\langle \rho, [\lambda]\rangle$ is defined on the level of homology, but if $\lambda$ has sufficient regularity (which holds for any measured stretch lamination), then it has a more appealing interpretation (\ref{coarea formula on laminations}): it is the integration of any representative $F$ of $\rho$ along the leaves of $\lambda$, which are then summed over using the transverse measure.
-Meanwhile $\Mass(\lambda)$ is the total area of the leaves of $\lambda$, summed over using the transverse measure.
-In \S\ref{L infinity calibrations} we prepare for the proof of Theorem \ref{lams are calibrated} by establishing several related results concerning integration along laminations which may be of independent interest.
+Theorem \ref{lams are calibrated} immediately implies the Bangert--Cui theorem (Theorem \ref{Bangert MFMC}), and is stronger than the Bangert--Cui theorem because we need not assume that $\rho$ contains a continuous calibration.
+In general, it seems unlikely that $\Comass(\rho) = 1$ implies that $\rho$ contains a continuous calibration, though this is known to hold when $d = 2$ \cite{Evans08} or when $M$ is Ricci-flat. 
+Theorem \ref{lams are calibrated} also implies the Daskalopolous--Uhlenbeck theorem (Theorem \ref{Daskalopolous MFMC}): if $d = 2$, then a $1$-form $F$ is tight iff a local primitive of $F$ is $\infty$-harmonic.
 
-In upcoming work we shall embed the measured stretch laminations into a lamination (without a transverse measure) which we call the \dfn{canonical lamination} for $\rho$ \cite{BackusBest2}.
-This lamination is the largest lamination whose leaves are locally calibrated by every best comass representative of $\rho$, and exhibits strongly analogous behavior with Thurston's canonical lamination on a closed hyperbolic surface \cite{Thurston98}.
+The duality relation (\ref{duality between stable and comass}) has already been interpreted in the string theory literature as a continuous analogue of the max flow min cut theorem \cite{Freedman_2016}, at least in the case that $\lambda$ has only one leaf.
+On the other hand, one can think of $\langle \rho, [\lambda]\rangle/\Mass(\lambda)$ as the amount that $\lambda$ is ``stretched'' by a representative of $\rho$, or in other words we can think of it as analogous to Thurston's functional $K$ \cite[\S5.3]{daskalopoulos2020transverse}.
+So (\ref{duality between stable and comass}) is an analogue of Thurston's formula (\ref{Thurston MFMC formula}), and Theorem \ref{lams are calibrated} can be viewed as an explanation for why the max flow min cut theorem should appear in Thurston's conjecture.
+
+The analogy with Thurston's theorem, Theorem \ref{Thurston MFMC}, can be made even stronger.
+In Thurston's theorem, there are many maximally stretched measured geodesic laminations, but one can embed all of them in a uniquely defined \dfn{canonical maximally stretched lamination} $\lambda(\rho, \sigma)$, which can be used to study the duality of the tangent and cotangent bundles of $\mathscr T_\gamma$.
+In our situation, while there may be many measured stretch laminations $\rho$, we will embed them all in a \dfn{canonical calibrated lamination} $\lambda(\rho)$, as I will show in an upcoming companion paper \cite{BackusBest2}.
+Moreover, I will show that $\lambda(\rho)$ can be used to prove facts about the duality between the costable and stable norms, some of which were claimed but not proven by Auer and Bangert \cite{Auer01}.
 
 Theorem \ref{lams are calibrated} is based on the fact that the level sets of a function of least gradient are area-minimizing hypersurfaces, but one can seek to formulate such a result for eigenfunctions of the $1$-Laplacian instead.
 The superlevel sets of the first eigenfunction are \dfn{Cheeger sets} -- sets $U$ which maximize the isoperimetric ratio $\Mass(\partial U)/\vol(U)$ \cite{Kawohl2003}.
-The dual $d - 1$-forms $F$ are not closed, but instead satisfy $\dif F \geq 0$ \cite{Grieser05}.
+The dual $d - 1$-forms $F$ are not closed, but instead satisfy $\dif F \geq 0$; one can also interpret this fact as a continuous max flow min cut theorem \cite{Grieser05}.
 It would be interesting to study the $L^\infty$ one-sided variational problem that $F$ solves in this setting, but we shall not attempt to do so.
 
 %%%%%%%%%%%%%%%%%
@@ -368,8 +432,7 @@ To be more precise, we study $C^1$ solutions of the PDE
 \end{equation}
 We derive this equation as the formal limit of the PDE solved by the $p$-tight forms.
 Therefore tight forms are variational solutions of (\ref{tight Einstein}).
-We are particularly interested in this equation not just because it is formally solved by tight forms, but because it seems to be a model problem for $L^\infty$ variational systems, in particular the PDE solved by the tight maps of Sheffield and Smart \cite{Sheffield12} and the closely related $\infty$-harmonic maps of Daskalopolous and Uhlenbeck \cite{daskalopoulos2022,daskalopoulos2023}.
-Such maps are solutions to the optimal Lipschitz extension problem between manifolds.
+We are particularly interested in this equation not just because it is formally solved by tight forms, but because it seems to be a model problem for $L^\infty$ variational systems, in particular the optimal Lipschitz extension problem \cite{Sheffield12,daskalopoulos2022,daskalopoulos2023}.
 
 When $d = 2$, (\ref{tight Einstein}) asserts that $F = \dif v$, where $v$ is $\infty$-harmonic:
 $$(\nabla_i \partial_j v) \partial^i v \partial^j v = 0.$$

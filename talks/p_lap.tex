@@ -65,34 +65,48 @@
     \titlepage
 \end{frame}
 
-\begin{frame}{Overview}
+\begin{frame}{Max flow min cut}
 \begin{itemize}
-\item We seek to understanding the limiting behavior of the $p$-Laplacian 
-$$\nabla \cdot (|\nabla u|^{p - 2} \nabla u) = 0$$
-and its convex dual problem as $p \to 1$, where $u: M \to \RR$ and $M$ is a Riemannian manifold of dimension $2 \leq d \leq 7$. \pause
-\item Later we will see that behavior is a continuous analogue of the classic max flow/min cut theorem from graph theory. \pause
-\item Before then: let's just understand the $1$-Laplacian by itself. 
+\item The \emph{max flow min cut theorem} asserts that in a discrete flow network, the maximal amount of incompressible fluid that can flow equals the capacity of the smallest bottleneck. \pause
+\item Picture from Wikipedia:
 \end{itemize}
+
+\begin{center}
+    \includegraphics[scale=0.75]{Max-flow_min-cut_example.svg.png}
+\end{center}
 \end{frame}
 
-\begin{frame}{Functions of least gradient}
+\begin{frame}{A continuous max flow min cut?}
 \begin{itemize}
-\item $p$-harmonic functions minimize
+\item Various formulations of a continuous max flow/min cut theorem (for example Sullivan '90, Thurston '96, Grieser '05, Freedman and Headrick '16). \pause
+\item MF/MC arises from the convex duality theorem applied to the space of $\ell^\infty$ functions on the space of edges. \pause
+\item So, natural to prove a continuous MF/MC theorem that arises from convex duality on $L^\infty$. \pause
+\item $L^\infty$ is not reflexive, so we will regularize by using $L^q$, $q < \infty$.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{\texorpdfstring{The $p$-Laplacian}{The p-Laplacian}}
+\begin{itemize}
+\item We will look at the (regularized) dual problem first. It is the $p$-Laplacian: to minimize
 $$J_p(u) := \frac{1}{p} \int_M |\nabla u(x)|^p \dif x,$$
-the $p$-Dirichlet energy. \pause
+the $p$-Dirichlet energy, where we always have $1/p + 1/q = 1$. \pause
+\item Its convex dual is the minimization of
+$$\hat J_p(F) = -\frac{1}{q} \int_M |F(x)|^q \dif x$$
+where $F$ ranges over $d - 1$-forms subject to the constraint $\dif F = 0$. \pause
 \item Taking $p \to 1$ we get
 $$J_1(u) := \int_M |\nabla u(x)| \dif x = \sup_{\substack{\varphi \in C^1_0(M, \Omega^{d - 1}) \\ \|\varphi\|_{C^0} \leq 1}} \int_M u \dif \varphi$$
-which is the least gradient energy in the weak sense. \pause
-\item We say that $u \in BV(M)$ has \emph{least gradient} if $u$ minimizes $J_1$ subject to Dirichlet (or equivariant) boundary conditions.
+which is the least gradient energy in the weak sense.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Functions of least gradient}
 \begin{itemize}
+\item We say that $u \in BV(M)$ has \emph{least gradient} if $u$ minimizes $J_1$ subject to Dirichlet (or equivariant) boundary conditions. \pause
 \item Let $\mathcal H^s$ denote $s$-dimensional Hausdorff measure. Then
 $$J_1(u) = \int_{-\infty}^\infty \mathcal H^{d - 1}(\partial \{u > t\}) \dif t$$
 for any $u \in BV(M)$. \pause
-\item Thus the level sets of a least gradient function $u$ are area-minimizing: \pause
+\item Thus the level sets of a least gradient function $u$ are area-minimizing. They are also all disjoint (Auer and Bangert '02). \pause
 \end{itemize}
 
 \begin{theorem}[Bombieri, de Giorgi, Giusti '69]
@@ -100,11 +114,7 @@ Suppose that $u \in BV(M)$ has least gradient.
 Then for every $t \in \RR$ and every hypersurface $\Sigma$ homologous to $\partial \{u > t\}$ relative to $\partial M$,
 $$\mathcal H^{d - 1}(\partial \{u > t\}) \leq \mathcal H^{d - 1}(\Sigma).$$
 In particular, $\Sigma$ is a smooth complete hypersurface.
-\end{theorem} \pause
-
-\begin{itemize}
-\item The level sets are all disjoint (Auer and Bangert '02).
-\end{itemize}
+\end{theorem} 
 \end{frame}
 
 \begin{frame}{Laminations}
@@ -136,61 +146,52 @@ Moreover, $\dif u$ is a Ruelle-Sullivan current of $\lambda$.
 \end{theorem} \pause
 
 \begin{itemize}
+    \item Proof is based on elliptic estimates for area-minimizing hypersurfaces, especially Harnack's inequality. \pause
     \item A partial converse is also available; together these results completely characterize function of least gradient. \pause
-    \item So after a Lipschitz change of coordinates, $u$ is constant in $d - 1$ directions. This implies various regularity properties for $u$, which were previously proven by Hakkarainen et al '15 and G\'orny '18 by more direct means.
+    \item So after a Lipschitz change of coordinates, $u$ is constant in $d - 1$ directions. This gives a new proof of the following regularity theorem for least gradient functions: \pause
 \end{itemize}
 
+\begin{theorem}[Hakkarainen et al '15, G\'orny '18]
+Suppose that $u$ is a function of least gradient. 
+Then $u = u_{ac} + u_C + u_j$ where $u_{ac}, u_C, u_j$ have least gradient, $u_{ac} \in W^{1, 1} \cap C^0$, $u_C \in C^0$ is a Cantor function, and $u_j$ is a jump function.
+\end{theorem}
 \end{frame}
 
-\begin{frame}{The lamination construction theorem}
-\begin{itemize}
-\item One can use curvature estimates for area-minimizing hypersurfaces (Schoen and Simon '81) to reduce the least gradient-lamination correspondence theorem to: \pause
-\end{itemize}
+% \begin{frame}{The lamination construction theorem}
+% \begin{itemize}
+% \item One can use curvature estimates for area-minimizing hypersurfaces (Schoen and Simon '81) to reduce the least gradient-lamination correspondence theorem to: \pause
+% \end{itemize}
 
-\begin{theorem}[B '23, following Solomon '86]
-Let $\mathscr S$ be a set of disjoint minimal hypersurfaces whose second fundamental forms are locally uniformly bounded.
-Then $\mathscr S$ is the set of leaves of a Lipschitz lamination.
-\end{theorem} \pause
+% \begin{theorem}[B '23, following Solomon '86]
+% Let $\mathscr S$ be a set of disjoint minimal hypersurfaces whose second fundamental forms are locally uniformly bounded.
+% Then $\mathscr S$ is the set of leaves of a Lipschitz lamination.
+% \end{theorem} \pause
 
-\begin{itemize}
-\item Main idea: by disjointness, on small scales the hypersurfaces must all be graphs over each other, of functions which are small-data solutions of the minimal surface equation. Then use Harnack-type estimates. \pause
-\item One can use this theorem to show compactness theorems for certain spaces of laminations as well.
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Max flow min cut}
-\begin{itemize}
-\item The \emph{max flow min cut theorem} asserts that in a discrete flow network, the maximal amount of incompressible fluid that can flow equals the capacity of the smallest bottleneck. \pause
-\item Picture from Wikipedia:
-\end{itemize}
-
-\begin{center}
-    \includegraphics[scale=0.75]{Max-flow_min-cut_example.svg.png}
-\end{center}
-\end{frame}
+% \begin{itemize}
+% \item Main idea: by disjointness, on small scales the hypersurfaces must all be graphs over each other, of functions which are small-data solutions of the minimal surface equation. Then use Harnack-type estimates. \pause
+% \item One can use this theorem to show compactness theorems for certain spaces of laminations as well.
+% \end{itemize}
+% \end{frame}
 
 \begin{frame}{Continuous max flow min cut}
 \begin{itemize}
-\item Various formulations of a continuous max flow/min cut theorem (for example Sullivan '90, Grieser '05, Freedman and Headrick '16). Thurston '96 conjectured that a version should be available for laminations but wasn't precise about what he meant. \pause
-\item To every $q$-harmonic function $u_q$ is associated its conjugate $v_p$ ($p^{-1} + q^{-1} = 1$), a $d - 2$-form, such that
-$$\dif v_p = |\dif u_q|^{q - 2} \star \dif u_q.$$
-Notice if $p = q = d = 2$ this is exactly the Cauchy-Riemann equation. \pause
-\item We are going to construct an ``incompressible flow'' out of $\dif v_p$ as $p \to \infty$ which is bottlenecked by a lamination obtained from the limit of the $u_q$ as $q \to 1$.
+\item Thurston '96 conjectured that a MF/MC theorem should be available for laminations but wasn't precise about what he meant. \pause
+\item Recall that the convex dual problem to the $q$-Laplacian is the minimization of
+$$\hat J_q(F) = \frac{1}{p} \int_M |F(x)|^p \dif x$$
+where $F$ ranges over $d - 1$-forms such that $\dif F = 0$. \pause
+\item The convex duality relation is 
+$$\frac{1}{q} \int_M |\dif u|^q + \frac{1}{q} \int_M |F|^p + \int_M \dif u \wedge F.$$
+\item We are going to construct an ``incompressible flow'' out of $F$ as $p \to \infty$ which is bottlenecked by a lamination obtained from the limit of $u$ as $q \to 1$.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{The dual forms}
 \begin{itemize}
-\item We say that a $d - 1$-form $F_p$ is \emph{$p$-tight} if
-$$\begin{cases}
-\dif F_p = 0 \\
-\dif^* (|F_p|^{p - 2} F_p) = 0.
-\end{cases}$$
-If $d = 2$, this means that $F_p = \dif v_p$ for a $p$-harmonic function $v_p$. \pause
+\item We say that a $d - 1$-form $F_p$ is \emph{$p$-tight} if $F_p$ minimizes $\hat J_p$ subject to $\dif F_p = 0$, among all $F_p$ cohomologous to $F$ relative to the boundary. \pause
 \item If $u_q$ is $q$-harmonic, then
 $$F_p := |\dif u_q|^{q - 2} \star \dif u_q$$
 is $p$-tight.
-\item $p$-tight forms essentially appear in the formulation of weak solutions of the $1$-Laplacian (Maz\'on, Rossi, and Segura de L\'eon '14), and in applications to Teichm\"uller theory (Daskalopolous and Uhlenbeck '20, '22).
+\item $p$-tight forms essentially appear in the weak formulation of $1$-harmonic functions (Maz\'on, Rossi, and Segura de L\'eon '14), and in applications to Teichm\"uller theory (Daskalopolous and Uhlenbeck '20, '22) though neither paper made this explicit.
 \end{itemize}
 \end{frame}
 
@@ -198,13 +199,15 @@ is $p$-tight.
 \begin{itemize}
 \item We say that $F$ is \emph{tight} if there are $p$-tight $F_p$ such that $F_p \to F$ weakly in $L^r$ for every $1 < r < \infty$. \pause
 \item If $F$ is tight, then $F$ minimizes its $L^\infty$ norm among all $d - 1$-forms cohomologous to $F$ relative to the boundary. \pause
-\item We want to say that $F$ is tight iff
-$$\begin{cases}
+\item On the level of formal manipulations, $F$ is tight iff
+\begin{equation}\label{tight PDE}
+\begin{cases}
 \dif F = 0 \\
 (\nabla_i F_{j_1 \cdots j_{d - 1}}) F^{j_1 \cdots j_{d - 1}} {F^i}_{k_1 \cdots k_{d - 2}} = 0.
-\end{cases}$$
-But this PDE makes no sense because viscosity solutions are ill-defined for systems and a tight form only satisfies $F \in L^\infty$.
-Nevertheless this PDE appears to be a model problem in the $L^\infty$ variational calculus.
+\end{cases}
+\end{equation}
+But (\ref{tight PDE}) makes no sense because viscosity solutions are ill-defined for systems and a tight form only satisfies $F \in L^\infty$. \pause 
+\item In fact, for $d = 3$ there is a smooth solution of (\ref{tight PDE}) which is not tight and is not an $L^\infty$ minimizer.
 \end{itemize}
 \end{frame}
 
