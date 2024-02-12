@@ -2,6 +2,9 @@ import numpy as np
 gauss = np.random.normal
 from scipy.linalg import svd
 
+import matplotlib.pyplot as plt
+from matplotlib.patches import Polygon
+
 # We start by defining the simplicial complex of the domain.
 # Here are the vertices:
 VERTICES = [
@@ -86,6 +89,13 @@ BOUNDARY = [
     24
 ]
 
+# Assign each simplex a color 
+colors = []
+for s in range(len(SIMPLICES)):
+    colors.append(
+        list(np.random.choice(range(256), size=3) / 256)
+    )
+
 def link(v):
     # Returns points in the link of a vertex of index v 
     pts = []
@@ -144,69 +154,82 @@ class PL:
     def tighter(self, other):
         if self.globalLipOnVertices == 0:
             return True
-        if (self.globalLipOnVertices - other.globalLipOnVertices)/self.globalLipOnVertices < -0.1:
+        if (self.globalLipOnVertices - other.globalLipOnVertices)/self.globalLipOnVertices < -0.0001:
+            print("Found a map of smaller global Lip! Now", other.globalLipOnVertices)
             return True
         lhs = [self.localLip[s] if self.localLip[s] > other.localLip[s] else 0 for s in range(len(SIMPLICES))]
         rhs = [other.localLip[s] if other.localLip[s] > self.localLip[s] else 0 for s in range(len(SIMPLICES))]
-        return (max(lhs) < max(rhs))
+        if max(lhs) < max(rhs) - 0.0001:
+            print("Found a tighter map!")
+            return True
+        return False
     
-    def perturb(self, temperature):
+    def perturb(self, temperature, localize):
         y = self.values.copy()
         for v in range(len(VERTICES)):
             if v not in BOUNDARY:
-                local_temp = self.localLipOnVertices[v] * temperature / self.globalLipOnVertices
+                local_temp = temperature
+                if localize:
+                    local_temp = self.localLipOnVertices[v] * local_temp / self.globalLipOnVertices
                 y[v] = gauss(y[v], local_temp)
         return PL.extension(y)
+    
+    def plot(self):
+        # We plot the map.
+        x0 = min([self.values[v][0] for v in range(len(VERTICES))])
+        x1 = max([self.values[v][0] for v in range(len(VERTICES))])
+        y0 = min([self.values[v][1] for v in range(len(VERTICES))])
+        y1 = max([self.values[v][1] for v in range(len(VERTICES))])
 
-def find_tight_map(f, initial_temperature, final_temperature):
+        fig, ax = plt.subplots()
+        ax.set_xlim([x0, x1])
+        ax.set_ylim([y0, y1])
+
+        for s in range(len(SIMPLICES)):
+            y = []
+            for v in range(len(VERTICES)):
+                if v in SIMPLICES[s]:
+                    y.append(self.values[v])
+            p = Polygon(np.array(y), facecolor=colors[s])
+            ax.add_patch(p)
+
+    def deform_tight(self, initial_temperature, final_temperature, intermediate_plot=False):
     # Returns the tight map which agrees with f on BOUNDARY
     # The temperature is the amount we perturb f at a "typical" step.
     # It exponentially decays, so we try smaller perturbations later on.
-    candidate = f
-    temperature = initial_temperature
-    i = 0
-    while temperature > final_temperature:
-        new_candidate = candidate.perturb(temperature)
-        if new_candidate.tighter(candidate):
-            candidate = new_candidate 
-            print("Improvement at step", i, ": Temperature", temperature, ": Lip", candidate.globalLipOnVertices)
-        temperature = 0.999 * temperature
-        i = i + 1
-    return candidate
+        candidate = self
+        
+        # print("First pass: trying to decrease the Lipschitz constant")
+        time = 0
+        most_recent_improvement = 0
+        temperature = initial_temperature
+        while temperature > final_temperature:
+            if time % 2500 == 0:
+                print("Current time:", time, " | Current temperature:", temperature)
+                if intermediate_plot:
+                    candidate.plot()
+            if most_recent_improvement < time - 100:
+                temperature = temperature * 0.999
 
-identity = PL.extension(VERTICES)
+            new_candidate = candidate.perturb(temperature, True)
+            if new_candidate.tighter(candidate):
+                candidate = new_candidate 
+                most_recent_improvement = time
+            time = time + 1
+            
+        # print("Second pass: trying to tighten")
+        # time = 0
+        # most_recent_improvement = 0
+        # temperature = initial_temperature
+        # while temperature > final_temperature:
+        #     if time % 5000 == 0:
+        #         print("Current time:", time, " | Current temperature:", temperature)
+        #     if most_recent_improvement < time - 100:
+        #         temperature = temperature * 0.999
+        #     new_candidate = candidate.perturb(temperature, False)
+        #     if new_candidate.tighter(candidate):
+        #         candidate = new_candidate 
+        #         most_recent_improvement = time
+        #     time = time + 1
 
-# Sanity check:
-# This initial data oscillates wildly on the interior, but agrees with the identity on the boundary.
-# It should converge to a map close to the identity.
-crazy = PL.extension([
-    np.array([0, 0]),
-    np.array([2, 0]),
-    np.array([4, 0]),
-    np.array([6, 0]),
-    np.array([8, 0]),
-    np.array([1, 1.732]),
-    np.array([10, 9]),
-    np.array([6, 0]),
-    np.array([5, 0]),
-    np.array([9, 1.732]),
-    np.array([2, 3.464]),
-    np.array([4, 0]),
-    np.array([15, -2]),
-    np.array([5, -10]),
-    np.array([10, 3.464]),
-    np.array([3, 5.196]),
-    np.array([10, 19]),
-    np.array([12, -10]),
-    np.array([20, -2]),
-    np.array([11, 5.196]),
-    np.array([4, 6.928]),
-    np.array([6, 6.928]),
-    np.array([8, 6.928]),
-    np.array([10, 6.928]),
-    np.array([12, 6.928])
-])
-
-g = find_tight_map(crazy, 1, 0.01)
-print("Lipschitz constant of the tight competitor:", max(g.localLip))
-print("Lipschitz constant of the wildly oscillating map:", max(crazy.localLip))
+        return candidate
