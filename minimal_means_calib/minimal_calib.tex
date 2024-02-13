@@ -1,0 +1,273 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz, wrapfig}
+%\usepackage[T1]{fontenc}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title{Convex duality for $BV$ variational systems, geodesic laminations, and optimal transport}
+\author{Aidan Backus}
+\address{Department of Mathematics, Brown University}
+\email{aidan\_backus@brown.edu}
+\date{\today}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\PD}{PD}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\Teich}{Teich}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\Leaves}{\mathscr L}
+\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\Hypspace}{\mathscr H}
+
+\newcommand{\Chain}{\underline C}
+
+
+\newcommand{\weakto}{\rightharpoonup}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+\newcommand{\Ric}{\mathrm{Ric}}
+
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\diam}{\mathrm{diam}}
+\newcommand{\Ell}{\mathrm{Ell}}
+\newcommand{\inj}{\mathrm{inj}}
+\newcommand{\Lip}{\mathrm{Lip}}
+\newcommand{\MCL}{\mathrm{MCL}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\Mass}{\mathbf M}
+\newcommand{\Comass}{\mathbf L}
+
+\newcommand{\Min}{\mathrm{Min}}
+\newcommand{\Max}{\mathrm{Max}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\cpt}{\mathrm{cpt}}
+
+\DeclareMathOperator*{\essinf}{ess\,inf}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+\newtheorem{claim}{Claim}[theorem]
+\renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+% \newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,giveninits=true]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{minimal_calib.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\begin{abstract}
+    We use the $p$-Laplacian.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+We're going to use the ideas from \cite{górny2022dualitybased}.
+In geometric applications we want to do $BV$ variational problems on currents so restricting to scalar fields like in the reference is a little silly.
+
+Throughout, we assume that $M$ is a compact oriented Riemannian manifold with boundary and dimension $d$.
+We assume that $1 \leq \ell \leq d - 1$.
+
+\begin{definition}
+A \dfn{$BV$ Lagrangian} is a continuous function $\Lagrange(x, \xi)$ on the $\ell$th exterior power $\Omega^\ell$ of the cotangent bundle of $M$, such that:
+\begin{enumerate}
+\item For each $x \in M$, $\Lagrange(x, \cdot)$ is convex.
+\item One has 
+$$|\Lagrange(x, \xi)| \lesssim \Japan \xi.$$
+\item The \dfn{blowup at zero}
+$$\Lagrange_0(x, \xi) := \lim_{t \to 0} t \Lagrange(x, \xi/t)$$
+exists and is continuous. 
+\end{enumerate}
+\end{definition}
+
+\section{The minimizing problem}
+If $T$ is a closed $\ell$-current on $M$, we can decompose
+$$T = \alpha + \dif u$$
+where $\alpha$ is a harmonic $\ell$-form, and $u \in BV(M, \Omega^{\ell - 1})$ vanishes at $\partial M$.
+Note that we absorb all the boundary data into $\alpha$, and in particular we can't see the torsion of the homology.
+We know this is sharp since $H^1(SO(3), \ZZ) = \ZZ/2$ and the torsion geodesic is length-minimizing but clearly not calibrable.
+We specify the boundary data of $T$, by specifying the cohomology class $\alpha$, and the trace $h$ of $u$.
+
+\begin{definition}
+A closed $\ell$-current $T$ is \dfn{$\Lagrange$-minimizing} if for every $v \in BV(M, \Omega^{\ell - 1})$ with $\iota^* v = 0$,
+$$\int_M \Lagrange(T) \leq \int_M \Lagrange(T + \dif v).$$
+\end{definition}
+
+We probably need to relax this formulation.
+
+Let $T^{\rm sing}$ be the singular part of $\dif u$.
+In particular it doesn't see homology.
+$M/\partial M$ isn't quite right in the below. I want whatever Chapter 5.9 of Taylor's PDE 1 says I want.
+
+\begin{definition}
+Let $\alpha$ be a harmonic $\ell$-form with $\iota^* \alpha \in L^1$.
+A closed $\ell$-current $T$ is \dfn{$\Lagrange$-calibrable} cohomologous to $\alpha$ if there exists $F \in L^\infty(M, \Omega^{d - \ell})$ and $u \in BV(M, \RR)$ such that in the sense of subdifferentials,
+\begin{align}
+F &\in \star \partial_\xi \Lagrange(T) \\
+\dif F &= 0 \\
+F \wedge T^{\rm sing} &= \Lagrange_0(T^{\rm sing}) \\
+\alpha + \dif u &= T \\
+\iota^* \dif u &= 0 \\
+\sgn(\iota^* F) &= \sgn(\star_{\partial M} \iota^* \alpha).
+\end{align}
+\end{definition}
+
+By the Fenchel-Rockafellar theorem, $T$ is $\Lagrange$-minimizing iff $T$ is $\Lagrange$-calibrable.
+In particular a solution exists where the boundary condition is interpreted in the relaxed sense, not in the trace sense.
+The boundary condition in the definition of ``calibrable" doesn't quite make sense and I need to work out what it actually is.
+
+Now observe that if $T$ is $\Lagrange(\xi) = |\xi|$ then we can solve for a tight form.
+
+\begin{corollary}
+A mass-minimizing submanifold (for real homology) is calibrable.
+\end{corollary}
+
+Need to explain how this corollary is compatible with \cite{liu2023homologically} which constrains when a manifold is calibrable.
+
+\section{The eigenvalue problem}
+We now do the same thing but instead minimize $\int |T|$ subject to $\int |u| = \lambda$.
+We might be able to incorporate this into the previous problem, by adding $|\int|u| - \lambda|$ to the relaxed $BV$ functional.
+What does this mean for $\dif F$?
+
+\begin{corollary}
+Every Cheeger submanifold is calibrable in the CMC sense.
+\end{corollary}
+
+So we can estimate the isoperimetric constant using calibrations.
+
+\section{Geodesic laminations}
+\begin{corollary}
+    Every closed mass-minimizing $d - 1$-current is Ruelle-Sullivan for a geodesic lamination.
+\end{corollary}
+\begin{proof}
+If $T$ is as given, let $F$ be the dual calibration $1$-form.
+Then $F = \dif v$ for a $\infty$-harmonic function $v$.
+Now use comparison with cones like in \cite{daskalopoulos2020transverse}.
+We then need to prove the Lipschitz regularity but that's the same too.
+\end{proof}
+
+For the eigenvalue problem, we instead get curves of constant geodesic curvature. 
+Can they intersect? What does that look like geometrically?
+
+\begin{corollary}
+Existence of $1$-dimensional canonical laminations.
+\end{corollary}
+
+\begin{corollary}
+Suppose that $\alpha, \beta$ are in the in the same flat of the stable norm sphere for $H_1$.
+Then $\alpha \cdot \beta = 0$.
+\end{corollary}
+
+This seems to have an application to optimal transport(!!) since the reason why G\'orny needs to assume $d = 2$ in \cite{górny2021applications} is so he can interpret $\dif u$ as a mass-minimizing $1$-current.
+Maybe I should email Gorny and ask him if he wants to talk about this.
+
+\printbibliography
+
+\end{document}
