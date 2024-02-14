@@ -17,7 +17,7 @@
 % \setlength{\parskip}{0.05in}
 %\renewcommand{\baselinestretch}{1.05}
 
-\title{Convex duality for $BV$ variational systems, geodesic laminations, and optimal transport}
+\title[$BV$ variational systems and geodesic laminations]{Convex duality for $BV$ variational systems, and geodesic laminations as optimal transporters}
 \author{Aidan Backus}
 \address{Department of Mathematics, Brown University}
 \email{aidan\_backus@brown.edu}
@@ -90,7 +90,10 @@
 \renewcommand{\Im}{\operatorname{Im}}
 
 \newcommand{\loc}{\mathrm{loc}}
+\newcommand{\ac}{\mathrm{ac}}
+\newcommand{\cl}{\mathrm{cl}}
 \newcommand{\cpt}{\mathrm{cpt}}
+\newcommand{\sing}{\mathrm{sing}}
 
 \DeclareMathOperator*{\essinf}{ess\,inf}
 \DeclareMathOperator*{\esssup}{ess\,sup}
@@ -169,55 +172,138 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
-We're going to use the ideas from \cite{górny2022dualitybased}.
+G\'orny and Maz\'on \cite{górny2021applications} studied variational problems whose Lagrangians have linear growth, using convex duality.
+The natural Banach space for such problems is $BV$.
 In geometric applications we want to do $BV$ variational problems on currents so restricting to scalar fields like in the reference is a little silly.
+On the other hand, in optimal control and geometric analysis it turns out that currents cover all the applications.
 
-Throughout, we assume that $M$ is a compact oriented Riemannian manifold with boundary and dimension $d$.
-We assume that $1 \leq \ell \leq d - 1$.
+Throughout, we assume that $M$ is a compact oriented Riemannian manifold with Lipschitz boundary $\partial M$ and dimension $d$.
+We assume that $1 \leq \ell \leq d$, and let $\Omega^\ell$ be the $\ell$th exterior power of the cotangent bundle of $M$.
+Let $\Omega^\ell_\cl$ be the subsheaf of \emph{closed} $\ell$-forms.
 
 \begin{definition}
-A \dfn{$BV$ Lagrangian} is a continuous function $\Lagrange(x, \xi)$ on the $\ell$th exterior power $\Omega^\ell$ of the cotangent bundle of $M$, such that:
+A \dfn{Lagrangian of linear growth} is a continuous function $\Lagrange$ on $\Omega^\ell$ such that:
 \begin{enumerate}
 \item For each $x \in M$, $\Lagrange(x, \cdot)$ is convex.
 \item One has 
 $$|\Lagrange(x, \xi)| \lesssim \Japan \xi.$$
-\item The \dfn{blowup at zero}
-$$\Lagrange_0(x, \xi) := \lim_{t \to 0} t \Lagrange(x, \xi/t)$$
+\item The \dfn{blowdown}
+$$\Lagrange_\infty(x, \xi) := \lim_{\varepsilon \to 0} \varepsilon \Lagrange(x, \xi/\varepsilon)$$
 exists and is continuous. 
 \end{enumerate}
 \end{definition}
 
+The existence of blowdowns is a particularly natural assumption, because we are interested in plugging in a singular measure to $\xi$.
+Clearly this is only possible if $\Lagrange$ is well-behaved at infinity.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The minimizing problem}
-If $T$ is a closed $\ell$-current on $M$, we can decompose
-$$T = \alpha + \dif u$$
-where $\alpha$ is a harmonic $\ell$-form, and $u \in BV(M, \Omega^{\ell - 1})$ vanishes at $\partial M$.
-Note that we absorb all the boundary data into $\alpha$, and in particular we can't see the torsion of the homology.
-We know this is sharp since $H^1(SO(3), \ZZ) = \ZZ/2$ and the torsion geodesic is length-minimizing but clearly not calibrable.
-We specify the boundary data of $T$, by specifying the cohomology class $\alpha$, and the trace $h$ of $u$.
+\subsection{Boundary data}
+To specify a boundary condition, let
+$$j: \partial M \to \overline M$$
+be the inclusion map, and let $N := \overline M/\partial M$, which is a closed oriented manifold.
+\todo{Is this really true?}
+
+\begin{lemma}[Hodge theorem with Dirichlet constraints]
+The cohomology group $H^\ell(N, \RR)$ is naturally isomorphic to the space of $\alpha \in C^\infty(M, \Omega^\ell)$ such that 
+\begin{equation}\label{Dirichlet Hodge Laplacian}
+\begin{cases}
+  (\dif + \dif^*)^2 \alpha = 0 \\
+  j^* \alpha = 0\\
+  j^* (\dif^* \alpha) = 0.
+\end{cases}
+\end{equation}
+\end{lemma}
+\begin{proof}
+By a long exact sequence in Hatcher, $H^\ell(N, \RR)$ is identified with the relative cohomology $H^\ell((M, \partial M), \RR)$, which is then identified with the above space of harmonic $\ell$-forms by \cite[Chapter 5, Proposition 9.9]{taylor2010partial}.
+\end{proof}
+
+Henceforth we think of $H^\ell(N, \RR)$ as the space of solutions of (\ref{Dirichlet Hodge Laplacian}) without comment.
 
 \begin{definition}
-A closed $\ell$-current $T$ is \dfn{$\Lagrange$-minimizing} if for every $v \in BV(M, \Omega^{\ell - 1})$ with $\iota^* v = 0$,
-$$\int_M \Lagrange(T) \leq \int_M \Lagrange(T + \dif v).$$
+The space of \dfn{Dirichlet boundary data} is $H^\ell(N, \RR) \times L^1(\partial M, \Omega^{d - 1})$.
 \end{definition}
 
-We probably need to relax this formulation.
-
-Let $T^{\rm sing}$ be the singular part of $\dif u$.
-In particular it doesn't see homology.
-$M/\partial M$ isn't quite right in the below. I want whatever Chapter 5.9 of Taylor's PDE 1 says I want.
+By the inverse trace theorem, there exists $u \in W^{1, 1}(M, \Omega^\ell)$ with $j^* u = h$.
+However, $W^{1, 1}$ does not have a weakly compact unit ball, so it is necessary to pass to the larger space $BV$.
+This is possible, because the pullback is bounded
+$$j^*: BV(M, \Omega^{\ell - 1}) \to L^1(\partial M, \Omega^{\ell - 1}).$$
 
 \begin{definition}
-Let $\alpha$ be a harmonic $\ell$-form with $\iota^* \alpha \in L^1$.
-A closed $\ell$-current $T$ is \dfn{$\Lagrange$-calibrable} cohomologous to $\alpha$ if there exists $F \in L^\infty(M, \Omega^{d - \ell})$ and $u \in BV(M, \RR)$ such that in the sense of subdifferentials,
+Let
+$$(\alpha, h) \in H^\ell(N, \RR) \times L^1(\partial M, \Omega^{d - 1})$$
+be Dirichlet boundary data.
+The \dfn{competition class} $\mathscr A$ with data $(\alpha, h)$ is the space of all $\ell$-currents $T$ such that there exists $u \in BV(M, \Omega^{\ell - 1})$ such that $j^* u = h$ and
+$$T = \alpha + \dif u.$$
+\end{definition}
+
+Our boundary condition cannot see torsion classes in $H^\ell(N, \ZZ)$.
+But we know that this is necessary: if $M = N = SO(3)$, then $M$ is orientable with a torsion class $\alpha \in H^2(M, \ZZ)$.
+The geodesic representing the Poincar\'e dual of $\alpha$ cannot be calibrated, so the dual formulation of the minimization problem does not make much sense in this context.
+
+\todo{In \cite[Chapter 5, \S9]{taylor2010partial} we learn how to interchange the Dirichlet and Neumann data using the Hodge star.}
+Henceforth we will only consider the Dirichlet problem.
+
+%%%%%%%%%%%%%%%
+\subsection{Minimizers}
+\todo{Define the current $\Lagrange(T)$ using the blowdown.}
+
+Let $(\alpha, h)$ be Dirichlet boundary data, and let $\mathscr A$ be the induced competition class.
+We are interested in minimizing $\int_M \Lagrange(T)$ subject to $T \in \mathscr A$.
+Unfortunately this is not actually possible.
+So, we are going to minimize the relaxed functional
+$$\mathcal F_{\alpha, h}(u) := \int_M \Lagrange(\alpha + \dif u) + \int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat)$$
+subject to the constraint $u \in L^2(M, \Omega^{\ell - 1})$.
+
+%%%%%%%%%%%%%%
+\subsection{Calibration of solutions}
+Let $(\alpha, h)$ be Dirichlet boundary data for the Lagrangian of linear growth $\Lagrange$.
+
+\begin{definition}
+A form $u \in L^2(M, \Omega^{\ell - 1})$ is \dfn{$\Lagrange$-calibrable} subject to the boundary condition $(\alpha, h)$ if there exists $F \in L^\infty(M, \Omega^{d - \ell}_{\rm cl})$ such that:
 \begin{align}
-F &\in \star \partial_\xi \Lagrange(T) \\
-\dif F &= 0 \\
-F \wedge T^{\rm sing} &= \Lagrange_0(T^{\rm sing}) \\
-\alpha + \dif u &= T \\
-\iota^* \dif u &= 0 \\
-\sgn(\iota^* F) &= \sgn(\star_{\partial M} \iota^* \alpha).
+&F \in \partial_\xi \Lagrange(\alpha + \dif u^\ac), \label{calibration is a subgradient} \\
+&F \wedge \dif u^{\rm sing} = \Lagrange_\infty(\dif u^\sing), \label{calibration of singular part} \\
+&\Lagrange_\infty((h - u) \wedge \normal^\flat) = (h - u) \wedge F.\label{calibration of boundary condition}
 \end{align}
+We call $F$ a \dfn{$\Lagrange$-calibration} of $u$.
 \end{definition}
+
+\todo{Show that 
+$$j^*(u \wedge F) \leq \Lagrange_\infty(u \wedge \normal^\flat)$$
+}
+
+\todo{Redo all this to allow for subdifferentials, so we can do the parabolic and eigenvalue problems easily.}
+
+\begin{lemma}
+If $u$ is $\Lagrange$-calibrable subject to the boundary condition $(\alpha, h)$, then $u$ minimizes $\mathcal F_{\alpha, h}$.
+\end{lemma}
+\begin{proof}
+Let $F$ be a $\Lagrange$-calibration of $u$, and let $w \in L^2(M, \Omega^{\ell - 1})$ be a competitor.
+By an approximation argument, we may assume that $w$ is smooth.
+We use $\dif F = 0$ to integrate by parts:
+\begin{align*}
+0 
+&= (-1)^\ell \int_M (w - u) \wedge \dif F \\
+&= \int_M \dif(w - u) \wedge F - \int_{\partial M} (w - u) \wedge F \\
+&= \int_M (\dif w - \dif u^\ac) \wedge F - \int_M \dif u^\sing \wedge F + \int_{\partial M} (h - w) \wedge F - \int_{\partial M} (h - u) \wedge F \\
+&= \mathbf I - \mathbf{II} + \mathbf{III} - \mathbf{IV}.
+\end{align*}
+We then use (\ref{calibration is a subgradient}), (\ref{calibration of singular part}), ???, and (\ref{calibration of boundary condition}) respectively to compute:
+\begin{align*}
+\mathbf I &\leq \int_M \Lagrange(\alpha + \dif w) - \Lagrange(\alpha + \dif u^\ac), \\
+-\mathbf{II} &= -\int_M \Lagrange_\infty(\dif u^\sing), \\ 
+\mathbf{III} &\leq \int_{\partial M} \Lagrange_\infty((h - w) \wedge \normal^\flat), \\
+-\mathbf{IV} &= -\int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat).
+\end{align*}
+Adding up these terms and grouping in terms involving $w$ and terms involving $u$, we conclude 
+\begin{align*}
+0 
+&\leq \int_M \Lagrange(\alpha + \dif w) + \int_{\partial M} \Lagrange_\infty((h - w) \wedge \normal^\flat) \\
+&\qquad - \int_M \Lagrange(\alpha + \dif u^\ac) - \int_M \Lagrange_\infty(\dif u^\sing) - \int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat) \\
+&= \mathcal F_{\alpha, h}(w) - \mathcal F_{\alpha, h}(u). \qedhere
+\end{align*}
+\end{proof}
 
 By the Fenchel-Rockafellar theorem, $T$ is $\Lagrange$-minimizing iff $T$ is $\Lagrange$-calibrable.
 In particular a solution exists where the boundary condition is interpreted in the relaxed sense, not in the trace sense.
@@ -265,8 +351,19 @@ Suppose that $\alpha, \beta$ are in the in the same flat of the stable norm sphe
 Then $\alpha \cdot \beta = 0$.
 \end{corollary}
 
+Unfortunately this last corollary isn't very interesting, because if $d = 2$ it's known and if $d \geq 3$ then you should always be able to perturb the geodesics so they don't intersect.
+On the other hand, if $d \geq 3$ then maybe we can conclude that the canonical laminations are all disjoint, and so we get a master geodesic lamination of sorts containing ALL of the calibrated laminations.
+
 This seems to have an application to optimal transport(!!) since the reason why G\'orny needs to assume $d = 2$ in \cite{górny2021applications} is so he can interpret $\dif u$ as a mass-minimizing $1$-current.
 Maybe I should email Gorny and ask him if he wants to talk about this.
+
+Can we use the same ideas as the proof of regularity of optimal transport in higher dimensions as well, to get regularity theorems for lots of $BV$ problems?
+
+Can we use the dual problem in higher dimensions to show that a minimizing $k$-current has minimizing level sets?
+
+Sometimes, like in my work with Aaron Kennon, you can show that there are smooth solutions of the (global, not local) dual problem using a heat flow.
+When can we do this?
+When can we, as in Auer--Bangert '06, use this to get regularity for the $BV$ minimizer?
 
 \printbibliography
 
