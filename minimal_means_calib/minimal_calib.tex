@@ -1,0 +1,370 @@
+\documentclass[reqno,11pt]{amsart}
+\usepackage[letterpaper, margin=1in]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,graphicx,mathrsfs,url,slashed,subcaption}
+\RequirePackage[usenames,dvipsnames]{xcolor}
+\RequirePackage[colorlinks=true,linkcolor=Red,citecolor=Green]{hyperref}
+\RequirePackage{amsxtra}
+\usepackage{cancel}
+\usepackage{tikz, wrapfig}
+%\usepackage[T1]{fontenc}
+
+% \setlength{\textheight}{9.3in} \setlength{\oddsidemargin}{-0.25in}
+% \setlength{\evensidemargin}{-0.25in} \setlength{\textwidth}{7in}
+% \setlength{\topmargin}{-0.25in} \setlength{\headheight}{0.18in}
+% \setlength{\marginparwidth}{1.0in}
+% \setlength{\abovedisplayskip}{0.2in}
+% \setlength{\belowdisplayskip}{0.2in}
+% \setlength{\parskip}{0.05in}
+%\renewcommand{\baselinestretch}{1.05}
+
+\title[$BV$ variational systems and geodesic laminations]{Convex duality for $BV$ variational systems, and geodesic laminations as optimal transporters}
+\author{Aidan Backus}
+\address{Department of Mathematics, Brown University}
+\email{aidan\_backus@brown.edu}
+\date{\today}
+
+\newcommand{\NN}{\mathbf{N}}
+\newcommand{\ZZ}{\mathbf{Z}}
+\newcommand{\QQ}{\mathbf{Q}}
+\newcommand{\RR}{\mathbf{R}}
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\DD}{\mathbf{D}}
+\newcommand{\PP}{\mathbf P}
+\newcommand{\MM}{\mathbf M}
+\newcommand{\II}{\mathbf I}
+\newcommand{\Hyp}{\mathbf H}
+\newcommand{\Sph}{\mathbf S}
+\newcommand{\Group}{\mathbf G}
+\newcommand{\GL}{\mathbf{GL}}
+\newcommand{\Orth}{\mathbf{O}}
+\newcommand{\SpOrth}{\mathbf{SO}}
+\newcommand{\Ball}{\mathbf{B}}
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\PD}{PD}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\Teich}{Teich}
+\DeclareMathOperator{\tr}{tr}
+
+\newcommand{\Leaves}{\mathscr L}
+\newcommand{\Lagrange}{\mathscr L}
+\newcommand{\Hypspace}{\mathscr H}
+
+\newcommand{\Chain}{\underline C}
+
+
+\newcommand{\weakto}{\rightharpoonup}
+
+\newcommand{\Two}{\mathrm{I\!I}}
+\newcommand{\Ric}{\mathrm{Ric}}
+
+\newcommand{\normal}{\mathbf n}
+\newcommand{\radial}{\mathbf r}
+\newcommand{\evect}{\mathbf e}
+\newcommand{\vol}{\mathrm{vol}}
+
+\newcommand{\diam}{\mathrm{diam}}
+\newcommand{\Ell}{\mathrm{Ell}}
+\newcommand{\inj}{\mathrm{inj}}
+\newcommand{\Lip}{\mathrm{Lip}}
+\newcommand{\MCL}{\mathrm{MCL}}
+\newcommand{\sgn}{\mathrm{sgn}}
+\newcommand{\Riem}{\mathrm{Riem}}
+
+\newcommand{\Mass}{\mathbf M}
+\newcommand{\Comass}{\mathbf L}
+
+\newcommand{\Min}{\mathrm{Min}}
+\newcommand{\Max}{\mathrm{Max}}
+
+\newcommand{\dfn}[1]{\emph{#1}\index{#1}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newcommand{\loc}{\mathrm{loc}}
+\newcommand{\ac}{\mathrm{ac}}
+\newcommand{\cl}{\mathrm{cl}}
+\newcommand{\cpt}{\mathrm{cpt}}
+\newcommand{\sing}{\mathrm{sing}}
+
+\DeclareMathOperator*{\essinf}{ess\,inf}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+
+\def\Japan#1{\left \langle #1 \right \rangle}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{badtheorem}[theorem]{``Theorem"}
+\newtheorem{prop}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{sublemma}[theorem]{Sublemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{assumption}[theorem]{Assumption}
+
+\newtheorem{mainthm}{Theorem}
+\renewcommand{\themainthm}{\Alph{mainthm}}
+
+\newtheorem{claim}{Claim}[theorem]
+\renewcommand{\theclaim}{\thetheorem\Alph{claim}}
+% \newtheorem*{claim}{Claim}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{warning}[theorem]{Warning}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{notation}[theorem]{Notation}
+
+\newtheorem{exercise}[theorem]{Discussion topic}
+\newtheorem{homework}[theorem]{Homework}
+\newtheorem{problem}[theorem]{Problem}
+
+\makeatletter
+\newcommand{\proofpart}[2]{%
+  \par
+  \addvspace{\medskipamount}%
+  \noindent\emph{Part #1: #2.}
+}
+\makeatother
+
+
+
+\numberwithin{equation}{section}
+
+
+% Mean
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+\vcenter{\hbox{$#2#3$ }}\kern-.6\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\usepackage[backend=bibtex,style=alphabetic,giveninits=true]{biblatex}
+\renewcommand*{\bibfont}{\normalfont\footnotesize}
+\addbibresource{minimal_calib.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\newcommand\todo[1]{\textcolor{red}{TODO: #1}}
+
+
+\begin{document}
+\begin{abstract}
+    We use the $p$-Laplacian.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+G\'orny and Maz\'on \cite{górny2021applications} studied variational problems whose Lagrangians have linear growth, using convex duality.
+The natural Banach space for such problems is $BV$.
+In geometric applications we want to do $BV$ variational problems on currents so restricting to scalar fields like in the reference is a little silly.
+On the other hand, in optimal control and geometric analysis it turns out that currents cover all the applications.
+
+Throughout, we assume that $M$ is a compact oriented Riemannian manifold with Lipschitz boundary $\partial M$ and dimension $d$.
+We assume that $1 \leq \ell \leq d$, and let $\Omega^\ell$ be the $\ell$th exterior power of the cotangent bundle of $M$.
+Let $\Omega^\ell_\cl$ be the subsheaf of \emph{closed} $\ell$-forms.
+
+\begin{definition}
+A \dfn{Lagrangian of linear growth} is a continuous function $\Lagrange$ on $\Omega^\ell$ such that:
+\begin{enumerate}
+\item For each $x \in M$, $\Lagrange(x, \cdot)$ is convex.
+\item One has 
+$$|\Lagrange(x, \xi)| \lesssim \Japan \xi.$$
+\item The \dfn{blowdown}
+$$\Lagrange_\infty(x, \xi) := \lim_{\varepsilon \to 0} \varepsilon \Lagrange(x, \xi/\varepsilon)$$
+exists and is continuous. 
+\end{enumerate}
+\end{definition}
+
+The existence of blowdowns is a particularly natural assumption, because we are interested in plugging in a singular measure to $\xi$.
+Clearly this is only possible if $\Lagrange$ is well-behaved at infinity.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The minimizing problem}
+\subsection{Boundary data}
+To specify a boundary condition, let
+$$j: \partial M \to \overline M$$
+be the inclusion map, and let $N := \overline M/\partial M$, which is a closed oriented manifold.
+\todo{Is this really true?}
+
+\begin{lemma}[Hodge theorem with Dirichlet constraints]
+The cohomology group $H^\ell(N, \RR)$ is naturally isomorphic to the space of $\alpha \in C^\infty(M, \Omega^\ell)$ such that 
+\begin{equation}\label{Dirichlet Hodge Laplacian}
+\begin{cases}
+  (\dif + \dif^*)^2 \alpha = 0 \\
+  j^* \alpha = 0\\
+  j^* (\dif^* \alpha) = 0.
+\end{cases}
+\end{equation}
+\end{lemma}
+\begin{proof}
+By a long exact sequence in Hatcher, $H^\ell(N, \RR)$ is identified with the relative cohomology $H^\ell((M, \partial M), \RR)$, which is then identified with the above space of harmonic $\ell$-forms by \cite[Chapter 5, Proposition 9.9]{taylor2010partial}.
+\end{proof}
+
+Henceforth we think of $H^\ell(N, \RR)$ as the space of solutions of (\ref{Dirichlet Hodge Laplacian}) without comment.
+
+\begin{definition}
+The space of \dfn{Dirichlet boundary data} is $H^\ell(N, \RR) \times L^1(\partial M, \Omega^{d - 1})$.
+\end{definition}
+
+By the inverse trace theorem, there exists $u \in W^{1, 1}(M, \Omega^\ell)$ with $j^* u = h$.
+However, $W^{1, 1}$ does not have a weakly compact unit ball, so it is necessary to pass to the larger space $BV$.
+This is possible, because the pullback is bounded
+$$j^*: BV(M, \Omega^{\ell - 1}) \to L^1(\partial M, \Omega^{\ell - 1}).$$
+
+\begin{definition}
+Let
+$$(\alpha, h) \in H^\ell(N, \RR) \times L^1(\partial M, \Omega^{d - 1})$$
+be Dirichlet boundary data.
+The \dfn{competition class} $\mathscr A$ with data $(\alpha, h)$ is the space of all $\ell$-currents $T$ such that there exists $u \in BV(M, \Omega^{\ell - 1})$ such that $j^* u = h$ and
+$$T = \alpha + \dif u.$$
+\end{definition}
+
+Our boundary condition cannot see torsion classes in $H^\ell(N, \ZZ)$.
+But we know that this is necessary: if $M = N = SO(3)$, then $M$ is orientable with a torsion class $\alpha \in H^2(M, \ZZ)$.
+The geodesic representing the Poincar\'e dual of $\alpha$ cannot be calibrated, so the dual formulation of the minimization problem does not make much sense in this context.
+
+\todo{In \cite[Chapter 5, \S9]{taylor2010partial} we learn how to interchange the Dirichlet and Neumann data using the Hodge star.}
+Henceforth we will only consider the Dirichlet problem.
+
+%%%%%%%%%%%%%%%
+\subsection{Minimizers}
+\todo{Define the current $\Lagrange(T)$ using the blowdown.}
+
+Let $(\alpha, h)$ be Dirichlet boundary data, and let $\mathscr A$ be the induced competition class.
+We are interested in minimizing $\int_M \Lagrange(T)$ subject to $T \in \mathscr A$.
+Unfortunately this is not actually possible.
+So, we are going to minimize the relaxed functional
+$$\mathcal F_{\alpha, h}(u) := \int_M \Lagrange(\alpha + \dif u) + \int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat)$$
+subject to the constraint $u \in L^2(M, \Omega^{\ell - 1})$.
+
+%%%%%%%%%%%%%%
+\subsection{Calibration of solutions}
+Let $(\alpha, h)$ be Dirichlet boundary data for the Lagrangian of linear growth $\Lagrange$.
+
+\begin{definition}
+A form $u \in L^2(M, \Omega^{\ell - 1})$ is \dfn{$\Lagrange$-calibrable} subject to the boundary condition $(\alpha, h)$ if there exists $F \in L^\infty(M, \Omega^{d - \ell}_{\rm cl})$ such that:
+\begin{align}
+&F \in \partial_\xi \Lagrange(\alpha + \dif u^\ac), \label{calibration is a subgradient} \\
+&F \wedge \dif u^{\rm sing} = \Lagrange_\infty(\dif u^\sing), \label{calibration of singular part} \\
+&\Lagrange_\infty((h - u) \wedge \normal^\flat) = (h - u) \wedge F.\label{calibration of boundary condition}
+\end{align}
+We call $F$ a \dfn{$\Lagrange$-calibration} of $u$.
+\end{definition}
+
+\todo{Show that 
+$$j^*(u \wedge F) \leq \Lagrange_\infty(u \wedge \normal^\flat)$$
+}
+
+\todo{Redo all this to allow for subdifferentials, so we can do the parabolic and eigenvalue problems easily.}
+
+\begin{lemma}
+If $u$ is $\Lagrange$-calibrable subject to the boundary condition $(\alpha, h)$, then $u$ minimizes $\mathcal F_{\alpha, h}$.
+\end{lemma}
+\begin{proof}
+Let $F$ be a $\Lagrange$-calibration of $u$, and let $w \in L^2(M, \Omega^{\ell - 1})$ be a competitor.
+By an approximation argument, we may assume that $w$ is smooth.
+We use $\dif F = 0$ to integrate by parts:
+\begin{align*}
+0 
+&= (-1)^\ell \int_M (w - u) \wedge \dif F \\
+&= \int_M \dif(w - u) \wedge F - \int_{\partial M} (w - u) \wedge F \\
+&= \int_M (\dif w - \dif u^\ac) \wedge F - \int_M \dif u^\sing \wedge F + \int_{\partial M} (h - w) \wedge F - \int_{\partial M} (h - u) \wedge F \\
+&= \mathbf I - \mathbf{II} + \mathbf{III} - \mathbf{IV}.
+\end{align*}
+We then use (\ref{calibration is a subgradient}), (\ref{calibration of singular part}), ???, and (\ref{calibration of boundary condition}) respectively to compute:
+\begin{align*}
+\mathbf I &\leq \int_M \Lagrange(\alpha + \dif w) - \Lagrange(\alpha + \dif u^\ac), \\
+-\mathbf{II} &= -\int_M \Lagrange_\infty(\dif u^\sing), \\ 
+\mathbf{III} &\leq \int_{\partial M} \Lagrange_\infty((h - w) \wedge \normal^\flat), \\
+-\mathbf{IV} &= -\int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat).
+\end{align*}
+Adding up these terms and grouping in terms involving $w$ and terms involving $u$, we conclude 
+\begin{align*}
+0 
+&\leq \int_M \Lagrange(\alpha + \dif w) + \int_{\partial M} \Lagrange_\infty((h - w) \wedge \normal^\flat) \\
+&\qquad - \int_M \Lagrange(\alpha + \dif u^\ac) - \int_M \Lagrange_\infty(\dif u^\sing) - \int_{\partial M} \Lagrange_\infty((h - u) \wedge \normal^\flat) \\
+&= \mathcal F_{\alpha, h}(w) - \mathcal F_{\alpha, h}(u). \qedhere
+\end{align*}
+\end{proof}
+
+By the Fenchel-Rockafellar theorem, $T$ is $\Lagrange$-minimizing iff $T$ is $\Lagrange$-calibrable.
+In particular a solution exists where the boundary condition is interpreted in the relaxed sense, not in the trace sense.
+The boundary condition in the definition of ``calibrable" doesn't quite make sense and I need to work out what it actually is.
+
+Now observe that if $T$ is $\Lagrange(\xi) = |\xi|$ then we can solve for a tight form.
+
+\begin{corollary}
+A mass-minimizing submanifold (for real homology) is calibrable.
+\end{corollary}
+
+Need to explain how this corollary is compatible with \cite{liu2023homologically} which constrains when a manifold is calibrable.
+
+\section{The eigenvalue problem}
+We now do the same thing but instead minimize $\int |T|$ subject to $\int |u| = \lambda$.
+We might be able to incorporate this into the previous problem, by adding $|\int|u| - \lambda|$ to the relaxed $BV$ functional.
+What does this mean for $\dif F$?
+
+\begin{corollary}
+Every Cheeger submanifold is calibrable in the CMC sense.
+\end{corollary}
+
+So we can estimate the isoperimetric constant using calibrations.
+
+\section{Geodesic laminations}
+\begin{corollary}
+    Every closed mass-minimizing $d - 1$-current is Ruelle-Sullivan for a geodesic lamination.
+\end{corollary}
+\begin{proof}
+If $T$ is as given, let $F$ be the dual calibration $1$-form.
+Then $F = \dif v$ for a $\infty$-harmonic function $v$.
+Now use comparison with cones like in \cite{daskalopoulos2020transverse}.
+We then need to prove the Lipschitz regularity but that's the same too.
+\end{proof}
+
+For the eigenvalue problem, we instead get curves of constant geodesic curvature. 
+Can they intersect? What does that look like geometrically?
+
+\begin{corollary}
+Existence of $1$-dimensional canonical laminations.
+\end{corollary}
+
+\begin{corollary}
+Suppose that $\alpha, \beta$ are in the in the same flat of the stable norm sphere for $H_1$.
+Then $\alpha \cdot \beta = 0$.
+\end{corollary}
+
+Unfortunately this last corollary isn't very interesting, because if $d = 2$ it's known and if $d \geq 3$ then you should always be able to perturb the geodesics so they don't intersect.
+On the other hand, if $d \geq 3$ then maybe we can conclude that the canonical laminations are all disjoint, and so we get a master geodesic lamination of sorts containing ALL of the calibrated laminations.
+
+This seems to have an application to optimal transport(!!) since the reason why G\'orny needs to assume $d = 2$ in \cite{górny2021applications} is so he can interpret $\dif u$ as a mass-minimizing $1$-current.
+Maybe I should email Gorny and ask him if he wants to talk about this.
+
+Can we use the same ideas as the proof of regularity of optimal transport in higher dimensions as well, to get regularity theorems for lots of $BV$ problems?
+
+Can we use the dual problem in higher dimensions to show that a minimizing $k$-current has minimizing level sets?
+
+Sometimes, like in my work with Aaron Kennon, you can show that there are smooth solutions of the (global, not local) dual problem using a heat flow.
+When can we do this?
+When can we, as in Auer--Bangert '06, use this to get regularity for the $BV$ minimizer?
+
+\printbibliography
+
+\end{document}
