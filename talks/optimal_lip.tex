@@ -1,0 +1,281 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[10pt]{beamer}
+
+% \usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb,mathrsfs}
+\usepackage{tikz}
+\usepackage{wrapfig}
+\usepackage{cjhebrew}
+% \usepackage[shortlabels]{itemize}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{arrows}
+
+\title{Optimal Lipschitz Extension Problem}
+\author{Aidan Backus}
+
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\QQ}{\mathbb{Q}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+
+
+\newcommand*\dif{\mathop{}\!\mathrm{d}}
+\DeclareMathOperator*{\argmin}{argmin}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\hull}{hull}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Exc}{Exc}
+\DeclareMathOperator*{\Expect}{\mathbf E}
+\newcommand{\normal}{\vec n}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\newcommand{\Spec}{\operatorname{Spec}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\newtheorem{theoremconjecture}{Theorem-Conjecture}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{proposition}{Proposition}
+\newtheorem{question}{Question}
+
+\usepackage[backend=bibtex,style=alphabetic,maxcitenames=50,maxnames=50]{biblatex}
+\addbibresource{ultrapowerful.bib}
+\renewbibmacro{in:}{}
+\DeclareFieldFormat{pages}{#1}
+
+\usetheme{AnnArbor}
+\usecolortheme{dove}
+
+% \setbeamertemplate{itemize item}{\usebeamerfont*{itemize item}\raise1.25pt\hbox{\donotcoloroutermaths$\bullet$}}
+% \setbeamertemplate{itemize subitem}[triangle]
+% \setbeamertemplate{itemize subsubitem}[square]
+
+\begin{document}
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+\begin{frame}{Lipschitz maps}
+\begin{definition}
+Let $f: X \to Y$ be a mapping between metric spaces and $A \subseteq X$ a set.
+The \emph{Lipschitz constant} of $f$ on $A$ is
+$$\Lip(f, A) := \sup_{x, y \in A} \frac{\dist_Y(f(x), f(y))}{\dist_X(x, y)}.$$
+\end{definition}
+\pause 
+\begin{problem}
+Given a set of Lipschitz mappings $\mathscr F$, find one which is ``optimal''.
+\end{problem}
+\end{frame}
+
+\begin{frame}{Motivation from Teichm\"uller theory}
+\begin{itemize}
+\item Let $S$ be a closed surface of Euler characteristic $\chi \leq -2$. \pause
+\begin{itemize}
+\item By the Gauss-Bonnet theorem, any Riemannian metric $g$ on $S$ with curvature $K_g$ satisfies 
+$$\int_S K_g ~\dif A_g = 2\pi \chi \leq -4\pi,$$
+so it is natural to look for $g$ with $K_g = -1$ -- in other words $g$ is \emph{hyperbolic}.
+\item There are too many hyperbolic metrics, so we search for a way to understand them en masse. \pause
+\end{itemize}
+\item If $g, h$ are hyperbolic metrics, their \emph{Thurston distance} is
+$$\dist(g, h) = \inf_{f \sim \id_S} \log \Lip_{(S, g) \to (S, h)}(f, S).$$
+\begin{itemize}
+\item This metric encodes how geodesics on $(S, g)$ deform when $g$ is deformed (Thurston '86, Papadopoulos '15, Gu\'eritaud and Kassel '17, Daskalopoulos and Uhlenbeck '24...) 
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The Kirszbraun-Valentine theorem}
+\begin{itemize}
+\item We're going to focus on euclidean space in these lectures.
+\begin{itemize}
+\item Many of these results extend to Riemannian manifolds, and in particular have applications to understanding deformations of hyperbolic surfaces. \pause
+\end{itemize}
+\item First attempt: Find a Lipschitz mapping which minimizes its Lipschitz constant. \pause
+\end{itemize}
+'
+\begin{theorem}[Kirszbraun-Valentine theorem]
+Let $K$ be a compact subset of $\RR^d$ and $f: K \to \RR^D$ a Lipschitz mapping.
+Then there exists $u: \RR^d \to \RR^D$ such that: \pause
+\begin{itemize}
+\item $u|_K = f$, \pause
+\item and $\Lip(u, \RR^d) = \Lip(f, K)$.
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Proving the Kirszbraun-Valentine theorem}
+\begin{lemma}[Gu\'erituad and Kassel '17]
+Let $K$ be a compact subset of $\RR^d$, $f: K \to \RR^D$ a Lipschitz mapping, and $x \notin K$.
+For each $\xi \in \RR^D$, let 
+$$\varphi(\xi) := \max_{y \in K} \frac{|\xi - f(y)|}{|x - y|}.$$
+\pause Then there exists a minimum $\xi^*$ of $\varphi$.
+\pause Moreover, if $K'$ is the set of all $y \in K$ such that $|\xi - f(y)| = \varphi(\xi^*) |x - y|$, then $\xi^* \in \hull(f(K'))$, and: \pause
+\begin{itemize}
+    \item either there exist $y_1, y_2 \in K'$ such that
+    $$0 \leq \angle (y_1, x, y_2) < \angle(f(y_1), \xi^*, f(y_2)) \leq \pi,$$
+    \item or there exists a Borel probability measure $\nu$ on $K'$ such that: \pause
+    \begin{itemize}
+    \item $\xi^* \in \hull(\supp \nu)$,
+    \item and for $\nu$-almost every $y_1, y_2 \in K'$,
+    $$\angle(y_1, p, y_2) = \angle(f(y_1), \xi^*, f(y_2)).$$
+    \end{itemize}
+\end{itemize}
+\end{lemma}
+\end{frame}
+
+\begin{frame}{Proving the Kirszbraun-Valentine theorem}
+\begin{lemma}
+Let $K$ be a compact subset of $\RR^d$, $f: K \to \RR^D$ a Lipschitz mapping, and $x \notin K$.
+Then
+$$\min_{\xi \in \RR^d} \max_{y \in K} \frac{|\xi - f(y)|}{|x - y|} \leq \Lip(f, K).$$
+\end{lemma} \pause
+
+\begin{itemize}
+\item We prove the Kirszbraun-Valentine theorem by iterating this lemma. \pause
+\item Since the only property of euclidean geometry that we used is triangle comparison, this can be made to work in more general metric spaces with bounds on their Alexandrov curvature.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A failure of uniqueness}
+\begin{itemize}
+\item An example of nonuniqueness\dots 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Absolutely minimizing Lipschitz mappings}
+\begin{itemize}
+\item The problem is that variational problems defined by integrals already locally minimize, but not $L^\infty$ variational problems. \pause
+\item Second attempt: Try a more localized version of the Lipschitz minimization property. \pause
+\end{itemize}
+
+\begin{definition}
+Let $U \subseteq \RR^d$ be an open set.
+A mapping $u: U \to \RR^D$ is \emph{absolutely minimizing Lipschitz} (\emph{AML}) if \pause
+\begin{itemize}
+\item for every open set $V \subseteq \RR^d$ of sufficiently small diameter, \pause
+\item and every $v: V \to \RR^D$ with $\Lip(v, \partial V) = \Lip(u, \partial V)$, \pause
+\end{itemize}
+one has
+$$\Lip(u, V) \leq \Lip(v, V).$$
+\end{definition}
+\end{frame}
+
+\begin{frame}{Well-posedness of AML scalar fields}
+\begin{itemize}
+\item In general, AML mappings are too hard, but AML scalar fields are easier. \pause
+\item Recall the $p$-Laplacian 
+$$\Delta_p u := \nabla \cdot (|\nabla u|^{p - 2} \nabla u) = 0$$
+whose solutions minimize $\|\nabla u\|_{L^p}$. \pause
+\item Aronsson '67: Since $\|\nabla u\|_{L^p} \to \Lip(u, U)$ as $p \to \infty$, study $p$-harmonic functions as $p \to \infty$. \pause
+\end{itemize}
+
+\begin{theorem}[Jensen '93]
+Let $U \subseteq \RR^d$ be an open set with Lipschitz boundary, and $f: \partial U \to \RR$ a Lipschitz function. Then: \pause
+\begin{itemize}
+\item There is a unique AML function $u: U \to \RR$ such that $u|_{\partial U} = f$. \pause
+\item Let $u_p$ be the unique solution of 
+$$\begin{cases}\Delta_p u_p = 0 \\ u_p|_{\partial U} = f \end{cases}.$$
+Then $u_p \to u$ in $C^0$ as $p \to \infty$.
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{The $\infty$-Laplacian}
+\begin{itemize}
+\item The $p$-Laplacian is quasilinear and its solutions are only $C^{1 + \alpha}$.
+\begin{itemize}
+\item In Aronsson's time, the $p$-Laplacian could only be understood in divergence form: for every $\varphi \in C^\infty_c(U)$,
+$$\int_U \langle \nabla \varphi, |\nabla u|^{p - 2} \nabla u\rangle \dif V = 0.$$
+\end{itemize}
+\item Pretend for a moment that we could legally write the $p$-Laplacian in nondivergence form 
+$$(p - 2) |\nabla u|^{p - 4} \langle \nabla^2 u, \nabla u \otimes \nabla u\rangle + |\nabla u|^{p - 2} \Delta u = 0.$$
+Renormalize and take $p \to \infty$ to find the limiting PDE: \pause
+\end{itemize} 
+
+\begin{definition}
+The \emph{$\infty$-Laplacian} is the PDE 
+$$\Delta_\infty u := \langle \nabla^2 u, \nabla u \otimes \nabla u\rangle = 0.$$
+\end{definition}
+\end{frame}
+
+\begin{frame}{The $\infty$-Laplacian is a horrible PDE}
+\begin{itemize}
+\item According to Aronsson, to understand AML functions we need to understand the $\infty$-Laplacian 
+$$\Delta_\infty u := \langle \nabla^2 u, \nabla u \otimes \nabla u\rangle = 0.$$
+\item $\Delta_\infty$ is totally nonlinear, and only elliptic in the $\nabla u$ direction. \pause 
+\begin{itemize}
+\item So $u$ should not have much more regularity than Lipschitz. \pause
+\item $x^{4/3} - y^{4/3}$ is AML, but is only $C^{1 + 1/3}$. \pause
+\item According to Evans and Smart '11, in $d = 2$ you should think of $\Delta_\infty$ as a totally nonlinear parabolic PDE where the timelike direction is the measurable vector field $\nabla u$. \pause
+\end{itemize}
+\item We cannot define solutions using integration by parts. \pause
+\begin{itemize}
+\item $\Delta_\infty$ cannot be written in divergence form. \pause
+\item So Aronsson got stuck here.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The miracle on the viscosity-ula}
+\begin{itemize}
+\item The correct solution concept was introduced by Crandall, Evans, and Lions '84 in their work on Hamilton-Jacobi equations. \pause
+\item Too hard to motivate for the $\infty$-Laplacian a priori, so let's do it for inviscid Burgers' equation first:
+$$\partial_t u + u \partial_x u = 0.$$
+This has way too many solutions! \pause 
+\item The physically correct solutions are $C^0$ limits of the viscous problem 
+$$\partial_t u + u \partial_x u = \varepsilon \partial_x^2 u.$$
+This is a semilinear parabolic PDE, so it satisfies the maximum principle: \pause
+\begin{itemize}
+\item If $v \in C^2$ and $u - v$ has a local maximum at $(x_*, t_*)$, then
+$$\partial_t v(x_*, t_*) + v(x_*, t_*) \partial_x v(x_*, t_*) \leq \varepsilon \partial_x^2 v(x_*, t_*).$$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Viscosity solutions of inviscid Burgers}
+\begin{itemize}
+\item The maximum principle is a result about pointwise comparison, so it's preserved by $C^0$ limits. \pause
+\item So, if $u$ is a solution of inviscid Burgers which is physically meaningful, it is a viscosity solution: \pause
+\end{itemize}
+
+\begin{definition}
+Let $u \in C^0((-T, T) \times \RR)$. We say that $u$ is a \emph{viscosity solution of inviscid Burgers' equation} if, for every $v \in C^1((-T, T) \times \RR)$: \pause 
+\begin{itemize}
+\item If $u - v$ has a local maximum at $(x_*, t_*)$, then
+$$\partial_t v(x_*, t_*) + v(x_*, t_*) \partial_x v(x_*, t_*) \leq 0.$$
+\item If $u - v$ has a local minimum at $(x_*, t_*)$, then 
+$$\partial_t v(x_*, t_*) + v(x_*, t_*) \partial_x v(x_*, t_*) \geq 0.$$
+\end{itemize}
+\end{definition}
+\end{frame}
+
+\begin{frame}{Viscosity solutions of the $\infty$-Laplacian}
+\begin{itemize}
+\item The $p$-Laplacian is a quasilinear elliptic PDE, so it satisfies the maximum principle. \pause 
+\end{itemize}
+
+\begin{definition}
+Let $u \in C^0((-T, T) \times \RR)$. We say that $u$ is a \emph{viscosity solution of the $\infty$-Laplacian}, or simply that $u$ is \emph{$\infty$-harmonic}, if, for every $v \in C^2((-T, T) \times \RR)$: \pause 
+\begin{itemize}
+    \item If $u - v$ has a local maximum at $(x_*, t_*)$, then
+    $$\Delta_\infty v(x_*, t_*) \geq 0.$$
+    \item If $u - v$ has a local minimum at $(x_*, t_*)$, then 
+    $$\Delta_\infty v(x_*, t_*) \leq 0.$$
+\end{itemize}
+\end{definition}
+\end{frame}
+
+\end{document}
