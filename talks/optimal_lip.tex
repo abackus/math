@@ -34,6 +34,7 @@
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\Lip}{Lip}
 \DeclareMathOperator{\hull}{hull}
+\DeclareMathOperator{\Stretch}{stretch}
 \DeclareMathOperator{\supp}{supp}
 \DeclareMathOperator{\Var}{Var}
 \DeclareMathOperator{\Exc}{Exc}
@@ -68,6 +69,8 @@
 % --------------------------------------------------------------
 %                         Start here
 % --------------------------------------------------------------
+\frame{\titlepage}
+
 \begin{frame}{Lipschitz maps}
 \begin{definition}
 Let $f: X \to Y$ be a mapping between metric spaces and $A \subseteq X$ a set.
@@ -149,8 +152,12 @@ $$\min_{\xi \in \RR^d} \max_{y \in K} \frac{|\xi - f(y)|}{|x - y|} \leq \Lip(f, 
 \end{frame}
 
 \begin{frame}{A failure of uniqueness}
+    \centering 
+    \includegraphics[width=6cm]{KirszbraunValentine.png}
+    
 \begin{itemize}
-\item An example of nonuniqueness\dots 
+\item Adapted from Loisel '20: A minimizing Lipschitz function. \pause 
+\item Since the function is nearly constant near the upper-left corner, we can add artificial oscillations there to break uniqueness.
 \end{itemize}
 \end{frame}
 
@@ -185,8 +192,7 @@ whose solutions minimize $\|\nabla u\|_{L^p}$. \pause
 Let $U \subseteq \RR^d$ be an open set with Lipschitz boundary, and $f: \partial U \to \RR$ a Lipschitz function. Then: \pause
 \begin{itemize}
 \item There is a unique AML function $u: U \to \RR$ such that $u|_{\partial U} = f$. \pause
-\item Let $u_p$ be the unique solution of 
-$$\begin{cases}\Delta_p u_p = 0 \\ u_p|_{\partial U} = f \end{cases}.$$
+\item Let $u_p$ be the unique $p$-harmonic extension of $f$.
 Then $u_p \to u$ in $C^0$ as $p \to \infty$.
 \end{itemize}
 \end{theorem}
@@ -218,7 +224,7 @@ $$\Delta_\infty u := \langle \nabla^2 u, \nabla u \otimes \nabla u\rangle = 0.$$
 \begin{itemize}
 \item So $u$ should not have much more regularity than Lipschitz. \pause
 \item $x^{4/3} - y^{4/3}$ is AML, but is only $C^{1 + 1/3}$. \pause
-\item According to Evans and Smart '11, in $d = 2$ you should think of $\Delta_\infty$ as a totally nonlinear parabolic PDE where the timelike direction is the measurable vector field $\nabla u$. \pause
+\item According to Evans and Smart '11, in $d = 2$ you should think of $\Delta_\infty$ as a totally nonlinear parabolic PDE where the timelike direction is the measurable vector field $\nabla u^\perp$. \pause
 \end{itemize}
 \item We cannot define solutions using integration by parts. \pause
 \begin{itemize}
@@ -268,12 +274,12 @@ Then $u \leq v$ on $U$.
 \end{lemma}   
 \pause 
 \begin{definition}
-Let $u \in C^0(U)$. We say that $u$ is a \emph{viscosity solution of the $\infty$-Laplacian}, or simply that $u$ is \emph{$\infty$-harmonic}, if, for every $v \in C^2(U)$: \pause 
+Let $u \in C^0(U)$. Then:
 \begin{itemize}
-    \item If $u - v$ has a local maximum at $(x_*, t_*)$, then
-    $$\Delta_\infty v(x_*, t_*) \geq 0.$$
-    \item If $u - v$ has a local minimum at $(x_*, t_*)$, then 
-    $$\Delta_\infty v(x_*, t_*) \leq 0.$$
+\item $u$ is \emph{$\infty$-subharmonic} at $x_* \in U$ (or that $\Delta_\infty u \geq 0$ \emph{in the sense of vanishing viscosity}), if, for every $v \in C^2(U)$ such that $u - v$ has a local maximum at $x_*$,
+$$\Delta_\infty v(x_*) \geq 0.$$
+\item $u$ is \emph{$\infty$-superharmonic} if $-u$ is $\infty$-subharmonic.
+\item $u$ is \emph{$\infty$-harmonic} if $u$ is $\infty$-subharmonic and $\infty$-superharmonic.
 \end{itemize}
 \end{definition}
 \end{frame}
@@ -290,6 +296,252 @@ Let $U \subset \RR^d$ have a Lipschitz boundary and finite volume, and let $f$ b
 Then there is an $\infty$-harmonic extension $u$ of $f$. Moreover,
 $$\Lip(u, U) = \Lip(f, \partial U).$$
 \end{proposition}
+\end{frame}
+
+\begin{frame}{Uniqueness}
+\begin{theorem}[Jensen's maximum principle]
+Suppose that $u$ is $\infty$-subharmonic and $v$ is $\infty$-superharmonic on $U$.
+If $u \leq v$ on $\partial U$, then $u \leq v$.
+\end{theorem}
+\pause
+\begin{itemize}
+\item Suprisingly hard to prove, because the $\infty$-Laplacian is so degenerate. \pause
+\item The point is to show that we may assume that $|\nabla u| \geq \varepsilon$ by an approximation argument. \pause
+\item So there is a unique $\infty$-harmonic extension of $f$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Regularity}
+\begin{theorem}
+Let $u$ be $\infty$-harmonic. Then: \pause
+\begin{itemize}
+\item (Evans and Savin '08) If $d = 2$, then for some $\alpha > 0$, $u \in C^{1 + \alpha}$. \pause
+\item (Evans and Smart '11) $u$ is differentiable. \pause
+\end{itemize}
+\end{theorem}
+
+\begin{itemize}
+    \item Idea behind Evans and Savin: Do a highly anisotropic blowup, since $\Delta_\infty$ only looks elliptic in the $\nabla u$ direction.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Comparison with cones}
+\begin{itemize}
+\item Consider the \emph{cone}
+$$C_{A, B}(x) := A + B|x|.$$
+\begin{itemize}
+\item $C_{A, B}$ is smooth on $\RR^d \setminus \{0\}$, with $\nabla C_{A, B}(x) = B\partial_r$.
+\item So $\Delta_\infty C_{A, B} = 0$ on $\RR^d \setminus \{0\}$. \pause
+\end{itemize}
+\item By Jensen's maximum principle applied to a punctured ball, $B(x, r) \setminus \{x\}$: \pause 
+\begin{itemize}
+\item If $u$ is $\infty$-subharmonic and $u \leq C_{u(x), B}$ on $\partial B(x, r)$, then $u \leq C_{u(x), B}$ on $B(x, r)$. \pause
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Comparison with cones}
+
+\begin{definition}
+A function $u \in C^0(U)$ satisfies: \pause
+\begin{itemize}
+\item \emph{comparison with cones from above} if for every $B(x, r) \Subset U$, if $u \leq C_{u(x), B}$ on $B(x, r)$, then $u \leq C_{u(x), B}$ on $B(x, r)$, \pause
+\item \emph{comparison with cones from below} if $-u$ satisfies comparison with cones from above. \pause
+\item \emph{comparison with cones} if $u$ satisfies comparison with cones from above and below. \pause
+\end{itemize}
+\end{definition}
+
+\begin{itemize}
+\item So $\infty$-subharmonic functions satisfy comparison with cones from above. \pause 
+\item Let us show that the converse also holds.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Characterization of $\infty$-harmonic functions}
+\begin{theorem}
+Let $U \subseteq \RR^d$ be a bounded Lipschitz domain.
+The following are equivalent for $u \in C^0(U)$: \pause
+\begin{enumerate}
+\item $u$ is $\infty$-harmonic. \pause
+\item $u$ satisfies comparison with cones. \pause
+\item $u$ is absolutely minimizing Lipschitz. \pause
+\item $u$ is the limit in $C^0$ of $p$-harmonic functions as $p \to \infty$. \pause
+\item $u$ is the limit in $C^0$ of values of tug-of-war games at scale $\varepsilon$, as $\varepsilon \to 0$. \pause
+\end{enumerate}
+\end{theorem}
+    
+\begin{itemize}
+    \item We showed that 1, 2, and 4 are equivalent. \pause
+    \item Let us show that 2 is equivalent to 3. \pause
+    \item If we have time we will define 5 and show that 3 is equivalent to 5.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tug of war}
+\begin{itemize}
+\item Let $(X, E)$ be an (undirected, unweighted, possibly infinite) graph and $Y \subset X$. \pause
+\item Introduce \emph{Alice's payoff for tug-of-war} $f: Y \to \RR$. \pause 
+\begin{itemize}
+\item Alice and Bob are going to play a game where the set of game states is $X$, and the set of terminal game states is $Y$.
+\item If the final game state is $y \in Y$, Bob will pay Alice $f(y)$. \pause 
+\end{itemize}
+\item Suppose that the game is in state $x \in X$. \pause 
+\begin{itemize}
+\item Alice flips a coin.
+\item If it's heads, it's Alice's turn. Otherwise it's Bob's turn.
+\item The player whose turn it is moves the game to a state $x'$ adjacent to $x$.
+\item If $x' \in Y$, the game ends.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Strategies}
+\begin{itemize}
+\item A \emph{strategy for tug-of-war} is a mapping which sends $x \in X$ to a probability distribution on the set of vertices adjacent to $x$. \pause
+\begin{itemize} 
+\item Suppose that Alice's strategy is $S$, the game is in state $x$, and Alice won the coin toss. 
+\item Then Alice uses the probability distribution $S(x)$ to draw a vertex $x'$ adjacent to $x$ at random.
+\item Alice then moves the game state to $x'$. \pause
+\end{itemize}
+\item \emph{Alice's value function for tug-of-war} $u(x)$ at $x \in X$ is
+\begin{itemize}
+\item the supremum over all strategies $S_{\rm Alice}$
+\item of the infimum over all strategies $S_{\rm Bob}$
+\item of the expected value of Alice's payoff $f(y)$, where $y$ is the end state of the game such that:
+\begin{itemize}
+\item the initial state of the game was $x$, and
+\item Alice and Bob played the strategies $S_{\rm Alice}$ and $S_{\rm Bob}$.
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic programming}
+\begin{itemize}
+\item Alice's optimal strategy is to always move in a direction which increases her value function as much as possible. \pause
+\item However, she only has a half-chance to move, and otherwise (if he is playing optimally) Bob will decrease Alice's value function as much as possible. \pause 
+\end{itemize}
+
+\begin{proposition}
+Let $u$ be Alice's value function for tug-of-war. Then 
+$$u(x) = \frac{1}{2} \left[\sup_{x_{\rm Alice} \sim x} u(x_{\rm Alice}) + \inf_{x_{\rm Bob} \sim x} u(x_{\rm Bob})\right].$$
+\end{proposition} \pause 
+
+\begin{itemize}
+\item The finite difference equation for $u$ looks suspiciously like the $\infty$-Laplacian... 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tug-of-war at scale $\varepsilon$}
+\begin{definition}
+Let $X$ be a metric space, $Y \subset X$, $\varepsilon > 0$, and $\{x, x'\} \in E$ iff $\dist(x, x') < \varepsilon$.
+Then \emph{tug-of-war at scale $\varepsilon$} on $X$ is the game just described with the graph $(X, E)$ and set of final states $Y$.
+\end{definition} \pause
+
+\begin{theorem}[Peres, Schramm, Sheffield, and Wilson '08]
+Suppose that $X$ is a length space and $Y \subset X$ is nonempty.
+Let $f: Y \to \RR$ be bounded Lipschitz function with a uniformly continuous extension to $X$.
+Then: \pause
+\begin{itemize}
+\item Let $f$ be Alice's payoff for a game of tug-of-war at scale $\varepsilon$.
+Then Alice's value function $u_\varepsilon$ is well-defined and uniformly continuous on $X$. \pause 
+\item There exists an AML function $u$ such that $\|u - u_\varepsilon\|_{C^0} \lesssim \varepsilon$. 
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Geodesic laminations}
+\begin{definition}
+A \emph{geodesic lamination} is a closed set $\lambda \subseteq U$ equipped with a partition of $\lambda$ into line segments $\gamma$, called \emph{leaves}, such that $\partial \gamma \subset \partial U$. \pause
+\end{definition}
+
+\centering 
+\includegraphics[width=7cm]{GeodesicLamination.jpg}
+    
+\end{frame}
+
+\begin{frame}{The geodesic lamination in the stretch set}
+\begin{theorem}[Daskalopoulos and Uhlenbeck '22]
+Let $u$ be an $\infty$-harmonic function on $U$ and $\Stretch(u, U)$ is nonempty.
+Then $\Stretch(u, U)$ is a geodesic lamination, and for any leaf $\gamma \subseteq \Stretch(u, U)$,
+$$\frac{\dif}{\dif t} u(\gamma(t)) = \Lip(u, U).$$
+\end{theorem}
+\end{frame}
+
+\begin{frame}{The dual problem}
+\begin{theorem}[Daskalopoulos and Uhlenbeck '22]
+Suppose that $d = 2$, and $u_p$ are $p$-harmonic functions on $U$ converging to an $\infty$-harmonic function $u$.
+Let $v_q$ be the dual $q$-harmonic harmonic to $u_p$.
+Then:
+\begin{itemize}
+\item $v_q$ converges in the weakstar topology of $BV$ to a function $v$ of least gradient.
+\item If $v$ is not constant, then $\dif v$ is a transverse measure to $\Stretch(u, U)$.
+\end{itemize}
+\end{theorem}
+\end{frame}
+
+\begin{frame}{Sheffield and Smart's formulation}
+\begin{theorem}[Sheffield and Smart '10]
+Let $u: U \to \RR^D$ be a smooth mapping such that $\xi$ is the unique principal singular vector of $\nabla u$.
+Then $u$ is tight iff 
+$$\langle \nabla \langle \nabla u, \xi\rangle, \xi\rangle = 0.$$
+\end{theorem}
+
+\begin{theorem}[Sheffield and Smart '10]
+Suppose that $U \subseteq \CC$, and let $u: U \to \CC$ be an injective holomorphic function.
+Then $u$ is tight iff the mean curvature of every level set of $\log(Lu^{-1})$ is nonnegative.
+\end{theorem}
+    
+\end{frame}
+
+\begin{frame}{Daskalopoulos and Uhlenbeck's formulation}
+    
+\end{frame}
+
+\begin{frame}{$W^{2, 2}$ estimates break our hearts}
+\begin{theorem}[Daskalopoulos and Uhlenbeck '22] 
+Suppose that $d = 2$, $4 \leq p < \infty$ and $u_p: U \to \RR^2$ is the $p$-harmonic extension of a Lipschitz map $f$.
+Then $\|\nabla^2 u_p\|_{L^2} \lesssim_f 1$.
+\end{theorem}
+\pause 
+\begin{itemize}
+\item So $\nabla u_p$ converges to the $\infty$-harmonic map $u$ in the weakstar topology of $BMO$ and the strong topology of $L^r$, $1 < r < \infty$. \pause 
+\item If we knew that $\|\nabla u_p - \nabla u\|_{L^r} \ll 1$ independently of $r$, then we could conclude that $u$ is AML, but this estimate appears to be sharp, and is just short of what we need.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Comparing the two approaches}
+    
+\end{frame}
+
+\begin{frame}{The toy model}
+
+\end{frame}
+
+\begin{frame}{Hell is contact geometry}
+    \begin{itemize}
+        \item The tight PDE does not characterize tight or absolutely minimizing forms. \pause 
+        \item There is a natural map of spheres $\mathbb S^3 \to \mathbb S^2$, called the \emph{Hopf fibration}, such that the preimage of any point in $\mathbb S^2$ is a great circle. \pause
+    \end{itemize}
+
+    \begin{theorem}[B '24]
+    Let $F$ be the unit $2$-form on $\mathbb S^3$ such that $F(x)$ is conormal to the great circle through $x$ arising from the Hopf fibration.
+    Then: \pause
+\begin{itemize}
+    \item $F$ solves the tight PDE. \pause 
+    \item $F$ does not minimize its $L^\infty$ norm even globally.\pause
+\end{itemize}
+\end{theorem}
+
+\begin{itemize}
+\item Key point: $\mathbb S^3$ equipped with the Hopf fibration is a contact manifold, meaning that it's hard to find integral surfaces.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{The divide-and-conquer scheme}
+    
 \end{frame}
 
 \end{document}

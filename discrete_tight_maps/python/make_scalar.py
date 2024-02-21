@@ -42,10 +42,9 @@ for i in range(100):
 def linear_extn(x1, x2, y1, y2):
     # Returns the linear map (in two dimensions) which sends xi to yi (and 0 to 0).
     # We assume that x1 and x2 are linearly independent.
-    A = np.array([[x1[0], x1[1], 0, 0], [0, 0, x1[0], x1[1]], [x2[0], x2[1], 0, 0], [0, 0, x2[0], x2[1]]])
-    b = np.array([y1[0], y1[1], y2[0], y2[1]])
-    x = np.linalg.solve(A, b)
-    return np.array([[x[0], x[1]], [x[2], x[3]]])
+    A = np.array([[x1[0], x1[1]], [x2[0], x2[1]]])
+    b = np.array([y1, y2])
+    return(np.linalg.solve(A, b))
 
 def affine_extn(x0, x1, x2, y0, y1, y2):
     # Returns the affine map (in two dimensions) which sends xi to yi.
@@ -58,7 +57,7 @@ class PL:
     def __init__(self, linear, constant):
         self.linear = linear
         self.constant = constant
-        self.localLip = [svd(M)[1][0] for M in self.linear]
+        self.localLip = [abs(M) for M in self.linear]
         self.localLipOnVertices = [
             max([
                 self.localLip[s] for s in range(len(SIMPLICES)) if v in SIMPLICES[s]
