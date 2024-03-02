@@ -139,7 +139,7 @@ and the latter angle is not zero.
 \end{frame}
 
 \begin{frame}{Proving the Kirszbraun--Valentine theorem}
-\begin{lemma}
+\begin{lemma}[adding points to $K$]
 Let $K$ be a compact subset of $\RR^d$, $f: K \to \RR^D$ a Lipschitz mapping, and $x \notin K$.
 Then
 $$\min_{\xi \in \RR^d} \max_{y \in K} \frac{|\xi - f(y)|}{|x - y|} \leq \Lip(f, K).$$
@@ -151,7 +151,7 @@ $$\min_{\xi \in \RR^d} \max_{y \in K} \frac{|\xi - f(y)|}{|x - y|} \leq \Lip(f, 
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Some counterexamples for Kirszbraun--Valentine}
+\begin{frame}{Counterexamples from hyperbolic geometry}
 \begin{example}[Gu\'eritaud and Kassel '17]
 Let $p$ be a point in the hyperbolic plane $\mathbb H^2$, and draw three geodesics emanating from $p$ which form angles of $2\pi/3$.
 Let $K$ be the intersection of these geodesics with a circle centered on $p$.
@@ -160,8 +160,8 @@ Then $\Lip(f) < 1/2$, but any extension of $f$ to $\mathbb H^2$ stretches the ge
 \end{example}
 
 \begin{example}
-Let $M$ be a neighborhood of a closed hyperbolic geodesic $\gamma$ and let $f: \partial M \to \mathbb S^1$ be the angle function.
-Then $f$ must stretch $\gamma$ more than it does the cycles in $\partial M$.
+Let $X$ be a neighborhood of a closed hyperbolic geodesic $\gamma$ and let $f: \partial X \to \mathbb S^1$ be the angle function.
+Then any extension of $f$ to $X$ must stretch $\gamma$ more than it does the cycles in $\partial M$.
 \end{example}
 \end{frame}
 
@@ -175,20 +175,41 @@ Then $f$ must stretch $\gamma$ more than it does the cycles in $\partial M$.
 \end{itemize}
 \end{frame}
 
-\begin{frame}{A much bigger failure of nonuniqueness}
-\begin{itemize}
-\item If $u$ is a Lipschitz map, let
-$$Lu(x) := \lim_{r \to 0} \Lip(u, B(x, r)).$$
-\item $Lu$ is upper-semicontinuous and \emph{lower-semicontinuous on average}: for any open $U$ and lower-semicontinuous $\psi$, if $Lu \leq \psi$ on almost all of $U$, then $Lu \leq \psi$ on all of $U$.
-\end{itemize}
+\begin{frame}{Localizing the Lipschitz constant}
+\begin{definition}
+Let $u: X \to Y$ be a Lipschitz map. Then
+$$Lu(x) := \limsup_{r \to \infty} \Lip(u, B(x, r)).$$
+\end{definition}
 
-\begin{theorem}[B, Ze-An '24]
+\begin{itemize}
+\item The limit superior is actually a limit and an infimum.
+\item $Lu$ is upper-semicontinuous, and a proxy for $|\nabla u(x)|_\infty$.
+\begin{itemize}
+\item Need to take the operator norm $|\cdot|_\infty$ here, not the Frobenius norm $|\cdot|_2$.
+\end{itemize}
+\item If $X$ is convex then 
+$$\Lip(u, X) = \sup_{x \in X} Lu(x).$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A much bigger failure of uniqueness}
+
+\begin{theorem}[B, Ze-An '24: solving the eikonal equation]
 Let $\Gamma$ be a closed subset of $\RR^d$, $f: \RR^d \to \RR^D$ a Lipschitz map, and $\psi$ a continuous function on $\RR^d \setminus \Gamma$.
 If $\psi \geq Lf$ then there exists $u: \RR^d \to \RR^D$ such that $Lu = \psi$ on $\RR^d \setminus \Gamma$ and $u = f$ on $\Gamma$.
 \end{theorem}
 
+\begin{lemma}[creating oscillations without destructive interference]
+Let $u_0 := f$ and $\mathscr L_0 := \emptyset$.
+Then for each $i \in \NN$ there is a set of line segments $\mathscr L_i$, which are evenly spaced at scale $2^{-i}$, and a map $u_i$, such that:
+\begin{itemize}
+\item For each $\ell \in \mathscr L_i$ and $x \in \ell$, $\Lip(u_i, \ell) > \psi(x) - 2^{-i}$.
+\item $u_i = u_{i - 1}$ on a $2^{-i}$-neighborhood of $\Gamma \cup \bigcup_{j < i} \mathscr L_j$.
+\end{itemize}
+\end{lemma}
+
 \begin{problem}
-Which upper-semicontinuous, lower-semicontinuous on average functions can be $Lu$ for a Lipschitz map $u$?
+Which functions can be $Lu$ for a Lipschitz map $u$?
 \end{problem}
     
 \end{frame}
@@ -200,7 +221,6 @@ Which upper-semicontinuous, lower-semicontinuous on average functions can be $Lu
 \end{itemize}
 
 \begin{definition}
-Let $X, Y$ be metric spaces.
 A mapping $u: X \to Y$ is \emph{absolutely minimizing Lipschitz} (\emph{AML}) if there is a basis $\mathscr U$ of open subsets of $X$ such that
 \begin{itemize}
 \item for every basic open set $U \in \mathscr U$,
@@ -220,7 +240,7 @@ whose solutions minimize $\|\nabla u\|_{L^p}$.
 \item Aronsson '67: Since $\|\nabla u\|_{L^p} \to \Lip(u, U)$ as $p \to \infty$, study $p$-harmonic functions as $p \to \infty$. 
 \end{itemize}
 
-\begin{theorem}[Jensen '93]
+\begin{theorem}[Jensen '93: wellposedness of AML functions]
 Let $U \subseteq \RR^d$ be an open set with Lipschitz boundary, and $f: \partial U \to \RR$ a Lipschitz function. Then: 
 \begin{itemize}
 \item There is a unique AML function $u: U \to \RR$ such that $u|_{\partial U} = f$. 
@@ -234,8 +254,8 @@ Then $u_p \to u$ in $C^0$ as $p \to \infty$.
 \begin{itemize}
 \item The $p$-Laplacian is quasilinear and its solutions are only $C^{1 + \alpha}$.
 \begin{itemize}
-\item In Aronsson's time, the $p$-Laplacian could only be understood in divergence form: for every $\varphi \in C^\infty_c(U)$,
-$$\int_U \langle \nabla \varphi, |\nabla u|^{p - 2} \nabla u\rangle \dif V = 0.$$
+\item In Aronsson's time, the $p$-Laplacian could only be understood in divergence form: for every $\chi \in C^\infty_c(U)$,
+$$(\nabla \chi, |\nabla u|^{p - 2} \nabla u)_{L^2(U)} = 0.$$
 \end{itemize}
 \item Pretend for a moment that we could legally write the $p$-Laplacian in nondivergence form 
 $$(p - 2) |\nabla u|^{p - 4} \langle \nabla^2 u, \nabla u \otimes \nabla u\rangle + |\nabla u|^{p - 2} \Delta u = 0.$$
@@ -324,18 +344,18 @@ $$\Delta_\infty v(x_*) \geq 0.$$
 \end{definition}
 \end{frame}
 
-\begin{frame}{Existence}
-\begin{lemma}
-Let $U \subset \RR^d$ have a Lipschitz boundary, and let $f$ be a Lipschitz function on $\partial U$.
-Let $1 < p, r < \infty$, and let $u_p$ be the $p$-harmonic extension of $f$. Then
-$$\|\nabla u_p\|_{L^r} \leq \operatorname{vol}(U)^{1/r} \Lip(f, \partial U) .$$
-\end{lemma}
- 
-\begin{proposition}
+\begin{frame}{Existence} 
+\begin{proposition}[solving the $\infty$-Laplacian]
 Let $U \subset \RR^d$ have a Lipschitz boundary and finite volume, and let $f$ be a Lipschitz function on $\partial U$.
 Then there is an $\infty$-harmonic extension $u$ of $f$. Moreover,
 $$\Lip(u, U) = \Lip(f, \partial U).$$
 \end{proposition}
+
+\begin{lemma}[$W^{1, r}$ estimate on the $p$-Laplacian]
+Let $U \subset \RR^d$ have a Lipschitz boundary, and let $f$ be a Lipschitz function on $\partial U$.
+Let $1 < r \leq p < \infty$, and let $u_p$ be the $p$-harmonic extension of $f$. Then
+$$\|\nabla u_p\|_{L^r} \leq \operatorname{vol}(U)^{1/r} \Lip(f, \partial U) .$$
+\end{lemma}
 \end{frame}
 
 \begin{frame}{Uniqueness}
@@ -345,11 +365,15 @@ If $u \leq v$ on $\partial U$, then $u \leq v$.
 \end{theorem}
 
 \begin{lemma}
+Jensen's maximum principle holds if we additionally assume that there exists $\kappa > 0$ such that $\Delta_\infty u \geq \kappa$.
+\end{lemma}
+
+\begin{lemma}
 Suppose that $u$ is $\infty$-subharmonic on $U$, and $\varepsilon > 0$.
 Then there is an $\infty$-subharmonic function $u_\varepsilon$, such that: 
 \begin{itemize}
 \item $u_\varepsilon = u$ on $\{|\nabla u| \geq \varepsilon\} \cup \partial U$, but  
-\item on $\{|\nabla u| < \varepsilon\}$, $u_\varepsilon$ is a viscosity solution of the eikonal equation $|\nabla u_\varepsilon| = \varepsilon$.
+\item on $\{|\nabla u| < \varepsilon\}$, $u_\varepsilon$ is a viscosity solution of $|\nabla u_\varepsilon| = \varepsilon$.
 \end{itemize}
 \end{lemma}
 \end{frame}
@@ -362,10 +386,6 @@ Let $u$ be $\infty$-harmonic. Then:
 \item (Evans and Smart '11) $u$ is differentiable. 
 \end{itemize}
 \end{theorem}
-
-\begin{itemize}
-    \item Idea behind Evans and Savin: Do a highly anisotropic blowup, since $\Delta_\infty$ only looks elliptic in the $\nabla u$ direction.
-\end{itemize}
 
 \begin{problem}
     What is the sharp regularity of $\infty$-harmonic functions?
@@ -412,7 +432,7 @@ The following are equivalent for $u \in C^0(U)$:
 \begin{itemize}
     \item We showed that 1, 2, and 4 are equivalent. 
     \item Let us show that 2 is equivalent to 3. 
-    \item If we have time we will define 5 and sketch the proof that 3 is equivalent to 5.
+    \item Time permitting, we will define 5 and sketch that 3 is equivalent to 5.
 \end{itemize}
 \end{frame}
 
@@ -566,7 +586,7 @@ Then $u$ is tight iff the mean curvature of every level set of $\log(Lu^{-1})$ i
 \end{frame}
 
 \begin{frame}{What's the hold-up?}
-\begin{theorem}[Daskalopoulos and Uhlenbeck '22] 
+\begin{theorem}[Daskalopoulos and Uhlenbeck '22: $W^{2, 2}$ estimate] 
 Suppose that $d = 2$, $4 \leq p < \infty$ and $u_p: U \to \RR^2$ is $p$-harmonic.
 Then for any $V \Subset U$, $\|u_p\|_{W^{2, 2}(V)} \lesssim \|u_p\|_{L^\infty(U)}$ uniformly in $p$.
 \end{theorem}
@@ -591,7 +611,7 @@ Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? Wh
         \item There is a natural map of spheres $\mathbb S^3 \to \mathbb S^2$, called the \emph{Hopf fibration}, such that the preimage of any point in $\mathbb S^2$ is a great circle. 
     \end{itemize}
 
-    \begin{example}[B '24]
+    \begin{example}[B '24: nonuniqueness on differential forms]
     Let $F$ be the unit $2$-form on $\mathbb S^3$ such that $F(x)$ is conormal to the great circle through $x$ arising from the Hopf fibration.
     Then: 
 \begin{itemize}
@@ -611,7 +631,7 @@ Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? Wh
 
 \begin{frame}{A summary}
 \begin{itemize}
-\item Viscosity solutions (or, equivalently, the maximum principle) were an amazing discovery.
+\item In the scalar-valued case, viscosity solutions give us the correct formulation.
 \begin{itemize}
 \item $\infty$-harmonic functions have many equivalent and natural characterizations, and a good well-posedness theory.
 \item But there are still interesting problems in the scalar-valued case.
@@ -621,6 +641,7 @@ Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? Wh
     \item Good future: There is a definition with a good uniqueness theory, which is preserved by $W^1(BMO)$ limits.
     \item Bad future: There is no such definition.
 \end{itemize}
+\item Thanks for coming!
 \end{itemize}
 \end{frame}
 
