@@ -31,8 +31,11 @@
 
 \newcommand*\dif{\mathop{}\!\mathrm{d}}
 \DeclareMathOperator*{\argmin}{argmin}
+
+\DeclareMathOperator{\card}{card}
 \DeclareMathOperator{\dist}{dist}
 \DeclareMathOperator{\Lip}{Lip}
+\DeclareMathOperator{\Lex}{Lex}
 \DeclareMathOperator{\hull}{hull}
 \DeclareMathOperator{\Stretch}{stretch}
 \DeclareMathOperator{\supp}{supp}
@@ -65,11 +68,15 @@
 % \setbeamertemplate{itemize subitem}[triangle]
 % \setbeamertemplate{itemize subsubitem}[square]
 
+\AtBeginSection{\frame{\sectionpage}}
+
 \begin{document}
 % --------------------------------------------------------------
 %                         Start here
 % --------------------------------------------------------------
 \frame{\titlepage}
+
+\section{The Kirszbraun-Valentine theorem}
 
 \begin{frame}{Lipschitz maps}
 \begin{definition}
@@ -214,6 +221,9 @@ Which functions can be $Lu$ for a Lipschitz map $u$?
     
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The \texorpdfstring{$\infty$-Laplacian}{infinity-Laplacian}}
+
 \begin{frame}{Absolutely minimizing Lipschitz mappings}
 \begin{itemize}
 \item The problem is that variational problems defined by integrals already locally minimize, but not $L^\infty$ variational problems. 
@@ -357,6 +367,9 @@ Let $1 < r \leq p < \infty$, and let $u_p$ be the $p$-harmonic extension of $f$.
 $$\|\nabla u_p\|_{L^r} \leq \operatorname{vol}(U)^{1/r} \Lip(f, \partial U) .$$
 \end{lemma}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%
+\section{Properties of \texorpdfstring{$\infty$-harmonic}{infinity-harmonic} functions}
 
 \begin{frame}{Uniqueness}
 \begin{theorem}[Jensen's maximum principle]
@@ -503,10 +516,26 @@ Let $f: Y \to \RR$ be bounded Lipschitz function with a uniformly continuous ext
 Then: 
 \begin{itemize}
 \item Let $f$ be Alice's payoff for a game of tug-of-war at scale $\varepsilon$.
-Then Alice's value function $u_\varepsilon$ is well-defined and uniformly continuous on $X$.  
+Then Alice's value function $u_\varepsilon$ is well-defined and uniformly continuous on $X$.
 \item There exists an AML function $u$ such that $\|u - u_\varepsilon\|_{C^0} \lesssim \varepsilon$. 
 \end{itemize}
 \end{theorem}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%
+\section{The stretch set of a \texorpdfstring{$\infty$-harmonic}{infinity-harmonic} function}
+
+\begin{frame}{Stretch sets}
+\begin{definition}[Thurston '86]
+Let $u: X \to Y$ be a Lipschitz map and $U \subseteq X$ an open set. The \emph{stretch set} of $u$ on $U$ is 
+$$\Stretch(u, U) := \{x \in U: Lu(x) = \Lip(u, U)\}.$$
+\end{definition}
+
+\begin{itemize}
+\item Clearly a relatively closed subset of $U$.
+\item Our next task is to understand the geometry of $\Stretch(u, U)$.
+\end{itemize}
+    
 \end{frame}
 
 \begin{frame}{Geodesic laminations}
@@ -523,30 +552,143 @@ A \emph{geodesic lamination} is a closed set $\lambda \subseteq U$ equipped with
     
 \end{frame}
 
+\begin{frame}{Transverse measures}
+\begin{itemize}
+\item If $\lambda$ is a geodesic lamination, then we can cover $U$ by open sets $V$ such that the space of leaves of $\lambda \cap V$ is a locally compact metrizable space, which we call the \emph{local leaf space} in $V$.
+\item A \emph{$d - 1$-current of locally finite mass} on $U$ is a continuous linear functional on the space of compactly supported continuous $1$-forms on $U$.
+\end{itemize}
+
+\begin{definition}
+Let $\lambda$ be a geodesic lamination.
+A \emph{transverse measure} $T$ to $\lambda$ is a nonzero $d - 1$-current of locally finite mass, such that:
+\begin{itemize}
+\item for each open set $V$ with a local leaf space $K_V$, there is a positive Radon measure $\mu_V$ on $K_V$, such that:
+\item for each continuous $1$-form $\varphi$ with compact support in $V$,
+$$\langle T, \varphi\rangle = \int_{K_V} \left[\int_\gamma \varphi\right] \dif \mu_V(\gamma).$$
+\end{itemize}
+\end{definition}
+\end{frame}
+
 \begin{frame}{The geodesic lamination in the stretch set}
 \begin{theorem}[Daskalopoulos and Uhlenbeck '20]
 Let $u$ be an $\infty$-harmonic function on $U$ such that $\Stretch(u, U)$ is nonempty.
 Then $\Stretch(u, U)$ is a geodesic lamination, and for any leaf $\gamma \subseteq \Stretch(u, U)$,
 $$\frac{\dif}{\dif t} u(\gamma(t)) = \Lip(u, U).$$
 \end{theorem}
+
+\begin{lemma}[leaves are straight lines]
+Let $x \in \Stretch(u, U)$.
+If $B(x, r) \Subset U$, then there exists $x_+, x_- \in \partial B(x, r)$ such that:
+\begin{itemize}
+\item $[x, x_+], [x, x_-] \subseteq \Stretch(u, U)$.
+\item $u(x_\pm) = u(x) \pm \Lip(u, U)r$.
+\end{itemize}
+\end{lemma}
+
+\begin{lemma}[leaves are disjoint]
+Two maximal line segments in $\Stretch(u, U)$ must be disjoint.
+\end{lemma}
+\end{frame}
+
+\begin{frame}{Dualizing the $p$-Laplacian}
+\begin{itemize}
+\item Suppose that $d = 2$. Suppose that $u$ is $p$-harmonic:
+$$\nabla \cdot (|\nabla u|^{p - 2} \nabla u) = 0.$$
+\item We can rewrite this as
+$$\nabla \times (|\nabla u|^{p - 2} \nabla^\perp u) = 0,$$
+so there exists $v$ such that
+$$\nabla v = |\nabla u|^{p - 2} \nabla^\perp u.$$
+\item By H\"older-chasing, if $1/p + 1/q = 1$ then $v$ is $q$-harmonic!
+\end{itemize}
 \end{frame}
 
 \begin{frame}{The dual problem}
+\begin{definition}
+A $BV$ function $v$ on $U$ has \emph{least gradient}, if (among all functions with the same trace), $v$ minimizes its total variation
+$$\int_M |\nabla v| \dif V.$$
+\end{definition}
+
 \begin{theorem}[Daskalopoulos and Uhlenbeck '20]
-Suppose that $d = 2$, and $u_p$ are $p$-harmonic functions on $U$ converging to an $\infty$-harmonic function $u$.
+Suppose that $d = 2$, and $u_p$ are $p$-harmonic functions on $U$ converging to an $\infty$-harmonic function $u$, which is normalized so that $\Lip(u, U) = 1$.
 Let $v_q$ be the dual $q$-harmonic harmonic to $u_p$.
 Then:
 \begin{itemize}
 \item $v_q$ converges in the weakstar topology of $BV$ to a function $v$ of least gradient.
-\item If $v$ is not constant, then $\dif v$ is a transverse measure to $\Stretch(u, U)$.
+\item If $v$ is not constant, then $\nabla v$ is a transverse measure to $\Stretch(u, U)$.
 \end{itemize}
 \end{theorem}
 \end{frame}
 
-\begin{frame}{Generalizing the domain of $\infty$-harmonic functions}
+\begin{frame}{Constructing the transverse measure}
+\begin{itemize}
+\item We renormalize by replacing $v_q$ with $k_p^{p - 1} v_q$ where $k_p^{1 - p} := \|\nabla u_p\|_{L^p}^p$ (so $k_p \to 1$).
+\end{itemize}
+
+\begin{lemma}[B '24]
+$$\frac{1}{q} \int_U |\nabla v_q|^q \dif V + \frac{k_p^p}{p} \int_U |\nabla u_p|^p \dif V = k_p \int_U \nabla u_p \cdot \nabla v_q \dif V.$$
+\end{lemma}
+
+\begin{itemize}
+\item Total variation is lower-semicontinuous in the weakstar topology of $BV$, so by compensated compactness,
+$$\int_U |\nabla v| \dif V \leq \int_U \nabla u \cdot \nabla v \dif V \leq \int_U |\dif v| \dif V.$$
+\item Since $|\dif v| \dif V$ is a positive Radon measure, this forces $|\nabla v| = \nabla u \cdot \nabla v$ as Radon measures, so 
+\begin{itemize}
+\item it is necessary that $v$ have least gradient and $\nabla v$ be transverse.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Possible applications of the duality}
+\begin{itemize}
+\item Next few slides are very speculative!
+\item A slight generalization of the above proof yields:
+\end{itemize}
+
+\begin{theorem}
+Let $T$ be a mass-minimizing $d - 1$-current.
+Then there exists a geodesic lamination $\lambda$ such that $T$ is transverse to $\lambda$.
+\end{theorem}
+
+\begin{itemize}
+\item When $d = 2$, the fact that least gradient functions give a geodesic lamination leads to an equivalence between the least gradient problem and the Monge--Kantorovich problem in optimal transport.
+\begin{itemize}
+\item G\'orny '21: Applications of optimal transport to the regularity theory of the $1$-Laplacian when $d = 2$.
+\end{itemize}
+\end{itemize}
+
 \begin{problem}
-Verify that the theory of $\infty$-harmonic functions goes through unchanged on a (simply connected) Riemannian manifold.
-(More generally, is there a class of ``$\infty$-elliptic'' PDE which satisfy, for example, the Evans--Savin theorem?)
+Do the theorems of G\'orny '21 also hold for mass-minimizing $d - 1$-currents?
+\end{problem}
+\end{frame}
+
+\begin{frame}{More possible applications}
+    
+\begin{itemize}
+\item As we will later see, defining the $\infty$-Laplacian on vector-valued or manifold-valued maps seems impossibly hard.
+\begin{itemize}
+\item Maz\'on, Rossi, and Segura de L\'eon '14 and G\'orny and Maz\'on '21 \emph{defined} weak solutions of $BV$ variational problems in terms of the duality with $L^\infty$ variational problems.
+\end{itemize}
+\item A generalization of the $\infty$-Laplacian to vector-valued maps could perhaps be based on a resolution of:
+\end{itemize}
+
+\begin{problem}
+Formulate the $\infty$-Laplacian purely in terms of its duality with the $1$-Laplacian.
+\end{problem}
+
+\begin{example}
+Let $U$ be a disk in the right half-plane centered on the $x$-axis, and let $u(x, y) := \arctan(y/x)$.
+Then $\Stretch(u, U)$ is empty, so the dual $1$-harmonic function is $0$.
+\end{example}
+    
+\begin{itemize}
+\item No idea how to overcome this.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Two problems posed by Daskalopoulos and Uhlenbeck}
+\begin{problem}
+Verify that the theory of $\infty$-harmonic functions, in particular the theorems of Evans and Savin, and Evans and Smart, goes through unchanged on a (simply connected) Riemannian manifold (and more generally, for scalar-valued $L^\infty$ variational problems).
 \end{problem}
 
 \begin{problem}
@@ -555,34 +697,200 @@ Show that there is a unique $\infty$-harmonic map representing $\rho$.
 \end{problem}
 \end{frame}
 
-\begin{frame}{Constructing AML maps from holomorphic functions}
-    Too many holomorphic functions...
+\section{AML maps between manifolds}
+\begin{frame}{Existence and uniqueness}
+\begin{problem}
+Let $U$ be a Lipschitz domain in $\RR^d$ and $f: \partial U \to \RR^D$ a Lipschitz map.
+Does there exist an AML extension of $f$ to $U$?
+\end{problem}
+
+\begin{example}[Sheffield and Smart '10]
+On the unit disk, for each $t \in [0, 1]$, let
+$$u_t(re^{i\theta}) := tr^2e^{2i\theta} + (1 - t) re^{2i\theta}.$$
+Then $u_t(e^{i\theta}) = e^{2i\theta}$ (independently of $t$) but $u_t$ is AML.
+So uniqueness fails quite badly.
+\end{example}
 \end{frame}
 
 \begin{frame}{A toy problem on graphs}
-    Lexicographic minimizers
+\begin{itemize}
+    \item Idea (Sheffield and Smart '10): Look for an even stronger condition than AML, to try to get uniqueness.
+    \item Do a toy problem on finite graphs $(X, E)$ first, with a set of ``boundary'' vertices $Y \subset X$.
+\end{itemize}
+
+\begin{definition}
+Let $u: X \to \RR^D$. For $x \in X$, consider the \emph{local Lipschitz constant}
+$$Su(x) := \max_{y \sim x} |u(y) - u(x)|.$$
+Say that $u \preceq v$ if $u|_Y = v|_Y$ and
+$$\max_{Su > Sv} Su \leq \max_{Sv > Su} Sv.$$
+\end{definition}
 \end{frame}
 
-\begin{frame}{Sheffield and Smart's formulation}
-\begin{theorem}[Sheffield and Smart '10]
-Let $u: U \to \RR^D$ be a smooth mapping such that $\xi$ is the unique principal singular vector of $\nabla u$.
+\begin{frame}{Well-posedness of the toy problem}
+\begin{definition}
+A map $u: X \to \RR^D$ is \emph{tight} if $u$ is $\preceq$-minimal.
+\end{definition}
+
+\begin{lemma}
+Let $\Lex(u) \in \RR^{\card X}_+$ be the list of values of $Su$, sorted to be nonincreasing.
+If
+\begin{itemize}
+\item for every $v$ such that $u|_Y = v|_Y$, $\Lex(u)$ is lexicographically prior to $\Lex(v)$,
+\end{itemize}
+then $u$ is tight.
+\end{lemma}
+
+\begin{theorem}[well-posedness of discrete tight maps]
+Given $f: Y \to \RR^D$ there is a unique tight extension of $f$ to $X$.
+\end{theorem}
+
+\begin{itemize}
+    \item For existence, we use the lemma and induction on $\card X$.
+    \item Let's skip the proof of uniqueness.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Going to the continuum}
+\begin{definition}[Sheffield and Smart '10]
+Let $U \subseteq \RR^d$ be an open set, and $u, v: U \to \RR^D$.
+We say that $u \preceq v$ if $u|_{\partial U} = v|_{\partial U}$ and
+$$\sup_{Lu > Lv} Lu \leq \sup_{Lv > Lu} Lv.$$
+If $u$ is $\preceq$-minimal, then $u$ is \emph{tight}.
+\end{definition}
+
+\begin{lemma}
+If $u$ is tight, then $u$ is AML.
+\end{lemma}
+
+\begin{itemize}
+\item To get minimality on an open set $V$, compare to $v$ which agrees with $u$ on $U \setminus V$ and is given by the Kirszbraun-Valentine theorem on $V$.
+\end{itemize}
+
+\begin{problem}
+Given $f: \partial U \to \RR^D$ Lipschitz, does there exist a unique tight extension of $f$ to $U$?
+\end{problem}
+\end{frame}
+
+\begin{frame}{The Schatten norms}
+\begin{definition}
+Let $\mathcal H_1, \mathcal H_2$ be Hilbert spaces, and $A: \mathcal H_1 \to \mathcal H_2$ a bounded linear map.
+\begin{itemize}
+\item The \emph{positive-semidefinite part} of $A$ is
+$$Q(A) := \sqrt{AA^\dagger} \in \mathcal B(\mathcal H_2).$$
+\item For $p \in [1, \infty]$, the $p$th \emph{Schatten norm} of $A$, $|A|_p$, is the $\ell^p$ norm of the eigenvalues of $Q(A)$.
+\item A unit vector $\xi \in \mathcal H_1$ is a \emph{top singular vector} of $A$, if $|A\xi| = |A|_\infty$.
+\end{itemize}
+\end{definition}
+
+\begin{itemize}
+\item So $|A|_2$ is the Frobenius norm, and $|A|_\infty$ is the operator norm.
+\item Our instinct is to use the Frobenius norm with $\nabla u$, but...
+\end{itemize}
+
+\begin{lemma}
+Let $u$ be a smooth map. Then $Lu(x) = |\nabla u(x)|_\infty$.
+\end{lemma}
+
+\end{frame}
+
+\begin{frame}{A PDE for smooth tight maps}
+\begin{theorem}[Sheffield and Smart '10: Euler-Lagrange equation]
+Let $u: U \to \RR^D$ be a smooth mapping such that
+\begin{itemize}
+\item There exists a unit vector field $\xi$, such that for each $x \in U$, $\xi(x)$ is the unique top singular vector of $\nabla u(x)$.
+\end{itemize}
 Then $u$ is tight iff 
 $$\langle \nabla \langle \nabla u, \xi\rangle, \xi\rangle = 0.$$
 \end{theorem}
 
-\begin{theorem}[Sheffield and Smart '10]
-Suppose that $U \subseteq \CC$, and let $u: U \to \CC$ be an injective holomorphic function.
-Then $u$ is tight iff the mean curvature of every level set of $\log(Lu^{-1})$ is nonnegative.
-\end{theorem}
+\begin{itemize}
+\item Reduces to the $\infty$-Laplacian when $D = 1$ (take $\xi = \nabla u/|\nabla u|$).
+\item Doesn't make sense if $u$ is conformal... like if $u$ is the identity.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Proof of the PDE characterization}
+\begin{lemma}
+Let $A$ be a linear map, and let $\xi$ be the unique top singular vector of $A$. Then
+$$|A + \varepsilon B|_\infty^2 = |A|_\infty^2 + 2\varepsilon \langle A\xi, B\xi\rangle + O(\varepsilon^2)$$
+where the implied constant only depends on $|A|_\infty$, $|B|_\infty$, and the difference between the first two singular values of $A$.
+\end{lemma}
+
+\begin{lemma}
+If $u$ is a smooth tight map, and $\xi$ is as in the theorem, then $u$ pushes forward every integral curve of $\xi$ to a straight line.
+\end{lemma}
+\end{frame}
+
+\begin{frame}{Another attempt: bringing back the $p$-Laplacian}
+\begin{itemize}
+\item Problems with tightness:
+\begin{itemize}
+\item Well-posedness seems like a nightmare to prove: more on that later.
+\item No PDE for conformal maps.
+\item Not clear what its relation with $L^p$ or $BV$ problems is.
+\end{itemize}
+\item What if we declared by fiat that the AML map should arise from the $p$-Laplacian?
+\begin{itemize}
+\item Then existence would be easy to prove.
+\end{itemize}
+\end{itemize}
+
+\begin{definition}[Daskalopoulos and Uhlenbeck '22]
+Let $1 < p < \infty$.
+A $W^{1, p}$ map $u$ is \emph{(Schatten) $p$-harmonic} if
+$$\nabla \cdot (Q(\nabla u)^{p - 2} \nabla u) = 0.$$
+\end{definition}
+\end{frame}
+
+\begin{frame}{Properties of $p$-harmonic maps}
+\begin{lemma}[Euler-Lagrange equation]
+Let $u \in W^{1, p}$. Then $u$ is $p$-harmonic iff $u$ minimizes $\||\nabla u|_p\|_{L^p}$.
+\end{lemma}
+
+\begin{lemma}[well-posedness and $W^{1, r}$ estimate for Schatten $p$-Laplacian]
+Given a Lipschitz map $f$ on $\partial U$, there is a unique $p$-harmonic extension $u$ of $f$ to $U$.
+Moreover, if $r \leq p$ then
+$$\||\nabla u|_r\|_{L^r} \leq (d\mathrm{vol}(U))^{1/r} \Lip(f, \partial U).$$
+\end{lemma}
     
 \end{frame}
 
-\begin{frame}{Daskalopoulos and Uhlenbeck's formulation}
+\begin{frame}{Existence and geodesic lamination}
     
+\begin{definition}[Daskalopoulos and Uhlenbeck '22]
+A map $u$ is \emph{(Schatten) $\infty$-harmonic} if there exist Schatten $p$-harmonic maps $u_p$ such that for every $1 < r < \infty$, $u_p \rightharpoonup u$ in $W^{1, r}$.
+\end{definition}
+
+\begin{proposition}[solving the Schatten $\infty$-Laplacian]
+    Given a Lipschitz map $f$ on $\partial U$, there is an $\infty$-harmonic extension $u$ of $f$ to $U$.
+    Moreover,
+    $$\Lip(u, U) = \Lip(f, \partial U).$$
+\end{proposition}
+
+\begin{itemize}
+    \item For $\infty$-harmonic maps $u: M \to N$ between closed hyperbolic surfaces, Daskalopoulos and Uhlenbeck '22 prove that $\Stretch(u, M)$ contains a geodesic lamination, and can find a $so(2, 1)$-valued transverse measure by solving a dual $BV$ problem.
+    \begin{itemize}
+        \item Applications to Teichm\"uller theory; solves a problem posed by Thurston.
+    \end{itemize}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Comparing the two approaches}
-    
+\begin{frame}{But we can't prove anything}
+\begin{itemize}
+\item Weak convergence in $W^{1, r}$ does not seem to give enough information to readily establish any of the following:
+\end{itemize}
+
+\begin{problem}
+Are $\infty$-harmonic maps unique?
+\end{problem}
+
+\begin{problem}
+Are $\infty$-harmonic maps tight? Are they even AML?
+\end{problem}
+
+\begin{problem}
+Let $u$ be an $\infty$-harmonic map. Is the entirety of $\Stretch(u, M)$ a geodesic lamination?
+\end{problem}
 \end{frame}
 
 \begin{frame}{What's the hold-up?}
@@ -592,18 +900,64 @@ Then for any $V \Subset U$, $\|u_p\|_{W^{2, 2}(V)} \lesssim \|u_p\|_{L^\infty(U)
 \end{theorem}
 
 \begin{itemize}
-\item Let $\|v\|_{W^1(BMO)} := \|\nabla v\|_{BMO}$. Easy to show that this implies that $u_p$ converges in the weakstar topology of $W^1(BMO)$.
+\item Let $\|v\|_{W^1(BMO)} := \|\nabla v\|_{BMO}$.
+\begin{itemize}
+\item Then $v_n \rightharpoonup^* v$ in $W^1(BMO)$ iff for every matrix-valued Hardy atom $a$ on $U$,
+$$\int_U a \cdot \nabla v_n \dif V \to \int_U a \cdot \nabla v \dif V.$$
+\end{itemize}
+\item Easy to show that the $W^{2, 2}$ estimate implies that $u_p$ converges in the weakstar topology of $W^1(BMO)$.
 \item Brian Freidin and I were able to find a discretized version of the tight maps which converges in the weakstar topology of $W^{1, \infty}$.
-\item But none of us have any idea how to prove the following conjecture:
 \end{itemize}
 
+\end{frame}
+
+\begin{frame}{Is $W^1(BMO)$ just not good enough?}
 \begin{problem}
-Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? What about $W^{1, \infty}$?
+    Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? What about $W^{1, \infty}$?
 \end{problem}
+
+\begin{itemize}
+\item $L$ is lower-semicontinuous in $W^{1, \infty}$ (and probably also $W^1(BMO)$), because of destructive interference.
+\item The enemy: $Lu$ collapses away from some set $V \Subset U$, but is still large on $V$.
+\item Norm convergence in $W^{1, \infty}$ is enough, but $W^{1, \infty}$ is not separable.
+\item This didn't happen in the scalar-valued case, because viscosity solutions are preserved by $C^0$ limits.
+\begin{itemize}
+\item Proposed definition of vector-valued viscosity solutions by Katzourakis '18... which is not compatible with tight maps, because of the conformality issue.
+\end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}{A toy problem: the $\infty$-Laplacian on differential forms}
+\begin{itemize}
+\item In search for a replacement of viscosity solutions, trying an easier problem...
+\end{itemize}
 
+\begin{definition}[B '24]
+A differential $d - 1$-form $F$ is \emph{$p$-tight} if 
+$$
+\begin{cases}
+    \dif F = 0 \\
+    \dif^* (|F|^{p - 2} F) = 0.
+\end{cases}$$
+The form $F$ is \emph{tight} if there are $p$-tight forms $F_p$ such that for each $1 < r < \infty$, $F_p \rightharpoonup F$ in $L^r$.
+\end{definition}
+
+\begin{proposition}[Hodge theorem for tight forms]
+Let $M$ be a closed oriented Riemannian manifold of dimension $d$.
+Then there is a tight $d - 1$-form in every cohomology class in $H^{d - 1}(M, \RR)$, which minimizes its $L^\infty$ norm among all forms in its class.
+\end{proposition}
+\end{frame}
+
+\begin{frame}{Tight forms...}
+    Put stuff here .... 
+
+\begin{definition}[B '24]
+The \emph{$\infty$-Laplacian on differential forms} is the PDE 
+$$\begin{cases}
+    \dif F = 0 \\
+    (\nabla_\alpha F_{\beta_1 \cdots \beta_{d - 1}}) F^{\beta_1 \cdots \beta_{d - 1}} {F^\alpha}_{\gamma_1 \cdots \gamma_{d - 2}} = 0.
+\end{cases}$$
+\end{definition}
 \end{frame}
 
 \begin{frame}{A counterexample from contact geometry}
@@ -616,7 +970,7 @@ Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? Wh
     Then: 
 \begin{itemize}
     \item $F$ solves the $\infty$-Laplacian for differential forms.
-    \item $F$ does not minimize its $L^\infty$ norm even globally.
+    \item $F$ is not tight, and does not minimize its $L^\infty$ norm.
 \end{itemize}
 \end{example}
 
@@ -638,7 +992,12 @@ Are tight (or even just AML) maps preserved by weakstar limits in $W^1(BMO)$? Wh
 \end{itemize}
 \item Nobody knows the correct definition of optimal Lipschitz maps.
 \begin{itemize}
-    \item Good future: There is a definition with a good uniqueness theory, which is preserved by $W^1(BMO)$ limits.
+    \item Good future: There is a natural definition which is:
+    \begin{itemize}
+    \item preserved by $W^1(BMO)$ limits,
+    \item has a good uniqueness theorem,
+    \item and has a geodesic lamination in the stretch sets of its solutions.
+    \end{itemize}
     \item Bad future: There is no such definition.
 \end{itemize}
 \item Thanks for coming!
